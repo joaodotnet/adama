@@ -10,9 +10,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Adama.Models;
 using Adama.Models.ManageViewModels;
 using Adama.Services;
+using ApplicationCore.Models;
 
 namespace Adama.Controllers
 {

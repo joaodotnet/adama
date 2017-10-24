@@ -4,6 +4,6 @@
     {
         public string Code { get; set; }
         public string PictureUri { get; set; }
-
+        public IllustrationType Type { get; set; }
     }
 }
