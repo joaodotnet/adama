@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using Adama.Models;
 using Adama.Models.AccountViewModels;
 using Adama.Services;
+using ApplicationCore.Models;
 
 namespace Adama.Controllers
 {
