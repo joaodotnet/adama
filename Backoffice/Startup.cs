@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Adama.Data;
-using Adama.Models;
 using Adama.Services;
+using Infrastructure.Data;
+using ApplicationCore.Models;
 
 namespace Adama
 {
