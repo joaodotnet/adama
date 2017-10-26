@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Backoffice.RazorPages.Services;
 using Infrastructure.Data;
 using Infrastructure.Identity;
+using AutoMapper;
 
 namespace Backoffice.RazorPages
 {
@@ -44,6 +45,8 @@ namespace Backoffice.RazorPages
                     options.Conventions.AuthorizeFolder("/Account/Manage");
                     options.Conventions.AuthorizePage("/Account/Logout");
                 });
+
+            services.AddAutoMapper();
 
             // Register no-op EmailSender used by account confirmation and password reset during development
             // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713

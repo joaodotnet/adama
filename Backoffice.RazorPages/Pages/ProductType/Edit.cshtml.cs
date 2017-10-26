@@ -8,10 +8,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ApplicationCore.Entities;
 using Infrastructure.Data;
-using AutoMapper;
 using Backoffice.RazorPages.ViewModels;
+using AutoMapper;
 
-namespace Backoffice.RazorPages.Pages.Category
+namespace Backoffice.RazorPages.Pages.ProductType
 {
     public class EditModel : PageModel
     {
@@ -25,7 +25,7 @@ namespace Backoffice.RazorPages.Pages.Category
         }
 
         [BindProperty]
-        public CategoryViewModel Category { get; set; }
+        public ProductTypeViewModel ProductTypeModel { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -34,14 +34,15 @@ namespace Backoffice.RazorPages.Pages.Category
                 return NotFound();
             }
 
-            var category = await _context.Categories.SingleOrDefaultAsync(m => m.Id == id);
+            var productType = await _context.ProductTypes
+                .Include(p => p.Category).SingleOrDefaultAsync(m => m.Id == id);
 
-            if (category == null)
+            if (productType == null)
             {
                 return NotFound();
             }
-
-            Category = _mapper.Map<CategoryViewModel>(category);
+            ProductTypeModel = _mapper.Map<ProductTypeViewModel>(productType);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
             return Page();
         }
 
@@ -52,9 +53,9 @@ namespace Backoffice.RazorPages.Pages.Category
                 return Page();
             }
 
-            var category = _mapper.Map<ApplicationCore.Entities.Category>(Category);
+            var productEntity = _mapper.Map<ApplicationCore.Entities.ProductType>(ProductTypeModel);
 
-            _context.Attach(category).State = EntityState.Modified;
+            _context.Attach(productEntity).State = EntityState.Modified;
 
             try
             {
@@ -62,7 +63,7 @@ namespace Backoffice.RazorPages.Pages.Category
             }
             catch (DbUpdateConcurrencyException)
             {
-                
+
             }
 
             return RedirectToPage("./Index");

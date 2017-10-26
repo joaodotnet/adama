@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using ApplicationCore.Entities;
+using Infrastructure.Data;
 using Backoffice.RazorPages.ViewModels;
 using AutoMapper;
 
-namespace Backoffice.RazorPages.Pages.Category
+namespace Backoffice.RazorPages.Pages.ProductType
 {
     public class DeleteModel : PageModel
     {
@@ -22,7 +24,7 @@ namespace Backoffice.RazorPages.Pages.Category
         }
 
         [BindProperty]
-        public CategoryViewModel Category { get; set; }
+        public ProductTypeViewModel ProductTypeModel { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -31,15 +33,14 @@ namespace Backoffice.RazorPages.Pages.Category
                 return NotFound();
             }
 
-            var catInDB = await _context.Categories.SingleOrDefaultAsync(m => m.Id == id);
+            var type = await _context.ProductTypes
+                .Include(p => p.Category).SingleOrDefaultAsync(m => m.Id == id);
 
-            if (catInDB == null)
+            if (type == null)
             {
                 return NotFound();
             }
-
-            Category = _mapper.Map<CategoryViewModel>(catInDB);
-
+            ProductTypeModel = _mapper.Map<ProductTypeViewModel>(type);
             return Page();
         }
 
@@ -50,11 +51,11 @@ namespace Backoffice.RazorPages.Pages.Category
                 return NotFound();
             }
 
-            var catinDb = await _context.Categories.FindAsync(id);
+            var type = await _context.ProductTypes.FindAsync(id);
 
-            if (catinDb != null)
+            if (type != null)
             {
-                _context.Categories.Remove(catinDb);
+                _context.ProductTypes.Remove(type);
                 await _context.SaveChangesAsync();
             }
 
