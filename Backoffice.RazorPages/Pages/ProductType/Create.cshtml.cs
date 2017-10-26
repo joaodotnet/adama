@@ -10,12 +10,12 @@ using Infrastructure.Data;
 using Backoffice.RazorPages.ViewModels;
 using AutoMapper;
 
-namespace Backoffice.RazorPages.Pages.Category
+namespace Backoffice.RazorPages.Pages.ProductType
 {
     public class CreateModel : PageModel
     {
         private readonly Infrastructure.Data.DamaContext _context;
-        private readonly IMapper _mapper;
+        protected readonly IMapper _mapper;
 
         public CreateModel(Infrastructure.Data.DamaContext context, IMapper mapper)
         {
@@ -25,11 +25,12 @@ namespace Backoffice.RazorPages.Pages.Category
 
         public IActionResult OnGet()
         {
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
             return Page();
         }
 
         [BindProperty]
-        public CategoryViewModel Category { get; set; }
+        public ProductTypeViewModel ProductTypeModel { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -38,7 +39,7 @@ namespace Backoffice.RazorPages.Pages.Category
                 return Page();
             }
 
-            _context.Categories.Add(_mapper.Map<ApplicationCore.Entities.Category>(Category));
+            _context.ProductTypes.Add(_mapper.Map<ApplicationCore.Entities.ProductType>(ProductTypeModel));
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

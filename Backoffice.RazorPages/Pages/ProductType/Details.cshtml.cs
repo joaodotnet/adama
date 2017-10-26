@@ -10,7 +10,7 @@ using Infrastructure.Data;
 using Backoffice.RazorPages.ViewModels;
 using AutoMapper;
 
-namespace Backoffice.RazorPages.Pages.Category
+namespace Backoffice.RazorPages.Pages.ProductType
 {
     public class DetailsModel : PageModel
     {
@@ -23,7 +23,7 @@ namespace Backoffice.RazorPages.Pages.Category
             _mapper = mapper;
         }
 
-        public CategoryViewModel Category { get; set; }
+        public ProductTypeViewModel ProductTypeModel { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -32,13 +32,14 @@ namespace Backoffice.RazorPages.Pages.Category
                 return NotFound();
             }
 
-            var category = await _context.Categories.SingleOrDefaultAsync(m => m.Id == id);
+            var type = await _context.ProductTypes
+                .Include(p => p.Category).SingleOrDefaultAsync(m => m.Id == id);
 
-            if (category == null)
+            if (type == null)
             {
                 return NotFound();
             }
-            Category = _mapper.Map<CategoryViewModel>(category);
+            ProductTypeModel = _mapper.Map<ProductTypeViewModel>(type);
             return Page();
         }
     }
