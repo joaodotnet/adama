@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Adama.Models.ManageViewModels;
 using Adama.Services;
-using ApplicationCore.Models;
+using Infrastructure.Identity;
 
 namespace Adama.Controllers
 {

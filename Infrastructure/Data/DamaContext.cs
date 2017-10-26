@@ -4,14 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using ApplicationCore.Models;
 using ApplicationCore.Entities;
 
 namespace Infrastructure.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class DamaContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public DamaContext(DbContextOptions<DamaContext> options)
             : base(options)
         {
         }
@@ -26,16 +25,14 @@ namespace Infrastructure.Data
         {
             base.OnModelCreating(builder);
 
-            // Customize the ASP.NET Identity model and override the defaults if needed.
-            // For example, you can rename the ASP.NET Identity table names and more.
-            // Add your customizations after calling base.OnModelCreating(builder);
-
             //Category
+            builder.Entity<Category>().ToTable("Category");
             builder.Entity<Category>().Property(c => c.Name)
                 .IsRequired()
                 .HasMaxLength(100);
 
             //ProductType
+            builder.Entity<ProductType>().ToTable("ProductType");
             builder.Entity<ProductType>().Property(x => x.Code)
                 .IsRequired()
                 .HasMaxLength(25);
@@ -47,6 +44,7 @@ namespace Infrastructure.Data
                 .HasForeignKey(x => x.CategoryId);
 
             //Illustration
+            builder.Entity<Illustration>().ToTable("Illustration");
             builder.Entity<Illustration>().Property(x => x.Code)
                 .IsRequired()
                 .HasMaxLength(25);
@@ -56,6 +54,7 @@ namespace Infrastructure.Data
                 .IsRequired();
 
             //Product
+            builder.Entity<Product>().ToTable("Product");
             builder.Entity<Product>().HasKey(x => x.Id);
             builder.Entity<Product>().Property(x => x.Id)
                 .ForSqlServerUseSequenceHiLo("product_hilo")
@@ -82,6 +81,7 @@ namespace Infrastructure.Data
                 .HasForeignKey(x => x.ProductTypeId);
 
             //ProductAttribute
+            builder.Entity<ProductAttribute>().ToTable("ProductAttribute");
             builder.Entity<ProductAttribute>().Property(x => x.Type)
                 .IsRequired();
             builder.Entity<ProductAttribute>().Property(x => x.Code)
@@ -90,10 +90,9 @@ namespace Infrastructure.Data
             builder.Entity<ProductAttribute>().Property(x => x.Name)
                 .IsRequired()
                 .HasMaxLength(100);
-            //builder.Entity<ProductAttribute>().HasOne(x => x.Product)                
-            //    .WithMany()
-            //    .HasForeignKey(x => x.ProductId)
-            //    .IsRequired();
+            builder.Entity<ProductAttribute>().HasOne(x => x.Product)
+                .WithMany(p => p.ProductAttributes)
+                .HasForeignKey(x => x.ProductId);
 
         }
     }
