@@ -15,7 +15,7 @@ namespace Infrastructure.Data
         {
         }
 
-        public DbSet<Category> Categories { get; set; }
+        public DbSet<ApplicationCore.Entities.Category> Categories { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<Illustration> Illustrations { get; set; }
         public DbSet<ProductAttribute> ProductAttributes { get; set; }
