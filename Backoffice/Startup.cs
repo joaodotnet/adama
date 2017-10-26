@@ -9,8 +9,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Adama.Services;
+using Infrastructure.Identity;
 using Infrastructure.Data;
-using ApplicationCore.Models;
 
 namespace Adama
 {
@@ -26,13 +26,16 @@ namespace Adama
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<AppIdentityDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+
+            services.AddDbContext<DamaContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DamaConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-
+               .AddEntityFrameworkStores<AppIdentityDbContext>()
+               .AddDefaultTokenProviders();
+            
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 

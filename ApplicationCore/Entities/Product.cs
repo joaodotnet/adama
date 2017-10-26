@@ -16,6 +16,6 @@ namespace ApplicationCore.Entities
         public int ProductTypeId { get; set; }
         public ProductType ProductType { get; set; }
 
-        public virtual ICollection<ProductAttribute> ProductAttributes { get; set; }        
+        public ICollection<ProductAttribute> ProductAttributes { get; set; }        
     }
 }
