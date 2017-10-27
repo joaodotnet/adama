@@ -40,7 +40,7 @@ namespace Infrastructure.Data
                 .IsRequired()
                 .HasMaxLength(100);
             builder.Entity<ProductType>().HasOne(x => x.Category)
-                .WithMany()
+                .WithMany(c => c.ProductTypes)
                 .HasForeignKey(x => x.CategoryId);
 
             //Illustration

@@ -12,5 +12,8 @@ namespace Backoffice.RazorPages.ViewModels
         [StringLength(100)]
         [Display(Name = "Nome")]
         public string Name { get; set; }
+        [Display(Name = "Nº Tipos de Produtos")]
+        public int NrTypeProducts { get; set; }
+        public List<ProductTypeViewModel> ProductTypes { get; set; }
     }
 }

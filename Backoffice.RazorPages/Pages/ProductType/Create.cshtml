@@ -2,12 +2,12 @@
 @model Backoffice.RazorPages.Pages.ProductType.CreateModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Novo";
 }
 
-<h2>Create</h2>
+<h2>Novo</h2>
 
-<h4>ProductType</h4>
+<h4>Tipo de Produto</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -28,14 +28,14 @@
                 <select asp-for="ProductTypeModel.CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Criar" class="btn btn-default" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a asp-page="Index">Voltar para a lista</a>
 </div>
 
 @section Scripts {
