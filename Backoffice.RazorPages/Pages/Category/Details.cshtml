@@ -18,6 +18,37 @@
             @Html.DisplayFor(model => model.Category.Name)
         </dd>
     </dl>
+    <h4>Tipos de Produtos associados</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Category.ProductTypes[0].Code)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Category.ProductTypes[0].Description)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Category.ProductTypes)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        <a asp-page="/ProductType/Edit" asp-route-id="@item.Id">Editar</a> |
+                        <a asp-page="/ProductType/Details" asp-route-id="@item.Id">Detalhe</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
 <div>
     <a asp-page="./Edit" asp-route-id="@Model.Category.Id">Editar</a> |

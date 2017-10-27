@@ -7,15 +7,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ApplicationCore.Entities;
 using Infrastructure.Data;
-using Backoffice.RazorPages.ViewModels;
 using AutoMapper;
 
-namespace Backoffice.RazorPages.Pages.Category
+namespace Backoffice.RazorPages.Pages.Illustrations
 {
     public class DetailsModel : PageModel
     {
         private readonly Infrastructure.Data.DamaContext _context;
-        protected readonly IMapper _mapper;
+        private readonly IMapper _mapper;
 
         public DetailsModel(Infrastructure.Data.DamaContext context, IMapper mapper)
         {
@@ -23,7 +22,7 @@ namespace Backoffice.RazorPages.Pages.Category
             _mapper = mapper;
         }
 
-        public CategoryViewModel Category { get; set; }
+        public IllustrationViewModel IllustrationModel { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -32,15 +31,12 @@ namespace Backoffice.RazorPages.Pages.Category
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .Include(x => x.ProductTypes)
-                .SingleOrDefaultAsync(m => m.Id == id);
+            IllustrationModel = _mapper.Map<IllustrationViewModel>(await _context.Illustrations.SingleOrDefaultAsync(m => m.Id == id));
 
-            if (category == null)
+            if (IllustrationModel == null)
             {
                 return NotFound();
             }
-            Category = _mapper.Map<CategoryViewModel>(category);
             return Page();
         }
     }

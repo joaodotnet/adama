@@ -1,0 +1,48 @@
+﻿@page
+@model Backoffice.RazorPages.Pages.Illustrations.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.IllustrationModel[0].Code)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IllustrationModel[0].PictureUri)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IllustrationModel[0].Type)
+                </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.IllustrationModel) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PictureUri)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Backoffice.RazorPages.ViewModels;
+using ApplicationCore.Entities;
+using Infrastructure.Data;
 using AutoMapper;
 
-namespace Backoffice.RazorPages.Pages.Category
+namespace Backoffice.RazorPages.Pages.Illustrations
 {
     public class IndexModel : PageModel
     {
@@ -20,14 +22,11 @@ namespace Backoffice.RazorPages.Pages.Category
             _mapper = mapper;
         }
 
-        public IList<CategoryViewModel> Categories { get;set; }
+        public IList<IllustrationViewModel> IllustrationModel { get;set; }
 
         public async Task OnGetAsync()
         {
-            var cats = await _context.Categories
-                .Include(x => x.ProductTypes)
-                .ToListAsync();
-            Categories = _mapper.Map<List<CategoryViewModel>>(cats);            
+            IllustrationModel = _mapper.Map<List<IllustrationViewModel>>(await _context.Illustrations.ToListAsync());
         }
     }
 }

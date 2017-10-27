@@ -13,10 +13,13 @@ namespace Backoffice.RazorPages
         public MappingProfile()
         {
             // Add as many of these lines as you need to map your objects
-            CreateMap<Category, CategoryViewModel>();
+            CreateMap<Category, CategoryViewModel>()
+                 .ForMember(x => x.NrTypeProducts, o => o.MapFrom(x => x.ProductTypes.Count ));
             CreateMap<CategoryViewModel, Category>();
             CreateMap<ProductType, ProductTypeViewModel>();
             CreateMap<ProductTypeViewModel, ProductType>();
+            CreateMap<Illustration, IllustrationViewModel>();
+            CreateMap<IllustrationViewModel, Illustration>();
         }
     }
 }
