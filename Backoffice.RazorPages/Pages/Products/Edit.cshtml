@@ -1,0 +1,92 @@
+﻿@page
+@model Backoffice.RazorPages.Pages.Products.EditModel
+
+@{
+    ViewData["Title"] = "Editar";
+}
+
+<h2>Editar</h2>
+
+<h4>Produto</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ProductModel.Code" class="control-label"></label>
+                <input asp-for="ProductModel.Code" class="form-control" />
+                <span asp-validation-for="ProductModel.Code" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductModel.Name" class="control-label"></label>
+                <input asp-for="ProductModel.Name" class="form-control" />
+                <span asp-validation-for="ProductModel.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductModel.Description" class="control-label"></label>
+                <input asp-for="ProductModel.Description" class="form-control" />
+                <span asp-validation-for="ProductModel.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductModel.Personalized" class="control-label"></label>
+                <input asp-for="ProductModel.Personalized" class="form-control" />
+                <span asp-validation-for="ProductModel.Personalized" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductModel.Price" class="control-label"></label>
+                <input asp-for="ProductModel.Price" class="form-control decimal" />
+                <span asp-validation-for="ProductModel.Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductModel.IllustrationId" class="control-label"></label>
+                <select asp-for="ProductModel.IllustrationId" class="form-control" asp-items="ViewBag.IllustrationId"></select>
+                <span asp-validation-for="ProductModel.IllustrationId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductModel.ProductTypeId" class="control-label"></label>
+                <select asp-for="ProductModel.ProductTypeId" class="form-control" asp-items="ViewBag.ProductTypeId"></select>
+                <span asp-validation-for="ProductModel.ProductTypeId" class="text-danger"></span>
+            </div>
+            <hr />
+            <h4>Atributos do Produto</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProductModel.ProductAttributes[0].Type)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProductModel.ProductAttributes[0].Code)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProductModel.ProductAttributes[0].Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProductModel.ProductAttributes[0].Price)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <input type="hidden" asp-for="ProductModel.Id" />
+            <div class="form-group">
+                <input type="submit" value="Gravar" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Voltar para a lista</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

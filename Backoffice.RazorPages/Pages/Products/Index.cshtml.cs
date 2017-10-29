@@ -7,27 +7,30 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ApplicationCore.Entities;
 using Infrastructure.Data;
-using AutoMapper;
 using Backoffice.RazorPages.ViewModels;
+using AutoMapper;
 
-namespace Backoffice.RazorPages.Pages.Illustrations
+namespace Backoffice.RazorPages.Pages.Products
 {
     public class IndexModel : PageModel
     {
-        private readonly Infrastructure.Data.DamaContext _context;
+        private readonly DamaContext _context;
         private readonly IMapper _mapper;
 
-        public IndexModel(Infrastructure.Data.DamaContext context, IMapper mapper)
+        public IndexModel(DamaContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        public IList<IllustrationViewModel> IllustrationModel { get;set; }
+        public IList<ProductViewModel> ProductModel { get;set; }
 
         public async Task OnGetAsync()
         {
-            IllustrationModel = _mapper.Map<List<IllustrationViewModel>>(await _context.Illustrations.ToListAsync());
+            ProductModel = _mapper.Map<List<ProductViewModel>>(await _context.Products
+                .Include(p => p.Illustation)
+                .Include(p => p.ProductType)
+                .ToListAsync());
         }
     }
 }

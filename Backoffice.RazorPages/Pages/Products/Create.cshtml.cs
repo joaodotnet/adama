@@ -8,10 +8,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using ApplicationCore.Entities;
 using Infrastructure.Data;
 using AutoMapper;
-using Backoffice.RazorPages.Extensions;
 using Backoffice.RazorPages.ViewModels;
 
-namespace Backoffice.RazorPages.Pages.Illustrations
+namespace Backoffice.RazorPages.Pages.Products
 {
     public class CreateModel : PageModel
     {
@@ -26,20 +25,24 @@ namespace Backoffice.RazorPages.Pages.Illustrations
 
         public IActionResult OnGet()
         {
+        ViewData["IllustrationId"] = new SelectList(_context.Illustrations, "Id", "Code");
+        ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Code");
             return Page();
         }
 
         [BindProperty]
-        public IllustrationViewModel IllustrationModel { get; set; }
+        public ProductViewModel ProductModel { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
+                ViewData["IllustrationId"] = new SelectList(_context.Illustrations, "Id", "Code");
+                ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Code");
                 return Page();
             }
 
-            _context.Illustrations.Add(_mapper.Map<Illustration>(IllustrationModel));
+            _context.Products.Add(_mapper.Map<Product>(ProductModel));
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

@@ -13,6 +13,8 @@ using Backoffice.RazorPages.Services;
 using Infrastructure.Data;
 using Infrastructure.Identity;
 using AutoMapper;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 
 namespace Backoffice.RazorPages
 {

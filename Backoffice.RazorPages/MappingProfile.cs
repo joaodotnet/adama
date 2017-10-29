@@ -20,6 +20,8 @@ namespace Backoffice.RazorPages
             CreateMap<ProductTypeViewModel, ProductType>();
             CreateMap<Illustration, IllustrationViewModel>();
             CreateMap<IllustrationViewModel, Illustration>();
+            CreateMap<Product, ProductViewModel>();
+            CreateMap<ProductViewModel, Product>();
         }
     }
 }

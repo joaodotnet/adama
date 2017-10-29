@@ -11,21 +11,21 @@ using Infrastructure.Data;
 using AutoMapper;
 using Backoffice.RazorPages.ViewModels;
 
-namespace Backoffice.RazorPages.Pages.Illustrations
+namespace Backoffice.RazorPages.Pages.Products
 {
     public class EditModel : PageModel
     {
-        private readonly Infrastructure.Data.DamaContext _context;
+        private readonly DamaContext _context;
         private readonly IMapper _mapper;
 
-        public EditModel(Infrastructure.Data.DamaContext context, IMapper mapper)
+        public EditModel(DamaContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
         [BindProperty]
-        public IllustrationViewModel IllustrationModel { get; set; }
+        public ProductViewModel ProductModel { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -34,12 +34,18 @@ namespace Backoffice.RazorPages.Pages.Illustrations
                 return NotFound();
             }
 
-            IllustrationModel = _mapper.Map<IllustrationViewModel>(await _context.Illustrations.SingleOrDefaultAsync(m => m.Id == id));
+            ProductModel = _mapper.Map<ProductViewModel>(
+                await _context.Products
+                .Include(p => p.Illustation)
+                .Include(p => p.ProductType)
+                .SingleOrDefaultAsync(m => m.Id == id));
 
-            if (IllustrationModel == null)
+            if (ProductModel == null)
             {
                 return NotFound();
             }
+           ViewData["IllustrationId"] = new SelectList(_context.Illustrations, "Id", "Code");
+           ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Code");
             return Page();
         }
 
@@ -49,8 +55,8 @@ namespace Backoffice.RazorPages.Pages.Illustrations
             {
                 return Page();
             }
-            var illustrationEntity = _mapper.Map<Illustration>(IllustrationModel);
-            _context.Attach(illustrationEntity).State = EntityState.Modified;
+
+            _context.Attach(_mapper.Map<Product>(ProductModel)).State = EntityState.Modified;
 
             try
             {

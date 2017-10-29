@@ -10,21 +10,21 @@ using Infrastructure.Data;
 using AutoMapper;
 using Backoffice.RazorPages.ViewModels;
 
-namespace Backoffice.RazorPages.Pages.Illustrations
+namespace Backoffice.RazorPages.Pages.Products
 {
     public class DeleteModel : PageModel
     {
-        private readonly Infrastructure.Data.DamaContext _context;
+        private readonly DamaContext _context;
         private readonly IMapper _mapper;
 
-        public DeleteModel(Infrastructure.Data.DamaContext context, IMapper mapper)
+        public DeleteModel(DamaContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
         [BindProperty]
-        public IllustrationViewModel IllustrationModel { get; set; }
+        public ProductViewModel ProductModel { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -33,9 +33,12 @@ namespace Backoffice.RazorPages.Pages.Illustrations
                 return NotFound();
             }
 
-            IllustrationModel = _mapper.Map<IllustrationViewModel>(await _context.Illustrations.SingleOrDefaultAsync(m => m.Id == id));
+            ProductModel = _mapper.Map<ProductViewModel>(await _context.Products
+                .Include(p => p.Illustation)
+                .Include(p => p.ProductType)
+                .SingleOrDefaultAsync(m => m.Id == id));
 
-            if (IllustrationModel == null)
+            if (ProductModel == null)
             {
                 return NotFound();
             }
@@ -49,11 +52,11 @@ namespace Backoffice.RazorPages.Pages.Illustrations
                 return NotFound();
             }
 
-            var illustration = await _context.Illustrations.FindAsync(id);
+            var product = await _context.Products.FindAsync(id);
 
-            if (illustration != null)
+            if (product != null)
             {
-                _context.Illustrations.Remove(illustration);
+                _context.Products.Remove(product);
                 await _context.SaveChangesAsync();
             }
 
