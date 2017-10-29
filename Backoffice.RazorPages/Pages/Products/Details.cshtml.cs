@@ -10,20 +10,20 @@ using Infrastructure.Data;
 using AutoMapper;
 using Backoffice.RazorPages.ViewModels;
 
-namespace Backoffice.RazorPages.Pages.Illustrations
+namespace Backoffice.RazorPages.Pages.Products
 {
     public class DetailsModel : PageModel
     {
-        private readonly Infrastructure.Data.DamaContext _context;
+        private readonly DamaContext _context;
         private readonly IMapper _mapper;
 
-        public DetailsModel(Infrastructure.Data.DamaContext context, IMapper mapper)
+        public DetailsModel(DamaContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        public IllustrationViewModel IllustrationModel { get; set; }
+        public ProductViewModel ProductModel { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -32,9 +32,12 @@ namespace Backoffice.RazorPages.Pages.Illustrations
                 return NotFound();
             }
 
-            IllustrationModel = _mapper.Map<IllustrationViewModel>(await _context.Illustrations.SingleOrDefaultAsync(m => m.Id == id));
+            ProductModel = _mapper.Map<ProductViewModel>(await _context.Products
+                .Include(p => p.Illustation)
+                .Include(p => p.ProductType)
+                .SingleOrDefaultAsync(m => m.Id == id));
 
-            if (IllustrationModel == null)
+            if (ProductModel == null)
             {
                 return NotFound();
             }

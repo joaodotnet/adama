@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Backoffice.RazorPages</title>
+    <title>@ViewData["Title"] - Dama Backoffice</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -31,8 +31,10 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-page="/Index">Home</a></li>
-                    <li><a asp-page="/About">About</a></li>
-                    <li><a asp-page="/Contact">Contact</a></li>
+                    <li><a asp-page="/Category/Index">Categorias</a></li>
+                    <li><a asp-page="/ProductType/Index">Tipos de Produto</a></li>
+                    <li><a asp-page="/Illustrations/Index">Ilustrações</a></li>
+                    <li><a asp-page="/Products/Index">Produtos</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>

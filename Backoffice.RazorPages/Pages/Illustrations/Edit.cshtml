@@ -2,12 +2,12 @@
 @model Backoffice.RazorPages.Pages.Illustrations.EditModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar";
 }
 
-<h2>Edit</h2>
+<h2>Editar</h2>
 
-<h4>Illustration</h4>
+<h4>Ilustração</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -30,14 +30,14 @@
             </div>
             <input type="hidden" asp-for="IllustrationModel.Id" />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Gravar" class="btn btn-default" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./Index">Voltar para a lista</a>
 </div>
 
 @section Scripts {
