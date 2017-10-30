@@ -34,6 +34,6 @@ namespace Backoffice.RazorPages.ViewModels
         public int ProductTypeId { get; set; }
         public ProductTypeViewModel ProductType { get; set; }
 
-        public IList<ProductAttributeViewModel> ProductAttributes { get; set; }        
+        public IList<ProductAttributeViewModel> ProductAttributes { get; set; } = new List<ProductAttributeViewModel>();  
     }
 }
