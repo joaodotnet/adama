@@ -25,8 +25,8 @@ namespace Backoffice.RazorPages.Pages.Products
 
         public IActionResult OnGet()
         {
-        ViewData["IllustrationId"] = new SelectList(_context.Illustrations, "Id", "Code");
-        ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Code");
+            ViewData["IllustrationId"] = new SelectList(_context.Illustrations, "Id", "Code");
+            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Code");
             return Page();
         }
 
@@ -46,6 +46,12 @@ namespace Backoffice.RazorPages.Pages.Products
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
+        }
+
+        public async Task<IActionResult> AddAttribute()
+        {
+            ProductModel.ProductAttributes.Add(new ProductAttributeViewModel());
+            return Page();
         }
     }
 }

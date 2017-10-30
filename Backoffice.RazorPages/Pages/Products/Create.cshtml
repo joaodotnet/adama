@@ -48,6 +48,57 @@
                 <label asp-for="ProductModel.ProductTypeId" class="control-label"></label>
                 <select asp-for="ProductModel.ProductTypeId" class ="form-control" asp-items="ViewBag.ProductTypeId"></select>
             </div>
+            <hr />
+            <h4>Atributos do Produto</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProductModel.ProductAttributes[0].Type)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProductModel.ProductAttributes[0].Code)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProductModel.ProductAttributes[0].Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProductModel.ProductAttributes[0].Price)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.ProductModel.ProductAttributes.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                <input type="hidden" asp-for="ProductModel.ProductAttributes[i].Id" />
+                                <select asp-for="ProductModel.ProductAttributes[i].Type" asp-items="Html.GetEnumSelectList<ApplicationCore.Entities.ProductAttributeType>()" class="form-control"></select>
+                                <span asp-validation-for="ProductModel.ProductAttributes[i].Type" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ProductModel.ProductAttributes[i].Code" class="form-control"/>
+                                <span asp-validation-for="ProductModel.ProductAttributes[i].Code" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ProductModel.ProductAttributes[i].Name" class="form-control" />
+                                <span asp-validation-for="ProductModel.ProductAttributes[i].Name" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ProductModel.ProductAttributes[i].Price" class="form-control decimal" />
+                                <span asp-validation-for="ProductModel.ProductAttributes[i].Price" class="text-danger"></span>
+                            </td>
+                        </tr>
+                    }                   
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4">
+                            <input type="submit" asp-page-handler="AddAttribute" value="Adicionar Atributo" class="btn btn-default"/>                            
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
             <div class="form-group">
                 <input type="submit" value="Criar" class="btn btn-default" />
             </div>
