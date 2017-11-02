@@ -38,6 +38,7 @@ namespace Backoffice.RazorPages.Pages.Products
                 await _context.Products
                 .Include(p => p.Illustation)
                 .Include(p => p.ProductType)
+                .Include(p => p.ProductAttributes)
                 .SingleOrDefaultAsync(m => m.Id == id));
 
             if (ProductModel == null)
@@ -49,14 +50,45 @@ namespace Backoffice.RazorPages.Pages.Products
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostSaveAsync()
         {
             if (!ModelState.IsValid)
             {
+                ViewData["IllustrationId"] = new SelectList(_context.Illustrations, "Id", "Code");
+                ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Code");
+                return Page();
+            }
+            //Remove model attributes with no id
+            var to_remove = ProductModel.ProductAttributes.Where(x => x.ToRemove && x.Id == 0).ToList();
+            foreach (var item in to_remove)
+            {
+                ProductModel.ProductAttributes.Remove(item);
+            }
+            //Validate Model
+            if (!ValidateAttributesModel())
+            {
+                ViewData["IllustrationId"] = new SelectList(_context.Illustrations, "Id", "Code");
+                ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Code");
                 return Page();
             }
 
-            _context.Attach(_mapper.Map<Product>(ProductModel)).State = EntityState.Modified;
+            //Save Changes            
+            var prod = _mapper.Map<Product>(ProductModel);
+            foreach (var item in prod.ProductAttributes)
+            {
+                if (item.Id != 0)
+                {
+                    if (ProductModel.ProductAttributes.SingleOrDefault(x => x.Id == item.Id).ToRemove)
+                        _context.Entry(item).State = EntityState.Deleted;
+                    else
+                        _context.Entry(item).State = EntityState.Modified;
+                }
+                else
+                    _context.Entry(item).State = EntityState.Added;
+            }
+
+
+            _context.Attach(prod).State = EntityState.Modified;
 
             try
             {
@@ -64,10 +96,68 @@ namespace Backoffice.RazorPages.Pages.Products
             }
             catch (DbUpdateConcurrencyException)
             {
-                
+
             }
 
             return RedirectToPage("./Index");
         }
+
+        private bool ValidateAttributesModel()
+        {
+            foreach (var item in ProductModel.ProductAttributes)
+            {
+                if (!item.ToRemove)
+                {
+                    //Validate
+                    if (string.IsNullOrEmpty(item.Code))
+                        ModelState.AddModelError("", "O código do atributo é obrigatório");
+                    if (string.IsNullOrEmpty(item.Name))
+                        ModelState.AddModelError("", "O nome do atributo é obrigatório");
+                    if (!ModelState.IsValid)
+                    {
+                        return false;                        
+                    }
+                }
+            }
+            return true;
+        }
+
+        public async Task<IActionResult> OnPostAddAttributeAsync()
+        {
+            ViewData["IllustrationId"] = new SelectList(_context.Illustrations, "Id", "Code");
+            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Code");
+            ProductModel.ProductAttributes.Add(new ProductAttributeViewModel
+            {
+                ProductId = ProductModel.Id
+            });
+            return Page();
+        }
+
+        //public async Task<IActionResult> OnPostRemoveAttributeAsync(int id)
+        //{
+        //    ViewData["IllustrationId"] = new SelectList(_context.Illustrations, "Id", "Code");
+        //    ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Code");
+        //    if (id != 0)
+        //    {
+        //        //var attributeModel = ProductModel.ProductAttributes.SingleOrDefault(x => x.Id == id);
+        //        //if (attributeModel != null)
+        //        //    ProductModel.ProductAttributes.Remove(attributeModel);
+
+        //        var attribute = await _context.ProductAttributes.FindAsync(id);
+        //        var prodId = attribute.ProductId;
+        //        if (attribute != null)
+        //        {
+        //            _context.ProductAttributes.Remove(attribute);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        //var prod = await _context.Products
+        //        //    .Include(x => x.ProductAttributes)
+        //        //    .SingleOrDefaultAsync(x => x.Id == prodId);
+
+        //        //ProductModel.ProductAttributes = _mapper.Map<List<ProductAttributeViewModel>>(prod.ProductAttributes);
+        //    }            
+
+        //    return Page();
+        //}
     }
 }

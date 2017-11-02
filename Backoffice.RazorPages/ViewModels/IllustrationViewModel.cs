@@ -10,10 +10,15 @@ namespace Backoffice.RazorPages.ViewModels
         [StringLength(25)]
         [Required]
         public string Code { get; set; }
+        [Display(Name = "Nome")]
+        [StringLength(100)]
+        [Required]
+        public string Name { get; set; }
         [Display(Name = "Url")]
         [StringLength(255)]
         public string PictureUri { get; set; }
         [Required]
+        [Display(Name = "Tipo")]
         public IllustrationType Type { get; set; }
     }
 }
