@@ -54,6 +54,54 @@
             @Html.DisplayFor(model => model.ProductModel.ProductType.Code)
         </dd>
     </dl>
+    <hr />
+    <div class="row">
+        <div class="col-md-8">
+            <hr />
+            <h4>Atributos do Produto</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProductModel.ProductAttributes[0].Type)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProductModel.ProductAttributes[0].Code)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProductModel.ProductAttributes[0].Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProductModel.ProductAttributes[0].Price)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.ProductModel?.ProductAttributes?.Count > 0)
+                    {
+                        for (int i = 0; i < Model.ProductModel.ProductAttributes.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(model => model.ProductModel.ProductAttributes[i].Type)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(model => model.ProductModel.ProductAttributes[i].Code)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(model => model.ProductModel.ProductAttributes[i].Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(model => model.ProductModel.ProductAttributes[i].Price)
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>                
+            </table>
+        </div>
+    </div>
 </div>
 <div>
     <a asp-page="./Edit" asp-route-id="@Model.ProductModel.Id">Editar</a> |

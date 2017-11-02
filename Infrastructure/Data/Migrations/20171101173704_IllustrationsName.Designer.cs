@@ -12,9 +12,10 @@ using System;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(DamaContext))]
-    partial class DamaContextModelSnapshot : ModelSnapshot
+    [Migration("20171101173704_IllustrationsName")]
+    partial class IllustrationsName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -48,6 +48,9 @@ namespace Infrastructure.Data
             builder.Entity<Illustration>().Property(x => x.Code)
                 .IsRequired()
                 .HasMaxLength(25);
+            builder.Entity<Illustration>().Property(x => x.Name)
+                .IsRequired()
+                .HasMaxLength(100);
             builder.Entity<Illustration>().Property(x => x.PictureUri)                
                 .HasMaxLength(255);
             builder.Entity<Illustration>().Property(x => x.Type)
