@@ -5,6 +5,7 @@
         public string Code { get; set; }
         public string Name { get; set; }
         public string PictureUri { get; set; }
-        public IllustrationType Type { get; set; }
+        public int IllustrationTypeId { get; set; }
+        public IllustrationType IllustrationType { get; set; }
     }
 }

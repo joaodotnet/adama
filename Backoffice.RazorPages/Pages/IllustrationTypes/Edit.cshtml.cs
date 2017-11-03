@@ -11,11 +11,11 @@ using Infrastructure.Data;
 using AutoMapper;
 using Backoffice.RazorPages.ViewModels;
 
-namespace Backoffice.RazorPages.Pages.Illustrations
+namespace Backoffice.RazorPages.Pages.IllustrationTypes
 {
     public class EditModel : PageModel
     {
-        private readonly Infrastructure.Data.DamaContext _context;
+        private readonly DamaContext _context;
         private readonly IMapper _mapper;
 
         public EditModel(Infrastructure.Data.DamaContext context, IMapper mapper)
@@ -25,7 +25,7 @@ namespace Backoffice.RazorPages.Pages.Illustrations
         }
 
         [BindProperty]
-        public IllustrationViewModel IllustrationModel { get; set; }
+        public IllustrationTypeViewModel IllustrationType { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -33,11 +33,10 @@ namespace Backoffice.RazorPages.Pages.Illustrations
             {
                 return NotFound();
             }
-            ViewData["IllustrationTypes"] = new SelectList(_context.IllustrationTypes, "Id", "Code");
 
-            IllustrationModel = _mapper.Map<IllustrationViewModel>(await _context.Illustrations.Include(x => x.IllustrationType).SingleOrDefaultAsync(m => m.Id == id));
+            IllustrationType = _mapper.Map<IllustrationTypeViewModel>(await _context.IllustrationTypes.SingleOrDefaultAsync(m => m.Id == id));
 
-            if (IllustrationModel == null)
+            if (IllustrationType == null)
             {
                 return NotFound();
             }
@@ -50,8 +49,8 @@ namespace Backoffice.RazorPages.Pages.Illustrations
             {
                 return Page();
             }
-            var illustrationEntity = _mapper.Map<Illustration>(IllustrationModel);
-            _context.Attach(illustrationEntity).State = EntityState.Modified;
+
+            _context.Attach(_mapper.Map<IllustrationType>(IllustrationType)).State = EntityState.Modified;
 
             try
             {

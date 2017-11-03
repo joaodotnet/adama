@@ -1,10 +1,8 @@
 ﻿namespace ApplicationCore.Entities
 {
-    public enum IllustrationType
-    {        
-        PROFESSOR,
-        EDUCATOR,
-        MAN,
-        WOMEN
+    public class IllustrationType : BaseEntity
+    {
+        public string Code { get; set; }
+        public string Name { get; set; }
     }
 }

@@ -7,11 +7,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ApplicationCore.Entities;
 using Infrastructure.Data;
-using AutoMapper;
-using Backoffice.RazorPages.Extensions;
 using Backoffice.RazorPages.ViewModels;
+using AutoMapper;
 
-namespace Backoffice.RazorPages.Pages.Illustrations
+namespace Backoffice.RazorPages.Pages.IllustrationTypes
 {
     public class CreateModel : PageModel
     {
@@ -26,22 +25,20 @@ namespace Backoffice.RazorPages.Pages.Illustrations
 
         public IActionResult OnGet()
         {
-            ViewData["IllustrationTypes"] = new SelectList(_context.IllustrationTypes, "Id", "Code");
             return Page();
         }
 
         [BindProperty]
-        public IllustrationViewModel IllustrationModel { get; set; }
+        public IllustrationTypeViewModel IllustrationType { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
-                ViewData["IllustrationTypes"] = new SelectList(_context.IllustrationTypes, "Id", "Code");
                 return Page();
             }
 
-            _context.Illustrations.Add(_mapper.Map<Illustration>(IllustrationModel));
+            _context.IllustrationTypes.Add(_mapper.Map<IllustrationType>(IllustrationType));
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

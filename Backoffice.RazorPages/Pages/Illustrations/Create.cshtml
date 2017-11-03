@@ -29,9 +29,11 @@
                 <span asp-validation-for="IllustrationModel.PictureUri" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="IllustrationModel.Type" class="control-label"></label>
-                <select asp-for="IllustrationModel.Type" asp-items="Html.GetEnumSelectList<ApplicationCore.Entities.IllustrationType>()" class="form-control"></select>
-                <span asp-validation-for="IllustrationModel.Type" class="text-danger"></span>
+                <label asp-for="IllustrationModel.IllustrationTypeId" class="control-label"></label>
+                <select asp-for="IllustrationModel.IllustrationTypeId" asp-items="ViewBag.IllustrationTypes" class="form-control"></select>                
+                <span asp-validation-for="IllustrationModel.IllustrationTypeId" class="text-danger"></span>
+                <a asp-page="../IllustrationTypes/Create" target="_blank">Criar Novo Tipo</a>
+                <a asp-page="../IllustrationTypes/Index" target="_blank">Editar Tipos</a>
             </div>
             <div class="form-group">
                 <input type="submit" value="Criar" class="btn btn-default" />
