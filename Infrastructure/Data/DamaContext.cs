@@ -18,8 +18,10 @@ namespace Infrastructure.Data
         public DbSet<ApplicationCore.Entities.Category> Categories { get; set; }
         public DbSet<ApplicationCore.Entities.ProductType> ProductTypes { get; set; }
         public DbSet<ApplicationCore.Entities.Illustration> Illustrations { get; set; }
+        public DbSet<ApplicationCore.Entities.IllustrationType> IllustrationTypes { get; set; }
         public DbSet<ApplicationCore.Entities.ProductAttribute> ProductAttributes { get; set; }
         public DbSet<ApplicationCore.Entities.Product> Products { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -43,6 +45,14 @@ namespace Infrastructure.Data
                 .WithMany(c => c.ProductTypes)
                 .HasForeignKey(x => x.CategoryId);
 
+            //Illustration Types
+            builder.Entity<IllustrationType>().ToTable("IllustrationType");
+            builder.Entity<IllustrationType>().Property(x => x.Code)
+                .IsRequired()
+                .HasMaxLength(25);
+            builder.Entity<IllustrationType>().Property(x => x.Name)                
+                .HasMaxLength(100);
+
             //Illustration
             builder.Entity<Illustration>().ToTable("Illustration");
             builder.Entity<Illustration>().Property(x => x.Code)
@@ -53,8 +63,9 @@ namespace Infrastructure.Data
                 .HasMaxLength(100);
             builder.Entity<Illustration>().Property(x => x.PictureUri)                
                 .HasMaxLength(255);
-            builder.Entity<Illustration>().Property(x => x.Type)
-                .IsRequired();
+            builder.Entity<Illustration>().HasOne(x => x.IllustrationType)
+                .WithMany()
+                .HasForeignKey(x => x.IllustrationTypeId);                
 
             //Product
             builder.Entity<Product>().ToTable("Product");

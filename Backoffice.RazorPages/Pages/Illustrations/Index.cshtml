@@ -23,7 +23,7 @@
                     @Html.DisplayNameFor(model => model.IllustrationModel[0].PictureUri)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.IllustrationModel[0].Type)
+                    @Html.DisplayNameFor(model => model.IllustrationModel[0].IllustrationTypeId)
                 </th>
             <th></th>
         </tr>
@@ -41,7 +41,7 @@
                 @Html.DisplayFor(modelItem => item.PictureUri)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Type)
+                @Html.DisplayFor(modelItem => item.IllustrationType.Code)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Editar</a> |

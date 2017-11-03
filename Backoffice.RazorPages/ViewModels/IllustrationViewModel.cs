@@ -19,6 +19,7 @@ namespace Backoffice.RazorPages.ViewModels
         public string PictureUri { get; set; }
         [Required]
         [Display(Name = "Tipo")]
-        public IllustrationType Type { get; set; }
+        public int IllustrationTypeId { get; set; }
+        public IllustrationTypeViewModel IllustrationType { get; set; }
     }
 }
