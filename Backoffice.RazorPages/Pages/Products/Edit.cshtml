@@ -27,13 +27,7 @@
                 <label asp-for="ProductModel.Description" class="control-label"></label>
                 <input asp-for="ProductModel.Description" class="form-control" />
                 <span asp-validation-for="ProductModel.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProductModel.Personalized" class="control-label"></label><br />
-                <label class="radio-inline"><input type="radio" asp-for="ProductModel.Personalized" value="true">Sim</label>
-                <label class="radio-inline"><input type="radio" asp-for="ProductModel.Personalized" value="false">Não</label>
-                <span asp-validation-for="ProductModel.Personalized" class="text-danger"></span>
-            </div>
+            </div>            
             <div class="form-group">
                 <label asp-for="ProductModel.Price" class="control-label"></label>
                 <input asp-for="ProductModel.Price" class="form-control decimal" />

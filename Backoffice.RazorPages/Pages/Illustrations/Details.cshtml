@@ -24,16 +24,16 @@
             @Html.DisplayFor(model => model.IllustrationModel.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.IllustrationModel.PictureUri)
+            @Html.DisplayNameFor(model => model.IllustrationModel.IllustrationImage)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.IllustrationModel.PictureUri)
+            <img alt="" src="@Model.IllustrationModel.ImageBase64" class="img-thumbnail" />
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.IllustrationModel.Type)
+            @Html.DisplayNameFor(model => model.IllustrationModel.IllustrationTypeId)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.IllustrationModel.Type)
+            @Html.DisplayFor(model => model.IllustrationModel.IllustrationType.Code)
         </dd>
     </dl>
 </div>

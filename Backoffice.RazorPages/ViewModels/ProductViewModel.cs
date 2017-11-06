@@ -7,7 +7,7 @@ namespace Backoffice.RazorPages.ViewModels
 {
     public class ProductViewModel
     {
-        public int Id { get; set; }
+        public int Id { get; set; }        
         [Required]
         [StringLength(25)]
         [Display(Name = "Código")]
@@ -20,9 +20,6 @@ namespace Backoffice.RazorPages.ViewModels
         [Display(Name = "Descrição")]
         public string Description { get; set; }                
         [Required]
-        [Display(Name = ("Personalização"))]
-        public bool Personalized { get; set; }
-        [Required]
         [Display(Name = "Preço")]
         public decimal Price { get; set; }
         [Display(Name = "Ilustração")]
@@ -33,6 +30,8 @@ namespace Backoffice.RazorPages.ViewModels
         [Display(Name = "Tipo de Produto")]
         public int ProductTypeId { get; set; }
         public ProductTypeViewModel ProductType { get; set; }
+        [Display(Name = "SKU")]
+        public string ProductSKU { get; set; }
 
         public IList<ProductAttributeViewModel> ProductAttributes { get; set; } = new List<ProductAttributeViewModel>();  
     }

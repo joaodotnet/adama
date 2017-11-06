@@ -5,7 +5,7 @@ namespace Backoffice.RazorPages.ViewModels
 {
     public class ProductAttributeViewModel
     {
-        public int Id { get; set; }
+        public int Id { get; set; }        
         [Display(Name = "Tipo")]
         public ProductAttributeType Type { get; set; }
         [StringLength(25)]
@@ -18,5 +18,7 @@ namespace Backoffice.RazorPages.ViewModels
         public decimal? Price { get; set; }
         public int ProductId { get; set; }
         public bool ToRemove { get; set; }
+        [Display(Name = "SKU")]
+        public string ProductSKU { get; set; }
     }
 }

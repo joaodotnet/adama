@@ -7,5 +7,6 @@
         public string PictureUri { get; set; }
         public int IllustrationTypeId { get; set; }
         public IllustrationType IllustrationType { get; set; }
+        public byte[] Image { get; set; }
     }
 }
