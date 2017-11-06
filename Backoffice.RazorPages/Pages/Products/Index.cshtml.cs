@@ -30,7 +30,17 @@ namespace Backoffice.RazorPages.Pages.Products
             ProductModel = _mapper.Map<List<ProductViewModel>>(await _context.Products
                 .Include(p => p.Illustation)
                 .Include(p => p.ProductType)
+                .Include(p => p.ProductAttributes)
                 .ToListAsync());
+
+            foreach (var item in ProductModel)
+            {
+                if(item.ProductAttributes.Count > 0)
+                {
+                    var skus = string.Join(';', item.ProductAttributes.Select(x => x.ProductSKU));
+                    item.ProductSKU = skus;
+                }
+            }
         }
     }
 }

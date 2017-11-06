@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Entities;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
 namespace Backoffice.RazorPages.ViewModels
@@ -14,12 +15,15 @@ namespace Backoffice.RazorPages.ViewModels
         [StringLength(100)]
         [Required]
         public string Name { get; set; }
-        [Display(Name = "Url")]
-        [StringLength(255)]
-        public string PictureUri { get; set; }
+        //[Display(Name = "Url")]
+        //[StringLength(255)]
+        //public string PictureUri { get; set; }
         [Required]
         [Display(Name = "Tipo")]
         public int IllustrationTypeId { get; set; }
         public IllustrationTypeViewModel IllustrationType { get; set; }
+        [Display(Name = "Imagem")]
+        public IFormFile IllustrationImage { get; set; }
+        public string ImageBase64 { get; set; }
     }
 }

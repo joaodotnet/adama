@@ -10,6 +10,7 @@ using ApplicationCore.Entities;
 using Infrastructure.Data;
 using AutoMapper;
 using Backoffice.RazorPages.ViewModels;
+using System.IO;
 
 namespace Backoffice.RazorPages.Pages.Illustrations
 {
@@ -35,7 +36,13 @@ namespace Backoffice.RazorPages.Pages.Illustrations
             }
             ViewData["IllustrationTypes"] = new SelectList(_context.IllustrationTypes, "Id", "Code");
 
-            IllustrationModel = _mapper.Map<IllustrationViewModel>(await _context.Illustrations.Include(x => x.IllustrationType).SingleOrDefaultAsync(m => m.Id == id));
+            var illustrationDb = await _context.Illustrations.Include(x => x.IllustrationType).SingleOrDefaultAsync(m => m.Id == id);
+            IllustrationModel = _mapper.Map<IllustrationViewModel>(illustrationDb);
+
+            if (illustrationDb.Image != null)
+            {
+                IllustrationModel.ImageBase64 = "data:image/png;base64," + Convert.ToBase64String(illustrationDb.Image, 0, illustrationDb.Image.Length);
+            }
 
             if (IllustrationModel == null)
             {
@@ -51,6 +58,18 @@ namespace Backoffice.RazorPages.Pages.Illustrations
                 return Page();
             }
             var illustrationEntity = _mapper.Map<Illustration>(IllustrationModel);
+
+            if (IllustrationModel.IllustrationImage.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await IllustrationModel.IllustrationImage.CopyToAsync(memoryStream);
+                    // validate file, then move to CDN or public folder
+                    illustrationEntity.Image = memoryStream.ToArray();
+                }
+            }
+
+
             _context.Attach(illustrationEntity).State = EntityState.Modified;
 
             try

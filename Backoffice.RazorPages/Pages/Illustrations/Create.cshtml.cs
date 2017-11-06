@@ -10,6 +10,7 @@ using Infrastructure.Data;
 using AutoMapper;
 using Backoffice.RazorPages.Extensions;
 using Backoffice.RazorPages.ViewModels;
+using System.IO;
 
 namespace Backoffice.RazorPages.Pages.Illustrations
 {
@@ -41,7 +42,20 @@ namespace Backoffice.RazorPages.Pages.Illustrations
                 return Page();
             }
 
-            _context.Illustrations.Add(_mapper.Map<Illustration>(IllustrationModel));
+            var illustrationDB = _mapper.Map<Illustration>(IllustrationModel);
+
+            if (IllustrationModel.IllustrationImage.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await IllustrationModel.IllustrationImage.CopyToAsync(memoryStream);
+                    // validate file, then move to CDN or public folder
+                    illustrationDB.Image = memoryStream.ToArray();
+                }
+            }
+
+            _context.Illustrations.Add(illustrationDB);
+
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
