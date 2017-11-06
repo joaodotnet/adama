@@ -33,7 +33,7 @@ namespace Backoffice.RazorPages.Pages.IllustrationTypes
                 return NotFound();
             }
 
-            var IllustrationType = _mapper.Map<IllustrationTypeViewModel>(await _context.IllustrationTypes.SingleOrDefaultAsync(m => m.Id == id));
+            IllustrationType = _mapper.Map<IllustrationTypeViewModel>(await _context.IllustrationTypes.SingleOrDefaultAsync(m => m.Id == id));
 
             if (IllustrationType == null)
             {
