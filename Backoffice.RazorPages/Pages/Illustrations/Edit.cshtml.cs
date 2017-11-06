@@ -44,7 +44,7 @@ namespace Backoffice.RazorPages.Pages.Illustrations
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostSaveAsync()
         {
             if (!ModelState.IsValid)
             {
@@ -63,6 +63,11 @@ namespace Backoffice.RazorPages.Pages.Illustrations
             }
 
             return RedirectToPage("./Index");
+        }
+        public async Task<IActionResult> OnPostRefreshTypesAsync()
+        {
+            ViewData["IllustrationTypes"] = new SelectList(_context.IllustrationTypes, "Id", "Code");
+            return Page();
         }
     }
 }
