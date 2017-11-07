@@ -36,7 +36,10 @@ namespace Backoffice
             services.AddDbContext<DamaContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DamaConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+                {
+                    options.Password.RequireUppercase = false;
+                })
                .AddEntityFrameworkStores<AppIdentityDbContext>()
                .AddDefaultTokenProviders();
 
@@ -46,6 +49,11 @@ namespace Backoffice
                 {
                     options.Conventions.AuthorizeFolder("/Account/Manage");
                     options.Conventions.AuthorizePage("/Account/Logout");
+                    options.Conventions.AuthorizeFolder("/Category");
+                    options.Conventions.AuthorizeFolder("/Illustrations");
+                    options.Conventions.AuthorizeFolder("/IllustrationsTypes");
+                    options.Conventions.AuthorizeFolder("/Products");
+                    options.Conventions.AuthorizeFolder("/ProductType");
                 });
 
             services.AddAutoMapper();
