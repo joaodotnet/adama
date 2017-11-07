@@ -10,6 +10,7 @@
             <li>
                 <a asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
             </li>
+            <li><a asp-page="/Account/Register">Register</a></li>
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
             </li>
@@ -18,8 +19,7 @@
 }
 else
 {
-    <ul class="nav navbar-nav navbar-right">
-        <li><a asp-page="/Account/Register">Register</a></li>
+    <ul class="nav navbar-nav navbar-right">        
         <li><a asp-page="/Account/Login">Log in</a></li>
     </ul>
 }
