@@ -1,0 +1,41 @@
+﻿@page
+@model Backoffice.Pages.Illustrations.DeleteModel
+
+@{
+    ViewData["Title"] = "Remover";
+}
+
+<h2>Remover</h2>
+
+<h3>Tem a certeza que quer remover o registo?</h3>
+<p class="alert alert-danger">Atenção: Esta operação vai remover todos os produtos associados a esta ilustração!</p>
+<div>
+    <h4>Ilustração</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.IllustrationModel.Code)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IllustrationModel.Code)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IllustrationModel.PictureUri)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IllustrationModel.PictureUri)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IllustrationModel.Type)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IllustrationModel.Type)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="IllustrationModel.Id" />
+        <input type="submit" value="Remover" class="btn btn-default" /> |
+        <a asp-page="./Index">Voltar para a lista</a>
+    </form>
+</div>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Adama.Services
+namespace Backoffice.Services
 {
     public interface IEmailSender
     {
