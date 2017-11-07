@@ -1,0 +1,48 @@
+﻿@page
+@model Backoffice.Pages.ProductType.IndexModel
+
+@{
+    ViewData["Title"] = "Tipos de Produtos";
+}
+
+<h2>Tipos de Produtos</h2>
+
+<p>
+    <a asp-page="Create">Novo Tipo de Produto</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProductTypesModel[0].Code)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProductTypesModel[0].Description)
+                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductTypesModel[0].Category)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.ProductTypesModel) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.Name)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Editar</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Detalhe</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Remover</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
