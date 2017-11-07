@@ -29,6 +29,7 @@ namespace Backoffice.RazorPages.Pages.Products
         {
             ProductModel = _mapper.Map<List<ProductViewModel>>(await _context.Products
                 .Include(p => p.Illustation)
+                    .ThenInclude(i => i.IllustrationType)
                 .Include(p => p.ProductType)
                 .Include(p => p.ProductAttributes)
                 .ToListAsync());
