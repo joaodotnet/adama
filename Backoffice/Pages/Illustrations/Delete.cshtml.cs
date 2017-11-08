@@ -33,7 +33,7 @@ namespace Backoffice.Pages.Illustrations
                 return NotFound();
             }
 
-            IllustrationModel = _mapper.Map<IllustrationViewModel>(await _context.Illustrations.SingleOrDefaultAsync(m => m.Id == id));
+            IllustrationModel = _mapper.Map<IllustrationViewModel>(await _context.Illustrations.Include(x => x.IllustrationType).SingleOrDefaultAsync(m => m.Id == id));
 
             if (IllustrationModel == null)
             {

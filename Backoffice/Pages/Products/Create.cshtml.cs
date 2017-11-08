@@ -9,6 +9,7 @@ using ApplicationCore.Entities;
 using Infrastructure.Data;
 using AutoMapper;
 using Backoffice.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backoffice.Pages.Products
 {
@@ -23,12 +24,11 @@ namespace Backoffice.Pages.Products
             _mapper = mapper;
         }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGet()
         {
-            ViewData["IllustrationId"] = new SelectList(_context.Illustrations, "Id", "Code");
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Code");
+            await PopulateLists();
             return Page();
-        }
+        }        
 
         [BindProperty]
         public ProductViewModel ProductModel { get; set; }
@@ -37,8 +37,7 @@ namespace Backoffice.Pages.Products
         {
             if (!ModelState.IsValid)
             {
-                ViewData["IllustrationId"] = new SelectList(_context.Illustrations, "Id", "Code");
-                ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Code");
+                await PopulateLists();
                 return Page();
             }
 
@@ -51,8 +50,7 @@ namespace Backoffice.Pages.Products
             //Validate Model
             if (!ValidateAttributesModel())
             {
-                ViewData["IllustrationId"] = new SelectList(_context.Illustrations, "Id", "Code");
-                ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Code");
+                await PopulateLists();
             }
 
             //Save Changes            
@@ -64,8 +62,7 @@ namespace Backoffice.Pages.Products
 
         public async Task<IActionResult> OnPostAddAttributeAsync()
         {
-            ViewData["IllustrationId"] = new SelectList(_context.Illustrations, "Id", "Code");
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Code");
+            await PopulateLists();
             ProductModel.ProductAttributes.Add(new ProductAttributeViewModel());
             return Page();
         }
@@ -88,6 +85,17 @@ namespace Backoffice.Pages.Products
                 }
             }
             return true;
+        }
+
+        private async Task PopulateLists()
+        {
+            var illustrations = await _context.Illustrations
+                .Include(x => x.IllustrationType)
+                .Select(s => new { Id = s.Id, Name = $"{s.IllustrationType.Code} - {s.Code}" })
+                .OrderBy(x => x.Name)
+                .ToListAsync();
+            ViewData["IllustrationId"] = new SelectList(illustrations, "Id", "Name");
+            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Code");
         }
     }
 }
