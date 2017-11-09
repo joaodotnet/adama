@@ -38,7 +38,7 @@ namespace Backoffice.Pages.Products
             {
                 if(item.ProductAttributes.Count > 0)
                 {
-                    var skus = string.Join(';', item.ProductAttributes.Select(x => x.ProductSKU));
+                    var skus = string.Join("<br>", item.ProductAttributes.Select(x => x.ProductSKU));
                     item.ProductSKU = skus;
                 }
             }

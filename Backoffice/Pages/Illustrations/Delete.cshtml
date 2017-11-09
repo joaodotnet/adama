@@ -18,12 +18,18 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.IllustrationModel.Code)
-        </dd>        
+        </dd> 
+        <dt>
+            @Html.DisplayNameFor(model => model.IllustrationModel.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IllustrationModel.Name)
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.IllustrationModel.IllustrationType)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.IllustrationModel.IllustrationType.Code)
+            @Html.DisplayFor(model => model.IllustrationModel.IllustrationType.Code) - @Html.DisplayFor(model => model.IllustrationModel.IllustrationType.Name)
         </dd>
     </dl>
     

@@ -34,7 +34,7 @@ namespace Backoffice.Pages.Illustrations
             {
                 return NotFound();
             }
-            ViewData["IllustrationTypes"] = new SelectList(_context.IllustrationTypes, "Id", "Code");
+            await PopulateListAsync();
 
             var illustrationDb = await _context.Illustrations.Include(x => x.IllustrationType).SingleOrDefaultAsync(m => m.Id == id);
             IllustrationModel = _mapper.Map<IllustrationViewModel>(illustrationDb);
@@ -57,9 +57,21 @@ namespace Backoffice.Pages.Illustrations
             {
                 return Page();
             }
-            var illustrationEntity = _mapper.Map<Illustration>(IllustrationModel);
+            //var illustrationEntity = _mapper.Map<Illustration>(IllustrationModel);
+            var illustrationEntity = await _context.Illustrations
+                .Include(x => x.IllustrationType)
+                .SingleOrDefaultAsync(x => x.Id == IllustrationModel.Id);
 
-            if (IllustrationModel.IllustrationImage.Length > 0)
+            if(illustrationEntity == null)
+            {
+                ModelState.AddModelError("", "Ilustração não encontrada!");
+                return Page();
+            }
+            illustrationEntity.Code = IllustrationModel.Code;
+            illustrationEntity.Name = IllustrationModel.Name;
+            illustrationEntity.IllustrationTypeId = IllustrationModel.IllustrationTypeId;
+
+            if (IllustrationModel.IllustrationImage?.Length > 0)
             {
                 using (var memoryStream = new MemoryStream())
                 {
@@ -70,7 +82,7 @@ namespace Backoffice.Pages.Illustrations
             }
 
 
-            _context.Attach(illustrationEntity).State = EntityState.Modified;
+            //_context.Attach(illustrationEntity).State = EntityState.Modified;
 
             try
             {
@@ -85,8 +97,16 @@ namespace Backoffice.Pages.Illustrations
         }
         public async Task<IActionResult> OnPostRefreshTypesAsync()
         {
-            ViewData["IllustrationTypes"] = new SelectList(_context.IllustrationTypes, "Id", "Code");
+            await PopulateListAsync();
             return Page();
+        }
+
+        private async Task PopulateListAsync()
+        {
+            var list = await _context.IllustrationTypes
+                .Select(x => new { Id = x.Id, Name = $"{x.Code} - {x.Name}" })
+                .ToListAsync();
+            ViewData["IllustrationTypes"] = new SelectList(list, "Id", "Name");
         }
     }
 }

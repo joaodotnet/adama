@@ -45,8 +45,7 @@ namespace Backoffice.Pages.Products
             {
                 return NotFound();
             }
-           ViewData["IllustrationId"] = new SelectList(_context.Illustrations, "Id", "Code");
-           ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Code");
+            await PopulateLists();
             return Page();
         }
 
@@ -54,8 +53,7 @@ namespace Backoffice.Pages.Products
         {
             if (!ModelState.IsValid)
             {
-                ViewData["IllustrationId"] = new SelectList(_context.Illustrations, "Id", "Code");
-                ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Code");
+                await PopulateLists();
                 return Page();
             }
             //Remove model attributes with no id
@@ -67,8 +65,7 @@ namespace Backoffice.Pages.Products
             //Validate Model
             if (!ValidateAttributesModel())
             {
-                ViewData["IllustrationId"] = new SelectList(_context.Illustrations, "Id", "Code");
-                ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Code");
+                await PopulateLists();
                 return Page();
             }
 
@@ -124,13 +121,23 @@ namespace Backoffice.Pages.Products
 
         public async Task<IActionResult> OnPostAddAttributeAsync()
         {
-            ViewData["IllustrationId"] = new SelectList(_context.Illustrations, "Id", "Code");
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Code");
+            await PopulateLists();
             ProductModel.ProductAttributes.Add(new ProductAttributeViewModel
             {
                 ProductId = ProductModel.Id
             });
             return Page();
+        }
+
+        private async Task PopulateLists()
+        {
+            var illustrations = await _context.Illustrations
+                .Include(x => x.IllustrationType)
+                .Select(s => new { Id = s.Id, Name = $"{s.IllustrationType.Code} - {s.Code}" })
+                .OrderBy(x => x.Name)
+                .ToListAsync();
+            ViewData["IllustrationId"] = new SelectList(illustrations, "Id", "Name");
+            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Code");
         }
 
         //public async Task<IActionResult> OnPostRemoveAttributeAsync(int id)

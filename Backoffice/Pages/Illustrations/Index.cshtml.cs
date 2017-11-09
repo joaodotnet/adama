@@ -27,7 +27,11 @@ namespace Backoffice.Pages.Illustrations
 
         public async Task OnGetAsync()
         {
-            IllustrationModel = _mapper.Map<List<IllustrationViewModel>>(await _context.Illustrations.Include(x => x.IllustrationType).ToListAsync());
+            IllustrationModel = _mapper.Map<List<IllustrationViewModel>>(
+                await _context.Illustrations
+                .Include(x => x.IllustrationType)
+                .OrderBy(x => x.Code)
+                .ToListAsync());
         }
     }
 }

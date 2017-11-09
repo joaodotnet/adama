@@ -7,11 +7,7 @@ namespace Backoffice.ViewModels
 {
     public class ProductViewModel
     {
-        public int Id { get; set; }        
-        [Required]
-        [StringLength(25)]
-        [Display(Name = "Código")]
-        public string Code { get; set; }
+        public int Id { get; set; }                       
         [Required]
         [StringLength(100)]
         [Display(Name = "Nome")]
@@ -25,7 +21,7 @@ namespace Backoffice.ViewModels
         [Display(Name = "Ilustração")]
         [Required]
         public int IllustrationId { get; set; }
-        public IllustrationViewModel Illustation { get; set; }
+        public IllustrationViewModel Illustration { get; set; }
         [Required]
         [Display(Name = "Tipo de Produto")]
         public int ProductTypeId { get; set; }

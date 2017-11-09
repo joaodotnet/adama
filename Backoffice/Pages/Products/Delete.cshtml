@@ -13,12 +13,6 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.ProductModel.Code)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ProductModel.Code)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.ProductModel.Name)
         </dt>
         <dd>
@@ -31,22 +25,22 @@
             @Html.DisplayFor(model => model.ProductModel.Description)
         </dd>        
         <dt>
+            @Html.DisplayNameFor(model => model.ProductModel.ProductTypeId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductModel.ProductType.Code)
+        </dd>        
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductModel.IllustrationId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductModel.Illustration.Code)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.ProductModel.Price)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.ProductModel.Price)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ProductModel.Illustation)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ProductModel.Illustation.Code)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ProductModel.ProductType)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ProductModel.ProductType.Code)
         </dd>
     </dl>
     
