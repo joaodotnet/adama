@@ -73,8 +73,7 @@ namespace Infrastructure.Data
             builder.Entity<Product>().Property(x => x.Id)
                 .ForSqlServerUseSequenceHiLo("product_hilo")
                 .IsRequired();
-            builder.Entity<Product>().Property(x => x.Code)
-                .IsRequired()
+            builder.Entity<Product>().Property(x => x.Code)                
                 .HasMaxLength(25);
             builder.Entity<Product>().Property(x => x.Name)
                 .IsRequired()

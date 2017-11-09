@@ -24,13 +24,13 @@ namespace Backoffice
             CreateMap<IllustrationTypeViewModel, IllustrationType>();
             CreateMap<Product, ProductViewModel>()
                 .ForMember(dest => dest.ProductSKU,
-                opts => opts.MapFrom(src => $"{src.ProductType.Code}_{src.Illustation.Code}_{src.Illustation.IllustrationType.Code}_{src.Code}"));
+                opts => opts.MapFrom(src => $"{src.ProductType.Code}_{src.Illustation.Code}{src.Illustation.IllustrationType.Code}"));
             CreateMap<ProductViewModel, Product>()
                 .ForMember(dest => dest.Personalized,
                 opts => opts.UseValue(false));
             CreateMap<ProductAttribute, ProductAttributeViewModel>()
                 .ForMember(dest => dest.ProductSKU,
-                opts => opts.MapFrom(src => $"{src.Product.ProductType.Code}_{src.Product.Illustation.Code}_{src.Product.Illustation.IllustrationType.Code}_{src.Product.Code}_{src.Code}"));
+                opts => opts.MapFrom(src => $"{src.Product.ProductType.Code}_{src.Product.Illustation.Code}{src.Product.Illustation.IllustrationType.Code}_{src.Code}"));
             CreateMap<ProductAttributeViewModel, ProductAttribute>();
         }
     }

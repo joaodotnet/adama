@@ -11,6 +11,7 @@ using AutoMapper;
 using Backoffice.Extensions;
 using Backoffice.ViewModels;
 using System.IO;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backoffice.Pages.Illustrations
 {
@@ -25,9 +26,9 @@ namespace Backoffice.Pages.Illustrations
             _mapper = mapper;
         }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGet()
         {
-            ViewData["IllustrationTypes"] = new SelectList(_context.IllustrationTypes, "Id", "Code");
+            await PopulateListAsync();
             return Page();
         }
 
@@ -38,13 +39,13 @@ namespace Backoffice.Pages.Illustrations
         {
             if (!ModelState.IsValid)
             {
-                ViewData["IllustrationTypes"] = new SelectList(_context.IllustrationTypes, "Id", "Code");
+                await PopulateListAsync();
                 return Page();
             }
 
             var illustrationDB = _mapper.Map<Illustration>(IllustrationModel);
 
-            if (IllustrationModel.IllustrationImage.Length > 0)
+            if (IllustrationModel.IllustrationImage?.Length > 0)
             {
                 using (var memoryStream = new MemoryStream())
                 {
@@ -63,8 +64,16 @@ namespace Backoffice.Pages.Illustrations
 
         public async Task<IActionResult> OnPostRefreshTypesAsync()
         {
-            ViewData["IllustrationTypes"] = new SelectList(_context.IllustrationTypes, "Id", "Code");
+            await PopulateListAsync();
             return Page();
+        }
+
+        private async Task PopulateListAsync()
+        {
+            var list = await _context.IllustrationTypes
+                .Select(x => new { Id = x.Id, Name = $"{x.Code} - {x.Name}" })
+                .ToListAsync();
+            ViewData["IllustrationTypes"] = new SelectList(list, "Id", "Name");
         }
     }
 }
