@@ -13,7 +13,7 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
         <div class="col-md-4">           
-            <div class="form-group">
+            <div class="form-group required">
                 <label asp-for="ProductModel.Name" class="control-label"></label>
                 <input asp-for="ProductModel.Name" class="form-control" />
                 <span asp-validation-for="ProductModel.Name" class="text-danger"></span>
@@ -23,17 +23,17 @@
                 <input asp-for="ProductModel.Description" class="form-control" />
                 <span asp-validation-for="ProductModel.Description" class="text-danger"></span>
             </div>  
-            <div class="form-group">
+            <div class="form-group required">
                 <label asp-for="ProductModel.ProductTypeId" class="control-label"></label>
                 <select asp-for="ProductModel.ProductTypeId" class="form-control" asp-items="ViewBag.ProductTypeId"></select>
                 <span asp-validation-for="ProductModel.ProductTypeId" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group required">
                 <label asp-for="ProductModel.IllustrationId" class="control-label"></label>
                 <select asp-for="ProductModel.IllustrationId" class="form-control" asp-items="ViewBag.IllustrationId"></select>
                 <span asp-validation-for="ProductModel.IllustrationId" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group required">
                 <label asp-for="ProductModel.Price" class="control-label"></label>
                 <input asp-for="ProductModel.Price" class="form-control decimal" />
                 <span asp-validation-for="ProductModel.Price" class="text-danger"></span>
@@ -49,9 +49,11 @@
                     <tr>
                         <th>
                             @Html.DisplayNameFor(model => model.ProductModel.ProductAttributes[0].Type)
+                            <span style="color:red">*</span>
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.ProductModel.ProductAttributes[0].Code)
+                            <span style="color:red">*</span>
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.ProductModel.ProductAttributes[0].Name)
