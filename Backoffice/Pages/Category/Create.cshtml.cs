@@ -37,7 +37,12 @@ namespace Backoffice.Pages.Category
             {
                 return Page();
             }
-
+            //check if name exists
+            if(_context.Categories.Any(x => x.Name.ToUpper() == Category.Name.ToUpper()))
+            {
+                ModelState.AddModelError("", $"O nome da Categoria '{Category.Name}' já existe!");
+                return Page();
+            }
             _context.Categories.Add(_mapper.Map<ApplicationCore.Entities.Category>(Category));
             await _context.SaveChangesAsync();
 

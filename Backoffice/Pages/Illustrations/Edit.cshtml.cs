@@ -53,10 +53,20 @@ namespace Backoffice.Pages.Illustrations
 
         public async Task<IActionResult> OnPostSaveAsync()
         {
+            await PopulateListAsync();
+
             if (!ModelState.IsValid)
             {
                 return Page();
             }
+
+            //check if code exists
+            if (_context.Illustrations.Any(x => x.Code.ToUpper() == IllustrationModel.Code.ToUpper() && x.Id != IllustrationModel.Id))
+            {
+                ModelState.AddModelError("", $"O código da Ilustração '{IllustrationModel.Code}' já existe!");
+                return Page();
+            }
+
             //var illustrationEntity = _mapper.Map<Illustration>(IllustrationModel);
             var illustrationEntity = await _context.Illustrations
                 .Include(x => x.IllustrationType)
