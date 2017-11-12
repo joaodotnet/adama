@@ -13,17 +13,17 @@
     <div class="col-md-4">
         <form method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            <div class="form-group required">
                 <label asp-for="IllustrationModel.Code" class="control-label"></label>
                 <input asp-for="IllustrationModel.Code" class="form-control" />
                 <span asp-validation-for="IllustrationModel.Code" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group required">
                 <label asp-for="IllustrationModel.Name" class="control-label"></label>
                 <input asp-for="IllustrationModel.Name" class="form-control" />
                 <span asp-validation-for="IllustrationModel.Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group required">
                 <label asp-for="IllustrationModel.IllustrationTypeId" class="control-label"></label>
                 <div class="text-nowrap">
                     <select asp-for="IllustrationModel.IllustrationTypeId" asp-items="ViewBag.IllustrationTypes" class="form-control col-md-10"></select>
