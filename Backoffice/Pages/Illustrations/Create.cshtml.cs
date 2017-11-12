@@ -43,6 +43,14 @@ namespace Backoffice.Pages.Illustrations
                 return Page();
             }
 
+            //check if code exists
+            if (_context.Illustrations.Any(x => x.Code.ToUpper() == IllustrationModel.Code.ToUpper()))
+            {
+                await PopulateListAsync();
+                ModelState.AddModelError("", $"O código da Ilustração '{IllustrationModel.Code}' já existe!");
+                return Page();
+            }
+
             var illustrationDB = _mapper.Map<Illustration>(IllustrationModel);
 
             if (IllustrationModel.IllustrationImage?.Length > 0)

@@ -38,6 +38,13 @@ namespace Backoffice.Pages.IllustrationTypes
                 return Page();
             }
 
+            //check if code exists
+            if (_context.IllustrationTypes.Any(x => x.Code.ToUpper() == IllustrationType.Code.ToUpper()))
+            {
+                ModelState.AddModelError("", $"O código do Tipo de Ilustração '{IllustrationType.Code}' já existe!");
+                return Page();
+            }
+
             _context.IllustrationTypes.Add(_mapper.Map<IllustrationType>(IllustrationType));
             await _context.SaveChangesAsync();
 

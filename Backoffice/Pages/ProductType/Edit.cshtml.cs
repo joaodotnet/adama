@@ -52,6 +52,12 @@ namespace Backoffice.Pages.ProductType
             {
                 return Page();
             }
+            //check if code exists
+            if (_context.ProductTypes.Any(x => x.Code.ToUpper() == ProductTypeModel.Code.ToUpper() && x.Id != ProductTypeModel.Id))
+            {
+                ModelState.AddModelError("", $"O nome do Tipo do Produto '{ProductTypeModel.Code}' já existe!");
+                return Page();
+            }
 
             var productEntity = _mapper.Map<ApplicationCore.Entities.ProductType>(ProductTypeModel);
 

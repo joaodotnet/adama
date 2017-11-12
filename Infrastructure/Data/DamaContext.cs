@@ -32,6 +32,9 @@ namespace Infrastructure.Data
             builder.Entity<Category>().Property(c => c.Name)
                 .IsRequired()
                 .HasMaxLength(100);
+            builder.Entity<Category>()
+                .HasIndex(c => c.Name)
+                .IsUnique();
 
             //ProductType
             builder.Entity<ProductType>().ToTable("ProductType");
@@ -44,6 +47,9 @@ namespace Infrastructure.Data
             builder.Entity<ProductType>().HasOne(x => x.Category)
                 .WithMany(c => c.ProductTypes)
                 .HasForeignKey(x => x.CategoryId);
+            builder.Entity<ProductType>()
+               .HasIndex(x => x.Code)
+               .IsUnique();
 
             //Illustration Types
             builder.Entity<IllustrationType>().ToTable("IllustrationType");
@@ -52,6 +58,9 @@ namespace Infrastructure.Data
                 .HasMaxLength(25);
             builder.Entity<IllustrationType>().Property(x => x.Name)                
                 .HasMaxLength(100);
+            builder.Entity<IllustrationType>()
+               .HasIndex(x => x.Code)
+               .IsUnique();
 
             //Illustration
             builder.Entity<Illustration>().ToTable("Illustration");
@@ -65,7 +74,10 @@ namespace Infrastructure.Data
                 .HasMaxLength(255);
             builder.Entity<Illustration>().HasOne(x => x.IllustrationType)
                 .WithMany()
-                .HasForeignKey(x => x.IllustrationTypeId);                
+                .HasForeignKey(x => x.IllustrationTypeId);
+            builder.Entity<Illustration>()
+               .HasIndex(x => x.Code)
+               .IsUnique();
 
             //Product
             builder.Entity<Product>().ToTable("Product");
@@ -73,7 +85,7 @@ namespace Infrastructure.Data
             builder.Entity<Product>().Property(x => x.Id)
                 .ForSqlServerUseSequenceHiLo("product_hilo")
                 .IsRequired();
-            builder.Entity<Product>().Property(x => x.Code)                
+            builder.Entity<Product>().Property(x => x.Code)
                 .HasMaxLength(25);
             builder.Entity<Product>().Property(x => x.Name)
                 .IsRequired()
