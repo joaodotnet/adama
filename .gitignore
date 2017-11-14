@@ -287,5 +287,4 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 
-BackOffice/wwwroot/lib/
-BackOffice.RazorPages/wwwroot/lib/
+src/BackOffice/wwwroot/lib/
