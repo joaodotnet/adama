@@ -2,32 +2,21 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DamaSales.Pages.Sales">
-  <ListView x:Name="MyListView"
-            ItemsSource="{Binding Items}"
+    <ListView x:Name="categoriesListView"
+            ItemsSource="{Binding}"
             ItemTapped="Handle_ItemTapped"
             CachingStrategy="RecycleElement">
-            
-    <!--Built in Cells-->
-    <ListView.ItemTemplate>
-        <DataTemplate>
-            <TextCell Text="{Binding .}" />
-        </DataTemplate>
-    </ListView.ItemTemplate>
-    
-    <!--Custom View Cells-->
-    <!--
-    <ListView.ItemTemplate>
-      <DataTemplate>
-        <ViewCell>
-          <StackLayout>
-            <Label Text="{Binding Text}" 
-                   Style="{DynamicResource ListItemTextStyle}" />
-            <Label Text="{Binding Detail}" 
-                   Style="{DynamicResource ListItemDetailTextStyle}"/>
-          </StackLayout>
-        </ViewCell>
-      </DataTemplate>
-    </ListView.ItemTemplate>
-    -->
-  </ListView>
+
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <StackLayout>
+                        <Image Aspect="AspectFit" Source="http://via.placeholder.com/100x100" />
+                        <Label Text="{Binding Name}" />
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+
+    </ListView>
 </ContentPage>
