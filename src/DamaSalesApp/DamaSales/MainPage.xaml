@@ -13,8 +13,8 @@
         </RelativeLayout>
         <RelativeLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" >
             <StackLayout Orientation="Horizontal">
-                <Button Text="Vendas" Clicked="Sales_Clicked" TextColor="White" BackgroundColor="LightSeaGreen" HeightRequest="100" WidthRequest="200"/>
-                <Button Text="Encomendas" Clicked="Orders_Clicked" TextColor="White" BackgroundColor="LightSeaGreen" HeightRequest="100" WidthRequest="200"/>
+                <Button Text="Vendas" FontSize="Large" Clicked="Sales_Clicked" TextColor="White" BackgroundColor="LightSeaGreen" HeightRequest="100" WidthRequest="200"/>
+                <Button Text="Encomendas" FontSize="Large" Clicked="Orders_Clicked" TextColor="White" BackgroundColor="LightSeaGreen" HeightRequest="100" WidthRequest="200"/>
             </StackLayout>
         </RelativeLayout>
     </StackLayout>

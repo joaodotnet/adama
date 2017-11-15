@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DamaSales.Models;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -8,26 +10,33 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace DamaSales.Pages
-{
-    [XamlCompilation(XamlCompilationOptions.Compile)]
+{    
     public partial class Sales : ContentPage
     {
         public ObservableCollection<string> Items { get; set; }
 
         public Sales()
         {
-            InitializeComponent();
+            InitializeComponent();            
+        }
 
-            Items = new ObservableCollection<string>
+        protected override void OnAppearing()
+        {
+            //categoriesListView.IsRefreshing = true;
+            var Items = new List<Category>()
             {
-                "Acessórios",
-                "Decoração",
-                "Design",
-                "Papelaria",
-                "Personalizado"
+                new Category { Id = 1, Name = "Acessórios" },
+                new Category { Id = 2, Name = "Decoração" },
+                new Category { Id = 3, Name = "Design" },
+                new Category { Id = 4, Name = "Papelaria" },
+                new Category { Id = 5, Name = "Personalizado" }
             };
 
-            MyListView.ItemsSource = Items;
+            this.BindingContext = Items;
+
+            //categoriesListView.IsRefreshing = false;
+
+            base.OnAppearing();
         }
 
         async void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
