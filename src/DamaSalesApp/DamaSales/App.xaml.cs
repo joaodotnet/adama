@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DamaSales.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,7 @@ namespace DamaSales
 {
     public partial class App : Application
     {
+        public static MainViewModel ViewModel { get; set; }
         public App()
         {
             InitializeComponent();

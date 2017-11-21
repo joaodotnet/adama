@@ -14,6 +14,21 @@ namespace DamaSales
             InitializeComponent();
         }
 
+        protected override void OnAppearing()
+        {
+            if(App.ViewModel == null)
+            {
+                App.ViewModel = new ViewModels.MainViewModel
+                {
+                    CurrentDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                    Place = "Feira de Quarteira"
+                };
+
+                App.ViewModel.RefreshCategories();
+            }
+            base.OnAppearing();
+        }
+
         private async void Sales_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new Pages.Sales());
