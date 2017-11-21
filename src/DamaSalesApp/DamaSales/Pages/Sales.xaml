@@ -48,6 +48,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
+
         </Grid>
         <StackLayout Orientation="Vertical">
             <StackLayout Orientation="Horizontal">
