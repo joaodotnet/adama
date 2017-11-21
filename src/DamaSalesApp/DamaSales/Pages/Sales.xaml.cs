@@ -1,5 +1,4 @@
 ﻿using DamaSales.Models;
-using DamaSales.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -33,14 +32,15 @@ namespace DamaSales.Pages
                     await DisplayAlert("Item Tapped", $"{item.Name} tapped", "OK");
                 };
 
-                StackLayout stack = new StackLayout();
-                //var image = new Image { Source = "http://via.placeholder.com/100x100" };
-                //image.GestureRecognizers.Add(tapGestureRecognizer);
-                var box = new BoxView { HeightRequest = 150, WidthRequest = 150, Color = GetCategoryColor(item.Name)};
-                box.GestureRecognizers.Add(tapGestureRecognizer);
-                stack.Children.Add(box);
-                stack.Children.Add(new Label { Text = item.Name, VerticalOptions = LayoutOptions.CenterAndExpand, HorizontalOptions = LayoutOptions.CenterAndExpand });
-                categoriesList.Children.Add(stack, column, row);
+                StackLayout sl = new StackLayout
+                {
+                    BackgroundColor = GetCategoryColor(item.Name),
+                    HeightRequest = 150,
+                    WidthRequest = 150
+                };
+                sl.GestureRecognizers.Add(tapGestureRecognizer);
+                sl.Children.Add(new Label { Text = item.Name, TextColor = Color.FromHex("fff"), VerticalOptions = LayoutOptions.CenterAndExpand, HorizontalOptions = LayoutOptions.CenterAndExpand });
+                categoriesList.Children.Add(sl, column, row);
                 column++;
                 if (column == 4)
                 {
@@ -62,17 +62,17 @@ namespace DamaSales.Pages
             switch(name)
             {
                 case "Acessórios":
-                    return new Color(0, 160, 141);
+                    return Color.FromHex("00a08d");
                 case "Decoração":
-                    return new Color(255, 181, 181);
+                    return Color.FromHex("ffb5b5");
                 case "Design":
-                    return new Color(229, 190, 221);
+                    return Color.FromHex("e5bedd");
                 case "Papelaria":
-                    return new Color(237, 218, 196);
+                    return Color.FromHex("eddac4");
                 case "Personalizado":
-                    return new Color(58, 191, 201);
+                    return Color.FromHex("3abfc9");
                 default:
-                    return new Color();
+                    return Color.FromHex("000000");
             }
         }
     }
