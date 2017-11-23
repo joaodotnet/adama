@@ -42,9 +42,10 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\BasketItem.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductType.cs" />
-    <Compile Include="Models\ScreenModeType.cs" />
     <Compile Include="Pages\Sales.xaml.cs">
       <DependentUpon>Sales.xaml</DependentUpon>
     </Compile>

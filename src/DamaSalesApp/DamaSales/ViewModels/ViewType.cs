@@ -9,6 +9,7 @@ namespace DamaSales.ViewModels
     public enum ViewType
     {
         CATEGORY,
-        PRODUCT_TYPE
+        PRODUCT_TYPE,
+        PRODUCT
     }
 }
