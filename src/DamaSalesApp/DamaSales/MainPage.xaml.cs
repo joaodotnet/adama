@@ -26,6 +26,7 @@ namespace DamaSales
 
                 App.ViewModel.RefreshCategories();
                 App.ViewModel.RefreshProductTypes();
+                App.ViewModel.RefreshProducts();
             }
             base.OnAppearing();
         }

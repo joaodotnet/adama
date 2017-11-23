@@ -14,15 +14,15 @@ namespace DamaSales.Pages
 {
     public partial class Sales : ContentPage
     {
-        //public ObservableCollection<string> Items { get; set; }
-        //public ScreenModeType ScreenMode { get; set; }
         public int? CategoryId { get; set; }
+        public int? ProductTypeId { get; set; }
 
-        public Sales(int? categoryId = null)
+        public Sales(int? categoryId = null, int? productTypeId = null)
         {            
             InitializeComponent();
 
             CategoryId = categoryId;
+            ProductTypeId = productTypeId;
         }
 
         protected override void OnAppearing()
@@ -40,12 +40,21 @@ namespace DamaSales.Pages
                     AddToGrid(ref row, ref column, sl);
                 }
             }
-            else
+            else if(!ProductTypeId.HasValue)
             {
                 foreach (var item in App.ViewModel.ProductTypes.Where(x => x.CategoryId == CategoryId.Value).ToList())
                 {
-                    var tapGestureRecognizer = CreateTapGesture(null);
+                    var tapGestureRecognizer = CreateTapGesture(item.CategoryId, item.Id);
                     StackLayout sl = CreateChild(ViewType.PRODUCT_TYPE, item.Description, tapGestureRecognizer);
+                    AddToGrid(ref row, ref column, sl);
+                }
+            }
+            else
+            {
+                foreach (var item in App.ViewModel.Products.Where(x => x.ProductTypeId == ProductTypeId.Value).ToList())
+                {
+                    var tapGestureRecognizer = CreateTapGesture(CategoryId, ProductTypeId, item);
+                    StackLayout sl = CreateChild(ViewType.PRODUCT, item.Name, tapGestureRecognizer);
                     AddToGrid(ref row, ref column, sl);
                 }
             }
@@ -81,21 +90,36 @@ namespace DamaSales.Pages
             return sl;
         }
 
-        private TapGestureRecognizer CreateTapGesture(int? categoryId, string productTypeName = null)
+        private TapGestureRecognizer CreateTapGesture(int? categoryId, int? productTypeId = null, Product product = null)
         {
             var tapGestureRecognizer = new TapGestureRecognizer();
-            if(categoryId.HasValue)
+
+            if(product != null)
+            {                
+                tapGestureRecognizer.Tapped += async (s, e) =>
+                {
+                    App.ViewModel.BasketItems.Add(new BasketItem
+                    {
+                        Product = product,
+                        DisplayName = product.Name,
+                        Quantity = 1,
+                        UnitPrice = product.Price
+                    });
+                    await DisplayAlert("Carrinho", $"O produto {product.Name} foi adicionado", "OK");
+                };
+            }
+            if (productTypeId.HasValue && categoryId.HasValue)
+            {
+                tapGestureRecognizer.Tapped += async (s, e) =>
+                {
+                    await Navigation.PushAsync(new Pages.Sales(categoryId,productTypeId));
+                };
+            }
+            else if (categoryId.HasValue)
             {
                 tapGestureRecognizer.Tapped += async (s, e) =>
                 {
                     await Navigation.PushAsync(new Pages.Sales(categoryId));
-                };
-            }
-            else
-            {
-                tapGestureRecognizer.Tapped += async (s, e) =>
-                {
-                    await DisplayAlert("Item Tapped", $"{productTypeName} tapped", "OK");
                 };
             }
             
@@ -123,8 +147,19 @@ namespace DamaSales.Pages
                 }
             }
             else if (type == ViewType.PRODUCT_TYPE)
-                return Color.FromHex("cef442");
+                return Color.FromHex("049994");
+            else if (type == ViewType.PRODUCT)
+                return Color.FromHex("042251");
             return Color.FromHex("000000");
+        }
+
+        private async void OnItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            var product = e.Item as BasketItem;
+
+            var res = await DisplayAlert("Carrinho", $"Deseja remover o produto {product.DisplayName}?", "Sim", "Não");
+            if (res)
+                App.ViewModel.BasketItems.Remove(product);
         }
     }
 

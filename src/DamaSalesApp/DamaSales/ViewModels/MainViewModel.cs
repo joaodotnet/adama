@@ -15,6 +15,8 @@ namespace DamaSales.ViewModels
         {
             this.Categories = new ObservableCollection<Category>();
             this.ProductTypes = new ObservableCollection<ProductType>();
+            this.Products = new ObservableCollection<Product>();
+            this.BasketItems = new ObservableCollection<BasketItem>();
         }
 
         public string CurrentDate { get; set; }
@@ -32,6 +34,20 @@ namespace DamaSales.ViewModels
         {
             get { return this._productTypes; }
             set { this.SetProperty(ref this._productTypes, value); }
+        }
+
+        private ObservableCollection<Product> _products;
+        public ObservableCollection<Product> Products
+        {
+            get { return this._products; }
+            set { this.SetProperty(ref this._products, value); }
+        }
+
+        private ObservableCollection<BasketItem> _basketItems;
+        public ObservableCollection<BasketItem> BasketItems
+        {
+            get { return this._basketItems; }
+            set { this.SetProperty(ref this._basketItems, value); }
         }
 
         private bool _isBusy;
@@ -68,16 +84,37 @@ namespace DamaSales.ViewModels
 
             var productTypeList = new List<ProductType>()
             {
-                new ProductType { Code = "CAT", Description = "Carteira", CategoryId = 1 },
-                new ProductType { Code = "BLS", Description = "Bolsa", CategoryId = 1 },
-                new ProductType { Code = "PCH", Description = "Porta Chaves", CategoryId = 1 },
-                new ProductType { Code = "ALM", Description = "Almofada", CategoryId = 2 },
-                new ProductType { Code = "COL", Description = "Convites", CategoryId = 3 },
+                new ProductType { Id = 1, Code = "CAT", Description = "Carteira", CategoryId = 1 },
+                new ProductType { Id = 2, Code = "BLS", Description = "Bolsa", CategoryId = 1 },
+                new ProductType { Id = 3, Code = "PCH", Description = "Porta Chaves", CategoryId = 1 },
+                new ProductType { Id = 4, Code = "ALM", Description = "Almofada", CategoryId = 2 },
+                new ProductType { Id = 5, Code = "COL", Description = "Convites", CategoryId = 3 },
             };
 
             foreach (var item in productTypeList)
             {
                 this.ProductTypes.Add(item);
+            }
+
+            this.IsBusy = false;
+        }
+
+        public void RefreshProducts()
+        {
+            this.IsBusy = true;
+
+            var products = new List<Product>()
+            {
+                new Product { ProductTypeId = 1, Name = "Carteira Dama Sevilha", Price = 5.50m  },
+                new Product { ProductTypeId = 2, Name = "Bolsa Dama Cadiz", Price = 3.50m  },
+                new Product { ProductTypeId = 3, Name = "Porta Chaves Faro", Price = 2.50m  },
+                new Product { ProductTypeId = 1, Name = "Carteira Dama Cadiz", Price = 5.50m  },
+                new Product { ProductTypeId = 1, Name = "Carteira Dama Huelva", Price = 5.50m  },
+            };
+
+            foreach (var item in products)
+            {
+                this.Products.Add(item);
             }
 
             this.IsBusy = false;
