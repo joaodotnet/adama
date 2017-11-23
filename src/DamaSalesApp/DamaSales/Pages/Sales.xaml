@@ -36,7 +36,7 @@
 
     </ListView>-->
     <StackLayout Orientation="Horizontal" Padding="20,100,20,20">
-        <Grid x:Name="categoriesList" >
+        <Grid x:Name="categoriesList" WidthRequest="600" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />

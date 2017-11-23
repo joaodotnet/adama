@@ -25,6 +25,7 @@ namespace DamaSales
                 };
 
                 App.ViewModel.RefreshCategories();
+                App.ViewModel.RefreshProductTypes();
             }
             base.OnAppearing();
         }

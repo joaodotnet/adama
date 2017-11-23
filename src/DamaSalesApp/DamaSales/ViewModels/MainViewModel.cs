@@ -14,6 +14,7 @@ namespace DamaSales.ViewModels
         public MainViewModel()
         {
             this.Categories = new ObservableCollection<Category>();
+            this.ProductTypes = new ObservableCollection<ProductType>();
         }
 
         public string CurrentDate { get; set; }
@@ -24,7 +25,14 @@ namespace DamaSales.ViewModels
         {
             get { return this._categories; }
             set { this.SetProperty(ref this._categories, value); }
-        }        
+        }
+
+        private ObservableCollection<ProductType> _productTypes;
+        public ObservableCollection<ProductType> ProductTypes
+        {
+            get { return this._productTypes; }
+            set { this.SetProperty(ref this._productTypes, value); }
+        }
 
         private bool _isBusy;
         public bool IsBusy
@@ -53,6 +61,28 @@ namespace DamaSales.ViewModels
 
             this.IsBusy = false;
         }
+
+        public void RefreshProductTypes()
+        {
+            this.IsBusy = true;
+
+            var productTypeList = new List<ProductType>()
+            {
+                new ProductType { Code = "CAT", Description = "Carteira", CategoryId = 1 },
+                new ProductType { Code = "BLS", Description = "Bolsa", CategoryId = 1 },
+                new ProductType { Code = "PCH", Description = "Porta Chaves", CategoryId = 1 },
+                new ProductType { Code = "ALM", Description = "Almofada", CategoryId = 2 },
+                new ProductType { Code = "COL", Description = "Convites", CategoryId = 3 },
+            };
+
+            foreach (var item in productTypeList)
+            {
+                this.ProductTypes.Add(item);
+            }
+
+            this.IsBusy = false;
+        }
+
 
     }
 }
