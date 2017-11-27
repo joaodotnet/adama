@@ -7,7 +7,7 @@
         <StackLayout Orientation="Vertical" Spacing="10" Padding="5">
             <RelativeLayout VerticalOptions="Start" HorizontalOptions="Center" >
                 <StackLayout Padding="50" Orientation="Vertical">
-                    <Image Aspect="AspectFit" Source="http://via.placeholder.com/150x250" />
+                    <Image Aspect="AspectFit" Source="http://via.placeholder.com/150x150" />
                     <Label  VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" Text="Dama no Jornal"></Label>
                 </StackLayout>
