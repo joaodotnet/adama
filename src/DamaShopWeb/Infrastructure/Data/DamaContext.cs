@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ApplicationCore.Entities;
+using System;
 
 namespace Infrastructure.Data
 {
@@ -14,19 +15,63 @@ namespace Infrastructure.Data
 
         public DbSet<Basket> Baskets { get; set; }
         public DbSet<CatalogItem> CatalogItems { get; set; }
-        public DbSet<CatalogBrand> CatalogBrands { get; set; }
+        public DbSet<CatalogIllustration> CatalogBrands { get; set; }
         public DbSet<CatalogType> CatalogTypes { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Category>(ConfigureCategory);
             builder.Entity<Basket>(ConfigureBasket);
-            builder.Entity<CatalogBrand>(ConfigureCatalogBrand);
+            builder.Entity<CatalogIllustration>(ConfigureCatalogBrand);
             builder.Entity<CatalogType>(ConfigureCatalogType);
+            builder.Entity<IllustrationType>(ConfigureIllustrationType);           
             builder.Entity<CatalogItem>(ConfigureCatalogItem);
+            builder.Entity<CatalogAttribute>(ConfigureCatalogAttribute);
             builder.Entity<Order>(ConfigureOrder);
             builder.Entity<OrderItem>(ConfigureOrderItem);
+        }
+
+        private void ConfigureCatalogAttribute(EntityTypeBuilder<CatalogAttribute> builder)
+        {
+            builder.ToTable("CatalogAttribute");
+            builder.Property(x => x.Type)
+                .IsRequired();
+            builder.Property(x => x.Code)
+               .IsRequired()
+               .HasMaxLength(25);
+            builder.Property(x => x.Name)
+                .IsRequired()
+                .HasMaxLength(100);
+            builder.HasOne(x => x.CatalogItem)
+                .WithMany(p => p.CatalogAttributes)
+                .HasForeignKey(x => x.CatalogItemId);
+        }
+
+        private void ConfigureIllustrationType(EntityTypeBuilder<IllustrationType> builder)
+        {
+            builder.ToTable("IllustrationType");
+            builder.Property(x => x.Code)
+                .IsRequired()
+                .HasMaxLength(25);
+            builder.Property(x => x.Name)
+                .HasMaxLength(100);
+            builder
+               .HasIndex(x => x.Code)
+               .IsUnique();
+        }
+
+        private void ConfigureCategory(EntityTypeBuilder<Category> builder)
+        {
+            //Category
+            builder.ToTable("Category");
+            builder.Property(c => c.Name)
+                .IsRequired()
+                .HasMaxLength(100);
+            builder
+                .HasIndex(c => c.Name)
+                .IsUnique();
         }
 
         private void ConfigureBasket(EntityTypeBuilder<Basket> builder)
@@ -46,7 +91,7 @@ namespace Infrastructure.Data
 
             builder.Property(ci => ci.Name)
                 .IsRequired(true)
-                .HasMaxLength(50);
+                .HasMaxLength(100);
 
             builder.Property(ci => ci.Price)
                 .IsRequired(true);
@@ -54,18 +99,21 @@ namespace Infrastructure.Data
             builder.Property(ci => ci.PictureUri)
                 .IsRequired(false);
 
-            builder.HasOne(ci => ci.CatalogBrand)
+            builder.HasOne(ci => ci.CatalogIllustration)
                 .WithMany()
-                .HasForeignKey(ci => ci.CatalogBrandId);
+                .HasForeignKey(ci => ci.CatalogIllustrationId);
 
             builder.HasOne(ci => ci.CatalogType)
                 .WithMany()
                 .HasForeignKey(ci => ci.CatalogTypeId);
+
+            builder.Property(x => x.Description)
+                .HasMaxLength(255);
         }
 
-        private void ConfigureCatalogBrand(EntityTypeBuilder<CatalogBrand> builder)
+        private void ConfigureCatalogBrand(EntityTypeBuilder<CatalogIllustration> builder)
         {
-            builder.ToTable("CatalogBrand");
+            builder.ToTable("CatalogIllustration");
 
             builder.HasKey(ci => ci.Id);
 
@@ -73,9 +121,21 @@ namespace Infrastructure.Data
                .ForSqlServerUseSequenceHiLo("catalog_brand_hilo")
                .IsRequired();
 
-            builder.Property(cb => cb.Brand)
+            builder.Property(cb => cb.Code)
+                .IsRequired()
+                .HasMaxLength(25);
+            
+            builder.Property(x => x.Name)
                 .IsRequired()
                 .HasMaxLength(100);
+            builder.Property(x => x.PictureUri)
+                .HasMaxLength(255);
+            builder.HasOne(x => x.IllustrationType)
+                .WithMany()
+                .HasForeignKey(x => x.IllustrationTypeId);
+            builder
+               .HasIndex(x => x.Code)
+               .IsUnique();
         }
 
         private void ConfigureCatalogType(EntityTypeBuilder<CatalogType> builder)
@@ -88,9 +148,19 @@ namespace Infrastructure.Data
                .ForSqlServerUseSequenceHiLo("catalog_type_hilo")
                .IsRequired();
 
-            builder.Property(cb => cb.Type)
+            builder.Property(cb => cb.Code)
+                .IsRequired()
+                .HasMaxLength(25);
+
+            builder.Property(x => x.Description)
                 .IsRequired()
                 .HasMaxLength(100);
+            builder.HasOne(x => x.Category)
+                .WithMany(c => c.CatalogTypes)
+                .HasForeignKey(x => x.CategoryId);
+            builder
+               .HasIndex(x => x.Code)
+               .IsUnique();
         }
 
         private void ConfigureOrder(EntityTypeBuilder<Order> builder)

@@ -1,4 +1,6 @@
-﻿namespace ApplicationCore.Entities
+﻿using System.Collections.Generic;
+
+namespace ApplicationCore.Entities
 {
     public class CatalogItem : BaseEntity
     {
@@ -8,7 +10,9 @@
         public string PictureUri { get; set; }
         public int CatalogTypeId { get; set; }
         public CatalogType CatalogType { get; set; }
-        public int CatalogBrandId { get; set; }
-        public CatalogBrand CatalogBrand { get; set; }
+        public int CatalogIllustrationId { get; set; }
+        public CatalogIllustration CatalogIllustration { get; set; }
+
+        public ICollection<CatalogAttribute> CatalogAttributes { get; set; }
     }
 }

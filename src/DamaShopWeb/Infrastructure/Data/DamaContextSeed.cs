@@ -19,29 +19,29 @@ namespace Infrastructure.Data
                 // TODO: Only run this if using a real database
                 // context.Database.Migrate();
 
-                if (!catalogContext.CatalogBrands.Any())
-                {
-                    catalogContext.CatalogBrands.AddRange(
-                        GetPreconfiguredCatalogBrands());
+                //if (!catalogContext.CatalogBrands.Any())
+                //{
+                //    catalogContext.CatalogBrands.AddRange(
+                //        GetPreconfiguredCatalogBrands());
 
-                    await catalogContext.SaveChangesAsync();
-                }
+                //    await catalogContext.SaveChangesAsync();
+                //}
 
-                if (!catalogContext.CatalogTypes.Any())
-                {
-                    catalogContext.CatalogTypes.AddRange(
-                        GetPreconfiguredCatalogTypes());
+                //if (!catalogContext.CatalogTypes.Any())
+                //{
+                //    catalogContext.CatalogTypes.AddRange(
+                //        GetPreconfiguredCatalogTypes());
 
-                    await catalogContext.SaveChangesAsync();
-                }
+                //    await catalogContext.SaveChangesAsync();
+                //}
 
-                if (!catalogContext.CatalogItems.Any())
-                {
-                    catalogContext.CatalogItems.AddRange(
-                        GetPreconfiguredItems());
+                //if (!catalogContext.CatalogItems.Any())
+                //{
+                //    catalogContext.CatalogItems.AddRange(
+                //        GetPreconfiguredItems());
 
-                    await catalogContext.SaveChangesAsync();
-                }
+                //    await catalogContext.SaveChangesAsync();
+                //}
             }
             catch (Exception ex)
             {
@@ -55,15 +55,15 @@ namespace Infrastructure.Data
             }
         }
 
-        static IEnumerable<CatalogBrand> GetPreconfiguredCatalogBrands()
+        static IEnumerable<CatalogIllustration> GetPreconfiguredCatalogBrands()
         {
-            return new List<CatalogBrand>()
+            return new List<CatalogIllustration>()
             {
-                new CatalogBrand() { Brand = "Azure"},
-                new CatalogBrand() { Brand = ".NET" },
-                new CatalogBrand() { Brand = "Visual Studio" },
-                new CatalogBrand() { Brand = "SQL Server" }, 
-                new CatalogBrand() { Brand = "Other" }
+                new CatalogIllustration() { Code = "Azure"},
+                new CatalogIllustration() { Code = ".NET" },
+                new CatalogIllustration() { Code = "Visual Studio" },
+                new CatalogIllustration() { Code = "SQL Server" }, 
+                new CatalogIllustration() { Code = "Other" }
             };
         }
 
@@ -71,10 +71,10 @@ namespace Infrastructure.Data
         {
             return new List<CatalogType>()
             {
-                new CatalogType() { Type = "Mug"},
-                new CatalogType() { Type = "T-Shirt" },
-                new CatalogType() { Type = "Sheet" },
-                new CatalogType() { Type = "USB Memory Stick" }
+                new CatalogType() { Code = "Mug"},
+                new CatalogType() { Code = "T-Shirt" },
+                new CatalogType() { Code = "Sheet" },
+                new CatalogType() { Code = "USB Memory Stick" }
             };
         }
 
@@ -82,18 +82,18 @@ namespace Infrastructure.Data
         {
             return new List<CatalogItem>()
             {
-                new CatalogItem() { CatalogTypeId=2,CatalogBrandId=2, Description = ".NET Bot Black Sweatshirt", Name = ".NET Bot Black Sweatshirt", Price = 19.5M, PictureUri = "https://www.damanojornal.com/loja/images/products/1.png" },
-                new CatalogItem() { CatalogTypeId=1,CatalogBrandId=2, Description = ".NET Black & White Mug", Name = ".NET Black & White Mug", Price= 8.50M, PictureUri = "https://www.damanojornal.com/loja/images/products/2.png" },
-                new CatalogItem() { CatalogTypeId=2,CatalogBrandId=5, Description = "Prism White T-Shirt", Name = "Prism White T-Shirt", Price = 12, PictureUri = "https://www.damanojornal.com/loja/images/products/3.png" },
-                new CatalogItem() { CatalogTypeId=2,CatalogBrandId=2, Description = ".NET Foundation Sweatshirt", Name = ".NET Foundation Sweatshirt", Price = 12, PictureUri = "https://www.damanojornal.com/loja/images/products/4.png" },
-                new CatalogItem() { CatalogTypeId=3,CatalogBrandId=5, Description = "Roslyn Red Sheet", Name = "Roslyn Red Sheet", Price = 8.5M, PictureUri = "https://www.damanojornal.com/loja/images/products/5.png" },
-                new CatalogItem() { CatalogTypeId=2,CatalogBrandId=2, Description = ".NET Blue Sweatshirt", Name = ".NET Blue Sweatshirt", Price = 12, PictureUri = "https://www.damanojornal.com/loja/images/products/6.png" },
-                new CatalogItem() { CatalogTypeId=2,CatalogBrandId=5, Description = "Roslyn Red T-Shirt", Name = "Roslyn Red T-Shirt", Price = 12, PictureUri = "https://www.damanojornal.com/loja/images/products/7.png"  },
-                new CatalogItem() { CatalogTypeId=2,CatalogBrandId=5, Description = "Kudu Purple Sweatshirt", Name = "Kudu Purple Sweatshirt", Price = 8.5M, PictureUri = "https://www.damanojornal.com/loja/images/products/8.png" },
-                new CatalogItem() { CatalogTypeId=1,CatalogBrandId=5, Description = "Cup<T> White Mug", Name = "Cup<T> White Mug", Price = 12, PictureUri = "https://www.damanojornal.com/loja/images/products/9.png" },
-                new CatalogItem() { CatalogTypeId=3,CatalogBrandId=2, Description = ".NET Foundation Sheet", Name = ".NET Foundation Sheet", Price = 12, PictureUri = "https://www.damanojornal.com/loja/images/products/10.png" },
-                new CatalogItem() { CatalogTypeId=3,CatalogBrandId=2, Description = "Cup<T> Sheet", Name = "Cup<T> Sheet", Price = 8.5M, PictureUri = "https://www.damanojornal.com/loja/images/products/11.png" },
-                new CatalogItem() { CatalogTypeId=2,CatalogBrandId=5, Description = "Prism White TShirt", Name = "Prism White TShirt", Price = 12, PictureUri = "https://www.damanojornal.com/loja/images/products/12.png" }
+                new CatalogItem() { CatalogTypeId=2,CatalogIllustrationId=2, Description = ".NET Bot Black Sweatshirt", Name = ".NET Bot Black Sweatshirt", Price = 19.5M, PictureUri = "https://www.damanojornal.com/loja/images/products/1.png" },
+                new CatalogItem() { CatalogTypeId=1,CatalogIllustrationId=2, Description = ".NET Black & White Mug", Name = ".NET Black & White Mug", Price= 8.50M, PictureUri = "https://www.damanojornal.com/loja/images/products/2.png" },
+                new CatalogItem() { CatalogTypeId=2,CatalogIllustrationId=5, Description = "Prism White T-Shirt", Name = "Prism White T-Shirt", Price = 12, PictureUri = "https://www.damanojornal.com/loja/images/products/3.png" },
+                new CatalogItem() { CatalogTypeId=2,CatalogIllustrationId=2, Description = ".NET Foundation Sweatshirt", Name = ".NET Foundation Sweatshirt", Price = 12, PictureUri = "https://www.damanojornal.com/loja/images/products/4.png" },
+                new CatalogItem() { CatalogTypeId=3,CatalogIllustrationId=5, Description = "Roslyn Red Sheet", Name = "Roslyn Red Sheet", Price = 8.5M, PictureUri = "https://www.damanojornal.com/loja/images/products/5.png" },
+                new CatalogItem() { CatalogTypeId=2,CatalogIllustrationId=2, Description = ".NET Blue Sweatshirt", Name = ".NET Blue Sweatshirt", Price = 12, PictureUri = "https://www.damanojornal.com/loja/images/products/6.png" },
+                new CatalogItem() { CatalogTypeId=2,CatalogIllustrationId=5, Description = "Roslyn Red T-Shirt", Name = "Roslyn Red T-Shirt", Price = 12, PictureUri = "https://www.damanojornal.com/loja/images/products/7.png"  },
+                new CatalogItem() { CatalogTypeId=2,CatalogIllustrationId=5, Description = "Kudu Purple Sweatshirt", Name = "Kudu Purple Sweatshirt", Price = 8.5M, PictureUri = "https://www.damanojornal.com/loja/images/products/8.png" },
+                new CatalogItem() { CatalogTypeId=1,CatalogIllustrationId=5, Description = "Cup<T> White Mug", Name = "Cup<T> White Mug", Price = 12, PictureUri = "https://www.damanojornal.com/loja/images/products/9.png" },
+                new CatalogItem() { CatalogTypeId=3,CatalogIllustrationId=2, Description = ".NET Foundation Sheet", Name = ".NET Foundation Sheet", Price = 12, PictureUri = "https://www.damanojornal.com/loja/images/products/10.png" },
+                new CatalogItem() { CatalogTypeId=3,CatalogIllustrationId=2, Description = "Cup<T> Sheet", Name = "Cup<T> Sheet", Price = 8.5M, PictureUri = "https://www.damanojornal.com/loja/images/products/11.png" },
+                new CatalogItem() { CatalogTypeId=2,CatalogIllustrationId=5, Description = "Prism White TShirt", Name = "Prism White TShirt", Price = 12, PictureUri = "https://www.damanojornal.com/loja/images/products/12.png" }
             };
         }
     }
