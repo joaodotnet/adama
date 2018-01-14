@@ -20,14 +20,14 @@ namespace DamaShopWeb.Web.Services
     {
         private readonly ILogger<CatalogService> _logger;
         private readonly IRepository<CatalogItem> _itemRepository;
-        private readonly IAsyncRepository<CatalogBrand> _brandRepository;
+        private readonly IAsyncRepository<CatalogIllustration> _brandRepository;
         private readonly IAsyncRepository<CatalogType> _typeRepository;
         private readonly IUriComposer _uriComposer;
 
         public CatalogService(
             ILoggerFactory loggerFactory,
             IRepository<CatalogItem> itemRepository,
-            IAsyncRepository<CatalogBrand> brandRepository,
+            IAsyncRepository<CatalogIllustration> brandRepository,
             IAsyncRepository<CatalogType> typeRepository,
             IUriComposer uriComposer)
         {
@@ -94,9 +94,9 @@ namespace DamaShopWeb.Web.Services
             {
                 new SelectListItem() { Value = null, Text = "All", Selected = true }
             };
-            foreach (CatalogBrand brand in brands)
+            foreach (CatalogIllustration brand in brands)
             {
-                items.Add(new SelectListItem() { Value = brand.Id.ToString(), Text = brand.Brand });
+                items.Add(new SelectListItem() { Value = brand.Id.ToString(), Text = brand.Code });
             }
 
             return items;
@@ -112,7 +112,7 @@ namespace DamaShopWeb.Web.Services
             };
             foreach (CatalogType type in types)
             {
-                items.Add(new SelectListItem() { Value = type.Id.ToString(), Text = type.Type });
+                items.Add(new SelectListItem() { Value = type.Id.ToString(), Text = type.Code });
             }
 
             return items;

@@ -11,7 +11,7 @@
                         <img class="esh-identity-image" src="~/images/arrow-down.png">
                     </section>
 
-                    <section class="esh-identity-drop">
+                    @*<section class="esh-identity-drop">
                         <a class="esh-identity-item"
                            asp-page="/Order/Index">
 
@@ -32,7 +32,7 @@
                             <div class="esh-identity-name esh-identity-name--upper">Log Out</div>
                             <img class="esh-identity-image" src="~/images/logout.png">
                         </a>
-                    </section>
+                    </section>*@
                 </form>
             </div>
         </section>
@@ -44,12 +44,12 @@
 }
 else
 {
-        <section class="col-lg-1 col-lg-offset-3 col-md-3 col-xs-6">
+        <section> @*class="col-lg-1 col-lg-offset-3 col-md-3 col-xs-6">*@
             <div class="esh-identity">
                 <section class="esh-identity-section">
                     <div class="esh-identity-item">
 
-                        <a asp-page="/Account/Signin" class="esh-identity-name esh-identity-name--upper">
+                        <a asp-page="/Account/Signin" class="nav-link">
                             Login
                         </a>
                     </div>
@@ -57,7 +57,7 @@ else
             </div>
         </section>
 
-        <section class="col-lg-1 col-xs-12">
+        <section> @*class="col-lg-1 col-xs-12">*@
             @await Component.InvokeAsync("Basket")
         </section>
 }

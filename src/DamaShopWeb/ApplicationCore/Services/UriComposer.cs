@@ -11,7 +11,9 @@ namespace ApplicationCore.Services
 
         public string ComposePicUri(string uriTemplate)
         {
-            return uriTemplate.Replace("https://www.damanojornal.com/loja/images/", _catalogSettings.CatalogBaseUrl);
+            if(!string.IsNullOrEmpty(uriTemplate))
+                return uriTemplate.Replace("https://www.damanojornal.com/loja/images/", _catalogSettings.CatalogBaseUrl);
+            return "";
         }
     }
 }
