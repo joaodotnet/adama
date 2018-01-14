@@ -35,10 +35,10 @@ namespace Backoffice.Pages.Products
             }
 
             ProductModel = _mapper.Map<ProductViewModel>(
-                await _context.Products
-                .Include(p => p.Illustation)
-                .Include(p => p.ProductType)
-                .Include(p => p.ProductAttributes)
+                await _context.CatalogItems
+                .Include(p => p.CatalogIllustration)
+                .Include(p => p.CatalogType)
+                .Include(p => p.CatalogAttributes)
                 .SingleOrDefaultAsync(m => m.Id == id));
 
             if (ProductModel == null)
@@ -70,8 +70,8 @@ namespace Backoffice.Pages.Products
             }
 
             //Save Changes            
-            var prod = _mapper.Map<Product>(ProductModel);
-            foreach (var item in prod.ProductAttributes)
+            var prod = _mapper.Map<CatalogItem>(ProductModel);
+            foreach (var item in prod.CatalogAttributes)
             {
                 if (item.Id != 0)
                 {
@@ -131,13 +131,13 @@ namespace Backoffice.Pages.Products
 
         private async Task PopulateLists()
         {
-            var illustrations = await _context.Illustrations
+            var illustrations = await _context.CatalogIllustrations
                 .Include(x => x.IllustrationType)
                 .Select(s => new { Id = s.Id, Name = $"{s.IllustrationType.Code} - {s.Code}" })
                 .OrderBy(x => x.Name)
                 .ToListAsync();
             ViewData["IllustrationId"] = new SelectList(illustrations, "Id", "Name");
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Code");
+            ViewData["ProductTypeId"] = new SelectList(_context.CatalogTypes, "Id", "Code");
         }
 
         //public async Task<IActionResult> OnPostRemoveAttributeAsync(int id)

@@ -44,14 +44,14 @@ namespace Backoffice.Pages.Illustrations
             }
 
             //check if code exists
-            if (_context.Illustrations.Any(x => x.Code.ToUpper() == IllustrationModel.Code.ToUpper()))
+            if (_context.CatalogIllustrations.Any(x => x.Code.ToUpper() == IllustrationModel.Code.ToUpper()))
             {
                 await PopulateListAsync();
                 ModelState.AddModelError("", $"O código da Ilustração '{IllustrationModel.Code}' já existe!");
                 return Page();
             }
 
-            var illustrationDB = _mapper.Map<Illustration>(IllustrationModel);
+            var illustrationDB = _mapper.Map<CatalogIllustration>(IllustrationModel);
 
             if (IllustrationModel.IllustrationImage?.Length > 0)
             {
@@ -63,7 +63,7 @@ namespace Backoffice.Pages.Illustrations
                 }
             }
 
-            _context.Illustrations.Add(illustrationDB);
+            _context.CatalogIllustrations.Add(illustrationDB);
 
             await _context.SaveChangesAsync();
 

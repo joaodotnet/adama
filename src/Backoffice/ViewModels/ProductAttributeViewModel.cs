@@ -7,7 +7,7 @@ namespace Backoffice.ViewModels
     {
         public int Id { get; set; }        
         [Display(Name = "Tipo")]
-        public ProductAttributeType Type { get; set; }
+        public CatalogAttributeType Type { get; set; }
         [StringLength(25)]
         [Display(Name = "Código")]
         public string Code { get; set; }

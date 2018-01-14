@@ -36,7 +36,7 @@ namespace Backoffice.Pages.Illustrations
             }
             await PopulateListAsync();
 
-            var illustrationDb = await _context.Illustrations.Include(x => x.IllustrationType).SingleOrDefaultAsync(m => m.Id == id);
+            var illustrationDb = await _context.CatalogIllustrations.Include(x => x.IllustrationType).SingleOrDefaultAsync(m => m.Id == id);
             IllustrationModel = _mapper.Map<IllustrationViewModel>(illustrationDb);
 
             if (illustrationDb.Image != null)
@@ -61,14 +61,14 @@ namespace Backoffice.Pages.Illustrations
             }
 
             //check if code exists
-            if (_context.Illustrations.Any(x => x.Code.ToUpper() == IllustrationModel.Code.ToUpper() && x.Id != IllustrationModel.Id))
+            if (_context.CatalogIllustrations.Any(x => x.Code.ToUpper() == IllustrationModel.Code.ToUpper() && x.Id != IllustrationModel.Id))
             {
                 ModelState.AddModelError("", $"O código da Ilustração '{IllustrationModel.Code}' já existe!");
                 return Page();
             }
 
             //var illustrationEntity = _mapper.Map<Illustration>(IllustrationModel);
-            var illustrationEntity = await _context.Illustrations
+            var illustrationEntity = await _context.CatalogIllustrations
                 .Include(x => x.IllustrationType)
                 .SingleOrDefaultAsync(x => x.Id == IllustrationModel.Id);
 

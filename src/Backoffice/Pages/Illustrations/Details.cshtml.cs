@@ -32,7 +32,7 @@ namespace Backoffice.Pages.Illustrations
             {
                 return NotFound();
             }
-            var illustrationDb = await _context.Illustrations.Include(x => x.IllustrationType).SingleOrDefaultAsync(m => m.Id == id);
+            var illustrationDb = await _context.CatalogIllustrations.Include(x => x.IllustrationType).SingleOrDefaultAsync(m => m.Id == id);
             IllustrationModel = _mapper.Map<IllustrationViewModel>(illustrationDb);
             if(illustrationDb.Image != null)
             {

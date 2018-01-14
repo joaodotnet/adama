@@ -33,7 +33,7 @@ namespace Backoffice.Pages.Illustrations
                 return NotFound();
             }
 
-            IllustrationModel = _mapper.Map<IllustrationViewModel>(await _context.Illustrations.Include(x => x.IllustrationType).SingleOrDefaultAsync(m => m.Id == id));
+            IllustrationModel = _mapper.Map<IllustrationViewModel>(await _context.CatalogIllustrations.Include(x => x.IllustrationType).SingleOrDefaultAsync(m => m.Id == id));
 
             if (IllustrationModel == null)
             {
@@ -49,11 +49,11 @@ namespace Backoffice.Pages.Illustrations
                 return NotFound();
             }
 
-            var illustration = await _context.Illustrations.FindAsync(id);
+            var illustration = await _context.CatalogIllustrations.FindAsync(id);
 
             if (illustration != null)
             {
-                _context.Illustrations.Remove(illustration);
+                _context.CatalogIllustrations.Remove(illustration);
                 await _context.SaveChangesAsync();
             }
 

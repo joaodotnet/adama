@@ -32,7 +32,7 @@ namespace Backoffice.Pages.ProductType
                 return NotFound();
             }
 
-            var type = await _context.ProductTypes
+            var type = await _context.CatalogTypes
                 .Include(p => p.Category).SingleOrDefaultAsync(m => m.Id == id);
 
             if (type == null)

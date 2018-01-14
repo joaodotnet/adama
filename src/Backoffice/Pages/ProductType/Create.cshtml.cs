@@ -40,13 +40,13 @@ namespace Backoffice.Pages.ProductType
             }
 
             //check if code exists
-            if (_context.ProductTypes.Any(x => x.Code.ToUpper() == ProductTypeModel.Code.ToUpper()))
+            if (_context.CatalogTypes.Any(x => x.Code.ToUpper() == ProductTypeModel.Code.ToUpper()))
             {
                 ModelState.AddModelError("", $"O nome do Tipo do Produto '{ProductTypeModel.Code}' já existe!");
                 return Page();
             }
 
-            _context.ProductTypes.Add(_mapper.Map<ApplicationCore.Entities.ProductType>(ProductTypeModel));
+            _context.CatalogTypes.Add(_mapper.Map<ApplicationCore.Entities.CatalogType>(ProductTypeModel));
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
