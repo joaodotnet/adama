@@ -34,7 +34,7 @@ namespace Backoffice.Pages.ProductType
                 return NotFound();
             }
 
-            var productType = await _context.ProductTypes
+            var productType = await _context.CatalogTypes
                 .Include(p => p.Category).SingleOrDefaultAsync(m => m.Id == id);
 
             if (productType == null)
@@ -53,13 +53,13 @@ namespace Backoffice.Pages.ProductType
                 return Page();
             }
             //check if code exists
-            if (_context.ProductTypes.Any(x => x.Code.ToUpper() == ProductTypeModel.Code.ToUpper() && x.Id != ProductTypeModel.Id))
+            if (_context.CatalogTypes.Any(x => x.Code.ToUpper() == ProductTypeModel.Code.ToUpper() && x.Id != ProductTypeModel.Id))
             {
                 ModelState.AddModelError("", $"O nome do Tipo do Produto '{ProductTypeModel.Code}' já existe!");
                 return Page();
             }
 
-            var productEntity = _mapper.Map<ApplicationCore.Entities.ProductType>(ProductTypeModel);
+            var productEntity = _mapper.Map<ApplicationCore.Entities.CatalogType>(ProductTypeModel);
 
             _context.Attach(productEntity).State = EntityState.Modified;
 

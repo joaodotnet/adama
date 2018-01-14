@@ -33,7 +33,7 @@ namespace Backoffice.Pages.ProductType
                 return NotFound();
             }
 
-            var type = await _context.ProductTypes
+            var type = await _context.CatalogTypes
                 .Include(p => p.Category).SingleOrDefaultAsync(m => m.Id == id);
 
             if (type == null)
@@ -51,11 +51,11 @@ namespace Backoffice.Pages.ProductType
                 return NotFound();
             }
 
-            var type = await _context.ProductTypes.FindAsync(id);
+            var type = await _context.CatalogTypes.FindAsync(id);
 
             if (type != null)
             {
-                _context.ProductTypes.Remove(type);
+                _context.CatalogTypes.Remove(type);
                 await _context.SaveChangesAsync();
             }
 

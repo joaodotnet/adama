@@ -33,9 +33,9 @@ namespace Backoffice.Pages.Products
                 return NotFound();
             }
 
-            ProductModel = _mapper.Map<ProductViewModel>(await _context.Products
-                .Include(p => p.Illustation)
-                .Include(p => p.ProductType)
+            ProductModel = _mapper.Map<ProductViewModel>(await _context.CatalogItems
+                .Include(p => p.CatalogIllustration)
+                .Include(p => p.CatalogType)
                 .SingleOrDefaultAsync(m => m.Id == id));
 
             if (ProductModel == null)
@@ -52,11 +52,11 @@ namespace Backoffice.Pages.Products
                 return NotFound();
             }
 
-            var product = await _context.Products.FindAsync(id);
+            var product = await _context.CatalogItems.FindAsync(id);
 
             if (product != null)
             {
-                _context.Products.Remove(product);
+                _context.CatalogItems.Remove(product);
                 await _context.SaveChangesAsync();
             }
 

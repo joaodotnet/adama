@@ -73,7 +73,7 @@
                                 <td>
                                     <input type="hidden" asp-for="ProductModel.ProductAttributes[i].Id" />
                                     <input type="hidden" asp-for="ProductModel.ProductAttributes[i].ToRemove" class="to-remove" />
-                                    <select asp-for="ProductModel.ProductAttributes[i].Type" asp-items="Html.GetEnumSelectList<ApplicationCore.Entities.ProductAttributeType>()" class="form-control"></select>
+                                    <select asp-for="ProductModel.ProductAttributes[i].Type" asp-items="Html.GetEnumSelectList<ApplicationCore.Entities.CatalogAttributeType>()" class="form-control"></select>
                                     <span asp-validation-for="ProductModel.ProductAttributes[i].Type" class="text-danger"></span>
                                 </td>
                                 <td>

@@ -15,7 +15,7 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ApplicationCore\ApplicationCore.csproj" />
-    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\DamaShopWeb\ApplicationCore\ApplicationCore.csproj" />
+    <ProjectReference Include="..\DamaShopWeb\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 </Project>

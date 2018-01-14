@@ -27,11 +27,11 @@ namespace Backoffice.Pages.Products
 
         public async Task OnGetAsync()
         {
-            ProductModel = _mapper.Map<List<ProductViewModel>>(await _context.Products
-                .Include(p => p.Illustation)
+            ProductModel = _mapper.Map<List<ProductViewModel>>(await _context.CatalogItems
+                .Include(p => p.CatalogIllustration)
                     .ThenInclude(i => i.IllustrationType)
-                .Include(p => p.ProductType)
-                .Include(p => p.ProductAttributes)
+                .Include(p => p.CatalogType)
+                .Include(p => p.CatalogAttributes)
                 .ToListAsync());
 
             foreach (var item in ProductModel)

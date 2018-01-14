@@ -54,7 +54,7 @@ namespace Backoffice.Pages.Products
             }
 
             //Save Changes            
-            _context.Products.Add(_mapper.Map<Product>(ProductModel));
+            _context.CatalogItems.Add(_mapper.Map<CatalogItem>(ProductModel));
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
@@ -89,13 +89,13 @@ namespace Backoffice.Pages.Products
 
         private async Task PopulateLists()
         {
-            var illustrations = await _context.Illustrations
+            var illustrations = await _context.CatalogIllustrations
                 .Include(x => x.IllustrationType)
                 .Select(s => new { Id = s.Id, Name = $"{s.IllustrationType.Code} - {s.Code}" })
                 .OrderBy(x => x.Name)
                 .ToListAsync();
             ViewData["IllustrationId"] = new SelectList(illustrations, "Id", "Name");
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Code");
+            ViewData["ProductTypeId"] = new SelectList(_context.CatalogTypes, "Id", "Code");
         }
     }
 }

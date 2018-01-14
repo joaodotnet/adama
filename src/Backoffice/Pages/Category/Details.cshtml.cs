@@ -33,7 +33,7 @@ namespace Backoffice.Pages.Category
             }
 
             var category = await _context.Categories
-                .Include(x => x.ProductTypes)
+                .Include(x => x.CatalogTypes)
                 .SingleOrDefaultAsync(m => m.Id == id);
 
             if (category == null)

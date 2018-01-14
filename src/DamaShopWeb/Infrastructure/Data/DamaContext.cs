@@ -15,10 +15,14 @@ namespace Infrastructure.Data
 
         public DbSet<Basket> Baskets { get; set; }
         public DbSet<CatalogItem> CatalogItems { get; set; }
-        public DbSet<CatalogIllustration> CatalogBrands { get; set; }
+        public DbSet<CatalogIllustration> CatalogIllustrations { get; set; }
+        public DbSet<IllustrationType> IllustrationTypes { get; set; }
         public DbSet<CatalogType> CatalogTypes { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Category> Categories { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
