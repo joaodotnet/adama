@@ -17,22 +17,34 @@
         <dd>
             @Html.DisplayFor(model => model.Category.Name)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Category.Order)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Category.Order)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Category.Position)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Category.Position)
+        </dd>
     </dl>
     <h4>Tipos de Produtos associados</h4>
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Category.ProductTypes[0].Code)
+                    @Html.DisplayNameFor(model => model.Category.CatalogTypes[0].Code)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Category.ProductTypes[0].Description)
+                    @Html.DisplayNameFor(model => model.Category.CatalogTypes[0].Description)
                 </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.Category.ProductTypes)
+            @foreach (var item in Model.Category.CatalogTypes)
             {
                 <tr>
                     <td>

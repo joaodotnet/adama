@@ -25,6 +25,7 @@ namespace Backoffice.Pages.Category
 
         public IActionResult OnGet()
         {
+            PopulateList();
             return Page();
         }
 
@@ -33,6 +34,7 @@ namespace Backoffice.Pages.Category
 
         public async Task<IActionResult> OnPostAsync()
         {
+            PopulateList();
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -47,6 +49,17 @@ namespace Backoffice.Pages.Category
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
+        }
+
+        private void PopulateList()
+        {
+            List<(string, string)> list = new List<(string, string)>
+            {
+                ("left", "Esquerda"),
+                ("right", "Direita")
+            };            
+
+            ViewData["PositionList"] = new SelectList(list.Select(x => new { Id = x.Item1, Name = x.Item2 }), "Id", "Name");            
         }
     }
 }

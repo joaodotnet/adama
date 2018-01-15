@@ -28,11 +28,12 @@ namespace Backoffice.Pages.Category
         public CategoryViewModel Category { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
-        {
+        {            
             if (id == null)
             {
                 return NotFound();
             }
+            PopulateList();
 
             var category = await _context.Categories.SingleOrDefaultAsync(m => m.Id == id);
 
@@ -47,6 +48,7 @@ namespace Backoffice.Pages.Category
 
         public async Task<IActionResult> OnPostAsync()
         {
+            PopulateList();
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -72,6 +74,16 @@ namespace Backoffice.Pages.Category
             }
 
             return RedirectToPage("./Index");
+        }
+        private void PopulateList()
+        {
+            List<(string, string)> list = new List<(string, string)>
+            {
+                ("left", "Esquerda"),
+                ("right", "Direita")
+            };
+
+            ViewData["PositionList"] = new SelectList(list.Select(x => new { Id = x.Item1, Name = x.Item2 }), "Id", "Name");
         }
     }
 }
