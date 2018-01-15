@@ -36,9 +36,9 @@ namespace Backoffice.Pages.Products
 
             foreach (var item in ProductModel)
             {
-                if(item.ProductAttributes.Count > 0)
+                if(item.CatalogAttributes.Count > 0)
                 {
-                    var skus = string.Join("<br>", item.ProductAttributes.Select(x => x.ProductSKU));
+                    var skus = string.Join("<br>", item.CatalogAttributes.Select(x => x.ProductSKU));
                     item.ProductSKU = skus;
                 }
             }

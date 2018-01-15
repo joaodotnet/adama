@@ -24,14 +24,14 @@
                 <span asp-validation-for="ProductModel.Description" class="text-danger"></span>
             </div>            
             <div class="form-group">
-                <label asp-for="ProductModel.ProductTypeId" class="control-label"></label>
-                <select asp-for="ProductModel.ProductTypeId" class="form-control" asp-items="ViewBag.ProductTypeId"></select>
-                <span asp-validation-for="ProductModel.ProductTypeId" class="text-danger"></span>
+                <label asp-for="ProductModel.CatalogTypeId" class="control-label"></label>
+                <select asp-for="ProductModel.CatalogTypeId" class="form-control" asp-items="ViewBag.ProductTypeId"></select>
+                <span asp-validation-for="ProductModel.CatalogTypeId" class="text-danger"></span>
             </div>                        
             <div class="form-group">
-                <label asp-for="ProductModel.IllustrationId" class="control-label"></label>
-                <select asp-for="ProductModel.IllustrationId" class="form-control" asp-items="ViewBag.IllustrationId"></select>
-                <span asp-validation-for="ProductModel.IllustrationId" class="text-danger"></span>
+                <label asp-for="ProductModel.CatalogIllustrationId" class="control-label"></label>
+                <select asp-for="ProductModel.CatalogIllustrationId" class="form-control" asp-items="ViewBag.IllustrationId"></select>
+                <span asp-validation-for="ProductModel.CatalogIllustrationId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ProductModel.Price" class="control-label"></label>
@@ -48,46 +48,46 @@
                 <thead>
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.ProductModel.ProductAttributes[0].Type)
+                            @Html.DisplayNameFor(model => model.ProductModel.CatalogAttributes[0].Type)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.ProductModel.ProductAttributes[0].Code)
+                            @Html.DisplayNameFor(model => model.ProductModel.CatalogAttributes[0].Code)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.ProductModel.ProductAttributes[0].Name)
+                            @Html.DisplayNameFor(model => model.ProductModel.CatalogAttributes[0].Name)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.ProductModel.ProductAttributes[0].Price)
+                            @Html.DisplayNameFor(model => model.ProductModel.CatalogAttributes[0].Price)
                         </th>
                         <th>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    @if (Model.ProductModel?.ProductAttributes?.Count > 0)
+                    @if (Model.ProductModel?.CatalogAttributes?.Count > 0)
                     {
-                        for (int i = 0; i < Model.ProductModel.ProductAttributes.Count; i++)
+                        for (int i = 0; i < Model.ProductModel.CatalogAttributes.Count; i++)
                         {
                             <tr>
                                 <td>
-                                    <input type="hidden" asp-for="ProductModel.ProductAttributes[i].Id" />
-                                    <input type="hidden" asp-for="ProductModel.ProductAttributes[i].ProductId" />
-                                    <input type="hidden" asp-for="ProductModel.ProductAttributes[i].ToRemove" class="to-remove" />
-                                    @*<input type="hidden" asp-for="ProductModel.ProductAttributes[i].Type" value="@Model.ProductModel.ProductAttributes[i].Type" />*@
-                                    <select asp-for="ProductModel.ProductAttributes[i].Type" asp-items="Html.GetEnumSelectList<ApplicationCore.Entities.ProductAttributeType>()" class="form-control" ></select>
-                                    <span asp-validation-for="ProductModel.ProductAttributes[i].Type" class="text-danger"></span>
+                                    <input type="hidden" asp-for="ProductModel.CatalogAttributes[i].Id" />
+                                    <input type="hidden" asp-for="ProductModel.CatalogAttributes[i].CatalogItemId" />
+                                    <input type="hidden" asp-for="ProductModel.CatalogAttributes[i].ToRemove" class="to-remove" />
+                                    @*<input type="hidden" asp-for="ProductModel.CatalogAttributes[i].Type" value="@Model.ProductModel.CatalogAttributes[i].Type" />*@
+                                    <select asp-for="ProductModel.CatalogAttributes[i].Type" asp-items="Html.GetEnumSelectList<ApplicationCore.Entities.CatalogAttributeType>()" class="form-control" ></select>
+                                    <span asp-validation-for="ProductModel.CatalogAttributes[i].Type" class="text-danger"></span>
                                 </td>
                                 <td>
-                                    <input asp-for="ProductModel.ProductAttributes[i].Code" class="form-control" value="@Model.ProductModel.ProductAttributes[i].Code" />
-                                    <span asp-validation-for="ProductModel.ProductAttributes[i].Code" class="text-danger"></span>
+                                    <input asp-for="ProductModel.CatalogAttributes[i].Code" class="form-control" value="@Model.ProductModel.CatalogAttributes[i].Code" />
+                                    <span asp-validation-for="ProductModel.CatalogAttributes[i].Code" class="text-danger"></span>
                                 </td>
                                 <td>
-                                    <input asp-for="ProductModel.ProductAttributes[i].Name" class="form-control" value="@Model.ProductModel.ProductAttributes[i].Name" />
-                                    <span asp-validation-for="ProductModel.ProductAttributes[i].Name" class="text-danger"></span>
+                                    <input asp-for="ProductModel.CatalogAttributes[i].Name" class="form-control" value="@Model.ProductModel.CatalogAttributes[i].Name" />
+                                    <span asp-validation-for="ProductModel.CatalogAttributes[i].Name" class="text-danger"></span>
                                 </td>
                                 <td>
-                                    <input asp-for="ProductModel.ProductAttributes[i].Price" class="form-control decimal" value="@Model.ProductModel.ProductAttributes[i].Price" />
-                                    <span asp-validation-for="ProductModel.ProductAttributes[i].Price" class="text-danger"></span>
+                                    <input asp-for="ProductModel.CatalogAttributes[i].Price" class="form-control decimal" value="@Model.ProductModel.CatalogAttributes[i].Price" />
+                                    <span asp-validation-for="ProductModel.CatalogAttributes[i].Price" class="text-danger"></span>
                                 </td>
                                 <td>
                                     <button type="button" class="btn btn-danger remove">Remover</button>

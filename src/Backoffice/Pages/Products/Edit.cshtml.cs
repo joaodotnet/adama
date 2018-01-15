@@ -57,10 +57,10 @@ namespace Backoffice.Pages.Products
                 return Page();
             }
             //Remove model attributes with no id
-            var to_remove = ProductModel.ProductAttributes.Where(x => x.ToRemove && x.Id == 0).ToList();
+            var to_remove = ProductModel.CatalogAttributes.Where(x => x.ToRemove && x.Id == 0).ToList();
             foreach (var item in to_remove)
             {
-                ProductModel.ProductAttributes.Remove(item);
+                ProductModel.CatalogAttributes.Remove(item);
             }
             //Validate Model
             if (!ValidateAttributesModel())
@@ -75,7 +75,7 @@ namespace Backoffice.Pages.Products
             {
                 if (item.Id != 0)
                 {
-                    if (ProductModel.ProductAttributes.SingleOrDefault(x => x.Id == item.Id).ToRemove)
+                    if (ProductModel.CatalogAttributes.SingleOrDefault(x => x.Id == item.Id).ToRemove)
                         _context.Entry(item).State = EntityState.Deleted;
                     else
                         _context.Entry(item).State = EntityState.Modified;
@@ -101,7 +101,7 @@ namespace Backoffice.Pages.Products
 
         private bool ValidateAttributesModel()
         {
-            foreach (var item in ProductModel.ProductAttributes)
+            foreach (var item in ProductModel.CatalogAttributes)
             {
                 if (!item.ToRemove)
                 {
@@ -122,9 +122,9 @@ namespace Backoffice.Pages.Products
         public async Task<IActionResult> OnPostAddAttributeAsync()
         {
             await PopulateLists();
-            ProductModel.ProductAttributes.Add(new ProductAttributeViewModel
+            ProductModel.CatalogAttributes.Add(new ProductAttributeViewModel
             {
-                ProductId = ProductModel.Id
+                CatalogItemId = ProductModel.Id
             });
             return Page();
         }

@@ -16,7 +16,7 @@ namespace Backoffice.ViewModels
         public string Name { get; set; }
         [Display(Name = "Preço")]
         public decimal? Price { get; set; }
-        public int ProductId { get; set; }
+        public int CatalogItemId { get; set; }
         public bool ToRemove { get; set; }
         [Display(Name = "SKU")]
         public string ProductSKU { get; set; }
