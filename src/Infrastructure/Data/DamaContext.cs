@@ -73,6 +73,13 @@ namespace Infrastructure.Data
             builder.Property(c => c.Name)
                 .IsRequired()
                 .HasMaxLength(100);
+            builder.Property(c => c.Order)
+                .IsRequired()
+                .HasDefaultValue(1);
+            builder.Property(c => c.Position)
+                .IsRequired()
+                .HasMaxLength(10)
+                .HasDefaultValue("left");
             builder
                 .HasIndex(c => c.Name)
                 .IsUnique();

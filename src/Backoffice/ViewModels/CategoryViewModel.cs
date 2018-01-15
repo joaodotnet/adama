@@ -12,6 +12,15 @@ namespace Backoffice.ViewModels
         [StringLength(100)]
         [Display(Name = "Nome")]
         public string Name { get; set; }
+
+        [Required]        
+        [Display(Name = "Ordem")]
+        public int Order { get; set; }
+
+        [Required]
+        [Display(Name = "Posição Web")]
+        public string Position { get; set; }
+
         [Display(Name = "Nº Tipos de Produtos")]
         public int NrTypeProducts { get; set; }
         public List<ProductTypeViewModel> CatalogTypes { get; set; }

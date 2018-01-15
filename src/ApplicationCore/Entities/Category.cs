@@ -7,6 +7,8 @@ namespace ApplicationCore.Entities
     public class Category : BaseEntity
     {
         public string Name { get; set; }
+        public int Order { get; set; }
+        public string Position { get; set; }
 
         public virtual ICollection<CatalogType> CatalogTypes { get; set; }
     }
