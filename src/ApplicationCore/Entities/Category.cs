@@ -8,6 +8,6 @@ namespace ApplicationCore.Entities
     {
         public string Name { get; set; }
 
-        public virtual ICollection<ProductType> ProductTypes { get; set; }
+        public virtual ICollection<CatalogType> CatalogTypes { get; set; }
     }
 }

@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationCore", "DamaShopWeb\ApplicationCore\ApplicationCore.csproj", "{CD92A358-8147-485F-807C-CE4EF6F2510B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationCore", "src\ApplicationCore\ApplicationCore.csproj", "{CD92A358-8147-485F-807C-CE4EF6F2510B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "DamaShopWeb\Infrastructure\Infrastructure.csproj", "{72104E45-A7FB-41E7-80F8-25C8899748EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Infrastructure\Infrastructure.csproj", "{72104E45-A7FB-41E7-80F8-25C8899748EC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backoffice", "Backoffice\Backoffice.csproj", "{48D70499-D02B-4C42-A241-9DE72E37FA40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backoffice", "src\Backoffice\Backoffice.csproj", "{48D70499-D02B-4C42-A241-9DE72E37FA40}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
