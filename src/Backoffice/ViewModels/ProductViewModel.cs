@@ -20,15 +20,15 @@ namespace Backoffice.ViewModels
         public decimal Price { get; set; }
         [Display(Name = "Ilustração")]
         [Required]
-        public int IllustrationId { get; set; }
-        public IllustrationViewModel Illustration { get; set; }
+        public int CatalogIllustrationId { get; set; }
+        public IllustrationViewModel CatalogIllustration { get; set; }
         [Required]
         [Display(Name = "Tipo de Produto")]
-        public int ProductTypeId { get; set; }
-        public ProductTypeViewModel ProductType { get; set; }
+        public int CatalogTypeId { get; set; }
+        public ProductTypeViewModel CatalogType { get; set; }
         [Display(Name = "SKU")]
         public string ProductSKU { get; set; }
 
-        public IList<ProductAttributeViewModel> ProductAttributes { get; set; } = new List<ProductAttributeViewModel>();  
+        public IList<ProductAttributeViewModel> CatalogAttributes { get; set; } = new List<ProductAttributeViewModel>();  
     }
 }

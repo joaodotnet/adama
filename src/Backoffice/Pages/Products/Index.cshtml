@@ -20,10 +20,10 @@
                 @Html.DisplayNameFor(model => model.ProductModel[0].Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProductModel[0].ProductTypeId)
+                @Html.DisplayNameFor(model => model.ProductModel[0].CatalogTypeId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProductModel[0].IllustrationId)
+                @Html.DisplayNameFor(model => model.ProductModel[0].CatalogIllustrationId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ProductModel[0].Price)
@@ -45,10 +45,10 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ProductType.Code)
+                    @Html.DisplayFor(modelItem => item.CatalogType.Code)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Illustration.Code)
+                    @Html.DisplayFor(modelItem => item.CatalogIllustration.Code)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Price)

@@ -42,10 +42,10 @@ namespace Backoffice.Pages.Products
             }
 
             //Remove model attributes with no id
-            var to_remove = ProductModel.ProductAttributes.Where(x => x.ToRemove && x.Id == 0).ToList();
+            var to_remove = ProductModel.CatalogAttributes.Where(x => x.ToRemove && x.Id == 0).ToList();
             foreach (var item in to_remove)
             {
-                ProductModel.ProductAttributes.Remove(item);
+                ProductModel.CatalogAttributes.Remove(item);
             }
             //Validate Model
             if (!ValidateAttributesModel())
@@ -63,13 +63,13 @@ namespace Backoffice.Pages.Products
         public async Task<IActionResult> OnPostAddAttributeAsync()
         {
             await PopulateLists();
-            ProductModel.ProductAttributes.Add(new ProductAttributeViewModel());
+            ProductModel.CatalogAttributes.Add(new ProductAttributeViewModel());
             return Page();
         }
 
         private bool ValidateAttributesModel()
         {
-            foreach (var item in ProductModel.ProductAttributes)
+            foreach (var item in ProductModel.CatalogAttributes)
             {
                 if (!item.ToRemove)
                 {
