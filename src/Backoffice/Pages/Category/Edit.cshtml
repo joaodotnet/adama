@@ -23,12 +23,14 @@
                 <input asp-for="Category.Order" class="form-control" />
                 <span asp-validation-for="Category.Order" class="text-danger"></span>
             </div>
-            <div class="form-group required">
+            <div class="form-group">
                 <label asp-for="Category.Position" class="control-label"></label>
-                <select asp-for="Category.Position" class="form-control" asp-items="ViewBag.PositionList"></select>
+                <select asp-for="Category.Position" class="form-control" asp-items="ViewBag.PositionList">
+                    <option></option>
+                </select>
                 <span asp-validation-for="Category.Position" class="text-danger"></span>
             </div>
-            <div class="form-group required">
+            <div class="form-group">
                 <label asp-for="Category.ParentId" class="control-label"></label>
                 <select asp-for="Category.ParentId" class="form-control" asp-items="ViewBag.CategoryList">
                     <option></option>
