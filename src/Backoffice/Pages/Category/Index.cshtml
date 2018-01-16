@@ -41,7 +41,7 @@
                 @Html.DisplayFor(modelItem => item.Order)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Position)
+                @(item.Position == "left"? "Esquerda" : item.Position == "right" ? "Direita" : "")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Parent.Name)

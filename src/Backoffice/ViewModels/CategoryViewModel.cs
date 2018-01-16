@@ -16,8 +16,7 @@ namespace Backoffice.ViewModels
         [Required]        
         [Display(Name = "Ordem")]
         public int Order { get; set; }
-
-        [Required]
+       
         [Display(Name = "Posição Web")]
         public string Position { get; set; }
 
