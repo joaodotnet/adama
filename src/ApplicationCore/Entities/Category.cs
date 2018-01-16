@@ -9,7 +9,8 @@ namespace ApplicationCore.Entities
         public string Name { get; set; }
         public int Order { get; set; }
         public string Position { get; set; }
-
+        public int? ParentId { get; set; }
+        public Category Parent { get; set; }
         public virtual ICollection<CatalogType> CatalogTypes { get; set; }
     }
 }

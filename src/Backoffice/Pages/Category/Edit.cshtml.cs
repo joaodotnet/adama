@@ -35,7 +35,7 @@ namespace Backoffice.Pages.Category
             }
             PopulateList();
 
-            var category = await _context.Categories.SingleOrDefaultAsync(m => m.Id == id);
+            var category = await _context.Categories.Include(x=> x.Parent).SingleOrDefaultAsync(m => m.Id == id);
 
             if (category == null)
             {
@@ -84,6 +84,7 @@ namespace Backoffice.Pages.Category
             };
 
             ViewData["PositionList"] = new SelectList(list.Select(x => new { Id = x.Item1, Name = x.Item2 }), "Id", "Name");
+            ViewData["CategoryList"] = new SelectList(_context.Categories, "Id", "Name");
         }
     }
 }

@@ -1,0 +1,61 @@
+﻿@using DamaShopWeb.Web.ViewComponents
+@model Menu.MenuComponentViewModel
+
+<ul class="navbar-nav mx-auto w-100 justify-content-end">
+    @foreach (var item in Model.Left)
+    {
+        if (item.Childs.Count > 0)
+        {
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @item.Name
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    @foreach (var child in item.Childs)
+                    {
+                        <a class="dropdown-item" href="#">@child.Name</a>
+                    }
+                </div>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link" href="#">@item.Name</a>
+            </li>
+
+        }
+
+    }
+</ul>
+<div class="brand-image justify-content-center text-center">
+    <a href="https://www.damanojornal.com" class="navbar-brand">
+        <img src="~/images/brand.png" width="137px" alt="eShop On Web" />
+    </a>
+    <h1>A Loja</h1>
+</div>
+<ul class="navbar-nav mx-auto w-100">
+    @foreach (var item in Model.Right)
+    {
+        if (item.Childs.Count > 0)
+        {
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @item.Name
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    @foreach (var child in item.Childs)
+                    {
+                        <a class="dropdown-item" href="#">@child.Name</a>
+                    }
+                </div>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link" href="#">@item.Name</a>
+            </li>
+        }
+    }
+</ul>

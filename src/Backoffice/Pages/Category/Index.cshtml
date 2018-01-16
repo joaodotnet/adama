@@ -23,6 +23,9 @@
                 @Html.DisplayNameFor(model => model.Categories[0].Position)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Categories[0].ParentId)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Categories[0].NrTypeProducts)
             </th>
             <th></th>
@@ -39,6 +42,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Position)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Parent.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.NrTypeProducts)

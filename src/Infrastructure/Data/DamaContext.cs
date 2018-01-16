@@ -80,6 +80,9 @@ namespace Infrastructure.Data
                 .IsRequired()
                 .HasMaxLength(10)
                 .HasDefaultValue("left");
+            builder.HasOne(x => x.Parent)
+                .WithMany()
+                .HasForeignKey(x => x.ParentId);
             builder
                 .HasIndex(c => c.Name)
                 .IsUnique();

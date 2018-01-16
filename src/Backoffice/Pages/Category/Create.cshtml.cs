@@ -59,7 +59,8 @@ namespace Backoffice.Pages.Category
                 ("right", "Direita")
             };            
 
-            ViewData["PositionList"] = new SelectList(list.Select(x => new { Id = x.Item1, Name = x.Item2 }), "Id", "Name");            
+            ViewData["PositionList"] = new SelectList(list.Select(x => new { Id = x.Item1, Name = x.Item2 }), "Id", "Name");
+            ViewData["CategoryList"] = new SelectList(_context.Categories, "Id", "Name");
         }
     }
 }

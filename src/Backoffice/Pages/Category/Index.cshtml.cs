@@ -25,9 +25,10 @@ namespace Backoffice.Pages.Category
         public async Task OnGetAsync()
         {
             var cats = await _context.Categories
-                .Include(x => x.CatalogTypes)
+                .Include(x => x.CatalogTypes)                
                 .ToListAsync();
-            Categories = _mapper.Map<List<CategoryViewModel>>(cats);            
+                
+            Categories = _mapper.Map<List<CategoryViewModel>>(cats);
         }
     }
 }
