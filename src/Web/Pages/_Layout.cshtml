@@ -33,40 +33,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-md-center" id="navbarSupportedContent">
-            <ul class="navbar-nav mx-auto w-100 justify-content-end">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Acessórios</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Papelaria</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Decoração</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Para Eles</a>
-                </li>
-            </ul>
-            <div class="brand-image justify-content-center text-center">
-                <a href="https://www.damanojornal.com" class="navbar-brand">
-                    <img src="~/images/brand.png" width="137px" alt="eShop On Web" />
-                </a>
-                <h1>A Loja</h1>
-            </div>
-            <ul class="navbar-nav mx-auto w-100">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Kids</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Dogs</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Presentes</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Vestuário</a>
-                </li>
-            </ul>
+            @await Component.InvokeAsync("Menu")
             <ul class="nav navbar-nav ml-auto justify-content-end">
                 <li class="nav-item">
                     <div class="ml-auto my-2 my-lg-0">

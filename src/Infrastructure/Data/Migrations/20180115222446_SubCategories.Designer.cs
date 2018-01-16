@@ -12,9 +12,10 @@ using System;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(DamaContext))]
-    partial class CatalogContextModelSnapshot : ModelSnapshot
+    [Migration("20180115222446_SubCategories")]
+    partial class SubCategories
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

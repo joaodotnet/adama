@@ -21,6 +21,10 @@ namespace Backoffice.ViewModels
         [Display(Name = "Posição Web")]
         public string Position { get; set; }
 
+        [Display(Name="Categoria Pai")]
+        public int? ParentId { get; set; }
+        public CategoryViewModel Parent { get; set; }
+
         [Display(Name = "Nº Tipos de Produtos")]
         public int NrTypeProducts { get; set; }
         public List<ProductTypeViewModel> CatalogTypes { get; set; }

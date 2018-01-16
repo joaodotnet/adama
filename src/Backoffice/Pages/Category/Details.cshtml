@@ -29,6 +29,12 @@
         <dd>
             @Html.DisplayFor(model => model.Category.Position)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Category.ParentId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Category.Parent.Name)
+        </dd>
     </dl>
     <h4>Tipos de Produtos associados</h4>
     <table class="table">
