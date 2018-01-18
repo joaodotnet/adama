@@ -30,6 +30,10 @@ namespace Backoffice
                 .ForMember(dest => dest.ProductSKU,
                 opts => opts.MapFrom(src => $"{src.CatalogItem.CatalogType.Code}_{src.CatalogItem.CatalogIllustration.Code}{src.CatalogItem.CatalogIllustration.IllustrationType.Code}_{src.Code}"));
             CreateMap<ProductAttributeViewModel, CatalogAttribute>();
+            CreateMap<ShopConfigViewModel, ShopConfig>();
+            CreateMap<ShopConfig, ShopConfigViewModel>();
+            CreateMap<ShopConfigDetail, ShopConfigDetailViewModel>();
+            CreateMap<ShopConfigDetailViewModel, ShopConfigDetail>();
         }
     }
 }

@@ -1,0 +1,67 @@
+﻿@page
+@model Backoffice.Pages.ShopConfig.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<h4>ShopConfigDetail</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @*<div class="form-group">
+                <label asp-for="ShopConfigDetailModel.PictureUri" class="control-label"></label>
+                <input asp-for="ShopConfigDetailModel.PictureUri" class="form-control" />
+                <span asp-validation-for="ShopConfigDetailModel.PictureUri" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <label asp-for="ShopConfigDetailModel.HeadingText" class="control-label"></label>
+                <input asp-for="ShopConfigDetailModel.HeadingText" class="form-control" />
+                <span asp-validation-for="ShopConfigDetailModel.HeadingText" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShopConfigDetailModel.ContentText" class="control-label"></label>
+                <input asp-for="ShopConfigDetailModel.ContentText" class="form-control" />
+                <span asp-validation-for="ShopConfigDetailModel.ContentText" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShopConfigDetailModel.LinkButtonUri" class="control-label"></label>
+                <input asp-for="ShopConfigDetailModel.LinkButtonUri" class="form-control" />
+                <span asp-validation-for="ShopConfigDetailModel.LinkButtonUri" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShopConfigDetailModel.LinkButtonText" class="control-label"></label>
+                <input asp-for="ShopConfigDetailModel.LinkButtonText" class="form-control" />
+                <span asp-validation-for="ShopConfigDetailModel.LinkButtonText" class="text-danger"></span>
+            </div>
+            <div class="form-check">
+                <input asp-for="ShopConfigDetailModel.IsActive" class="form-check-input" />
+                <label asp-for="ShopConfigDetailModel.IsActive" class="form-check-label"></label>
+
+                <span asp-validation-for="ShopConfigDetailModel.IsActive" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShopConfigDetailModel.Picture" class="control-label"></label>
+
+                <input type="file" asp-for="ShopConfigDetailModel.Picture" class="form-control" />
+                <span asp-validation-for="ShopConfigDetailModel.Picture" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="ShopConfigDetailModel.ShopConfigId" />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
