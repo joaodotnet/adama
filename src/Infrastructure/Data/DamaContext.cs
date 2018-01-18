@@ -21,9 +21,9 @@ namespace Infrastructure.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Category> Categories { get; set; }
-
-
-
+        public DbSet<ShopConfig> ShopConfigs { get; set; }
+        public DbSet<ApplicationCore.Entities.ShopConfigDetail> ShopConfigDetails { get; set; } //Need the full qualified name for generate code
+        
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Category>(ConfigureCategory);
@@ -35,6 +35,8 @@ namespace Infrastructure.Data
             builder.Entity<CatalogAttribute>(ConfigureCatalogAttribute);
             builder.Entity<Order>(ConfigureOrder);
             builder.Entity<OrderItem>(ConfigureOrderItem);
+            builder.Entity<ShopConfig>(ConfigureShopConfig);
+            builder.Entity<ShopConfigDetail>(ConfigureShopConfigDetails);
         }
 
         private void ConfigureCatalogAttribute(EntityTypeBuilder<CatalogAttribute> builder)
@@ -189,6 +191,33 @@ namespace Infrastructure.Data
         private void ConfigureOrderItem(EntityTypeBuilder<OrderItem> builder)
         {
             builder.OwnsOne(i => i.ItemOrdered);
+        }
+
+        private void ConfigureShopConfig(EntityTypeBuilder<ShopConfig> builder)
+        {
+            builder.ToTable("ShopConfig");
+            builder.Property(x => x.Type)
+                .IsRequired();
+            builder.Property(x => x.Name)
+                .HasMaxLength(100);
+            builder.Property(x => x.Value)
+               .HasMaxLength(255);
+            builder.Property(x => x.IsActive)
+                .IsRequired()
+                .HasDefaultValue(true);
+        }
+        private void ConfigureShopConfigDetails(EntityTypeBuilder<ShopConfigDetail> builder)
+        {
+            builder.ToTable("ShopConfigDetail");
+            builder.Property(x => x.PictureUri)
+                .HasMaxLength(255);
+            builder.Property(x => x.IsActive)
+                .IsRequired()
+                .HasDefaultValue(true);
+
+            builder.HasOne(x => x.ShopConfig)
+                .WithMany(p => p.Details)
+                .HasForeignKey(x => x.ShopConfigId);
         }
     }
 }

@@ -12,9 +12,10 @@ using System;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(DamaContext))]
-    partial class CatalogContextModelSnapshot : ModelSnapshot
+    [Migration("20180118124405_AddShopConfig")]
+    partial class AddShopConfig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -266,11 +267,13 @@ namespace Infrastructure.Data.Migrations
                         .HasDefaultValue(true);
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(100);
 
                     b.Property<int>("Type");
 
                     b.Property<string>("Value")
+                        .IsRequired()
                         .HasMaxLength(255);
 
                     b.HasKey("Id");
@@ -278,7 +281,7 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("ShopConfig");
                 });
 
-            modelBuilder.Entity("ApplicationCore.Entities.ShopConfigDetail", b =>
+            modelBuilder.Entity("ApplicationCore.Entities.ShopConfigDetails", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -409,7 +412,7 @@ namespace Infrastructure.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ApplicationCore.Entities.ShopConfigDetail", b =>
+            modelBuilder.Entity("ApplicationCore.Entities.ShopConfigDetails", b =>
                 {
                     b.HasOne("ApplicationCore.Entities.ShopConfig", "ShopConfig")
                         .WithMany("Details")
