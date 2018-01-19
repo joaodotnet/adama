@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Backoffice.Services;
 using Infrastructure.Identity;
+using ApplicationCore.Interfaces;
 
 namespace Backoffice.Pages.Account
 {

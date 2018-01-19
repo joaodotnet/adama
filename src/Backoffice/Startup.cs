@@ -15,6 +15,8 @@ using Infrastructure.Identity;
 using AutoMapper;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
+using ApplicationCore.Interfaces;
+using Backoffice.Interfaces;
 
 namespace Backoffice
 {
@@ -54,13 +56,16 @@ namespace Backoffice
                     options.Conventions.AuthorizeFolder("/IllustrationsTypes");
                     options.Conventions.AuthorizeFolder("/Products");
                     options.Conventions.AuthorizeFolder("/ProductType");
+                    options.Conventions.AuthorizeFolder("/ShopConfig");
                 });
 
             services.AddAutoMapper();
 
             // Register no-op EmailSender used by account confirmation and password reset during development
             // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
-            services.AddSingleton<IEmailSender, EmailSender>();
+            services.Configure<BackofficeSettings>(Configuration);            
+            services.AddScoped<IBackofficeService, BackofficeService>();
+            services.AddTransient<IEmailSender, EmailSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

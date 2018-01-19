@@ -10,6 +10,8 @@ using ApplicationCore.Entities;
 using Infrastructure.Data;
 using Backoffice.ViewModels;
 using AutoMapper;
+using Backoffice.Interfaces;
+using Microsoft.Extensions.Options;
 
 namespace Backoffice.Pages.ShopConfig
 {
@@ -17,11 +19,15 @@ namespace Backoffice.Pages.ShopConfig
     {
         private readonly DamaContext _context;
         private readonly IMapper _mapper;
+        private readonly BackofficeSettings _backofficeSettings;
+        private readonly IBackofficeService _service;
 
-        public EditModel(DamaContext context, IMapper mapper)
+        public EditModel(DamaContext context, IMapper mapper, IOptions<BackofficeSettings> settings, IBackofficeService service)
         {
             _context = context;
             _mapper = mapper;
+            _backofficeSettings = settings.Value;
+            _service = service;
         }
 
         [BindProperty]
@@ -52,6 +58,23 @@ namespace Backoffice.Pages.ShopConfig
             if (!ModelState.IsValid)
             {
                 return Page();
+            }
+
+            if (ShopConfigDetailModel.Picture == null || ShopConfigDetailModel.Picture.Length == 0)
+            {
+                ModelState.AddModelError("", "A menina quer por favor escolher uma imagem, obrigado! Ass.: O seu amor!");
+                return Page();
+            }
+
+            if (ShopConfigDetailModel.Picture.Length > 2097152)
+            {
+                ModelState.AddModelError("", "A menina quer por favor diminuir o tamanho do ficheiro? O máximo é 2MB, obrigado! Ass.: O seu amor!");
+                return Page();
+            }
+
+            if (ShopConfigDetailModel.Picture.Length > 0)
+            {
+                ShopConfigDetailModel.PictureUri = await _service.SaveFileAsync(ShopConfigDetailModel.Picture, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri);
             }
 
             var shopConfigDetail = _mapper.Map<ShopConfigDetail>(ShopConfigDetailModel);
