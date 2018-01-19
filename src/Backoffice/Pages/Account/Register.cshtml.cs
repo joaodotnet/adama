@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Infrastructure.Identity;
 using Backoffice.Services;
+using ApplicationCore.Interfaces;
 
 namespace Backoffice.Pages.Account
 {

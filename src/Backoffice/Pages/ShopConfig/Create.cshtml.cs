@@ -11,6 +11,9 @@ using Backoffice.ViewModels;
 using AutoMapper;
 using System.IO;
 using System.Net.Http.Headers;
+using Microsoft.Extensions.Options;
+using Backoffice.Extensions;
+using Backoffice.Interfaces;
 
 namespace Backoffice.Pages.ShopConfig
 {
@@ -19,11 +22,14 @@ namespace Backoffice.Pages.ShopConfig
         private readonly DamaContext _context;
         private readonly IMapper _mapper;
         private readonly BackofficeSettings _backofficeSettings;
+        private readonly IBackofficeService _service;
 
-        public CreateModel(DamaContext context, IMapper mapper)
+        public CreateModel(DamaContext context, IMapper mapper, IOptions<BackofficeSettings> settings, IBackofficeService service)
         {
             _context = context;
             _mapper = mapper;
+            _backofficeSettings = settings.Value;
+            _service = service;
         }
 
         public IActionResult OnGet(int? id)
@@ -57,44 +63,13 @@ namespace Backoffice.Pages.ShopConfig
                 return Page();
             }
 
-           
-
-            var shopConfigAdded = _context.ShopConfigDetails.Add(_mapper.Map<ShopConfigDetail>(ShopConfigDetailModel));
-            await _context.SaveChangesAsync();
-
             if (ShopConfigDetailModel.Picture.Length > 0)
             {
-                var type = ContentDispositionHeaderValue
-                        .Parse(ShopConfigDetailModel.Picture.ContentDisposition)
-                        .DispositionType;
-
-                //Check if is jpg on png                
-                var filename = $"news_banner_{shopConfigAdded.Entity.Id}.jpg";
-                shopConfigAdded.Entity.PictureUri = _backofficeSettings.WebNewsPictureUri + filename;
-
-                var filePath = Path.Combine(
-                    _backofficeSettings.WebNewsPictureFullPath,
-                    filename);
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await ShopConfigDetailModel.Picture.CopyToAsync(stream);
-                }
-                //using (FileStream fs = System.IO.File.Create(filePath))
-                //{
-                //    ShopConfigDetailModel.Picture.CopyTo(fs);
-                //    fs.Flush();
-                //}
-                await _context.SaveChangesAsync();
+                ShopConfigDetailModel.PictureUri = await _service.SaveFileAsync(ShopConfigDetailModel.Picture, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri);
             }
 
-            //using (var memoryStream = new MemoryStream())
-            //{
-            //    await ShopConfigDetailModel.Picture.CopyToAsync(memoryStream);
-            //    // validate file, then move to CDN or public folder
-
-            //}
-
-            
+            _context.ShopConfigDetails.Add(_mapper.Map<ShopConfigDetail>(ShopConfigDetailModel));
+            await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }
