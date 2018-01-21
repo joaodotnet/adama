@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using System;
 using System.Text;
+using AutoMapper;
 
 namespace DamaShopWeb.Web
 {
@@ -89,6 +90,8 @@ namespace DamaShopWeb.Web
                 options.LoginPath = "/Account/Signin";
                 options.LogoutPath = "/Account/Signout";
             });
+
+            services.AddAutoMapper();
 
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));

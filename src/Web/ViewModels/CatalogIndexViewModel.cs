@@ -13,6 +13,6 @@ namespace DamaShopWeb.Web.ViewModels
         public PaginationInfoViewModel PaginationInfo { get; set; }
 
         //Dama Stuff
-        public MainBannerViewModel BannerViewModel { get; set; }
+        public List<MainBannerViewModel> Banners { get; set; }
     }
 }

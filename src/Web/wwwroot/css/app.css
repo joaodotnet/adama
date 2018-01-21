@@ -77,7 +77,7 @@ select::-ms-expand {
     font-size: 12px;
 }
 
-a,
+/*a,
 a:active,
 a:hover,
 a:visited {
@@ -90,7 +90,7 @@ a:visited {
     a:active {
         color: #75B918;
         transition: color 0.35s;
-    }
+    }*/
 
 h1 {
     color: #000000;
@@ -106,6 +106,17 @@ h2 {
     font-size: 41px;
     font-weight: 100;
     line-height: 1.4em
+}
+
+.btn-primary {
+    background-color: #f5b0b9;
+    border-color: #fff;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #ef7e8e;
+    border-color: #fff;
 }
 
 /* DamaShopWeb App Header */
@@ -190,4 +201,8 @@ h2 {
 
 .news-heading {
     padding: 50px 50px;
+}
+
+.bannerLink {
+    cursor: pointer;
 }
