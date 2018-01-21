@@ -113,7 +113,7 @@ namespace Infrastructure.Data
                 .IsRequired(true);
 
             builder.Property(ci => ci.PictureUri)
-                .IsRequired(false);
+                .IsRequired(true);
 
             builder.HasOne(ci => ci.CatalogIllustration)
                 .WithMany()
@@ -125,6 +125,12 @@ namespace Infrastructure.Data
 
             builder.Property(x => x.Description)
                 .HasMaxLength(255);
+            builder.Property(x => x.ShowOnShop)
+                .IsRequired(true);
+            builder.Property(x => x.IsNew)
+                .IsRequired(true);
+            builder.Property(x => x.IsFeatured)
+                .IsRequired(true);
         }
 
         private void ConfigureCatalogBrand(EntityTypeBuilder<CatalogIllustration> builder)

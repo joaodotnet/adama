@@ -9,5 +9,7 @@ namespace Backoffice
     {
         public string WebNewsPictureUri { get; set; }
         public string WebNewsPictureFullPath { get; set; }
+        public string WebProductsPictureUri { get; set; }
+        public string WebProductsPictureFullPath { get; set; }
     }
 }

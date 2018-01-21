@@ -10,6 +10,8 @@ using ApplicationCore.Entities;
 using Infrastructure.Data;
 using AutoMapper;
 using Backoffice.ViewModels;
+using Backoffice.Interfaces;
+using Microsoft.Extensions.Options;
 
 namespace Backoffice.Pages.Products
 {
@@ -17,11 +19,15 @@ namespace Backoffice.Pages.Products
     {
         private readonly DamaContext _context;
         private readonly IMapper _mapper;
+        private readonly IBackofficeService _service;
+        private readonly BackofficeSettings _backofficeSettings;
 
-        public EditModel(DamaContext context, IMapper mapper)
+        public EditModel(DamaContext context, IMapper mapper, IOptions<BackofficeSettings> settings, IBackofficeService service)
         {
             _context = context;
             _mapper = mapper;
+            _service = service;
+            _backofficeSettings = settings.Value;
         }
 
         [BindProperty]
@@ -67,6 +73,17 @@ namespace Backoffice.Pages.Products
             {
                 await PopulateLists();
                 return Page();
+            }
+
+            if (ProductModel.Picture != null && ProductModel.Picture.Length > 2097152)
+            {
+                ModelState.AddModelError("", "A menina quer por favor diminuir o tamanho do ficheiro? O máximo é 2MB, obrigado! Ass.: O seu amor!");
+                return Page();
+            }
+
+            if (ProductModel.Picture != null && ProductModel.Picture.Length > 0)
+            {
+                ProductModel.PictureUri = await _service.SaveFileAsync(ProductModel.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri);
             }
 
             //Save Changes            
