@@ -9,7 +9,7 @@
 
 <h4>Produto</h4>
 <hr />
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
         <div class="col-md-4">
@@ -22,12 +22,12 @@
                 <label asp-for="ProductModel.Description" class="control-label"></label>
                 <input asp-for="ProductModel.Description" class="form-control" />
                 <span asp-validation-for="ProductModel.Description" class="text-danger"></span>
-            </div>            
+            </div>
             <div class="form-group">
                 <label asp-for="ProductModel.CatalogTypeId" class="control-label"></label>
                 <select asp-for="ProductModel.CatalogTypeId" class="form-control" asp-items="ViewBag.ProductTypeId"></select>
                 <span asp-validation-for="ProductModel.CatalogTypeId" class="text-danger"></span>
-            </div>                        
+            </div>
             <div class="form-group">
                 <label asp-for="ProductModel.CatalogIllustrationId" class="control-label"></label>
                 <select asp-for="ProductModel.CatalogIllustrationId" class="form-control" asp-items="ViewBag.IllustrationId"></select>
@@ -37,6 +37,29 @@
                 <label asp-for="ProductModel.Price" class="control-label"></label>
                 <input asp-for="ProductModel.Price" class="form-control decimal" />
                 <span asp-validation-for="ProductModel.Price" class="text-danger"></span>
+            </div>
+            <div class="form-check">
+                <input asp-for="ProductModel.ShowOnShop" class="form-check-input" />
+                <label asp-for="ProductModel.ShowOnShop" class="form-check-label"></label>
+                <span asp-validation-for="ProductModel.ShowOnShop" class="text-danger"></span>
+            </div>
+            <div class="form-check">
+                <input asp-for="ProductModel.IsNew" class="form-check-input" />
+                <label asp-for="ProductModel.IsNew" class="form-check-label"></label>
+                <span asp-validation-for="ProductModel.IsNew" class="text-danger"></span>
+            </div>
+            <div class="form-check">
+                <input asp-for="ProductModel.IsFeatured" class="form-check-input" />
+                <label asp-for="ProductModel.IsFeatured" class="form-check-label"></label>
+                <span asp-validation-for="ProductModel.IsFeatured" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductModel.Picture" class="control-label"></label>
+                <input type="file" asp-for="ProductModel.Picture" class="form-control" />
+                <small>(quadrado)</small>
+                <span asp-validation-for="ProductModel.Picture" class="text-danger"></span>
+                <img src="@Model.ProductModel.PictureUri" class="img-responsive" />
+                <input type="hidden" asp-for="ProductModel.PictureUri" />
             </div>
         </div>
     </div>

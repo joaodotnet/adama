@@ -10,6 +10,8 @@ using Infrastructure.Data;
 using AutoMapper;
 using Backoffice.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Backoffice.Interfaces;
+using Microsoft.Extensions.Options;
 
 namespace Backoffice.Pages.Products
 {
@@ -17,11 +19,15 @@ namespace Backoffice.Pages.Products
     {
         private readonly DamaContext _context;
         private readonly IMapper _mapper;
+        private readonly IBackofficeService _service;
+        private readonly BackofficeSettings _backofficeSettings;
 
-        public CreateModel(DamaContext context, IMapper mapper)
+        public CreateModel(DamaContext context, IMapper mapper, IBackofficeService service, IOptions<BackofficeSettings> backofficeSettings)
         {
             _context = context;
             _mapper = mapper;
+            _service = service;
+            _backofficeSettings = backofficeSettings.Value;
         }
 
         public async Task<IActionResult> OnGet()
@@ -39,6 +45,23 @@ namespace Backoffice.Pages.Products
             {
                 await PopulateLists();
                 return Page();
+            }
+
+            if (ProductModel.Picture == null || ProductModel.Picture.Length == 0)
+            {
+                ModelState.AddModelError("", "A menina quer por favor escolher uma imagem, obrigado! Ass.: O seu amor!");
+                return Page();
+            }
+
+            if (ProductModel.Picture.Length > 2097152)
+            {
+                ModelState.AddModelError("", "A menina quer por favor diminuir o tamanho do ficheiro? O máximo é 2MB, obrigado! Ass.: O seu amor!");
+                return Page();
+            }
+
+            if (ProductModel.Picture.Length > 0)
+            {
+                ProductModel.PictureUri = await _service.SaveFileAsync(ProductModel.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri);
             }
 
             //Remove model attributes with no id

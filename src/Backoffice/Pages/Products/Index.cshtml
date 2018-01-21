@@ -31,37 +31,61 @@
             <th>
                 @Html.DisplayNameFor(model => model.ProductModel[0].ProductSKU)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductModel[0].ShowOnShop)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductModel[0].IsNew)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductModel[0].IsFeatured)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductModel[0].PictureUri)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model.ProductModel)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CatalogType.Code)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CatalogIllustration.Code)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    @Html.Raw(item.ProductSKU)
-                </td>
-                <td>
-                    <a asp-page="./Edit" asp-route-id="@item.Id">Editar</a> |
-                    <a asp-page="./Details" asp-route-id="@item.Id">Detalhes</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.Id">Remover</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CatalogType.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CatalogIllustration.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.Raw(item.ProductSKU)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShowOnShop)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsNew)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsFeatured)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PictureUri)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Editar</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Detalhes</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Remover</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

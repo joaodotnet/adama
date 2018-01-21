@@ -22,7 +22,7 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.ProductModel.Description)
-        </dd>        
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.ProductModel.CatalogTypeId)
         </dt>
@@ -46,6 +46,36 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.ProductModel.ProductSKU)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductModel.ShowOnShop)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductModel.ShowOnShop)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductModel.IsNew)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductModel.IsNew)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductModel.IsFeatured)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductModel.IsFeatured)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductModel.PictureUri)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductModel.PictureUri)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductModel.Picture)
+        </dt>
+        <dd>
+            <img src="@Model.ProductModel.PictureUri" />
         </dd>
     </dl>
     <hr />

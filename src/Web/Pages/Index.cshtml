@@ -40,49 +40,84 @@
     </div>
 }
 
-<div class="news-heading text-center">
-    <h2>Novidades</h2>
-    <img width="395" height="26" src="~/images/coração-rosa.png" />
-</div>
-
-@*<section class="esh-catalog-filters">
-    <div class="container">
-        <form method="get">
-            <label class="esh-catalog-label" data-title="brand">
-                <select asp-for="@Model.CatalogModel.BrandFilterApplied" asp-items="@Model.CatalogModel.Brands" class="esh-catalog-filter"></select>
-            </label>
-            <label class="esh-catalog-label" data-title="type">
-                <select asp-for="@Model.CatalogModel.TypesFilterApplied" asp-items="@Model.CatalogModel.Types" class="esh-catalog-filter"></select>
-            </label>
-            <input class="esh-catalog-send" type="image" src="images/arrow-right.svg" />
-        </form>
+@if (Model.CatalogModel.NewCatalogItems.Any())
+{
+    <div class="news-heading text-center">
+        <h2>Novidades</h2>
+        <img width="395" height="26" src="~/images/coração-rosa.png" />
     </div>
-</section>*@
 
-<div class="container">
-
-    @if (Model.CatalogModel.CatalogItems.Any())
-    {
-        @Html.Partial("_pagination", Model.CatalogModel.PaginationInfo)
+    <div class="container">
 
         <div class="esh-catalog-items row">
-            @foreach (var catalogItem in Model.CatalogModel.CatalogItems)
+            @foreach (var catalogItem in Model.CatalogModel.NewCatalogItems)
             {
-                <div class="esh-catalog-item col-md-4">
+                <div class="esh-catalog-item col-md-3">
                     @Html.Partial("_product", catalogItem)
                 </div>
             }
         </div>
+    </div>
+}
 
-        @Html.Partial("_pagination", Model.CatalogModel.PaginationInfo)
-    }
-    else
-    {
+@if (Model.CatalogModel.FeaturedCatalogItems.Any())
+{
+    <div class="news-heading text-center">
+        <h2>Destaques</h2>
+        <img width="395" height="26" src="~/images/coração-rosa.png" />
+    </div>
+
+    <div class="container">
+
         <div class="esh-catalog-items row">
-            THERE ARE NO RESULTS THAT MATCH YOUR SEARCH
+            @foreach (var catalogItem in Model.CatalogModel.FeaturedCatalogItems)
+            {
+                <div class="esh-catalog-item col-md-3">
+                    @Html.Partial("_product", catalogItem)
+                </div>
+            }
         </div>
-    }
-</div>
+    </div>
+}
+
+@*<section class="esh-catalog-filters">
+        <div class="container">
+            <form method="get">
+                <label class="esh-catalog-label" data-title="brand">
+                    <select asp-for="@Model.CatalogModel.BrandFilterApplied" asp-items="@Model.CatalogModel.Brands" class="esh-catalog-filter"></select>
+                </label>
+                <label class="esh-catalog-label" data-title="type">
+                    <select asp-for="@Model.CatalogModel.TypesFilterApplied" asp-items="@Model.CatalogModel.Types" class="esh-catalog-filter"></select>
+                </label>
+                <input class="esh-catalog-send" type="image" src="images/arrow-right.svg" />
+            </form>
+        </div>
+    </section>*@
+
+@*<div class="container">
+
+        @if (Model.CatalogModel.CatalogItems.Any())
+        {
+            @Html.Partial("_pagination", Model.CatalogModel.PaginationInfo)
+
+            <div class="esh-catalog-items row">
+                @foreach (var catalogItem in Model.CatalogModel.CatalogItems)
+                {
+                    <div class="esh-catalog-item col-md-4">
+                        @Html.Partial("_product", catalogItem)
+                    </div>
+                }
+            </div>
+
+            @Html.Partial("_pagination", Model.CatalogModel.PaginationInfo)
+        }
+        else
+        {
+            <div class="esh-catalog-items row">
+                THERE ARE NO RESULTS THAT MATCH YOUR SEARCH
+            </div>
+        }
+    </div>*@
 @section Scripts {
     <script>
         $(document).ready(function () {

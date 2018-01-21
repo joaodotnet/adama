@@ -49,6 +49,7 @@ namespace DamaShopWeb.Web.Services
             var iPage = itemsPage ?? totalItems;
 
             var itemsOnPage = root
+                .Where(x => x.ShowOnShop.Value) // TODO: filter in repo
                 .Skip(iPage * pageIndex)
                 .Take(iPage)
                 .ToList();
@@ -67,6 +68,26 @@ namespace DamaShopWeb.Web.Services
                     PictureUri = i.PictureUri,
                     Price = i.Price
                 }),
+                NewCatalogItems = itemsOnPage
+                    .Where(x => x.IsNew.Value)
+                    .Take(8)
+                    .Select(i => new CatalogItemViewModel()
+                    {
+                        Id = i.Id,
+                        Name = i.Name,
+                        PictureUri = i.PictureUri,
+                        Price = i.Price
+                    }),
+                FeaturedCatalogItems = itemsOnPage
+                    .Where(x => x.IsFeatured.Value)
+                    .Take(8)
+                    .Select(i => new CatalogItemViewModel()
+                    {
+                        Id = i.Id,
+                        Name = i.Name,
+                        PictureUri = i.PictureUri,
+                        Price = i.Price
+                    }),
                 Brands = await GetBrands(),
                 Types = await GetTypes(),
                 BrandFilterApplied = brandId ?? 0,

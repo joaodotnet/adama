@@ -186,6 +186,31 @@ h2 {
     color: #909090;
 }
 
+/* Footer */
+.footer-links {
+    width: 300px;
+    padding-top: 30px;
+}
+.footer-link{
+    width: 300px;
+    padding: 5px 5px;
+}
+.footer-link a,
+    a:active,
+    a:hover,
+    a:visited {
+        color: #fff;
+        text-decoration: none;
+        
+    }
+.footer-link:hover {
+    border: 1px solid #fff;
+    transition: color 0.35s;
+}
+.footer-link i {
+    margin: 5px;
+}
+
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;
