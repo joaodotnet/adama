@@ -7,7 +7,7 @@ namespace DamaShopWeb.Web.Interfaces
 {
     public interface ICatalogService
     {
-        Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int itemsPage, int? brandId, int? typeId);
+        Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int? itemsPage, int? brandId, int? typeId);
         Task<IEnumerable<SelectListItem>> GetBrands();
         Task<IEnumerable<SelectListItem>> GetTypes();
     }

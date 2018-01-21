@@ -10,5 +10,6 @@ namespace DamaShopWeb.Web.Interfaces
     public interface IShopService
     {
         Task<MenuComponentViewModel> GetMenuList();
+        Task<List<MainBannerViewModel>> GetMainBanners();
     }
 }

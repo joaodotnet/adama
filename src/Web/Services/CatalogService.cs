@@ -38,7 +38,7 @@ namespace DamaShopWeb.Web.Services
             _uriComposer = uriComposer;
         }
 
-        public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int itemsPage, int? brandId, int? typeId)
+        public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int? itemsPage, int? brandId, int? typeId)
         {
             _logger.LogInformation("GetCatalogItems called.");
 
@@ -46,10 +46,11 @@ namespace DamaShopWeb.Web.Services
             var root = _itemRepository.List(filterSpecification);
 
             var totalItems = root.Count();
+            var iPage = itemsPage ?? totalItems;
 
             var itemsOnPage = root
-                .Skip(itemsPage * pageIndex)
-                .Take(itemsPage)
+                .Skip(iPage * pageIndex)
+                .Take(iPage)
                 .ToList();
 
             itemsOnPage.ForEach(x =>
@@ -75,7 +76,7 @@ namespace DamaShopWeb.Web.Services
                     ActualPage = pageIndex,
                     ItemsPerPage = itemsOnPage.Count,
                     TotalItems = totalItems,
-                    TotalPages = int.Parse(Math.Ceiling(((decimal)totalItems / itemsPage)).ToString())
+                    TotalPages = int.Parse(Math.Ceiling(((decimal)totalItems / iPage)).ToString())
                 }
             };
 
