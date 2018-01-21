@@ -99,6 +99,7 @@ namespace DamaShopWeb.Web
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<CatalogService>();
+            services.AddScoped<IShopService,ShopService>();
             services.Configure<CatalogSettings>(Configuration);
             services.AddSingleton<IUriComposer>(new UriComposer(Configuration.Get<CatalogSettings>()));
 

@@ -18,8 +18,12 @@ namespace DamaShopWeb.Web.Pages
         public CatalogIndexViewModel CatalogModel { get; set; } = new CatalogIndexViewModel();
 
         public async Task OnGet(CatalogIndexViewModel catalogModel, int? pageId)
-        {
+        {            
+            //Shop Stuff
             CatalogModel = await _catalogService.GetCatalogItems(pageId ?? 0, Constants.ITEMS_PER_PAGE, catalogModel.BrandFilterApplied, catalogModel.TypesFilterApplied);
+
+            //DamaStuff
+            
         }
     }
 }

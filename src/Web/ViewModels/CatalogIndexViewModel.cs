@@ -11,5 +11,8 @@ namespace DamaShopWeb.Web.ViewModels
         public int? BrandFilterApplied { get; set; }
         public int? TypesFilterApplied { get; set; }
         public PaginationInfoViewModel PaginationInfo { get; set; }
+
+        //Dama Stuff
+        public MainBannerViewModel BannerViewModel { get; set; }
     }
 }
