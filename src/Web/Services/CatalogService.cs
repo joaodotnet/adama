@@ -48,8 +48,7 @@ namespace DamaShopWeb.Web.Services
             var totalItems = root.Count();
             var iPage = itemsPage ?? totalItems;
 
-            var itemsOnPage = root
-                .Where(x => x.ShowOnShop.Value) // TODO: filter in repo
+            var itemsOnPage = root                
                 .Skip(iPage * pageIndex)
                 .Take(iPage)
                 .ToList();
