@@ -136,10 +136,18 @@ h2 {
     .ul-social {
         display:none;
     }
+    .separator {
+        width: 250px;
+    }
+    
 }
 @media screen and (min-width: 992px) {
     #brand-mobile-image {
         display: none;
+    }
+    .separator {
+        width: 395px;
+        height: 26px;
     }
 }
 
