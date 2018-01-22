@@ -46,6 +46,13 @@ namespace DamaShopWeb.Web.Services
 
             GetTopCategories(menuViewModel.Left, categories, parentsLeft);
 
+            var parentsRight = categories
+                .Where(x => !x.ParentId.HasValue && x.Position == "right")
+                .OrderBy(x => x.Order)
+                .ToList();
+
+            GetTopCategories(menuViewModel.Right, categories, parentsRight);
+
             return menuViewModel;
         }
 
