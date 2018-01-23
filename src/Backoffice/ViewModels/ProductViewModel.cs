@@ -35,10 +35,15 @@ namespace Backoffice.ViewModels
         public bool IsNew { get; set; }
         [Display(Name = "Destaque")]
         public bool IsFeatured{ get; set; }
-        [Display(Name = "Imagem")]
+        [Display(Name = "Imagem Principal")]
         public IFormFile Picture { get; set; }
+        [Display(Name = "URL da Imagem Principal")]
         public string PictureUri { get; set; }
+        [Display(Name = "Imagens do Produto")]
+        public List<IFormFile> OtherPictures { get; set; }
 
-        public IList<ProductAttributeViewModel> CatalogAttributes { get; set; } = new List<ProductAttributeViewModel>();  
+        public IList<ProductAttributeViewModel> CatalogAttributes { get; set; } = new List<ProductAttributeViewModel>();
+        [Display(Name = "Imagens do Produto")]
+        public IList<ProductPictureViewModel> CatalogPictures { get; set; } = new List<ProductPictureViewModel>();
     }
 }

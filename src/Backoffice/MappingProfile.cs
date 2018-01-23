@@ -34,6 +34,8 @@ namespace Backoffice
             CreateMap<ShopConfig, ShopConfigViewModel>();
             CreateMap<ShopConfigDetail, ShopConfigDetailViewModel>();
             CreateMap<ShopConfigDetailViewModel, ShopConfigDetail>();
+            CreateMap<CatalogPicture, ProductPictureViewModel>();
+            CreateMap<ProductPictureViewModel, CatalogPicture>();
         }
     }
 }
