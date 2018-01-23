@@ -11,7 +11,7 @@ namespace ApplicationCore.Entities
         public string ContentText { get; set; }
         public string LinkButtonUri { get; set; }
         public string LinkButtonText { get; set; }
-        public bool? IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
         public int ShopConfigId { get; set; }
         public ShopConfig ShopConfig { get; set; }
     }

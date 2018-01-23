@@ -12,10 +12,11 @@ namespace ApplicationCore.Entities
         public CatalogType CatalogType { get; set; }
         public int CatalogIllustrationId { get; set; }
         public CatalogIllustration CatalogIllustration { get; set; }
-        public bool? ShowOnShop { get; set; }
-        public bool? IsNew { get; set; }
-        public bool? IsFeatured { get; set; }
+        public bool ShowOnShop { get; set; }
+        public bool IsNew { get; set; }
+        public bool IsFeatured { get; set; }
 
         public ICollection<CatalogAttribute> CatalogAttributes { get; set; }
+        public ICollection<CatalogPicture> CatalogPictures { get; set; }
     }
 }

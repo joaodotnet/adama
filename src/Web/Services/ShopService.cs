@@ -25,7 +25,7 @@ namespace DamaShopWeb.Web.Services
         {
             var bannerConfig = await _db.ShopConfigDetails
                 .Include(x => x.ShopConfig)
-                .Where(x => x.ShopConfig.Type == ShopConfigType.NEWS_BANNER && x.ShopConfig.IsActive.Value && x.IsActive.Value)
+                .Where(x => x.ShopConfig.Type == ShopConfigType.NEWS_BANNER && x.ShopConfig.IsActive && x.IsActive)
                 .ToListAsync();
             return _mapper.Map<List<MainBannerViewModel>>(bannerConfig);
         }

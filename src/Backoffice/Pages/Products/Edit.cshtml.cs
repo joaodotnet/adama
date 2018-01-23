@@ -12,6 +12,7 @@ using AutoMapper;
 using Backoffice.ViewModels;
 using Backoffice.Interfaces;
 using Microsoft.Extensions.Options;
+using Backoffice.Extensions;
 
 namespace Backoffice.Pages.Products
 {
@@ -45,6 +46,7 @@ namespace Backoffice.Pages.Products
                 .Include(p => p.CatalogIllustration)
                 .Include(p => p.CatalogType)
                 .Include(p => p.CatalogAttributes)
+                .Include(p => p.CatalogPictures)
                 .SingleOrDefaultAsync(m => m.Id == id));
 
             if (ProductModel == null)
@@ -75,15 +77,33 @@ namespace Backoffice.Pages.Products
                 return Page();
             }
 
-            if (ProductModel.Picture != null && ProductModel.Picture.Length > 2097152)
+            if (!ValidatePictures())
             {
-                ModelState.AddModelError("", "A menina quer por favor diminuir o tamanho do ficheiro? O máximo é 2MB, obrigado! Ass.: O seu amor!");
+                await PopulateLists();
                 return Page();
-            }
+            }            
 
             if (ProductModel.Picture != null && ProductModel.Picture.Length > 0)
             {
                 ProductModel.PictureUri = await _service.SaveFileAsync(ProductModel.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri);
+            }
+
+            //Update images            
+            foreach (var item in ProductModel.CatalogPictures.Where(x => x.Picture != null).ToList())
+            {
+                //TODO delete old image
+                item.PictureUri = await _service.SaveFileAsync(item.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri);                
+            }
+            //Save news images
+            var order = ProductModel.CatalogPictures.Count == 0 ? 0 : ProductModel.CatalogPictures.Max(x => x.Order);
+            foreach (var item in ProductModel.OtherPictures)
+            {
+                ProductModel.CatalogPictures.Add(new ProductPictureViewModel
+                {
+                    IsActive = true,
+                    Order = ++order,
+                    PictureUri = await _service.SaveFileAsync(item, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri)
+                });
             }
 
             //Save Changes            
@@ -157,31 +177,23 @@ namespace Backoffice.Pages.Products
             ViewData["ProductTypeId"] = new SelectList(_context.CatalogTypes, "Id", "Code");
         }
 
-        //public async Task<IActionResult> OnPostRemoveAttributeAsync(int id)
-        //{
-        //    ViewData["IllustrationId"] = new SelectList(_context.Illustrations, "Id", "Code");
-        //    ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Code");
-        //    if (id != 0)
-        //    {
-        //        //var attributeModel = ProductModel.ProductAttributes.SingleOrDefault(x => x.Id == id);
-        //        //if (attributeModel != null)
-        //        //    ProductModel.ProductAttributes.Remove(attributeModel);
+        private bool ValidatePictures()
+        {
+            if (ProductModel.Picture == null || ProductModel.Picture.Length == 0)
+            {
+                ModelState.AddModelError("", "A menina quer por favor escolher uma imagem principal, obrigado! Ass.: O seu amor!");
+            }
 
-        //        var attribute = await _context.ProductAttributes.FindAsync(id);
-        //        var prodId = attribute.ProductId;
-        //        if (attribute != null)
-        //        {
-        //            _context.ProductAttributes.Remove(attribute);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        //var prod = await _context.Products
-        //        //    .Include(x => x.ProductAttributes)
-        //        //    .SingleOrDefaultAsync(x => x.Id == prodId);
-
-        //        //ProductModel.ProductAttributes = _mapper.Map<List<ProductAttributeViewModel>>(prod.ProductAttributes);
-        //    }            
-
-        //    return Page();
-        //}
+            if (ProductModel.Picture.Length > 2097152)
+            {
+                ModelState.AddModelError("", "A menina quer por favor diminuir o tamanho da imagem principal? O máximo é 2MB, obrigado! Ass.: O seu amor!");
+            }
+            foreach (var item in ProductModel.OtherPictures)
+            {
+                if (item.Length > 2097152)
+                    ModelState.AddModelError("", $"A imagem {item.GetFileName()} está muito grande amor, O máximo é 2MB, obrigado!");
+            }
+            return ModelState.IsValid;
+        }        
     }
 }

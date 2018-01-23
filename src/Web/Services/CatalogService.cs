@@ -68,7 +68,7 @@ namespace DamaShopWeb.Web.Services
                     Price = i.Price
                 }),
                 NewCatalogItems = itemsOnPage
-                    .Where(x => x.IsNew.Value)
+                    .Where(x => x.IsNew)
                     .Take(8)
                     .Select(i => new CatalogItemViewModel()
                     {
@@ -78,7 +78,7 @@ namespace DamaShopWeb.Web.Services
                         Price = i.Price
                     }),
                 FeaturedCatalogItems = itemsOnPage
-                    .Where(x => x.IsFeatured.Value)
+                    .Where(x => x.IsFeatured)
                     .Take(8)
                     .Select(i => new CatalogItemViewModel()
                     {

@@ -77,6 +77,25 @@
         <dd>
             <img src="@Model.ProductModel.PictureUri" />
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductModel.CatalogPictures)
+        </dt>
+        <dd>
+            @foreach (var item in Model.ProductModel.CatalogPictures)
+            {
+            <div class="col-md-3">
+                <img src="@item.PictureUri" class="img-responsive" />
+                <div>
+                    @Html.DisplayNameFor(model => item.IsActive)
+                    @Html.DisplayFor(model => item.IsActive)
+                </div>
+                <div>
+                    @Html.DisplayNameFor(model => item.Order)
+                    @Html.DisplayFor(model => item.Order)
+                </div>                
+            </div>
+            }
+        </dd>
     </dl>
     <hr />
     <div class="row">

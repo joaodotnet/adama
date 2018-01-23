@@ -64,6 +64,44 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-md-12">
+            <hr />
+            <h4>Imagens do Produto</h4>
+            @for (int i = 0; i < Model.ProductModel.CatalogPictures.Count; i++)
+            {
+            <div class="col-md-3">
+                <img src="@Model.ProductModel.CatalogPictures[i].PictureUri" class="img-responsive" />
+                <div class="form-check">
+                    <input asp-for="ProductModel.CatalogPictures[i].IsActive" class="form-check-input" />
+                    <label asp-for="ProductModel.CatalogPictures[i].IsActive" class="form-check-label"></label>
+                    <span asp-validation-for="ProductModel.CatalogPictures[i].IsActive" class="text-danger"></span>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="ProductModel.CatalogPictures[i].Order" class="col-md-3 control-label"></label>
+                    <div class="col-md-9">
+                        <input asp-for="ProductModel.CatalogPictures[i].Order" class="form-control" />
+                        <span asp-validation-for="ProductModel.CatalogPictures[i].Order" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-control">
+                    <label class="control-label">Nova imagem</label>
+                    <input type="file" asp-for="ProductModel.CatalogPictures[i].Picture" class="form-control" />                    
+                </div>
+                <div>
+                    <input type="submit" asp-page-handler="RemovePicture" value="Remover Imagem" class="btn btn-danger" />
+                </div>
+            </div>
+            }
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="control-label">Carregar novas imagens</label>
+                    <input asp-for="ProductModel.OtherPictures" class="form-control" />
+                    <span asp-validation-for="ProductModel.OtherPictures" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-8">
             <hr />
             <h4>Atributos do Produto</h4>
@@ -97,7 +135,7 @@
                                     <input type="hidden" asp-for="ProductModel.CatalogAttributes[i].CatalogItemId" />
                                     <input type="hidden" asp-for="ProductModel.CatalogAttributes[i].ToRemove" class="to-remove" />
                                     @*<input type="hidden" asp-for="ProductModel.CatalogAttributes[i].Type" value="@Model.ProductModel.CatalogAttributes[i].Type" />*@
-                                    <select asp-for="ProductModel.CatalogAttributes[i].Type" asp-items="Html.GetEnumSelectList<ApplicationCore.Entities.CatalogAttributeType>()" class="form-control" ></select>
+                                    <select asp-for="ProductModel.CatalogAttributes[i].Type" asp-items="Html.GetEnumSelectList<ApplicationCore.Entities.CatalogAttributeType>()" class="form-control"></select>
                                     <span asp-validation-for="ProductModel.CatalogAttributes[i].Type" class="text-danger"></span>
                                 </td>
                                 <td>
@@ -134,6 +172,7 @@
             </div>
         </div>
     </div>
+
 </form>
 
 

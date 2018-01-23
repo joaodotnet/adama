@@ -9,7 +9,7 @@ namespace ApplicationCore.Entities
         public ShopConfigType Type { get; set; }
         public string Name { get; set; }
         public string Value { get; set; }
-        public bool? IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
 
         public List<ShopConfigDetail> Details { get; set; }
     }

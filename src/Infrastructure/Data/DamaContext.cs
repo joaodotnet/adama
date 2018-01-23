@@ -16,6 +16,7 @@ namespace Infrastructure.Data
         public DbSet<Basket> Baskets { get; set; }
         public DbSet<CatalogItem> CatalogItems { get; set; }
         public DbSet<CatalogIllustration> CatalogIllustrations { get; set; }
+        public DbSet<CatalogPicture> CatalogPictures { get; set; }
         public DbSet<IllustrationType> IllustrationTypes { get; set; }
         public DbSet<CatalogType> CatalogTypes { get; set; }
         public DbSet<Order> Orders { get; set; }
@@ -33,10 +34,21 @@ namespace Infrastructure.Data
             builder.Entity<IllustrationType>(ConfigureIllustrationType);           
             builder.Entity<CatalogItem>(ConfigureCatalogItem);
             builder.Entity<CatalogAttribute>(ConfigureCatalogAttribute);
+            builder.Entity<CatalogPicture>(ConfigureCatalogPicture);
             builder.Entity<Order>(ConfigureOrder);
             builder.Entity<OrderItem>(ConfigureOrderItem);
             builder.Entity<ShopConfig>(ConfigureShopConfig);
             builder.Entity<ShopConfigDetail>(ConfigureShopConfigDetails);
+        }
+
+        private void ConfigureCatalogPicture(EntityTypeBuilder<CatalogPicture> builder)
+        {
+            builder.ToTable("CatalogPicture");
+            builder.Property(x => x.PictureUri)
+                .IsRequired();
+            builder.HasOne(x => x.CatalogItem)
+                .WithMany(p => p.CatalogPictures)
+                .HasForeignKey(x => x.CatalogItemId);
         }
 
         private void ConfigureCatalogAttribute(EntityTypeBuilder<CatalogAttribute> builder)
@@ -209,8 +221,7 @@ namespace Infrastructure.Data
             builder.Property(x => x.Value)
                .HasMaxLength(255);
             builder.Property(x => x.IsActive)
-                .IsRequired()
-                .HasDefaultValue(true);
+                .IsRequired();
         }
         private void ConfigureShopConfigDetails(EntityTypeBuilder<ShopConfigDetail> builder)
         {
@@ -218,8 +229,7 @@ namespace Infrastructure.Data
             builder.Property(x => x.PictureUri)
                 .HasMaxLength(255);
             builder.Property(x => x.IsActive)
-                .IsRequired()
-                .HasDefaultValue(true);
+                .IsRequired();
 
             builder.HasOne(x => x.ShopConfig)
                 .WithMany(p => p.Details)
