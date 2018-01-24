@@ -69,28 +69,31 @@
             <h4>Imagens do Produto</h4>
             @for (int i = 0; i < Model.ProductModel.CatalogPictures.Count; i++)
             {
-            <div class="col-md-3">
-                <img src="@Model.ProductModel.CatalogPictures[i].PictureUri" class="img-responsive" />
-                <div class="form-check">
-                    <input asp-for="ProductModel.CatalogPictures[i].IsActive" class="form-check-input" />
-                    <label asp-for="ProductModel.CatalogPictures[i].IsActive" class="form-check-label"></label>
-                    <span asp-validation-for="ProductModel.CatalogPictures[i].IsActive" class="text-danger"></span>
-                </div>
-                <div class="form-group row">
-                    <label asp-for="ProductModel.CatalogPictures[i].Order" class="col-md-3 control-label"></label>
-                    <div class="col-md-9">
-                        <input asp-for="ProductModel.CatalogPictures[i].Order" class="form-control" />
-                        <span asp-validation-for="ProductModel.CatalogPictures[i].Order" class="text-danger"></span>
+                <input type="hidden" asp-for="ProductModel.CatalogPictures[i].Id" />
+                <input type="hidden" asp-for="ProductModel.CatalogPictures[i].CatalogItemId" />
+                <input type="hidden" asp-for="ProductModel.CatalogPictures[i].PictureUri" />
+                <div class="col-md-3">
+                    <img src="@Model.ProductModel.CatalogPictures[i].PictureUri" class="img-responsive" />
+                    <div class="form-check">
+                        <input asp-for="ProductModel.CatalogPictures[i].IsActive" class="form-check-input" />
+                        <label asp-for="ProductModel.CatalogPictures[i].IsActive" class="form-check-label"></label>
+                        <span asp-validation-for="ProductModel.CatalogPictures[i].IsActive" class="text-danger"></span>
+                    </div>
+                    <div class="form-group row">
+                        <label asp-for="ProductModel.CatalogPictures[i].Order" class="col-md-3 control-label"></label>
+                        <div class="col-md-4">
+                            <input asp-for="ProductModel.CatalogPictures[i].Order" class="form-control" />
+                            <span asp-validation-for="ProductModel.CatalogPictures[i].Order" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <button class="btnChangeImage btn btn-default">Substituir</button>
+                        <input type="submit" asp-page-handler="RemovePicture" value="Remover" class="btnRemoveImage btn btn-danger" />
+                        <input type="file" asp-for="ProductModel.CatalogPictures[i].Picture" class="form-control sr-only" />
+                        <input type="hidden" asp-for="ProductModel.CatalogPictures[i].ToRemove" class="img-to-remove" />
+                        <p class="alert" role="alert"></p>
                     </div>
                 </div>
-                <div class="form-control">
-                    <label class="control-label">Nova imagem</label>
-                    <input type="file" asp-for="ProductModel.CatalogPictures[i].Picture" class="form-control" />                    
-                </div>
-                <div>
-                    <input type="submit" asp-page-handler="RemovePicture" value="Remover Imagem" class="btn btn-danger" />
-                </div>
-            </div>
             }
             <div class="col-md-12">
                 <div class="form-group">
@@ -188,8 +191,19 @@
             $('.remove').on('click', function (e) {
                 e.preventDefault();
                 var tr = $(this).closest('tr');
-                tr.find('.to-remove').val(true);               
+                tr.find('.to-remove').val(true);
                 tr.hide();
+            });
+            $('.btnChangeImage').on('click', function (e) {
+                e.preventDefault();
+                var elem = $(this).siblings('input[type=file]');
+                elem.click();
+                $(this).siblings('p').addClass('alert-warning').text('Imagem vai ser substituida!');
+            });
+            $('.btnRemoveImage').on('click', function (e) {
+                e.preventDefault();
+                $(this).siblings('p').addClass('alert-danger').text('Imagem vai ser removida!');
+                $(this).siblings('.img-to-remove').val(true);
             });
         });
     </script>
