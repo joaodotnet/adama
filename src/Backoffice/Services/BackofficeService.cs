@@ -12,6 +12,16 @@ namespace Backoffice.Services
 {
     public class BackofficeService : IBackofficeService
     {
+        public bool CheckIfFileExists(string fullpath, string fileName)
+        {
+            return System.IO.File.Exists(Path.Combine(fullpath,fileName));
+        }
+
+        public void DeleteFile(string fullpath, string fileName)
+        {
+            if (System.IO.File.Exists(Path.Combine(fullpath, fileName)))
+                System.IO.File.Delete(Path.Combine(fullpath, fileName));
+        }
 
         public async Task<string> SaveFileAsync(IFormFile formFile, string fullPath, string uriPath)
         {
@@ -28,5 +38,7 @@ namespace Backoffice.Services
 
             return uriPath + filename; 
         }
+
+
     }
 }

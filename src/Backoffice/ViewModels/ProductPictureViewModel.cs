@@ -13,5 +13,6 @@ namespace Backoffice.ViewModels
         public int Order { get; set; }
         public int CatalogItemId { get; set; }
         public IFormFile Picture { get; set; }
+        public bool ToRemove { get; set; }
     }
 }
