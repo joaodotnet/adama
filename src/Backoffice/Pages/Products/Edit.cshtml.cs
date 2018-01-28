@@ -83,8 +83,11 @@ namespace Backoffice.Pages.Products
                 return Page();
             }
 
+            //Main Picture
             if (ProductModel.Picture != null && ProductModel.Picture.Length > 0)
             {
+                if (!string.IsNullOrEmpty(ProductModel.PictureUri))
+                    _service.DeleteFile(_backofficeSettings.WebProductsPictureFullPath, Utils.GetFileName(ProductModel.PictureUri));
                 ProductModel.PictureUri = await _service.SaveFileAsync(ProductModel.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri);
             }
 

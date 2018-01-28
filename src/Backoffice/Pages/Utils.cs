@@ -11,7 +11,7 @@ namespace Backoffice.Pages
         {
             if (string.IsNullOrEmpty(uri))
                 return "";
-            return uri.Substring(uri.LastIndexOf('\\') + 1)
+            return uri.Substring(uri.LastIndexOf('/') + 1)
                 .Trim('"');
         }
     }
