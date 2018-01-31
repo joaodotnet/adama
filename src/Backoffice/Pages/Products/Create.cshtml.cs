@@ -49,7 +49,10 @@ namespace Backoffice.Pages.Products
             }
 
             if (!ValidatePictures())
+            {
+                await PopulateLists();
                 return Page();
+            }
 
             //Save Main Image
             if (ProductModel.Picture.Length > 0)
@@ -58,15 +61,18 @@ namespace Backoffice.Pages.Products
             }
 
             //Save other images
-            var order = 0;
-            foreach (var item in ProductModel.OtherPictures)
+            if (ProductModel.OtherPictures?.Count > 0)
             {
-                ProductModel.CatalogPictures.Add(new ProductPictureViewModel
+                var order = 0;
+                foreach (var item in ProductModel.OtherPictures)
                 {
-                    IsActive = true,
-                    Order = ++order,
-                    PictureUri = await _service.SaveFileAsync(item, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri)
-                });
+                    ProductModel.CatalogPictures.Add(new ProductPictureViewModel
+                    {
+                        IsActive = true,
+                        Order = ++order,
+                        PictureUri = await _service.SaveFileAsync(item, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri)
+                    });
+                }
             }
 
             //Remove model attributes with no id
@@ -106,10 +112,26 @@ namespace Backoffice.Pages.Products
             {
                 ModelState.AddModelError("", "A menina quer por favor diminuir o tamanho da imagem principal? O máximo é 2MB, obrigado! Ass.: O seu amor!");               
             }
-            foreach (var item in ProductModel.OtherPictures)
+
+            //check if file exits
+            if(ProductModel.Picture != null && _service.CheckIfFileExists(_backofficeSettings.WebProductsPictureFullPath, ProductModel.Picture.GetFileName()))
             {
-                if (item.Length > 2097152)
-                    ModelState.AddModelError("", $"A imagem {item.GetFileName()} está muito grande amor, O máximo é 2MB, obrigado!");
+                ModelState.AddModelError("",$"O nome da imagem {ProductModel.Picture.GetFileName()} já existe, por favor escolha outro nome!");
+            }
+
+            if (ProductModel.OtherPictures?.Count > 0)
+            {
+                foreach (var item in ProductModel.OtherPictures)
+                {
+                    if (item.Length > 2097152)
+                        ModelState.AddModelError("", $"A imagem {item.GetFileName()} está muito grande amor, O máximo é 2MB, obrigado!");
+
+                    //check if file exits
+                    if (item != null && _service.CheckIfFileExists(_backofficeSettings.WebProductsPictureFullPath, item.GetFileName()))
+                    {
+                        ModelState.AddModelError("", $"O nome da imagem {item.GetFileName()} já existe, por favor escolha outro nome!");
+                    }
+                }
             }
             return ModelState.IsValid;
         }
