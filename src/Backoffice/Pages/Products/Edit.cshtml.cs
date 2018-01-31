@@ -202,19 +202,42 @@ namespace Backoffice.Pages.Products
                 ModelState.AddModelError("", "A menina quer por favor diminuir o tamanho da imagem principal? O máximo é 2MB, obrigado! Ass.: O seu amor!");
             }
 
+            //check if file exits but not the same
+            if (ProductModel.Picture != null && 
+                ProductModel.Picture.GetFileName() != Utils.GetFileName(ProductModel.PictureUri) && 
+                _service.CheckIfFileExists(_backofficeSettings.WebProductsPictureFullPath, ProductModel.Picture.GetFileName()))
+            {
+                ModelState.AddModelError("", $"O nome da imagem {ProductModel.Picture.GetFileName()} já existe, por favor escolha outro nome!");
+            }
+            
+            foreach (var item in ProductModel.CatalogPictures)
+            {
+                if (item.Picture != null && item.Picture.Length > 2097152)
+                    ModelState.AddModelError("", $"A imagem {item.Picture.GetFileName()} está muito grande amor, O máximo é 2MB, obrigado!");
+
+                if(item.Picture != null && string.IsNullOrEmpty(item.PictureUri) && _service.CheckIfFileExists(_backofficeSettings.WebProductsPictureFullPath,item.Picture.GetFileName()))
+                    ModelState.AddModelError("", $"O nome da imagem {item.Picture.GetFileName()} já existe, por favor escolha outro nome!");
+
+                if(item.Picture != null && 
+                    !string.IsNullOrEmpty(item.PictureUri) &&
+                    item.Picture.GetFileName() != Utils.GetFileName(item.PictureUri) &&
+                    _service.CheckIfFileExists(_backofficeSettings.WebProductsPictureFullPath, item.Picture.GetFileName()))
+                    ModelState.AddModelError("", $"O nome da imagem {item.Picture.GetFileName()} já existe, por favor escolha outro nome!");
+            }
+
             if (ProductModel.OtherPictures != null)
             {
                 foreach (var item in ProductModel.OtherPictures)
                 {
                     if (item.Length > 2097152)
                         ModelState.AddModelError("", $"A imagem {item.GetFileName()} está muito grande amor, O máximo é 2MB, obrigado!");
+
+                    if (item != null &&
+                        _service.CheckIfFileExists(_backofficeSettings.WebProductsPictureFullPath, item.GetFileName()))
+                        ModelState.AddModelError("", $"O nome da imagem {item.GetFileName()} já existe, por favor escolha outro nome!");
                 }
             }
-            foreach (var item in ProductModel.CatalogPictures)
-            {
-                if (item.Picture != null && item.Picture.Length > 2097152)
-                    ModelState.AddModelError("", $"A imagem {item.Picture.GetFileName()} está muito grande amor, O máximo é 2MB, obrigado!");
-            }
+
             return ModelState.IsValid;
         }
     }
