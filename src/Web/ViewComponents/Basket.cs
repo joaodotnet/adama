@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace DamaShopWeb.Web.ViewComponents
+namespace Web.ViewComponents
 {
     public class Basket : ViewComponent
     {

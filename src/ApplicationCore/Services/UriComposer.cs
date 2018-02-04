@@ -1,5 +1,4 @@
 ﻿using ApplicationCore.Interfaces;
-using DamaShopWeb;
 
 namespace ApplicationCore.Services
 {

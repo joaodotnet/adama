@@ -7,7 +7,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
-namespace DamaShopWeb.Web.Pages.Account.Manage
+namespace Web.Pages.Account.Manage
 {
     public partial class IndexModel : PageModel
     {

@@ -1,4 +1,4 @@
-﻿namespace DamaShopWeb
+﻿namespace ApplicationCore
 {
     public class CatalogSettings
     {

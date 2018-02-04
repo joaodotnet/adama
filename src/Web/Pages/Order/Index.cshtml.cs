@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
-namespace DamaShopWeb.Web.Pages.Order
+namespace Web.Pages.Order
 {
     public class IndexModel : PageModel
     {

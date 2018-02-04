@@ -1,15 +1,16 @@
 ﻿using ApplicationCore.Entities;
 using AutoMapper;
-using DamaShopWeb.Web.Interfaces;
-using DamaShopWeb.Web.ViewModels;
+using Web.Interfaces;
+using Web.ViewModels;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DamaShopWeb.Web;
 
-namespace DamaShopWeb.Web.Services
+namespace Web.Services
 {
     public class ShopService : IShopService
     {
@@ -19,6 +20,18 @@ namespace DamaShopWeb.Web.Services
         {
             _db = db;
             _mapper = mapper;
+        }
+
+        public async Task<Category> GetCategory(string name)
+        {
+            var allCategories = await _db.Categories.ToListAsync();
+            foreach (var item in allCategories)
+            {
+                var catName = item.Name.Replace(" ", "-").ToLower();
+                if (Utils.RemoveDiacritics(catName) == name.ToLower())
+                    return item;
+            }
+            return null;
         }
 
         public async Task<List<MainBannerViewModel>> GetMainBanners()

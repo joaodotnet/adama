@@ -7,7 +7,7 @@ using Infrastructure.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
 
-namespace DamaShopWeb.Web
+namespace Web
 {
     public class Program
     {

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
-namespace DamaShopWeb.Web.Pages.Account.Manage
+namespace Web.Pages.Account.Manage
 {
     public class ResetAuthenticatorModel : PageModel
     {

@@ -6,7 +6,7 @@ using System;
 using ApplicationCore.Entities.OrderAggregate;
 using System.Collections.Generic;
 
-namespace DamaShopWeb.Web.Pages.Order
+namespace Web.Pages.Order
 {
     public class DetailModel : PageModel
     {

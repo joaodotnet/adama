@@ -2,15 +2,15 @@
 using ApplicationCore.Specifications;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ApplicationCore.Entities;
-using DamaShopWeb.Web.Interfaces;
-using DamaShopWeb.Web.ViewModels;
+using Web.Interfaces;
+using Web.ViewModels;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DamaShopWeb.Web.Services
+namespace Web.Services
 {
     /// <summary>
     /// This is a UI-specific service so belongs in UI project. It does not contain any business logic and works

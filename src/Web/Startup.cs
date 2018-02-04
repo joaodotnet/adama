@@ -10,16 +10,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
-using DamaShopWeb.Web.Interfaces;
-using DamaShopWeb.Web.Services;
+using Web.Interfaces;
+using Web.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using System;
 using System.Text;
 using AutoMapper;
+using ApplicationCore;
 
-namespace DamaShopWeb.Web
+namespace Web
 {
     public class Startup
     {
@@ -117,6 +118,7 @@ namespace DamaShopWeb.Web
                 {
                     options.Conventions.AuthorizeFolder("/Order");
                     options.Conventions.AuthorizePage("/Basket/Checkout");
+                    options.Conventions.AddPageRoute("/Category/Index", "{id}/");
                 });
 
             _services = services;
