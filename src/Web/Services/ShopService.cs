@@ -22,6 +22,11 @@ namespace Web.Services
             _mapper = mapper;
         }
 
+        public Task<CatalogType> GetCatalogType(string type)
+        {
+            return _db.CatalogTypes.SingleOrDefaultAsync(x => x.Code == type);
+        }
+
         public async Task<Category> GetCategory(string name)
         {
             var allCategories = await _db.Categories.ToListAsync();

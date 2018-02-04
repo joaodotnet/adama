@@ -12,5 +12,6 @@ namespace Web.Interfaces
         Task<MenuComponentViewModel> GetMenuList();
         Task<List<MainBannerViewModel>> GetMainBanners();
         Task<Category> GetCategory(string name);
+        Task<CatalogType> GetCatalogType(string type);
     }
 }

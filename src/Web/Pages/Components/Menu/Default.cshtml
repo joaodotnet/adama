@@ -14,7 +14,7 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     @foreach (var child in item.Childs)
                     {
-                        <a class="dropdown-item" href="#">@child.Name</a>
+                        <a class="dropdown-item" href="@DamaShopWeb.Web.Utils.RemoveDiacritics(child.Name).Replace(" ","-").ToLower()">@child.Name</a>
                     }
                 </div>
             </li>
@@ -22,7 +22,7 @@
         else
         {
             <li class="nav-item">
-                <a class="nav-link" href="#">@item.Name</a>
+                <a class="nav-link" href="@DamaShopWeb.Web.Utils.RemoveDiacritics(item.Name).Replace(" ","-").ToLower()">@item.Name</a>
             </li>
 
         }
@@ -47,7 +47,7 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     @foreach (var child in item.Childs)
                     {
-                        <a class="dropdown-item" href="#">@child.Name</a>
+                        <a class="dropdown-item" href="@DamaShopWeb.Web.Utils.RemoveDiacritics(child.Name).Replace(" ","-").ToLower()">@child.Name</a>
                     }
                 </div>
             </li>
@@ -55,7 +55,7 @@
         else
         {
             <li class="nav-item">
-                <a class="nav-link" href="#">@item.Name</a>
+                <a class="nav-link" href="@DamaShopWeb.Web.Utils.RemoveDiacritics(item.Name).Replace(" ","-").ToLower()">@item.Name</a>
             </li>
         }
     }

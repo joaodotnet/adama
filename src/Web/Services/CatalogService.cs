@@ -43,9 +43,11 @@ namespace Web.Services
             _logger.LogInformation("GetCatalogItems called.");
 
             var filterSpecification = new CatalogFilterSpecification(brandId, typeId);
-            var root = _itemRepository.List(filterSpecification);
+            var root = _itemRepository
+                .List(filterSpecification);
 
             var totalItems = root.Count();
+            
             var iPage = itemsPage ?? totalItems;
 
             var itemsOnPage = root                
@@ -65,7 +67,9 @@ namespace Web.Services
                     Id = i.Id,
                     Name = i.Name,
                     PictureUri = i.PictureUri,
-                    Price = i.Price
+                    Price = i.Price,
+                    CatalogTypeCode = i.CatalogType.Code,
+                    CatalogTypeName = i.CatalogType.Description
                 }),
                 NewCatalogItems = itemsOnPage
                     .Where(x => x.IsNew)
@@ -96,7 +100,7 @@ namespace Web.Services
                     ActualPage = pageIndex,
                     ItemsPerPage = itemsOnPage.Count,
                     TotalItems = totalItems,
-                    TotalPages = int.Parse(Math.Ceiling(((decimal)totalItems / iPage)).ToString())
+                    TotalPages = iPage != 0 ? int.Parse(Math.Ceiling(((decimal)totalItems / iPage)).ToString()) : 0
                 }
             };
 
