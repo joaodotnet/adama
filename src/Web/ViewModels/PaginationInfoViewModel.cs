@@ -1,4 +1,4 @@
-﻿namespace DamaShopWeb.Web.ViewModels
+﻿namespace Web.ViewModels
 {
     public class PaginationInfoViewModel
     {

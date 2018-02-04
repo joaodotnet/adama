@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using DamaShopWeb.Web.ViewModels;
+using Web.ViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DamaShopWeb.Web.Interfaces
+namespace Web.Interfaces
 {
     public interface ICatalogService
     {

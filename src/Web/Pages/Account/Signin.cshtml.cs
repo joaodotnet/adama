@@ -8,7 +8,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using ApplicationCore.Interfaces;
 
-namespace DamaShopWeb.Web.Pages.Account
+namespace Web.Pages.Account
 {
     public class SigninModel : PageModel
     {

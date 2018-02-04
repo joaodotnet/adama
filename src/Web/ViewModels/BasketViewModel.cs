@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DamaShopWeb.Web.ViewModels
+namespace Web.ViewModels
 {
 
     public class BasketViewModel

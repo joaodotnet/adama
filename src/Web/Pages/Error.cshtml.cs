@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace DamaShopWeb.Web.Pages
+namespace Web.Pages
 {
     public class ErrorModel : PageModel
     {

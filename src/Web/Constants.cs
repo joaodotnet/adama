@@ -1,4 +1,4 @@
-﻿namespace DamaShopWeb.Web
+﻿namespace Web
 {
     public static class Constants
     {

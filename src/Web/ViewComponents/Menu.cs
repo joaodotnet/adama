@@ -1,6 +1,6 @@
 ﻿using ApplicationCore.Entities;
-using DamaShopWeb.Web.Interfaces;
-using DamaShopWeb.Web.ViewModels;
+using Web.Interfaces;
+using Web.ViewModels;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DamaShopWeb.Web.ViewComponents
+namespace Web.ViewComponents
 {
     public class Menu : ViewComponent
     {

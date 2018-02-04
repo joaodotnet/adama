@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using DamaShopWeb.Web.ViewModels;
-using DamaShopWeb.Web.Interfaces;
+using Web.ViewModels;
+using Web.Interfaces;
 using ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Infrastructure.Identity;
@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using ApplicationCore.Entities.OrderAggregate;
 
-namespace DamaShopWeb.Web.Pages.Basket
+namespace Web.Pages.Basket
 {
     public class CheckoutModel : PageModel
     {

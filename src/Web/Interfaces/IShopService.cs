@@ -1,15 +1,16 @@
 ﻿using ApplicationCore.Entities;
-using DamaShopWeb.Web.ViewModels;
+using Web.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DamaShopWeb.Web.Interfaces
+namespace Web.Interfaces
 {
     public interface IShopService
     {
         Task<MenuComponentViewModel> GetMenuList();
         Task<List<MainBannerViewModel>> GetMainBanners();
+        Task<Category> GetCategory(string name);
     }
 }

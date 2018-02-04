@@ -1,6 +1,6 @@
 ﻿using ApplicationCore.Entities;
 using AutoMapper;
-using DamaShopWeb.Web.ViewModels;
+using Web.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
