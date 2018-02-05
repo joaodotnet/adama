@@ -119,7 +119,7 @@ namespace Web
                     options.Conventions.AuthorizeFolder("/Order");
                     options.Conventions.AuthorizePage("/Basket/Checkout");
                     options.Conventions.AddPageRoute("/Category/Index", "{id}/");
-                    options.Conventions.AddPageRoute("/Category/Type/Index", "tipo/{id}/");
+                    options.Conventions.AddPageRoute("/Category/Type/Index", "{cat}/{type}");
                 });
 
             _services = services;

@@ -10,5 +10,7 @@ namespace Web.ViewModels
     {
         public CatalogIndexViewModel CatalogModel { get; set; } = new CatalogIndexViewModel();
         public List<(string,string)> CatalogTypes { get; set; }
+        public string CategoryUrlName { get; set; }
+        public string CategoryName { get; set; }
     }
 }

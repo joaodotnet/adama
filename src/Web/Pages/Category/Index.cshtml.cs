@@ -19,10 +19,7 @@ namespace Web.Pages.Category
             _shopService = service;
             _catalogService = catalogService;
         }
-        [TempData]
-        public string CategoryName { get; set; }
-        [TempData]
-        public string CatalogTypeName { get; set; }
+
         public CategoryViewModel CategoryModel { get; set; } = new CategoryViewModel();
 
         public async Task<IActionResult> OnGetAsync(string id)
@@ -31,10 +28,11 @@ namespace Web.Pages.Category
             if (cat == null)
                 return NotFound();
             else
-                CategoryName = cat.Name;
+                CategoryModel.CategoryName = cat.Name;
 
             CategoryModel.CatalogModel = await _catalogService.GetCatalogItems(0, null, cat.Id, null);
             CategoryModel.CatalogTypes = CategoryModel.CatalogModel.CatalogItems.Select(x => (x.CatalogTypeCode,x.CatalogTypeName)).Distinct().ToList();
+            CategoryModel.CategoryUrlName = id.ToLower();
 
             return Page();
         }
