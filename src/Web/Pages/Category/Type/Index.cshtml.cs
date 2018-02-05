@@ -25,9 +25,9 @@ namespace Web.Pages.Category.Type
         //public CategoryViewModel CategoryModel { get; set; } = new CategoryViewModel();
         public CatalogIndexViewModel CatalogModel { get; set; } = new CatalogIndexViewModel();
 
-        public async Task<IActionResult> OnGetAsync(string id)
+        public async Task<IActionResult> OnGetAsync(string cat, string type)
         {
-            var catalogType = await _shopService.GetCatalogType(id);
+            var catalogType = await _shopService.GetCatalogType(type);
             if (catalogType == null)
                 return NotFound();
             CatalogTypeName = catalogType.Description;
