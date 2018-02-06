@@ -108,7 +108,7 @@ namespace Backoffice.Pages.Products
                 ModelState.AddModelError("", "A menina quer por favor escolher uma imagem principal, obrigado! Ass.: O seu amor!");                
             }
 
-            if (ProductModel.Picture.Length > 2097152)
+            if (ProductModel.Picture?.Length > 2097152)
             {
                 ModelState.AddModelError("", "A menina quer por favor diminuir o tamanho da imagem principal? O máximo é 2MB, obrigado! Ass.: O seu amor!");               
             }
