@@ -34,6 +34,7 @@ namespace Backoffice.Pages.ProductType
 
         public async Task<IActionResult> OnPostAsync()
         {
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
             if (!ModelState.IsValid)
             {
                 return Page();
