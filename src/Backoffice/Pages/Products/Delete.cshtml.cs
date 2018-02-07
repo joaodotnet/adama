@@ -9,6 +9,8 @@ using ApplicationCore.Entities;
 using Infrastructure.Data;
 using AutoMapper;
 using Backoffice.ViewModels;
+using Backoffice.Interfaces;
+using Microsoft.Extensions.Options;
 
 namespace Backoffice.Pages.Products
 {
@@ -16,11 +18,15 @@ namespace Backoffice.Pages.Products
     {
         private readonly DamaContext _context;
         private readonly IMapper _mapper;
+        private readonly IBackofficeService _service;
+        private readonly BackofficeSettings _backofficeSettings;
 
-        public DeleteModel(DamaContext context, IMapper mapper)
+        public DeleteModel(DamaContext context, IMapper mapper, IOptions<BackofficeSettings> settings, IBackofficeService service)
         {
             _context = context;
             _mapper = mapper;
+            _service = service;
+            _backofficeSettings = settings.Value;
         }
 
         [BindProperty]
@@ -52,12 +58,27 @@ namespace Backoffice.Pages.Products
                 return NotFound();
             }
 
-            var product = await _context.CatalogItems.FindAsync(id);
+            var product = await _context.CatalogItems
+                .Include(x => x.CatalogPictures)
+                .SingleOrDefaultAsync(x => x.Id == id);
 
             if (product != null)
             {
                 _context.CatalogItems.Remove(product);
                 await _context.SaveChangesAsync();
+            }
+
+            //Delete the images of the product
+            if(!string.IsNullOrEmpty(product.PictureUri))
+                _service.DeleteFile(_backofficeSettings.WebProductsPictureFullPath, Utils.GetFileName(product.PictureUri));
+
+            if (product.CatalogPictures != null)
+            {
+                foreach (var item in product.CatalogPictures)
+                {
+                    if (!string.IsNullOrEmpty(item.PictureUri))
+                        _service.DeleteFile(_backofficeSettings.WebProductsPictureFullPath, Utils.GetFileName(item.PictureUri));
+                }
             }
 
             return RedirectToPage("./Index");

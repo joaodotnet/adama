@@ -40,9 +40,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.ProductModel[0].IsFeatured)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductModel[0].PictureUri)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -76,9 +73,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsFeatured)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PictureUri)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Editar</a> |
