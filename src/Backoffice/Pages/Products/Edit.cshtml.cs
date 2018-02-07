@@ -188,11 +188,11 @@ namespace Backoffice.Pages.Products
         {
             var illustrations = await _context.CatalogIllustrations
                 .Include(x => x.IllustrationType)
-                .Select(s => new { Id = s.Id, Name = $"{s.IllustrationType.Code} - {s.Code}" })
+                .Select(s => new { s.Id, Name = $"{s.IllustrationType.Code} - {s.Code} - {s.Name}" })
                 .OrderBy(x => x.Name)
                 .ToListAsync();
             ViewData["IllustrationId"] = new SelectList(illustrations, "Id", "Name");
-            ViewData["ProductTypeId"] = new SelectList(_context.CatalogTypes, "Id", "Code");
+            ViewData["ProductTypeId"] = new SelectList(_context.CatalogTypes.Select(x => new { x.Id, Name = $"{x.Code} - {x.Description}" }), "Id", "Name");
         }
 
         private bool ValidatePictures()
