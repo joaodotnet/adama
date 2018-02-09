@@ -7,31 +7,36 @@
 
 <h2>@Model.CategoryModel.CategoryName</h2>
 
-<div class="row">
-    @foreach (var item in Model.CategoryModel.CatalogModel.CatalogTypes)
+@if (Model.CategoryModel.CatalogModel != null)
+{
+    <div class="row">
+
+        @foreach (var item in Model.CategoryModel.CatalogModel.CatalogTypes)
+        {
+            <div class="col-md-3 bg-dark">
+                <a href="@Model.CategoryModel.CategoryUrlName/@item.Code">@item.Name</a>
+            </div>
+        }
+        
+    </div>
+
+    @if (Model.CategoryModel.CatalogModel.NewCatalogItems.Any())
     {
-        <div class="col-md-3 bg-dark">
-            <a href="@Model.CategoryModel.CategoryUrlName/@item.Code">@item.Name</a>
+        <div class="news-heading text-center">
+            <h2>Novidades</h2>
+            <img class="separator" src="~/images/coração-rosa.png" />
+        </div>
+
+        <div class="container">
+
+            <div class="esh-catalog-items row">
+                @foreach (var catalogItem in Model.CategoryModel.CatalogModel.NewCatalogItems)
+                {
+                    <div class="esh-catalog-item col-md-3">
+                        @Html.Partial("_product", catalogItem)
+                    </div>
+                }
+            </div>
         </div>
     }
-</div>
-
-@if (Model.CategoryModel.CatalogModel.NewCatalogItems.Any())
-{
-    <div class="news-heading text-center">
-        <h2>Novidades</h2>
-        <img class="separator" src="~/images/coração-rosa.png" />
-    </div>
-
-    <div class="container">
-
-        <div class="esh-catalog-items row">
-            @foreach (var catalogItem in Model.CategoryModel.CatalogModel.NewCatalogItems)
-            {
-                <div class="esh-catalog-item col-md-3">
-                    @Html.Partial("_product", catalogItem)
-                </div>
-            }
-        </div>
-    </div>
 }
