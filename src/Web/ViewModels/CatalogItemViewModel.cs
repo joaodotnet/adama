@@ -7,7 +7,5 @@
         public string Name { get; set; }
         public string PictureUri { get; set; }
         public decimal Price { get; set; }
-        public string CatalogTypeCode { get; set; }
-        public string CatalogTypeName { get; set; }
     }
 }

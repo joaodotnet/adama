@@ -13,6 +13,7 @@ namespace Web.ViewModels
         public int? BrandFilterApplied { get; set; }
         public int? TypesFilterApplied { get; set; }
         public PaginationInfoViewModel PaginationInfo { get; set; }
+        public IEnumerable<CatalogTypeViewModel> CatalogTypes { get; set; }
 
         //Dama Stuff
         public List<MainBannerViewModel> Banners { get; set; }

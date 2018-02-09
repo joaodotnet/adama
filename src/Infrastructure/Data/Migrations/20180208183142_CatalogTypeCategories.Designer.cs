@@ -12,9 +12,10 @@ using System;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(DamaContext))]
-    partial class CatalogContextModelSnapshot : ModelSnapshot
+    [Migration("20180208183142_CatalogTypeCategories")]
+    partial class CatalogTypeCategories
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -201,11 +202,16 @@ namespace Infrastructure.Data.Migrations
 
             modelBuilder.Entity("ApplicationCore.Entities.CatalogTypeCategory", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
                     b.Property<int>("CatalogTypeId");
 
                     b.Property<int>("CategoryId");
 
-                    b.HasKey("CatalogTypeId", "CategoryId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("CatalogTypeId");
 
                     b.HasIndex("CategoryId");
 

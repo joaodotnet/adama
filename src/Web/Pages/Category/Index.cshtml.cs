@@ -30,8 +30,8 @@ namespace Web.Pages.Category
             else
                 CategoryModel.CategoryName = cat.Name;
 
-            CategoryModel.CatalogModel = await _catalogService.GetCatalogItems(0, null, cat.Id, null);
-            CategoryModel.CatalogTypes = CategoryModel.CatalogModel.CatalogItems.Select(x => (x.CatalogTypeCode,x.CatalogTypeName)).Distinct().ToList();
+            CategoryModel.CatalogModel = await _catalogService.GetCategoryCatalogItems(cat.Id);
+            //CategoryModel.CatalogTypes = CategoryModel.CatalogModel.CatalogItems.Select(x => (x.CatalogTypeCode,x.CatalogTypeName)).Distinct().ToList();
             CategoryModel.CategoryUrlName = id.ToLower();
 
             return Page();

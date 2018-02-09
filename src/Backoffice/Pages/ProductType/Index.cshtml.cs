@@ -28,7 +28,9 @@ namespace Backoffice.Pages.ProductType
         public async Task OnGetAsync()
         {
             var types = await _context.CatalogTypes
-                .Include(p => p.Category).ToListAsync();
+                .Include(p => p.Categories)
+                .ThenInclude(c => c.Category)
+                .ToListAsync();
 
             ProductTypesModel = _mapper.Map<List<ProductTypeViewModel>>(types);
 

@@ -47,7 +47,24 @@ namespace Backoffice.Pages.ProductType
                 return Page();
             }
 
-            _context.CatalogTypes.Add(_mapper.Map<ApplicationCore.Entities.CatalogType>(ProductTypeModel));
+            if(ProductTypeModel.CategoriesId == null || ProductTypeModel.CategoriesId.Count == 0)
+            {
+                ModelState.AddModelError("", "O campo Categorias é obrigatório");
+                return Page();
+            }
+
+            var catalogType = _mapper.Map<ApplicationCore.Entities.CatalogType>(ProductTypeModel);
+
+            catalogType.Categories = new List<CatalogTypeCategory>();
+            foreach (var item in ProductTypeModel.CategoriesId)
+            {
+                catalogType.Categories.Add(new CatalogTypeCategory
+                {
+                    CategoryId = item
+                });
+            }
+
+            _context.CatalogTypes.Add(catalogType);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

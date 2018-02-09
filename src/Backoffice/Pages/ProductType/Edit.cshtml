@@ -24,9 +24,9 @@
                 <span asp-validation-for="ProductTypeModel.Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProductTypeModel.CategoryId" class="control-label"></label>
-                <select asp-for="ProductTypeModel.CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-                <span asp-validation-for="ProductTypeModel.CategoryId" class="text-danger"></span>
+                <label asp-for="ProductTypeModel.CategoriesId" class="control-label"></label>
+                <select asp-for="ProductTypeModel.CategoriesId" class="form-control" asp-items="ViewBag.CategoryId" multiple="multiple"></select>
+                <span asp-validation-for="ProductTypeModel.CategoriesId" class="text-danger"></span>
             </div>
             <input type="hidden" asp-for="ProductTypeModel.Id" />
             <div class="form-group">
@@ -42,4 +42,10 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function() {
+            $('#ProductTypeModel_CategoriesId').select2();
+        });
+    </script>
 }
