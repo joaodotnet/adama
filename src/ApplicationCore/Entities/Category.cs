@@ -11,6 +11,7 @@ namespace ApplicationCore.Entities
         public string Position { get; set; }
         public int? ParentId { get; set; }
         public Category Parent { get; set; }
-        public virtual ICollection<CatalogType> CatalogTypes { get; set; }
+        //public virtual ICollection<CatalogType> CatalogTypes { get; set; }
+        public ICollection<CatalogTypeCategory> CatalogTypes { get; set; }
     }
 }

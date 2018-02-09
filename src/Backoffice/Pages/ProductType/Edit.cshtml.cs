@@ -35,13 +35,19 @@ namespace Backoffice.Pages.ProductType
             }
 
             var productType = await _context.CatalogTypes
-                .Include(p => p.Category).SingleOrDefaultAsync(m => m.Id == id);
+                .Include(p => p.Categories)
+                 .ThenInclude(c => c.Category)
+                .SingleOrDefaultAsync(m => m.Id == id);
 
             if (productType == null)
             {
                 return NotFound();
             }
-            ProductTypeModel = _mapper.Map<ProductTypeViewModel>(productType);
+            ProductTypeModel = _mapper.Map<ProductTypeViewModel>(productType);            
+            if (productType.Categories?.Count > 0)
+            {
+                ProductTypeModel.CategoriesId.AddRange(productType.Categories.Select(x => x.CategoryId));
+            }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
             return Page();
         }
@@ -59,9 +65,29 @@ namespace Backoffice.Pages.ProductType
                 return Page();
             }
 
-            var productEntity = _mapper.Map<ApplicationCore.Entities.CatalogType>(ProductTypeModel);
+            //Get entity
+            var productTypeEntity = await _context.CatalogTypes
+                .Include(x => x.Categories)
+                .SingleOrDefaultAsync(x => x.Id == ProductTypeModel.Id);
 
-            _context.Attach(productEntity).State = EntityState.Modified;
+            if(productTypeEntity != null)
+            {
+                productTypeEntity.Code = ProductTypeModel.Code;
+                productTypeEntity.Description = ProductTypeModel.Description;
+
+                //Remove
+                var to_remove = productTypeEntity.Categories.Where(c => !ProductTypeModel.CategoriesId.Any(c2 => c2 == c.CategoryId));
+                foreach (var item in to_remove)
+                {
+                    _context.Entry(item).State = EntityState.Deleted;
+                }
+                //Add
+                var to_add = ProductTypeModel.CategoriesId.Where(c => !productTypeEntity.Categories.Any(c2 => c2.CategoryId == c));
+                foreach (var item in to_add)
+                {
+                    productTypeEntity.Categories.Add(new CatalogTypeCategory { CategoryId = item });
+                }                
+            }
 
             try
             {

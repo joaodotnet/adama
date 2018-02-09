@@ -5,8 +5,8 @@ namespace ApplicationCore.Specifications
 
     public class CatalogFilterSpecification : BaseSpecification<CatalogItem>
     {
-        public CatalogFilterSpecification(int? brandId, int? typeId)
-            : base(i => i.ShowOnShop && (!brandId.HasValue || i.CatalogType.CategoryId == brandId) &&
+        public CatalogFilterSpecification(int? IllustrationId, int? typeId)
+            : base(i => i.ShowOnShop && (!IllustrationId.HasValue || i.CatalogIllustrationId == IllustrationId) &&
                 (!typeId.HasValue || i.CatalogTypeId == typeId))
         {
             AddInclude(x => x.CatalogType);

@@ -8,10 +8,10 @@
 <h2>@Model.CategoryModel.CategoryName</h2>
 
 <div class="row">
-    @foreach (var item in Model.CategoryModel.CatalogTypes)
+    @foreach (var item in Model.CategoryModel.CatalogModel.CatalogTypes)
     {
         <div class="col-md-3 bg-dark">
-            <a href="@Model.CategoryModel.CategoryUrlName/@item.Item1">@item.Item2</a>
+            <a href="@Model.CategoryModel.CategoryUrlName/@item.Code">@item.Name</a>
         </div>
     }
 </div>

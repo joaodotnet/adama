@@ -19,11 +19,13 @@ namespace Infrastructure.Data
         public DbSet<CatalogPicture> CatalogPictures { get; set; }
         public DbSet<IllustrationType> IllustrationTypes { get; set; }
         public DbSet<CatalogType> CatalogTypes { get; set; }
+        public DbSet<CatalogTypeCategory> CatalogTypeCategories { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<ShopConfig> ShopConfigs { get; set; }
         public DbSet<ApplicationCore.Entities.ShopConfigDetail> ShopConfigDetails { get; set; } //Need the full qualified name for generate code
+
         
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -39,6 +41,20 @@ namespace Infrastructure.Data
             builder.Entity<OrderItem>(ConfigureOrderItem);
             builder.Entity<ShopConfig>(ConfigureShopConfig);
             builder.Entity<ShopConfigDetail>(ConfigureShopConfigDetails);
+            builder.Entity<CatalogTypeCategory>(ConfigureCatalogTypeCategory);
+        }
+
+        private void ConfigureCatalogTypeCategory(EntityTypeBuilder<CatalogTypeCategory> builder)
+        {
+            builder.ToTable("CatalogTypeCategory");
+            builder.HasKey(c => new { c.CatalogTypeId, c.CategoryId });
+            builder.HasOne(x => x.CatalogType)
+                .WithMany(p => p.Categories)
+                .HasForeignKey(x => x.CatalogTypeId);
+
+            builder.HasOne(x => x.Category)
+                .WithMany(p => p.CatalogTypes)
+                .HasForeignKey(x => x.CategoryId);
         }
 
         private void ConfigureCatalogPicture(EntityTypeBuilder<CatalogPicture> builder)
@@ -189,12 +205,13 @@ namespace Infrastructure.Data
             builder.Property(x => x.Description)
                 .IsRequired()
                 .HasMaxLength(100);
-            builder.HasOne(x => x.Category)
-                .WithMany(c => c.CatalogTypes)
-                .HasForeignKey(x => x.CategoryId);
-            builder
-               .HasIndex(x => x.Code)
+            //builder.HasOne(x => x.Category)
+            //    .WithMany(c => c.CatalogTypes)
+            //    .HasForeignKey(x => x.CategoryId);
+            builder.HasIndex(x => x.Code)
                .IsUnique();
+            builder.Property(x => x.PictureUri)
+                .HasMaxLength(255);
         }
 
         private void ConfigureOrder(EntityTypeBuilder<Order> builder)
