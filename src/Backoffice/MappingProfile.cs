@@ -13,8 +13,8 @@ namespace Backoffice
         public MappingProfile()
         {
             // Add as many of these lines as you need to map your objects
-            CreateMap<Category, CategoryViewModel>()
-                 .ForMember(x => x.NrTypeProducts, o => o.MapFrom(x => x.CatalogTypes.Count));
+            CreateMap<Category, CategoryViewModel>();
+                 //.ForMember(x => x.NrTypeProducts, o => o.MapFrom(x => x.CatalogTypes.Count));
             CreateMap<CategoryViewModel, Category>();
             CreateMap<CatalogType, ProductTypeViewModel>()
                 .ForMember(dest => dest.CategoriesName,

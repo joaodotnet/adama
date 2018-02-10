@@ -22,9 +22,16 @@ namespace Web.Services
             _mapper = mapper;
         }
 
-        public Task<CatalogType> GetCatalogType(string type)
+        public async Task<CatalogType> GetCatalogType(string type)
         {
-            return _db.CatalogTypes.SingleOrDefaultAsync(x => x.Code == type);
+            var allCatalogTypes = await _db.CatalogTypes.ToListAsync();
+            foreach (var item in allCatalogTypes)
+            {
+                var typeName = item.Description.Replace(" ", "-").ToLower();
+                if (Utils.RemoveDiacritics(typeName) == type)
+                    return item;
+            }
+            return null;
         }
 
         public async Task<Category> GetCategory(string name)

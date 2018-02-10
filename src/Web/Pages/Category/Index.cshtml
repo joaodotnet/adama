@@ -14,7 +14,7 @@
         @foreach (var item in Model.CategoryModel.CatalogModel.CatalogTypes)
         {
             <div class="col-md-3 bg-dark">
-                <a href="@Model.CategoryModel.CategoryUrlName/@item.Code">@item.Name</a>
+                <a href="@Model.CategoryModel.CategoryUrlName/@DamaShopWeb.Web.Utils.RemoveDiacritics(item.Name).Replace(" ","-").ToLower()">@item.Name</a>
             </div>
         }
         
