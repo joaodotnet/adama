@@ -33,7 +33,6 @@ namespace Backoffice.Pages.Category
             }
 
             var category = await _context.Categories
-                .Include(x => x.CatalogTypes)
                 .Include(x => x.Parent)
                 .SingleOrDefaultAsync(m => m.Id == id);
 
@@ -41,7 +40,17 @@ namespace Backoffice.Pages.Category
             {
                 return NotFound();
             }
+
+            //Prodcut Types
+            var types = await _context.CatalogTypeCategories
+                .Include(x => x.CatalogType)
+                .Where(x => x.CategoryId == id)
+                .Select(ct => ct.CatalogType)
+                .ToListAsync();
+
             Category = _mapper.Map<CategoryViewModel>(category);
+            Category.ProductTypes = _mapper.Map<List<ProductTypeViewModel>>(types);
+            
             return Page();
         }
     }

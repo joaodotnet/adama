@@ -41,16 +41,16 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Category.CatalogTypes[0].Code)
+                    @Html.DisplayNameFor(model => model.Category.ProductTypes[0].Code)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Category.CatalogTypes[0].Description)
+                    @Html.DisplayNameFor(model => model.Category.ProductTypes[0].Description)
                 </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.Category.CatalogTypes)
+            @foreach (var item in Model.Category.ProductTypes)
             {
                 <tr>
                     <td>

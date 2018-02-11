@@ -26,6 +26,6 @@ namespace Backoffice.ViewModels
 
         [Display(Name = "Nº Tipos de Produtos")]
         public int NrTypeProducts { get; set; }
-        //public List<ProductTypeViewModel> CatalogTypes { get; set; }
+        public List<ProductTypeViewModel> ProductTypes { get; set; }
     }
 }

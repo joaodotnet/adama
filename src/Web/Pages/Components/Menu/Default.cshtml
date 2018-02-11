@@ -8,13 +8,15 @@
         if (item.Childs.Count > 0)
         {
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="@item.MenuUri" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">
                     @item.Name
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     @foreach (var child in item.Childs)
                     {
-                        <a class="dropdown-item" href="@DamaShopWeb.Web.Utils.RemoveDiacritics(child.Name).Replace(" ","-").ToLower()">@child.Name</a>
+                        <a class="dropdown-item" href="@child.MenuUri">
+                            <span class="dropdown-item-text">@child.Name</span>
+                        </a>
                     }
                 </div>
             </li>
@@ -22,7 +24,7 @@
         else
         {
             <li class="nav-item">
-                <a class="nav-link" href="@DamaShopWeb.Web.Utils.RemoveDiacritics(item.Name).Replace(" ","-").ToLower()">@item.Name</a>
+                <a class="nav-link" href="@item.MenuUri">@item.Name</a>
             </li>
 
         }
@@ -41,13 +43,13 @@
         if (item.Childs.Count > 0)
         {
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="@DamaShopWeb.Web.Utils.RemoveDiacritics(item.Name).Replace(" ","-").ToLower()" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="@item.MenuUri" aria-haspopup="true" aria-expanded="false">
                     @item.Name
                 </a>
                 <div class="dropdown-menu">
                     @foreach (var child in item.Childs)
                     {
-                        <a class="dropdown-item" href="@DamaShopWeb.Web.Utils.RemoveDiacritics(child.Name).Replace(" ","-").ToLower()">@child.Name</a>
+                        <a class="dropdown-item" href="@child.MenuUri">@child.Name</a>
                     }
                 </div>
             </li>
@@ -55,7 +57,7 @@
         else
         {
             <li class="nav-item">
-                <a class="nav-link" href="@DamaShopWeb.Web.Utils.RemoveDiacritics(item.Name).Replace(" ","-").ToLower()">@item.Name</a>
+                <a class="nav-link" href="@item.MenuUri">@item.Name</a>
             </li>
         }
     }

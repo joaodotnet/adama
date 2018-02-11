@@ -5,6 +5,6 @@ $(document).ready(function () {
         _d.addClass('show');
         setTimeout(function () {
             _d[_d.is(':hover') ? 'addClass' : 'removeClass']('show');
-        }, 300);
+        }, 1000);
     });
 });

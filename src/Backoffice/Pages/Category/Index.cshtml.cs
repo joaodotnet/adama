@@ -27,8 +27,18 @@ namespace Backoffice.Pages.Category
             var cats = await _context.Categories
                 .Include(x => x.CatalogTypes)                
                 .ToListAsync();
-                
+
             Categories = _mapper.Map<List<CategoryViewModel>>(cats);
+
+            foreach (var item in Categories)
+            {
+                //Prodcut Types
+                item.NrTypeProducts = await _context.CatalogTypeCategories
+                    .Include(x => x.CatalogType)
+                    .Where(x => x.CategoryId == item.Id)
+                    .Select(ct => ct.CatalogType)
+                    .CountAsync();
+            }
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DamaShopWeb.Web;
+using System.IO;
 
 namespace Web.Services
 {
@@ -60,6 +61,8 @@ namespace Web.Services
             //TODO GET CACHE
             var categories = await _db.Categories
                 .Include(x => x.Parent)
+                .Include(x => x.CatalogTypes)
+                .ThenInclude(ct => ct.CatalogType)
                 .ToListAsync();
 
             MenuComponentViewModel menuViewModel = new MenuComponentViewModel();
@@ -83,7 +86,12 @@ namespace Web.Services
 
         private void GetTopCategories(List<MenuItemComponentViewModel> model, List<Category> categories, List<Category> parents)
         {
-            model.AddRange(parents.Select(x => new MenuItemComponentViewModel { Id = x.Id, Name = x.Name }));
+            model.AddRange(parents.Select(x => new MenuItemComponentViewModel
+            {
+                Id = x.Id,
+                Name = x.Name.ToUpper(),
+                MenuUri = "/" + Utils.RemoveDiacritics(x.Name).Replace(" ", "-").ToLower()
+            }));
 
             //SubCategories
             foreach (var item in model)
@@ -92,7 +100,33 @@ namespace Web.Services
                     .Where(x => x.ParentId == item.Id)
                     .OrderBy(x => x.Order)
                     .ToList();
-                item.Childs.AddRange(childs.Select(x => new MenuItemComponentViewModel { Id = x.Id, Name = x.Name }));
+
+                if(childs?.Count > 0)
+                {
+                    item.Childs.AddRange(childs.Select(x => new MenuItemComponentViewModel
+                    {
+                        Id = x.Id,
+                        Name = x.Name.ToUpper(),
+                        MenuUri = "/" + Utils.RemoveDiacritics(x.Name).Replace(" ", "-").ToLower()
+                    }));
+                }
+                else
+                {
+                    var types = categories
+                        .Where(x => x.Id == item.Id)
+                        .Select(x => x.CatalogTypes);
+
+                    var catalogTypes = types.SelectMany(x => x.Select(t => t.CatalogType));
+
+                    item.Childs.AddRange(catalogTypes.Select(x => new MenuItemComponentViewModel
+                    {
+                        Id = x.Id,
+                        Name = x.Description.ToUpper(),
+                        MenuUri = "/" + Path.Combine(
+                            Utils.RemoveDiacritics(item.Name).Replace(" ", "-").ToLower(),
+                            Utils.RemoveDiacritics(x.Description).Replace(" ", "-").ToLower())
+                    }));
+                }
             }
         }
     }

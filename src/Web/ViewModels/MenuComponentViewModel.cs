@@ -15,6 +15,7 @@ namespace Web.ViewModels
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string MenuUri { get; set; }
         public List<MenuItemComponentViewModel> Childs { get; set; } = new List<MenuItemComponentViewModel>();
     }
 }
