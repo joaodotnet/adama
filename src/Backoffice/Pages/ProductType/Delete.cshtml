@@ -25,10 +25,10 @@
             @Html.DisplayFor(model => model.ProductTypeModel.Description)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.ProductTypeModel.CategoryId)
+            @Html.DisplayNameFor(model => model.ProductTypeModel.CategoriesName)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ProductTypeModel.Category.Name)
+            @string.Join(", ", Model.ProductTypeModel.CategoriesName)
         </dd>
     </dl>
     
