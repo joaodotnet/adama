@@ -9,6 +9,8 @@ using ApplicationCore.Entities;
 using Infrastructure.Data;
 using Backoffice.ViewModels;
 using AutoMapper;
+using Backoffice.Interfaces;
+using Microsoft.Extensions.Options;
 
 namespace Backoffice.Pages.ProductType
 {
@@ -16,11 +18,15 @@ namespace Backoffice.Pages.ProductType
     {
         private readonly Infrastructure.Data.DamaContext _context;
         protected readonly IMapper _mapper;
+        private readonly IBackofficeService _service;
+        private readonly BackofficeSettings _backofficeSettings;
 
-        public CreateModel(Infrastructure.Data.DamaContext context, IMapper mapper)
+        public CreateModel(Infrastructure.Data.DamaContext context, IMapper mapper, IBackofficeService service, IOptions<BackofficeSettings> backofficeSettings)
         {
             _context = context;
             _mapper = mapper;
+            _service = service;
+            _backofficeSettings = backofficeSettings.Value;
         }
 
         public IActionResult OnGet()
@@ -51,6 +57,18 @@ namespace Backoffice.Pages.ProductType
             {
                 ModelState.AddModelError("", "O campo Categorias é obrigatório");
                 return Page();
+            }
+
+            if (ProductTypeModel.Picture?.Length > 2097152)
+            {
+                ModelState.AddModelError("", "A menina quer por favor diminuir o tamanho da imagem? O máximo é 2MB, obrigado! Ass.: O seu amor!");
+                return Page();
+            }
+
+            //Save Image
+            if (ProductTypeModel?.Picture.Length > 0)
+            {
+                ProductTypeModel.PictureUri = await _service.SaveFileAsync(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureFullPath, _backofficeSettings.WebProductTypesPictureUri);
             }
 
             var catalogType = _mapper.Map<ApplicationCore.Entities.CatalogType>(ProductTypeModel);

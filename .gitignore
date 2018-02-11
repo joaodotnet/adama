@@ -290,3 +290,4 @@ __pycache__/
 #ignore
 src/Web/wwwroot/images/news/
 src/Web/wwwroot/images/products/
+src/Web/wwwroot/images/producttypes/

@@ -9,6 +9,8 @@ using ApplicationCore.Entities;
 using Infrastructure.Data;
 using Backoffice.ViewModels;
 using AutoMapper;
+using Backoffice.Interfaces;
+using Microsoft.Extensions.Options;
 
 namespace Backoffice.Pages.ProductType
 {
@@ -16,11 +18,15 @@ namespace Backoffice.Pages.ProductType
     {
         private readonly Infrastructure.Data.DamaContext _context;
         protected readonly IMapper _mapper;
+        private readonly IBackofficeService _service;
+        private readonly BackofficeSettings _backofficeSettings;
 
-        public DeleteModel(Infrastructure.Data.DamaContext context, IMapper mapper)
+        public DeleteModel(DamaContext context, IMapper mapper, IBackofficeService service, IOptions<BackofficeSettings> backofficeSettings)
         {
             _context = context;
             _mapper = mapper;
+            _service = service;
+            _backofficeSettings = backofficeSettings.Value;
         }
 
         [BindProperty]
@@ -57,6 +63,11 @@ namespace Backoffice.Pages.ProductType
 
             if (type != null)
             {
+                if (!string.IsNullOrEmpty(type.PictureUri))
+                {
+                    _service.DeleteFile(_backofficeSettings.WebProductTypesPictureFullPath, Utils.GetFileName(type.PictureUri));
+                }
+
                 _context.CatalogTypes.Remove(type);
                 await _context.SaveChangesAsync();
             }
