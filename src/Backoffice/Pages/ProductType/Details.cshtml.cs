@@ -34,6 +34,7 @@ namespace Backoffice.Pages.ProductType
 
             var type = await _context.CatalogTypes
                 .Include(p => p.Categories)
+                .ThenInclude(c => c.Category)
                 .SingleOrDefaultAsync(m => m.Id == id);
 
             if (type == null)
