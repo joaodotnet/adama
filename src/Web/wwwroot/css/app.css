@@ -19,14 +19,14 @@
 @font-face {
     font-family: Quicksand;
     font-weight: 400;
-    src: url("../fonts/Quicksand-Regular.ttf") format("truetype");
+    src: url("../fonts/Quicksand-Bold.ttf") format("truetype");
 }
 
 
 html,
 body {
-    font-family: Montserrat, sans-serif;
-    font-size: 16px;
+    font-family: Quicksand, sans-serif;
+    font-size: 18px;
     font-weight: 400;
     z-index: 10;
 }
@@ -184,7 +184,7 @@ h2 {
 
  
 .navbar-dark .navbar-nav .nav-item a:hover {
-    border-bottom: 3px solid #fff;
+    /*border-bottom: 3px solid #fff;*/
     color: #fff;
 }
 
@@ -192,33 +192,40 @@ h2 {
 
 .navbar-dark .navbar-nav .nav-link {
     color:#fff;
+    font-weight:800;
+    font-size:14px;
 }
 
 .dropdown-menu {
-    background-color: transparent;
-    color: #fff;
+    background-color: #fff;
+    color: #00A69C;
     border: none;
+    margin: 0;
 }
 
 .dropdown-item {
-    color: #fff !important;    
+    color: #00A69C !important;
+    font-weight: 400;
+    font-size: 14px;
 }
 
 .dropdown-item:hover {
-    border: 3px solid #fff !important;
     background-color: transparent;
 }
-.dropdown > .dropdown-toggle:active {
-    /*Without this, clicking will make it sticky*/
-    pointer-events: none;
+.dropdown-item:hover > .dropdown-item-text {
+    border-bottom: 3px solid #00A69C;
+    background-color: transparent;
 }
 
 .dropdown:hover > .dropdown-menu {
     display: block;
 }
+.dropdown-toggle:hover > .dropdown-menu {
+    display: block;
+} 
 
 .social-links {
-    text-align: center;    
+    text-align: center;
 }
 
 .social-links a {
