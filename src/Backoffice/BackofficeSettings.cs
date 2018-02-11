@@ -11,5 +11,7 @@ namespace Backoffice
         public string WebNewsPictureFullPath { get; set; }
         public string WebProductsPictureUri { get; set; }
         public string WebProductsPictureFullPath { get; set; }
+        public string WebProductTypesPictureUri { get; set; }
+        public string WebProductTypesPictureFullPath { get; set; }
     }
 }

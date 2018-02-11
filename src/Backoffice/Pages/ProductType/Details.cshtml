@@ -29,6 +29,12 @@
         <dd>
             @string.Join(", ", Model.ProductTypeModel.CategoriesName)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductTypeModel.PictureUri)
+        </dt>
+        <dd>
+            <img src="@Model.ProductTypeModel.PictureUri" class="img-responsive" />
+        </dd>
     </dl>
 </div>
 <div>

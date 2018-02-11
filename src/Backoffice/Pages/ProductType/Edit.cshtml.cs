@@ -10,6 +10,8 @@ using ApplicationCore.Entities;
 using Infrastructure.Data;
 using Backoffice.ViewModels;
 using AutoMapper;
+using Backoffice.Interfaces;
+using Microsoft.Extensions.Options;
 
 namespace Backoffice.Pages.ProductType
 {
@@ -17,11 +19,15 @@ namespace Backoffice.Pages.ProductType
     {
         private readonly Infrastructure.Data.DamaContext _context;
         protected readonly IMapper _mapper;
+        private readonly IBackofficeService _service;
+        private readonly BackofficeSettings _backofficeSettings;
 
-        public EditModel(Infrastructure.Data.DamaContext context, IMapper mapper)
+        public EditModel(Infrastructure.Data.DamaContext context, IMapper mapper, IBackofficeService service, IOptions<BackofficeSettings> backofficeSettings)
         {
             _context = context;
             _mapper = mapper;
+            _service = service;
+            _backofficeSettings = backofficeSettings.Value;
         }
 
         [BindProperty]
@@ -65,6 +71,18 @@ namespace Backoffice.Pages.ProductType
                 return Page();
             }
 
+            if (ProductTypeModel.Picture?.Length > 2097152)
+            {
+                ModelState.AddModelError("", "A menina quer por favor diminuir o tamanho da imagem? O máximo é 2MB, obrigado! Ass.: O seu amor!");
+                return Page();
+            }
+
+            //Save Image
+            if (ProductTypeModel?.Picture.Length > 0)
+            {
+                ProductTypeModel.PictureUri = await _service.SaveFileAsync(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureFullPath, _backofficeSettings.WebProductTypesPictureUri);
+            }
+
             //Get entity
             var productTypeEntity = await _context.CatalogTypes
                 .Include(x => x.Categories)
@@ -72,8 +90,14 @@ namespace Backoffice.Pages.ProductType
 
             if(productTypeEntity != null)
             {
+                if(!string.IsNullOrEmpty(productTypeEntity.PictureUri))
+                {
+                    _service.DeleteFile(_backofficeSettings.WebProductTypesPictureFullPath, Utils.GetFileName(productTypeEntity.PictureUri));
+                }
                 productTypeEntity.Code = ProductTypeModel.Code;
                 productTypeEntity.Description = ProductTypeModel.Description;
+                if (!string.IsNullOrEmpty(ProductTypeModel.PictureUri))
+                    productTypeEntity.PictureUri = ProductTypeModel.PictureUri;
 
                 //Remove
                 var to_remove = productTypeEntity.Categories.Where(c => !ProductTypeModel.CategoriesId.Any(c2 => c2 == c.CategoryId));

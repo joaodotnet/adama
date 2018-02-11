@@ -49,7 +49,9 @@
                 <div class="dropdown-menu">
                     @foreach (var child in item.Childs)
                     {
-                        <a class="dropdown-item" href="@child.MenuUri">@child.Name</a>
+                        <a class="dropdown-item" href="@child.MenuUri">
+                            <span class="dropdown-item-text">@child.Name</span>
+                        </a>
                     }
                 </div>
             </li>

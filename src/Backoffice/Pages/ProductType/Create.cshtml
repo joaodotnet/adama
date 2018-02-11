@@ -11,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ProductTypeModel.Code" class="control-label"></label>
@@ -27,6 +27,12 @@
                 <label asp-for="ProductTypeModel.CategoriesId" class="control-label"></label>
                 <select asp-for="ProductTypeModel.CategoriesId" class="form-control" asp-items="ViewBag.CategoryId" multiple="multiple"></select>
                 <span asp-validation-for="ProductTypeModel.CategoriesId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductTypeModel.Picture" class="control-label"></label>
+                <input type="file" asp-for="ProductTypeModel.Picture" class="form-control" />
+                <small>(quadrado)</small>
+                <span asp-validation-for="ProductTypeModel.Picture" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Criar" class="btn btn-default" />
