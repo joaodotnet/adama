@@ -134,6 +134,9 @@ h2 {
     width:200px;
 }
 
+.brand-image  {
+    text-decoration: none;
+}
 
 .backToHome span {
     opacity: .9;
@@ -190,15 +193,16 @@ h2 {
  
 .navbar-dark .navbar-nav .nav-item a:hover {
     /*border-bottom: 3px solid #fff;*/
-    color: #fff;
+    color: #fff;   
 }
 
 
 
 .navbar-dark .navbar-nav .nav-link {
-    color:#fff;
-    font-weight:800;
-    font-size:14px;
+    color: #fff;
+    font-weight: 800;
+    font-size: 14px;
+    text-decoration: none;
 }
 
 .dropdown-menu {
@@ -212,6 +216,7 @@ h2 {
     color: #00A69C !important;
     font-weight: 400;
     font-size: 14px;
+    text-decoration: none;
 }
 
 .dropdown-item:hover {
