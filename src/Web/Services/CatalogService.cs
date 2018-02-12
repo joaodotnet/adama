@@ -11,6 +11,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
+using DamaShopWeb.Web;
 
 namespace Web.Services
 {
@@ -150,15 +152,16 @@ namespace Web.Services
         {
             //TODO: Move to repo
             var types = await _db.CatalogTypeCategories
+                .Include(x => x.Category)
                 .Include(x => x.CatalogType)
                 .Where(x => x.CategoryId == categoryId)
-                .Select(x => x.CatalogType)
+                //.Select(x => x.CatalogType)
                 .ToListAsync();
             if (types?.Count > 0)
             {
                 var items = await _db.CatalogItems
                     .Include(x => x.CatalogType)
-                    .Where(x => types.Any(t => t.Id == x.CatalogTypeId))
+                    .Where(x => types.Any(t => t.CatalogTypeId == x.CatalogTypeId))
                     .ToListAsync();
 
                 var vm = new CatalogIndexViewModel()
@@ -185,9 +188,11 @@ namespace Web.Services
                     }),
                     CatalogTypes = types.Select(x => new CatalogTypeViewModel()
                     {
-                        Id = x.Id,
-                        Code = x.Code,
-                        Name = x.Description
+                        Id = x.CatalogType.Id,
+                        Code = x.CatalogType.Code,
+                        Name = x.CatalogType.Description,
+                        PictureUri = x.CatalogType.PictureUri,
+                        LinkUri = $"/{Utils.StringToUri(x.Category.Name)}/{Utils.StringToUri(x.CatalogType.Description)}"
                     })
                     .Distinct()
                     .ToList()

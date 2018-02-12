@@ -13,11 +13,24 @@
 
         @foreach (var item in Model.CategoryModel.CatalogModel.CatalogTypes)
         {
-            <div class="col-md-3 bg-dark">
-                <a href="@Model.CategoryModel.CategoryUrlName/@DamaShopWeb.Web.Utils.RemoveDiacritics(item.Name).Replace(" ","-").ToLower()">@item.Name</a>
+            <div class="col-md-3">
+                @if (string.IsNullOrEmpty(item.PictureUri))
+                {
+                    <a href="@item.LinkUri">
+                        <div class="card">
+                            <div class="card-body">
+                                @item.Name
+                            </div>
+                        </div>
+                    </a>
+                }
+                else
+                {
+                    <img src="@item.PictureUri" class="img-thumbnail" />
+                }
             </div>
         }
-        
+
     </div>
 
     @if (Model.CategoryModel.CatalogModel.NewCatalogItems.Any())

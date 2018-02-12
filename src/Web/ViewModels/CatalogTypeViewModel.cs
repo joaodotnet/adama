@@ -11,5 +11,6 @@ namespace Web.ViewModels
         public string Code { get; set; }
         public string Name { get; set; }
         public string PictureUri { get; set; }
+        public string LinkUri { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 @model MenuComponentViewModel
 
 
-<ul class="navbar-nav">
+<ul class="navbar-nav text-nowrap">
     @foreach (var item in Model.Left)
     {
         if (item.Childs.Count > 0)
@@ -36,7 +36,7 @@
     <h1>A Loja</h1>
 </a>
 
-<ul class="navbar-nav">
+<ul class="navbar-nav text-nowrap">
 
     @foreach (var item in Model.Right)
     {
