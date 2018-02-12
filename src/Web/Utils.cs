@@ -28,7 +28,7 @@ namespace DamaShopWeb.Web
 
         public static string StringToUri(string text)
         {
-            return RemoveDiacritics(text.Replace(' ', '+').ToLower());
+            return RemoveDiacritics(text.Replace(' ', '-').ToLower());
         }        
     }
 }
