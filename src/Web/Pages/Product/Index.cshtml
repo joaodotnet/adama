@@ -1,0 +1,59 @@
+﻿@page
+@model Web.Pages.Product.IndexModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row">
+    <div class="col-6">
+        <img src="http://via.placeholder.com/600x533" class="img-fluid" height="533" />
+    </div>
+    <div class="col-6">
+        <h2 class="text-center">Titulo do produto</h2>
+        <div class="row justify-content-center">
+            <div class="esh-catalog-price">
+                <span>13.00</span>
+            </div>
+            &mdash;
+            <div class="esh-catalog-price">
+                <span>15.00</span>
+            </div>
+        </div>
+        <img width="395" height="26" src="~/images/coração-rosa.png" />
+        <p>Descrição do produto</p>
+        <div class="form-control row">
+            <label class="col-sm-2 col-form-label">Tamanho</label>
+            <div class="col-sm-10">
+                <select class="form-control">
+                    <option>XL</option>
+                    <option>M</option>
+                </select>
+            </div>
+        </div>
+        <hr />
+        <div class="form-row">
+            <div class="col-2">
+                <button class="btn">-</button>
+            </div>
+            <div class="col-2">
+                <input type="text" class="form-control" value="1">
+            </div>
+            <div class="col-2">
+                <button class="btn">+</button>
+            </div>
+            <div class="col">
+                <input class="esh-catalog-button" type="submit" value="[ ADD TO BASKET ]" />
+            </div>
+        </div>
+
+        <h4>ReFerencia</h4>
+
+        <div class="row">
+            <span>Categorias</span>
+            <span>Acessorios, Dogs</span>
+        </div>
+
+
+    </div>
+
+</div>
