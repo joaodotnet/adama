@@ -62,5 +62,10 @@ namespace Web.Services
                 return await _catalogService.GetCategoryCatalogItems(categoryId);
             });
         }
+
+        public Task<ProductViewModel> GetCatalogItem(string id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
