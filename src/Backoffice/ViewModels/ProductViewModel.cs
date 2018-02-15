@@ -28,7 +28,7 @@ namespace Backoffice.ViewModels
         public int CatalogTypeId { get; set; }
         public ProductTypeViewModel CatalogType { get; set; }
         [Display(Name = "SKU")]
-        public string ProductSKU { get; set; }
+        public string Sku { get; set; }
         [Display(Name = "Loja")]
         public bool ShowOnShop { get; set; }
         [Display(Name = "Novidade")]
@@ -41,6 +41,8 @@ namespace Backoffice.ViewModels
         public string PictureUri { get; set; }
         [Display(Name = "Imagens do Produto")]
         public List<IFormFile> OtherPictures { get; set; }
+        public string CatalogIllustrationTypeId { get; set; }
+        
 
         public IList<ProductAttributeViewModel> CatalogAttributes { get; set; } = new List<ProductAttributeViewModel>();
         [Display(Name = "Imagens do Produto")]

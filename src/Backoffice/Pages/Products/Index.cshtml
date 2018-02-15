@@ -29,7 +29,7 @@
                 @Html.DisplayNameFor(model => model.ProductModel[0].Price)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProductModel[0].ProductSKU)
+                @Html.DisplayNameFor(model => model.ProductModel[0].Sku)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ProductModel[0].ShowOnShop)
@@ -63,7 +63,7 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @Html.Raw(item.ProductSKU)
+                @Html.DisplayFor(modelItem => item.Sku)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ShowOnShop)

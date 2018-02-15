@@ -201,5 +201,10 @@ namespace Web.Services
             }
             return null;
         }
+
+        public Task<ProductViewModel> GetCatalogItem(string id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

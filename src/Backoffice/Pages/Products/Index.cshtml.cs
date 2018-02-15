@@ -38,8 +38,8 @@ namespace Backoffice.Pages.Products
             {
                 if(item.CatalogAttributes.Count > 0)
                 {
-                    var skus = string.Join("<br>", item.CatalogAttributes.Select(x => x.ProductSKU));
-                    item.ProductSKU = skus;
+                    var skus = string.Join("<br>", item.CatalogAttributes.Select(x => x.Sku));
+                    item.Sku = skus;
                 }
             }
         }

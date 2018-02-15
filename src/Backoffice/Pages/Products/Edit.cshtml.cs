@@ -114,6 +114,7 @@ namespace Backoffice.Pages.Products
 
             //Save Changes            
             var prod = _mapper.Map<CatalogItem>(ProductModel);
+            prod.Sku = await _service.GetSku(prod.CatalogTypeId, prod.CatalogIllustrationId, prod.CatalogIllustration.IllustrationTypeId);
             foreach (var item in prod.CatalogAttributes)
             {
                 if (item.Id != 0)
@@ -139,7 +140,7 @@ namespace Backoffice.Pages.Products
                         _context.Entry(item).State = EntityState.Modified;
                 }
             }
-
+            
             _context.Attach(prod).State = EntityState.Modified;
 
             try

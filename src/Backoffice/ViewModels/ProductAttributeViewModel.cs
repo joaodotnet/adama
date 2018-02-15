@@ -19,6 +19,6 @@ namespace Backoffice.ViewModels
         public int CatalogItemId { get; set; }
         public bool ToRemove { get; set; }
         [Display(Name = "SKU")]
-        public string ProductSKU { get; set; }
+        public string Sku { get; set; }
     }
 }

@@ -8,6 +8,8 @@
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/app.css" />
+        <link rel="stylesheet" href="~/lib/slick-1.8.0/slick/slick.css" />
+        <link href="~/lib/slick-1.8.0/slick/slick-theme.css" rel="stylesheet" />
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous"
@@ -21,6 +23,7 @@
     <link rel="stylesheet" href="~/css/catalog/catalog.component.css" />
     <link rel="stylesheet" href="~/css/basket/basket-status/basket-status.component.css" />
     <link rel="stylesheet" href="~/css/orders/orders.component.css" />
+    <link rel="stylesheet" href="~/lib/slick-1.8.0/slick/slick.css" />
 </head>
 <body>
     @*
@@ -96,7 +99,7 @@
         </nav>*@
 
 
-    <nav class="navbar navbar-dark navbar-expand-md justify-content-between background_gradient">
+    <nav class="navbar navbar-dark navbar-expand-md justify-content-between background_gradient pb-md-4">
         <a href="/" class="pl-3 pl-lg-5 backToHome"><i class="fas fa-arrow-left"></i><span>Votar ao inicio</span></a>
         <a id="brand-mobile-image" class="navbar-brand" href="https://www.damanojornal.com">
             <img src="~/images/brand.png" width="50px;" alt="Dama no Jornal" />
@@ -109,7 +112,7 @@
             @await Component.InvokeAsync("Menu")
             
         </div>
-        <ul class="nav navbar-nav flex-row pr-3 pr-lg-5">
+        <ul class="nav navbar-nav flex-row pr-3 pr-lg-5 social-links">
             <li class=""><a class="nav-link" href=""><i class="fab fa-facebook-f fa-inverse"></i></a></li>
             <li class=""><a class="nav-link" href=""><i class="fab fa-instagram"></i></a></li>
             <li class=""><a class="nav-link" href=""><i class="fab fa-google-plus-g"></i></a></li>
@@ -210,6 +213,7 @@
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/lib/fontawesome-free-5.0.4/js/fontawesome-all.js"></script>
+        <script src="~/lib/slick-1.8.0/slick/slick.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">
@@ -225,6 +229,7 @@
         <script defer src="https://use.fontawesome.com/releases/v5.0.4/js/all.js"
                 asp-fallback-src="~/lib/fontawesome-free-5.0.4/js/fontawesome-all.js">
         </script>
+        <script src="~/lib/slick-1.8.0/slick/slick.min.js"></script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 

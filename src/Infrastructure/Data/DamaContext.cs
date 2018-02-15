@@ -70,6 +70,10 @@ namespace Infrastructure.Data
         private void ConfigureCatalogAttribute(EntityTypeBuilder<CatalogAttribute> builder)
         {
             builder.ToTable("CatalogAttribute");
+            builder.HasIndex(x => x.Sku)
+                .IsUnique();
+            builder.Property(x => x.Sku)
+                .HasMaxLength(255);
             builder.Property(x => x.Type)
                 .IsRequired();
             builder.Property(x => x.Code)
@@ -129,6 +133,10 @@ namespace Infrastructure.Data
         {
             builder.ToTable("Catalog");
 
+            builder.HasIndex(ci => ci.Sku)
+                .IsUnique();
+            builder.Property(ci => ci.Sku)
+                .HasMaxLength(255);
             builder.Property(ci => ci.Id)
                 .ForSqlServerUseSequenceHiLo("catalog_hilo")
                 .IsRequired();

@@ -24,13 +24,13 @@ namespace Backoffice
             CreateMap<IllustrationViewModel, CatalogIllustration>();
             CreateMap<IllustrationType, IllustrationTypeViewModel>();
             CreateMap<IllustrationTypeViewModel, IllustrationType>();
-            CreateMap<CatalogItem, ProductViewModel>()
-                .ForMember(dest => dest.ProductSKU,
-                opts => opts.MapFrom(src => $"{src.CatalogType.Code}_{src.CatalogIllustration.Code}{src.CatalogIllustration.IllustrationType.Code}"));
+            CreateMap<CatalogItem, ProductViewModel>();
+                //.ForMember(dest => dest.Sku,
+                //opts => opts.MapFrom(src => $"{src.CatalogType.Code}_{src.CatalogIllustration.Code}{src.CatalogIllustration.IllustrationType.Code}"));
             CreateMap<ProductViewModel, CatalogItem>();
-            CreateMap<CatalogAttribute, ProductAttributeViewModel>()
-                .ForMember(dest => dest.ProductSKU,
-                opts => opts.MapFrom(src => $"{src.CatalogItem.CatalogType.Code}_{src.CatalogItem.CatalogIllustration.Code}{src.CatalogItem.CatalogIllustration.IllustrationType.Code}_{src.Code}"));
+            CreateMap<CatalogAttribute, ProductAttributeViewModel>();
+                //.ForMember(dest => dest.Sku,
+                //opts => opts.MapFrom(src => $"{src.CatalogItem.CatalogType.Code}_{src.CatalogItem.CatalogIllustration.Code}{src.CatalogItem.CatalogIllustration.IllustrationType.Code}_{src.Code}"));
             CreateMap<ProductAttributeViewModel, CatalogAttribute>();
             CreateMap<ShopConfigViewModel, ShopConfig>();
             CreateMap<ShopConfig, ShopConfigViewModel>();
