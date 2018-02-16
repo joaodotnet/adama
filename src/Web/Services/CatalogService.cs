@@ -54,10 +54,10 @@ namespace Web.Services
                 .List(filterSpecification);
 
             var totalItems = root.Count();
-            
+
             var iPage = itemsPage ?? totalItems;
 
-            var itemsOnPage = root                
+            var itemsOnPage = root
                 .Skip(iPage * pageIndex)
                 .Take(iPage)
                 .ToList();
@@ -73,8 +73,9 @@ namespace Web.Services
                 {
                     Id = i.Id,
                     Name = i.Name,
-                    PictureUri = i.PictureUri,
-                    Price = i.Price
+                    PictureUri = i.PictureUri,                    
+                    Price = i.Price,
+                    ProductSku = i.Sku
                 }),
                 NewCatalogItems = itemsOnPage
                     .Where(x => x.IsNew)
@@ -84,7 +85,8 @@ namespace Web.Services
                         Id = i.Id,
                         Name = i.Name,
                         PictureUri = i.PictureUri,
-                        Price = i.Price
+                        Price = i.Price,
+                        ProductSku = i.Sku,
                     }),
                 FeaturedCatalogItems = itemsOnPage
                     .Where(x => x.IsFeatured)
@@ -94,7 +96,8 @@ namespace Web.Services
                         Id = i.Id,
                         Name = i.Name,
                         PictureUri = i.PictureUri,
-                        Price = i.Price
+                        Price = i.Price,
+                        ProductSku = i.Sku,
                     }),
                 Brands = await GetBrands(),
                 Types = await GetTypes(),
@@ -165,7 +168,7 @@ namespace Web.Services
                     .ToListAsync();
 
                 var vm = new CatalogIndexViewModel()
-                {                    
+                {
                     NewCatalogItems = items
                     .Where(x => x.IsNew)
                     .Take(8)
@@ -174,7 +177,8 @@ namespace Web.Services
                         Id = i.Id,
                         Name = i.Name,
                         PictureUri = i.PictureUri,
-                        Price = i.Price
+                        Price = i.Price,
+                        ProductSku = i.Sku
                     }),
                     FeaturedCatalogItems = items
                     .Where(x => x.IsFeatured)
@@ -184,7 +188,8 @@ namespace Web.Services
                         Id = i.Id,
                         Name = i.Name,
                         PictureUri = i.PictureUri,
-                        Price = i.Price
+                        Price = i.Price,
+                        ProductSku = i.Sku
                     }),
                     CatalogTypes = types.Select(x => new CatalogTypeViewModel()
                     {
@@ -196,15 +201,101 @@ namespace Web.Services
                     })
                     .Distinct()
                     .ToList()
-            };
+                };
                 return vm;
             }
             return null;
         }
 
-        public Task<ProductViewModel> GetCatalogItem(string id)
+        public async Task<ProductViewModel> GetCatalogItem(string sku)
         {
-            throw new NotImplementedException();
+            var product = await _db.CatalogItems
+                .Include(x => x.CatalogPictures)
+                .Include(x => x.CatalogAttributes)                
+                .Include(x => x.CatalogType)
+                    .ThenInclude(ct => ct.Categories)
+                        .ThenInclude(c => c.Category)
+                .Include(x => x.CatalogIllustration)
+                    .ThenInclude(ci => ci.IllustrationType)
+                .SingleOrDefaultAsync(x => x.Sku == sku);
+
+            if (product != null)
+            {
+                var vm = new ProductViewModel
+                {
+                    ProductId = product.Id,
+                    ProductSKU = product.Sku,
+                    ProductTitle = product.Name,
+                    ProductDescription = product.Description,
+                    ProductBasePrice = product.Price,
+                    ProductQuantity = 1,
+                    ProductImagesUri = new List<string>
+                    {
+                        product.PictureUri
+                    },
+                    Attributes = new List<ProductAttributeViewModel>(),
+                    Categories = new List<LinkViewModel>(),
+                    Tags = new List<LinkViewModel>
+                    {
+                        new LinkViewModel { Name = product.CatalogType.Description, Uri = "#"},
+                        new LinkViewModel { Name = product.CatalogIllustration.Name, Uri = "#"},
+                        new LinkViewModel { Name = product.CatalogIllustration.IllustrationType.Name, Uri = "#"},
+                    }
+                };
+
+                //Others prictures
+                if (product.CatalogPictures.Where(x => x.IsActive).Count() > 0)
+                    vm.ProductImagesUri.AddRange(
+                        product.CatalogPictures
+                        .Where(x => x.IsActive)
+                        .OrderBy(x => x.Order)
+                        .Select(x => x.PictureUri)
+                        );
+
+                //Attributes
+                foreach(var grpAttr in product.CatalogAttributes.GroupBy(x => x.Type))
+                {
+                    vm.Attributes.Add(new ProductAttributeViewModel
+                    {
+                        AttributeType = grpAttr.Key,
+                        Items = new SelectList(grpAttr.ToList(), "Id", "Name"),
+                        Label = grpAttr.Key.ToString(),
+                        DefaultText = GetDefaultText(grpAttr.Key),
+                        Selected = grpAttr.First().Id,
+                        Attributes = grpAttr.Select(x => new AttributeViewModel
+                        {
+                            Id = x.Id,
+                            Price = x.Price,
+                            Sku = x.Sku
+                        }).ToList()
+                    });
+                }
+
+                //Categories
+                foreach (var item in product.CatalogType.Categories)
+                {
+                    vm.Categories.Add(new LinkViewModel
+                    {
+                        Name = item.Category.Name,
+                        Uri = $"/{Utils.StringToUri(item.Category.Name)}"
+                    });
+                }
+                return vm;
+            }
+            return null;
+        }
+
+        private string GetDefaultText(CatalogAttributeType key)
+        {
+            switch (key)
+            {
+                case CatalogAttributeType.SIZE:
+                    return "Escolha um tamanho";
+                case CatalogAttributeType.BOOK_FORMAT:
+                    return "Escolha um formato";
+                default:
+                    return null;
+            }
         }
     }
 }

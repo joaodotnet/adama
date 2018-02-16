@@ -1,0 +1,69 @@
+﻿@model ProductViewModel
+
+<form asp-page="/Basket/Index" asp-page-handler="addtobasket" method="post">
+    <div class="dama-product-title">@Model.ProductTitle</div>
+    <div class="row justify-content-center mt-1 mt-md-3">
+        <div class="dama-product-price">
+            <span>@Model.ProductBasePrice</span>
+        </div>
+        @*<div class="my-auto pl-1 pr-1">&#8211;</div>
+            <div class="dama-product-price">
+                <span>15.00</span>
+            </div>*@
+    </div>
+    <div class="text-center mb-1 mt-md-3 mb-md-3">
+        <img width="180" src="~/images/coração-rosa.png" />
+    </div>
+
+    <p class="dama-product-description mb-md-4">@Model.ProductDescription</p>
+
+    @for (int i = 0; i < Model.Attributes.Count; i++)
+    {
+        <input type="hidden" asp-for="Attributes[i].AttributeType" />
+        <div class="row dama-product-attr mb-md-4">
+            <label class="col-2 col-form-label">@Model.Attributes[i].Label</label>
+            <div class="col-10">
+                <select asp-for="Attributes[i].Selected" class="form-control" asp-items="Model.Attributes[i].Items">
+                    <option>@Model.Attributes[i].DefaultText</option>
+                </select>
+            </div>
+        </div>
+    }
+
+    <hr />
+    <div class="btn-group mt-md-4" role="group">
+        <button id="btnSub" type="button" class="btn">-</button>
+        <input asp-for="ProductQuantity" class="form-control col-2 text-center">
+        <button id="btnAdd" type="button" class="btn">+</button>
+        <input class="dama-product-add ml-2" type="submit" value="[ ADICIONAR ]" />
+    </div>
+
+    <div class="row dama-product-attr mt-2 mt-md-4">
+        <label asp-for="ProductSKU" class="col-3 col-form-label"></label>
+        <div class="col-9">
+            <span>@Model.ProductSKU</span>
+        </div>
+    </div>
+
+    <div class="row dama-product-attr mt-md-2">
+        <label class="col-3 col-form-label">Categorias:</label>
+        <div class="col-9">
+            @foreach (var item in Model.Categories)
+            {
+                <a href="@item.Uri">@item.Name</a>
+            }
+        </div>
+    </div>
+    <div class="row dama-product-attr mt-md-2">
+        <label class="col-3 col-form-label">Tags:</label>
+        <div class="col-9">
+            @foreach (var item in Model.Tags)
+            {
+                <a href="@item.Uri">@item.Name</a>
+            }
+        </div>
+    </div>
+    <input type="hidden" asp-for="ProductSKU" />
+    <input type="hidden" asp-for="ProductId" />
+    <input type="hidden" asp-for="ProductBasePrice" />    
+</form>

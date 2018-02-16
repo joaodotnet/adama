@@ -70,19 +70,32 @@ namespace Backoffice.Pages.Products
             {
                 ProductModel.CatalogAttributes.Remove(item);
             }
-            //Validate Model
+            //Validate Attributes
             if (!ValidateAttributesModel())
             {
                 await PopulateLists();
                 return Page();
             }
-
+            //Validade Pictures
             if (!ValidatePictures())
             {
                 await PopulateLists();
                 return Page();
             }
 
+            //Validate SKU
+            var new_sku = await _service.GetSku(ProductModel.CatalogTypeId, ProductModel.CatalogIllustrationId); 
+            if (ProductModel.Sku != new_sku)
+            {
+                if(await _service.CheckIfSkuExists(new_sku))
+                {
+                    await PopulateLists();
+                    ModelState.AddModelError("", $"O produto {new_sku} já existe!");
+                    return Page();
+                }
+                ProductModel.Sku = new_sku;
+            }
+            
             //Main Picture
             if (ProductModel.Picture != null && ProductModel.Picture.Length > 0)
             {
@@ -113,8 +126,7 @@ namespace Backoffice.Pages.Products
             }
 
             //Save Changes            
-            var prod = _mapper.Map<CatalogItem>(ProductModel);
-            prod.Sku = await _service.GetSku(prod.CatalogTypeId, prod.CatalogIllustrationId, prod.CatalogIllustration.IllustrationTypeId);
+            var prod = _mapper.Map<CatalogItem>(ProductModel);            
             foreach (var item in prod.CatalogAttributes)
             {
                 if (item.Id != 0)
@@ -189,7 +201,7 @@ namespace Backoffice.Pages.Products
         {
             var illustrations = await _context.CatalogIllustrations
                 .Include(x => x.IllustrationType)
-                .Select(s => new { s.Id, Name = $"{s.IllustrationType.Code} - {s.Code} - {s.Name}" })
+                .Select(s => new { s.Id, Name = $"{s.Code} - {s.IllustrationType.Code} - {s.Name}" })
                 .OrderBy(x => x.Name)
                 .ToListAsync();
             ViewData["IllustrationId"] = new SelectList(illustrations, "Id", "Name");

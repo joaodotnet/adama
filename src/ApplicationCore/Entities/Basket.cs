@@ -9,7 +9,7 @@ public class Basket : BaseEntity
     private readonly List<BasketItem> _items = new List<BasketItem>();
     public IReadOnlyCollection<BasketItem> Items => _items.AsReadOnly();
 
-    public void AddItem(int catalogItemId, decimal unitPrice, int quantity = 1)
+    public void AddItem(int catalogItemId, decimal unitPrice, int quantity = 1, List<int> attrIds = null)
     {
         if (!Items.Any(i => i.CatalogItemId == catalogItemId))
         {
@@ -17,7 +17,8 @@ public class Basket : BaseEntity
             {
                 CatalogItemId = catalogItemId,
                 Quantity = quantity,
-                UnitPrice = unitPrice
+                UnitPrice = unitPrice,
+                Details = attrIds?.Select(x => new BasketDetailItem { CatalogAttributeId = x}).ToList()
             });
             return;
         }

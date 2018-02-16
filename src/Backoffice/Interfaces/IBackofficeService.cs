@@ -11,6 +11,7 @@ namespace Backoffice.Interfaces
         Task<string> SaveFileAsync(IFormFile formFile, string fullPath, string uriPath);
         void DeleteFile(string fullpath, string fileName);
         bool CheckIfFileExists(string fullpath, string fileName);
-        Task<string> GetSku(int typeId, int illustationId, int illustrationTypeId, int? attributeId = null);
+        Task<string> GetSku(int typeId, int illustationId, int? attributeId = null);
+        Task<bool> CheckIfSkuExists(string sku);
     }
 }

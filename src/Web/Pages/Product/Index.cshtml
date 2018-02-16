@@ -11,11 +11,11 @@
                 <a href="#" class="top-arrow"><i class="fas fa-chevron-up"></i></a>
                 <div class="slider-nav">
                     @*<div><img src="https://via.placeholder.com/100?text=1" class="img-thumbnail"/></div>
-                    <div><img src="https://via.placeholder.com/100?text=2" class="img-thumbnail"/></div>
-                    <div><img src="https://via.placeholder.com/100?text=3" class="img-thumbnail"/></div>
-                    <div><img src="https://via.placeholder.com/100?text=4" class="img-thumbnail"/></div>
-                    <div><img src="https://via.placeholder.com/100?text=5" class="img-thumbnail"/></div>
-                    <div><img src="https://via.placeholder.com/100?text=6" class="img-thumbnail"/></div>*@
+                        <div><img src="https://via.placeholder.com/100?text=2" class="img-thumbnail"/></div>
+                        <div><img src="https://via.placeholder.com/100?text=3" class="img-thumbnail"/></div>
+                        <div><img src="https://via.placeholder.com/100?text=4" class="img-thumbnail"/></div>
+                        <div><img src="https://via.placeholder.com/100?text=5" class="img-thumbnail"/></div>
+                        <div><img src="https://via.placeholder.com/100?text=6" class="img-thumbnail"/></div>*@
                     @foreach (var item in Model.ProductModel.ProductImagesUri)
                     {
                         <div><img src="@item" class="img-thumbnail" alt="Imagem do Produto" /></div>
@@ -24,84 +24,24 @@
                 <a href="#" class="bottom-arrow"><i class="fas fa-chevron-down"></i></a>
             </div>
             <div class="col-12 col-md-9 text-center">
-                <div class="dama-product-title-mobile pt-1 pb-1">@Model.ProductModel.ProductTitle</div>               
+                <div class="dama-product-title-mobile pt-1 pb-1">@Model.ProductModel.ProductTitle</div>
                 <div class="slider-for">
                     @*<div><img src="https://via.placeholder.com/300x300?text=1" class="img-fluid" /></div>
-                    <div><img src="https://via.placeholder.com/300x300?text=2" class="img-fluid" /></div>
-                    <div><img src="https://via.placeholder.com/300x300?text=3" class="img-fluid" /></div>
-                    <div><img src="https://via.placeholder.com/300x300?text=4" class="img-fluid" /></div>
-                    <div><img src="https://via.placeholder.com/300x300?text=5" class="img-fluid" /></div>
-                    <div><img src="https://via.placeholder.com/300x300?text=6" class="img-fluid" /></div>*@
+                        <div><img src="https://via.placeholder.com/300x300?text=2" class="img-fluid" /></div>
+                        <div><img src="https://via.placeholder.com/300x300?text=3" class="img-fluid" /></div>
+                        <div><img src="https://via.placeholder.com/300x300?text=4" class="img-fluid" /></div>
+                        <div><img src="https://via.placeholder.com/300x300?text=5" class="img-fluid" /></div>
+                        <div><img src="https://via.placeholder.com/300x300?text=6" class="img-fluid" /></div>*@
                     @foreach (var item in Model.ProductModel.ProductImagesUri)
                     {
                         <div><img src="@item" class="img-fluid" alt="Imagem do Produto" /></div>
                     }
-                </div>               
+                </div>
             </div>
         </div>
     </div>
     <div class="col-md-6">
-        <div class="dama-product-title">@Model.ProductModel.ProductTitle</div>
-        <div class="row justify-content-center mt-1 mt-md-3">
-            <div class="dama-product-price">
-                <span>@Model.ProductModel.ProductBasePrice</span>
-            </div>
-            @*<div class="my-auto pl-1 pr-1">&#8211;</div>
-                <div class="dama-product-price">
-                    <span>15.00</span>
-                </div>*@
-        </div>
-        <div class="text-center mb-1 mt-md-3 mb-md-3">
-            <img width="180" src="~/images/coração-rosa.png" />
-        </div>
-
-        <p class="dama-product-description mb-md-4">@Model.ProductModel.ProductDescription</p>
-
-        @for (int i = 0; i < Model.ProductModel.Attributes.Count; i++)        
-        {
-            <div class="row dama-product-attr mb-md-4">
-                <label class="col-2 col-form-label">@Model.ProductModel.Attributes[i].Label</label>
-                <div class="col-10">
-                    <select asp-for="ProductModel.Attributes[i].Selected" class="form-control" asp-items="Model.ProductModel.Attributes[i].Items">
-                        <option>@Model.ProductModel.Attributes[i].DefaultValue</option>
-                    </select>
-                </div>
-            </div>
-        }
-        
-        <hr />
-        <div class="btn-group mt-md-4" role="group">
-            <button type="button" class="btn">-</button>
-            <input asp-for="ProductModel.ProductQuantity" class="form-control col-2 text-center">
-            <button type="button" class="btn">+</button>
-            <input class="dama-product-add ml-2" type="submit" value="[ ADICIONAR ]" />
-        </div>
-
-        <div class="row dama-product-attr mt-2 mt-md-4">
-            <label asp-for="ProductModel.ProductSKU" class="col-3 col-form-label" />
-            <div class="col-9">
-                <span>@Model.ProductModel.ProductSKU</span>
-            </div>
-        </div>
-
-        <div class="row dama-product-attr mt-md-2">
-            <label class="col-3 col-form-label">Categorias:</label>
-            <div class="col-9">
-                @foreach (var item in Model.ProductModel.Categories)
-                {
-                    <a href="@item.Uri">@item.Name</a>
-                }
-            </div>
-        </div>
-        <div class="row dama-product-attr mt-md-2">
-            <label class="col-3 col-form-label">Tags:</label>
-            <div class="col-9">
-                @foreach (var item in Model.ProductModel.Tags)
-                {
-                    <a href="@item.Uri">@item.Name</a>
-                }
-            </div>
-        </div>
+        @Html.Partial("_productDetail", Model.ProductModel)
     </div>
 </div>
 @section Scripts {
@@ -125,14 +65,14 @@
                 fade: true,
                 asNavFor: '.slider-nav',
                 responsive: [
-                {
-                    breakpoint: 992,
-                    settings: {                        
-                        infinite: true,
-                        arrows: true,
-                        centerMode: true,
-                    }
-                }]
+                    {
+                        breakpoint: 992,
+                        settings: {
+                            infinite: true,
+                            arrows: true,
+                            centerMode: true,
+                        }
+                    }]
             });
             $('.dama-product-description').on('click touch', function () {
                 if ($(this).css('white-space') == 'normal') {
@@ -142,8 +82,22 @@
                 else if ($(this).css('white-space') == 'nowrap') {
                     $(this).css('white-space', 'normal');
                     $(this).css('text-overflow', 'initial');
-                }                
+                }
             });
+            $('#btnAdd').on('click', function () {
+                var value = $('#ProductQuantity').val();
+                if (value)
+                    $('#ProductQuantity').val(parseInt(value) + 1);
+                else
+                    $('#ProductQuantity').val(1);
+            });
+            $('#btnSub').on('click', function () {
+                var value = $('#ProductQuantity').val();
+                if (value && parseInt(value) > 1)
+                    $('#ProductQuantity').val(parseInt(value) - 1);
+                else
+                    $('#ProductQuantity').val(1);
+            })
         });
     </script>
 }

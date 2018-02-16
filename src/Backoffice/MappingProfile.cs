@@ -25,8 +25,6 @@ namespace Backoffice
             CreateMap<IllustrationType, IllustrationTypeViewModel>();
             CreateMap<IllustrationTypeViewModel, IllustrationType>();
             CreateMap<CatalogItem, ProductViewModel>();
-                //.ForMember(dest => dest.Sku,
-                //opts => opts.MapFrom(src => $"{src.CatalogType.Code}_{src.CatalogIllustration.Code}{src.CatalogIllustration.IllustrationType.Code}"));
             CreateMap<ProductViewModel, CatalogItem>();
             CreateMap<CatalogAttribute, ProductAttributeViewModel>();
                 //.ForMember(dest => dest.Sku,

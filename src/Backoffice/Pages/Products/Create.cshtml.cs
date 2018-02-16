@@ -54,6 +54,14 @@ namespace Backoffice.Pages.Products
                 return Page();
             }
 
+            ProductModel.Sku = await _service.GetSku(ProductModel.CatalogTypeId, ProductModel.CatalogIllustrationId);
+            if(await _service.CheckIfSkuExists(ProductModel.Sku))
+            {
+                await PopulateLists();
+                ModelState.AddModelError("", $"O produto {ProductModel.Sku} já existe!");
+                return Page();
+            }
+
             //Save Main Image
             if (ProductModel.Picture.Length > 0)
             {
@@ -87,7 +95,7 @@ namespace Backoffice.Pages.Products
                 await PopulateLists();
             }
 
-            //Save Changes            
+            //Save Changes                        
             _context.CatalogItems.Add(_mapper.Map<CatalogItem>(ProductModel));
             await _context.SaveChangesAsync();
 
@@ -160,7 +168,7 @@ namespace Backoffice.Pages.Products
         {
             var illustrations = await _context.CatalogIllustrations
                 .Include(x => x.IllustrationType)
-                .Select(s => new { s.Id, Name = $"{s.IllustrationType.Code} - {s.Code} - {s.Name}" })
+                .Select(s => new { s.Id, Name = $"{s.Code} - {s.IllustrationType.Code} - {s.Name}" })
                 .OrderBy(x => x.Name)
                 .ToListAsync();
             ViewData["IllustrationId"] = new SelectList(illustrations, "Id", "Name");
