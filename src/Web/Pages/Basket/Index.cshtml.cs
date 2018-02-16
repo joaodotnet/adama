@@ -9,6 +9,7 @@ using Infrastructure.Identity;
 using System;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Web.Pages.Basket
 {
@@ -48,6 +49,25 @@ namespace Web.Pages.Basket
             await SetBasketModelAsync();
 
             await _basketService.AddItemToBasket(BasketModel.Id, productDetails.Id, productDetails.Price, 1);
+
+            await SetBasketModelAsync();
+
+            return RedirectToPage();
+        }
+
+        public async Task<IActionResult> OnPostAddToBasketAsync(ProductViewModel productDetails)
+        {
+            if (productDetails?.ProductId == null)
+            {
+                return RedirectToPage("/Index");
+            }
+            await SetBasketModelAsync();
+
+            //Get Attributes ids
+            var attrIds = new List<int>();
+            if (productDetails.Attributes?.Count > 0)
+                attrIds = productDetails.Attributes.Select(x => x.Selected).ToList();
+            await _basketService.AddItemToBasket(BasketModel.Id, productDetails.ProductId, productDetails.ProductBasePrice, productDetails.ProductQuantity, attrIds);
 
             await SetBasketModelAsync();
 

@@ -120,6 +120,7 @@ namespace Web
                     options.Conventions.AuthorizePage("/Basket/Checkout");
                     options.Conventions.AddPageRoute("/Category/Index", "{id}/");
                     options.Conventions.AddPageRoute("/Category/Type/Index", "{cat}/{type}");
+                    options.Conventions.AddPageRoute("/Product/Index", "produto/{id}");
                 });
 
             _services = services;

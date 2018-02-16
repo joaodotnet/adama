@@ -41,8 +41,6 @@ namespace Backoffice.ViewModels
         public string PictureUri { get; set; }
         [Display(Name = "Imagens do Produto")]
         public List<IFormFile> OtherPictures { get; set; }
-        public string CatalogIllustrationTypeId { get; set; }
-        
 
         public IList<ProductAttributeViewModel> CatalogAttributes { get; set; } = new List<ProductAttributeViewModel>();
         [Display(Name = "Imagens do Produto")]

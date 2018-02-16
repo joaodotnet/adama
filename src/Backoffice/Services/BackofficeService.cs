@@ -46,24 +46,25 @@ namespace Backoffice.Services
             return uriPath + filename; 
         }
 
-        public async Task<string> GetSku(int typeId, int illustationId, int illustrationTypeId, int? attributeId = null)
+        public async Task<string> GetSku(int typeId, int illustationId, int? attributeId = null)
         {
             var type = await _db.CatalogTypes                
                 .Where(x => x.Id == typeId)
                 .Select(x => x.Code)
                 .SingleAsync();
             var illustration = await _db.CatalogIllustrations
-                .Where(x => x.Id == illustationId)
-                .Select(x => x.Code)
-                .SingleAsync();
-            var illustrationType = await _db.IllustrationTypes
-                .Where(x => x.Id == illustrationTypeId)
-                .Select(x => x.Code)
-                .SingleAsync();
-            string sku = $"{type}_{illustration}_{illustrationType}";
+                .Include(x => x.IllustrationType)
+                .SingleOrDefaultAsync(x => x.Id == illustationId);
+                        
+            string sku = $"{type}_{illustration.Code}_{illustration.IllustrationType.Code}";
             if (attributeId.HasValue)
                 sku += $"_{attributeId}";
             return sku;
+        }
+
+        public async Task<bool> CheckIfSkuExists(string sku)
+        {
+            return (await _db.CatalogItems.SingleOrDefaultAsync(x => x.Sku == sku)) != null;
         }
     }
 }

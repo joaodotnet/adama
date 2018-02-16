@@ -26,11 +26,11 @@ namespace ApplicationCore.Services
             _itemRepository = itemRepository;
         }
 
-        public async Task AddItemToBasket(int basketId, int catalogItemId, decimal price, int quantity)
+        public async Task AddItemToBasket(int basketId, int catalogItemId, decimal price, int quantity, List<int> attrIds = null)
         {
             var basket = await _basketRepository.GetByIdAsync(basketId);
 
-            basket.AddItem(catalogItemId, price, quantity);
+            basket.AddItem(catalogItemId, price, quantity, attrIds);
 
             await _basketRepository.UpdateAsync(basket);
         }
