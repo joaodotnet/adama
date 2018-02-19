@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using ApplicationCore.Specifications;
 using Web.Interfaces;
 using Web.ViewModels;
+using Web.Extensions;
 
 namespace Web.Services
 {
@@ -54,6 +55,11 @@ namespace Web.Services
                 var item = _itemRepository.GetById(i.CatalogItemId);
                 itemModel.PictureUrl = _uriComposer.ComposePicUri(item.PictureUri);
                 itemModel.ProductName = item.Name;
+                itemModel.Attributes = i.Details.Select(d => new AttributeViewModel
+                {
+                    Name = d.CatalogAttribute.Name,
+                    Label = EnumHelper<CatalogAttributeType>.GetDisplayValue(d.CatalogAttribute.Type)
+                }).ToList();
                 return itemModel;
             })
                             .ToList();

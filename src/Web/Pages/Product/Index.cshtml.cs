@@ -25,5 +25,11 @@ namespace Web.Pages.Product
             ProductModel = await _catalogService.GetCatalogItem(id);
             return Page();
         }
+
+        public async Task<JsonResult> OnGetAttributePriceAsync(int id)
+        {
+            var res = await _catalogService.GetAttributePrice(id);
+            return new JsonResult(res);
+        }
     }
 }

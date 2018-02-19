@@ -25,6 +25,7 @@ namespace Infrastructure.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<ShopConfig> ShopConfigs { get; set; }
         public DbSet<ApplicationCore.Entities.ShopConfigDetail> ShopConfigDetails { get; set; } //Need the full qualified name for generate code
+        public DbSet<CatalogAttribute> CatalogAttributes { get; set; }
 
         
         protected override void OnModelCreating(ModelBuilder builder)
