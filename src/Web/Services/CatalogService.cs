@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
-using DamaShopWeb.Web;
+using Web.Extensions;
 
 namespace Web.Services
 {
@@ -259,7 +259,7 @@ namespace Web.Services
                     {
                         AttributeType = grpAttr.Key,
                         Items = new SelectList(grpAttr.ToList(), "Id", "Name"),
-                        Label = grpAttr.Key.ToString(),
+                        Label = EnumHelper<CatalogAttributeType>.GetDisplayValue(grpAttr.Key),
                         DefaultText = GetDefaultText(grpAttr.Key),
                         Selected = grpAttr.First().Id,
                         Attributes = grpAttr.Select(x => new AttributeViewModel
@@ -296,6 +296,14 @@ namespace Web.Services
                 default:
                     return null;
             }
+        }
+
+        public async Task<decimal?> GetAttributePrice(int attributeId)
+        {
+            var attr = await _db.CatalogAttributes.SingleOrDefaultAsync(x => x.Id == attributeId);
+            if (attr != null)
+                return attr.Price;
+            return null;
         }
     }
 }

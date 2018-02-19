@@ -12,5 +12,6 @@ namespace Web.Interfaces
         Task<IEnumerable<SelectListItem>> GetBrands();
         Task<IEnumerable<SelectListItem>> GetTypes();
         Task<ProductViewModel> GetCatalogItem(string sku);
+        Task<decimal?> GetAttributePrice(int attributeId);
     }
 }

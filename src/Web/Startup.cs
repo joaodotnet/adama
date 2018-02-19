@@ -19,6 +19,7 @@ using System;
 using System.Text;
 using AutoMapper;
 using ApplicationCore;
+using System.Globalization;
 
 namespace Web
 {
@@ -143,6 +144,15 @@ namespace Web
             {
                 app.UseExceptionHandler("/Catalog/Error");
             }
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("pt-PT"),
+                // Formatting numbers, dates, etc.
+                SupportedCultures = new[] { new CultureInfo("pt-PT") },
+                // UI strings that we have localized.
+                SupportedUICultures = new[] { new CultureInfo("pt-PT") }
+            });
 
             app.UseStaticFiles();
 

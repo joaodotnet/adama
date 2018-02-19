@@ -10,12 +10,6 @@
             <div class="dama-product-thumbnails col-3 text-center">
                 <a href="#" class="top-arrow"><i class="fas fa-chevron-up"></i></a>
                 <div class="slider-nav">
-                    @*<div><img src="https://via.placeholder.com/100?text=1" class="img-thumbnail"/></div>
-                        <div><img src="https://via.placeholder.com/100?text=2" class="img-thumbnail"/></div>
-                        <div><img src="https://via.placeholder.com/100?text=3" class="img-thumbnail"/></div>
-                        <div><img src="https://via.placeholder.com/100?text=4" class="img-thumbnail"/></div>
-                        <div><img src="https://via.placeholder.com/100?text=5" class="img-thumbnail"/></div>
-                        <div><img src="https://via.placeholder.com/100?text=6" class="img-thumbnail"/></div>*@
                     @foreach (var item in Model.ProductModel.ProductImagesUri)
                     {
                         <div><img src="@item" class="img-thumbnail" alt="Imagem do Produto" /></div>
@@ -26,12 +20,6 @@
             <div class="col-12 col-md-9 text-center">
                 <div class="dama-product-title-mobile pt-1 pb-1">@Model.ProductModel.ProductTitle</div>
                 <div class="slider-for">
-                    @*<div><img src="https://via.placeholder.com/300x300?text=1" class="img-fluid" /></div>
-                        <div><img src="https://via.placeholder.com/300x300?text=2" class="img-fluid" /></div>
-                        <div><img src="https://via.placeholder.com/300x300?text=3" class="img-fluid" /></div>
-                        <div><img src="https://via.placeholder.com/300x300?text=4" class="img-fluid" /></div>
-                        <div><img src="https://via.placeholder.com/300x300?text=5" class="img-fluid" /></div>
-                        <div><img src="https://via.placeholder.com/300x300?text=6" class="img-fluid" /></div>*@
                     @foreach (var item in Model.ProductModel.ProductImagesUri)
                     {
                         <div><img src="@item" class="img-fluid" alt="Imagem do Produto" /></div>
@@ -45,6 +33,7 @@
     </div>
 </div>
 @section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
         $(document).ready(function () {
             $('.slider-nav').slick({
@@ -97,7 +86,21 @@
                     $('#ProductQuantity').val(parseInt(value) - 1);
                 else
                     $('#ProductQuantity').val(1);
-            })
+            });
+            $('.atribute-items').on('change', function () {
+                var attrId = $(this).val();
+
+                $.getJSON("/Product?handler=attributeprice", { id: attrId })
+                    .done(function (data) {
+                        if (data) {
+                            $('.dama-product-price span').text(toNumber(data));
+                        }
+                    })
+                    .fail(function (jqxhr, textStatus, error) {
+                        var err = textStatus + ", " + error;
+                        console.log("Request Failed: " + err);
+                    });
+            });
         });
     </script>
 }

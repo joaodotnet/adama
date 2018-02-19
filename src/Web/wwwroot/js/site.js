@@ -8,3 +8,6 @@ $(document).ready(function () {
         }, 1000);
     });
 });
+function toNumber(value) {
+    return parseFloat(value).toFixed(2).replace('.', ',');
+}

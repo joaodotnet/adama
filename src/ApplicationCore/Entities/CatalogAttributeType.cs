@@ -1,8 +1,14 @@
-﻿namespace ApplicationCore.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ApplicationCore.Entities
 {
     public enum CatalogAttributeType
     {
+        [Display(Name = "Tamanho")]
         SIZE,
-        BOOK_FORMAT
+        [Display(Name = "Formato")]
+        BOOK_FORMAT,
+        [Display(Name = "Côr")]
+        Color,
     }
 }

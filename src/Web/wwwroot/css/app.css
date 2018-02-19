@@ -86,11 +86,11 @@ a,
 a:active,
 a:visited {
     color: #000000;
-    text-decoration: underline;
     transition: color 0.35s;
 }
 a:hover {
-    color: Highlight;
+    color: #EF7C8D; 
+    text-decoration: underline;
 }
 h1 {
     color: #000000;
@@ -369,16 +369,14 @@ h2 {
     font-size: 14px;
 }
 .dama-product-attr span {
-    color: #7a7a7a;
-    font-size: 14px;
+    font-size: 12px;
 }
 .dama-product-attr a {
-    text-decoration: none;
     font-size: 14px;
 }
 
 .dama-product-add {
-    background-color: #f5b0b9;
+    background-color: #EF7C8D;
     border: 0;
     color: #FFFFFF;
     cursor: pointer;
@@ -388,6 +386,6 @@ h2 {
     width: 100%;
 }
 .dama-product-add:hover {
-    background-color: #ef7e8e;
+    background-color: #eb6075;
     transition: all 0.35s;
 }

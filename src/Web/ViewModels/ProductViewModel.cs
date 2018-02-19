@@ -37,6 +37,8 @@ namespace Web.ViewModels
         public int? DefaultValue { get; set; }
         public string DefaultText { get; set; }
         public IEnumerable<SelectListItem> Items { get; set; }
+        [Required(ErrorMessage = "Por favor escolha uma opção")]
+        [Range(1,999999999, ErrorMessage = "Por favor escolha uma opção")]
         public int Selected { get; set; }
         public List<AttributeViewModel> Attributes { get; set; }
     }
@@ -46,5 +48,7 @@ namespace Web.ViewModels
         public int Id { get; set; }
         public decimal? Price { get; set; }
         public string Sku { get; set; }
+        public string Name { get; set; }
+        public string Label { get; set; }
     }
 }
