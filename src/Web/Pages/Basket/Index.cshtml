@@ -9,28 +9,32 @@
     @if (Model.BasketModel.Items.Any())
     {
         <form method="post">
-            <article class="esh-basket-titles row">
-                <br />
-                <section class="esh-basket-title col-3">Produto</section>
-                <section class="esh-basket-title col-3 hidden-lg-down"></section>
-                <section class="esh-basket-title col-2">Preço Unitário</section>
-                <section class="esh-basket-title col-2">Quantidade</section>
-                <section class="esh-basket-title col-2">Preço</section>
-            </article>
+            <div class="d-none d-sm-block">
+                <article class="esh-basket-titles row ">
+                    <br />
+                    <section class="esh-basket-title col-3">Produto</section>
+                    <section class="esh-basket-title col-3 hidden-lg-down"></section>
+                    <section class="esh-basket-title col-2">Preço</section>
+                    <section class="esh-basket-title col-2">Quantidade</section>
+                    <section class="esh-basket-title col-2">Subtotal</section>
+
+                </article>
+                <hr class="basket-hr" />
+            </div>
             <div class="esh-catalog-items">
                 @for (int i = 0; i < Model.BasketModel.Items.Count; i++)
                 {
                     var item = Model.BasketModel.Items[i];
                     <article class="esh-basket-items row align-items-center">
-                        <section class="esh-basket-item esh-basket-item--middle col-3 hidden-lg-down">
-                            <img class="esh-basket-image" src="@item.PictureUrl" />
+                        <section class="esh-basket-item esh-basket-item--middle col-3 hidden-lg-down pl-0 pl-md-2">
+                            <img class="esh-basket-image" src="@item.PictureUrl" width="100" />
                         </section>
                         <section class="esh-basket-item col-3">
                             @item.ProductName
                             @foreach (var attr in Model.BasketModel.Items[i].Attributes)
                             {
                                 <br />
-                                <span class="small">@attr.Label: @attr.Name</span>
+                                <span class="small"><span class="d-none d-sm-block">@attr.Label:</span> @attr.Name</span>
                             }
                         </section>
                         <section class="esh-basket-item esh-basket-item--middle col-2">€ @item.UnitPrice.ToString("N2")</section>
@@ -40,7 +44,12 @@
                         </section>
                         <section class="esh-basket-item esh-basket-item--middle esh-basket-item--mark col-2">€ @Math.Round(item.Quantity * item.UnitPrice, 2).ToString("N2")</section>
                     </article>
+                    @if (i < Model.BasketModel.Items.Count - 1)
+                    {
+                        <hr />
+                    }
                 }
+                <hr class="basket-hr" />
                 <div class="container">
                     <article class="esh-basket-titles esh-basket-titles--clean row">
                         <section class="esh-basket-title col-10"></section>
@@ -55,7 +64,7 @@
                 <section class="esh-basket-item col-push-8 col-4">
                     <button class="btn esh-basket-checkout" name="updatebutton" value="" type="submit"
                             asp-page-handler="Update">
-                        [ Update ]
+                        [ Atualizar ]
                     </button>
                     <input type="submit" asp-page="Checkout"
                            class="btn esh-basket-checkout"
