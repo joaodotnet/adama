@@ -210,6 +210,11 @@ namespace Backoffice.Pages.Products
 
         private bool ValidatePictures()
         {
+            if (string.IsNullOrEmpty(ProductModel.PictureUri) && ProductModel.Picture == null)
+            {
+                ModelState.AddModelError("", "A imagem principal é obrigatória!");
+            }
+
             if (ProductModel.Picture != null && ProductModel.Picture.Length > 2097152)
             {
                 ModelState.AddModelError("", "A menina quer por favor diminuir o tamanho da imagem principal? O máximo é 2MB, obrigado! Ass.: O seu amor!");
