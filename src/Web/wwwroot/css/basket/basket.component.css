@@ -16,6 +16,12 @@
     text-transform: uppercase;
 }
 
+/*@media (max-width: 576px) {
+    .esh-basket-title {
+        display: none;
+    }
+}*/
+
 .esh-basket-items--border {
     border-bottom: 1px solid #EEEEEE;
     padding: .5rem 0;
@@ -72,7 +78,11 @@
     transition: all 0.35s;
 }
 
-    .esh-basket-checkout:hover {
-        background-color: #eb6075;
-        transition: all 0.35s;
-    }
+.esh-basket-checkout:hover {
+    background-color: #eb6075;
+    transition: all 0.35s;
+}
+
+.basket-hr {
+    border-width: 5px;
+}
