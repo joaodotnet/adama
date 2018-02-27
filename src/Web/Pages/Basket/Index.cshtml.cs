@@ -82,6 +82,22 @@ namespace Web.Pages.Basket
             await SetBasketModelAsync();
         }
 
+        public async Task<IActionResult> OnPostCheckout(Dictionary<string, int> items)
+        {
+            await SetBasketModelAsync();
+            await _basketService.SetQuantities(BasketModel.Id, items);
+            await SetBasketModelAsync();
+
+            return RedirectToPage("./Checkout");
+        }
+
+        public async Task OnPostRemove(int id)
+        {
+            await SetBasketModelAsync();
+            await _basketService.DeleteItem(BasketModel.Id, id);
+            await SetBasketModelAsync();
+        }
+
         private async Task SetBasketModelAsync()
         {
             if (_signInManager.IsSignedIn(HttpContext.User))

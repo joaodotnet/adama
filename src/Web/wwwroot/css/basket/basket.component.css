@@ -59,8 +59,8 @@
 
 .esh-basket-checkout {
     background-color: #EF7C8D;
-    border: 0;
-    border-radius: 0;
+    /*border: 0;
+    border-radius: 0;*/
     color: #FFFFFF;
     display: inline-block;
     font-size: 1rem;
@@ -81,6 +81,9 @@
     .esh-basket-checkout {
         padding: 10px 10px;
     }
+    .dama-basket-link {
+        font-size: 14px;
+    }
 }
 
 .basket-hr {
@@ -97,4 +100,38 @@
     .dama-basket-item {
         font-size: 14px;
     }
+}
+
+.dama-basket-btn {
+    background: none;
+    border: 0;
+    cursor: pointer;
+}
+
+.esh-identity-item a {
+    color: #808080;
+}
+
+.esh-identity-item a:hover {
+    text-decoration: underline !important;
+    color: #fff !important;
+    transition: color 0.35s;
+}
+
+/* Checkout */
+.dama-checkout-text span{
+    font-size: 14px;
+}
+.dama-checkout-items {
+    font-size: 14px;
+}
+@media (min-width: 576px) {
+    .dama-checkout-btn {
+        position: absolute;
+        bottom: 0;
+    }
+}
+
+.dama-checkout-border {
+    border: 1px solid #EF7C8D;
 }

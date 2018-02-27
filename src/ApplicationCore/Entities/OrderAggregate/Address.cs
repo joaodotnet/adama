@@ -9,21 +9,18 @@ namespace ApplicationCore.Entities.OrderAggregate
 
         public String City { get; private set; }
 
-        public String State { get; private set; }
-
         public String Country { get; private set; }
 
-        public String ZipCode { get; private set; }
+        public String PostalCode { get; private set; }
 
-        private Address() { }
+        public Address() { }
 
-        public Address(string street, string city, string state, string country, string zipcode)
+        public Address(string street, string city, string country, string postalCode)
         {
             Street = street;
             City = city;
-            State = state;
             Country = country;
-            ZipCode = zipcode;
+            PostalCode = postalCode;
         }
     }
 }

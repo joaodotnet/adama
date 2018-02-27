@@ -11,16 +11,19 @@ namespace ApplicationCore.Entities.OrderAggregate
         {
         }
 
-        public Order(string buyerId, Address shipToAddress, List<OrderItem> items)
+        public Order(string buyerId, Address shipToAddress, List<OrderItem> items, decimal shippingCost)
         {
             ShipToAddress = shipToAddress;
+            ShippingCost = shippingCost;
             _orderItems = items;
             BuyerId = buyerId;
+
         }
         public string BuyerId { get; private set; }
 
         public DateTimeOffset OrderDate { get; private set; } = DateTimeOffset.Now;
         public Address ShipToAddress { get; private set; }
+        public decimal ShippingCost { get; private set; }
 
         // DDD Patterns comment
         // Using a private collection field, better for DDD Aggregate's encapsulation
@@ -41,7 +44,7 @@ namespace ApplicationCore.Entities.OrderAggregate
             {
                 total += item.UnitPrice * item.Units;
             }
-            return total;
+            return total + ShippingCost;
         }
 
     }

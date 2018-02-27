@@ -108,6 +108,10 @@ h2 {
     line-height: 1.4em
 }
 
+h4 {
+    font-size: 20px;
+}
+
 .btn-primary {
     background-color: #f5b0b9;
     border-color: #fff;
@@ -120,6 +124,10 @@ h2 {
 }
 
 /* DamaShopWeb App Header */
+.top-nav {
+    background-color: #5fcbcb;
+}
+
 .background_gradient {
     background-color: transparent;
     background-image: linear-gradient(180deg, #5fcbcb 0%, #cdefef 100%);
@@ -167,9 +175,6 @@ h2 {
     .footer-text{
         display:none;
     }
-    .social-links{
-        display: none;
-    }
     .backToHome{
         display: none;
     }
@@ -192,22 +197,21 @@ h2 {
     left: 50%;
     transform: translateX(-50%);
 }
-
-
-
  
 .navbar-dark .navbar-nav .nav-item a:hover {
     /*border-bottom: 3px solid #fff;*/
     color: #fff;   
 }
 
-
-
 .navbar-dark .navbar-nav .nav-link {
     color: #fff;
     font-weight: 600;
     font-size: 14px;
     text-decoration: none;
+}
+
+.navbar-dark .list-inline .nav-item .nav-link {
+    color: #fff;
 }
 
 .dropdown-menu {
@@ -244,20 +248,23 @@ h2 {
 }
 
 .social-links a {
-    display: inline-block;
+    /*display: inline-block;*/
     width: 40px;
     height: 40px;
     border: 2px solid #fff;
     border-radius: 50px;
-    margin-right: 15px;
+    margin-right: 4px;
     cursor: pointer;
 }
 
-.social-links a i {
-    padding: 18px 15px;
-    font-size: 20px;
-    color: #909090;
-}
+    .social-links a i {         
+    color: #909090;        
+    }
+    .social-links .nav-link {
+        padding-top: 8px;
+        padding-right: 2px !important;
+        padding-left: 6px !important;
+    }
 
 /* Footer */
 .footer-links {
@@ -355,7 +362,7 @@ h2 {
     color: #000000;
 }
 .dama-product-price::before {
-    content: '€';
+    content: '€ ';
 }
 .dama-product-description {
     font-size: 14px;
@@ -388,4 +395,8 @@ h2 {
 .dama-product-add:hover {
     background-color: #eb6075;
     transition: all 0.35s;
+}
+
+.dama-login-mobile {
+    margin-left: 38px;
 }

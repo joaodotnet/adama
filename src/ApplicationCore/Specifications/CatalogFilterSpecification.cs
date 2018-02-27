@@ -12,4 +12,12 @@ namespace ApplicationCore.Specifications
             AddInclude(x => x.CatalogType);
         }
     }
+
+    public class CatalogAttrFilterSpecification : BaseSpecification<CatalogItem>
+    {
+        public CatalogAttrFilterSpecification(int catalogId): base(i => i.Id == catalogId)
+        {
+            AddInclude(x => x.CatalogAttributes);
+        }
+    }
 }

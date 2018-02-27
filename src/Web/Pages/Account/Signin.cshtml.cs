@@ -7,23 +7,30 @@ using Microsoft.AspNetCore.Authentication;
 using System;
 using System.ComponentModel.DataAnnotations;
 using ApplicationCore.Interfaces;
+using Web.ViewModels;
 
 namespace Web.Pages.Account
 {
     public class SigninModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IBasketService _basketService;
 
         public SigninModel(SignInManager<ApplicationUser> signInManager,
+            UserManager<ApplicationUser> userManager,
             IBasketService basketService)
         {
             _signInManager = signInManager;
             _basketService = basketService;
+            _userManager = userManager;
         }
 
         [BindProperty]
         public LoginViewModel LoginDetails { get; set; } = new LoginViewModel();
+
+        [BindProperty]
+        public RegisterViewModel UserDetails { get; set; }
 
         public class LoginViewModel
         {
@@ -35,7 +42,7 @@ namespace Web.Pages.Account
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
-            [Display(Name = "Remember me?")]
+            [Display(Name = "Memorizar?")]
             public bool RememberMe { get; set; }
         }
 
@@ -45,14 +52,19 @@ namespace Web.Pages.Account
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             ViewData["ReturnUrl"] = returnUrl;
-            if (!String.IsNullOrEmpty(returnUrl) &&
-                returnUrl.IndexOf("checkout", StringComparison.OrdinalIgnoreCase) >= 0)
-            {
-                ViewData["ReturnUrl"] = "/Basket/Index";
-            }
+            //if (!String.IsNullOrEmpty(returnUrl) &&
+            //    returnUrl.IndexOf("checkout", StringComparison.OrdinalIgnoreCase) >= 0)
+            //{
+            //    ViewData["ReturnUrl"] = "/Basket/Index";
+            //}
         }
-        public async Task<IActionResult> OnPost(string returnUrl = null)
+        public async Task<IActionResult> OnPostSignIn(string returnUrl = null)
         {
+            foreach (var item in ModelState)
+            {
+                if (!item.Key.Contains("LoginDetails"))
+                    item.Value.ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
+            }
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -77,6 +89,43 @@ namespace Web.Pages.Account
             }
             ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostRegister(string returnUrl = "/Index")
+        {
+            foreach (var item in ModelState)
+            {
+                if (!item.Key.Contains("UserDetails"))
+                    item.Value.ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
+            }
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser { UserName = UserDetails.Email, Email = UserDetails.Email };
+                var result = await _userManager.CreateAsync(user, UserDetails.Password);
+                if (result.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+
+                    string anonymousBasketId = Request.Cookies[Constants.BASKET_COOKIENAME];
+                    if (!String.IsNullOrEmpty(anonymousBasketId))
+                    {
+                        await _basketService.TransferBasketAsync(anonymousBasketId, UserDetails.Email);
+                        Response.Cookies.Delete(Constants.BASKET_COOKIENAME);
+                    }
+
+                    return LocalRedirect(returnUrl);
+                }
+                AddErrors(result);
+            }
+            return Page();
+        }
+
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
         }
     }
 }

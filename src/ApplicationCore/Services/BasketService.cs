@@ -13,7 +13,7 @@ namespace ApplicationCore.Services
         private readonly IAsyncRepository<Basket> _basketRepository;
         private readonly IUriComposer _uriComposer;
         private readonly IAppLogger<BasketService> _logger;
-        private readonly IRepository<CatalogItem> _itemRepository;
+        private readonly IRepository<CatalogItem> _itemRepository;        
 
         public BasketService(IAsyncRepository<Basket> basketRepository,
             IRepository<CatalogItem> itemRepository,
@@ -30,6 +30,18 @@ namespace ApplicationCore.Services
         {
             var basket = await _basketRepository.GetByIdAsync(basketId);
 
+            if(attrIds == null)
+            {
+                attrIds = new List<int>();
+                var specification = new CatalogAttrFilterSpecification(catalogItemId);
+                var item = _itemRepository.GetSingleBySpec(specification);
+                var group = item.CatalogAttributes.GroupBy(x => x.Type);
+                foreach (var attribute in group)
+                {
+                    attrIds.Add(attribute.First().Id);
+                }
+            }
+
             basket.AddItem(catalogItemId, price, quantity, attrIds);
 
             await _basketRepository.UpdateAsync(basket);
@@ -40,7 +52,7 @@ namespace ApplicationCore.Services
             var basket = await _basketRepository.GetByIdAsync(basketId);
 
             await _basketRepository.DeleteAsync(basket);
-        }
+        }       
 
         public async Task<int> GetBasketItemCountAsync(string userName)
         {
@@ -48,7 +60,7 @@ namespace ApplicationCore.Services
             {
                 Guard.Against.NullOrEmpty(userName, nameof(userName));
                 var basketSpec = new BasketWithItemsSpecification(userName);
-                var basket = (await _basketRepository.ListAsync(basketSpec)).FirstOrDefault();
+                var basket = (await _basketRepository.ListAsync(basketSpec)).LastOrDefault();
                 if (basket == null)
                 {
                     _logger.LogInformation($"No basket found for {userName}");
@@ -82,9 +94,16 @@ namespace ApplicationCore.Services
             Guard.Against.NullOrEmpty(anonymousId, nameof(anonymousId));
             Guard.Against.NullOrEmpty(userName, nameof(userName));
             var basketSpec = new BasketWithItemsSpecification(anonymousId);
-            var basket = (await _basketRepository.ListAsync(basketSpec)).FirstOrDefault();
+            var basket = (await _basketRepository.ListAsync(basketSpec)).LastOrDefault();
             if (basket == null) return;
             basket.BuyerId = userName;
+            await _basketRepository.UpdateAsync(basket);
+        }
+        public async Task DeleteItem(int basketId, int itemIndex)
+        {
+            var basket = await _basketRepository.GetByIdAsync(basketId);
+            if (basket != null)
+                basket.RemoveItem(itemIndex);
             await _basketRepository.UpdateAsync(basket);
         }
     }
