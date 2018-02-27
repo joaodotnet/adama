@@ -109,6 +109,7 @@ namespace Web
             services.AddScoped<IBasketViewModelService, BasketViewModelService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<CatalogService>();
             services.AddScoped<IShopService,ShopService>();
             services.Configure<CatalogSettings>(Configuration);
