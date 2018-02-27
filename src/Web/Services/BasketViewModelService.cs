@@ -28,7 +28,7 @@ namespace Web.Services
         public async Task<BasketViewModel> GetOrCreateBasketForUser(string userName)
         {
             var basketSpec = new BasketWithItemsSpecification(userName);
-            var basket = (await _basketRepository.ListAsync(basketSpec)).FirstOrDefault();
+            var basket = (await _basketRepository.ListAsync(basketSpec)).LastOrDefault();
 
             if (basket == null)
             {
@@ -53,8 +53,11 @@ namespace Web.Services
 
                 };
                 var item = _itemRepository.GetById(i.CatalogItemId);
-                itemModel.PictureUrl = _uriComposer.ComposePicUri(item.PictureUri);
-                itemModel.ProductName = item.Name;
+                if(item != null)
+                {
+                    itemModel.PictureUrl = _uriComposer.ComposePicUri(item.PictureUri);
+                    itemModel.ProductName = item.Name;
+                }
                 itemModel.Attributes = i.Details.Select(d => new AttributeViewModel
                 {
                     Name = d.CatalogAttribute.Name,

@@ -9,17 +9,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
+using Infrastructure.Identity;
 
 namespace Web.Services
 {
     public class ShopService : IShopService
     {
         private readonly DamaContext _db;
+        private readonly AppIdentityDbContext _identityDb;
         private readonly IMapper _mapper;
-        public ShopService(DamaContext db, IMapper mapper)
+        public ShopService(DamaContext db, IMapper mapper, AppIdentityDbContext identity)
         {
             _db = db;
             _mapper = mapper;
+            _identityDb = identity;
         }
 
         public async Task<CatalogType> GetCatalogType(string type)
@@ -81,6 +84,58 @@ namespace Web.Services
             GetTopCategories(menuViewModel.Right, categories, parentsRight);
 
             return menuViewModel;
+        }
+        public async Task AddorUpdateUserAddress(ApplicationUser user, AddressViewModel addressModel)
+        {
+            if(user != null && addressModel != null)
+            {
+                //get user Addresses
+                var addresses = await _identityDb.UserAddresses.Where(x => x.UserId == user.Id).FirstOrDefaultAsync();
+                if (addresses == null)
+                {
+                    _identityDb.UserAddresses.Add(new UserAddress
+                    {
+                        UserId = user.Id,
+                        Street = addressModel.Street,
+                        City = addressModel.City,
+                        PostalCode = addressModel.PostalCode,
+                        Country = addressModel.Country,
+                        DefaultAddress = true
+                    });
+                }
+                else
+                {                    
+                    addresses.Street = addressModel.Street;
+                    addresses.City = addressModel.City;
+                    addresses.PostalCode = addressModel.PostalCode;
+                    addresses.Country = addressModel.Country;
+                    addresses.DefaultAddress = true;
+                }
+
+                //if (addresses?.Count > 0 && addressModel.SaveAddress)
+                //{
+                //    addresses.ForEach(x => x.DefaultAddress = false);
+                //}
+
+                await _identityDb.SaveChangesAsync();
+            }            
+        }
+
+        public async Task<AddressViewModel> GetUserAddress(string userId)
+        {
+            var address = await _identityDb.UserAddresses.SingleOrDefaultAsync(x => x.UserId == userId);
+            if (address != null)
+            {
+                return new AddressViewModel
+                {
+                    Street = address.Street,
+                    City = address.City,
+                    PostalCode = address.PostalCode,
+                    Country = address.Country,
+                    UseUserAddress = 1
+                };
+            }
+            return new AddressViewModel();
         }
 
         private void GetTopCategories(List<MenuItemComponentViewModel> model, List<Category> categories, List<Category> parents)

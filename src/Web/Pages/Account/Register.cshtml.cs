@@ -2,8 +2,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Web.Interfaces;
+using Web.ViewModels;
 
 namespace Web.Pages.Account
 {
@@ -13,7 +16,8 @@ namespace Web.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
 
         public RegisterModel(SignInManager<ApplicationUser> signInManager,
-                        UserManager<ApplicationUser> userManager
+                        UserManager<ApplicationUser> userManager,
+                        IShopService service
 )
         {
             _signInManager = signInManager;
@@ -23,25 +27,6 @@ namespace Web.Pages.Account
         [BindProperty]
         public RegisterViewModel UserDetails { get; set; }
 
-        public class RegisterViewModel
-        {
-            [Required]
-            [EmailAddress]
-            [Display(Name = "Email")]
-            public string Email { get; set; }
-
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
-            [DataType(DataType.Password)]
-            [Display(Name = "Password")]
-            public string Password { get; set; }
-
-            [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-            public string ConfirmPassword { get; set; }
-        }
-
         public async Task<IActionResult> OnPost(string returnUrl = "/Index")
         {
             if (ModelState.IsValid)
@@ -49,8 +34,9 @@ namespace Web.Pages.Account
                 var user = new ApplicationUser { UserName = UserDetails.Email, Email = UserDetails.Email };
                 var result = await _userManager.CreateAsync(user, UserDetails.Password);
                 if (result.Succeeded)
-                {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                {                    
+                    await _signInManager.SignInAsync(user, isPersistent: false);                 
+
                     return LocalRedirect(returnUrl);
                 }
                 AddErrors(result);
