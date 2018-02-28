@@ -138,7 +138,7 @@ namespace Web
         public void Configure(IApplicationBuilder app,
             IHostingEnvironment env)
         {
-            //app.UsePathBase("/loja");
+            app.UsePathBase("/loja");
 
             if (env.IsDevelopment())
             {
