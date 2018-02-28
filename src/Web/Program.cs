@@ -40,7 +40,7 @@ namespace Web
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseUrls("http://0.0.0.0:5500/")
+                .UseUrls("http://0.0.0.0:5500/loja")
                 .UseStartup<Startup>()
                 .Build();
     }
