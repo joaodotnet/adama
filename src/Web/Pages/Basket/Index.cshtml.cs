@@ -88,7 +88,7 @@ namespace Web.Pages.Basket
             await _basketService.SetQuantities(BasketModel.Id, items);
             await SetBasketModelAsync();
 
-            return RedirectToPage("./Checkout");
+            return RedirectToPage("/Basket/Checkout");
         }
 
         public async Task OnPostRemove(int id)
