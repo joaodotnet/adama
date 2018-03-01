@@ -197,7 +197,8 @@ namespace Web.Services
                         Code = x.CatalogType.Code,
                         Name = x.CatalogType.Description,
                         PictureUri = x.CatalogType.PictureUri,
-                        LinkUri = $"/{Utils.StringToUri(x.Category.Name)}/{Utils.StringToUri(x.CatalogType.Description)}"
+                        CatNameUri = Utils.StringToUri(x.Category.Name),
+                        TypeNameUri = Utils.StringToUri(x.CatalogType.Description)
                     })
                     .Distinct()
                     .ToList()

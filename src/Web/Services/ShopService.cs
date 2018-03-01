@@ -10,7 +10,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 using Infrastructure.Identity;
-using Microsoft.AspNetCore.Hosting;
 
 namespace Web.Services
 {
@@ -19,14 +18,11 @@ namespace Web.Services
         private readonly DamaContext _db;
         private readonly AppIdentityDbContext _identityDb;
         private readonly IMapper _mapper;
-        IHostingEnvironment _env;
-
-        public ShopService(DamaContext db, IMapper mapper, AppIdentityDbContext identity, IHostingEnvironment env)
+        public ShopService(DamaContext db, IMapper mapper, AppIdentityDbContext identity)
         {
             _db = db;
             _mapper = mapper;
             _identityDb = identity;
-            _env = env;
         }
 
         public async Task<CatalogType> GetCatalogType(string type)
@@ -148,7 +144,7 @@ namespace Web.Services
             {
                 Id = x.Id,
                 Name = x.Name.ToUpper(),
-                MenuUri = GetPathBase() + Utils.RemoveDiacritics(x.Name).Replace(" ", "-").ToLower()
+                NameUri = Utils.RemoveDiacritics(x.Name).Replace(" ", "-").ToLower()
             }));
 
             //SubCategories
@@ -165,7 +161,7 @@ namespace Web.Services
                     {
                         Id = x.Id,
                         Name = x.Name.ToUpper(),
-                        MenuUri = GetPathBase() + Utils.RemoveDiacritics(x.Name).Replace(" ", "-").ToLower()
+                        NameUri = Utils.RemoveDiacritics(x.Name).Replace(" ", "-").ToLower()
                     }));
                 }
                 else
@@ -180,19 +176,11 @@ namespace Web.Services
                     {
                         Id = x.Id,
                         Name = x.Description.ToUpper(),
-                        MenuUri = GetPathBase() + Path.Combine(
-                            Utils.RemoveDiacritics(item.Name).Replace(" ", "-").ToLower(),
-                            Utils.RemoveDiacritics(x.Description).Replace(" ", "-").ToLower())
+                        NameUri = Utils.RemoveDiacritics(item.Name).Replace(" ", "-").ToLower(),
+                        TypeUri = Utils.RemoveDiacritics(x.Description).Replace(" ", "-").ToLower()
                     }));
                 }
             }
-        }
-
-        private string GetPathBase()
-        {
-            if (_env.IsProduction())
-                return "/loja/";
-            return "/";
         }
     }
 }
