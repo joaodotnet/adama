@@ -7,7 +7,7 @@
     <input class="esh-catalog-button" type="submit" value="[ ADD TO BASKET ]" />
 
     <div class="esh-catalog-name">
-        <span>@Model.Name</span>
+        <span>@Model.CatalogItemName</span>
     </div>
     <div class="esh-catalog-price">
         <span>@Model.Price.ToString("N2")</span>
@@ -17,8 +17,8 @@
     <input type="hidden" asp-for="@Model.CatalogType" name="type" />
     <input type="hidden" asp-for="@Model.CatalogTypeId" name="typeId" />
     <input type="hidden" asp-for="@Model.Description" name="description" />*@
-    <input type="hidden" asp-for="@Model.Id" name="id" />
-    <input type="hidden" asp-for="@Model.Name" name="name" />
-    <input type="hidden" asp-for="@Model.PictureUri" name="pictureUri" />
-    <input type="hidden" asp-for="@Model.Price" name="price" />    
+    <input type="hidden" asp-for="CatalogItemId"  />
+    <input type="hidden" asp-for="CatalogItemName"/>
+    <input type="hidden" asp-for="PictureUri" />
+    <input type="hidden" asp-for="Price" />    
 </form>
