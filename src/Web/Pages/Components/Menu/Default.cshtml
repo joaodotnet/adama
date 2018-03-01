@@ -8,15 +8,27 @@
         if (item.Childs.Count > 0)
         {
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="@item.MenuUri" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" asp-page="/Category/Index" asp-route-id="@item.NameUri">
                     @item.Name
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     @foreach (var child in item.Childs)
                     {
-                        <a class="dropdown-item" href="@child.MenuUri">
-                            <span class="dropdown-item-text">@child.Name</span>
-                        </a>
+                        @if (!string.IsNullOrEmpty(child.TypeUri))
+                        {
+
+                            <a class="dropdown-item" asp-page="/Category/Type/Index" asp-route-cat="@child.NameUri" asp-route-type="@child.TypeUri">
+                                <span class="dropdown-item-text">@child.Name</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="dropdown-item" asp-page="/Category/Index" asp-route-id="@child.NameUri">
+                                <span class="dropdown-item-text">@child.Name</span>
+                            </a>
+
+                        }
+
                     }
                 </div>
             </li>
@@ -24,7 +36,7 @@
         else
         {
             <li class="nav-item">
-                <a class="nav-link" href="@item.MenuUri">@item.Name</a>
+                <a class="nav-link" asp-page="/Category/Index" asp-route-id="@item.NameUri">@item.Name</a>
             </li>
 
         }
@@ -43,15 +55,26 @@
         if (item.Childs.Count > 0)
         {
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="@item.MenuUri" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" asp-page="/Category/Index" asp-route-id="@item.NameUri">
                     @item.Name
                 </a>
                 <div class="dropdown-menu">
                     @foreach (var child in item.Childs)
                     {
-                        <a class="dropdown-item" href="@child.MenuUri">
-                            <span class="dropdown-item-text">@child.Name</span>
-                        </a>
+                        @if (!string.IsNullOrEmpty(child.TypeUri))
+                        {
+
+                            <a class="dropdown-item" asp-page="/Category/Type/Index" asp-route-cat="@child.NameUri" asp-route-type="@child.TypeUri">
+                                <span class="dropdown-item-text">@child.Name</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="dropdown-item" asp-page="/Category/Index" asp-route-id="@child.NameUri">
+                                <span class="dropdown-item-text">@child.Name</span>
+                            </a>
+
+                        }
                     }
                 </div>
             </li>
@@ -59,7 +82,7 @@
         else
         {
             <li class="nav-item">
-                <a class="nav-link" href="@item.MenuUri">@item.Name</a>
+                <a class="nav-link" asp-page="/Category/Index" asp-route-id="@item.NameUri">@item.Name</a>
             </li>
         }
     }

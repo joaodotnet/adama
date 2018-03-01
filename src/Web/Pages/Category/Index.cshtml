@@ -16,7 +16,7 @@
             <div class="col-md-3">
                 @if (string.IsNullOrEmpty(item.PictureUri))
                 {
-                    <a href="@item.LinkUri">
+                    <a asp-page="/Category/Type/Index" asp-route-cat="@item.CatNameUri" asp-route-type="@item.TypeNameUri">
                         <div class="card">
                             <div class="card-body">
                                 @item.Name
@@ -26,7 +26,9 @@
                 }
                 else
                 {
-                    <img src="@item.PictureUri" class="img-thumbnail" />
+                    <a asp-page="/Category/Type/Index" asp-route-cat="@item.CatNameUri" asp-route-type="@item.TypeNameUri">
+                        <img src="@item.PictureUri" class="img-thumbnail" />
+                    </a>
                 }
             </div>
         }
