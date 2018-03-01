@@ -125,10 +125,15 @@ namespace Web
                 .AddRazorPagesOptions(options =>
                 {
                     options.Conventions.AuthorizeFolder("/Order");
+                    options.Conventions.AuthorizeFolder("/loja/Order");
                     options.Conventions.AuthorizePage("/Basket/Checkout");
+                    options.Conventions.AuthorizePage("/loja/Basket/Checkout");
                     options.Conventions.AddPageRoute("/Category/Index", "{id}/");
+                    options.Conventions.AddPageRoute("/Category/Index", "loja/{id}/");
                     options.Conventions.AddPageRoute("/Category/Type/Index", "{cat}/{type}");
+                    options.Conventions.AddPageRoute("/Category/Type/Index", "loja/{cat}/{type}");
                     options.Conventions.AddPageRoute("/Product/Index", "produto/{id}");
+                    options.Conventions.AddPageRoute("/Product/Index", "loja/produto/{id}");
                 });
 
             _services = services;
