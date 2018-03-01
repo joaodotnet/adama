@@ -71,8 +71,8 @@ namespace Web.Services
             {
                 CatalogItems = itemsOnPage.Select(i => new CatalogItemViewModel()
                 {
-                    Id = i.Id,
-                    Name = i.Name,
+                    CatalogItemId = i.Id,
+                    CatalogItemName = i.Name,
                     PictureUri = i.PictureUri,                    
                     Price = i.Price,
                     ProductSku = i.Sku
@@ -82,8 +82,8 @@ namespace Web.Services
                     .Take(8)
                     .Select(i => new CatalogItemViewModel()
                     {
-                        Id = i.Id,
-                        Name = i.Name,
+                        CatalogItemId = i.Id,
+                        CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
                         Price = i.Price,
                         ProductSku = i.Sku,
@@ -93,8 +93,8 @@ namespace Web.Services
                     .Take(8)
                     .Select(i => new CatalogItemViewModel()
                     {
-                        Id = i.Id,
-                        Name = i.Name,
+                        CatalogItemId = i.Id,
+                        CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
                         Price = i.Price,
                         ProductSku = i.Sku,
@@ -174,8 +174,8 @@ namespace Web.Services
                     .Take(8)
                     .Select(i => new CatalogItemViewModel()
                     {
-                        Id = i.Id,
-                        Name = i.Name,
+                        CatalogItemId = i.Id,
+                        CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
                         Price = i.Price,
                         ProductSku = i.Sku
@@ -185,8 +185,8 @@ namespace Web.Services
                     .Take(8)
                     .Select(i => new CatalogItemViewModel()
                     {
-                        Id = i.Id,
-                        Name = i.Name,
+                        CatalogItemId = i.Id,
+                        CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
                         Price = i.Price,
                         ProductSku = i.Sku

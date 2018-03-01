@@ -42,13 +42,13 @@ namespace Web.Pages.Basket
 
         public async Task<IActionResult> OnPost(CatalogItemViewModel productDetails)
         {
-            if (productDetails?.Id == null)
+            if (productDetails?.CatalogItemId == null)
             {
                 return RedirectToPage("/Index");
             }
             await SetBasketModelAsync();
 
-            await _basketService.AddItemToBasket(BasketModel.Id, productDetails.Id, productDetails.Price, 1);
+            await _basketService.AddItemToBasket(BasketModel.Id, productDetails.CatalogItemId, productDetails.Price, 1);
 
             await SetBasketModelAsync();
 
