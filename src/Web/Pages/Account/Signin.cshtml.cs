@@ -50,7 +50,7 @@ namespace Web.Pages.Account
         public async Task OnGet(string returnUrl = null)
         {
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-
+            returnUrl = FixBasePath(returnUrl);
             ViewData["ReturnUrl"] = returnUrl;
             //if (!String.IsNullOrEmpty(returnUrl) &&
             //    returnUrl.IndexOf("checkout", StringComparison.OrdinalIgnoreCase) >= 0)
@@ -58,6 +58,14 @@ namespace Web.Pages.Account
             //    ViewData["ReturnUrl"] = "/Basket/Index";
             //}
         }
+
+        private string FixBasePath(string returnUrl)
+        {        
+            if (!string.IsNullOrEmpty(returnUrl) && returnUrl.LastIndexOf("/loja") >= 0)
+                return returnUrl.Substring(returnUrl.LastIndexOf("/loja") + 5);
+            return null;
+        }
+
         public async Task<IActionResult> OnPostSignIn(string returnUrl = null)
         {
             foreach (var item in ModelState)
