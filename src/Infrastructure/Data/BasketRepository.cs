@@ -18,7 +18,8 @@ namespace Infrastructure.Data
             return _dbContext.Baskets
                 .Include(b => b.Items)
                 .Include("Items.Details")
-                .FirstOrDefault();
+                .Include("Items.Details.CatalogAttribute")
+                .FirstOrDefault(x => x.Id == id);
         }
 
         public Task<Basket> GetByIdWithItemsAsync(int id)
@@ -26,7 +27,8 @@ namespace Infrastructure.Data
             return _dbContext.Baskets
                 .Include(b => b.Items)
                 .Include("Items.Details")
-                .FirstOrDefaultAsync();
+                .Include("Items.Details.CatalogAttribute")
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }

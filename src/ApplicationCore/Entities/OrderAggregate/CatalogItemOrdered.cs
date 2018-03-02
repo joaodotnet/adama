@@ -1,4 +1,6 @@
-﻿namespace ApplicationCore.Entities.OrderAggregate
+﻿using System.Collections.Generic;
+
+namespace ApplicationCore.Entities.OrderAggregate
 {
     /// <summary>
     /// Represents the item that was ordered. If catalog item details change, details of
