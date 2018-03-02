@@ -10,10 +10,10 @@ namespace ApplicationCore.Services
     public class OrderService : IOrderService
     {
         private readonly IAsyncRepository<Order> _orderRepository;
-        private readonly IAsyncRepository<Basket> _basketRepository;
+        private readonly IBasketRepository _basketRepository;
         private readonly IAsyncRepository<CatalogItem> _itemRepository;
 
-        public OrderService(IAsyncRepository<Basket> basketRepository,
+        public OrderService(IBasketRepository basketRepository,
             IAsyncRepository<CatalogItem> itemRepository,
             IAsyncRepository<Order> orderRepository)
         {
@@ -24,7 +24,8 @@ namespace ApplicationCore.Services
 
         public async Task CreateOrderAsync(int basketId, Address shippingAddress, decimal shippingCost)
         {
-            var basket = await _basketRepository.GetByIdAsync(basketId);
+            //TODO: check price
+            var basket = await _basketRepository.GetByIdWithItemsAsync(basketId);
             Guard.Against.NullBasket(basketId, basket);
             var items = new List<OrderItem>();
             foreach (var item in basket.Items)
@@ -32,6 +33,15 @@ namespace ApplicationCore.Services
                 var catalogItem = await _itemRepository.GetByIdAsync(item.CatalogItemId);
                 var itemOrdered = new CatalogItemOrdered(catalogItem.Id, catalogItem.Name, catalogItem.PictureUri);
                 var orderItem = new OrderItem(itemOrdered, item.UnitPrice, item.Quantity);
+                foreach (var attribute in item.Details)
+                {
+                    orderItem.Details.Add(new OrderItemDetail
+                    {
+                        AttributeType = attribute.CatalogAttribute.Type,
+                        AttributeCode = attribute.CatalogAttribute.Code,
+                        AttributeName = attribute.CatalogAttribute.Name
+                    });
+                }
                 items.Add(orderItem);
             }
             var order = new Order(basket.BuyerId, shippingAddress, items, shippingCost);

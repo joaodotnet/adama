@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Entities;
+using System.Collections.Generic;
 
 namespace ApplicationCore.Entities.OrderAggregate
 {
@@ -8,6 +9,8 @@ namespace ApplicationCore.Entities.OrderAggregate
         public CatalogItemOrdered ItemOrdered { get; private set; }
         public decimal UnitPrice { get; private set; }
         public int Units { get; private set; }
+
+        public ICollection<OrderItemDetail> Details { get; set; } = new List<OrderItemDetail>();
 
         protected OrderItem()
         {

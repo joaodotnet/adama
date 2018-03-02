@@ -16,8 +16,8 @@ namespace Infrastructure.Data
         {
             return _dbContext.Orders
                 .Include(o => o.OrderItems)
-                .Include("OrderItems.ItemOrdered")
-                .FirstOrDefault();
+                .Include("OrderItems.ItemOrdered")                
+                .FirstOrDefault(x => x.Id == id);
         }
 
         public Task<Order> GetByIdWithItemsAsync(int id)
@@ -25,7 +25,7 @@ namespace Infrastructure.Data
             return _dbContext.Orders
                 .Include(o => o.OrderItems)
                 .Include("OrderItems.ItemOrdered")
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }

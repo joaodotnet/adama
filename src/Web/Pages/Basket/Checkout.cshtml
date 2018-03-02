@@ -10,47 +10,51 @@
     <div class="row">
         <div class="col-sm-9">
             <h4>Como quer receber a sua encomenda?</h4>
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="row mr-1">
-                <div id="user-address-col" class="col-sm-6 dama-checkout-border">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="row mr-1 ml-1">
+                <div id="user-address-col" class="col-sm-6">
                     <div class="form-check">
-                        <input asp-for="UserAddress.UseUserAddress" class="form-check-input" type="radio" value="1" checked>
-                        <label class="form-check-label" asp-for="UserAddress.UseUserAddress">
+                        
+                        <label class="form-check-label">
+                            <input asp-for="UserAddress.UseUserAddress" class="form-check-input" type="radio" value="1">
                             <strong>Na sua morada</strong>
                         </label>                        
                     </div>
-                    <div class="form-group">
-                        <label asp-for="UserAddress.Street"></label>
-                        <input class="form-control" asp-for="UserAddress.Street">
-                        <span asp-validation-for="UserAddress.Street" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="UserAddress.City"></label>
-                        <input class="form-control" asp-for="UserAddress.City">
-                        <span asp-validation-for="UserAddress.City" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="UserAddress.PostalCode"></label>
-                        <input class="form-control" asp-for="UserAddress.PostalCode">
-                        <span asp-validation-for="UserAddress.PostalCode" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="UserAddress.Country"></label>
-                        <select class="form-control" asp-for="UserAddress.Country">
-                            <option>Portugal</option>
-                        </select>
-                        <span asp-validation-for="UserAddress.Country" class="text-danger"></span>
-                    </div>
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" asp-for="UserAddress.SaveAddress">
-                        <label class="form-check-label" asp-for="UserAddress.SaveAddress"></label>
-                        <span asp-validation-for="UserAddress.SaveAddress" class="text-danger"></span>
+                    <div id="user-address-controls" class="d-none d-sm-block">
+                        <div class="form-group">
+                            <label asp-for="UserAddress.Street"></label>
+                            <input class="form-control" asp-for="UserAddress.Street">
+                            <span asp-validation-for="UserAddress.Street" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="UserAddress.City"></label>
+                            <input class="form-control" asp-for="UserAddress.City">
+                            <span asp-validation-for="UserAddress.City" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="UserAddress.PostalCode"></label>
+                            <input class="form-control" asp-for="UserAddress.PostalCode">
+                            <span asp-validation-for="UserAddress.PostalCode" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="UserAddress.Country"></label>
+                            <select class="form-control" asp-for="UserAddress.Country">
+                                <option>Portugal</option>
+                            </select>
+                            <span asp-validation-for="UserAddress.Country" class="text-danger"></span>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" asp-for="UserAddress.SaveAddress">
+                            <label class="form-check-label" asp-for="UserAddress.SaveAddress"></label>
+                            <span asp-validation-for="UserAddress.SaveAddress" class="text-danger"></span>
+                        </div>
                     </div>
                 </div>
-                <div id="store-location-col" class="col-sm-6 dama-checkout-text">
+                <div id="store-location-col" class="col-sm-6 dama-checkout-text mt-2 mt-sm-0">
                     <div class="form-check">
-                        <input asp-for="UserAddress.UseUserAddress" class="form-check-input" type="radio" value="2">
+                       
                         <label class="form-check-label">
+                            <input asp-for="UserAddress.UseUserAddress" class="form-check-input" type="radio" value="2">
                             <strong>Levantar na loja</strong>
                         </label>
                     </div>
@@ -76,28 +80,28 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-3 bg-light pt-2">
+        <div class="col-sm-3 bg-light pt-2 mt-3 mt-sm-0">
             <h4 class="text-center">Resumo da encomenda</h4>
-            <article class="row">
-                <section class="col-2">Qt.</section>
-                <section class="col-6">Produto</section>
-                <section class="col-4">Preço</section>
+            <article class="row m-0">
+                <section class="col-2 p-0">Qt.</section>
+                <section class="col-7 p-0">Produto</section>
+                <section class="col-3 p-0">Preço</section>
             </article>
             <hr />
             <div class="dama-checkout-items">
                 @foreach (var item in Model.BasketModel.Items)
                 {
-                    <article class="row pt-1">
-                        <section class="col-2">@item.Quantity</section>
-                        <section class="col-6">
+                    <article class="row pt-sm-1 m-0">
+                        <section class="col-2 p-0">@item.Quantity</section>
+                        <section class="col-7 p-0">
                             @item.ProductName
+                            <br />
                             @foreach (var attr in item.Attributes)
-                            {
-                                <br />
-                                <span class="dama-basket-label">@attr.Label</span><span class="dama-basket-item"> @attr.Name</span>
+                            {                                
+                                <span class="dama-basket-label">@attr.Name; </span> 
                             }
                         </section>
-                        <section class="col-4">€ @item.UnitPrice.ToString("N2")</section>
+                        <section class="col-3 p-0">€ @item.UnitPrice.ToString("N2")</section>
                     </article>
                 }
             </div>
@@ -114,7 +118,7 @@
                 <section class="offset-2 col-6 text-right">TOTAL</section>
                 <section id="basket-total" class="col-4 pl-0 dama-product-price">@Model.BasketModel.Total()</section>
             </article>
-            <div class="dama-checkout-btn mb-3">
+            <div class="dama-checkout-btn mb-3 float-right mt-3 mt-sm-0">
                 <input class="btn btn-default esh-basket-checkout p-1 m-auto" type="submit" value="[ Finalizar Encomenda ]" />
             </div>
         </div>
@@ -133,12 +137,16 @@
                     $('#basket-total').text(toNumber(@Model.BasketModel.Total()));
                     $('#user-address-col').addClass('dama-checkout-border');
                     $('#store-location-col').removeClass('dama-checkout-border');
+                    $('#user-address-controls').removeClass('d-none');
+                    $('#store-location-controls').addClass('d-none');
                 }
                 else if (this.value == '2') {
                     $('#shipping-cost').removeClass('d-flex').addClass('d-none');                    
                     $('#basket-total').text(toNumber(@Model.BasketModel.SubTotal()));
                     $('#user-address-col').removeClass('dama-checkout-border');
                     $('#store-location-col').addClass('dama-checkout-border');
+                    $('#user-address-controls').addClass('d-none');
+                    $('#store-location-controls').removeClass('d-none');
                 }
             });
         });

@@ -22,6 +22,7 @@ namespace Infrastructure.Data
         public DbSet<CatalogTypeCategory> CatalogTypeCategories { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<OrderItemDetail> OrderItemDetails { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<ShopConfig> ShopConfigs { get; set; }
         public DbSet<ApplicationCore.Entities.ShopConfigDetail> ShopConfigDetails { get; set; } //Need the full qualified name for generate code
@@ -40,6 +41,7 @@ namespace Infrastructure.Data
             builder.Entity<CatalogPicture>(ConfigureCatalogPicture);
             builder.Entity<Order>(ConfigureOrder);
             builder.Entity<OrderItem>(ConfigureOrderItem);
+            builder.Entity<OrderItemDetail>(ConfigureOrderItemDetail);
             builder.Entity<ShopConfig>(ConfigureShopConfig);
             builder.Entity<ShopConfigDetail>(ConfigureShopConfigDetails);
             builder.Entity<CatalogTypeCategory>(ConfigureCatalogTypeCategory);
@@ -234,7 +236,25 @@ namespace Infrastructure.Data
 
         private void ConfigureOrderItem(EntityTypeBuilder<OrderItem> builder)
         {
+            var navigation = builder.Metadata.FindNavigation(nameof(OrderItem.Details));
+
+            navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+
             builder.OwnsOne(i => i.ItemOrdered);
+        }
+
+        private void ConfigureOrderItemDetail(EntityTypeBuilder<OrderItemDetail> builder)
+        {
+            builder.Property(x => x.AttributeCode)
+               .IsRequired()
+               .HasMaxLength(25);
+            builder.Property(x => x.AttributeName)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            builder.HasOne(x => x.OrderItem)
+                .WithMany(o => o.Details)
+                .HasForeignKey(x => x.OrderItemId);
         }
 
         private void ConfigureShopConfig(EntityTypeBuilder<ShopConfig> builder)

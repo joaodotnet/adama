@@ -131,8 +131,7 @@ namespace Web.Services
                     Street = address.Street,
                     City = address.City,
                     PostalCode = address.PostalCode,
-                    Country = address.Country,
-                    UseUserAddress = 1
+                    Country = address.Country
                 };
             }
             return new AddressViewModel();

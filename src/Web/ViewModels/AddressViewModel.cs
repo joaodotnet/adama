@@ -8,6 +8,7 @@ namespace Web.ViewModels
 {
     public class AddressViewModel
     {
+        [Required(ErrorMessage = "Por favor escolha o método de entrega.")]
         public int UseUserAddress { get; set; }
         [Display(Name = "Morada")]
         public string Street { get; set; }
