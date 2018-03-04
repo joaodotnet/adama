@@ -30,17 +30,33 @@ namespace ApplicationCore.Services
         {
             var basket = await _basketRepository.GetByIdAsync(basketId);
 
+            var specification = new CatalogAttrFilterSpecification(catalogItemId);
+            var catalogItem = _itemRepository.GetSingleBySpec(specification);
+
+            decimal attrsPrice = 0;
             if(attrIds == null)
             {
                 attrIds = new List<int>();
-                var specification = new CatalogAttrFilterSpecification(catalogItemId);
-                var item = _itemRepository.GetSingleBySpec(specification);
-                var group = item.CatalogAttributes.GroupBy(x => x.Type);
+                
+                var group = catalogItem.CatalogAttributes.GroupBy(x => x.Type);
                 foreach (var attribute in group)
                 {
                     attrIds.Add(attribute.First().Id);
+                    attrsPrice += attribute.First().Price ?? 0;
                 }
             }
+            else
+            {
+                foreach (var item in attrIds)
+                {
+                    var attrItem = catalogItem.CatalogAttributes.SingleOrDefault(x => x.Id == item);
+                    if (attrItem != null)
+                        attrsPrice += attrItem.Price ?? 0;
+                }
+            }
+
+            //update price 
+            price += attrsPrice;
 
             basket.AddItem(catalogItemId, price, quantity, attrIds);
 

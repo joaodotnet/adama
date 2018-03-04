@@ -38,7 +38,6 @@ namespace ApplicationCore.Services
                     orderItem.Details.Add(new OrderItemDetail
                     {
                         AttributeType = attribute.CatalogAttribute.Type,
-                        AttributeCode = attribute.CatalogAttribute.Code,
                         AttributeName = attribute.CatalogAttribute.Name
                     });
                 }

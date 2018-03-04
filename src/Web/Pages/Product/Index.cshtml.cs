@@ -23,13 +23,21 @@ namespace Web.Pages.Product
             if (string.IsNullOrEmpty(id))
                 return NotFound();
             ProductModel = await _catalogService.GetCatalogItem(id);
+
+            //Update default price
+            decimal attrDefaultPrice = 0M;
+            foreach (var item in ProductModel.Attributes.GroupBy(x => x.AttributeType))
+            {
+                attrDefaultPrice += item.First().Attributes.First().Price ?? 0;
+            }
+            ProductModel.ProductTotalPrice = ProductModel.ProductBasePrice + attrDefaultPrice;
             return Page();
         }
 
-        public async Task<JsonResult> OnGetAttributePriceAsync(int id)
+        public async Task<JsonResult> OnGetAttributeDetailsAsync(int id)
         {
-            var res = await _catalogService.GetAttributePrice(id);
-            return new JsonResult(res);
+            var res = await _catalogService.GetAttributeDetails(id);
+            return new JsonResult(new { price = res.Price, sku = res.ReferenceCatalogSku });
         }
     }
 }

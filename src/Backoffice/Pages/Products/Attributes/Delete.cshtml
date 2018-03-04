@@ -1,0 +1,46 @@
+﻿@page
+@model Backoffice.Pages.Products.Attributes.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Apagar</h2>
+
+<h3>Tem a certeza que quer apagar?</h3>
+<div>
+    <h4>Atributo do Produto @Model.CatalogAttributeModel.CatalogItem.Name</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CatalogAttributeModel.Type)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CatalogAttributeModel.Type)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CatalogAttributeModel.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CatalogAttributeModel.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CatalogAttributeModel.Price)
+        </dt>
+        <dd>
+            + @Html.DisplayFor(model => model.CatalogAttributeModel.Price)
+        </dd>        
+        <dt>
+            @Html.DisplayNameFor(model => model.CatalogAttributeModel.ReferenceCatalogItem)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CatalogAttributeModel.ReferenceCatalogItem.Name)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="CatalogAttributeModel.Id" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-page="/Products/Edit" asp-route-id="@Model.CatalogAttributeModel.CatalogItemId">Voltar</a>
+    </form>
+</div>

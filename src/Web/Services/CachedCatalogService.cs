@@ -75,13 +75,13 @@ namespace Web.Services
             });
         }
 
-        public async Task<decimal?> GetAttributePrice(int attributeId)
+        public async Task<AttributeViewModel> GetAttributeDetails(int attributeId)
         {
             string cacheKey = String.Format(_categoryAttrKeyTemplate, attributeId);
             return await _cache.GetOrCreateAsync(cacheKey, async entry =>
             {
                 entry.SlidingExpiration = _defaultCacheDuration;
-                return await _catalogService.GetAttributePrice(attributeId);
+                return await _catalogService.GetAttributeDetails(attributeId);
             });
         }
     }

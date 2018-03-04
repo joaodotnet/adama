@@ -26,7 +26,7 @@ namespace Infrastructure.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<ShopConfig> ShopConfigs { get; set; }
         public DbSet<ApplicationCore.Entities.ShopConfigDetail> ShopConfigDetails { get; set; } //Need the full qualified name for generate code
-        public DbSet<CatalogAttribute> CatalogAttributes { get; set; }
+        public DbSet<ApplicationCore.Entities.CatalogAttribute> CatalogAttributes { get; set; }
 
         
         protected override void OnModelCreating(ModelBuilder builder)
@@ -73,21 +73,21 @@ namespace Infrastructure.Data
         private void ConfigureCatalogAttribute(EntityTypeBuilder<CatalogAttribute> builder)
         {
             builder.ToTable("CatalogAttribute");
-            builder.HasIndex(x => x.Sku)
-                .IsUnique();
+            //builder.HasIndex(x => x.Sku)
+            //    .IsUnique();
             builder.Property(x => x.Sku)
                 .HasMaxLength(255);
             builder.Property(x => x.Type)
-                .IsRequired();
-            builder.Property(x => x.Code)
-               .IsRequired()
-               .HasMaxLength(25);
+                .IsRequired();            
             builder.Property(x => x.Name)
                 .IsRequired()
                 .HasMaxLength(100);
             builder.HasOne(x => x.CatalogItem)
                 .WithMany(p => p.CatalogAttributes)
                 .HasForeignKey(x => x.CatalogItemId);
+            builder.HasOne(x => x.ReferenceCatalogItem)
+                .WithMany(x => x.ReferenceCatalogAttributes)
+                .HasForeignKey(x => x.ReferenceCatalogItemId);
         }
 
         private void ConfigureIllustrationType(EntityTypeBuilder<IllustrationType> builder)
@@ -136,8 +136,8 @@ namespace Infrastructure.Data
         {
             builder.ToTable("Catalog");
 
-            builder.HasIndex(ci => ci.Sku)
-                .IsUnique();
+            //builder.HasIndex(ci => ci.Sku)
+            //    .IsUnique();
             builder.Property(ci => ci.Sku)
                 .HasMaxLength(255);
             builder.Property(ci => ci.Id)
@@ -244,10 +244,7 @@ namespace Infrastructure.Data
         }
 
         private void ConfigureOrderItemDetail(EntityTypeBuilder<OrderItemDetail> builder)
-        {
-            builder.Property(x => x.AttributeCode)
-               .IsRequired()
-               .HasMaxLength(25);
+        {            
             builder.Property(x => x.AttributeName)
                 .IsRequired()
                 .HasMaxLength(100);
