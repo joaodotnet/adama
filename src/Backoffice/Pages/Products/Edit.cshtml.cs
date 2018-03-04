@@ -46,6 +46,7 @@ namespace Backoffice.Pages.Products
                 .Include(p => p.CatalogIllustration)
                 .Include(p => p.CatalogType)
                 .Include(p => p.CatalogAttributes)
+                .ThenInclude(ca => ca.ReferenceCatalogItem)
                 .Include(p => p.CatalogPictures)
                 .SingleOrDefaultAsync(m => m.Id == id));
 
@@ -64,18 +65,18 @@ namespace Backoffice.Pages.Products
                 await PopulateLists();
                 return Page();
             }
-            //Remove model attributes with no id
-            var to_remove = ProductModel.CatalogAttributes.Where(x => x.ToRemove && x.Id == 0).ToList();
-            foreach (var item in to_remove)
-            {
-                ProductModel.CatalogAttributes.Remove(item);
-            }
+            ////Remove model attributes with no id
+            //var to_remove = ProductModel.CatalogAttributes.Where(x => x.ToRemove && x.Id == 0).ToList();
+            //foreach (var item in to_remove)
+            //{
+            //    ProductModel.CatalogAttributes.Remove(item);
+            //}
             //Validate Attributes
-            if (!ValidateAttributesModel())
-            {
-                await PopulateLists();
-                return Page();
-            }
+            //if (!ValidateAttributesModel())
+            //{
+            //    await PopulateLists();
+            //    return Page();
+            //}
             //Validade Pictures
             if (!ValidatePictures())
             {
@@ -84,17 +85,17 @@ namespace Backoffice.Pages.Products
             }
 
             //Validate SKU
-            var new_sku = await _service.GetSku(ProductModel.CatalogTypeId, ProductModel.CatalogIllustrationId); 
-            if (ProductModel.Sku != new_sku)
-            {
-                if(await _service.CheckIfSkuExists(new_sku))
-                {
-                    await PopulateLists();
-                    ModelState.AddModelError("", $"O produto {new_sku} já existe!");
-                    return Page();
-                }
-                ProductModel.Sku = new_sku;
-            }
+            ProductModel.Sku = await _service.GetSku(ProductModel.CatalogTypeId, ProductModel.CatalogIllustrationId) + "_" + ProductModel.Id; 
+            //if (ProductModel.Sku != new_sku)
+            //{
+            //    if(await _service.CheckIfSkuExists(new_sku))
+            //    {
+            //        await PopulateLists();
+            //        ModelState.AddModelError("", $"O produto {new_sku} já existe!");
+            //        return Page();
+            //    }
+            //    ProductModel.Sku = new_sku;
+            //}
             
             //Main Picture
             if (ProductModel.Picture != null && ProductModel.Picture.Length > 0)
@@ -127,18 +128,18 @@ namespace Backoffice.Pages.Products
 
             //Save Changes            
             var prod = _mapper.Map<CatalogItem>(ProductModel);            
-            foreach (var item in prod.CatalogAttributes)
-            {
-                if (item.Id != 0)
-                {
-                    if (ProductModel.CatalogAttributes.SingleOrDefault(x => x.Id == item.Id).ToRemove)
-                        _context.Entry(item).State = EntityState.Deleted;
-                    else
-                        _context.Entry(item).State = EntityState.Modified;
-                }
-                else
-                    _context.Entry(item).State = EntityState.Added;
-            }
+            //foreach (var item in prod.CatalogAttributes)
+            //{
+            //    if (item.Id != 0)
+            //    {
+            //        if (ProductModel.CatalogAttributes.SingleOrDefault(x => x.Id == item.Id).ToRemove)
+            //            _context.Entry(item).State = EntityState.Deleted;
+            //        else
+            //            _context.Entry(item).State = EntityState.Modified;
+            //    }
+            //    else
+            //        _context.Entry(item).State = EntityState.Added;
+            //}
             foreach (var item in prod.CatalogPictures)
             {
                 if (item.Id != 0)
@@ -174,8 +175,8 @@ namespace Backoffice.Pages.Products
                 if (!item.ToRemove)
                 {
                     //Validate
-                    if (string.IsNullOrEmpty(item.Code))
-                        ModelState.AddModelError("", "O código do atributo é obrigatório");
+                    //if (string.IsNullOrEmpty(item.Code))
+                    //    ModelState.AddModelError("", "O código do atributo é obrigatório");
                     if (string.IsNullOrEmpty(item.Name))
                         ModelState.AddModelError("", "O nome do atributo é obrigatório");
                     if (!ModelState.IsValid)

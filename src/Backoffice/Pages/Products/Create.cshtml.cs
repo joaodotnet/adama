@@ -55,12 +55,12 @@ namespace Backoffice.Pages.Products
             }
 
             ProductModel.Sku = await _service.GetSku(ProductModel.CatalogTypeId, ProductModel.CatalogIllustrationId);
-            if(await _service.CheckIfSkuExists(ProductModel.Sku))
-            {
-                await PopulateLists();
-                ModelState.AddModelError("", $"O produto {ProductModel.Sku} já existe!");
-                return Page();
-            }
+            //if(await _service.CheckIfSkuExists(ProductModel.Sku))
+            //{
+            //    await PopulateLists();
+            //    ModelState.AddModelError("", $"O produto {ProductModel.Sku} já existe!");
+            //    return Page();
+            //}
 
             //Save Main Image
             if (ProductModel.Picture.Length > 0)
@@ -84,19 +84,23 @@ namespace Backoffice.Pages.Products
             }
 
             //Remove model attributes with no id
-            var to_remove = ProductModel.CatalogAttributes.Where(x => x.ToRemove && x.Id == 0).ToList();
-            foreach (var item in to_remove)
-            {
-                ProductModel.CatalogAttributes.Remove(item);
-            }
+            //var to_remove = ProductModel.CatalogAttributes.Where(x => x.ToRemove && x.Id == 0).ToList();
+            //foreach (var item in to_remove)
+            //{
+            //    ProductModel.CatalogAttributes.Remove(item);
+            //}
             //Validate Model
-            if (!ValidateAttributesModel())
-            {
-                await PopulateLists();
-            }
+            //if (!ValidateAttributesModel())
+            //{
+            //    await PopulateLists();
+            //}
 
             //Save Changes                        
-            _context.CatalogItems.Add(_mapper.Map<CatalogItem>(ProductModel));
+            var prod = _context.CatalogItems.Add(_mapper.Map<CatalogItem>(ProductModel));
+            await _context.SaveChangesAsync();
+
+            //Update Sku
+            prod.Entity.Sku += "_" + prod.Entity.Id;
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
@@ -150,9 +154,7 @@ namespace Backoffice.Pages.Products
             {
                 if (!item.ToRemove)
                 {
-                    //Validate
-                    if (string.IsNullOrEmpty(item.Code))
-                        ModelState.AddModelError("", "O código do atributo é obrigatório");
+                    //Validate                    
                     if (string.IsNullOrEmpty(item.Name))
                         ModelState.AddModelError("", "O nome do atributo é obrigatório");
                     if (!ModelState.IsValid)

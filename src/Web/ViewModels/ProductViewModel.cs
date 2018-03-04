@@ -10,6 +10,8 @@ namespace Web.ViewModels
 {
     public class ProductViewModel
     {
+        public decimal ProductTotalPrice;
+
         public int ProductId { get; set; }
         public string ProductTitle { get; set; }
         public string ProductDescription { get; set; }
@@ -50,5 +52,6 @@ namespace Web.ViewModels
         public string Sku { get; set; }
         public string Name { get; set; }
         public string Label { get; set; }
+        public string ReferenceCatalogSku { get; set; }
     }
 }

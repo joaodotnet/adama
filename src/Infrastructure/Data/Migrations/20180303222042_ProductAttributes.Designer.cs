@@ -12,9 +12,10 @@ using System;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(DamaContext))]
-    partial class CatalogContextModelSnapshot : ModelSnapshot
+    [Migration("20180303222042_ProductAttributes")]
+    partial class ProductAttributes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,6 +82,10 @@ namespace Infrastructure.Data.Migrations
 
                     b.Property<int>("CatalogItemId");
 
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(25);
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100);
@@ -99,6 +104,10 @@ namespace Infrastructure.Data.Migrations
                     b.HasIndex("CatalogItemId");
 
                     b.HasIndex("ReferenceCatalogItemId");
+
+                    b.HasIndex("Sku")
+                        .IsUnique()
+                        .HasFilter("[Sku] IS NOT NULL");
 
                     b.ToTable("CatalogAttribute");
                 });
@@ -172,6 +181,10 @@ namespace Infrastructure.Data.Migrations
                     b.HasIndex("CatalogIllustrationId");
 
                     b.HasIndex("CatalogTypeId");
+
+                    b.HasIndex("Sku")
+                        .IsUnique()
+                        .HasFilter("[Sku] IS NOT NULL");
 
                     b.ToTable("Catalog");
                 });
@@ -325,6 +338,10 @@ namespace Infrastructure.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AttributeCode")
+                        .IsRequired()
+                        .HasMaxLength(25);
 
                     b.Property<string>("AttributeName")
                         .IsRequired()

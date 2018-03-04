@@ -18,6 +18,7 @@ namespace ApplicationCore.Entities
         public bool IsFeatured { get; set; }
 
         public ICollection<CatalogAttribute> CatalogAttributes { get; set; }
+        public ICollection<CatalogAttribute> ReferenceCatalogAttributes { get; set; }
         public ICollection<CatalogPicture> CatalogPictures { get; set; }
     }
 }

@@ -12,9 +12,10 @@ using System;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(DamaContext))]
-    partial class CatalogContextModelSnapshot : ModelSnapshot
+    [Migration("20180303230014_RemoveCode")]
+    partial class RemoveCode
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,6 +101,10 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("ReferenceCatalogItemId");
 
+                    b.HasIndex("Sku")
+                        .IsUnique()
+                        .HasFilter("[Sku] IS NOT NULL");
+
                     b.ToTable("CatalogAttribute");
                 });
 
@@ -172,6 +177,10 @@ namespace Infrastructure.Data.Migrations
                     b.HasIndex("CatalogIllustrationId");
 
                     b.HasIndex("CatalogTypeId");
+
+                    b.HasIndex("Sku")
+                        .IsUnique()
+                        .HasFilter("[Sku] IS NOT NULL");
 
                     b.ToTable("Catalog");
                 });

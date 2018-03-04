@@ -254,8 +254,10 @@ namespace Web.Services
                         );
 
                 //Attributes
+                //decimal attrPriceDefault = 0M;
                 foreach(var grpAttr in product.CatalogAttributes.GroupBy(x => x.Type))
                 {
+                    //attrPriceDefault += grpAttr.First().Price ?? 0;
                     vm.Attributes.Add(new ProductAttributeViewModel
                     {
                         AttributeType = grpAttr.Key,
@@ -271,7 +273,7 @@ namespace Web.Services
                         }).ToList()
                     });
                 }
-
+                //vm.ProductBasePrice += attrPriceDefault;
                 //Categories
                 foreach (var item in product.CatalogType.Categories)
                 {
@@ -299,11 +301,17 @@ namespace Web.Services
             }
         }
 
-        public async Task<decimal?> GetAttributePrice(int attributeId)
+        public async Task<AttributeViewModel> GetAttributeDetails(int attributeId)
         {
-            var attr = await _db.CatalogAttributes.SingleOrDefaultAsync(x => x.Id == attributeId);
+            var attr = await _db.CatalogAttributes
+                .Include(x => x.ReferenceCatalogItem)
+                .SingleOrDefaultAsync(x => x.Id == attributeId);
             if (attr != null)
-                return attr.Price;
+                return new AttributeViewModel
+                {
+                    Price = attr.Price,
+                    ReferenceCatalogSku = attr.ReferenceCatalogItem?.Sku
+                };
             return null;
         }
     }
