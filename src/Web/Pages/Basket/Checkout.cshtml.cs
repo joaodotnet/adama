@@ -10,6 +10,9 @@ using System;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using ApplicationCore.Entities.OrderAggregate;
+using System.Text;
+using Web.Extensions;
+using ApplicationCore.Entities;
 
 namespace Web.Pages.Basket
 {
@@ -23,6 +26,7 @@ namespace Web.Pages.Basket
         private string _username = null;
         private readonly IBasketViewModelService _basketViewModelService;
         private readonly IShopService _shopService;
+        private readonly IEmailSender _emailSender;
 
         public CheckoutModel(IBasketService basketService,
             IBasketViewModelService basketViewModelService,
@@ -30,7 +34,8 @@ namespace Web.Pages.Basket
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IOrderService orderService,
-            IShopService shopService)
+            IShopService shopService,
+            IEmailSender emailSender)
         {
             _basketService = basketService;
             _uriComposer = uriComposer;
@@ -39,6 +44,7 @@ namespace Web.Pages.Basket
             _orderService = orderService;
             _basketViewModelService = basketViewModelService;
             _shopService = shopService;
+            _emailSender = emailSender;
         }
         [BindProperty]
         public BasketViewModel BasketModel { get; set; } = new BasketViewModel();
@@ -60,10 +66,10 @@ namespace Web.Pages.Basket
         {
             if (ModelState.IsValid && ValidateAddressModel())
             {
+                var user = await _userManager.GetUserAsync(User);
                 //Save Address
                 if (UserAddress.SaveAddress)
                 {
-                    var user = await _userManager.GetUserAsync(User);
                     await _shopService.AddorUpdateUserAddress(user, UserAddress);
                 }
 
@@ -76,13 +82,68 @@ namespace Web.Pages.Basket
                     address = new Address(UserAddress.Street, UserAddress.City, UserAddress.Country, UserAddress.PostalCode);
                 }
 
-                await _orderService.CreateOrderAsync(BasketModel.Id, address, shippingcost);
+                var resOrder = await _orderService.CreateOrderAsync(BasketModel.Id, address, shippingcost);                
 
                 await _basketService.DeleteBasketAsync(BasketModel.Id);
+
+                var body = GetEmailBody(resOrder, user);
+                await _emailSender.SendEmailAsync(resOrder.BuyerId, $"Encomenda nº  {resOrder.Id} foi criada com sucesso.", body);
 
                 return RedirectToPage("./Result");
             }
             return Page();
+        }
+
+        private string GetEmailBody(ApplicationCore.Entities.OrderAggregate.Order order, ApplicationUser user)
+        {
+            StringBuilder body = new StringBuilder();
+
+            body.AppendLine($"Olá {user.UserName},<br>");
+            body.AppendLine("<br>");
+            body.AppendLine("<br>");
+            body.AppendLine("A sua encomenda foi criada com <strong>sucesso.</strong><br>");
+            body.AppendLine("<br>");
+            body.AppendLine("<br>");
+            body.AppendLine($"<strong>Encomenda nº {order.Id}</strong><br>");
+            body.AppendLine("<br>");
+            foreach (var item in order.OrderItems)
+            {
+                body.AppendLine($"<img src='{item.ItemOrdered.PictureUri}' width='100px'/> {item.Units}x {item.ItemOrdered.ProductName} € {item.UnitPrice}<br>");
+                foreach (var attr in item.Details)
+                {
+                    body.AppendLine($"{EnumHelper<CatalogAttributeType>.GetDisplayValue(attr.AttributeType)} {attr.AttributeName}<br>");
+                }
+            }
+            if(order.ShippingCost > 0)
+                body.AppendLine($"<strong>Portes</strong> € {order.ShippingCost}<br>");
+            body.AppendLine($"<strong>Total</strong> € {order.Total()}<br>");
+
+            body.AppendLine("<br>");
+            body.AppendLine("<br>");
+            body.AppendLine($"<strong>Morada de Entrega</strong><br>");
+            if (string.IsNullOrEmpty(order.ShipToAddress.Street))
+            {
+                body.AppendLine($"Mercado de Loulé, Praça da Republica, 8100-270 Loulé<br>");
+                body.AppendLine($"Banca Nº 44<br>");
+                body.AppendLine("<br>");
+                body.AppendLine($"<strong>Mapa</strong><br>");
+                body.AppendLine("<iframe width='100%' height='300' " + 
+                    "frameborder = '0' style='border:0' " +
+                    "src='https://www.google.com/maps/embed/v1/place?key=AIzaSyB2Av0vyWQSV7OOZK_LdJ3i52TSC8pLPF8&q=Mercado+Municipal+de+Loulé+(Desde+1908)' allowfullscreen></iframe>");
+            }
+            else
+            {
+                body.AppendLine($"{order.ShipToAddress.Street}, {order.ShipToAddress.PostalCode}, {order.ShipToAddress.City}, {order.ShipToAddress.Country}<br>");
+            }
+            body.AppendLine("<br>");
+            body.AppendLine("<br>");
+            body.AppendLine($"<strong>Para concluir a sua encomenda por favor faça a transferência no valor de {order.Total()} para o IBAN  XXXXXXXXXXXXXXXXXXXXXXXXX.</strong> e envie o comprovativo respondendo a este email, ou enviando para info@damanojornal.com indicando a referência nº {order.Id}.<br>");
+            body.AppendLine("<br>");
+            body.AppendLine("<br>");
+            body.AppendLine("Alguma dúvida não hesite em contactar-nos.<br>");
+            body.AppendLine("Dama no Jornal<br>");
+            body.AppendLine($"<img src='{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/{Url.Content("/images/damanojornal-email.jpg")}' >");
+            return body.ToString();
         }
 
         //public async Task<IActionResult> OnPostCreateOrder(Dictionary<string, int> items)

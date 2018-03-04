@@ -116,7 +116,7 @@ namespace Web
             services.AddSingleton<IUriComposer>(new UriComposer(Configuration.Get<CatalogSettings>()));
 
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddSingleton<IEmailSender>(new EmailSender(Configuration.Get<CatalogSettings>()));
 
             // Add memory cache services
             services.AddMemoryCache();
