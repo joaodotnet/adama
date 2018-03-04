@@ -6,6 +6,6 @@ namespace ApplicationCore.Interfaces
 {
     public interface IOrderService
     {
-        Task CreateOrderAsync(int basketId, Address shippingAddress, decimal shippingCost);
+        Task<Order> CreateOrderAsync(int basketId, Address shippingAddress, decimal shippingCost);
     }
 }
