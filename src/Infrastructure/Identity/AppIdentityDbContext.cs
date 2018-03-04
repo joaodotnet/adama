@@ -25,20 +25,20 @@ namespace Infrastructure.Identity
                 .HasForeignKey(x => x.UserId)
                 .IsRequired();
 
-            builder.Entity<UserAddress>().Property(x => x.Street)
-                .IsRequired();
+            //builder.Entity<UserAddress>().Property(x => x.Street)
+            //    .IsRequired();
 
-            builder.Entity<UserAddress>().Property(x => x.City)
-                .IsRequired();
+            //builder.Entity<UserAddress>().Property(x => x.City)
+            //    .IsRequired();
 
-            builder.Entity<UserAddress>().Property(x => x.Country)
-                .IsRequired();
+            //builder.Entity<UserAddress>().Property(x => x.Country)
+            //    .IsRequired();
 
-            builder.Entity<UserAddress>().Property(x => x.PostalCode)
-                .IsRequired();
+            //builder.Entity<UserAddress>().Property(x => x.PostalCode)
+            //    .IsRequired();
 
-            builder.Entity<UserAddress>().Property(x => x.DefaultAddress)
-                .IsRequired();
+            //builder.Entity<UserAddress>().Property(x => x.DefaultAddress)
+            //    .IsRequired();
         }
     }
 
