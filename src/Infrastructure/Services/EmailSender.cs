@@ -44,7 +44,7 @@ namespace Infrastructure.Services
                 using (SmtpClient smtp = new SmtpClient(_appSettings.SmtpServer, _appSettings.SmtpPort))
                 {
                     smtp.Credentials = new NetworkCredential(_appSettings.SmtpUsername, _appSettings.SmtpPassword);
-                    smtp.EnableSsl = false;
+                    smtp.EnableSsl = _appSettings.SSL;
                     await smtp.SendMailAsync(mail);
                 }
             }

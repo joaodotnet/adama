@@ -9,5 +9,6 @@
         public string SmtpPassword { get; set; }
         public string FromEmail { get; set; }
         public string ToEmails { get; set; }
+        public bool SSL { get; set; }
     }
 }

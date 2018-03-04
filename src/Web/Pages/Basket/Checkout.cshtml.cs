@@ -126,10 +126,7 @@ namespace Web.Pages.Basket
                 body.AppendLine($"Mercado de Loulé, Praça da Republica, 8100-270 Loulé<br>");
                 body.AppendLine($"Banca Nº 44<br>");
                 body.AppendLine("<br>");
-                body.AppendLine($"<strong>Mapa</strong><br>");
-                body.AppendLine("<iframe width='100%' height='300' " + 
-                    "frameborder = '0' style='border:0' " +
-                    "src='https://www.google.com/maps/embed/v1/place?key=AIzaSyB2Av0vyWQSV7OOZK_LdJ3i52TSC8pLPF8&q=Mercado+Municipal+de+Loulé+(Desde+1908)' allowfullscreen></iframe>");
+                body.AppendLine("<strong><a href='https://goo.gl/maps/3BbPSkX5N7H2'>Mapa</a></strong>");
             }
             else
             {
