@@ -134,7 +134,7 @@
             $('input[type=radio][name="UserAddress.UseUserAddress"]').click(function () {
                 if (this.value == '1') {
                     $('#shipping-cost').removeClass('d-none').addClass('d-flex');
-                    $('#basket-total').text(toNumber(@Model.BasketModel.Total()));
+                    $('#basket-total').text(toNumber(@Model.BasketModel.Total().ToString().Replace(',','.')));
                     $('#user-address-col').addClass('dama-checkout-border');
                     $('#store-location-col').removeClass('dama-checkout-border');
                     $('#user-address-controls').removeClass('d-none');
@@ -142,7 +142,7 @@
                 }
                 else if (this.value == '2') {
                     $('#shipping-cost').removeClass('d-flex').addClass('d-none');                    
-                    $('#basket-total').text(toNumber(@Model.BasketModel.SubTotal()));
+                    $('#basket-total').text(toNumber(@Model.BasketModel.SubTotal().ToString().Replace(',', '.')));
                     $('#user-address-col').removeClass('dama-checkout-border');
                     $('#store-location-col').addClass('dama-checkout-border');
                     $('#user-address-controls').addClass('d-none');
