@@ -14,12 +14,12 @@ namespace Web.ViewModels
 
         public decimal SubTotal()
         {
-            return Math.Round(Items.Sum(x => x.UnitPrice * x.Quantity), 2);
+            return Items.Sum(x => x.UnitPrice * x.Quantity);
         }
 
         public decimal Total()
         {
-            return SubTotal() + DefaultShippingCost;
+            return Math.Round(SubTotal() + DefaultShippingCost,2);
         }
     }
 }

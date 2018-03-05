@@ -73,7 +73,7 @@ namespace Backoffice.Pages.Products
             //Save other images
             if (ProductModel.OtherPictures?.Count > 0)
             {
-                var lastCatalogPictureId = (await _context.CatalogPictures.LastAsync())?.Id ?? 0;
+                var lastCatalogPictureId = _context.CatalogPictures.Count() > 0 ? (await _context.CatalogPictures.LastAsync()).Id : 0;
                 var order = 0;
                 foreach (var item in ProductModel.OtherPictures)
                 {

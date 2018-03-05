@@ -76,6 +76,20 @@ body {
     color: red;
 }
 
+.search-text input {
+    color: #fff;
+    border-bottom:  1px solid #fff !important;
+    font-size: 14px;
+}
+
+.search-text input::-ms-input-placeholder {
+    color: #fff;
+}
+
+.search-text input::placeholder {
+    color: #fff;
+}
+
 .alert {
     padding-left: 0;
 }
@@ -120,7 +134,7 @@ h4 {
 .btn-primary {
     background-color: #f5b0b9;
     border-color: #fff;
-    color: #fff;
+    color: #fff;    
 }
 
 .btn-primary:hover {

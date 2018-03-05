@@ -87,7 +87,7 @@ namespace Web.Pages.Basket
                 await _basketService.DeleteBasketAsync(BasketModel.Id);
 
                 var body = GetEmailBody(resOrder, user);
-                await _emailSender.SendEmailAsync(resOrder.BuyerId, $"Encomenda nº  {resOrder.Id} foi criada com sucesso.", body);
+                await _emailSender.SendEmailAsync(resOrder.BuyerId, $"Dama no Jornal®: Encomenda nº{resOrder.Id}", body);
 
                 return RedirectToPage("./Result");
             }
@@ -97,14 +97,20 @@ namespace Web.Pages.Basket
         private string GetEmailBody(ApplicationCore.Entities.OrderAggregate.Order order, ApplicationUser user)
         {
             StringBuilder body = new StringBuilder();
+            body.AppendLine("<table style='width:80%;text-align: center;'>");
+            body.AppendLine($"<tr><td width='50%'>Olá <strong>{(string.IsNullOrEmpty(user.FirstName) ? user.UserName : user.FirstName + " " + user.LastName)}!</strong>,<br>");            
+            body.AppendLine("Obrigada por escolher a Dama no Jornal®.<br>");
+            body.AppendLine("A sua encomenda foi criada com <strong>Sucesso!</strong>< br>");
+            body.AppendLine("</td>");
+            body.AppendLine("<td width='50%'>");
+            body.AppendLine("<img src='https://www.damanojornal.com/loja/images/dama_bird.png' />");
+            body.AppendLine("</td>");
+            body.AppendLine("</tr>");
+            body.AppendLine("</table>");
 
-            body.AppendLine($"Olá {user.UserName},<br>");
             body.AppendLine("<br>");
             body.AppendLine("<br>");
-            body.AppendLine("A sua encomenda foi criada com <strong>sucesso.</strong><br>");
-            body.AppendLine("<br>");
-            body.AppendLine("<br>");
-            body.AppendLine($"<strong>Encomenda nº {order.Id}</strong><br>");
+            body.AppendLine($"<strong>Encomenda #{order.Id}</strong><br>");
             body.AppendLine("<br>");
             foreach (var item in order.OrderItems)
             {
@@ -140,7 +146,7 @@ namespace Web.Pages.Basket
             body.AppendLine("<br>");
             body.AppendLine("Alguma dúvida não hesite em contactar-nos.<br>");
             body.AppendLine("Dama no Jornal<br>");
-            body.AppendLine($"<img src='{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/{HttpContext.Request.PathBase}/{Url.Content("/images/damanojornal-email.jpg")}' >");
+            body.AppendLine($"<img src='https://www.damanojornal.com/images/damanojornal-email.jpg' />");
             return body.ToString();
         }
 
