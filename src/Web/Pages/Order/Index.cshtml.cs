@@ -5,6 +5,7 @@ using ApplicationCore.Specifications;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Web.Pages.Order
 {
@@ -22,6 +23,7 @@ namespace Web.Pages.Order
         public class OrderSummary
         {
             public int OrderNumber { get; set; }
+            [Display(Name = "Data"), DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy - hh:mm}")]
             public DateTimeOffset OrderDate { get; set; }
             public decimal Total { get; set; }
             public string Status { get; set; }
@@ -39,7 +41,9 @@ namespace Web.Pages.Order
                     Status = "Pending",
                     Total = o.Total()
 
-                }).ToList();
+                })
+                .OrderByDescending(o => o.OrderDate)
+                .ToList();
         }
     }
 }
