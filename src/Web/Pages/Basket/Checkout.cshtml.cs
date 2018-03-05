@@ -108,7 +108,8 @@ namespace Web.Pages.Basket
             body.AppendLine("<br>");
             foreach (var item in order.OrderItems)
             {
-                body.AppendLine($"<img src='{item.ItemOrdered.PictureUri}' width='100px'/> {item.Units}x {item.ItemOrdered.ProductName} € {item.UnitPrice}<br>");
+                body.AppendLine($"<img src='{item.ItemOrdered.PictureUri}' width='100px'/><br>");
+                body.AppendLine($"{ item.Units}x {item.ItemOrdered.ProductName} € {item.UnitPrice}<br>");
                 foreach (var attr in item.Details)
                 {
                     body.AppendLine($"{EnumHelper<CatalogAttributeType>.GetDisplayValue(attr.AttributeType)} {attr.AttributeName}<br>");
@@ -139,7 +140,7 @@ namespace Web.Pages.Basket
             body.AppendLine("<br>");
             body.AppendLine("Alguma dúvida não hesite em contactar-nos.<br>");
             body.AppendLine("Dama no Jornal<br>");
-            body.AppendLine($"<img src='{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/{Url.Content("/images/damanojornal-email.jpg")}' >");
+            body.AppendLine($"<img src='{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/{HttpContext.Request.PathBase}/{Url.Content("/images/damanojornal-email.jpg")}' >");
             return body.ToString();
         }
 

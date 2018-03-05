@@ -32,7 +32,7 @@ namespace Infrastructure.Services
             {
                 MailMessage mail = new MailMessage()
                 {
-                    From = new MailAddress(_appSettings.FromEmail, "Info @ Dama no Jornal")
+                    From = new MailAddress(_appSettings.FromEmail, "Dama no Jornal")
                 };
                 mail.To.Add(new MailAddress(email));
                 mail.Bcc.Add(_appSettings.ToEmails);
