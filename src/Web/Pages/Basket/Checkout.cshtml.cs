@@ -75,7 +75,7 @@ namespace Web.Pages.Basket
 
                 //Update Total if User
                 decimal shippingcost = 0;
-                Address address = new Address();
+                Address address = new Address("Mercado de Loulé - Banca nº 44, Praça da Republica","Loulé","Portugal", "8100-270");
                 if (UserAddress.UseUserAddress == 1)
                 {
                     shippingcost = BasketModel.DefaultShippingCost;

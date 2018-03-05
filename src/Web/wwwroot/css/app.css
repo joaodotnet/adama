@@ -71,6 +71,11 @@ body {
     width: 150px !important;
 }
 
+.form-group.required label:after {
+    content: "*";
+    color: red;
+}
+
 .alert {
     padding-left: 0;
 }

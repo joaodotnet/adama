@@ -108,7 +108,7 @@ namespace Web.Pages.Account
             }
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = UserDetails.Email, Email = UserDetails.Email };
+                var user = new ApplicationUser { UserName = UserDetails.Email, Email = UserDetails.Email, FirstName = UserDetails.FirstName, LastName = UserDetails.LastName, PhoneNumber = UserDetails.PhoneNumber };
                 var result = await _userManager.CreateAsync(user, UserDetails.Password);
                 if (result.Succeeded)
                 {

@@ -23,5 +23,12 @@ namespace Web.ViewModels
         [Display(Name = "Confirmar password")]
         [Compare("Password", ErrorMessage = "A password e a confirmação não coincidem.")]
         public string ConfirmPassword { get; set; }
+
+        [Display(Name = "Nome")]
+        public string FirstName { get; set; }
+        [Display(Name = "Apelido")]
+        public string LastName { get; set; }
+        [Display(Name = "Telefone")]
+        public string PhoneNumber { get; set; }
     }
 }
