@@ -14,6 +14,7 @@ using System.Net.Http.Headers;
 using Microsoft.Extensions.Options;
 using Backoffice.Extensions;
 using Backoffice.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backoffice.Pages.ShopConfig
 {
@@ -65,7 +66,8 @@ namespace Backoffice.Pages.ShopConfig
 
             if (ShopConfigDetailModel.Picture.Length > 0)
             {
-                ShopConfigDetailModel.PictureUri = await _service.SaveFileAsync(ShopConfigDetailModel.Picture, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri);
+                var lastShopDetailId = (await _context.ShopConfigDetails.LastAsync())?.Id ?? 0;
+                ShopConfigDetailModel.PictureUri = await _service.SaveFileAsync(ShopConfigDetailModel.Picture, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, (++lastShopDetailId).ToString());
             }
 
             _context.ShopConfigDetails.Add(_mapper.Map<ShopConfigDetail>(ShopConfigDetailModel));

@@ -62,15 +62,18 @@ namespace Backoffice.Pages.Products
             //    return Page();
             //}
 
-            //Save Main Image
+            //Save Main Image            
             if (ProductModel.Picture.Length > 0)
             {
-                ProductModel.PictureUri = await _service.SaveFileAsync(ProductModel.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri);
+                var lastCatalogItemId = (await _context.CatalogItems.LastAsync())?.Id ?? 0;
+
+                ProductModel.PictureUri = await _service.SaveFileAsync(ProductModel.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri, (++lastCatalogItemId).ToString());
             }
 
             //Save other images
             if (ProductModel.OtherPictures?.Count > 0)
             {
+                var lastCatalogPictureId = (await _context.CatalogPictures.LastAsync())?.Id ?? 0;
                 var order = 0;
                 foreach (var item in ProductModel.OtherPictures)
                 {
@@ -78,7 +81,7 @@ namespace Backoffice.Pages.Products
                     {
                         IsActive = true,
                         Order = ++order,
-                        PictureUri = await _service.SaveFileAsync(item, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri)
+                        PictureUri = await _service.SaveFileAsync(item, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri, (++lastCatalogPictureId).ToString())
                     });
                 }
             }
@@ -126,10 +129,10 @@ namespace Backoffice.Pages.Products
             }
 
             //check if file exits
-            if(ProductModel.Picture != null && _service.CheckIfFileExists(_backofficeSettings.WebProductsPictureFullPath, ProductModel.Picture.GetFileName()))
-            {
-                ModelState.AddModelError("",$"O nome da imagem {ProductModel.Picture.GetFileName()} já existe, por favor escolha outro nome!");
-            }
+            //if(ProductModel.Picture != null && _service.CheckIfFileExists(_backofficeSettings.WebProductsPictureFullPath, ProductModel.Picture.GetFileName()))
+            //{
+            //    ModelState.AddModelError("",$"O nome da imagem {ProductModel.Picture.GetFileName()} já existe, por favor escolha outro nome!");
+            //}
 
             if (ProductModel.OtherPictures?.Count > 0)
             {
@@ -139,10 +142,10 @@ namespace Backoffice.Pages.Products
                         ModelState.AddModelError("", $"A imagem {item.GetFileName()} está muito grande amor, O máximo é 2MB, obrigado!");
 
                     //check if file exits
-                    if (item != null && _service.CheckIfFileExists(_backofficeSettings.WebProductsPictureFullPath, item.GetFileName()))
-                    {
-                        ModelState.AddModelError("", $"O nome da imagem {item.GetFileName()} já existe, por favor escolha outro nome!");
-                    }
+                    //if (item != null && _service.CheckIfFileExists(_backofficeSettings.WebProductsPictureFullPath, item.GetFileName()))
+                    //{
+                    //    ModelState.AddModelError("", $"O nome da imagem {item.GetFileName()} já existe, por favor escolha outro nome!");
+                    //}
                 }
             }
             return ModelState.IsValid;

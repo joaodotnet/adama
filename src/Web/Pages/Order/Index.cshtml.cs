@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.ComponentModel.DataAnnotations;
+using Web.Extensions;
+using ApplicationCore.Entities.OrderAggregate;
 
 namespace Web.Pages.Order
 {
@@ -38,7 +40,7 @@ namespace Web.Pages.Order
                 {
                     OrderDate = o.OrderDate,
                     OrderNumber = o.Id,
-                    Status = "Pending",
+                    Status = EnumHelper<OrderStateType>.GetDisplayValue(o.OrderState),
                     Total = o.Total()
 
                 })

@@ -11,6 +11,7 @@ using Backoffice.ViewModels;
 using AutoMapper;
 using Backoffice.Interfaces;
 using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backoffice.Pages.ProductType
 {
@@ -68,7 +69,8 @@ namespace Backoffice.Pages.ProductType
             //Save Image
             if (ProductTypeModel?.Picture.Length > 0)
             {
-                ProductTypeModel.PictureUri = await _service.SaveFileAsync(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureFullPath, _backofficeSettings.WebProductTypesPictureUri);
+                var lastId = (await _context.CatalogTypes.LastAsync())?.Id ?? 0;
+                ProductTypeModel.PictureUri = await _service.SaveFileAsync(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureFullPath, _backofficeSettings.WebProductTypesPictureUri, (++lastId).ToString());
             }
 
             var catalogType = _mapper.Map<ApplicationCore.Entities.CatalogType>(ProductTypeModel);

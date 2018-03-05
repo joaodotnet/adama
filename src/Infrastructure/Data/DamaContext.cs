@@ -227,6 +227,10 @@ namespace Infrastructure.Data
 
         private void ConfigureOrder(EntityTypeBuilder<Order> builder)
         {
+            builder.Property(x => x.OrderState)
+                .IsRequired()
+                .HasDefaultValue(OrderStateType.PENDING);
+
             var navigation = builder.Metadata.FindNavigation(nameof(Order.OrderItems));
 
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);

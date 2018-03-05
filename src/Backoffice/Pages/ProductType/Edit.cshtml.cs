@@ -80,7 +80,7 @@ namespace Backoffice.Pages.ProductType
             //Save Image
             if (ProductTypeModel?.Picture.Length > 0)
             {
-                ProductTypeModel.PictureUri = await _service.SaveFileAsync(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureFullPath, _backofficeSettings.WebProductTypesPictureUri);
+                ProductTypeModel.PictureUri = await _service.SaveFileAsync(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureFullPath, _backofficeSettings.WebProductTypesPictureUri, ProductTypeModel.Id.ToString());
             }
 
             //Get entity

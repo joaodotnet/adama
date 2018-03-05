@@ -22,7 +22,7 @@
                 <article class="esh-orders-items row">
                     <section class="esh-orders-item col-2">@Html.DisplayFor(modelItem => item.OrderNumber)</section>
                     <section class="esh-orders-item col-4">@Html.DisplayFor(modelItem => item.OrderDate)</section>
-                    <section class="esh-orders-item col-2">$ @Html.DisplayFor(modelItem => item.Total)</section>
+                    <section class="esh-orders-item col-2">€ @Html.DisplayFor(modelItem => item.Total)</section>
                     <section class="esh-orders-item col-2">@Html.DisplayFor(modelItem => item.Status)</section>
                     <section class="esh-orders-item col-1">
                         <a class="esh-orders-link" asp-page="Detail" asp-route-orderId="@item.OrderNumber">Detalhe</a>

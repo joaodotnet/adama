@@ -30,9 +30,15 @@ namespace Backoffice.Services
                 System.IO.File.Delete(Path.Combine(fullpath, fileName));
         }
 
-        public async Task<string> SaveFileAsync(IFormFile formFile, string fullPath, string uriPath)
+        public async Task<string> SaveFileAsync(IFormFile formFile, string fullPath, string uriPath, string addToFilename)
         {
             var filename = formFile.GetFileName();
+
+            if (!string.IsNullOrEmpty(addToFilename))
+            {                
+                var name = filename.Substring(0, filename.LastIndexOf('.')) + $"-{addToFilename}";
+                filename = name + filename.Substring(filename.LastIndexOf('.'));
+            }
 
             var filePath = Path.Combine(
                 fullPath,

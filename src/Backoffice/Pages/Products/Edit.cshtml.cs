@@ -101,27 +101,30 @@ namespace Backoffice.Pages.Products
             if (ProductModel.Picture != null && ProductModel.Picture.Length > 0)
             {
                 if (!string.IsNullOrEmpty(ProductModel.PictureUri))
+                {
                     _service.DeleteFile(_backofficeSettings.WebProductsPictureFullPath, Utils.GetFileName(ProductModel.PictureUri));
-                ProductModel.PictureUri = await _service.SaveFileAsync(ProductModel.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri);
+                }
+                ProductModel.PictureUri = await _service.SaveFileAsync(ProductModel.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri, ProductModel.Id.ToString());
             }
 
             //Update images            
             foreach (var item in ProductModel.CatalogPictures.Where(x => x.Picture != null && !x.ToRemove).ToList())
             {
                 _service.DeleteFile(_backofficeSettings.WebProductsPictureFullPath, Utils.GetFileName(item.PictureUri));
-                item.PictureUri = await _service.SaveFileAsync(item.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri);
+                item.PictureUri = await _service.SaveFileAsync(item.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri, item.Id.ToString());
             }
             //Save news images
             if (ProductModel.OtherPictures != null)
             {
                 var order = ProductModel.CatalogPictures.Count == 0 ? 0 : ProductModel.CatalogPictures.Max(x => x.Order);
+                var lastCatalogPictureId = (await _context.CatalogPictures.LastAsync())?.Id ?? 0;
                 foreach (var item in ProductModel.OtherPictures)
                 {
                     ProductModel.CatalogPictures.Add(new ProductPictureViewModel
                     {
                         IsActive = true,
                         Order = ++order,
-                        PictureUri = await _service.SaveFileAsync(item, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri)
+                        PictureUri = await _service.SaveFileAsync(item, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri, (++lastCatalogPictureId).ToString())
                     });
                 }
             }
@@ -222,26 +225,26 @@ namespace Backoffice.Pages.Products
             }
 
             //check if file exits but not the same
-            if (ProductModel.Picture != null && 
-                ProductModel.Picture.GetFileName() != Utils.GetFileName(ProductModel.PictureUri) && 
-                _service.CheckIfFileExists(_backofficeSettings.WebProductsPictureFullPath, ProductModel.Picture.GetFileName()))
-            {
-                ModelState.AddModelError("", $"O nome da imagem {ProductModel.Picture.GetFileName()} já existe, por favor escolha outro nome!");
-            }
+            //if (ProductModel.Picture != null && 
+            //    ProductModel.Picture.GetFileName() != Utils.GetFileName(ProductModel.PictureUri) && 
+            //    _service.CheckIfFileExists(_backofficeSettings.WebProductsPictureFullPath, ProductModel.Picture.GetFileName()))
+            //{
+            //    ModelState.AddModelError("", $"O nome da imagem {ProductModel.Picture.GetFileName()} já existe, por favor escolha outro nome!");
+            //}
             
             foreach (var item in ProductModel.CatalogPictures)
             {
                 if (item.Picture != null && item.Picture.Length > 2097152)
                     ModelState.AddModelError("", $"A imagem {item.Picture.GetFileName()} está muito grande amor, O máximo é 2MB, obrigado!");
 
-                if(item.Picture != null && string.IsNullOrEmpty(item.PictureUri) && _service.CheckIfFileExists(_backofficeSettings.WebProductsPictureFullPath,item.Picture.GetFileName()))
-                    ModelState.AddModelError("", $"O nome da imagem {item.Picture.GetFileName()} já existe, por favor escolha outro nome!");
+                //if(item.Picture != null && string.IsNullOrEmpty(item.PictureUri) && _service.CheckIfFileExists(_backofficeSettings.WebProductsPictureFullPath,item.Picture.GetFileName()))
+                //    ModelState.AddModelError("", $"O nome da imagem {item.Picture.GetFileName()} já existe, por favor escolha outro nome!");
 
-                if(item.Picture != null && 
-                    !string.IsNullOrEmpty(item.PictureUri) &&
-                    item.Picture.GetFileName() != Utils.GetFileName(item.PictureUri) &&
-                    _service.CheckIfFileExists(_backofficeSettings.WebProductsPictureFullPath, item.Picture.GetFileName()))
-                    ModelState.AddModelError("", $"O nome da imagem {item.Picture.GetFileName()} já existe, por favor escolha outro nome!");
+                //if(item.Picture != null && 
+                //    !string.IsNullOrEmpty(item.PictureUri) &&
+                //    item.Picture.GetFileName() != Utils.GetFileName(item.PictureUri) &&
+                //    _service.CheckIfFileExists(_backofficeSettings.WebProductsPictureFullPath, item.Picture.GetFileName()))
+                //    ModelState.AddModelError("", $"O nome da imagem {item.Picture.GetFileName()} já existe, por favor escolha outro nome!");
             }
 
             if (ProductModel.OtherPictures != null)
@@ -251,9 +254,9 @@ namespace Backoffice.Pages.Products
                     if (item.Length > 2097152)
                         ModelState.AddModelError("", $"A imagem {item.GetFileName()} está muito grande amor, O máximo é 2MB, obrigado!");
 
-                    if (item != null &&
-                        _service.CheckIfFileExists(_backofficeSettings.WebProductsPictureFullPath, item.GetFileName()))
-                        ModelState.AddModelError("", $"O nome da imagem {item.GetFileName()} já existe, por favor escolha outro nome!");
+                    //if (item != null &&
+                    //    _service.CheckIfFileExists(_backofficeSettings.WebProductsPictureFullPath, item.GetFileName()))
+                    //    ModelState.AddModelError("", $"O nome da imagem {item.GetFileName()} já existe, por favor escolha outro nome!");
                 }
             }
 
