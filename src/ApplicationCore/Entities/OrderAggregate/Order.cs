@@ -24,6 +24,7 @@ namespace ApplicationCore.Entities.OrderAggregate
         public DateTimeOffset OrderDate { get; private set; } = DateTimeOffset.Now;
         public Address ShipToAddress { get; private set; }
         public decimal ShippingCost { get; private set; }
+        public OrderStateType OrderState { get; set; }
 
         // DDD Patterns comment
         // Using a private collection field, better for DDD Aggregate's encapsulation

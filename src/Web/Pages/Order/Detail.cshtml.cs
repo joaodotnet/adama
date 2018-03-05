@@ -5,6 +5,8 @@ using System.Linq;
 using System;
 using ApplicationCore.Entities.OrderAggregate;
 using System.Collections.Generic;
+using Web.Extensions;
+using ApplicationCore.Entities;
 
 namespace Web.Pages.Order
 {
@@ -25,6 +27,7 @@ namespace Web.Pages.Order
             public DateTimeOffset OrderDate { get; set; }
             public decimal Total { get; set; }
             public string Status { get; set; }
+            public decimal ShippingCost { get; set; }
 
             public Address ShippingAddress { get; set; }
 
@@ -39,7 +42,15 @@ namespace Web.Pages.Order
             public decimal Discount { get; set; }
             public int Units { get; set; }
             public string PictureUrl { get; set; }
+            public List<OrderItemDetailViewModel> Attributes { get; set; } = new List<OrderItemDetailViewModel>();
         }
+
+        public class OrderItemDetailViewModel
+        {
+            public CatalogAttributeType Type { get; set; }
+            public string AttributeName { get; set; }
+        }
+
 
         public async Task OnGet(int orderId)
         {
@@ -54,13 +65,19 @@ namespace Web.Pages.Order
                     ProductId = oi.ItemOrdered.CatalogItemId,
                     ProductName = oi.ItemOrdered.ProductName,
                     UnitPrice = oi.UnitPrice,
-                    Units = oi.Units
+                    Units = oi.Units,
+                    Attributes = oi.Details.Select(a => new OrderItemDetailViewModel()
+                    {
+                        Type = a.AttributeType,
+                        AttributeName = a.AttributeName
+                    }).ToList()
                 }).ToList(),
                 OrderNumber = order.Id,
                 ShippingAddress = order.ShipToAddress,
-                Status = "Pending",
+                Status = EnumHelper<OrderStateType>.GetDisplayValue(order.OrderState),
+                ShippingCost = order.ShippingCost,
                 Total = order.Total()
             };
         }
-    }
+    }    
 }

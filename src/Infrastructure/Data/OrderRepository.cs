@@ -16,7 +16,10 @@ namespace Infrastructure.Data
         {
             return _dbContext.Orders
                 .Include(o => o.OrderItems)
-                .Include("OrderItems.ItemOrdered")                
+                    .ThenInclude(oi => oi.ItemOrdered)
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Details)
+                //.Include("OrderItems.ItemOrdered")
                 .FirstOrDefault(x => x.Id == id);
         }
 
@@ -24,7 +27,10 @@ namespace Infrastructure.Data
         {
             return _dbContext.Orders
                 .Include(o => o.OrderItems)
-                .Include("OrderItems.ItemOrdered")
+                //.Include("OrderItems.ItemOrdered")
+                    .ThenInclude(oi => oi.ItemOrdered)
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Details)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
     }
