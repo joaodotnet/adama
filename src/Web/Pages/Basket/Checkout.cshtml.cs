@@ -72,6 +72,8 @@ namespace Web.Pages.Basket
                 {
                     await _shopService.AddorUpdateUserAddress(user, UserAddress);
                 }
+                if (UserAddress.InvoiceSaveAddress)
+                    await _shopService.AddorUpdateUserAddress(user, UserAddress, true);
 
                 //Update Total if User
                 decimal shippingcost = 0;

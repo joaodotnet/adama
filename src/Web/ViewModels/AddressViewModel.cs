@@ -20,5 +20,14 @@ namespace Web.ViewModels
         public string PostalCode { get; set; }
         [Display(Name = "Guardar sua morada na sua conta")]
         public bool SaveAddress { get; set; } = true;
+        public bool UseSameAsShipping { get; set; } = true;
+        public string InvoiceAddressStreet { get; set; }
+        [Display(Name = "Cidade")]
+        public string InvoiceAddressCity { get; set; }
+        [Display(Name = "País")]
+        public string InvoiceAddressCountry { get; set; }
+        [Display(Name = "Código Postal")]
+        public string InvoiceAddressPostalCode { get; set; }
+        public bool InvoiceSaveAddress { get; set; } = true;
     }
 }

@@ -1,7 +1,7 @@
 @page
 @model IndexModel
 @{
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = "Perfil";
 }
 
 <h4>@ViewData["Title"]</h4>
@@ -26,7 +26,7 @@
                 else
                 {
                     <input asp-for="Input.Email" class="form-control" />
-                    <button asp-page-handler="SendVerificationEmail" class="btn btn-link">Send verification email</button>
+                    <button asp-page-handler="SendVerificationEmail" class="btn btn-link">Enviar email de confirmação</button>
                 }
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
@@ -34,6 +34,21 @@
                 <label asp-for="Input.PhoneNumber"></label>
                 <input asp-for="Input.PhoneNumber" class="form-control" />
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Firstname"></label>
+                <input asp-for="Input.Firstname" class="form-control" />
+                <span asp-validation-for="Input.Firstname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Lastname"></label>
+                <input asp-for="Input.Lastname" class="form-control" />
+                <span asp-validation-for="Input.Lastname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.NIF"></label>
+                <input asp-for="Input.NIF" class="form-control" />
+                <span asp-validation-for="Input.NIF" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-default">Save</button>
         </form>

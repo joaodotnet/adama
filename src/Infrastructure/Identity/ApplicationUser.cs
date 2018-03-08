@@ -7,6 +7,7 @@ namespace Infrastructure.Identity
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public int? NIF { get; set; }
         public ICollection<UserAddress> Addresses { get; set; }
     }
 }
