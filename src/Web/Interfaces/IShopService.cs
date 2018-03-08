@@ -14,7 +14,7 @@ namespace Web.Interfaces
         Task<List<MainBannerViewModel>> GetMainBanners();
         Task<Category> GetCategory(string name);
         Task<CatalogType> GetCatalogType(string type);
-        Task AddorUpdateUserAddress(ApplicationUser user, AddressViewModel addressModel);
+        Task AddorUpdateUserAddress(ApplicationUser user, AddressViewModel addressModel, bool isInvoiceAddress = false);
         Task<AddressViewModel> GetUserAddress(string userId);
     }
 }

@@ -25,7 +25,7 @@ namespace Web.Pages.Account.Manage
             _emailSender = emailSender;
         }
 
-        public string Username { get; set; }
+        public string Username { get; set; }        
 
         public bool IsEmailConfirmed { get; set; }
 
@@ -42,8 +42,12 @@ namespace Web.Pages.Account.Manage
             public string Email { get; set; }
 
             [Phone]
-            [Display(Name = "Phone number")]
+            [Display(Name = "Telefone")]
             public string PhoneNumber { get; set; }
+
+            public string Firstname { get; set; }
+            public string Lastname { get; set; }
+            public int? NIF { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -59,7 +63,10 @@ namespace Web.Pages.Account.Manage
             Input = new InputModel
             {
                 Email = user.Email,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                Firstname = user.FirstName,
+                Lastname = user.LastName,
+                NIF = user.NIF
             };
 
             IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
@@ -98,7 +105,15 @@ namespace Web.Pages.Account.Manage
                 }
             }
 
-            StatusMessage = "Your profile has been updated";
+            if(Input.Firstname != user.FirstName || Input.Lastname != user.LastName || Input.NIF != user.NIF)
+            {
+                user.FirstName = Input.Firstname;
+                user.LastName = Input.Lastname;
+                user.NIF = user.NIF;
+                var result = await _userManager.UpdateAsync(user);                
+            }
+
+            StatusMessage = "O seu perfil foi atualizado.";
             return RedirectToPage();
         }
         public async Task<IActionResult> OnPostSendVerificationEmailAsync()
@@ -118,7 +133,7 @@ namespace Web.Pages.Account.Manage
             var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
             await _emailSender.SendEmailConfirmationAsync(user.Email, callbackUrl);
 
-            StatusMessage = "Verification email sent. Please check your email.";
+            StatusMessage = "Email de verificação enviado.Por favor verifique o seu email.";
             return RedirectToPage();
         }
     }

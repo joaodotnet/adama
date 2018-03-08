@@ -85,31 +85,58 @@ namespace Web.Services
 
             return menuViewModel;
         }
-        public async Task AddorUpdateUserAddress(ApplicationUser user, AddressViewModel addressModel)
+        public async Task AddorUpdateUserAddress(ApplicationUser user, AddressViewModel addressModel, bool isInvoice = false)
         {
             if(user != null && addressModel != null)
             {
                 //get user Addresses
-                var addresses = await _identityDb.UserAddresses.Where(x => x.UserId == user.Id).FirstOrDefaultAsync();
+                var addresses = await _identityDb.UserAddresses.Where(x => x.UserId == user.Id && x.IsInvoiceAddress == isInvoice).FirstOrDefaultAsync();
                 if (addresses == null)
                 {
-                    _identityDb.UserAddresses.Add(new UserAddress
+                    var newAddress = new UserAddress
                     {
-                        UserId = user.Id,
-                        Street = addressModel.Street,
-                        City = addressModel.City,
-                        PostalCode = addressModel.PostalCode,
-                        Country = addressModel.Country,
-                        DefaultAddress = true
-                    });
+                        UserId = user.Id,                        
+                        DefaultAddress = true,
+                        UseInvoiceSameAsShipping = addressModel.UseSameAsShipping,
+                        IsInvoiceAddress = isInvoice
+                    };
+                    if(!isInvoice)
+                    {
+                        newAddress.Street = addressModel.Street;
+                        newAddress.City = addressModel.City;
+                        newAddress.PostalCode = addressModel.PostalCode;
+                        newAddress.Country = addressModel.Country;
+                    }
+                    else
+                    {
+                        newAddress.Street = addressModel.InvoiceAddressStreet;
+                        newAddress.City = addressModel.InvoiceAddressCity;
+                        newAddress.PostalCode = addressModel.InvoiceAddressPostalCode;
+                        newAddress.Country = addressModel.InvoiceAddressCountry;
+                    }
+                    _identityDb.UserAddresses.Add(newAddress);
                 }
                 else
-                {                    
-                    addresses.Street = addressModel.Street;
-                    addresses.City = addressModel.City;
-                    addresses.PostalCode = addressModel.PostalCode;
-                    addresses.Country = addressModel.Country;
+                {
                     addresses.DefaultAddress = true;
+                    addresses.UseInvoiceSameAsShipping = addressModel.UseSameAsShipping;
+                    addresses.IsInvoiceAddress = isInvoice;
+
+                    if (!isInvoice)
+                    {
+                        addresses.Street = addressModel.Street;
+                        addresses.City = addressModel.City;
+                        addresses.PostalCode = addressModel.PostalCode;
+                        addresses.Country = addressModel.Country;                        
+                    }
+                    else
+                    {
+                        addresses.Street = addressModel.InvoiceAddressStreet;
+                        addresses.City = addressModel.InvoiceAddressCity;
+                        addresses.PostalCode = addressModel.InvoiceAddressPostalCode;
+                        addresses.Country = addressModel.InvoiceAddressCountry;
+                    }
+                    
                 }
 
                 //if (addresses?.Count > 0 && addressModel.SaveAddress)
@@ -123,18 +150,30 @@ namespace Web.Services
 
         public async Task<AddressViewModel> GetUserAddress(string userId)
         {
-            var address = await _identityDb.UserAddresses.SingleOrDefaultAsync(x => x.UserId == userId);
-            if (address != null)
+            var addresses = await _identityDb.UserAddresses.Where(x => x.UserId == userId).ToListAsync();
+            var addressViewModel = new AddressViewModel();
+            if (addresses?.Count > 0)
             {
-                return new AddressViewModel
+                foreach (var item in addresses)
                 {
-                    Street = address.Street,
-                    City = address.City,
-                    PostalCode = address.PostalCode,
-                    Country = address.Country
-                };
+                    addressViewModel.UseSameAsShipping = item.UseInvoiceSameAsShipping;
+                    if (!item.IsInvoiceAddress)
+                    {
+                        addressViewModel.Street = item.Street;
+                        addressViewModel.City = item.City;
+                        addressViewModel.PostalCode = item.PostalCode;
+                        addressViewModel.Country = item.Country;                        
+                    }
+                    else
+                    {
+                        addressViewModel.InvoiceAddressStreet = item.Street;
+                        addressViewModel.InvoiceAddressCity = item.City;
+                        addressViewModel.InvoiceAddressPostalCode = item.PostalCode;
+                        addressViewModel.InvoiceAddressCountry = item.Country;
+                    }
+                }                                
             }
-            return new AddressViewModel();
+            return addressViewModel;
         }
 
         private void GetTopCategories(List<MenuItemComponentViewModel> model, List<Category> categories, List<Category> parents)

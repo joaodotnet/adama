@@ -79,6 +79,45 @@
                     </div>
                 </div>
             </div>
+            <div class="row mr-1 ml-1">
+                <div class="col-12">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input asp-for="UserAddress.UseSameAsShipping" class="form-check-input" type="checkbox" />
+                            <strong>Usar a mesma morada na fatura</strong>
+                        </label>
+                    </div>
+                    <div id="invoice-address-controls" class="d-none">
+                        <div class="form-group">
+                            <label asp-for="UserAddress.InvoiceAddressStreet"></label>
+                            <input class="form-control" asp-for="UserAddress.InvoiceAddressStreet">
+                            <span asp-validation-for="UserAddress.InvoiceAddressStreet" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="UserAddress.InvoiceAddressCity"></label>
+                            <input class="form-control" asp-for="UserAddress.InvoiceAddressCity">
+                            <span asp-validation-for="UserAddress.InvoiceAddressCity" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="UserAddress.InvoiceAddressPostalCode"></label>
+                            <input class="form-control" asp-for="UserAddress.InvoiceAddressPostalCode">
+                            <span asp-validation-for="UserAddress.InvoiceAddressPostalCode" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="UserAddress.InvoiceAddressCountry"></label>
+                            <select class="form-control" asp-for="UserAddress.InvoiceAddressCountry">
+                                <option>Portugal</option>
+                            </select>
+                            <span asp-validation-for="UserAddress.InvoiceAddressCountry" class="text-danger"></span>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" asp-for="UserAddress.InvoiceSaveAddress">
+                            <label class="form-check-label" asp-for="UserAddress.InvoiceSaveAddress"></label>
+                            <span asp-validation-for="UserAddress.InvoiceSaveAddress" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-sm-3 bg-light pt-2 mt-3 mt-sm-0">
             <h4 class="text-center">Resumo da encomenda</h4>
@@ -147,6 +186,15 @@
                     $('#store-location-col').addClass('dama-checkout-border');
                     $('#user-address-controls').addClass('d-none');
                     $('#store-location-controls').removeClass('d-none');
+                }
+            });
+
+            $('#UserAddress_UseSameAsShipping').click(function () {
+                if (this.val()) {
+                    $('#invoice-address-controls').removeClass('d-none').addClass('d-block');
+                }
+                else {
+                    $('#invoice-address-controls').removeClass('d-block').addClass('d-none');
                 }
             });
         });
