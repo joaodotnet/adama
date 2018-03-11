@@ -6,6 +6,6 @@ namespace ApplicationCore.Interfaces
 {
     public interface IOrderService
     {
-        Task<Order> CreateOrderAsync(int basketId, Address shippingAddress, decimal shippingCost);
+        Task<Order> CreateOrderAsync(int basketId, int? taxNumber, Address shippingAddress, Address billingAddress, bool useBillingSameAsShipping, decimal shippingCost);
     }
 }

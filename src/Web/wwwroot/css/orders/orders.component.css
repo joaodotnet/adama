@@ -30,6 +30,11 @@
     text-transform: uppercase;
 }
 
+.esh-orders_detail-titles {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
 .esh-orders-items {
     height: 2rem;
     line-height: 2rem;

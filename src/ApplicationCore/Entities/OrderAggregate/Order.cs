@@ -11,19 +11,23 @@ namespace ApplicationCore.Entities.OrderAggregate
         {
         }
 
-        public Order(string buyerId, Address shipToAddress, List<OrderItem> items, decimal shippingCost)
+        public Order(string buyerId, int? taxNumber, Address shipToAddress, Address billingAddress, bool useBillingSameAsShipping, List<OrderItem> items, decimal shippingCost)
         {
             ShipToAddress = shipToAddress;
+            BillingToAddress = billingAddress;
+            UseBillingSameAsShipping = useBillingSameAsShipping;
             ShippingCost = shippingCost;
             _orderItems = items;
             BuyerId = buyerId;
-
+            TaxNumber = taxNumber;
         }
         public string BuyerId { get; private set; }
-
+        public int? TaxNumber { get; private set; }
         public DateTimeOffset OrderDate { get; private set; } = DateTimeOffset.Now;
         public Address ShipToAddress { get; private set; }
+        public Address BillingToAddress { get; private set; }
         public decimal ShippingCost { get; private set; }
+        public Boolean UseBillingSameAsShipping { get; private set; }
         public OrderStateType OrderState { get; set; }
 
         // DDD Patterns comment

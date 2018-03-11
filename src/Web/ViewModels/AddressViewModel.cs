@@ -10,6 +10,9 @@ namespace Web.ViewModels
     {
         [Required(ErrorMessage = "Por favor escolha o método de entrega.")]
         public int UseUserAddress { get; set; }
+        [Display(Name = "Nome")]
+        [Required(ErrorMessage = "O nome é obrigatório")]
+        public string Name { get; set; }
         [Display(Name = "Morada")]
         public string Street { get; set; }
         [Display(Name = "Cidade")]
@@ -21,6 +24,11 @@ namespace Web.ViewModels
         [Display(Name = "Guardar sua morada na sua conta")]
         public bool SaveAddress { get; set; } = true;
         public bool UseSameAsShipping { get; set; } = true;
+        [Display(Name = "Nome")]
+        public string InvoiceName { get; set; }
+        [Display(Name = "NIF")]
+        public int? InvoiceTaxNumber { get; set; }
+        [Display(Name = "Morada")]
         public string InvoiceAddressStreet { get; set; }
         [Display(Name = "Cidade")]
         public string InvoiceAddressCity { get; set; }
@@ -28,6 +36,7 @@ namespace Web.ViewModels
         public string InvoiceAddressCountry { get; set; }
         [Display(Name = "Código Postal")]
         public string InvoiceAddressPostalCode { get; set; }
+        [Display(Name = "Guardar sua morada na sua conta")]
         public bool InvoiceSaveAddress { get; set; } = true;
     }
 }

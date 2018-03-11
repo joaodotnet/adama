@@ -235,7 +235,12 @@ namespace Infrastructure.Data
 
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
 
+            builder.Property(x => x.UseBillingSameAsShipping)
+                .IsRequired()
+                .HasDefaultValue(true);
+
             builder.OwnsOne(o => o.ShipToAddress);
+            builder.OwnsOne(o => o.BillingToAddress);
         }
 
         private void ConfigureOrderItem(EntityTypeBuilder<OrderItem> builder)

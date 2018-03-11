@@ -13,9 +13,10 @@ using System;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(DamaContext))]
-    partial class CatalogContextModelSnapshot : ModelSnapshot
+    [Migration("20180310175018_BasketAddress")]
+    partial class BasketAddress
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -303,12 +304,6 @@ namespace Infrastructure.Data.Migrations
 
                     b.Property<decimal>("ShippingCost");
 
-                    b.Property<int?>("TaxNumber");
-
-                    b.Property<bool>("UseBillingSameAsShipping")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(true);
-
                     b.HasKey("Id");
 
                     b.ToTable("Orders");
@@ -482,41 +477,27 @@ namespace Infrastructure.Data.Migrations
 
             modelBuilder.Entity("ApplicationCore.Entities.OrderAggregate.Order", b =>
                 {
-                    b.OwnsOne("ApplicationCore.Entities.OrderAggregate.Address", "BillingToAddress", b1 =>
-                        {
-                            b1.Property<int?>("OrderId");
-
-                            b1.Property<string>("City");
-
-                            b1.Property<string>("Country");
-
-                            b1.Property<string>("Name");
-
-                            b1.Property<string>("PostalCode");
-
-                            b1.Property<string>("Street");
-
-                            b1.ToTable("Orders");
-
-                            b1.HasOne("ApplicationCore.Entities.OrderAggregate.Order")
-                                .WithOne("BillingToAddress")
-                                .HasForeignKey("ApplicationCore.Entities.OrderAggregate.Address", "OrderId")
-                                .OnDelete(DeleteBehavior.Cascade);
-                        });
-
                     b.OwnsOne("ApplicationCore.Entities.OrderAggregate.Address", "ShipToAddress", b1 =>
                         {
                             b1.Property<int>("OrderId");
 
+                            b1.Property<string>("BillingCity");
+
+                            b1.Property<string>("BillingCountry");
+
+                            b1.Property<string>("BillingPostalCode");
+
+                            b1.Property<string>("BillingStreet");
+
                             b1.Property<string>("City");
 
                             b1.Property<string>("Country");
 
-                            b1.Property<string>("Name");
-
                             b1.Property<string>("PostalCode");
 
                             b1.Property<string>("Street");
+
+                            b1.Property<bool>("UseBillingSameAsShipping");
 
                             b1.ToTable("Orders");
 

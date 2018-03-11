@@ -22,7 +22,7 @@ namespace ApplicationCore.Services
             _itemRepository = itemRepository;
         }
 
-        public async Task<Order> CreateOrderAsync(int basketId, Address shippingAddress, decimal shippingCost)
+        public async Task<Order> CreateOrderAsync(int basketId, int? taxNumber, Address shippingAddress, Address billingAddress, bool useBillingSameAsShipping, decimal shippingCost)
         {
             //TODO: check price
             var basket = await _basketRepository.GetByIdWithItemsAsync(basketId);
@@ -43,7 +43,7 @@ namespace ApplicationCore.Services
                 }
                 items.Add(orderItem);
             }
-            var order = new Order(basket.BuyerId, shippingAddress, items, shippingCost);
+            var order = new Order(basket.BuyerId, taxNumber, shippingAddress, billingAddress, useBillingSameAsShipping, items, shippingCost);
 
             return await _orderRepository.AddAsync(order);
             

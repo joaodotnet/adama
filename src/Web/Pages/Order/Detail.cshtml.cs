@@ -7,6 +7,7 @@ using ApplicationCore.Entities.OrderAggregate;
 using System.Collections.Generic;
 using Web.Extensions;
 using ApplicationCore.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace Web.Pages.Order
 {
@@ -24,12 +25,15 @@ namespace Web.Pages.Order
         public class OrderViewModel
         {
             public int OrderNumber { get; set; }
+            [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy - HH:mm}")]
             public DateTimeOffset OrderDate { get; set; }
             public decimal Total { get; set; }
             public string Status { get; set; }
             public decimal ShippingCost { get; set; }
 
             public Address ShippingAddress { get; set; }
+
+            public Address BillingAddress { get; set; }
 
             public List<OrderItemViewModel> OrderItems { get; set; } = new List<OrderItemViewModel>();
         }
@@ -74,6 +78,7 @@ namespace Web.Pages.Order
                 }).ToList(),
                 OrderNumber = order.Id,
                 ShippingAddress = order.ShipToAddress,
+                BillingAddress = order.BillingToAddress,
                 Status = EnumHelper<OrderStateType>.GetDisplayValue(order.OrderState),
                 ShippingCost = order.ShippingCost,
                 Total = order.Total()
