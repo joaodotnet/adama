@@ -73,83 +73,192 @@ namespace Web.Pages.Basket
                     await _shopService.AddorUpdateUserAddress(user, UserAddress);
                 }
                 if (UserAddress.InvoiceSaveAddress)
-                    await _shopService.AddorUpdateUserAddress(user, UserAddress, true);
+                    await _shopService.AddorUpdateUserAddress(user, UserAddress, AddressType.BILLING);
 
                 //Update Total if User
                 decimal shippingcost = 0;
-                Address address = new Address("Mercado de Loulé - Banca nº 44, Praça da Republica","Loulé","Portugal", "8100-270");
+                Address address = new Address(UserAddress.Name,"Mercado de Loulé - Banca nº 44, Praça da Republica", "Loulé", "Portugal", "8100-270"); //,UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);
                 if (UserAddress.UseUserAddress == 1)
                 {
                     shippingcost = BasketModel.DefaultShippingCost;
-                    address = new Address(UserAddress.Street, UserAddress.City, UserAddress.Country, UserAddress.PostalCode);
+                    address = new Address(UserAddress.Name, UserAddress.Street, UserAddress.City, UserAddress.Country, UserAddress.PostalCode); //, UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);                    
                 }
+                Address billingAddress = new Address(UserAddress.InvoiceName,address.Street, address.City, address.Country, address.PostalCode);
+                if (!UserAddress.UseSameAsShipping || UserAddress.UseUserAddress == 2)                   
+                    billingAddress = new Address(UserAddress.InvoiceName, UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);
 
-                var resOrder = await _orderService.CreateOrderAsync(BasketModel.Id, address, shippingcost);                
+                var resOrder = await _orderService.CreateOrderAsync(BasketModel.Id, UserAddress.InvoiceTaxNumber, address, billingAddress, UserAddress.UseSameAsShipping, shippingcost);                
 
                 await _basketService.DeleteBasketAsync(BasketModel.Id);
 
-                var body = GetEmailBody(resOrder, user);
+                var body = GetEmailBody(resOrder, user, UserAddress.UseUserAddress == 2);
                 await _emailSender.SendEmailAsync(resOrder.BuyerId, $"Dama no Jornal®: Encomenda nº{resOrder.Id}", body);
 
                 return RedirectToPage("./Result");
             }
+            await SetBasketModelAsync();
             return Page();
         }
 
-        private string GetEmailBody(ApplicationCore.Entities.OrderAggregate.Order order, ApplicationUser user)
+        private string GetEmailBody(ApplicationCore.Entities.OrderAggregate.Order order, ApplicationUser user, bool pickupAtStore)
         {
-            StringBuilder body = new StringBuilder();
-            body.AppendLine("<table style='width:80%;text-align: center;'>");
-            body.AppendLine($"<tr><td width='50%'>Olá <strong>{(string.IsNullOrEmpty(user.FirstName) ? user.UserName : user.FirstName + " " + user.LastName)}!</strong>,<br>");            
-            body.AppendLine("Obrigada por escolher a Dama no Jornal®.<br>");
-            body.AppendLine("A sua encomenda foi criada com <strong>Sucesso!</strong>< br>");
-            body.AppendLine("</td>");
-            body.AppendLine("<td width='50%'>");
-            body.AppendLine("<img src='https://www.damanojornal.com/loja/images/dama_bird.png' />");
-            body.AppendLine("</td>");
-            body.AppendLine("</tr>");
-            body.AppendLine("</table>");
+            string body = $@"
+<table style='width:550px;'>
+        <tr>
+            <td width='400px' style='vertical-align:bottom'>
+                Olá <strong>{user.FirstName} {user.LastName}</strong><br />
+                Obrigada por escolher a Dama no Jornal®.<br />
+                A sua encomenda foi criada com <strong>Sucesso!</strong> <br />
+            </td>
+            <td>
+                <img src='https://www.damanojornal.com/loja/images/dama_bird.png' width='150' />
+            </td>
+        </tr>
+    </table>
+    <div style='width:550px'>
+        <img width='100%' src='https://www.damanojornal.com/loja/images/linha-coracao.png' />
+    </div>
+    <div>
+        ENCOMENDA #{order.Id}<br />
+        ESTADO: {EnumHelper<OrderStateType>.GetDisplayValue(order.OrderState)} <br />
+    </div>
+    <div style='margin-top:20px;width:550px'>
+        <table width='100%'>";
 
-            body.AppendLine("<br>");
-            body.AppendLine("<br>");
-            body.AppendLine($"<strong>Encomenda #{order.Id}</strong><br>");
-            body.AppendLine("<br>");
             foreach (var item in order.OrderItems)
             {
-                body.AppendLine($"<img src='{item.ItemOrdered.PictureUri}' width='100px'/><br>");
-                body.AppendLine($"{ item.Units}x {item.ItemOrdered.ProductName} € {item.UnitPrice}<br>");
+                body += $@"
+            <tr>
+                <td width='250px'>
+                    <img width='250' src='{item.ItemOrdered.PictureUri}'
+                </td>
+                <td style='padding-bottom:20px;vertical-align:bottom'>
+                    <table>
+                        <tr>
+                            <td>{item.ItemOrdered.ProductName}</td>
+                            <td>€ {item.UnitPrice}</td>
+                        </tr>";
                 foreach (var attr in item.Details)
                 {
-                    body.AppendLine($"{EnumHelper<CatalogAttributeType>.GetDisplayValue(attr.AttributeType)} {attr.AttributeName}<br>");
+                    body += $@"<tr>
+                            <td>{EnumHelper<CatalogAttributeType>.GetDisplayValue(attr.AttributeType)}: {attr.AttributeName}</td>
+                        </tr>";
                 }
+                body +=$@"<tr>
+                            <td>Quantidade: {item.Units}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan='2'><hr /></td>
+            </tr>";
             }
-            if(order.ShippingCost > 0)
-                body.AppendLine($"<strong>Portes</strong> € {order.ShippingCost}<br>");
-            body.AppendLine($"<strong>Total</strong> € {order.Total()}<br>");
 
-            body.AppendLine("<br>");
-            body.AppendLine("<br>");
-            body.AppendLine($"<strong>Morada de Entrega</strong><br>");
-            if (string.IsNullOrEmpty(order.ShipToAddress.Street))
-            {
-                body.AppendLine($"Mercado de Loulé, Praça da Republica, 8100-270 Loulé<br>");
-                body.AppendLine($"Banca Nº 44<br>");
-                body.AppendLine("<br>");
-                body.AppendLine("<strong><a href='https://goo.gl/maps/3BbPSkX5N7H2'>Mapa</a></strong>");
-            }
-            else
-            {
-                body.AppendLine($"{order.ShipToAddress.Street}, {order.ShipToAddress.PostalCode}, {order.ShipToAddress.City}, {order.ShipToAddress.Country}<br>");
-            }
-            body.AppendLine("<br>");
-            body.AppendLine("<br>");
-            body.AppendLine($"<strong>Para concluir a sua encomenda por favor faça a transferência no valor de {order.Total()} para o IBAN  XXXXXXXXXXXXXXXXXXXXXXXXX.</strong> e envie o comprovativo respondendo a este email, ou enviando para info@damanojornal.com indicando a referência nº {order.Id}.<br>");
-            body.AppendLine("<br>");
-            body.AppendLine("<br>");
-            body.AppendLine("Alguma dúvida não hesite em contactar-nos.<br>");
-            body.AppendLine("Dama no Jornal<br>");
-            body.AppendLine($"<img src='https://www.damanojornal.com/images/damanojornal-email.jpg' />");
-            return body.ToString();
+            body += $@"</table>
+    </div>
+    <div style='margin-top:20px;width:550px'>
+        <table width='100%'>
+            <tr>
+                <td>Subtotal</td>
+                <td style='text-align:right'>€ {order.Total() - order.ShippingCost}</td>
+            </tr>
+            <tr>
+                <td colspan='2'>
+                    <hr />
+                </td>
+            </tr>
+            <tr>
+                <td>Envio</td>
+                <td style='text-align:right'>€ {order.ShippingCost}</td>
+            </tr>
+            <tr>
+                <td colspan='2'>
+                    <hr />
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Total</strong></td>
+                <td style='text-align:right'>€ {order.Total()}</td>
+            </tr>
+            <tr>
+                <td colspan='2'>
+                    <hr />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div style='margin-top:20px;width:550px'>
+        <img width='100%' src='https://www.damanojornal.com/loja/images/linha-coracao.png' />
+    </div>
+    <div style='background-color:#eeebeb;width:550px;padding: 5px;'>
+        <h3 style='margin-top:20px;text-align:center;width:550px'>INFORMAÇÔES DE FACTURAÇÂO</h3>
+        <div style='text-align:center;width:550px'>
+            <strong>{order.BillingToAddress.Name}</strong>";
+            if (order.TaxNumber.HasValue)
+                body += $"({order.TaxNumber})";
+            body += $@"
+            <br />
+            {order.BillingToAddress.Street}<br />
+            {order.BillingToAddress.PostalCode} {order.BillingToAddress.City}
+        </div>
+    </div>
+    <div style='margin-top:20px;background-color:#eeebeb;width:550px;padding: 5px;'>
+        <h3 style='text-align:center'>INFORMAÇÕES DE ENVIO*</h3>
+        <div style='text-align:center;width:550px'>
+            <strong>{order.ShipToAddress.Name}</strong>";
+            if (order.TaxNumber.HasValue)
+                body += $"({order.TaxNumber})";
+            body += $@"<br />
+            {order.ShipToAddress.Street}<br />
+            {order.ShipToAddress.PostalCode} {order.ShipToAddress.City}
+        </div>
+        <div style='margin-top:20px;text-align:center;width:550px'>
+            <strong>Tempo de entrega:</strong> 2-3 dias úteis para artigos em stock
+        </div>
+    </div>
+    <div style='margin-top:20px;background-color:#eeebeb;width:550px;padding: 5px;'>
+        <h3 style='text-align:center;width:550px'>MÉTODO DE ENVIO</h3>
+        <div style='text-align:center;width:550px'>
+            <strong>";
+            if (pickupAtStore) body += "Recolha no nosso Ponto de Referência:"; else body += "Correio Registado em mão (CTT e CTT EXPRESSO)";
+            body += "</strong><br />";
+            if (pickupAtStore)
+                body += @"
+            Mercado Municipal de Loulé<br />
+            <a href='https://goo.gl/maps/vHLacbNAqdo' style='color: #EF7C8D;text-decoration:underline'>Ver Mapa</a>";            
+        body += $@"</div>
+    </div>
+    <div style='margin-top:20px;background-color:#eeebeb;width:550px;padding: 5px;'>
+        <h3 style='text-align:center;width:550px'>INFORMAÇÕES DE PAGAMENTO</h3>
+        <div style='text-align:center;width:550px'>
+            <h4>Para concluir a sua encomenda por favor faça uma transferência bancária com os seguintes dados:</h4>
+        </div>
+        <div style='margin-top:20px;text-align:center;width:550px'>
+            Valor: € {order.Total()}<br />
+            IBAN XXXXXXXXXXXXXXXXXXXXXXXXX<br />
+            NIB XXXXXXXXXXXXXXXXXXXXXXXXX<br />
+            CAIXA DE CRÉDITO AGRÍCOLA<br />
+            <strong>Títular da conta:</strong> Susana Nunes<br />
+        </div>
+        <div style='margin-top:20px;text-align:center;width:550px'>
+            <span>E envie o comprovativo de pagamento em resposta a este email, ou envie um mail para info@damanojornal.com indicando a referência de encomenda nº {order.Id}.</span>
+        </div>
+    </div>
+    <div style='margin-top:20px;text-align:center;width:550px'>
+        <strong>Se tem alguma dúvida sobre a sua encomenda, por favor contacte-nos.</strong>
+    </div>
+    <div style='margin-top:20px;text-align:center;width:550px'>
+        <strong>Muito Obrigada,</strong>
+    </div>
+    <div style='color: #EF7C8D;text-align:center;width:550px'>
+        ❤ Dama no Jornal®
+    </div>
+    <div style='text-align:center;width:550px'>
+        <img width='100' src='https://www.damanojornal.com/loja/images/logo_name.png'
+    </div>
+";
+            return body;
         }
 
         //public async Task<IActionResult> OnPostCreateOrder(Dictionary<string, int> items)
@@ -197,6 +306,8 @@ namespace Web.Pages.Basket
         {
             if (UserAddress.UseUserAddress == 1)
             {
+                if (string.IsNullOrEmpty(UserAddress.Name))
+                    ModelState.AddModelError("UserAddress.Name", "O campo Nome é obrigatório");
                 if (string.IsNullOrEmpty(UserAddress.Street))
                     ModelState.AddModelError("UserAddress.Street", "O campo Morada é obrigatório.");
                 if (string.IsNullOrEmpty(UserAddress.City))
@@ -204,10 +315,20 @@ namespace Web.Pages.Basket
                 if (string.IsNullOrEmpty(UserAddress.PostalCode))
                     ModelState.AddModelError("UserAddress.PostalCode", "O campo Código Postal é obrigatório.");
                 if (string.IsNullOrEmpty(UserAddress.Country))
-                    ModelState.AddModelError("UserAddress.Country", "O campo País é obrigatório.");
-                return ModelState.IsValid;
+                    ModelState.AddModelError("UserAddress.Country", "O campo País é obrigatório.");                
             }
-            return true;
+            //if(UserAddress.UseUserAddress == 1 && !UserAddress.UseSameAsShipping)
+            //{
+            //    if (string.IsNullOrEmpty(UserAddress.InvoiceAddressStreet))
+            //        ModelState.AddModelError("UserAddress.InvoiceAddressStreet", "O campo Morada (Faturação) é obrigatório.");
+            //    if (string.IsNullOrEmpty(UserAddress.InvoiceAddressCity))
+            //        ModelState.AddModelError("UserAddress.InvoiceAddressCity", "O campo Cidade (Faturação) é obrigatório.");
+            //    if (string.IsNullOrEmpty(UserAddress.InvoiceAddressPostalCode))
+            //        ModelState.AddModelError("UserAddress.InvoiceAddressPostalCode", "O campo Código Postal (Faturação) é obrigatório.");
+            //    if (string.IsNullOrEmpty(UserAddress.InvoiceAddressCountry))
+            //        ModelState.AddModelError("UserAddress.InvoiceAddressCountry", "O campo País (Faturação) é obrigatório.");
+            //}
+            return ModelState.IsValid;
         }
 
     }

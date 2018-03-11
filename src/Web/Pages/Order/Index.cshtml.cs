@@ -25,7 +25,7 @@ namespace Web.Pages.Order
         public class OrderSummary
         {
             public int OrderNumber { get; set; }
-            [Display(Name = "Data"), DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy - hh:mm}")]
+            [Display(Name = "Data"), DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy - HH:mm}")]
             public DateTimeOffset OrderDate { get; set; }
             public decimal Total { get; set; }
             public string Status { get; set; }

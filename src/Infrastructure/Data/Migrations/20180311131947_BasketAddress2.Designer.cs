@@ -13,9 +13,10 @@ using System;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(DamaContext))]
-    partial class CatalogContextModelSnapshot : ModelSnapshot
+    [Migration("20180311131947_BasketAddress2")]
+    partial class BasketAddress2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -303,8 +304,6 @@ namespace Infrastructure.Data.Migrations
 
                     b.Property<decimal>("ShippingCost");
 
-                    b.Property<int?>("TaxNumber");
-
                     b.Property<bool>("UseBillingSameAsShipping")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(true);
@@ -490,8 +489,6 @@ namespace Infrastructure.Data.Migrations
 
                             b1.Property<string>("Country");
 
-                            b1.Property<string>("Name");
-
                             b1.Property<string>("PostalCode");
 
                             b1.Property<string>("Street");
@@ -511,8 +508,6 @@ namespace Infrastructure.Data.Migrations
                             b1.Property<string>("City");
 
                             b1.Property<string>("Country");
-
-                            b1.Property<string>("Name");
 
                             b1.Property<string>("PostalCode");
 

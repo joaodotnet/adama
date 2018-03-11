@@ -85,22 +85,25 @@ namespace Web.Services
 
             return menuViewModel;
         }
-        public async Task AddorUpdateUserAddress(ApplicationUser user, AddressViewModel addressModel, bool isInvoice = false)
+        public async Task AddorUpdateUserAddress(ApplicationUser user, AddressViewModel addressModel, AddressType addressType = AddressType.SHIPPING)
         {
             if(user != null && addressModel != null)
             {
                 //get user Addresses
-                var addresses = await _identityDb.UserAddresses.Where(x => x.UserId == user.Id && x.IsInvoiceAddress == isInvoice).FirstOrDefaultAsync();
+                var addresses = await _identityDb.UserAddresses
+                    .Include(x => x.User)
+                    .Where(x => x.UserId == user.Id && x.AddressType == addressType)
+                    .FirstOrDefaultAsync();
+
+                user.BillingAddressSameAsShipping = addressModel.UseSameAsShipping;
                 if (addresses == null)
-                {
+                {                    
                     var newAddress = new UserAddress
                     {
-                        UserId = user.Id,                        
-                        DefaultAddress = true,
-                        UseInvoiceSameAsShipping = addressModel.UseSameAsShipping,
-                        IsInvoiceAddress = isInvoice
+                        User = user,
+                        AddressType = addressType
                     };
-                    if(!isInvoice)
+                    if(addressType == AddressType.SHIPPING)
                     {
                         newAddress.Street = addressModel.Street;
                         newAddress.City = addressModel.City;
@@ -117,12 +120,9 @@ namespace Web.Services
                     _identityDb.UserAddresses.Add(newAddress);
                 }
                 else
-                {
-                    addresses.DefaultAddress = true;
-                    addresses.UseInvoiceSameAsShipping = addressModel.UseSameAsShipping;
-                    addresses.IsInvoiceAddress = isInvoice;
+                {                                                            
 
-                    if (!isInvoice)
+                    if (addressType == AddressType.SHIPPING)
                     {
                         addresses.Street = addressModel.Street;
                         addresses.City = addressModel.City;
@@ -139,25 +139,28 @@ namespace Web.Services
                     
                 }
 
-                //if (addresses?.Count > 0 && addressModel.SaveAddress)
-                //{
-                //    addresses.ForEach(x => x.DefaultAddress = false);
-                //}
-
                 await _identityDb.SaveChangesAsync();
             }            
         }
 
         public async Task<AddressViewModel> GetUserAddress(string userId)
         {
-            var addresses = await _identityDb.UserAddresses.Where(x => x.UserId == userId).ToListAsync();
-            var addressViewModel = new AddressViewModel();
+            var addresses = await _identityDb.UserAddresses
+                .Include(x => x.User)
+                .Where(x => x.UserId == userId)
+                .ToListAsync();
+            var addressViewModel = new AddressViewModel
+            {
+                UseSameAsShipping = addresses.First().User.BillingAddressSameAsShipping,
+                Name = $"{addresses.First().User.FirstName} {addresses.First().User.LastName}".Trim(),
+                InvoiceName = $"{addresses.First().User.FirstName} {addresses.First().User.LastName}".Trim()
+            };
             if (addresses?.Count > 0)
             {
                 foreach (var item in addresses)
                 {
-                    addressViewModel.UseSameAsShipping = item.UseInvoiceSameAsShipping;
-                    if (!item.IsInvoiceAddress)
+                    
+                    if (item.AddressType == AddressType.SHIPPING)
                     {
                         addressViewModel.Street = item.Street;
                         addressViewModel.City = item.City;

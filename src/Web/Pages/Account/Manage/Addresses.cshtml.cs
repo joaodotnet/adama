@@ -59,8 +59,8 @@ namespace Web.Pages.Account.Manage
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            await _shopService.AddorUpdateUserAddress(user, UserAddress, false);
-            await _shopService.AddorUpdateUserAddress(user, UserAddress, true);
+            await _shopService.AddorUpdateUserAddress(user, UserAddress, AddressType.SHIPPING);
+            await _shopService.AddorUpdateUserAddress(user, UserAddress, AddressType.BILLING);
 
             _logger.LogInformation("User changed their addresses.");
             StatusMessage = "A sua morada foi alterada";
