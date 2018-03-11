@@ -125,6 +125,8 @@ namespace Web
                 .AddRazorPagesOptions(options =>
                 {
                     options.Conventions.AuthorizeFolder("/Order");
+                    options.Conventions.AuthorizeFolder("/Account/Manage");
+                    options.Conventions.AuthorizePage("/Account/Logout");
                     options.Conventions.AuthorizePage("/Basket/Checkout");
                     options.Conventions.AddPageRoute("/Category/Index", "{id}/");
                     options.Conventions.AddPageRoute("/Category/Type/Index", "{cat}/{type}");

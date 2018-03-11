@@ -8,14 +8,14 @@ namespace Microsoft.AspNetCore.Mvc
     {
         public static Task SendEmailConfirmationAsync(this IEmailSender emailSender, string email, string link)
         {
-            return emailSender.SendEmailAsync(email, "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(link)}'>clicking here</a>.");
+            return emailSender.SendEmailAsync(email, "Dama no Jornal®: Confirme o seu email",
+                $"Por favor confirme a sua conta <a href='{HtmlEncoder.Default.Encode(link)}'>clicando aqui</a>.");
         }
 
         public static Task SendResetPasswordAsync(this IEmailSender emailSender, string email, string callbackUrl)
         {
-            return emailSender.SendEmailAsync(email, "Reset Password",
-                $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+            return emailSender.SendEmailAsync(email, "Dama no Jornal®: Recuperar Password",
+                $"Por favor recupere a password <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicando aqui</a>.");
         }
     }
 
