@@ -33,20 +33,20 @@ namespace Web.Pages.Account.Manage
 
         public class InputModel
         {
-            [Required]
+            [Required(ErrorMessage = "A {0} é obrigatória")]
             [DataType(DataType.Password)]
-            [Display(Name = "Current password")]
+            [Display(Name = "Password atual")]
             public string OldPassword { get; set; }
 
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage = "A {0} é obrigatória")]
+            [StringLength(100, ErrorMessage = "A {0} deve ter no mínimo de {2} e no máximo {1} caracteres de comprimento.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "New password")]
+            [Display(Name = "Nova password")]
             public string NewPassword { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm new password")]
-            [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+            [Display(Name = "Confirmar nova password")]
+            [Compare("NewPassword", ErrorMessage = "A confirmação da password não corresponde à password escolhida.")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -85,14 +85,15 @@ namespace Web.Pages.Account.Manage
             {
                 foreach (var error in changePasswordResult.Errors)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    var errorMessage = error.Description == "Incorrect password." ? "Password Incorrecta." : error.Description;
+                    ModelState.AddModelError(string.Empty, errorMessage);
                 }
                 return Page();
             }
 
             await _signInManager.SignInAsync(user, isPersistent: false);
             _logger.LogInformation("User changed their password successfully.");
-            StatusMessage = "Your password has been changed.";
+            StatusMessage = "A sua password foi alterada.";
 
             return RedirectToPage();
         }

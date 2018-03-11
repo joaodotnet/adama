@@ -58,6 +58,7 @@ namespace Web.Pages.Basket
             if(user != null)
             {
                 UserAddress = await _shopService.GetUserAddress(user.Id);
+                UserAddress.InvoiceTaxNumber = user.NIF;
             }
             await SetBasketModelAsync();
         }

@@ -44,8 +44,9 @@ namespace Web.Pages.Account.Manage
             [Phone]
             [Display(Name = "Telefone")]
             public string PhoneNumber { get; set; }
-
+            [Display(Name = "Nome")]
             public string Firstname { get; set; }
+            [Display(Name = "Apelido")]
             public string Lastname { get; set; }
             public int? NIF { get; set; }
         }
@@ -109,7 +110,7 @@ namespace Web.Pages.Account.Manage
             {
                 user.FirstName = Input.Firstname;
                 user.LastName = Input.Lastname;
-                user.NIF = user.NIF;
+                user.NIF = Input.NIF;
                 var result = await _userManager.UpdateAsync(user);                
             }
 
@@ -133,7 +134,7 @@ namespace Web.Pages.Account.Manage
             var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
             await _emailSender.SendEmailConfirmationAsync(user.Email, callbackUrl);
 
-            StatusMessage = "Email de verificação enviado.Por favor verifique o seu email.";
+            StatusMessage = "Email de verificação enviado. Por favor verifique o seu email.";
             return RedirectToPage();
         }
     }

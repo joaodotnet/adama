@@ -35,6 +35,11 @@
                     <div class="form-group col-3 p-0">
                         <input type="submit" class="esh-catalog-button btn btn-default btn-brand btn-brand-big mt-0" value="&nbsp;LOG IN&nbsp;" />
                     </div>
+                    <div class="form-group">
+                        <p>
+                            <a asp-page="./ForgotPassword">Esqueceu-se a password?</a>
+                        </p>
+                    </div>
                 </form>
             </section>
         </div>
@@ -44,6 +49,27 @@
                 <h4>Registe-se!</h4>
                 <form asp-route-returnurl="@ViewData["ReturnUrl"]" asp-page-handler="Register" method="post" class="form-horizontal">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group required">
+                        <label asp-for="UserDetails.FirstName" class="col-md-6"></label>
+                        <div class="col-md-10">
+                            <input asp-for="UserDetails.FirstName" class="form-control" />
+                            <span asp-validation-for="UserDetails.FirstName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group required">
+                        <label asp-for="UserDetails.LastName" class="col-md-6"></label>
+                        <div class="col-md-10">
+                            <input asp-for="UserDetails.LastName" class="form-control" />
+                            <span asp-validation-for="UserDetails.LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserDetails.PhoneNumber" class="col-md-6"></label>
+                        <div class="col-md-10">
+                            <input asp-for="UserDetails.PhoneNumber" class="form-control" />
+                            <span asp-validation-for="UserDetails.PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
                     <div class="form-group required">
                         <label asp-for="UserDetails.Email" class="col-md-2 control-label"></label>
                         <div class="col-md-10">
@@ -65,27 +91,7 @@
                             <span asp-validation-for="UserDetails.ConfirmPassword" class="text-danger"></span>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="UserDetails.FirstName" class="col-md-6"></label>
-                        <div class="col-md-10">
-                            <input asp-for="UserDetails.FirstName" class="form-control" />
-                            <span asp-validation-for="UserDetails.FirstName" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="UserDetails.LastName" class="col-md-6"></label>
-                        <div class="col-md-10">
-                            <input asp-for="UserDetails.LastName" class="form-control" />
-                            <span asp-validation-for="UserDetails.LastName" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="UserDetails.PhoneNumber" class="col-md-6"></label>
-                        <div class="col-md-10">
-                            <input asp-for="UserDetails.PhoneNumber" class="form-control" />
-                            <span asp-validation-for="UserDetails.PhoneNumber" class="text-danger"></span>
-                        </div>
-                    </div>
+
                     <div class="form-group col-6">
                         <button type="submit" class="esh-catalog-button btn btn-default btn-brand btn-brand-big">&nbsp;REGISTAR&nbsp;</button>
                     </div>

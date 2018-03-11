@@ -11,6 +11,11 @@
         <form method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
+                <label asp-for="UserAddress.Name"></label>
+                <input class="form-control-plaintext" asp-for="UserAddress.Name">
+                <span asp-validation-for="UserAddress.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="UserAddress.Street"></label>
                 <input class="form-control" asp-for="UserAddress.Street">
                 <span asp-validation-for="UserAddress.Street" class="text-danger"></span>
@@ -38,7 +43,7 @@
                     <strong>Usar a mesma morada na fatura</strong>
                 </label>
             </div>
-            <div id="invoice-address-controls" class="d-none">
+            <div id="invoice-address-controls" class="@(Model.UserAddress.UseSameAsShipping ? "d-none" : "d-block")">
                 <div class="form-group">
                     <label asp-for="UserAddress.InvoiceAddressStreet"></label>
                     <input class="form-control" asp-for="UserAddress.InvoiceAddressStreet">
@@ -71,7 +76,7 @@
     @await Html.PartialAsync("_ValidationScriptsPartial")
     <script>
         $(document).ready(function () {
-            $('#UserAddress_UseSameAsShipping').click(function () {
+            $('#UserAddress.UseSameAsShipping').click(function () {
                 if (this.val()) {
                     $('#invoice-address-controls').removeClass('d-none').addClass('d-block');
                 }
