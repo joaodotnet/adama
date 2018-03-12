@@ -67,6 +67,7 @@
                     <span asp-validation-for="UserAddress.InvoiceAddressCountry" class="text-danger"></span>
                 </div>
             </div>
+            <input type="hidden" asp-for="UserAddress.PhoneNumber" />
             <button type="submit" class="btn btn-default">Alterar morada</button>
         </form>
     </div>
@@ -76,12 +77,12 @@
     @await Html.PartialAsync("_ValidationScriptsPartial")
     <script>
         $(document).ready(function () {
-            $('#UserAddress.UseSameAsShipping').click(function () {
-                if (this.val()) {
-                    $('#invoice-address-controls').removeClass('d-none').addClass('d-block');
+            $('#UserAddress_UseSameAsShipping').click(function () {
+                if (this.checked) {
+                    $('#invoice-address-controls').removeClass('d-block').addClass('d-none');
                 }
                 else {
-                    $('#invoice-address-controls').removeClass('d-block').addClass('d-none');
+                    $('#invoice-address-controls').removeClass('d-none').addClass('d-block');
                 }
             });
         });

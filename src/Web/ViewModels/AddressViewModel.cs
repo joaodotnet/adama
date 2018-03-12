@@ -13,6 +13,10 @@ namespace Web.ViewModels
         [Display(Name = "Nome")]
         [Required(ErrorMessage = "O nome é obrigatório")]
         public string Name { get; set; }
+        [Display(Name = "Telefone")]
+        public int? ShipAddressPhoneNumber { get; set; }
+        [Display(Name = "Telefone")]
+        public int? ContactPhoneNumber { get; set; }
         [Display(Name = "Morada")]
         public string Street { get; set; }
         [Display(Name = "Cidade")]

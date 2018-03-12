@@ -38,6 +38,11 @@
                         <span asp-validation-for="UserAddress.Name" class="text-danger"></span>
                     </div>
                     <div class="form-group">
+                        <label asp-for="UserAddress.ShipAddressPhoneNumber"></label>
+                        <input asp-for="UserAddress.ShipAddressPhoneNumber" class="form-control">
+                        <span asp-validation-for="UserAddress.ShipAddressPhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
                         <label asp-for="UserAddress.Street"></label>
                         <input class="form-control" asp-for="UserAddress.Street">
                         <span asp-validation-for="UserAddress.Street" class="text-danger"></span>
@@ -74,6 +79,11 @@
                         <span asp-validation-for="UserAddress.Name" class="text-danger"></span>
                     </div>
                     <div class="form-group">
+                        <label asp-for="UserAddress.ContactPhoneNumber"></label>
+                        <input asp-for="UserAddress.ContactPhoneNumber" class="form-control">
+                        <span asp-validation-for="UserAddress.ContactPhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
                         <label>Morada</label>
                         <div class="">
                             <span>Mercado de Loulé, Praça da Republica, 8100-270 Loulé</span>
@@ -106,13 +116,13 @@
                         <input asp-for="UserAddress.InvoiceTaxNumber" class="form-control">
                         <span asp-validation-for="UserAddress.InvoiceTaxNumber" class="text-danger"></span>
                     </div>
-                    <div class="form-check">
+                    <div id="grpSameAsShipping" class="form-check @(Model.UserAddress.UseUserAddress == 2 ? "d-none": "d-block")">
                         <label class="form-check-label">
                             <input asp-for="UserAddress.UseSameAsShipping" class="form-check-input" type="checkbox" />
                             <strong>Usar a mesma morada na fatura</strong>
                         </label>
                     </div>
-                    <div id="invoice-address-controls" class="@(Model.UserAddress.UseSameAsShipping ? "d-none":"d-block")">
+                    <div id="invoice-address-controls" class="@( (Model.UserAddress.UseSameAsShipping && Model.UserAddress.UseUserAddress == 1) || Model.UserAddress.UseUserAddress == 2 ? "d-none":"d-block")">
                         <div class="form-group">
                             <label asp-for="UserAddress.InvoiceAddressStreet"></label>
                             <input class="form-control" asp-for="UserAddress.InvoiceAddressStreet">
@@ -202,6 +212,9 @@
                     $('#user-address-col').addClass('dama-checkout-border d-none').addClass('d-block');
                     $('#store-location-col').removeClass('dama-checkout-border d-block').addClass('d-none');
                     $('#billing-address-col').removeClass('d-none').addClass('d-block');
+                    $('#grpSameAsShipping').removeClass('d-none').addClass('d-block');
+                    $('#invoice-address-controls').removeClass('d-none').addClass('d-block');
+                    
                     //$('#user-address-controls').removeClass('d-none');
                     //$('#store-location-controls').addClass('d-none');
                 }
@@ -212,6 +225,8 @@
                     $('#user-address-col').removeClass('dama-checkout-border d-block').addClass('d-none');
                     $('#store-location-col').addClass('dama-checkout-border d-none').addClass('d-block');
                     $('#billing-address-col').removeClass('d-none').addClass('d-block');
+                    $('#grpSameAsShipping').removeClass('d-block').addClass('d-none');
+                    $('#invoice-address-controls').removeClass('d-block').addClass('d-none');
                     //$('#user-address-controls').addClass('d-none');
                     //$('#store-location-controls').removeClass('d-none');
                 }

@@ -13,6 +13,8 @@ using ApplicationCore.Entities.OrderAggregate;
 using System.Text;
 using Web.Extensions;
 using ApplicationCore.Entities;
+using ApplicationCore;
+using Microsoft.Extensions.Options;
 
 namespace Web.Pages.Basket
 {
@@ -27,6 +29,7 @@ namespace Web.Pages.Basket
         private readonly IBasketViewModelService _basketViewModelService;
         private readonly IShopService _shopService;
         private readonly IEmailSender _emailSender;
+        private readonly CatalogSettings _settings;
 
         public CheckoutModel(IBasketService basketService,
             IBasketViewModelService basketViewModelService,
@@ -35,7 +38,8 @@ namespace Web.Pages.Basket
             SignInManager<ApplicationUser> signInManager,
             IOrderService orderService,
             IShopService shopService,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IOptions<CatalogSettings> settings)
         {
             _basketService = basketService;
             _uriComposer = uriComposer;
@@ -45,6 +49,7 @@ namespace Web.Pages.Basket
             _basketViewModelService = basketViewModelService;
             _shopService = shopService;
             _emailSender = emailSender;
+            _settings = settings.Value;
         }
         [BindProperty]
         public BasketViewModel BasketModel { get; set; } = new BasketViewModel();
@@ -78,22 +83,26 @@ namespace Web.Pages.Basket
 
                 //Update Total if User
                 decimal shippingcost = 0;
-                Address address = new Address(UserAddress.Name,"Mercado de Loulé - Banca nº 44, Praça da Republica", "Loulé", "Portugal", "8100-270"); //,UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);
+                Address address = new Address(UserAddress.Name, UserAddress.ContactPhoneNumber, "Mercado de Loulé - Banca nº 44, Praça da Republica", "Loulé", "Portugal", "8100-270"); //,UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);
                 if (UserAddress.UseUserAddress == 1)
                 {
                     shippingcost = BasketModel.DefaultShippingCost;
-                    address = new Address(UserAddress.Name, UserAddress.Street, UserAddress.City, UserAddress.Country, UserAddress.PostalCode); //, UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);                    
+                    address = new Address(UserAddress.Name, UserAddress.ShipAddressPhoneNumber, UserAddress.Street, UserAddress.City, UserAddress.Country, UserAddress.PostalCode); //, UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);                    
                 }
-                Address billingAddress = new Address(UserAddress.InvoiceName,address.Street, address.City, address.Country, address.PostalCode);
-                if (!UserAddress.UseSameAsShipping || UserAddress.UseUserAddress == 2)                   
-                    billingAddress = new Address(UserAddress.InvoiceName, UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);
+                Address billingAddress = null;
+                if (UserAddress.UseUserAddress == 1 && !UserAddress.UseSameAsShipping)
+                    billingAddress = new Address(UserAddress.InvoiceName, UserAddress.ContactPhoneNumber, UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);
+                else if (UserAddress.UseUserAddress == 1 && UserAddress.UseSameAsShipping)
+                    billingAddress = new Address(UserAddress.InvoiceName, address.PhoneNumber, address.Street, address.City, address.Country, address.PostalCode);
+                else if (UserAddress.UseUserAddress == 2)
+                    billingAddress = new Address(UserAddress.InvoiceName, UserAddress.ContactPhoneNumber,null,null,null,null);
 
                 var resOrder = await _orderService.CreateOrderAsync(BasketModel.Id, UserAddress.InvoiceTaxNumber, address, billingAddress, UserAddress.UseSameAsShipping, shippingcost);                
 
                 await _basketService.DeleteBasketAsync(BasketModel.Id);
 
                 var body = GetEmailBody(resOrder, user, UserAddress.UseUserAddress == 2);
-                await _emailSender.SendEmailAsync(resOrder.BuyerId, $"Dama no Jornal®: Encomenda nº{resOrder.Id}", body);
+                await _emailSender.SendEmailAsync(resOrder.BuyerId, $"Dama no Jornal®: Encomenda nº{resOrder.Id}", body, _settings.ToEmails);
 
                 return RedirectToPage("./Result");
             }
@@ -207,10 +216,12 @@ namespace Web.Pages.Basket
     <div style='margin-top:20px;background-color:#eeebeb;width:550px;padding: 5px;'>
         <h3 style='text-align:center'>INFORMAÇÕES DE ENVIO*</h3>
         <div style='text-align:center;width:550px'>
-            <strong>{order.ShipToAddress.Name}</strong>";
+            <strong>{order.ShipToAddress.Name}</strong>";            
             if (order.TaxNumber.HasValue)
                 body += $"({order.TaxNumber})";
+
             body += $@"<br />
+            Telefone: {order.ShipToAddress.PhoneNumber}<br/>
             {order.ShipToAddress.Street}<br />
             {order.ShipToAddress.PostalCode} {order.ShipToAddress.City}
         </div>
@@ -309,6 +320,8 @@ namespace Web.Pages.Basket
             {
                 if (string.IsNullOrEmpty(UserAddress.Name))
                     ModelState.AddModelError("UserAddress.Name", "O campo Nome é obrigatório");
+                if (!UserAddress.ShipAddressPhoneNumber.HasValue)
+                    ModelState.AddModelError("UserAddress.ShipAddressPhoneNumber", "O campo Telefone é obrigatório");
                 if (string.IsNullOrEmpty(UserAddress.Street))
                     ModelState.AddModelError("UserAddress.Street", "O campo Morada é obrigatório.");
                 if (string.IsNullOrEmpty(UserAddress.City))
@@ -317,6 +330,11 @@ namespace Web.Pages.Basket
                     ModelState.AddModelError("UserAddress.PostalCode", "O campo Código Postal é obrigatório.");
                 if (string.IsNullOrEmpty(UserAddress.Country))
                     ModelState.AddModelError("UserAddress.Country", "O campo País é obrigatório.");                
+            }
+            else if(UserAddress.UseUserAddress == 2)
+            {
+                if (!UserAddress.ContactPhoneNumber.HasValue)
+                    ModelState.AddModelError("UserAddress.ContactPhoneNumber", "O campo Telefone é obrigatório");
             }
             //if(UserAddress.UseUserAddress == 1 && !UserAddress.UseSameAsShipping)
             //{
