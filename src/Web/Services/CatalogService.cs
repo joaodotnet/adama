@@ -73,7 +73,7 @@ namespace Web.Services
                 {
                     CatalogItemId = i.Id,
                     CatalogItemName = i.Name,
-                    PictureUri = i.PictureUri,                    
+                    PictureUri = i.PictureUri,
                     Price = i.Price,
                     ProductSku = i.Sku
                 }),
@@ -212,7 +212,7 @@ namespace Web.Services
         {
             var product = await _db.CatalogItems
                 .Include(x => x.CatalogPictures)
-                .Include(x => x.CatalogAttributes)                
+                .Include(x => x.CatalogAttributes)
                 .Include(x => x.CatalogType)
                     .ThenInclude(ct => ct.Categories)
                         .ThenInclude(c => c.Category)
@@ -238,9 +238,9 @@ namespace Web.Services
                     Categories = new List<LinkViewModel>(),
                     Tags = new List<LinkViewModel>
                     {
-                        new LinkViewModel { Name = product.CatalogType.Description, Uri = "#"},
-                        new LinkViewModel { Name = product.CatalogIllustration.Name, Uri = "#"},
-                        new LinkViewModel { Name = product.CatalogIllustration.IllustrationType.Name, Uri = "#"},
+                        new LinkViewModel { Name = product.CatalogType.Description, TagName = "tipo"},
+                        new LinkViewModel { Name = product.CatalogIllustration.Name, TagName = "ilustracao"},
+                        new LinkViewModel { Name = product.CatalogIllustration.IllustrationType.Name, TagName = "ilustracao_tipo"},
                     }
                 };
 
@@ -255,7 +255,7 @@ namespace Web.Services
 
                 //Attributes
                 //decimal attrPriceDefault = 0M;
-                foreach(var grpAttr in product.CatalogAttributes.GroupBy(x => x.Type))
+                foreach (var grpAttr in product.CatalogAttributes.GroupBy(x => x.Type))
                 {
                     //attrPriceDefault += grpAttr.First().Price ?? 0;
                     vm.Attributes.Add(new ProductAttributeViewModel
@@ -280,7 +280,7 @@ namespace Web.Services
                     vm.Categories.Add(new LinkViewModel
                     {
                         Name = item.Category.Name,
-                        Uri = $"/{Utils.StringToUri(item.Category.Name)}"
+                        TagName = Utils.StringToUri(item.Category.Name)
                     });
                 }
                 return vm;
@@ -313,6 +313,59 @@ namespace Web.Services
                     ReferenceCatalogSku = attr.ReferenceCatalogItem?.Sku
                 };
             return null;
+        }
+
+        public async Task<CatalogIndexViewModel> GetCatalogItemsByTag(string tagName, TagType? tagType)
+        {
+            tagName = tagName.ToLower().Trim();
+            CatalogIndexViewModel vm = new CatalogIndexViewModel();
+            IQueryable<CatalogItem> query = null;
+            if (tagType.HasValue)
+            {
+
+                switch (tagType.Value)
+                {
+
+                    case TagType.CATALOG_TYPE:
+                        query = _db.CatalogItems
+                            .Include(x => x.CatalogType)
+                            .Where(x => Utils.StringToUri(x.CatalogType.Description) == tagName);
+                        break;
+                    case TagType.ILLUSTRATION:
+                        query = _db.CatalogItems
+                            .Include(x => x.CatalogIllustration)
+                            .Where(x => Utils.StringToUri(x.CatalogIllustration.Name) == tagName);
+                        break;
+                    case TagType.ILLUSTRATION_TYPE:
+                        query = _db.CatalogItems
+                            .Include(x => x.CatalogIllustration)
+                            .ThenInclude(ci => ci.IllustrationType)
+                            .Where(x => x.CatalogIllustration.IllustrationType.Name == tagName);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                query = _db.CatalogItems
+                    .Include(x => x.CatalogType)
+                    .Include(x => x.CatalogIllustration)
+                    .ThenInclude(ci => ci.IllustrationType)
+                    .Where(x => Utils.StringToUri(x.CatalogType.Description) == tagName || Utils.StringToUri(x.CatalogIllustration.Name) == tagName || x.CatalogIllustration.IllustrationType.Name == tagName);
+            }
+
+            return new CatalogIndexViewModel
+            {
+                CatalogItems = await query.Select(x => new CatalogItemViewModel
+                {
+                    CatalogItemId = x.Id,
+                    CatalogItemName = x.Name,
+                    PictureUri = x.PictureUri,
+                    Price = x.Price,
+                    ProductSku = x.Sku
+                }).ToListAsync()
+            };
         }
     }
 }

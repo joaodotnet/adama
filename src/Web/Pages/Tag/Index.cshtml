@@ -1,13 +1,13 @@
 ﻿@page
-@model Web.Pages.Category.Type.IndexModel
+
+@model Web.Pages.Tag.IndexModel
 @{
     ViewData["Title"] = "Index";
 }
 
-<h2>@Model.CatalogTypeName</h2>
+<h2>Resultados para: @Model.TagName</h2>
 
 <div class="news-heading text-center">
-    <h2>Todos os Produtos</h2>
     <img class="separator" src="~/images/coração-rosa.png" />
 </div>
 <div class="container">
@@ -19,7 +19,7 @@
                 @await Html.PartialAsync("_product", catalogItem)
             </div>
         }
-        @if(Model.CatalogModel.CatalogItems.Count() == 0)
+        @if (Model.CatalogModel.CatalogItems.Count() == 0)
         {
             <div class="text-center">
                 <p>Lamentamos, mas não foram encontrados resultados!</p>
@@ -27,3 +27,4 @@
         }
     </div>
 </div>
+

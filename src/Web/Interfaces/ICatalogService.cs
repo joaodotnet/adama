@@ -2,6 +2,7 @@
 using Web.ViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ApplicationCore.Specifications;
 
 namespace Web.Interfaces
 {
@@ -13,5 +14,6 @@ namespace Web.Interfaces
         Task<IEnumerable<SelectListItem>> GetTypes();
         Task<ProductViewModel> GetCatalogItem(string sku);
         Task<AttributeViewModel> GetAttributeDetails(int attributeId);
+        Task<CatalogIndexViewModel> GetCatalogItemsByTag(string tagName, TagType? tagType);
     }
 }
