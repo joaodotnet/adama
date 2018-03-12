@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Entities;
+using ApplicationCore.Specifications;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,7 @@ namespace Web.ViewModels
     {
         public string Uri { get; set; }
         public string Name { get; set; }
+        public string TagName { get; set; }
     }
 
     public class ProductAttributeViewModel

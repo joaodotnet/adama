@@ -51,7 +51,7 @@
         <div class="col-9">
             @foreach (var item in Model.Categories)
             {
-                <a href="@item.Uri">@item.Name</a>
+                <a asp-page="/Category/Index" asp-route-id="@item.TagName">@item.Name</a>
             }
         </div>
     </div>
@@ -60,7 +60,7 @@
         <div class="col-9">
             @foreach (var item in Model.Tags)
             {
-                <a href="@item.Uri">@item.Name</a>
+                <a asp-page="/Tag/Index" asp-route-id="@item.Name" asp-route-q="@item.TagName">@item.Name</a>
             }
         </div>
     </div>
