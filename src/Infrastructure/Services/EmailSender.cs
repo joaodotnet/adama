@@ -19,14 +19,14 @@ namespace Infrastructure.Services
             _appSettings = appSettings;
             //_logger = logger;
         }
-        public Task SendEmailAsync(string email, string subject, string message)
+        public Task SendEmailAsync(string email, string subject, string message, string bccEmails = null)
         {
             // TODO: Wire this up to actual email sending logic via SendGrid, local SMTP, etc.
-            Execute(email, subject, message).Wait();
+            Execute(email, subject, message, bccEmails).Wait();
 
             return Task.FromResult(0);
         }
-        public async Task Execute(string email, string subject, string message)
+        public async Task Execute(string email, string subject, string message, string bccEmails)
         {
             try
             {
@@ -35,7 +35,8 @@ namespace Infrastructure.Services
                     From = new MailAddress(_appSettings.FromEmail, "Dama no Jornal")
                 };
                 mail.To.Add(new MailAddress(email));
-                mail.Bcc.Add(_appSettings.ToEmails);
+                if(!string.IsNullOrEmpty(bccEmails))
+                    mail.Bcc.Add(bccEmails);
                 mail.Subject = subject;
                 mail.Body = message;
                 mail.IsBodyHtml = true;
