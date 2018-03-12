@@ -29,7 +29,7 @@
         </div>
     </div>
     <div class="col-md-6">
-        @Html.Partial("_productDetail", Model.ProductModel)
+        @await Html.PartialAsync("_productDetail", Model.ProductModel)
     </div>
 </div>
 @section Scripts {
