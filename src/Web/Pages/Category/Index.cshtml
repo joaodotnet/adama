@@ -48,7 +48,7 @@
                 @foreach (var catalogItem in Model.CategoryModel.CatalogModel.NewCatalogItems)
                 {
                     <div class="esh-catalog-item col-md-3">
-                        @Html.Partial("_product", catalogItem)
+                        @await Html.PartialAsync("_product", catalogItem)
                     </div>
                 }
             </div>
