@@ -63,8 +63,9 @@ namespace Web.Services
             //TODO GET CACHE
             var categories = await _db.Categories
                 .Include(x => x.Parent)
-                .Include(x => x.CatalogTypes)
-                .ThenInclude(ct => ct.CatalogType)
+                .Include(x => x.CatalogTypes)                
+                .ThenInclude(cts => cts.CatalogType)
+                .ThenInclude(ct => ct.CatalogItems)                
                 .ToListAsync();
 
             MenuComponentViewModel menuViewModel = new MenuComponentViewModel();

@@ -159,7 +159,7 @@ namespace Infrastructure.Data
                 .HasForeignKey(ci => ci.CatalogIllustrationId);
 
             builder.HasOne(ci => ci.CatalogType)
-                .WithMany()
+                .WithMany(x => x.CatalogItems)
                 .HasForeignKey(ci => ci.CatalogTypeId);
 
             builder.Property(x => x.Description)
@@ -222,7 +222,7 @@ namespace Infrastructure.Data
             builder.HasIndex(x => x.Code)
                .IsUnique();
             builder.Property(x => x.PictureUri)
-                .HasMaxLength(255);
+                .HasMaxLength(255);            
         }
 
         private void ConfigureOrder(EntityTypeBuilder<Order> builder)
