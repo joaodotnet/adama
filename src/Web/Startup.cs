@@ -132,6 +132,7 @@ namespace Web
                     options.Conventions.AddPageRoute("/Category/Type/Index", "{cat}/{type}");
                     options.Conventions.AddPageRoute("/Product/Index", "produto/{id}");
                     options.Conventions.AddPageRoute("/Tag/Index", "tag/{id}");
+                    options.Conventions.AddPageRoute("/Search/Index", "procurar/{q?}");
                 });
 
             _services = services;

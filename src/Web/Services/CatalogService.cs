@@ -367,5 +367,34 @@ namespace Web.Services
                 }).ToListAsync()
             };
         }
+        public async Task<CatalogIndexViewModel> GetCatalogItemsBySearch(string searchFor)
+        {
+            searchFor = searchFor.ToLower().Trim();
+
+            CatalogIndexViewModel vm = new CatalogIndexViewModel();
+            IQueryable<CatalogItem> query = null;
+            query = _db.CatalogItems
+                .Include(x => x.CatalogType)
+                .Include(x => x.CatalogIllustration)
+                .ThenInclude(ci => ci.IllustrationType)
+                .Where(x => x.CatalogType.Description.Contains(searchFor) || 
+                x.CatalogIllustration.Name.Contains(searchFor) || 
+                x.CatalogIllustration.IllustrationType.Name.Contains(searchFor) ||
+                x.Name.Contains(searchFor) ||
+                x.Description.Contains(searchFor));
+
+
+            return new CatalogIndexViewModel
+            {
+                CatalogItems = await query.Select(x => new CatalogItemViewModel
+                {
+                    CatalogItemId = x.Id,
+                    CatalogItemName = x.Name,
+                    PictureUri = x.PictureUri,
+                    Price = x.Price,
+                    ProductSku = x.Sku
+                }).ToListAsync()
+            };
+        }
     }
 }
