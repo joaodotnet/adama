@@ -11,5 +11,6 @@ namespace ApplicationCore.Entities
         //public Category Category { get; set; }
 
         public ICollection<CatalogTypeCategory> Categories { get; set; }
+        public ICollection<CatalogItem> CatalogItems { get; set; }
     }
 }
