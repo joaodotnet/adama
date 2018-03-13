@@ -20,6 +20,7 @@ namespace Web.Services
         private static readonly string _categoryItemKeyTemplate = "item-{0}";
         private static readonly string _categoryAttrKeyTemplate = "attr-{0}";
         private static readonly string _itemsByTagKeyTemplate = "tag-{0}-{1}";
+        private static readonly string _itemsBySearchKeyTemplate = "search-{0}";
         private static readonly TimeSpan _defaultCacheDuration = TimeSpan.FromSeconds(30);
 
         public CachedCatalogService(IMemoryCache cache,
@@ -94,6 +95,15 @@ namespace Web.Services
             {
                 entry.SlidingExpiration = _defaultCacheDuration;
                 return await _catalogService.GetCatalogItemsByTag(tagName,tagType);
+            });
+        }
+        public async Task<CatalogIndexViewModel> GetCatalogItemsBySearch(string searchfor)
+        {
+            string cacheKey = String.Format(_itemsBySearchKeyTemplate, searchfor);
+            return await _cache.GetOrCreateAsync(cacheKey, async entry =>
+            {
+                entry.SlidingExpiration = _defaultCacheDuration;
+                return await _catalogService.GetCatalogItemsBySearch(searchfor);
             });
         }
     }
