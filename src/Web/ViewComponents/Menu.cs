@@ -14,14 +14,18 @@ namespace Web.ViewComponents
     public class Menu : ViewComponent
     {
         private readonly IShopService _shopService;
-        public Menu(IShopService service)
+        private readonly ICatalogService _catalogService;
+
+        public Menu(IShopService service, ICatalogService catalogService)
         {
             _shopService = service;
+            _catalogService = catalogService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            return View(await _shopService.GetMenuList());
+            //return View(await _shopService.GetMenuList());
+            return View(await _catalogService.GetMenuViewModel());
         }
     }
 }

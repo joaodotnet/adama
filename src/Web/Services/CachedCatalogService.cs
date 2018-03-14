@@ -21,6 +21,9 @@ namespace Web.Services
         private static readonly string _categoryAttrKeyTemplate = "attr-{0}";
         private static readonly string _itemsByTagKeyTemplate = "tag-{0}-{1}";
         private static readonly string _itemsBySearchKeyTemplate = "search-{0}";
+        private static readonly string _menuKeyTemplate = "damamenu";
+        private static readonly string _categoryKeyTemplate = "category-{0}";
+        private static readonly string _categoryTypesKeyTemplate = "category-types-{0}";
         private static readonly TimeSpan _defaultCacheDuration = TimeSpan.FromSeconds(30);
 
         public CachedCatalogService(IMemoryCache cache,
@@ -104,6 +107,36 @@ namespace Web.Services
             {
                 entry.SlidingExpiration = _defaultCacheDuration;
                 return await _catalogService.GetCatalogItemsBySearch(searchfor);
+            });
+        }
+
+        public async Task<MenuComponentViewModel> GetMenuViewModel()
+        {
+            string cacheKey = _menuKeyTemplate;
+            return await _cache.GetOrCreateAsync(cacheKey, async entry =>
+            {
+                entry.SlidingExpiration = _defaultCacheDuration;
+                return await _catalogService.GetMenuViewModel();
+            });
+        }
+
+        public async Task<(int, string)?> GetCatalogType(string type)
+        {
+            string cacheKey = String.Format(_categoryTypesKeyTemplate, type);
+            return await _cache.GetOrCreateAsync(cacheKey, async entry =>
+            {
+                entry.SlidingExpiration = _defaultCacheDuration;
+                return await _catalogService.GetCatalogType(type);
+            });
+        }
+
+        public async Task<(int, string)?> GetCategory(string name)
+        {
+            string cacheKey = String.Format(_categoryKeyTemplate, name);
+            return await _cache.GetOrCreateAsync(cacheKey, async entry =>
+            {
+                entry.SlidingExpiration = _defaultCacheDuration;
+                return await _catalogService.GetCategory(name);
             });
         }
     }
