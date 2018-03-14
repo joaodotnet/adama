@@ -13,15 +13,24 @@
 <table class="table table-pagination">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.ProductTypesModel[0].Code)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ProductTypesModel[0].Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ProductTypesModel[0].CategoriesName)
-                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductTypesModel[0].Code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductTypesModel[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductTypesModel[0].CategoriesName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductTypesModel[0].DeliveryTimeMin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductTypesModel[0].DeliveryTimeMax)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductTypesModel[0].DeliveryTimeUnit)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -36,6 +45,15 @@
             </td>
             <td>
                 @string.Join(",", item.CategoriesName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeliveryTimeMin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeliveryTimeMax)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeliveryTimeUnit)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Editar</a> |

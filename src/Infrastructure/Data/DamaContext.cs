@@ -216,6 +216,17 @@ namespace Infrastructure.Data
             builder.Property(x => x.Description)
                 .IsRequired()
                 .HasMaxLength(100);
+
+            builder.Property(x => x.DeliveryTimeMin)
+                .IsRequired()
+                .HasDefaultValue(2);
+            builder.Property(x => x.DeliveryTimeMax)
+                .IsRequired()
+                .HasDefaultValue(3);
+            builder.Property(x => x.DeliveryTimeUnit)
+                .IsRequired()
+                .HasDefaultValue("dias");
+
             //builder.HasOne(x => x.Category)
             //    .WithMany(c => c.CatalogTypes)
             //    .HasForeignKey(x => x.CategoryId);
