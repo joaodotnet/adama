@@ -24,6 +24,15 @@ namespace Backoffice.ViewModels
         public List<string> CategoriesName { get; set; } = new List<string>();
         public string PictureUri { get; set; }
         public IFormFile Picture { get; set; }
-        
+        [Required]
+        [Display(Name = "Entrega (Min)")]
+        public int DeliveryTimeMin { get; set; } = 2;
+        [Required]
+        [Display(Name = "Entrega (Max)")]
+        public int DeliveryTimeMax { get; set; } = 3;
+        [Required]
+        [Display(Name = "Entrega (Unidade)")]
+        public string DeliveryTimeUnit { get; set; } = "dias";
+
     }
 }

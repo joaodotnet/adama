@@ -10,8 +10,7 @@ namespace Web.ViewModels
     {
         [Required(ErrorMessage = "Por favor escolha o método de entrega.")]
         public int UseUserAddress { get; set; }
-        [Display(Name = "Nome")]
-        [Required(ErrorMessage = "O nome é obrigatório")]
+        [Display(Name = "Nome")]      
         public string Name { get; set; }
         [Display(Name = "Telefone")]
         public int? ShipAddressPhoneNumber { get; set; }

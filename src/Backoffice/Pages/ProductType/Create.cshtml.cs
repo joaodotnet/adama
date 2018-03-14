@@ -33,6 +33,7 @@ namespace Backoffice.Pages.ProductType
         public IActionResult OnGet()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+            ViewData["Units"] = new SelectList(new object[] { new { Id = "dias" }, new { Id = "semanas" }, new { Id = "meses" } }, "Id", "Id");
             return Page();
         }
 
@@ -42,6 +43,7 @@ namespace Backoffice.Pages.ProductType
         public async Task<IActionResult> OnPostAsync()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+            ViewData["Units"] = new SelectList(new object[] { new { Id = "dias" }, new { Id = "semanas" }, new { Id = "meses" } }, "Id", "Id");
             if (!ModelState.IsValid)
             {
                 return Page();

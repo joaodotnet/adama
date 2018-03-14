@@ -7,6 +7,9 @@ namespace ApplicationCore.Entities
         public string Code { get; set; } //To Remove       
         public string Description { get; set; }
         public string PictureUri { get; set; }
+        public int DeliveryTimeMin { get; set; } = 2;
+        public int DeliveryTimeMax { get; set; } = 3;
+        public string DeliveryTimeUnit { get; set; } = "dias";
         //public int CategoryId { get; set; }
         //public Category Category { get; set; }
 

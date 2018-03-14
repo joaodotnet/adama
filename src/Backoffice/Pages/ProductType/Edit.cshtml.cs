@@ -55,11 +55,15 @@ namespace Backoffice.Pages.ProductType
                 ProductTypeModel.CategoriesId.AddRange(productType.Categories.Select(x => x.CategoryId));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+            ViewData["Units"] = new SelectList(new object[] { new { Id = "dias" }, new { Id = "semanas" }, new { Id = "meses" } }, "Id", "Id");
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+            ViewData["Units"] = new SelectList(new object[] { new { Id = "dias" }, new { Id = "semanas" }, new { Id = "meses" } }, "Id", "Id");
+
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -96,6 +100,9 @@ namespace Backoffice.Pages.ProductType
                 }
                 productTypeEntity.Code = ProductTypeModel.Code;
                 productTypeEntity.Description = ProductTypeModel.Description;
+                productTypeEntity.DeliveryTimeMin = ProductTypeModel.DeliveryTimeMin;
+                productTypeEntity.DeliveryTimeMax = ProductTypeModel.DeliveryTimeMax;
+                productTypeEntity.DeliveryTimeUnit = ProductTypeModel.DeliveryTimeUnit;
                 if (!string.IsNullOrEmpty(ProductTypeModel.PictureUri))
                     productTypeEntity.PictureUri = ProductTypeModel.PictureUri;
 

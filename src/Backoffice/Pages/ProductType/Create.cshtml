@@ -10,8 +10,9 @@
 <h4>Tipo de Produto</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form method="post" enctype="multipart/form-data">
+
+    <form method="post" enctype="multipart/form-data">
+        <div class="col-md-4">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ProductTypeModel.Code" class="control-label"></label>
@@ -34,11 +35,29 @@
                 <small>(quadrado)</small>
                 <span asp-validation-for="ProductTypeModel.Picture" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-inline">
+                <div class="form-group col-md-12" style="padding:0px">
+                    <label asp-for="ProductTypeModel.DeliveryTimeMin"></label>
+                    <input asp-for="ProductTypeModel.DeliveryTimeMin" class="form-control" />
+                    <label asp-for="ProductTypeModel.DeliveryTimeMax"></label>
+                    <input asp-for="ProductTypeModel.DeliveryTimeMax" class="form-control" />
+                    <label>Unidade</label>
+                    <select asp-for="ProductTypeModel.DeliveryTimeUnit" class="form-control" asp-items="ViewBag.Units"></select>
+                    <br />
+                    <span asp-validation-for="ProductTypeModel.DeliveryTimeMin" class="text-danger"></span>
+                    <span asp-validation-for="ProductTypeModel.DeliveryTimeMax" class="text-danger"></span>
+                    <span asp-validation-for="ProductTypeModel.DeliveryTimeUnit" class="text-danger"></span>
+                </div>                                 
+            </div>
+        </div>
+        <div class="col-md-12" style="margin-top:10px;">
             <div class="form-group">
                 <input type="submit" value="Criar" class="btn btn-default" />
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
 
 <div>
@@ -49,7 +68,7 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('#ProductTypeModel_CategoriesId').select2();
         });
     </script>
