@@ -11,11 +11,9 @@ namespace Web.Pages.Category
 {
     public class IndexModel : PageModel
     {
-        private readonly IShopService _shopService;
         private readonly ICatalogService _catalogService;
-        public IndexModel(IShopService service, ICatalogService catalogService)
+        public IndexModel(ICatalogService catalogService)
         {
-            _shopService = service;
             _catalogService = catalogService;
         }
 
@@ -23,13 +21,13 @@ namespace Web.Pages.Category
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
-            var cat = await _shopService.GetCategory(id);
-            if (cat == null)
+            var cat = await _catalogService.GetCategory(id); 
+            if (!cat.HasValue)
                 return NotFound();
             else
-                CategoryModel.CategoryName = cat.Name;
+                CategoryModel.CategoryName = cat.Value.Item2;
 
-            CategoryModel.CatalogModel = await _catalogService.GetCategoryCatalogItems(cat.Id);
+            CategoryModel.CatalogModel = await _catalogService.GetCategoryCatalogItems(cat.Value.Item1);
             //CategoryModel.CatalogTypes = CategoryModel.CatalogModel.CatalogItems.Select(x => (x.CatalogTypeCode,x.CatalogTypeName)).Distinct().ToList();
             CategoryModel.CategoryUrlName = id.ToLower();
 

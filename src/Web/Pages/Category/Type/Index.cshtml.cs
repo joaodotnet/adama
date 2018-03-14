@@ -27,10 +27,10 @@ namespace Web.Pages.Category.Type
 
         public async Task<IActionResult> OnGetAsync(string cat, string type)
         {
-            var catalogType = await _shopService.GetCatalogType(type);
-            if (catalogType == null)
+            var catalogType = await _catalogService.GetCatalogType(type);
+            if (!catalogType.HasValue)
                 return NotFound();
-            CatalogTypeName = catalogType.Description;
+            CatalogTypeName = catalogType.Value.Item2;
 
             //int? typeId = null;
             //if (!string.IsNullOrEmpty(type))
@@ -42,7 +42,7 @@ namespace Web.Pages.Category.Type
             //    CatalogTypeName = catalogType.Description;
             //}
 
-            CatalogModel = await _catalogService.GetCatalogItems(0, null, null, catalogType.Id);
+            CatalogModel = await _catalogService.GetCatalogItems(0, null, null, catalogType.Value.Item1);
             //CategoryModel.CatalogTypes = CategoryModel.CatalogModel.CatalogItems.Select(x => (x.CatalogTypeCode, x.CatalogTypeName)).Distinct().ToList();
 
             return Page();

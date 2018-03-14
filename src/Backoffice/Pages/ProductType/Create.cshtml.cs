@@ -67,7 +67,7 @@ namespace Backoffice.Pages.ProductType
             }
 
             //Save Image
-            if (ProductTypeModel?.Picture.Length > 0)
+            if (ProductTypeModel?.Picture?.Length > 0)
             {
                 var lastId = _context.CatalogTypes.Count() > 0 ? (await _context.CatalogTypes.LastAsync()).Id : 0;
                 ProductTypeModel.PictureUri = await _service.SaveFileAsync(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureFullPath, _backofficeSettings.WebProductTypesPictureUri, (++lastId).ToString());

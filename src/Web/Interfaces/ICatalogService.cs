@@ -16,5 +16,8 @@ namespace Web.Interfaces
         Task<AttributeViewModel> GetAttributeDetails(int attributeId);
         Task<CatalogIndexViewModel> GetCatalogItemsByTag(string tagName, TagType? tagType);
         Task<CatalogIndexViewModel> GetCatalogItemsBySearch(string searchFor);
+        Task<MenuComponentViewModel> GetMenuViewModel();
+        Task<(int,string)?> GetCatalogType(string type);
+        Task<(int, string)?> GetCategory(string name);
     }
 }
