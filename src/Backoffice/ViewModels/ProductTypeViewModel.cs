@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ApplicationCore.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -32,7 +33,7 @@ namespace Backoffice.ViewModels
         public int DeliveryTimeMax { get; set; } = 3;
         [Required]
         [Display(Name = "Entrega (Unidade)")]
-        public string DeliveryTimeUnit { get; set; } = "dias";
+        public DeliveryTimeUnitType DeliveryTimeUnit { get; set; } = DeliveryTimeUnitType.Days;
 
     }
 }

@@ -33,8 +33,6 @@ namespace Web.Pages.Product
             {                
                 attrDefaultPrice += item.First().Attributes.First().Price ?? 0;
             }
-            _logger.LogInformation(">>>>>>> Product Base Price: {0} <<<<<<<<<<<", ProductModel.ProductBasePrice);
-            _logger.LogInformation(">>>>>>> Atribute Default Price: {0} <<<<<<<<<<<", attrDefaultPrice);
             ProductModel.ProductTotalPrice = ProductModel.ProductBasePrice + attrDefaultPrice;
             return Page();
         }

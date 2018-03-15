@@ -24,6 +24,9 @@ namespace Web.ViewModels
         public string ProductSKU { get; set; }
         public List<LinkViewModel> Categories { get; set; }
         public List<LinkViewModel> Tags { get; set; }
+        public int DeliveryTimeMin { get; set; }
+        public int DeliveryTimeMax { get; set; }
+        public DeliveryTimeUnitType DeliveryTimeUnit { get; set; }
 
     }
 

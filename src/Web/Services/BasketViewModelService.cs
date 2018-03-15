@@ -53,7 +53,7 @@ namespace Web.Services
 
                 };
                 var item = _itemRepository.GetById(i.CatalogItemId);
-                if(item != null)
+                if (item != null)
                 {
                     itemModel.PictureUrl = _uriComposer.ComposePicUri(item.PictureUri);
                     itemModel.ProductName = item.Name;
@@ -64,8 +64,7 @@ namespace Web.Services
                     Label = EnumHelper<CatalogAttributeType>.GetDisplayValue(d.CatalogAttribute.Type)
                 }).ToList();
                 return itemModel;
-            })
-                            .ToList();
+            }).ToList();
             return viewModel;
         }
 

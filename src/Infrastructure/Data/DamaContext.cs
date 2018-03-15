@@ -225,7 +225,7 @@ namespace Infrastructure.Data
                 .HasDefaultValue(3);
             builder.Property(x => x.DeliveryTimeUnit)
                 .IsRequired()
-                .HasDefaultValue("dias");
+                .HasDefaultValue(DeliveryTimeUnitType.Days);
 
             //builder.HasOne(x => x.Category)
             //    .WithMany(c => c.CatalogTypes)

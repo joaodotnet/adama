@@ -15,6 +15,8 @@ using Web.Extensions;
 using ApplicationCore.Entities;
 using ApplicationCore;
 using Microsoft.Extensions.Options;
+using System.Linq;
+using ApplicationCore.DTOs;
 
 namespace Web.Pages.Basket
 {
@@ -57,6 +59,9 @@ namespace Web.Pages.Basket
         [BindProperty]
         public AddressViewModel UserAddress { get; set; } = new AddressViewModel();
 
+        [BindProperty]
+        public DeliveryTimeDTO DeliveryTime { get; set; } = new DeliveryTimeDTO();
+
         public async Task OnGet()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -66,6 +71,9 @@ namespace Web.Pages.Basket
                 UserAddress.InvoiceTaxNumber = user.NIF;
             }
             await SetBasketModelAsync();
+
+            //Set Min and Max Delivery time
+            DeliveryTime = await _basketService.CalculateDeliveryTime(BasketModel.Id);
         }
 
         public async Task<IActionResult> OnPost()
@@ -350,5 +358,5 @@ namespace Web.Pages.Basket
             return ModelState.IsValid;
         }
 
-    }
+    }    
 }
