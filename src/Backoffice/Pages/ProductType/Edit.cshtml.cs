@@ -55,14 +55,12 @@ namespace Backoffice.Pages.ProductType
                 ProductTypeModel.CategoriesId.AddRange(productType.Categories.Select(x => x.CategoryId));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
-            ViewData["Units"] = new SelectList(new object[] { new { Id = "dias" }, new { Id = "semanas" }, new { Id = "meses" } }, "Id", "Id");
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
-            ViewData["Units"] = new SelectList(new object[] { new { Id = "dias" }, new { Id = "semanas" }, new { Id = "meses" } }, "Id", "Id");
 
             if (!ModelState.IsValid)
             {

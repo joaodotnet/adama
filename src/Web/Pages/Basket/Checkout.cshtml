@@ -155,7 +155,7 @@
             </div>
         </div>
         <div class="col-sm-3 bg-light pt-2 mt-3 mt-sm-0" style="min-height:400px">
-            <h4 class="text-center">Resumo da encomenda</h4>
+            <h4>Resumo da encomenda</h4>
             <article class="row m-0">
                 <section class="col-2 p-0">Qt.</section>
                 <section class="col-7 p-0">Produto</section>
@@ -164,20 +164,20 @@
             <hr />
             <div class="dama-checkout-items">
                 @foreach (var item in Model.BasketModel.Items)
-                {
-                    <article class="row pt-sm-1 m-0">
-                        <section class="col-2 p-0">@item.Quantity</section>
-                        <section class="col-7 p-0">
-                            @item.ProductName
-                            <br />
-                            @foreach (var attr in item.Attributes)
-                            {
-                                <span class="dama-basket-label">@attr.Name; </span>
-                            }
-                        </section>
-                        <section class="col-3 p-0">€ @item.UnitPrice.ToString("N2")</section>
-                    </article>
-                }
+        {
+            <article class="row pt-sm-1 m-0">
+                <section class="col-2 p-0">@item.Quantity</section>
+                <section class="col-7 p-0">
+                    @item.ProductName
+                    <br />
+                    @foreach (var attr in item.Attributes)
+            {
+                <span class="dama-basket-label">@attr.Name; </span>
+    }
+                </section>
+                <section class="col-3 p-0">€ @item.UnitPrice.ToString("N2")</section>
+            </article>
+}
             </div>
             <hr />
             <article class="row">
@@ -191,6 +191,10 @@
             <article class="row">
                 <section class="offset-2 col-6 text-right">TOTAL</section>
                 <section id="basket-total" class="col-4 pl-0 dama-product-price">@Model.BasketModel.Total()</section>
+            </article>
+            <hr />
+            <article class="row">
+                <section class="col-12"><small>Tempo de entrega entre @Model.DeliveryTime.Min a @Model.DeliveryTime.Max @(Web.Extensions.EnumHelper<ApplicationCore.Entities.DeliveryTimeUnitType>.GetDisplayValue(Model.DeliveryTime.Unit))</small></section>
             </article>
             <div class="dama-checkout-btn mb-3 float-right mt-3 mt-sm-0">
                 <input class="btn btn-default esh-basket-checkout p-1 m-auto" type="submit" value="[ Finalizar Encomenda ]" />

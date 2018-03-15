@@ -5,6 +5,7 @@ using ApplicationCore.Specifications;
 using ApplicationCore.Entities;
 using System.Linq;
 using Ardalis.GuardClauses;
+using ApplicationCore.DTOs;
 
 namespace ApplicationCore.Services
 {
@@ -121,6 +122,37 @@ namespace ApplicationCore.Services
             if (basket != null)
                 basket.RemoveItem(itemIndex);
             await _basketRepository.UpdateAsync(basket);
+        }
+
+        public async Task<DeliveryTimeDTO> CalculateDeliveryTime(int basketId) //TODO: Create unit test
+        {
+            var basketSpec = new BasketWithItemsSpecification(basketId);
+            var basket = (await _basketRepository.ListAsync(basketSpec)).SingleOrDefault();
+
+            DeliveryTimeDTO deliveryTime = new DeliveryTimeDTO
+            {
+                Min = 2,
+                Max = 3,
+                Unit = DeliveryTimeUnitType.Days
+            };
+            foreach (var item in basket.Items)
+            {
+                var spec = new CatalogTypeFilterSpecification(item.CatalogItemId);
+                var product = _itemRepository.GetSingleBySpec(spec);
+
+                if(product.CatalogType.DeliveryTimeUnit > deliveryTime.Unit)
+                {
+                    deliveryTime.Min = product.CatalogType.DeliveryTimeMin;
+                    deliveryTime.Max = product.CatalogType.DeliveryTimeMax;
+                    deliveryTime.Unit = product.CatalogType.DeliveryTimeUnit;
+                }
+                else if(product.CatalogType.DeliveryTimeUnit == deliveryTime.Unit)
+                {
+                    deliveryTime.Min = product.CatalogType.DeliveryTimeMin > deliveryTime.Min ? product.CatalogType.DeliveryTimeMin : deliveryTime.Min;
+                    deliveryTime.Max = product.CatalogType.DeliveryTimeMax > deliveryTime.Max ? product.CatalogType.DeliveryTimeMax : deliveryTime.Max;                    
+                }                
+            }
+            return deliveryTime;
         }
     }
 }

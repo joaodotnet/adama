@@ -241,7 +241,10 @@ namespace Web.Services
                         new LinkViewModel { Name = product.CatalogType.Description, TagName = "tipo"},
                         new LinkViewModel { Name = product.CatalogIllustration.Name, TagName = "ilustracao"},
                         new LinkViewModel { Name = product.CatalogIllustration.IllustrationType.Name, TagName = "ilustracao_tipo"},
-                    }
+                    },
+                    DeliveryTimeMin = product.CatalogType.DeliveryTimeMin,
+                    DeliveryTimeMax = product.CatalogType.DeliveryTimeMax,
+                    DeliveryTimeUnit = product.CatalogType.DeliveryTimeUnit
                 };
 
                 //Others prictures

@@ -45,7 +45,7 @@
                     <label asp-for="ProductTypeModel.DeliveryTimeMax"></label>
                     <input asp-for="ProductTypeModel.DeliveryTimeMax" class="form-control" />
                     <label>Unidade</label>
-                    <select asp-for="ProductTypeModel.DeliveryTimeUnit" class="form-control" asp-items="ViewBag.Units"></select>
+                    <select asp-for="ProductTypeModel.DeliveryTimeUnit" class="form-control" asp-items="Html.GetEnumSelectList<ApplicationCore.Entities.DeliveryTimeUnitType>()"></select>
                     <br />
                     <span asp-validation-for="ProductTypeModel.DeliveryTimeMin" class="text-danger"></span>
                     <span asp-validation-for="ProductTypeModel.DeliveryTimeMax" class="text-danger"></span>
