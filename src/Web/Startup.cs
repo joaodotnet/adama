@@ -114,7 +114,8 @@ namespace Web
             services.AddScoped<IShopService,ShopService>();
             services.Configure<CatalogSettings>(Configuration);
             services.AddSingleton<IUriComposer>(new UriComposer(Configuration.Get<CatalogSettings>()));
-
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
             services.AddSingleton<IEmailSender>(new EmailSender(Configuration.Get<CatalogSettings>()));
 
