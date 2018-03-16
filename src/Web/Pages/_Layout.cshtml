@@ -33,7 +33,7 @@
             <img src="~/images/brand_full.png" width="150" alt="Dama no Jornal" />
         </a>
         <form class="form-inline my-2 my-lg-0 search-text" asp-page="/Search/Index" method="get">
-            <input name="q" class="bg-transparent border-left-0 border-right-0 border-top-0 border-light" autocomplete="off" type="search" placeholder="Procurar" aria-label="Search">            
+            <input name="q" class="bg-transparent border-left-0 border-right-0 border-top-0 border-light" autocomplete="off" type="search" placeholder="Procurar" aria-label="Search">
         </form>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar7">
             <span class="navbar-toggler-icon"></span>
@@ -73,121 +73,105 @@
         <div class="navbar-collapse collapse text-center" id="collapsingNavbar">
             <div></div>
             @await Component.InvokeAsync("Menu")
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="modal" data-target="#searchModal">PROCURAR</a>
+                </li>
+            </ul>
         </div>
     </nav>
-
-
-        @*<nav class="navbar navbar-dark navbar-expand-lg background_gradient">
-                <a id="brand-mobile-image" class="navbar-brand" href="https://www.damanojornal.com">
-                    <img src="~/images/brand.png" width="50px;" wialt="eShop On Web" />
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse justify-content-md-center" id="navbarSupportedContent">
-                    @await Component.InvokeAsync("Menu")
-                    <ul class="nav navbar-nav mx-auto w-25 ul-social">
-                        <li class="nav-item social-links">
-                            <a class="nav-link" href="https://www.facebook.com/damanojornal/" target="_blank">
-                                <i class="fab fa-facebook-f fa-inverse"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item social-links">
-                            <a class="nav-link" href="https://www.instagram.com/damanojornal/" target="_blank">
-                                <i class="fab fa-instagram"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item social-links">
-                            <a class="nav-link" href="https://plus.google.com/u/0/100248952978180097515" target="_blank">
-                                <i class="fab fa-google-plus-g"></i>
-                            </a>
-                        </li>
-                    </ul>
-
-                    <ul class="nav navbar-nav ml-auto justify-content-end">
-                        <li class="nav-item">
-                            <div class="ml-auto my-2 my-lg-0">
-                                @await Html.PartialAsync("_LoginPartial")
-                            </div>
-                        </li>
-                    </ul>
-
+    <!-- Search Modal -->
+    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" style="width:80%" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Procurar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-            </nav>*@
-        <div height="30px">
-            @*<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" preserveAspectRatio="none">
-                    <path class="elementor-shape-fill" opacity="0.33" d="M473,67.3c-203.9,88.3-263.1-34-320.3,0C66,119.1,0,59.7,0,59.7V0h1000v59.7 c0,0-62.1,26.1-94.9,29.3c-32.8,3.3-62.8-12.3-75.8-22.1C806,49.6,745.3,8.7,694.9,4.7S492.4,59,473,67.3z"></path>
-                    <path class="elementor-shape-fill" opacity="0.66" d="M734,67.3c-45.5,0-77.2-23.2-129.1-39.1c-28.6-8.7-150.3-10.1-254,39.1 s-91.7-34.4-149.2,0C115.7,118.3,0,39.8,0,39.8V0h1000v36.5c0,0-28.2-18.5-92.1-18.5C810.2,18.1,775.7,67.3,734,67.3z"></path>
-                    <path class="elementor-shape-fill" d="M766.1,28.9c-200-57.5-266,65.5-395.1,19.5C242,1.8,242,5.4,184.8,20.6C128,35.8,132.3,44.9,89.9,52.5C28.6,63.7,0,0,0,0 h1000c0,0-9.9,40.9-83.6,48.1S829.6,47,766.1,28.9z"></path>
-                </svg>*@
-            @*<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1000 100">
-                    <path fill="#e3f2f2" id="svg_1" d="m473,67.3c-203.9,88.3 -263.1,-34 -320.3,0c-86.7,51.8 -152.7,-7.6 -152.7,-7.6l0,-59.7l1000,0l0,59.7c0,0 -62.1,26.1 -94.9,29.3c-32.8,3.3 -62.8,-12.3 -75.8,-22.1c-23.3,-17.3 -84,-58.2 -134.4,-62.2s-202.5,54.3 -221.9,62.6z" opacity="0.33" class="elementor-shape-fill" />
-                    <path fill="#e3f2f2" id="svg_2" d="m734,67.3c-45.5,0 -77.2,-23.2 -129.1,-39.1c-28.6,-8.7 -150.3,-10.1 -254,39.1s-91.7,-34.4 -149.2,0c-86,51 -201.7,-27.5 -201.7,-27.5l0,-39.8l1000,0l0,36.5c0,0 -28.2,-18.5 -92.1,-18.5c-97.7,0.1 -132.2,49.3 -173.9,49.3z" opacity="0.66" class="elementor-shape-fill" />
-                    <path fill="#cdefef" id="svg_3" d="m766.1,28.9c-200,-57.5 -266,65.5 -395.1,19.5c-129,-46.6 -129,-43 -186.2,-27.8c-56.8,15.2 -52.5,24.3 -94.9,31.9c-61.3,11.2 -89.9,-52.5 -89.9,-52.5l1000,0c0,0 -9.9,40.9 -83.6,48.1s-86.8,-1.1 -150.3,-19.2z" class="elementor-shape-fill" />
-                </svg>*@
-        </div>
-        @*</article>
-            </header>*@
-        <div class="container body-content">
-            @RenderBody()
-        </div>
-
-
-        <footer class="esh-app-footer">
-            <div class="container">
-                <article class="row">
-                    <section class="offset-sm-2 col-sm-4">
-                        <div class="text-center footer-img">
-                            <img width="319px" src="~/images/flor-com-logo-1.png" />
-                        </div>
-                        <div class="esh-app-footer-text footer-text"> © Copyright 2017 Dama no Jornal | All Rights Reserved </div>
-                    </section>
-                    <section class="col-12 col-sm-4 footer-links text-center">
-                        <div class="footer-link text-center">
-                            <a href="#">FAQ</a>
-                        </div>
-                        <div class="footer-link text-center">
-                            <a href="#">Eventos</a>
-                        </div>
-                        <div class="footer-link text-center">
-                            <a href="#">Contactos</a>
-                        </div>
-                        <div class="footer-link text-center text-nowrap">
-                            <a href="#">Termos e Condições</a>
-                        </div>
-                        <div class="footer-link text-center">
-                            <i class="fab fa-facebook-f fa-inverse"></i>
-                            <i class="fab fa-instagram fa-inverse"></i>
-                            <i class="fab fa-google-plus-g fa-inverse"></i>
-                        </div>
-                        <div class="esh-app-footer-text footer-text-mobile"> © Copyright 2017 Dama no Jornal | All Rights Reserved </div>
-                    </section>
-                </article>
+                <div class="modal-body">
+                    <form class="form-inline" asp-page="/Search/Index" method="get">
+                        <input name="q" class="form-control" autocomplete="off" type="search" placeholder="Procurar" aria-label="Search">
+                    </form>
+                </div>
             </div>
-        </footer>
+        </div>
+    </div>
 
-        <environment names="Development">
-            <script src="~/lib/jquery/dist/jquery.js"></script>
-            <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-            <script src="~/lib/fontawesome-free-5.0.4/js/fontawesome-all.js"></script>
-            <script src="~/lib/slick-1.8.0/slick/slick.js"></script>
-            <script src="~/js/site.js" asp-append-version="true"></script>
-        </environment>
-        <environment names="Staging,Production">
-            <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
-                    asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                    asp-fallback-test="window.jQuery">
-            </script>          
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"
-                    asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <div height="30px">
+        @*<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" preserveAspectRatio="none">
+                <path class="elementor-shape-fill" opacity="0.33" d="M473,67.3c-203.9,88.3-263.1-34-320.3,0C66,119.1,0,59.7,0,59.7V0h1000v59.7 c0,0-62.1,26.1-94.9,29.3c-32.8,3.3-62.8-12.3-75.8-22.1C806,49.6,745.3,8.7,694.9,4.7S492.4,59,473,67.3z"></path>
+                <path class="elementor-shape-fill" opacity="0.66" d="M734,67.3c-45.5,0-77.2-23.2-129.1-39.1c-28.6-8.7-150.3-10.1-254,39.1 s-91.7-34.4-149.2,0C115.7,118.3,0,39.8,0,39.8V0h1000v36.5c0,0-28.2-18.5-92.1-18.5C810.2,18.1,775.7,67.3,734,67.3z"></path>
+                <path class="elementor-shape-fill" d="M766.1,28.9c-200-57.5-266,65.5-395.1,19.5C242,1.8,242,5.4,184.8,20.6C128,35.8,132.3,44.9,89.9,52.5C28.6,63.7,0,0,0,0 h1000c0,0-9.9,40.9-83.6,48.1S829.6,47,766.1,28.9z"></path>
+            </svg>*@
+        @*<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1000 100">
+                <path fill="#e3f2f2" id="svg_1" d="m473,67.3c-203.9,88.3 -263.1,-34 -320.3,0c-86.7,51.8 -152.7,-7.6 -152.7,-7.6l0,-59.7l1000,0l0,59.7c0,0 -62.1,26.1 -94.9,29.3c-32.8,3.3 -62.8,-12.3 -75.8,-22.1c-23.3,-17.3 -84,-58.2 -134.4,-62.2s-202.5,54.3 -221.9,62.6z" opacity="0.33" class="elementor-shape-fill" />
+                <path fill="#e3f2f2" id="svg_2" d="m734,67.3c-45.5,0 -77.2,-23.2 -129.1,-39.1c-28.6,-8.7 -150.3,-10.1 -254,39.1s-91.7,-34.4 -149.2,0c-86,51 -201.7,-27.5 -201.7,-27.5l0,-39.8l1000,0l0,36.5c0,0 -28.2,-18.5 -92.1,-18.5c-97.7,0.1 -132.2,49.3 -173.9,49.3z" opacity="0.66" class="elementor-shape-fill" />
+                <path fill="#cdefef" id="svg_3" d="m766.1,28.9c-200,-57.5 -266,65.5 -395.1,19.5c-129,-46.6 -129,-43 -186.2,-27.8c-56.8,15.2 -52.5,24.3 -94.9,31.9c-61.3,11.2 -89.9,-52.5 -89.9,-52.5l1000,0c0,0 -9.9,40.9 -83.6,48.1s-86.8,-1.1 -150.3,-19.2z" class="elementor-shape-fill" />
+            </svg>*@
+    </div>
 
-            <script defer src="https://use.fontawesome.com/releases/v5.0.4/js/all.js"
-                    asp-fallback-src="~/lib/fontawesome-free-5.0.4/js/fontawesome-all.js">
-            </script>
-            <script src="~/lib/slick-1.8.0/slick/slick.min.js"></script>
-            <script src="~/js/site.min.js" asp-append-version="true"></script>
-        </environment>
+    <div class="container body-content">
+        @RenderBody()
+    </div>
 
-        @RenderSection("scripts", required: false)
+
+    <footer class="esh-app-footer">
+        <div class="container">
+            <article class="row">
+                <section class="offset-sm-2 col-sm-4">
+                    <div class="text-center footer-img">
+                        <img width="319px" src="~/images/flor-com-logo-1.png" />
+                    </div>
+                    <div class="esh-app-footer-text footer-text"> © Copyright 2017 Dama no Jornal | All Rights Reserved </div>
+                </section>
+                <section class="col-12 col-sm-4 footer-links text-center">
+                    <div class="footer-link text-center">
+                        <a href="#">FAQ</a>
+                    </div>
+                    <div class="footer-link text-center">
+                        <a href="#">Eventos</a>
+                    </div>
+                    <div class="footer-link text-center">
+                        <a href="#">Contactos</a>
+                    </div>
+                    <div class="footer-link text-center text-nowrap">
+                        <a href="#">Termos e Condições</a>
+                    </div>
+                    <div class="footer-link text-center">
+                        <i class="fab fa-facebook-f fa-inverse"></i>
+                        <i class="fab fa-instagram fa-inverse"></i>
+                        <i class="fab fa-google-plus-g fa-inverse"></i>
+                    </div>
+                    <div class="esh-app-footer-text footer-text-mobile"> © Copyright 2017 Dama no Jornal | All Rights Reserved </div>
+                </section>
+            </article>
+        </div>
+    </footer>
+
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/lib/fontawesome-free-5.0.4/js/fontawesome-all.js"></script>
+        <script src="~/lib/slick-1.8.0/slick/slick.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery">
+        </script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+
+        <script defer src="https://use.fontawesome.com/releases/v5.0.4/js/all.js"
+                asp-fallback-src="~/lib/fontawesome-free-5.0.4/js/fontawesome-all.js">
+        </script>
+        <script src="~/lib/slick-1.8.0/slick/slick.min.js"></script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+
+    @RenderSection("scripts", required: false)
 </body>
 </html>

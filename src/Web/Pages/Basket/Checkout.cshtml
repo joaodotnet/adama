@@ -5,6 +5,7 @@
 }
 
 <h2>Encomendar</h2>
+
 <form method="post">
     <input type="hidden" asp-for="BasketModel.Id" />
     <div class="row">
@@ -122,7 +123,7 @@
                             <strong>Usar a mesma morada na fatura</strong>
                         </label>
                     </div>
-                    <div id="invoice-address-controls" class="@( (Model.UserAddress.UseSameAsShipping && Model.UserAddress.UseUserAddress == 1) || Model.UserAddress.UseUserAddress == 2 ? "d-none":"d-block")">
+                    <div id="invoice-address-controls" class="@( (Model.UserAddress.UseSameAsShipping && (Model.UserAddress.UseUserAddress == 1 || Model.UserAddress.UseUserAddress == 0)) || Model.UserAddress.UseUserAddress == 2 ? "d-none":"d-block")">
                         <div class="form-group">
                             <label asp-for="UserAddress.InvoiceAddressStreet"></label>
                             <input class="form-control" asp-for="UserAddress.InvoiceAddressStreet">
@@ -164,20 +165,20 @@
             <hr />
             <div class="dama-checkout-items">
                 @foreach (var item in Model.BasketModel.Items)
-        {
-            <article class="row pt-sm-1 m-0">
-                <section class="col-2 p-0">@item.Quantity</section>
-                <section class="col-7 p-0">
-                    @item.ProductName
-                    <br />
-                    @foreach (var attr in item.Attributes)
-            {
-                <span class="dama-basket-label">@attr.Name; </span>
-    }
-                </section>
-                <section class="col-3 p-0">€ @item.UnitPrice.ToString("N2")</section>
-            </article>
-}
+                {
+                    <article class="row pt-sm-1 m-0">
+                        <section class="col-2 p-0">@item.Quantity</section>
+                        <section class="col-7 p-0">
+                            @item.ProductName
+                            <br />
+                            @foreach (var attr in item.Attributes)
+                            {
+                                <span class="dama-basket-label">@attr.Name; </span>
+                            }
+                        </section>
+                        <section class="col-3 p-0">€ @item.UnitPrice.ToString("N2")</section>
+                    </article>
+                }
             </div>
             <hr />
             <article class="row">
@@ -201,6 +202,9 @@
             </div>
         </div>
     </div>
+    <input type="hidden" asp-for="DeliveryTime.Min" />
+    <input type="hidden" asp-for="DeliveryTime.Max" />
+    <input type="hidden" asp-for="DeliveryTime.Unit" />
 </form>
 
 @section Scripts {
@@ -217,8 +221,8 @@
                     $('#store-location-col').removeClass('dama-checkout-border d-block').addClass('d-none');
                     $('#billing-address-col').removeClass('d-none').addClass('d-block');
                     $('#grpSameAsShipping').removeClass('d-none').addClass('d-block');
-                    $('#invoice-address-controls').removeClass('d-none').addClass('d-block');
-                    
+                    //$('#invoice-address-controls').removeClass('d-none').addClass('d-block');
+
                     //$('#user-address-controls').removeClass('d-none');
                     //$('#store-location-controls').addClass('d-none');
                 }
@@ -230,7 +234,7 @@
                     $('#store-location-col').addClass('dama-checkout-border d-none').addClass('d-block');
                     $('#billing-address-col').removeClass('d-none').addClass('d-block');
                     $('#grpSameAsShipping').removeClass('d-block').addClass('d-none');
-                    $('#invoice-address-controls').removeClass('d-block').addClass('d-none');
+                    //$('#invoice-address-controls').removeClass('d-block').addClass('d-none');
                     //$('#user-address-controls').addClass('d-none');
                     //$('#store-location-controls').removeClass('d-none');
                 }

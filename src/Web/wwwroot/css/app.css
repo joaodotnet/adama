@@ -90,6 +90,10 @@ body {
     color: #fff;
 }
 
+#searchModal {
+    text-align: center;
+}
+
 .alert {
     padding-left: 0;
 }
