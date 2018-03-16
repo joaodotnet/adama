@@ -109,7 +109,7 @@ namespace Web.Pages.Basket
 
                 await _basketService.DeleteBasketAsync(BasketModel.Id);
 
-                var body = GetEmailBody(resOrder, user, UserAddress.UseUserAddress == 2);
+                var body = GetEmailBody(resOrder, user, UserAddress.UseUserAddress == 2, DeliveryTime);
                 await _emailSender.SendEmailAsync(resOrder.BuyerId, $"Dama no Jornal®: Encomenda nº{resOrder.Id}", body, _settings.ToEmails);
 
                 return RedirectToPage("./Result");
@@ -118,7 +118,7 @@ namespace Web.Pages.Basket
             return Page();
         }
 
-        private string GetEmailBody(ApplicationCore.Entities.OrderAggregate.Order order, ApplicationUser user, bool pickupAtStore)
+        private string GetEmailBody(ApplicationCore.Entities.OrderAggregate.Order order, ApplicationUser user, bool pickupAtStore, DeliveryTimeDTO deliveryTime)
         {
             string body = $@"
 <table style='width:550px;'>
@@ -234,7 +234,7 @@ namespace Web.Pages.Basket
             {order.ShipToAddress.PostalCode} {order.ShipToAddress.City}
         </div>
         <div style='margin-top:20px;text-align:center;width:550px'>
-            <strong>Tempo de entrega:</strong> 2-3 dias úteis para artigos em stock
+            <strong>Tempo de entrega:</strong> {deliveryTime.Min} a {deliveryTime.Max} {EnumHelper<DeliveryTimeUnitType>.GetDisplayValue(deliveryTime.Unit)} úteis para artigos em stock
         </div>
     </div>
     <div style='margin-top:20px;background-color:#eeebeb;width:550px;padding: 5px;'>
@@ -248,6 +248,7 @@ namespace Web.Pages.Basket
             Mercado Municipal de Loulé<br />
             <a href='https://goo.gl/maps/vHLacbNAqdo' style='color: #EF7C8D;text-decoration:underline'>Ver Mapa</a>";            
         body += $@"</div>
+
     </div>
     <div style='margin-top:20px;background-color:#eeebeb;width:550px;padding: 5px;'>
         <h3 style='text-align:center;width:550px'>INFORMAÇÕES DE PAGAMENTO</h3>
