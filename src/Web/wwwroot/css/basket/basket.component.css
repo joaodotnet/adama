@@ -128,7 +128,7 @@
 @media (min-width: 576px) {
     .dama-checkout-btn {
         position: absolute;
-        bottom: 0;
+        bottom: -60px;
     }
 }
 

@@ -34,11 +34,11 @@ namespace Web.Pages.Account
 
         public class LoginViewModel
         {
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = "O endereço de Email é obrigatório.")]
+            [EmailAddress(ErrorMessage = "O endereço de Email não é valido.")]
             public string Email { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "A {0} é obrigatória.")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
@@ -95,7 +95,7 @@ namespace Web.Pages.Account
             {
                 return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = LoginDetails.RememberMe });
             }
-            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            ModelState.AddModelError(string.Empty, "Email ou password inválidos, insira correctamente os dados.");
             return Page();
         }
 
@@ -132,8 +132,19 @@ namespace Web.Pages.Account
         {
             foreach (var error in result.Errors)
             {
-                ModelState.AddModelError("", error.Description);
+                string description = TryTranslate(error.Description);
+                ModelState.AddModelError("", description);
             }
+        }
+
+        private string TryTranslate(string description)
+        {
+            if(description.LastIndexOf("is already taken.") > 0)
+            {
+                return $"O email '{UserDetails.Email}' já se encontra registado.";
+            }
+            return description;
+
         }
     }
 }

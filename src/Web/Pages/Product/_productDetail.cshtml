@@ -62,10 +62,14 @@
             @foreach (var item in Model.Tags)
             {
                 <a asp-page="/Tag/Index" asp-route-id="@item.Name" asp-route-q="@item.TagName">@item.Name</a>
+                @if (item != Model.Tags.Last())
+                {
+                    <text>,</text>
+                }
             }
         </div>
     </div>
     <input type="hidden" asp-for="ProductSKU" />
     <input type="hidden" asp-for="ProductId" />
-    <input type="hidden" asp-for="ProductBasePrice" />    
+    <input type="hidden" asp-for="ProductBasePrice" />
 </form>

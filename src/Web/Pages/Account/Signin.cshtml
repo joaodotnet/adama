@@ -4,7 +4,7 @@
 @using Microsoft.AspNetCore.Http.Authentication
 @model SigninModel
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Login";
 }
 <div class="account-login-container">
     <div class="row">
@@ -14,12 +14,12 @@
                 <form asp-route-returnurl="@ViewData["ReturnUrl"]" asp-page-handler="SignIn" method="post" class="form-horizontal">
                     <h4>Já se registou?</h4>
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group">
+                    <div class="form-group required">
                         <label asp-for="LoginDetails.Email" class="control-label form-label"></label>
                         <input asp-for="LoginDetails.Email" class="form-control form-input form-input-center" />
                         <span asp-validation-for="LoginDetails.Email" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group required">
                         <label asp-for="LoginDetails.Password" class="control-label form-label"></label>
                         <input asp-for="LoginDetails.Password" class="form-control form-input form-input-center" />
                         <span asp-validation-for="LoginDetails.Password" class="text-danger"></span>
@@ -32,8 +32,8 @@
                             </label>
                         </div>
                     </div>
-                    <div class="form-group col-3 p-0">
-                        <input type="submit" class="esh-catalog-button btn btn-default btn-brand btn-brand-big mt-0" value="&nbsp;LOG IN&nbsp;" />
+                    <div class="form-group col-6 p-0">
+                        <button type="submit" class="esh-catalog-button btn btn-default btn-brand btn-brand-big mt-0">&nbsp;LOG IN&nbsp;</button>
                     </div>
                     <div class="form-group">
                         <p>
