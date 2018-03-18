@@ -13,7 +13,7 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input asp-for="ProductModel.Sku" type="hidden" />
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="ProductModel.Name" class="control-label"></label>
                 <input asp-for="ProductModel.Name" class="form-control" />
@@ -119,6 +119,39 @@
                 </tfoot>
             </table>
         </div>
+        <div class="col-md-4">
+            <h4>Categorias</h4>
+            <ul>
+                @for (int i = 0; i < Model.CatalogCategoryModel.Count; i++)
+                {
+                    <li class="parent-category">
+                        <label asp-for="CatalogCategoryModel[i].Selected">
+                            <input type="hidden" asp-for="CatalogCategoryModel[i].Id" />
+                            <input type="hidden" asp-for="CatalogCategoryModel[i].CategoryId" />
+                            <input type="checkbox" asp-for="CatalogCategoryModel[i].Selected" class="parent-checkbox" />
+                            @Model.CatalogCategoryModel[i].Label
+                        </label>
+
+                        @if (Model.CatalogCategoryModel[i].Childs.Count > 0)
+                        {
+                            <ul>
+                                @for (int j = 0; j < Model.CatalogCategoryModel[i].Childs.Count; j++)
+                                {
+                                    <li>
+                                        <label asp-for="CatalogCategoryModel[i].Childs[j].Selected">
+                                            <input type="hidden" asp-for="CatalogCategoryModel[i].Childs[j].Id" />
+                                            <input type="hidden" asp-for="CatalogCategoryModel[i].Childs[j].CategoryId" />
+                                            <input type="checkbox" asp-for="CatalogCategoryModel[i].Childs[j].Selected" class="child-checkbox" />
+                                            @Model.CatalogCategoryModel[i].Childs[j].Label
+                                        </label>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </li>
+                }
+            </ul>
+        </div>
     </div>
     <div class="row">
         <div class="col-md-12">
@@ -196,6 +229,11 @@
                 e.preventDefault();
                 $(this).siblings('p').addClass('alert-danger').text('Imagem vai ser removida!');
                 $(this).siblings('.img-to-remove').val(true);
+            });
+            $('.child-checkbox').click(function () {
+                if ($(this).is(":checked")) {
+                    $(this).closest('.parent-category').find('.parent-checkbox').prop('checked', true);
+                }
             });
         });
     </script>

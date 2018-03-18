@@ -45,11 +45,11 @@ namespace Web.Services
             _db = db;
         }
 
-        public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int? itemsPage, int? illustrationId, int? typeId)
+        public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int? itemsPage, int? illustrationId, int? typeId, int? categoryId)
         {
             _logger.LogInformation("GetCatalogItems called.");
 
-            var filterSpecification = new CatalogFilterSpecification(illustrationId, typeId);
+            var filterSpecification = new CatalogFilterSpecification(illustrationId, typeId, categoryId);
             var root = _itemRepository
                 .List(filterSpecification);
 
@@ -154,42 +154,42 @@ namespace Web.Services
         public async Task<CatalogIndexViewModel> GetCategoryCatalogItems(int categoryId)
         {
             //TODO: Move to repo
-            var types = await _db.CatalogTypeCategories
+            var products = await _db.CatalogCategories
                 .Include(x => x.Category)
-                .Include(x => x.CatalogType)
+                .Include(x => x.CatalogItem)
                 .Where(x => x.CategoryId == categoryId)
-                //.Select(x => x.CatalogType)
                 .ToListAsync();
-            if (types?.Count > 0)
+            if (products?.Count > 0)
             {
-                var items = await _db.CatalogItems
+                var types = await _db.CatalogTypeCategories
                     .Include(x => x.CatalogType)
-                    .Where(x => types.Any(t => t.CatalogTypeId == x.CatalogTypeId))
+                    .Include(x => x.Category)
+                    .Where(x => x.CategoryId == categoryId)
                     .ToListAsync();
 
                 var vm = new CatalogIndexViewModel()
                 {
-                    NewCatalogItems = items
-                    .Where(x => x.IsNew)
+                    NewCatalogItems = products
+                    .Where(x => x.CatalogItem.IsNew)
                     .Take(8)
                     .Select(i => new CatalogItemViewModel()
                     {
-                        CatalogItemId = i.Id,
-                        CatalogItemName = i.Name,
-                        PictureUri = i.PictureUri,
-                        Price = i.Price,
-                        ProductSku = i.Sku
+                        CatalogItemId = i.CatalogItemId,
+                        CatalogItemName = i.CatalogItem.Name,
+                        PictureUri = i.CatalogItem.PictureUri,
+                        Price = i.CatalogItem.Price,
+                        ProductSku = i.CatalogItem.Sku
                     }),
-                    FeaturedCatalogItems = items
-                    .Where(x => x.IsFeatured)
+                    FeaturedCatalogItems = products
+                    .Where(x => x.CatalogItem.IsFeatured)
                     .Take(8)
                     .Select(i => new CatalogItemViewModel()
                     {
-                        CatalogItemId = i.Id,
-                        CatalogItemName = i.Name,
-                        PictureUri = i.PictureUri,
-                        Price = i.Price,
-                        ProductSku = i.Sku
+                        CatalogItemId = i.CatalogItemId,
+                        CatalogItemName = i.CatalogItem.Name,
+                        PictureUri = i.CatalogItem.PictureUri,
+                        Price = i.CatalogItem.Price,
+                        ProductSku = i.CatalogItem.Sku
                     }),
                     CatalogTypes = types.Select(x => new CatalogTypeViewModel()
                     {
@@ -404,10 +404,12 @@ namespace Web.Services
         {
             var categories = await _db.Categories
                 .Include(x => x.Parent)
-                .Include(x => x.CatalogTypes)
-                .ThenInclude(cts => cts.CatalogType)
-                .ThenInclude(ct => ct.CatalogItems)
-                .Where(x => x.CatalogTypes.Any(ct => ct.CatalogType.CatalogItems != null && ct.CatalogType.CatalogItems.Count > 0))
+                .Include(x => x.CatalogCategories)
+                    .ThenInclude(cc => cc.CatalogItem)
+                //.Include(x => x.CatalogTypes)
+                //.ThenInclude(cts => cts.CatalogType)
+                //.ThenInclude(ct => ct.CatalogItems)
+                .Where(x => x.CatalogCategories.Count > 0)
                 .ToListAsync();
 
             MenuComponentViewModel menuViewModel = new MenuComponentViewModel();
@@ -455,22 +457,22 @@ namespace Web.Services
                         NameUri = Utils.RemoveDiacritics(x.Name).Replace(" ", "-").ToLower()
                     }));
                 }
-                else
-                {
-                    var types = categories
-                        .Where(x => x.Id == item.Id)
-                        .Select(x => x.CatalogTypes);
+                //else
+                //{
+                //    var types = categories
+                //        .Where(x => x.Id == item.Id)
+                //        .Select(x => x.CatalogTypes);
 
-                    var catalogTypes = types.SelectMany(x => x.Select(t => t.CatalogType));
+                //    var catalogTypes = types.SelectMany(x => x.Select(t => t.CatalogType));
 
-                    item.Childs.AddRange(catalogTypes.Select(x => new MenuItemComponentViewModel
-                    {
-                        Id = x.Id,
-                        Name = x.Description.ToUpper(),
-                        NameUri = Utils.RemoveDiacritics(item.Name).Replace(" ", "-").ToLower(),
-                        TypeUri = Utils.RemoveDiacritics(x.Description).Replace(" ", "-").ToLower()
-                    }));
-                }
+                //    item.Childs.AddRange(catalogTypes.Select(x => new MenuItemComponentViewModel
+                //    {
+                //        Id = x.Id,
+                //        Name = x.Description.ToUpper(),
+                //        NameUri = Utils.RemoveDiacritics(item.Name).Replace(" ", "-").ToLower(),
+                //        TypeUri = Utils.RemoveDiacritics(x.Description).Replace(" ", "-").ToLower()
+                //    }));
+                //}
             }
         }
 

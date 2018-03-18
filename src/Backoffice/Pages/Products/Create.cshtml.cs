@@ -30,6 +30,11 @@ namespace Backoffice.Pages.Products
             _service = service;
             _backofficeSettings = backofficeSettings.Value;
         }
+        [BindProperty]
+        public ProductViewModel ProductModel { get; set; }
+
+        [BindProperty]
+        public List<CatalogCategoryViewModel> CatalogCategoryModel { get; set; } = new List<CatalogCategoryViewModel>();
 
         public async Task<IActionResult> OnGet()
         {
@@ -37,8 +42,6 @@ namespace Backoffice.Pages.Products
             return Page();
         }        
 
-        [BindProperty]
-        public ProductViewModel ProductModel { get; set; }
 
         public async Task<IActionResult> OnPostSaveAsync()
         {
@@ -55,12 +58,6 @@ namespace Backoffice.Pages.Products
             }
 
             ProductModel.Sku = await _service.GetSku(ProductModel.CatalogTypeId, ProductModel.CatalogIllustrationId);
-            //if(await _service.CheckIfSkuExists(ProductModel.Sku))
-            //{
-            //    await PopulateLists();
-            //    ModelState.AddModelError("", $"O produto {ProductModel.Sku} já existe!");
-            //    return Page();
-            //}
 
             //Save Main Image            
             if (ProductModel.Picture.Length > 0)
@@ -86,24 +83,29 @@ namespace Backoffice.Pages.Products
                 }
             }
 
-            //Remove model attributes with no id
-            //var to_remove = ProductModel.CatalogAttributes.Where(x => x.ToRemove && x.Id == 0).ToList();
-            //foreach (var item in to_remove)
-            //{
-            //    ProductModel.CatalogAttributes.Remove(item);
-            //}
-            //Validate Model
-            //if (!ValidateAttributesModel())
-            //{
-            //    await PopulateLists();
-            //}
+            //Catalog Catagories
+            var prod = _mapper.Map<CatalogItem>(ProductModel);            
+            foreach (var item in CatalogCategoryModel.Where(x => x.Selected).ToList())
+            {
+                prod.CatalogCategories.Add(new CatalogCategory
+                {
+                    CategoryId = item.CategoryId
+                });
+                foreach (var child in item.Childs.Where(x => x.Selected).ToList())
+                {
+                    prod.CatalogCategories.Add(new CatalogCategory
+                    {
+                        CategoryId = child.CategoryId
+                    });
+                }
+            }
 
             //Save Changes                        
-            var prod = _context.CatalogItems.Add(_mapper.Map<CatalogItem>(ProductModel));
+            _context.CatalogItems.Add(prod);
             await _context.SaveChangesAsync();
 
             //Update Sku
-            prod.Entity.Sku += "_" + prod.Entity.Id;
+            prod.Sku += "_" + prod.Id;
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
@@ -128,24 +130,12 @@ namespace Backoffice.Pages.Products
                 ModelState.AddModelError("", "A menina quer por favor diminuir o tamanho da imagem principal? O máximo é 2MB, obrigado! Ass.: O seu amor!");               
             }
 
-            //check if file exits
-            //if(ProductModel.Picture != null && _service.CheckIfFileExists(_backofficeSettings.WebProductsPictureFullPath, ProductModel.Picture.GetFileName()))
-            //{
-            //    ModelState.AddModelError("",$"O nome da imagem {ProductModel.Picture.GetFileName()} já existe, por favor escolha outro nome!");
-            //}
-
             if (ProductModel.OtherPictures?.Count > 0)
             {
                 foreach (var item in ProductModel.OtherPictures)
                 {
                     if (item.Length > 2097152)
                         ModelState.AddModelError("", $"A imagem {item.GetFileName()} está muito grande amor, O máximo é 2MB, obrigado!");
-
-                    //check if file exits
-                    //if (item != null && _service.CheckIfFileExists(_backofficeSettings.WebProductsPictureFullPath, item.GetFileName()))
-                    //{
-                    //    ModelState.AddModelError("", $"O nome da imagem {item.GetFileName()} já existe, por favor escolha outro nome!");
-                    //}
                 }
             }
             return ModelState.IsValid;
@@ -178,6 +168,28 @@ namespace Backoffice.Pages.Products
                 .ToListAsync();
             ViewData["IllustrationId"] = new SelectList(illustrations, "Id", "Name");
             ViewData["ProductTypeId"] = new SelectList(_context.CatalogTypes.Select(x => new { x.Id, Name = $"{x.Code} - {x.Description}" }), "Id", "Name");
+            await SetCatalogCategoryModel();
+        }
+
+        private async Task SetCatalogCategoryModel()
+        {
+            //Catalog Categories            
+            var allCats = await _context.Categories.Include(x => x.Parent).ToListAsync();
+            foreach (var item in allCats.Where(x => x.Parent == null).ToList())
+            {
+                CatalogCategoryViewModel parent = new CatalogCategoryViewModel
+                {
+                    CategoryId = item.Id,
+                    Label = item.Name,
+                    Childs = new List<CatalogCategoryViewModel>()
+                };
+                parent.Childs.AddRange(allCats.Where(x => x.ParentId == item.Id).Select(s => new CatalogCategoryViewModel
+                {
+                    CategoryId = s.Id,
+                    Label = s.Name
+                }));
+                CatalogCategoryModel.Add(parent);
+            }
         }
     }
 }

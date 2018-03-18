@@ -27,6 +27,7 @@ namespace Infrastructure.Data
         public DbSet<ShopConfig> ShopConfigs { get; set; }
         public DbSet<ApplicationCore.Entities.ShopConfigDetail> ShopConfigDetails { get; set; } //Need the full qualified name for generate code
         public DbSet<ApplicationCore.Entities.CatalogAttribute> CatalogAttributes { get; set; }
+        public DbSet<CatalogCategory> CatalogCategories { get; set; }
 
         
         protected override void OnModelCreating(ModelBuilder builder)
@@ -45,7 +46,9 @@ namespace Infrastructure.Data
             builder.Entity<ShopConfig>(ConfigureShopConfig);
             builder.Entity<ShopConfigDetail>(ConfigureShopConfigDetails);
             builder.Entity<CatalogTypeCategory>(ConfigureCatalogTypeCategory);
+            builder.Entity<CatalogCategory>(ConfigureCatalogCategories);
         }
+
 
         private void ConfigureCatalogTypeCategory(EntityTypeBuilder<CatalogTypeCategory> builder)
         {
@@ -297,6 +300,14 @@ namespace Infrastructure.Data
             builder.HasOne(x => x.ShopConfig)
                 .WithMany(p => p.Details)
                 .HasForeignKey(x => x.ShopConfigId);
+        }
+        private void ConfigureCatalogCategories(EntityTypeBuilder<CatalogCategory> builder)
+        {
+            builder.ToTable("CatalogCategory");
+
+            builder.HasOne(x => x.Category)
+               .WithMany(p => p.CatalogCategories)
+               .HasForeignKey(x => x.CategoryId);
         }
     }
 }

@@ -39,6 +39,8 @@ namespace Backoffice.Pages.Products
                 .Include(p => p.CatalogAttributes)
                 .ThenInclude(ca => ca.ReferenceCatalogItem)
                 .Include(p => p.CatalogPictures)
+                .Include(p => p.CatalogCategories)
+                    .ThenInclude(cc => cc.Category)
                 .SingleOrDefaultAsync(m => m.Id == id));
 
             if (ProductModel == null)

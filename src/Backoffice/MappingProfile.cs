@@ -36,6 +36,10 @@ namespace Backoffice
             CreateMap<ShopConfigDetailViewModel, ShopConfigDetail>();
             CreateMap<CatalogPicture, ProductPictureViewModel>();
             CreateMap<ProductPictureViewModel, CatalogPicture>();
+            CreateMap<CatalogCategory, CatalogCategoryViewModel>()
+                //.ForMember(dest => dest.CategoryId, opts => opts.MapFrom(src => src.CategoryId))
+                .ForMember(dest => dest.Selected, opts => opts.UseValue(true))
+                .ForMember(dest => dest.Label, opts => opts.MapFrom(src => src.Category.Name));
         }
     }
 }

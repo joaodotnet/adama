@@ -45,6 +45,8 @@ namespace Backoffice.ViewModels
         public IList<ProductAttributeViewModel> CatalogAttributes { get; set; } = new List<ProductAttributeViewModel>();
         [Display(Name = "Imagens do Produto")]
         public IList<ProductPictureViewModel> CatalogPictures { get; set; } = new List<ProductPictureViewModel>();
+        [Display(Name = "Categorias")]
+        public IList<CatalogCategoryViewModel> CatalogCategories { get; set; } = new List<CatalogCategoryViewModel>();
 
         public string DisplayCatalogTypeName {
             get {
