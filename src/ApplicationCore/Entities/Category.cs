@@ -13,5 +13,6 @@ namespace ApplicationCore.Entities
         public Category Parent { get; set; }
         //public virtual ICollection<CatalogType> CatalogTypes { get; set; }
         public ICollection<CatalogTypeCategory> CatalogTypes { get; set; }
+        public ICollection<CatalogCategory> CatalogCategories { get; set; }
     }
 }

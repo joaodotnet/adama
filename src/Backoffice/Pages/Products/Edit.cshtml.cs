@@ -34,6 +34,9 @@ namespace Backoffice.Pages.Products
         [BindProperty]
         public ProductViewModel ProductModel { get; set; }
 
+        [BindProperty]
+        public List<CatalogCategoryViewModel> CatalogCategoryModel { get; set; } = new List<CatalogCategoryViewModel>();
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -43,6 +46,7 @@ namespace Backoffice.Pages.Products
 
             ProductModel = _mapper.Map<ProductViewModel>(
                 await _context.CatalogItems
+                .Include(p => p.CatalogCategories)
                 .Include(p => p.CatalogIllustration)
                 .Include(p => p.CatalogType)
                 .Include(p => p.CatalogAttributes)
@@ -65,18 +69,7 @@ namespace Backoffice.Pages.Products
                 await PopulateLists();
                 return Page();
             }
-            ////Remove model attributes with no id
-            //var to_remove = ProductModel.CatalogAttributes.Where(x => x.ToRemove && x.Id == 0).ToList();
-            //foreach (var item in to_remove)
-            //{
-            //    ProductModel.CatalogAttributes.Remove(item);
-            //}
-            //Validate Attributes
-            //if (!ValidateAttributesModel())
-            //{
-            //    await PopulateLists();
-            //    return Page();
-            //}
+           
             //Validade Pictures
             if (!ValidatePictures())
             {
@@ -86,16 +79,6 @@ namespace Backoffice.Pages.Products
 
             //Validate SKU
             ProductModel.Sku = await _service.GetSku(ProductModel.CatalogTypeId, ProductModel.CatalogIllustrationId) + "_" + ProductModel.Id; 
-            //if (ProductModel.Sku != new_sku)
-            //{
-            //    if(await _service.CheckIfSkuExists(new_sku))
-            //    {
-            //        await PopulateLists();
-            //        ModelState.AddModelError("", $"O produto {new_sku} já existe!");
-            //        return Page();
-            //    }
-            //    ProductModel.Sku = new_sku;
-            //}
             
             //Main Picture
             if (ProductModel.Picture != null && ProductModel.Picture.Length > 0)
@@ -156,7 +139,43 @@ namespace Backoffice.Pages.Products
                         _context.Entry(item).State = EntityState.Modified;
                 }
             }
-            
+
+            //Categorias dos Produtos
+            var catalogCategoriesDb = await _context.CatalogCategories.Where(x => x.CatalogItemId == prod.Id).ToListAsync();
+            //Novos
+            foreach (var item in CatalogCategoryModel.Where(x => x.Selected).ToList())
+            {
+                if(catalogCategoriesDb == null || !catalogCategoriesDb.Any(x => x.CategoryId == item.CategoryId))
+                {
+                    prod.CatalogCategories.Add(new CatalogCategory
+                    {                        
+                        CategoryId = item.CategoryId
+                    });
+                }
+                foreach (var child in item.Childs.Where(x => x.Selected).ToList())
+                {
+                    if (catalogCategoriesDb == null || !catalogCategoriesDb.Any(x => x.CategoryId == child.CategoryId))
+                    {
+                        prod.CatalogCategories.Add(new CatalogCategory
+                        {
+                            CategoryId = child.CategoryId
+                        });
+                    }
+                }
+            }
+            //Remover
+            foreach (var item in CatalogCategoryModel.Where(x => x.Id != 0).ToList())
+            {
+                if (!item.Selected)
+                    _context.CatalogCategories.Remove(_context.CatalogCategories.Find(item.Id));
+
+                foreach (var child in item.Childs.Where(x => x.Id != 0 && !x.Selected).ToList())
+                {
+                    _context.CatalogCategories.Remove(_context.CatalogCategories.Find(child.Id));
+                }
+
+            }
+
             _context.Attach(prod).State = EntityState.Modified;
 
             try
@@ -210,6 +229,7 @@ namespace Backoffice.Pages.Products
                 .ToListAsync();
             ViewData["IllustrationId"] = new SelectList(illustrations, "Id", "Name");
             ViewData["ProductTypeId"] = new SelectList(_context.CatalogTypes.Select(x => new { x.Id, Name = $"{x.Code} - {x.Description}" }), "Id", "Name");
+            await SetCatalogCategoryModel();
         }
 
         private bool ValidatePictures()
@@ -261,6 +281,32 @@ namespace Backoffice.Pages.Products
             }
 
             return ModelState.IsValid;
+        }
+
+        private async Task SetCatalogCategoryModel()
+        {
+            //Catalog Categories            
+            var allCats = await _context.Categories.Include(x => x.Parent).ToListAsync();
+            foreach (var item in allCats.Where(x => x.Parent == null).ToList())
+            {
+                var catalogCategory = ProductModel.CatalogCategories.SingleOrDefault(x => x.CategoryId == item.Id);
+                CatalogCategoryViewModel parent = new CatalogCategoryViewModel
+                {
+                    Id = catalogCategory?.Id ?? 0,
+                    CategoryId = item.Id,
+                    Label = item.Name,
+                    Selected = catalogCategory != null ? true : false,
+                    Childs = new List<CatalogCategoryViewModel>()
+                };
+                parent.Childs.AddRange(allCats.Where(x => x.ParentId == item.Id).Select(s => new CatalogCategoryViewModel
+                {
+                    Id = ProductModel.CatalogCategories.SingleOrDefault(x => x.CategoryId == s.Id)?.Id ?? 0,
+                    CategoryId = s.Id,
+                    Label = s.Name,
+                    Selected = ProductModel.CatalogCategories.Any(x => x.CategoryId == s.Id),
+                }));
+                CatalogCategoryModel.Add(parent);
+            }
         }
     }
 }

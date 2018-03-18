@@ -31,7 +31,7 @@ namespace Web.Pages
         public async Task OnGet(CatalogIndexViewModel catalogModel)
         {
             //Shop Stuff
-             CatalogModel = await _catalogService.GetCatalogItems(0, null, null, null);           
+             CatalogModel = await _catalogService.GetCatalogItems(0, null, null, null, null);           
 
             //DamaStuff
             CatalogModel.Banners = await _shopService.GetMainBanners();

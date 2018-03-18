@@ -8,7 +8,7 @@ namespace Web.Interfaces
 {
     public interface ICatalogService
     {
-        Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int? itemsPage, int? illustrationId, int? typeId);
+        Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int? itemsPage, int? illustrationId, int? typeId, int? categoryId);
         Task<CatalogIndexViewModel> GetCategoryCatalogItems(int categoryId);
         Task<IEnumerable<SelectListItem>> GetBrands();
         Task<IEnumerable<SelectListItem>> GetTypes();

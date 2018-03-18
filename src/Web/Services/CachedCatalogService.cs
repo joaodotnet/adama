@@ -15,7 +15,7 @@ namespace Web.Services
         private readonly CatalogService _catalogService;
         private static readonly string _brandsKey = "brands";
         private static readonly string _typesKey = "types";
-        private static readonly string _itemsKeyTemplate = "items-{0}-{1}-{2}-{3}";
+        private static readonly string _itemsKeyTemplate = "items-{0}-{1}-{2}-{3}-{4}";
         private static readonly string _categoryItemsKeyTemplate = "items-{0}";
         private static readonly string _categoryItemKeyTemplate = "item-{0}";
         private static readonly string _categoryAttrKeyTemplate = "attr-{0}";
@@ -42,13 +42,13 @@ namespace Web.Services
                     });
         }
 
-        public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int? itemsPage, int? brandID, int? typeId)
+        public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int? itemsPage, int? brandID, int? typeId, int? categoryId)
         {
-            string cacheKey = String.Format(_itemsKeyTemplate, pageIndex, itemsPage, brandID, typeId);
+            string cacheKey = String.Format(_itemsKeyTemplate, pageIndex, itemsPage, brandID, typeId, categoryId);
             return await _cache.GetOrCreateAsync(cacheKey, async entry =>
             {
                 entry.SlidingExpiration = _defaultCacheDuration;
-                return await _catalogService.GetCatalogItems(pageIndex, itemsPage, brandID, typeId);
+                return await _catalogService.GetCatalogItems(pageIndex, itemsPage, brandID, typeId, categoryId);
             });
         }
 

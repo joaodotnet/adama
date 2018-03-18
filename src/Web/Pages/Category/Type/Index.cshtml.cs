@@ -32,6 +32,10 @@ namespace Web.Pages.Category.Type
                 return NotFound();
             CatalogTypeName = catalogType.Value.Item2;
 
+            var category = await _catalogService.GetCategory(cat);
+            if (!category.HasValue)
+                return NotFound();
+           
             //int? typeId = null;
             //if (!string.IsNullOrEmpty(type))
             //{
@@ -42,7 +46,7 @@ namespace Web.Pages.Category.Type
             //    CatalogTypeName = catalogType.Description;
             //}
 
-            CatalogModel = await _catalogService.GetCatalogItems(0, null, null, catalogType.Value.Item1);
+            CatalogModel = await _catalogService.GetCatalogItems(0, null, null, catalogType.Value.Item1,category.Value.Item1);
             //CategoryModel.CatalogTypes = CategoryModel.CatalogModel.CatalogItems.Select(x => (x.CatalogTypeCode, x.CatalogTypeName)).Distinct().ToList();
 
             return Page();

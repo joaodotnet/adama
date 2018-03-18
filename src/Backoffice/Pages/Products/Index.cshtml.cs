@@ -32,6 +32,8 @@ namespace Backoffice.Pages.Products
                     .ThenInclude(i => i.IllustrationType)
                 .Include(p => p.CatalogType)
                 .Include(p => p.CatalogAttributes)
+                .Include(p => p.CatalogCategories)
+                    .ThenInclude( cc => cc.Category)
                 .ToListAsync());
 
             //foreach (var item in ProductModel)

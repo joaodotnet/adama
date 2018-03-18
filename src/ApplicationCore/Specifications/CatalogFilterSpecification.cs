@@ -1,15 +1,17 @@
 ﻿using ApplicationCore.Entities;
+using System.Linq;
 
 namespace ApplicationCore.Specifications
 {
 
     public class CatalogFilterSpecification : BaseSpecification<CatalogItem>
     {
-        public CatalogFilterSpecification(int? IllustrationId, int? typeId)
+        public CatalogFilterSpecification(int? IllustrationId, int? typeId, int? categoryId)
             : base(i => i.ShowOnShop && (!IllustrationId.HasValue || i.CatalogIllustrationId == IllustrationId) &&
-                (!typeId.HasValue || i.CatalogTypeId == typeId))
+                (!typeId.HasValue || i.CatalogTypeId == typeId) && (!categoryId.HasValue || i.CatalogCategories.Any(x => x.CategoryId == categoryId)))
         {
             AddInclude(x => x.CatalogType);
+            AddInclude(x => x.CatalogCategories);
         }
     }
 

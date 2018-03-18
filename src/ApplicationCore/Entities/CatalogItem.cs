@@ -20,5 +20,6 @@ namespace ApplicationCore.Entities
         public ICollection<CatalogAttribute> CatalogAttributes { get; set; }
         public ICollection<CatalogAttribute> ReferenceCatalogAttributes { get; set; }
         public ICollection<CatalogPicture> CatalogPictures { get; set; }
+        public ICollection<CatalogCategory> CatalogCategories { get; set; } = new List<CatalogCategory>();
     }
 }
