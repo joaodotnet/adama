@@ -211,11 +211,11 @@ namespace Web.Services
         public async Task<ProductViewModel> GetCatalogItem(string sku)
         {
             var product = await _db.CatalogItems
+                .Include(x => x.CatalogCategories)
+                    .ThenInclude(cc => cc.Category)
                 .Include(x => x.CatalogPictures)
                 .Include(x => x.CatalogAttributes)
                 .Include(x => x.CatalogType)
-                    .ThenInclude(ct => ct.Categories)
-                        .ThenInclude(c => c.Category)
                 .Include(x => x.CatalogIllustration)
                     .ThenInclude(ci => ci.IllustrationType)
                 .SingleOrDefaultAsync(x => x.Sku == sku);
@@ -235,7 +235,11 @@ namespace Web.Services
                         product.PictureUri
                     },
                     Attributes = new List<ProductAttributeViewModel>(),
-                    Categories = new List<LinkViewModel>(),
+                    Categories = product.CatalogCategories.Select(x => new LinkViewModel
+                    {
+                        Name = x.Category.Name,
+                        TagName = Utils.StringToUri(x.Category.Name)
+                    }).ToList(),
                     Tags = new List<LinkViewModel>
                     {
                         new LinkViewModel { Name = product.CatalogType.Description, TagName = "tipo"},
@@ -276,16 +280,15 @@ namespace Web.Services
                         }).ToList()
                     });
                 }
-                //vm.ProductBasePrice += attrPriceDefault;
                 //Categories
-                foreach (var item in product.CatalogType.Categories)
-                {
-                    vm.Categories.Add(new LinkViewModel
-                    {
-                        Name = item.Category.Name,
-                        TagName = Utils.StringToUri(item.Category.Name)
-                    });
-                }
+                //foreach (var item in product.CatalogType.Categories)
+                //{
+                //    vm.Categories.Add(new LinkViewModel
+                //    {
+                //        Name = item.Category.Name,
+                //        TagName = Utils.StringToUri(item.Category.Name)
+                //    });
+                //}
                 return vm;
             }
             return null;
