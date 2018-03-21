@@ -1,14 +1,17 @@
 ﻿@page
 @using System.Linq;
 @model IndexModel
-@{ 
+@{
     ViewData["Title"] = "As Minhas Encomendas";
 }
 
 <div class="esh-orders">
     <div class="container">
         <h2>@ViewData["Title"]</h2>
-        <article class="esh-orders-titles row">
+        <div class="text-center">
+            <img class="separator" src="~/images/coração-rosa.png" />
+        </div>
+        <article class="esh-orders-titles row d-none d-sm-flex">
             <section class="esh-orders-title col-2">Nº Encomenda</section>
             <section class="esh-orders-title col-4">Data</section>
             <section class="esh-orders-title col-2">Total</section>
@@ -20,17 +23,31 @@
             @foreach (var item in Model.Orders)
             {
                 <article class="esh-orders-items row">
-                    <section class="esh-orders-item col-2">@Html.DisplayFor(modelItem => item.OrderNumber)</section>
-                    <section class="esh-orders-item col-4">@Html.DisplayFor(modelItem => item.OrderDate)</section>
-                    <section class="esh-orders-item col-2">€ @Html.DisplayFor(modelItem => item.Total)</section>
-                    <section class="esh-orders-item col-2">@Html.DisplayFor(modelItem => item.Status)</section>
-                    <section class="esh-orders-item col-1">
-                        <a class="esh-orders-link" asp-page="Detail" asp-route-orderId="@item.OrderNumber">Detalhe</a>
+                    <section class="esh-orders-item col-12 col-sm-2">
+                        <span class="dama-orders-title-mobile d-sm-none">Nº Encomenda: </span>
+                        @Html.DisplayFor(modelItem => item.OrderNumber)
                     </section>
-                    <section class="esh-orders-item col-1">
-                        @if (item.Status.ToLower() == "pending")
+                    <section class="esh-orders-item col-12 col-sm-4">
+                        <span class="dama-orders-title-mobile d-sm-none">Data: </span>
+                        @Html.DisplayFor(modelItem => item.OrderDate)
+                    </section>
+                    <section class="esh-orders-item col-12 col-sm-2">
+                        <span class="dama-orders-title-mobile d-sm-none">Total: </span>
+                        € @Html.DisplayFor(modelItem => item.Total)
+                    </section>
+                    <section class="esh-orders-item col-12 col-sm-2">
+                        <span class="dama-orders-title-mobile d-sm-none">Estado: </span>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </section>
+                    <section class="esh-orders-item col-12 col-sm-1">
+                        <a class="btn btn-dama-blue btn-block d-sm-none" role="button" asp-page="Detail" asp-route-orderId="@item.OrderNumber">Ver Detalhe</a>
+                        <a class="esh-orders-link d-none d-sm-block" asp-page="Detail" asp-route-orderId="@item.OrderNumber">Detalhe</a>
+                    </section>
+                    <section class="esh-orders-item col-12 col-sm-1 mt-2 mb-2 mt-sm-0 mb-sm-0">
+                        @if (item.StatusType == ApplicationCore.Entities.OrderAggregate.OrderStateType.PENDING)
                         {
-                            <a class="esh-orders-link" asp-page="Cancel" asp-route-orderId="@item.OrderNumber">Cancelar</a>
+                            <a class="btn btn-primary btn-block d-sm-none" role="button" asp-page="Cancel" asp-route-orderId="@item.OrderNumber">Cancelar</a>
+                            <a class="esh-orders-link d-none d-sm-block" role="button" asp-page="Cancel" asp-route-orderId="@item.OrderNumber">Cancelar</a>
                         }
                     </section>
                 </article>

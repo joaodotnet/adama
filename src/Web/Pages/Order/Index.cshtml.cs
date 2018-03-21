@@ -29,6 +29,7 @@ namespace Web.Pages.Order
             public DateTimeOffset OrderDate { get; set; }
             public decimal Total { get; set; }
             public string Status { get; set; }
+            public OrderStateType StatusType { get; set; }
         }
 
         public async Task OnGet()
@@ -41,8 +42,8 @@ namespace Web.Pages.Order
                     OrderDate = o.OrderDate,
                     OrderNumber = o.Id,
                     Status = EnumHelper<OrderStateType>.GetDisplayValue(o.OrderState),
+                    StatusType = o.OrderState,
                     Total = o.Total()
-
                 })
                 .OrderByDescending(o => o.OrderDate)
                 .ToList();
