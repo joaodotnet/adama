@@ -36,22 +36,27 @@
 }
 
 .esh-orders-items {
-    height: 2rem;
-    line-height: 2rem;
     position: relative;
 }
 
-    .esh-orders-items:nth-of-type(2n + 1):before {
-        background-color: #EEEEFF;
-        content: '';
-        height: 100%;
-        left: 0;
-        margin-left: -100vw;
-        position: absolute;
-        top: 0;
-        width: 200vw;
-        z-index: -1;
+@media (min-width: 576px) {
+    .esh-orders-items {
+        height: 2rem;
+        line-height: 2rem;
     }
+}
+
+.esh-orders-items:nth-of-type(2n + 1):before {
+    background-color: #EEEEFF;
+    content: '';
+    height: 100%;
+    left: 0;
+    margin-left: -100vw;
+    position: absolute;
+    top: 0;
+    width: 200vw;
+    z-index: -1;
+}
 
 .esh-orders-item {
     font-weight: 300;
@@ -73,8 +78,13 @@
     transition: color 0.35s;
 }
 
-.esh-orders-link:hover {
-    color: #EF7C8D;
-    text-decoration: underline;
-    transition: color 0.35s;
+    .esh-orders-link:hover {
+        color: #EF7C8D;
+        text-decoration: underline;
+        transition: color 0.35s;
+    }
+
+.dama-orders-title-mobile {
+    color: #808080;
+    font-weight: bold;
 }
