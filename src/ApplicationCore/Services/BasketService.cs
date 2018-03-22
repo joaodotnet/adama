@@ -109,12 +109,24 @@ namespace ApplicationCore.Services
         public async Task TransferBasketAsync(string anonymousId, string userName)
         {
             Guard.Against.NullOrEmpty(anonymousId, nameof(anonymousId));
-            Guard.Against.NullOrEmpty(userName, nameof(userName));
+            Guard.Against.NullOrEmpty(userName, nameof(userName));            
+
             var basketSpec = new BasketWithItemsSpecification(anonymousId);
             var basket = (await _basketRepository.ListAsync(basketSpec)).LastOrDefault();
             if (basket == null) return;
+
+            if (basket.Items?.Count > 0)
+            {
+                //Delete previous baskets
+                var basketSpecUser = new BasketWithItemsSpecification(userName);
+                var listBasket = await _basketRepository.ListAsync(basketSpecUser);
+                foreach (var item in listBasket)
+                {
+                    await _basketRepository.DeleteAsync(item);
+                }
+            }
             basket.BuyerId = userName;
-            await _basketRepository.UpdateAsync(basket);
+            await _basketRepository.UpdateAsync(basket);            
         }
         public async Task DeleteItem(int basketId, int itemIndex)
         {

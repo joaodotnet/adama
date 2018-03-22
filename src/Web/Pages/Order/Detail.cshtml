@@ -115,6 +115,7 @@
                     <section class="esh-orders_detail-item esh-orders_detail-item--middle d-none d-sm-block col-sm-1">@item.Units</section>
                     <section class="esh-orders_detail-item esh-orders_detail-item--middle d-none d-sm-block col-sm-2">€ @Math.Round(item.Units * item.UnitPrice, 2).ToString("N2")</section>
                 </article>
+                <hr class="basket-hr" />
             }
         </section>
 
@@ -136,13 +137,13 @@
 
         <section class="esh-orders_detail-section esh-orders_detail-section--right">
             <article class="esh-orders_detail-titles esh-basket-titles--clean row">
-                <section class="esh-orders_detail-title col-9"></section>
-                <section class="esh-orders_detail-title col-2">TOTAL</section>
+                <section class="esh-orders_detail-title col-sm-9"></section>
+                <section class="esh-orders_detail-title col-sm-2">TOTAL</section>
             </article>
 
             <article class="esh-orders_detail-items row">
-                <section class="esh-orders_detail-item col-9"></section>
-                <section class="esh-orders_detail-item esh-orders_detail-item--mark col-2 text-right text-nowrap">€ @Model.OrderDetails.Total</section>
+                <section class="esh-orders_detail-item col-sm-9"></section>
+                <section class="esh-orders_detail-item esh-orders_detail-item--mark col-sm-2 text-sm-right text-nowrap">€ @Model.OrderDetails.Total</section>
             </article>
         </section>
     </div>
