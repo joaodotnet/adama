@@ -18,6 +18,7 @@ using System.Globalization;
 using ApplicationCore.Interfaces;
 using Backoffice.Interfaces;
 using Infrastructure.Services;
+using ApplicationCore;
 
 namespace Backoffice
 {
@@ -46,18 +47,24 @@ namespace Backoffice
                .AddEntityFrameworkStores<AppIdentityDbContext>()
                .AddDefaultTokenProviders();
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("Admin"));
+            });
+
 
             services.AddMvc()
                 .AddRazorPagesOptions(options =>
-                {
-                    options.Conventions.AuthorizeFolder("/Account/Manage");
-                    options.Conventions.AuthorizePage("/Account/Logout");
-                    options.Conventions.AuthorizeFolder("/Category");
-                    options.Conventions.AuthorizeFolder("/Illustrations");
-                    options.Conventions.AuthorizeFolder("/IllustrationsTypes");
-                    options.Conventions.AuthorizeFolder("/Products");
-                    options.Conventions.AuthorizeFolder("/ProductType");
-                    options.Conventions.AuthorizeFolder("/ShopConfig");
+                {                    
+                    options.Conventions.AuthorizeFolder("/Account/Manage", "RequireAdministratorRole");
+                    options.Conventions.AuthorizePage("/Account/Logout", "RequireAdministratorRole");
+                    options.Conventions.AuthorizeFolder("/Category", "RequireAdministratorRole");
+                    options.Conventions.AuthorizeFolder("/Illustrations", "RequireAdministratorRole");
+                    options.Conventions.AuthorizeFolder("/IllustrationsTypes", "RequireAdministratorRole");
+                    options.Conventions.AuthorizeFolder("/Products", "RequireAdministratorRole");
+                    options.Conventions.AuthorizeFolder("/ProductType", "RequireAdministratorRole");
+                    options.Conventions.AuthorizeFolder("/ShopConfig", "RequireAdministratorRole");
+                    options.Conventions.AuthorizePage("/Index", "RequireAdministratorRole");
                 });
 
             services.AddAutoMapper();
@@ -66,7 +73,7 @@ namespace Backoffice
             // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
             services.Configure<BackofficeSettings>(Configuration);            
             services.AddScoped<IBackofficeService, BackofficeService>();
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddSingleton<IEmailSender>(new EmailSender(Configuration.Get<BackofficeSettings>()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

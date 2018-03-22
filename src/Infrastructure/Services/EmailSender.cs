@@ -11,10 +11,10 @@ namespace Infrastructure.Services
     // For more details see https://go.microsoft.com/fwlink/?LinkID=532713
     public class EmailSender : IEmailSender
     {
-        private readonly CatalogSettings _appSettings;
+        private readonly AppSettings _appSettings;
         //private readonly IAppLogger<EmailSender> _logger;
 
-        public EmailSender(CatalogSettings appSettings/*, IAppLogger<EmailSender> logger*/)
+        public EmailSender(AppSettings appSettings/*, IAppLogger<EmailSender> logger*/)
         {
             _appSettings = appSettings;
             //_logger = logger;

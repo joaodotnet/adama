@@ -24,7 +24,9 @@ namespace Backoffice
                 var services = scope.ServiceProvider;
                 var loggerFactory = services.GetRequiredService<ILoggerFactory>();
                 try
-                {                    
+                {
+                    AppIdentityDbContextSeed.EnsureRoleAdminCreated(services).Wait();                    
+
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
                     AppIdentityDbContextSeed.SeedAsync(userManager).Wait();
                 }
