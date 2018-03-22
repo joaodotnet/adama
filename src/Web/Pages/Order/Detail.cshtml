@@ -92,8 +92,8 @@
             @for (int i = 0; i < Model.OrderDetails.OrderItems.Count; i++)
             {
                 var item = Model.OrderDetails.OrderItems[i];
-                <article class="esh-orders_detail-items esh-orders_detail-items--border row align-items-center">
-                    <section class="esh-orders_detail-item col-4 hidden-md-down">
+                <article class="esh-orders_detail-items esh-orders_detail-items--border row align-items-center mb-3">
+                    <section class="esh-orders_detail-item col-4">
                         <img class="esh-orders_detail-image img-fluid" src="@item.PictureUrl">
                     </section>
                     <section class="esh-orders_detail-item esh-orders_detail-item--middle col-8 col-sm-4">
@@ -106,10 +106,14 @@
                                 <span class="dama-basket-label">@(EnumHelper<ApplicationCore.Entities.CatalogAttributeType>.GetDisplayValue(attr.Type)): @attr.AttributeName </span>
                             }
                         }
+                        <span class="d-sm-none">
+                            <br />
+                            € @Math.Round(item.Units * item.UnitPrice, 2).ToString("N2")
+                        </span>
                     </section>
                     <section class="esh-orders_detail-item esh-orders_detail-item--middle d-none d-sm-block col-sm-1">€ @item.UnitPrice.ToString("N2")</section>
                     <section class="esh-orders_detail-item esh-orders_detail-item--middle d-none d-sm-block col-sm-1">@item.Units</section>
-                    <section class="esh-orders_detail-item esh-orders_detail-item--middle offset-4 offset-sm-0 col-8 col-sm-2">€ @Math.Round(item.Units * item.UnitPrice, 2).ToString("N2")</section>
+                    <section class="esh-orders_detail-item esh-orders_detail-item--middle d-none d-sm-block col-sm-2">€ @Math.Round(item.Units * item.UnitPrice, 2).ToString("N2")</section>
                 </article>
             }
         </section>
