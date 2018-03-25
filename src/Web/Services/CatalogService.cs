@@ -24,7 +24,7 @@ namespace Web.Services
     {
         private readonly ILogger<CatalogService> _logger;
         private readonly IRepository<CatalogItem> _itemRepository;
-        private readonly IAsyncRepository<CatalogIllustration> _brandRepository;
+        private readonly IAsyncRepository<CatalogIllustration> _illustrationRepository;
         private readonly IAsyncRepository<CatalogType> _typeRepository;
         private readonly IUriComposer _uriComposer;
         private readonly DamaContext _db; //TODO move all queries to repo
@@ -32,14 +32,14 @@ namespace Web.Services
         public CatalogService(
             ILoggerFactory loggerFactory,
             IRepository<CatalogItem> itemRepository,
-            IAsyncRepository<CatalogIllustration> brandRepository,
+            IAsyncRepository<CatalogIllustration> illustrationRepository,
             IAsyncRepository<CatalogType> typeRepository,
             IUriComposer uriComposer,
             DamaContext db)
         {
             _logger = loggerFactory.CreateLogger<CatalogService>();
             _itemRepository = itemRepository;
-            _brandRepository = brandRepository;
+            _illustrationRepository = illustrationRepository;
             _typeRepository = typeRepository;
             _uriComposer = uriComposer;
             _db = db;
@@ -99,9 +99,9 @@ namespace Web.Services
                         Price = i.Price,
                         ProductSku = i.Sku,
                     }),
-                Brands = await GetBrands(),
+                Illustrations = await GetIllustrations(),
                 Types = await GetTypes(),
-                BrandFilterApplied = illustrationId ?? 0,
+                IllustrationFilterApplied = illustrationId ?? 0,
                 TypesFilterApplied = typeId ?? 0,
                 PaginationInfo = new PaginationInfoViewModel()
                 {
@@ -118,18 +118,18 @@ namespace Web.Services
             return vm;
         }
 
-        public async Task<IEnumerable<SelectListItem>> GetBrands()
+        public async Task<IEnumerable<SelectListItem>> GetIllustrations()
         {
-            _logger.LogInformation("GetBrands called.");
-            var brands = await _brandRepository.ListAllAsync();
+            _logger.LogInformation("GetIllustrations called.");
+            var illustrations = await _illustrationRepository.ListAllAsync();
 
             var items = new List<SelectListItem>
             {
-                new SelectListItem() { Value = null, Text = "All", Selected = true }
+                new SelectListItem() { Value = null, Text = "Todos", Selected = true }
             };
-            foreach (CatalogIllustration brand in brands)
+            foreach (CatalogIllustration item in illustrations)
             {
-                items.Add(new SelectListItem() { Value = brand.Id.ToString(), Text = brand.Code });
+                items.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Name });
             }
 
             return items;
@@ -141,11 +141,11 @@ namespace Web.Services
             var types = await _typeRepository.ListAllAsync();
             var items = new List<SelectListItem>
             {
-                new SelectListItem() { Value = null, Text = "All", Selected = true }
+                new SelectListItem() { Value = null, Text = "Todos", Selected = true }
             };
             foreach (CatalogType type in types)
             {
-                items.Add(new SelectListItem() { Value = type.Id.ToString(), Text = type.Code });
+                items.Add(new SelectListItem() { Value = type.Id.ToString(), Text = type.Description });
             }
 
             return items;
@@ -321,17 +321,14 @@ namespace Web.Services
             return null;
         }
 
-        public async Task<CatalogIndexViewModel> GetCatalogItemsByTag(string tagName, TagType? tagType)
+        public async Task<CatalogIndexViewModel> GetCatalogItemsByTag(int pageIndex, int? itemsPage, string tagName, TagType? tagType, int? typeId, int? illustrationId)
         {
             tagName = tagName.ToLower().Trim();
-            CatalogIndexViewModel vm = new CatalogIndexViewModel();
             IQueryable<CatalogItem> query = null;
             if (tagType.HasValue)
             {
-
                 switch (tagType.Value)
                 {
-
                     case TagType.CATALOG_TYPE:
                         query = _db.CatalogItems
                             .Include(x => x.CatalogType)
@@ -361,46 +358,89 @@ namespace Web.Services
                     .Where(x => Utils.StringToUri(x.CatalogType.Description) == tagName || Utils.StringToUri(x.CatalogIllustration.Name) == tagName || x.CatalogIllustration.IllustrationType.Name == tagName);
             }
 
-            return new CatalogIndexViewModel
+            query = query.Where(x => (!illustrationId.HasValue || x.CatalogIllustrationId == illustrationId) &&
+                (!typeId.HasValue || x.CatalogTypeId == typeId));
+
+            var totalItems = query.Count();
+            var iPage = itemsPage ?? totalItems;
+            var itemsOnPage = await query
+                .Skip(iPage * pageIndex)
+                .Take(iPage)
+                .ToListAsync();
+
+            var vm = new CatalogIndexViewModel
             {
-                CatalogItems = await query.Select(x => new CatalogItemViewModel
+                CatalogItems = itemsOnPage.Select(x => new CatalogItemViewModel
                 {
                     CatalogItemId = x.Id,
                     CatalogItemName = x.Name,
                     PictureUri = x.PictureUri,
                     Price = x.Price,
                     ProductSku = x.Sku
-                }).ToListAsync()
+                }).ToList(),
+                PaginationInfo = new PaginationInfoViewModel()
+                {
+                    ActualPage = pageIndex,
+                    ItemsPerPage = itemsOnPage.Count,
+                    TotalItems = totalItems,
+                    TotalPages = iPage != 0 ? int.Parse(Math.Ceiling(((decimal)totalItems / iPage)).ToString()) : 0
+                },
+                Illustrations = await GetIllustrations(),
+                Types = await GetTypes(),
             };
+            vm.PaginationInfo.Next = (vm.PaginationInfo.TotalItems == 0 || vm.PaginationInfo.ActualPage == vm.PaginationInfo.TotalPages - 1) ? "is-disabled" : "";
+            vm.PaginationInfo.Previous = (vm.PaginationInfo.ActualPage == 0) ? "is-disabled" : "";
+            return vm;
         }
-        public async Task<CatalogIndexViewModel> GetCatalogItemsBySearch(string searchFor)
+        public async Task<CatalogIndexViewModel> GetCatalogItemsBySearch(int pageIndex, int? itemsPage, string searchFor, int? typeId, int? illustrationId)
         {
             searchFor = searchFor.ToLower().Trim();
 
-            CatalogIndexViewModel vm = new CatalogIndexViewModel();
             IQueryable<CatalogItem> query = null;
             query = _db.CatalogItems
                 .Include(x => x.CatalogType)
                 .Include(x => x.CatalogIllustration)
                 .ThenInclude(ci => ci.IllustrationType)
-                .Where(x => x.CatalogType.Description.Contains(searchFor) || 
+                .Where(x => (!illustrationId.HasValue || x.CatalogIllustrationId == illustrationId) &&
+                (!typeId.HasValue || x.CatalogTypeId == typeId) &&
+                x.CatalogType.Description.Contains(searchFor) || 
                 x.CatalogIllustration.Name.Contains(searchFor) || 
                 x.CatalogIllustration.IllustrationType.Name.Contains(searchFor) ||
                 x.Name.Contains(searchFor) ||
                 x.Description.Contains(searchFor));
 
+            var totalItems = query.Count();
+            var iPage = itemsPage ?? totalItems;
+            var itemsOnPage = await query
+                .Skip(iPage * pageIndex)
+                .Take(iPage)
+                .ToListAsync();
 
-            return new CatalogIndexViewModel
+
+            var vm = new CatalogIndexViewModel
             {
-                CatalogItems = await query.Select(x => new CatalogItemViewModel
+                CatalogItems = itemsOnPage.Select(x => new CatalogItemViewModel
                 {
                     CatalogItemId = x.Id,
                     CatalogItemName = x.Name,
                     PictureUri = x.PictureUri,
                     Price = x.Price,
                     ProductSku = x.Sku
-                }).ToListAsync()
+                }).ToList(),
+                PaginationInfo = new PaginationInfoViewModel()
+                {
+                    ActualPage = pageIndex,
+                    ItemsPerPage = itemsOnPage.Count,
+                    TotalItems = totalItems,
+                    TotalPages = iPage != 0 ? int.Parse(Math.Ceiling(((decimal)totalItems / iPage)).ToString()) : 0
+                },
+                Illustrations = await GetIllustrations(),
+                Types = await GetTypes(),
             };
+
+            vm.PaginationInfo.Next = (vm.PaginationInfo.ActualPage == vm.PaginationInfo.TotalPages - 1) ? "is-disabled" : "";
+            vm.PaginationInfo.Previous = (vm.PaginationInfo.ActualPage == 0) ? "is-disabled" : "";
+            return vm;
         }
 
         public async Task<MenuComponentViewModel> GetMenuViewModel()

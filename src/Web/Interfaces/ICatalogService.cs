@@ -10,12 +10,12 @@ namespace Web.Interfaces
     {
         Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int? itemsPage, int? illustrationId, int? typeId, int? categoryId);
         Task<CatalogIndexViewModel> GetCategoryCatalogItems(int categoryId);
-        Task<IEnumerable<SelectListItem>> GetBrands();
+        Task<IEnumerable<SelectListItem>> GetIllustrations();
         Task<IEnumerable<SelectListItem>> GetTypes();
         Task<ProductViewModel> GetCatalogItem(string sku);
         Task<AttributeViewModel> GetAttributeDetails(int attributeId);
-        Task<CatalogIndexViewModel> GetCatalogItemsByTag(string tagName, TagType? tagType);
-        Task<CatalogIndexViewModel> GetCatalogItemsBySearch(string searchFor);
+        Task<CatalogIndexViewModel> GetCatalogItemsByTag(int pageIndex, int? itemsPage, string tagName, TagType? tagType, int? typeId, int? illustrationId);
+        Task<CatalogIndexViewModel> GetCatalogItemsBySearch(int pageIndex, int? itemsPage, string searchFor, int? typeId, int? illustrationId);
         Task<MenuComponentViewModel> GetMenuViewModel();
         Task<(int,string)?> GetCatalogType(string type);
         Task<(int, string)?> GetCategory(string name);

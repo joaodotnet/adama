@@ -25,7 +25,7 @@ namespace Web.Pages.Category.Type
         //public CategoryViewModel CategoryModel { get; set; } = new CategoryViewModel();
         public CatalogIndexViewModel CatalogModel { get; set; } = new CatalogIndexViewModel();
 
-        public async Task<IActionResult> OnGetAsync(string cat, string type)
+        public async Task<IActionResult> OnGetAsync(CatalogIndexViewModel catalogModel, string cat, string type, int? p)
         {
             var catalogType = await _catalogService.GetCatalogType(type);
             if (!catalogType.HasValue)
@@ -34,20 +34,9 @@ namespace Web.Pages.Category.Type
 
             var category = await _catalogService.GetCategory(cat);
             if (!category.HasValue)
-                return NotFound();
-           
-            //int? typeId = null;
-            //if (!string.IsNullOrEmpty(type))
-            //{
-            //    var catalogType = await _shopService.GetCatalogType(type);
-            //    if (catalogType == null)
-            //        return NotFound();
-            //    typeId = catalogType.Id;
-            //    CatalogTypeName = catalogType.Description;
-            //}
+                return NotFound();          
 
-            CatalogModel = await _catalogService.GetCatalogItems(0, null, null, catalogType.Value.Item1,category.Value.Item1);
-            //CategoryModel.CatalogTypes = CategoryModel.CatalogModel.CatalogItems.Select(x => (x.CatalogTypeCode, x.CatalogTypeName)).Distinct().ToList();
+            CatalogModel = await _catalogService.GetCatalogItems(p ?? 0, Constants.ITEMS_PER_PAGE, catalogModel.IllustrationFilterApplied, catalogType.Value.Item1,category.Value.Item1);
 
             return Page();
         }

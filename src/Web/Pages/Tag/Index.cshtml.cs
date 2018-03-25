@@ -23,13 +23,17 @@ namespace Web.Pages.Tag
         [BindProperty]
         public string TagName { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(string id, string q)
+        [BindProperty]
+        public string Tag { get; set; }
+
+        public async Task<IActionResult> OnGetAsync(CatalogIndexViewModel catalogModel, string tagName, string q, int? p)
         {
-            if (string.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(tagName))
                 return NotFound();
 
-            TagName = id;
-            
+            TagName = tagName;
+            Tag = q;
+
             TagType? tagType = null;
             if(!string.IsNullOrEmpty(q))
             {
@@ -41,9 +45,9 @@ namespace Web.Pages.Tag
                     tagType = TagType.ILLUSTRATION_TYPE;
             }
 
-            var tagToSearch = Utils.StringToUri(id);
+            var tagToSearch = Utils.StringToUri(tagName);
 
-            CatalogModel = await _service.GetCatalogItemsByTag(tagToSearch, tagType);
+            CatalogModel = await _service.GetCatalogItemsByTag(p ?? 0, Constants.ITEMS_PER_PAGE, tagToSearch, tagType, catalogModel.TypesFilterApplied, catalogModel.IllustrationFilterApplied);
             return Page();
         }
     }

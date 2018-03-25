@@ -11,29 +11,29 @@
 }
 
 .esh-catalog-filters {
-    background-color: #00A69C;
-    height: 65px;
+    background-color: #5cc0c0;
+    height: 75px;
 }
 
 .esh-catalog-filter {
     -webkit-appearance: none;
     background-color: transparent;
-    border-color: #00d9cc;
+    border-color: #03958c;
     color: #FFFFFF;
     cursor: pointer;
     margin-right: 1rem;
     margin-top: .5rem;
-    min-width: 140px;
+    min-width: 120px;
+    max-width: 135px;
     outline-color: #83D01B;
     padding-bottom: 0;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
     padding-top: 1.5rem;
 }
-
-    .esh-catalog-filter option {
-        background-color: #00A69C;
-    }
+.esh-catalog-filter option {
+    background-color: #5cc0c0;
+}
 
 .esh-catalog-label {
     display: inline-block;
@@ -64,7 +64,7 @@
     }
 
 .esh-catalog-send {
-    background-color: #83D01B;
+    background-color: #ef7c8d;
     color: #FFFFFF;
     cursor: pointer;
     font-size: 1rem;
@@ -74,7 +74,7 @@
 }
 
     .esh-catalog-send:hover {
-        background-color: #4a760f;
+        background-color: #e9435b;
         transition: all 0.35s;
     }
 
@@ -108,7 +108,7 @@
 }
 
 .esh-catalog-button {
-    background-color: #f5b0b9;
+    background-color: #ef7c8d;
     border: 0;
     color: #FFFFFF;
     cursor: pointer;
@@ -119,15 +119,15 @@
     width: 80%;
 }
 
-    .esh-catalog-button.is-disabled {
-        opacity: .5;
-        pointer-events: none;
-    }
+.esh-catalog-button.is-disabled {
+    opacity: .5;
+    pointer-events: none;
+}
 
-    .esh-catalog-button:hover {
-        background-color: #ef7e8e;
-        transition: all 0.35s;
-    }
+.esh-catalog-button:hover {
+    background-color: #e9435b;
+    transition: all 0.35s;
+}
 
 .esh-catalog-name {
     font-size: 1rem;

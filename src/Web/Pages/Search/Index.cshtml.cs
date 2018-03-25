@@ -23,10 +23,14 @@ namespace Web.Pages.Search
 
         public CatalogIndexViewModel CatalogModel { get; set; } = new CatalogIndexViewModel();
 
-        public async Task<IActionResult> OnGetAsync(string q)
+        public async Task<IActionResult> OnGetAsync(CatalogIndexViewModel catalogModel,string q, int? p)
         {
             SearchFor = q;
-            CatalogModel = await _service.GetCatalogItemsBySearch(SearchFor);
+            var type = catalogModel.TypesFilterApplied;
+            var illustration = CatalogModel.IllustrationFilterApplied;
+            CatalogModel = await _service.GetCatalogItemsBySearch(p ?? 0, Constants.ITEMS_PER_PAGE, SearchFor, catalogModel.TypesFilterApplied, catalogModel.IllustrationFilterApplied);
+            CatalogModel.TypesFilterApplied = type;
+            CatalogModel.IllustrationFilterApplied = illustration;
             return Page();
         }
 
