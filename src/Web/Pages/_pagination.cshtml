@@ -3,31 +3,39 @@
 <div class="esh-pager">
 	<div class="container-fluid">
 		<article class="esh-pager-wrapper row">
-			<nav>
-				<div class="col-md-2 col-xs-12">
-					<a class="esh-pager-item-left esh-pager-item--navigable @Model.Previous"
+			
+				<div class="col-sm-2 col-6 order-2 order-sm-1">
+					<a class="esh-pager-item esh-pager-item-left esh-pager-item--navigable @Model.Previous"
 					   id="Previous"
-					   asp-route-pageid="@(Model.ActualPage - 1)"
-					   aria-label="Previous">
-						Previous
+                       asp-route-q="@ViewBag.SearchFor"
+                       asp-route-tagName="@ViewBag.TagName"
+                       asp-route-TypesFilterApplied="@ViewBag.TypeId"
+                       asp-route-IllustrationFilterApplied="@ViewBag.IllustrationId"
+					   asp-route-p="@(Model.ActualPage - 1)"
+					   aria-label="Anterior">
+						< Anterior
 					</a>
 				</div>
 				
-				<div class="col-md-8 col-xs-12">
+				<div class="col-sm-8 col-12 order-1 order-sm-2">
 					<span class="esh-pager-item">
-						Showing @Model.ItemsPerPage of @Model.TotalItems products - Page @(Model.ActualPage + 1) - @Model.TotalPages
+						@Model.ItemsPerPage de @Model.TotalItems produtos - Página @(Model.ActualPage + 1) / @Model.TotalPages
 					</span>
 				</div>
 		        
-				<div class="col-md-2 col-xs-12">
-					<a class="esh-pager-item-right esh-pager-item--navigable @Model.Next"
+				<div class="col-sm-2 col-6 order-3">
+					<a class="esh-pager-item esh-pager-item-right esh-pager-item--navigable @Model.Next"
 					   id="Next"
-					   asp-route-pageid="@(Model.ActualPage + 1)"
-					   aria-label="Next">
-						Next
+                       asp-route-q="@ViewBag.SearchFor"
+                       asp-route-tagName="@ViewBag.TagName"
+                       asp-route-TypesFilterApplied="@ViewBag.TypeId"
+                       asp-route-IllustrationFilterApplied="@ViewBag.IllustrationId"
+					   asp-route-p="@(Model.ActualPage + 1)"
+					   aria-label="Seguinte">
+						Seguinte >
 					</a>
 				</div>
-			</nav>
+			
 		</article>
 	</div>
 </div>

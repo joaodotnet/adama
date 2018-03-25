@@ -19,8 +19,8 @@ namespace Web.Services
         private static readonly string _categoryItemsKeyTemplate = "items-{0}";
         private static readonly string _categoryItemKeyTemplate = "item-{0}";
         private static readonly string _categoryAttrKeyTemplate = "attr-{0}";
-        private static readonly string _itemsByTagKeyTemplate = "tag-{0}-{1}";
-        private static readonly string _itemsBySearchKeyTemplate = "search-{0}";
+        private static readonly string _itemsByTagKeyTemplate = "tag-{0}-{1}-{2}-{3}-{4}-{5}";
+        private static readonly string _itemsBySearchKeyTemplate = "search-{0}-{1}-{2}-{3}-{4}";
         private static readonly string _menuKeyTemplate = "damamenu";
         private static readonly string _categoryKeyTemplate = "category-{0}";
         private static readonly string _categoryTypesKeyTemplate = "category-types-{0}";
@@ -33,12 +33,12 @@ namespace Web.Services
             _catalogService = catalogService;
         }
 
-        public async Task<IEnumerable<SelectListItem>> GetBrands()
+        public async Task<IEnumerable<SelectListItem>> GetIllustrations()
         {
             return await _cache.GetOrCreateAsync(_brandsKey, async entry =>
                     {
                         entry.SlidingExpiration = _defaultCacheDuration;
-                        return await _catalogService.GetBrands();
+                        return await _catalogService.GetIllustrations();
                     });
         }
 
@@ -91,22 +91,22 @@ namespace Web.Services
             });
         }
 
-        public async Task<CatalogIndexViewModel> GetCatalogItemsByTag(string tagName, TagType? tagType)
+        public async Task<CatalogIndexViewModel> GetCatalogItemsByTag(int pageIndex, int? itemsPage, string tagName, TagType? tagType, int? typeId, int? illustrationId)
         {
-            string cacheKey = String.Format(_itemsByTagKeyTemplate, tagName, tagType);
+            string cacheKey = String.Format(_itemsByTagKeyTemplate, tagName, tagType, pageIndex, itemsPage, typeId, illustrationId);
             return await _cache.GetOrCreateAsync(cacheKey, async entry =>
             {
                 entry.SlidingExpiration = _defaultCacheDuration;
-                return await _catalogService.GetCatalogItemsByTag(tagName,tagType);
+                return await _catalogService.GetCatalogItemsByTag(pageIndex,itemsPage,tagName,tagType,typeId,illustrationId);
             });
         }
-        public async Task<CatalogIndexViewModel> GetCatalogItemsBySearch(string searchfor)
+        public async Task<CatalogIndexViewModel> GetCatalogItemsBySearch(int pageIndex, int? itemsPage, string searchfor, int? typeId, int? illustrationId)
         {
-            string cacheKey = String.Format(_itemsBySearchKeyTemplate, searchfor);
+            string cacheKey = String.Format(_itemsBySearchKeyTemplate, searchfor, pageIndex, itemsPage, typeId, illustrationId);
             return await _cache.GetOrCreateAsync(cacheKey, async entry =>
             {
                 entry.SlidingExpiration = _defaultCacheDuration;
-                return await _catalogService.GetCatalogItemsBySearch(searchfor);
+                return await _catalogService.GetCatalogItemsBySearch(pageIndex, itemsPage, searchfor, typeId, illustrationId);
             });
         }
 
