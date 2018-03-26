@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Entities;
+using ApplicationCore.Entities.OrderAggregate;
 using AutoMapper;
 using Backoffice.ViewModels;
 using System;
@@ -40,6 +41,12 @@ namespace Backoffice
                 //.ForMember(dest => dest.CategoryId, opts => opts.MapFrom(src => src.CategoryId))
                 .ForMember(dest => dest.Selected, opts => opts.UseValue(true))
                 .ForMember(dest => dest.Label, opts => opts.MapFrom(src => src.Category.Name));
+            CreateMap<Order, OrderViewModel>()
+                .ForMember(dest => dest.ItemsCount, opts => opts.MapFrom(src => src.OrderItems.Sum(x => x.Units)))
+                .ForMember(dest => dest.ShipToAddress, opts => opts.MapFrom(src => $"{src.ShipToAddress.Street}, {src.ShipToAddress.PostalCode}, {src.ShipToAddress.City}"))
+                .ForMember(dest => dest.BillingToAddress, opts => opts.MapFrom(src => $"{src.BillingToAddress.Street}, {src.BillingToAddress.PostalCode}, {src.BillingToAddress.City}"));
+            CreateMap<OrderItem, OrderItemViewModel>()
+                .ForMember(dest => dest.Attributes, opts => opts.MapFrom(src => src.Details));
         }
     }
 }

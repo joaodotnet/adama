@@ -1,0 +1,73 @@
+﻿@page
+@model Backoffice.Pages.Orders.IndexModel
+@{
+    ViewData["Title"] = "Encomendas";
+}
+<h2>Encomendas</h2>
+<table class="table table-pagination">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OrdersModel[0].Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrdersModel[0].OrderDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrdersModel[0].BuyerId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrdersModel[0].ItemsCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrdersModel[0].ShipToAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrdersModel[0].ShippingCost)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrdersModel[0].Total)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrdersModel[0].OrderState)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrdersModel)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td class="text-nowrap">
+                @Html.DisplayFor(modelItem => item.OrderDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BuyerId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemsCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShipToAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShippingCost)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Total)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderState)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Editar</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Detalhe</a> 
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+

@@ -19,6 +19,7 @@ using ApplicationCore.Interfaces;
 using Backoffice.Interfaces;
 using Infrastructure.Services;
 using ApplicationCore;
+using ApplicationCore.Services;
 
 namespace Backoffice
 {
@@ -64,6 +65,7 @@ namespace Backoffice
                     options.Conventions.AuthorizeFolder("/Products", "RequireAdministratorRole");
                     options.Conventions.AuthorizeFolder("/ProductType", "RequireAdministratorRole");
                     options.Conventions.AuthorizeFolder("/ShopConfig", "RequireAdministratorRole");
+                    options.Conventions.AuthorizeFolder("/Orders", "RequireAdministratorRole");
                     options.Conventions.AuthorizePage("/Index", "RequireAdministratorRole");
                 });
 
@@ -71,8 +73,12 @@ namespace Backoffice
 
             // Register no-op EmailSender used by account confirmation and password reset during development
             // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
-            services.Configure<BackofficeSettings>(Configuration);            
+            services.Configure<BackofficeSettings>(Configuration);
+            services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+            services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
             services.AddScoped<IBackofficeService, BackofficeService>();
+            services.AddScoped<IBasketRepository, BasketRepository>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddSingleton<IEmailSender>(new EmailSender(Configuration.Get<BackofficeSettings>()));
         }
 

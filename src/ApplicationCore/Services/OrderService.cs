@@ -48,5 +48,15 @@ namespace ApplicationCore.Services
             return await _orderRepository.AddAsync(order);
             
         }
+
+        public async Task UpdateOrderState(int id, OrderStateType orderState)
+        {
+            var order = await _orderRepository.GetByIdAsync(id);
+            if(order != null)
+            {
+                order.OrderState = orderState;
+                await _orderRepository.UpdateAsync(order);
+            }
+        }
     }
 }
