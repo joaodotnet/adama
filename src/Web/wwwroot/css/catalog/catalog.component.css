@@ -53,9 +53,9 @@
     }
 
     .esh-catalog-label::after {
-        background-image: url("../../images/arrow-down.png");
+        background-image: url("../../images/angle-down.svg");
         content: '';
-        height: 7px;
+        height: 20px;
         position: absolute;
         right: 1.5rem;
         top: 2.5rem;
