@@ -4,5 +4,8 @@ $(document).on("blur", "input.decimal", function (e) {
 });
 
 $(document).ready(function () {
-    $('.table-pagination').DataTable();
+    $('.table-pagination').DataTable({
+        /* No ordering applied by DataTables during initialisation */
+        "order": []
+    });
 });

@@ -1,5 +1,9 @@
-﻿using Backoffice.Extensions;
+﻿using ApplicationCore.Entities.OrderAggregate;
+using ApplicationCore.Interfaces;
+using AutoMapper;
+using Backoffice.Extensions;
 using Backoffice.Interfaces;
+using Backoffice.ViewModels;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -15,9 +19,12 @@ namespace Backoffice.Services
     public class BackofficeService : IBackofficeService
     {
         private readonly DamaContext _db;
-        public BackofficeService(DamaContext context)
+        private readonly IMapper _mapper;
+
+        public BackofficeService(DamaContext context, IMapper mapper)
         {
             _db = context;
+            _mapper = mapper;
         }
         public bool CheckIfFileExists(string fullpath, string fileName)
         {
@@ -71,6 +78,28 @@ namespace Backoffice.Services
         public async Task<bool> CheckIfSkuExists(string sku)
         {
             return (await _db.CatalogItems.SingleOrDefaultAsync(x => x.Sku == sku)) != null;
+        }
+
+        public async Task<List<OrderViewModel>> GetOrders()
+        {
+            var orders = await _db.Orders
+                .Include(x => x.OrderItems)
+                .OrderByDescending(x => x.Id)
+                .ToListAsync();
+                
+            return _mapper.Map<List<OrderViewModel>>(orders);
+        }
+
+        public async Task<OrderViewModel> GetOrder(int id)
+        {
+            var order = await _db.Orders
+                .Include(x => x.OrderItems)
+                .ThenInclude(i => i.Details)
+                .SingleOrDefaultAsync(x => x.Id == id);
+
+            var orderViewModel = _mapper.Map<OrderViewModel>(order);
+            orderViewModel.Items = _mapper.Map<List<OrderItemViewModel>>(order.OrderItems);
+            return orderViewModel;
         }
     }
 }

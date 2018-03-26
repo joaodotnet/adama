@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ApplicationCore.Entities.OrderAggregate;
+using Backoffice.ViewModels;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +15,7 @@ namespace Backoffice.Interfaces
         bool CheckIfFileExists(string fullpath, string fileName);
         Task<string> GetSku(int typeId, int illustationId, int? attributeId = null);
         Task<bool> CheckIfSkuExists(string sku);
+        Task<List<OrderViewModel>> GetOrders();
+        Task<OrderViewModel> GetOrder(int id);
     }
 }

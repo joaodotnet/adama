@@ -1,0 +1,158 @@
+﻿@page
+@model Backoffice.Pages.Orders.DetailsModel
+@{
+    ViewData["Title"] = "Detalhe";
+}
+<h2>Encomenda nº @Model.OrderModel.Id</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.BuyerId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.BuyerId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.OrderDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.OrderDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.ShipToAddress_Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.ShipToAddress_Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.ShipToAddress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.ShipToAddress)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.ShipToAddress_PhoneNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.ShipToAddress_PhoneNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.UseBillingSameAsShipping)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.UseBillingSameAsShipping)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.BillingToAddress_Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.BillingToAddress_Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.TaxNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.TaxNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.BillingToAddress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.BillingToAddress)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.BillingToAddress_PhoneNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.BillingToAddress_PhoneNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.ShippingCost)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.ShippingCost)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.Total)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.Total)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.OrderState)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.OrderState)
+        </dd>
+    </dl>
+    <h4>Produtos</h4>
+    <table class="table">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].PictureUri)</th>
+            <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].ProductSku)</th>
+            <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].ProductName)</th>
+            <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].Units)</th>
+            <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].UnitPrice)</th>
+            <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].Attributes)</th>
+        </tr>
+
+        @foreach (var item in Model.OrderModel.Items)
+        {
+            <tr>
+                <td>
+                    <img src="@item.PictureUri" class="img-responsive" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductSku)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Units)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitPrice)
+                </td>
+                <td>
+                    <table class="table">
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => item.Attributes[0].AttributeType)</th>
+                            <th>@Html.DisplayNameFor(model => item.Attributes[0].AttributeName)</th>
+                        </tr>
+                        @foreach (var attr in item.Attributes)
+                        {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => attr.AttributeType)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => attr.AttributeName)
+                            </td>
+                        </tr>
+                        }
+                    </table>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<div>
+    <h4>Mudar de estado para</h4>
+    <form method="post">
+        <input type="hidden" asp-for="OrderModel.Id" />
+        <div class="form-control">
+            <label asp-for="OrderModel.OrderState" class="control-label"></label>
+            <select asp-for="OrderModel.OrderState" asp-items="Html.GetEnumSelectList<ApplicationCore.Entities.OrderAggregate.OrderStateType>()" class="form-control" />
+            <span asp-validation-for="OrderModel.OrderState" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Atualizar" class="btn btn-default"  />
+        </div>
+    </form>
+</div>
+<div>  
+    <a asp-page="./Index">Voltar para a lista</a>
+</div>

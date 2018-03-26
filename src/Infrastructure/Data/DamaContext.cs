@@ -20,7 +20,7 @@ namespace Infrastructure.Data
         public DbSet<IllustrationType> IllustrationTypes { get; set; }
         public DbSet<CatalogType> CatalogTypes { get; set; }
         public DbSet<CatalogTypeCategory> CatalogTypeCategories { get; set; }
-        public DbSet<Order> Orders { get; set; }
+        public DbSet<ApplicationCore.Entities.OrderAggregate.Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<OrderItemDetail> OrderItemDetails { get; set; }
         public DbSet<Category> Categories { get; set; }
