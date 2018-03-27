@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ApplicationCore.Entities.OrderAggregate;
 using ApplicationCore.Interfaces;
+using Backoffice.Extensions;
 using Backoffice.Interfaces;
 using Backoffice.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +23,11 @@ namespace Backoffice.Pages.Orders
             _orderService = orderService;
         }
 
+        [BindProperty]
         public OrderViewModel OrderModel { get; set; }
+
+        [TempData]
+        public string StatusMessage { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -31,12 +37,15 @@ namespace Backoffice.Pages.Orders
             return Page();
         }
 
-        public async Task OnPostAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             if(ModelState.IsValid)
             {
                 await _orderService.UpdateOrderState(OrderModel.Id, OrderModel.OrderState);
+                StatusMessage = $"O estado da encomenda #{OrderModel.Id} foi alterada para {EnumHelper<OrderStateType>.GetDisplayValue(OrderModel.OrderState)}";
+                return RedirectToPage(new { id = OrderModel.Id });                
             }
+            return Page();
         }
     }
 }

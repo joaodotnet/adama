@@ -95,11 +95,22 @@ namespace Backoffice.Services
             var order = await _db.Orders
                 .Include(x => x.OrderItems)
                 .ThenInclude(i => i.Details)
+                .Include(x => x.OrderItems)
+                .ThenInclude(i => i.ItemOrdered)
                 .SingleOrDefaultAsync(x => x.Id == id);
 
             var orderViewModel = _mapper.Map<OrderViewModel>(order);
             orderViewModel.Items = _mapper.Map<List<OrderItemViewModel>>(order.OrderItems);
+            orderViewModel.Items.ForEach(async x => x.ProductSku = await GetSkuAsync(x.ProductId));
             return orderViewModel;
+        }
+
+        private async Task<string> GetSkuAsync(int catalogItemId)
+        {
+            var item = await _db.CatalogItems.FindAsync(catalogItemId);
+            if (item != null)
+                return item.Sku;
+            return string.Empty;
         }
     }
 }
