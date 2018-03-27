@@ -4,7 +4,7 @@
     ViewData["Title"] = "Detalhe";
 }
 <h2>Encomenda nº @Model.OrderModel.Id</h2>
-
+@Html.Partial("_StatusMessage", Model.StatusMessage)
 <div>
     <hr />
     <dl class="dl-horizontal">
@@ -27,16 +27,16 @@
             @Html.DisplayFor(model => model.OrderModel.ShipToAddress_Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.OrderModel.ShipToAddress)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.OrderModel.ShipToAddress)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.OrderModel.ShipToAddress_PhoneNumber)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.OrderModel.ShipToAddress_PhoneNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.ShipToAddress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.ShipToAddress)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.OrderModel.UseBillingSameAsShipping)
@@ -51,6 +51,12 @@
             @Html.DisplayFor(model => model.OrderModel.BillingToAddress_Name)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.BillingToAddress_PhoneNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.BillingToAddress_PhoneNumber)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.OrderModel.TaxNumber)
         </dt>
         <dd>
@@ -61,12 +67,6 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.OrderModel.BillingToAddress)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.OrderModel.BillingToAddress_PhoneNumber)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.OrderModel.BillingToAddress_PhoneNumber)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.OrderModel.ShippingCost)
@@ -118,20 +118,16 @@
                 </td>
                 <td>
                     <table class="table">
-                        <tr>
-                            <th>@Html.DisplayNameFor(model => item.Attributes[0].AttributeType)</th>
-                            <th>@Html.DisplayNameFor(model => item.Attributes[0].AttributeName)</th>
-                        </tr>
                         @foreach (var attr in item.Attributes)
                         {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => attr.AttributeType)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => attr.AttributeName)
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => attr.AttributeType)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => attr.AttributeName)
+                                </td>
+                            </tr>
                         }
                     </table>
                 </td>
@@ -141,18 +137,21 @@
 </div>
 <div>
     <h4>Mudar de estado para</h4>
-    <form method="post">
-        <input type="hidden" asp-for="OrderModel.Id" />
-        <div class="form-control">
-            <label asp-for="OrderModel.OrderState" class="control-label"></label>
-            <select asp-for="OrderModel.OrderState" asp-items="Html.GetEnumSelectList<ApplicationCore.Entities.OrderAggregate.OrderStateType>()" class="form-control" />
-            <span asp-validation-for="OrderModel.OrderState" class="text-danger"></span>
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post">
+                <input type="hidden" asp-for="OrderModel.Id" />
+                <div class="form-group">
+                    <select asp-for="OrderModel.OrderState" asp-items="Html.GetEnumSelectList<ApplicationCore.Entities.OrderAggregate.OrderStateType>()" class="form-control"></select>
+                    <span asp-validation-for="OrderModel.OrderState" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Atualizar" class="btn btn-default" />
+                </div>
+            </form>
         </div>
-        <div class="form-group">
-            <input type="submit" value="Atualizar" class="btn btn-default"  />
-        </div>
-    </form>
+    </div>
 </div>
-<div>  
+<div>
     <a asp-page="./Index">Voltar para a lista</a>
 </div>

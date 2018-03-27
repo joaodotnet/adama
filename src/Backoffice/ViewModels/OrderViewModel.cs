@@ -18,16 +18,22 @@ namespace Backoffice.ViewModels
         [DisplayFormat(ApplyFormatInEditMode = true,DataFormatString = "{0:yyy-MM-dd HH:mm:ss}")]
         [Display(Name = "Data")]
         public DateTimeOffset OrderDate { get; set; }
+        [Display(Name = "Nome (envio)")]
         public string ShipToAddress_Name { get; set; }
+        [Display(Name = "Telefone (envio)")]
         public int? ShipToAddress_PhoneNumber { get; set; }
-        [Display(Name = "Morada")]
+        [Display(Name = "Morada de envio")]
         public string ShipToAddress { get; set; }
+        [Display(Name = "Nome (facturação)")]
         public string BillingToAddress_Name { get; set; }
+        [Display(Name = "Telefone (facturação)")]
         public int? BillingToAddress_PhoneNumber { get; set; }
+        [Display(Name = "Morada de facturação")]
         public string BillingToAddress { get; set; }
         [Display(Name = "Portes")]
         public decimal ShippingCost { get; set; }
         public decimal Total { get; set; }
+        [Display(Name = "Usar a mesma morada de faturação")]
         public bool UseBillingSameAsShipping { get; set; }
         [Display(Name = "Estado")]
         public OrderStateType OrderState { get; set; }

@@ -46,7 +46,11 @@ namespace Backoffice
                 .ForMember(dest => dest.ShipToAddress, opts => opts.MapFrom(src => $"{src.ShipToAddress.Street}, {src.ShipToAddress.PostalCode}, {src.ShipToAddress.City}"))
                 .ForMember(dest => dest.BillingToAddress, opts => opts.MapFrom(src => $"{src.BillingToAddress.Street}, {src.BillingToAddress.PostalCode}, {src.BillingToAddress.City}"));
             CreateMap<OrderItem, OrderItemViewModel>()
-                .ForMember(dest => dest.Attributes, opts => opts.MapFrom(src => src.Details));
+                .ForMember(dest => dest.Attributes, opts => opts.MapFrom(src => src.Details))
+                .ForMember(dest => dest.ProductId, opts => opts.MapFrom(src => src.ItemOrdered.CatalogItemId))
+                .ForMember(dest => dest.PictureUri, opts => opts.MapFrom(src => src.ItemOrdered.PictureUri))
+                .ForMember(dest => dest.ProductName, opts => opts.MapFrom(src => src.ItemOrdered.ProductName));                
+            CreateMap<OrderItemDetail, OrderItemAttributeViewModel>();
         }
     }
 }
