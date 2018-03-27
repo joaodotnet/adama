@@ -43,8 +43,8 @@ namespace Backoffice
                 .ForMember(dest => dest.Label, opts => opts.MapFrom(src => src.Category.Name));
             CreateMap<Order, OrderViewModel>()
                 .ForMember(dest => dest.ItemsCount, opts => opts.MapFrom(src => src.OrderItems.Sum(x => x.Units)))
-                .ForMember(dest => dest.ShipToAddress, opts => opts.MapFrom(src => $"{src.ShipToAddress.Street}, {src.ShipToAddress.PostalCode}, {src.ShipToAddress.City}"))
-                .ForMember(dest => dest.BillingToAddress, opts => opts.MapFrom(src => $"{src.BillingToAddress.Street}, {src.BillingToAddress.PostalCode}, {src.BillingToAddress.City}"));
+                .ForMember(dest => dest.ShipToAddress, opts => opts.MapFrom(src => string.IsNullOrEmpty(src.ShipToAddress.Street) ? "" : $"{src.ShipToAddress.Street}, {src.ShipToAddress.PostalCode}, {src.ShipToAddress.City}"))
+                .ForMember(dest => dest.BillingToAddress, opts => opts.MapFrom(src => string.IsNullOrEmpty(src.BillingToAddress.Street) ? "" : $"{src.BillingToAddress.Street}, {src.BillingToAddress.PostalCode}, {src.BillingToAddress.City}"));
             CreateMap<OrderItem, OrderItemViewModel>()
                 .ForMember(dest => dest.Attributes, opts => opts.MapFrom(src => src.Details))
                 .ForMember(dest => dest.ProductId, opts => opts.MapFrom(src => src.ItemOrdered.CatalogItemId))
