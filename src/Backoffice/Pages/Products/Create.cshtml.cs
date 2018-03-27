@@ -167,26 +167,39 @@ namespace Backoffice.Pages.Products
                 .OrderBy(x => x.Name)
                 .ToListAsync();
             ViewData["IllustrationId"] = new SelectList(illustrations, "Id", "Name");
-            ViewData["ProductTypeId"] = new SelectList(_context.CatalogTypes.Select(x => new { x.Id, Name = $"{x.Code} - {x.Description}" }), "Id", "Name");
-            await SetCatalogCategoryModel();
+            var types = _context.CatalogTypes.Select(x => new { x.Id, Name = $"{x.Code} - {x.Description}" });
+            ViewData["ProductTypeId"] = new SelectList(types, "Id", "Name");
+            await SetCatalogCategoryModel(types.First().Id);
         }
 
-        private async Task SetCatalogCategoryModel()
+        private async Task SetCatalogCategoryModel(int catalogTypeId)
         {
             //Catalog Categories            
-            var allCats = await _context.Categories.Include(x => x.Parent).ToListAsync();
+            var allCats = await _context.Categories
+                .Include(x => x.Parent)
+                .Include(x => x.CatalogTypes)
+                .ToListAsync();
+
+            var catsId = allCats
+                .Where(x => x.CatalogTypes.Any(ct => ct.CatalogTypeId == catalogTypeId))
+                .Select(x => x.Id)
+                .ToList();
+
             foreach (var item in allCats.Where(x => x.Parent == null).ToList())
             {
                 CatalogCategoryViewModel parent = new CatalogCategoryViewModel
                 {
                     CategoryId = item.Id,
                     Label = item.Name,
-                    Childs = new List<CatalogCategoryViewModel>()
+                    Childs = new List<CatalogCategoryViewModel>(),
+                    Selected = catsId.Contains(item.Id)
+
                 };
                 parent.Childs.AddRange(allCats.Where(x => x.ParentId == item.Id).Select(s => new CatalogCategoryViewModel
                 {
                     CategoryId = s.Id,
-                    Label = s.Name
+                    Label = s.Name,
+                    Selected = catsId.Contains(s.Id)
                 }));
                 CatalogCategoryModel.Add(parent);
             }
