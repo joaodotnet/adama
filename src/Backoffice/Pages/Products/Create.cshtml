@@ -119,6 +119,13 @@
                     $(this).closest('.parent-category').find('.parent-checkbox').prop('checked', true);
                 }
             });
+
+            $('#ProductModel_CatalogTypeId').on('change', function () {
+                console.log('input product Id = ' + this.value);
+                $.getJSON('@(Url.Page("Create","Categories"))' + '&productType=' + this.value, function (data) {
+                    console.log('response: ' + data);
+                });
+            });
         });
     </script>
 }

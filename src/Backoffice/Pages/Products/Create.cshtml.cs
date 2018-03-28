@@ -118,6 +118,11 @@ namespace Backoffice.Pages.Products
             return Page();
         }
 
+        public async Task<IActionResult> OnGetCategoriesAsync(int productType)
+        {
+            return new JsonResult(productType);
+        }
+
         private bool ValidatePictures()
         {
             if (ProductModel.Picture == null || ProductModel.Picture.Length == 0)
