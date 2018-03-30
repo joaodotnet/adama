@@ -121,14 +121,14 @@
         </div>
         <div class="col-md-4">
             <h4>Categorias</h4>
-            <ul>
+            <ul id="category-list">
                 @for (int i = 0; i < Model.CatalogCategoryModel.Count; i++)
                 {
                     <li class="parent-category">
                         <label asp-for="CatalogCategoryModel[i].Selected">
                             <input type="hidden" asp-for="CatalogCategoryModel[i].Id" />
                             <input type="hidden" asp-for="CatalogCategoryModel[i].CategoryId" />
-                            <input type="checkbox" asp-for="CatalogCategoryModel[i].Selected" class="parent-checkbox" />
+                            <input type="checkbox" asp-for="CatalogCategoryModel[i].Selected" class="parent-checkbox" cat-id="@Model.CatalogCategoryModel[i].CategoryId" />
                             @Model.CatalogCategoryModel[i].Label
                         </label>
 
@@ -141,7 +141,7 @@
                                         <label asp-for="CatalogCategoryModel[i].Childs[j].Selected">
                                             <input type="hidden" asp-for="CatalogCategoryModel[i].Childs[j].Id" />
                                             <input type="hidden" asp-for="CatalogCategoryModel[i].Childs[j].CategoryId" />
-                                            <input type="checkbox" asp-for="CatalogCategoryModel[i].Childs[j].Selected" class="child-checkbox" />
+                                            <input type="checkbox" asp-for="CatalogCategoryModel[i].Childs[j].Selected" class="child-checkbox" cat-id="@Model.CatalogCategoryModel[i].Childs[j].CategoryId" />
                                             @Model.CatalogCategoryModel[i].Childs[j].Label
                                         </label>
                                     </li>
@@ -234,6 +234,18 @@
                 if ($(this).is(":checked")) {
                     $(this).closest('.parent-category').find('.parent-checkbox').prop('checked', true);
                 }
+            });
+            $('#ProductModel_CatalogTypeId').on('change', function () {
+                $.getJSON('@(Url.Page("Create","Categories"))' + '&productType=' + this.value, function (data) {
+                    //deselect all checkboxes
+                    $('#category-list input:checkbox').prop('checked', false);
+
+                    if (data) {                        
+                        data.forEach(function (element) {
+                            $('#category-list input[cat-id=' + element + ']').prop('checked', true);
+                        });
+                    }
+                });
             });
         });
     </script>
