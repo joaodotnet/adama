@@ -17,5 +17,6 @@ namespace Backoffice.Interfaces
         Task<bool> CheckIfSkuExists(string sku);
         Task<List<OrderViewModel>> GetOrders();
         Task<OrderViewModel> GetOrder(int id);
+        Task<List<CategoryViewModel>> GetCategoriesAsync(int productTypeId);
     }
 }

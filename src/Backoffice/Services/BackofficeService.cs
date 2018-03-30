@@ -112,5 +112,16 @@ namespace Backoffice.Services
                 return item.Sku;
             return string.Empty;
         }
+
+        public async Task<List<CategoryViewModel>> GetCategoriesAsync(int productTypeId)
+        {
+            var type = await _db.CatalogTypes
+                .Include(x => x.Categories)
+                    .ThenInclude(c => c.Category)
+                .SingleOrDefaultAsync(x => x.Id == productTypeId);
+            if(type != null)
+                return _mapper.Map<List<CategoryViewModel>>(type.Categories.Select(x => x.Category).ToList());
+            return null;
+        }
     }
 }

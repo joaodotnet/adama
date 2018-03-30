@@ -190,6 +190,16 @@ namespace Backoffice.Pages.Products
             return RedirectToPage("./Index");
         }
 
+        public async Task<IActionResult> OnPostAddAttributeAsync()
+        {
+            await PopulateLists();
+            ProductModel.CatalogAttributes.Add(new ProductAttributeViewModel
+            {
+                CatalogItemId = ProductModel.Id
+            });
+            return Page();
+        }
+
         private bool ValidateAttributesModel()
         {
             foreach (var item in ProductModel.CatalogAttributes)
@@ -208,16 +218,6 @@ namespace Backoffice.Pages.Products
                 }
             }
             return true;
-        }
-
-        public async Task<IActionResult> OnPostAddAttributeAsync()
-        {
-            await PopulateLists();
-            ProductModel.CatalogAttributes.Add(new ProductAttributeViewModel
-            {
-                CatalogItemId = ProductModel.Id
-            });
-            return Page();
         }
 
         private async Task PopulateLists()

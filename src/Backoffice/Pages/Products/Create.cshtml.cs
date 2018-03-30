@@ -120,7 +120,8 @@ namespace Backoffice.Pages.Products
 
         public async Task<IActionResult> OnGetCategoriesAsync(int productType)
         {
-            return new JsonResult(productType);
+            var cats = await _service.GetCategoriesAsync(productType);
+            return new JsonResult(cats.Select(x => x.Id).ToList());
         }
 
         private bool ValidatePictures()
