@@ -428,3 +428,64 @@ h4 {
 .dama-login-mobile {
     margin-left: 38px;
 }
+
+.dama-customize {
+    background-color: #EF7C8D;
+}
+.dama-customize h2 {
+    color: #fff;
+}
+.dama-customize-small {
+    font-size: 12px;
+}
+.dama-customize-small2 {
+    font-size: 15px;
+}
+.dama-customize-cards .col-sm-3 .card {
+    height: 200px;
+    background-color:#dfdfdf;
+}
+.dama-customize-gray {
+    background-color:#e8e0e0;
+}
+
+.dama-customize-colors .card-body {    
+    height: 60px;
+}
+
+.dama-customize-gray textarea {
+    background-color: #e8e0e0;
+}
+
+.dama-customize-textarea {
+    background-image: -webkit-linear-gradient(left, #e8e0e0 10px, transparent 10px), -webkit-linear-gradient(right, #e8e0e0 10px, transparent 10px), -webkit-linear-gradient(#e8e0e0 30px, #000000 30px, #000000 31px, #e8e0e0 31px);
+    background-image: -moz-linear-gradient(left, #e8e0e0 10px, transparent 10px), -moz-linear-gradient(right, #e8e0e0 10px, transparent 10px), -moz-linear-gradient(#e8e0e0 30px, #000000 30px, #000000 31px, #e8e0e0 31px);
+    background-image: -ms-linear-gradient(left, #e8e0e0 10px, transparent 10px), -ms-linear-gradient(right, #e8e0e0 10px, transparent 10px), -ms-linear-gradient(#e8e0e0 30px, #000000 30px, #000000 31px, #e8e0e0 31px);
+    background-image: -o-linear-gradient(left, #e8e0e0 10px, transparent 10px), -o-linear-gradient(right, #e8e0e0 10px, transparent 10px), -o-linear-gradient(#e8e0e0 30px, #000000 30px, #000000 31px, #e8e0e0 31px);
+    background-image: linear-gradient(left, #e8e0e0 10px, transparent 10px), linear-gradient(right, #e8e0e0 10px, transparent 10px), linear-gradient(#e8e0e0 30px, #000000 30px, #000000 31px, #e8e0e0 31px);
+    background-size: 100% 100%, 100% 100%, 100% 31px;
+    border: 0px;
+    border-radius: 0px;
+    box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0);
+    line-height: 31px;
+    font-family: Arial, Helvetica, Sans-serif;
+    padding: 8px;
+}
+
+.dama-customize-textarea:focus {
+    outline: none;
+}
+
+.dama-customize .esh-catalog-button {
+    background-color: #e9435b;
+}
+
+.dama-customize .esh-catalog-button:hover {
+    background-color: #a83a4a;
+    transition: all 0.35s;
+}
+
+.image-invert {
+    -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+    filter: grayscale(100%)brightness(200%);
+}
