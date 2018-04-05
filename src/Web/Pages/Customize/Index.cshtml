@@ -3,10 +3,19 @@
 @{
     ViewData["Title"] = "Personalizar";
 }
-
+@section Styles {
+    <style type="text/css">
+        @@media screen and (max-width:576px) {
+            .container {
+                padding-left: 0px;
+                padding-right: 0px;
+            }
+        }
+    </style>
+}
 <img src="http://via.placeholder.com/1900x600" class="img-fluid" />
 
-<div class="dama-customize pt-5">
+<div class="dama-customize pt-sm-5 pt-2">
     <div class="text-center">
         <h2>Personaliza Tu mesmo!</h2>
         <img class="separator image-invert" src="~/images/coração-rosa.png" />
@@ -20,32 +29,15 @@
     </div>
     <div class="row">
         <div class="offset-1 col-10">
-            <div class="row p-3 dama-customize-cards ">
-                <div class="col-sm-3 pt-3">
-                    <div class="card card-block justify-content-center align-items-center">
-                        <h5>Acessórios</h5>
+            <div class="row p-sm-3 dama-customize-cards ">
+                @foreach (var item in Model.CustomizeModel.Categories)
+                {
+                    <div class="col-sm-3 pt-3 category-block" cat-id="@item.Item1">
+                        <div class="card card-block justify-content-center align-items-center">
+                            <h5>@item.Item2</h5>
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-3 pt-3">
-                    <div class="card card-block justify-content-center align-items-center">
-                        <h5>Acessórios</h5>
-                    </div>
-                </div>
-                <div class="col-sm-3 pt-3">
-                    <div class="card card-block justify-content-center align-items-center">
-                        <h5>Acessórios</h5>
-                    </div>
-                </div>
-                <div class="col-sm-3 pt-3">
-                    <div class="card card-block justify-content-center align-items-center">
-                        <h5>Acessórios</h5>
-                    </div>
-                </div>
-                <div class="col-sm-3 pt-3">
-                    <div class="card card-block justify-content-center align-items-center">
-                        <h5>Acessórios</h5>
-                    </div>
-                </div>
+                }
             </div>
         </div>
     </div>
@@ -60,7 +52,7 @@
     </div>
     <div class="row">
         <div class="offset-1 col-10">
-            <div class="row p-3 dama-customize-cards ">
+            <div class="row p-sm-3 dama-customize-cards slider-for">
                 <div class="col-sm-3 pt-3">
                     <div class="card card-block justify-content-center align-items-center">
                         <img class="card-img-top" src="http://via.placeholder.com/200X200" alt="Produto">
@@ -99,11 +91,11 @@
         </h4>
     </div>
     <div class="row ml-1 mr-1">
-        <div class="offset-1 col-7 dama-customize-gray p-3">
+        <div class="offset-sm-1 col-sm-7 col-12 dama-customize-gray p-3">
             <strong>Descreve a ilustração...</strong><br />
             <textarea rows="5" class="w-100 dama-customize-textarea"></textarea>
         </div>
-        <div class="col-3 pt-5">
+        <div class="col-sm-3 col-12 pt-sm-5 pt-2">
             <strong>Exemplo:</strong>
             <p class="dama-customize-small2">
                 "A minha amiga adora cozinhar, tem cabelo curto e não dispensa a companhia do seu gato cizento.<br />
@@ -111,18 +103,20 @@
             </p>
         </div>
     </div>
-    <div class="custom-file mt-4 offset-5 col-3">
+
+    <div class="custom-file mt-sm-4 mt-2 offset-sm-5 col-sm-3 offset-1 col-10">
         <input type="file" class="custom-file-input" id="validatedCustomFile" required>
         <label class="custom-file-label" for="validatedCustomFile">Anexar um ficheiro</label>
     </div>
-    <div class="row ml-1 mr-1 mt-4">
-        <div class="offset-1 col-7 dama-customize-gray p-3">
+    <div class="row ml-1 mr-1 mt-sm-4 mt-2">
+        <div class="offset-sm-1 col-sm-7 col-12 dama-customize-gray p-3">
             <strong>Queres adicionar uma frase ou nome?</strong><br />
             <textarea rows="2" class="w-100 dama-customize-textarea"></textarea>
         </div>
     </div>
-    <div class="row ml-1 mr-1 mt-4">
-        <div class="offset-1 col-7 p-0">
+    <div class="row ml-1 mr-1 mt-sm-4 mt-2 text-center">
+        <div class="offset-sm-1 col-sm-7 col-12 p-0">
+            <strong>Escolha uma ou duas cores</strong>
             <div class="row p-1 m-0 dama-customize-colors">
                 <div class="card" style="width: 5rem;">
                     <div class="card-body" style="background-color:#000000">
@@ -152,8 +146,7 @@
                     <div class="card-body" style="background-color:#0026ff">
                     </div>
                 </div>
-            </div>
-            <div class="row p-1 m-0 mt-1 dama-customize-colors">
+                <div class="w-100 d-none d-sm-block"></div>
                 <div class="card" style="width: 5rem;">
                     <div class="card-body" style="background-color:#b200ff">
                     </div>
@@ -186,10 +179,34 @@
         </div>
     </div>
     <div class="row mt-3 pb-5">
-        <div class="offset-5 col-3 text-right">
+        <div class="offset-sm-5 col-sm-3 col-12 text-sm-right text-center">
             <button type="submit" class="esh-catalog-button btn btn-default btn-brand btn-brand-big mt-0">&nbsp;SUBMETER&nbsp;</button>
         </div>
     </div>
 </div>
 
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.slider-for').slick({
+                infinite: true,
+                slidesToShow: 4,
+                slidesToScroll: 1,
+                responsive: [
+                    {
+                        breakpoint: 576,
+                        settings: {
+                            slidesToShow: 1
+                        }
+                    }]
 
+            });
+
+            $('.category-block').click(function () {
+                var url = '@(Url.Page("/Customize/Index", new { CategoryId = 0 }))';
+                url = url.replace('0', $(this).attr('cat-id'));
+                window.location.replace(url);
+            });
+        });
+    </script>
+}
