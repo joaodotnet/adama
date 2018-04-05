@@ -49,7 +49,6 @@ body {
 /*select::-ms-expand {
     display: none;
 }*/
-
 @media screen and (min-width: 992px) {
     .form-input {
         max-width: 360px;
