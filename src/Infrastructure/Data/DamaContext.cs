@@ -28,8 +28,8 @@ namespace Infrastructure.Data
         public DbSet<ApplicationCore.Entities.ShopConfigDetail> ShopConfigDetails { get; set; } //Need the full qualified name for generate code
         public DbSet<ApplicationCore.Entities.CatalogAttribute> CatalogAttributes { get; set; }
         public DbSet<CatalogCategory> CatalogCategories { get; set; }
+        public DbSet<CustomizeOrder> CustomizeOrders { get; set; }
 
-        
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Category>(ConfigureCategory);
@@ -47,8 +47,26 @@ namespace Infrastructure.Data
             builder.Entity<ShopConfigDetail>(ConfigureShopConfigDetails);
             builder.Entity<CatalogTypeCategory>(ConfigureCatalogTypeCategory);
             builder.Entity<CatalogCategory>(ConfigureCatalogCategories);
+            builder.Entity<CustomizeOrder>(ConfigureCustomizeOrders);
         }
 
+        private void ConfigureCustomizeOrders(EntityTypeBuilder<CustomizeOrder> builder)
+        {
+            builder.ToTable("CustomizeOrder");
+
+            builder.Property(x => x.OrderState)
+                .IsRequired()
+                .HasDefaultValue(OrderStateType.PENDING);
+            builder.Property(x => x.BuyerId)
+                .IsRequired();
+            builder.Property(x => x.BuyerName)
+                .IsRequired();
+            builder.Property(x => x.BuyerContact)
+                .IsRequired();
+            builder.Property(x => x.Description)
+                .IsRequired();
+            builder.OwnsOne(i => i.ItemOrdered);
+        }
 
         private void ConfigureCatalogTypeCategory(EntityTypeBuilder<CatalogTypeCategory> builder)
         {

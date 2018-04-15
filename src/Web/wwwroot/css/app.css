@@ -441,15 +441,20 @@ h4 {
     font-size: 15px;
 }
 .dama-customize-cards .col-sm-3 .card {
-    height: 200px;
+    min-height: 200px;
     background-color:#dfdfdf;
+    cursor: pointer;
 }
 .dama-customize-gray {
     background-color:#e8e0e0;
 }
 
-.dama-customize-colors .card-body {    
+.dama-customize-colors .card-body {
     height: 60px;
+    cursor: pointer;
+}
+.dama-customize-color-selected {
+    border: 5px solid #e8e0e0;
 }
 
 .dama-customize-gray textarea {

@@ -1,6 +1,8 @@
 ﻿using ApplicationCore;
 using ApplicationCore.Interfaces;
+using Microsoft.AspNetCore.Http;
 using System;
+using System.IO;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
@@ -19,14 +21,14 @@ namespace Infrastructure.Services
             _appSettings = appSettings;
             //_logger = logger;
         }
-        public Task SendEmailAsync(string email, string subject, string message, string bccEmails = null)
+        public Task SendEmailAsync(string email, string subject, string message, string bccEmails = null, IFormFile attachFile = null)
         {
             // TODO: Wire this up to actual email sending logic via SendGrid, local SMTP, etc.
-            Execute(email, subject, message, bccEmails).Wait();
+            Execute(email, subject, message, bccEmails, attachFile).Wait();
 
             return Task.FromResult(0);
         }
-        public async Task Execute(string email, string subject, string message, string bccEmails)
+        public async Task Execute(string email, string subject, string message, string bccEmails, IFormFile attachFile)
         {
             try
             {
@@ -34,13 +36,15 @@ namespace Infrastructure.Services
                 {
                     From = new MailAddress(_appSettings.FromEmail, "Dama no Jornal")
                 };
-                mail.To.Add(new MailAddress(email));
+                mail.To.Add(email);
                 if(!string.IsNullOrEmpty(bccEmails))
                     mail.Bcc.Add(bccEmails);
                 mail.Subject = subject;
                 mail.Body = message;
                 mail.IsBodyHtml = true;
                 mail.Priority = MailPriority.Normal;
+                if (attachFile != null)
+                    mail.Attachments.Add(new Attachment(attachFile.OpenReadStream(),attachFile.FileName));
 
                 using (SmtpClient smtp = new SmtpClient(_appSettings.SmtpServer, _appSettings.SmtpPort))
                 {
