@@ -9,5 +9,6 @@ namespace Web.Interfaces
     public interface ICustomizeViewModelService
     {
         Task<CustomizeViewModel> GetCustomizeItems(int? categoryId);
+        Task SendCustomizeService(CustomizeViewModel request);
     }
 }
