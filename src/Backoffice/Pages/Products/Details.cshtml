@@ -28,15 +28,15 @@
         </dt>
         <dd>
             @foreach (var cat in Model.ProductModel.CatalogCategories)
-            {
-                @cat.Label
-                <br />
-                @foreach (var child in cat.Childs)
-                {
-                    @child.Label
-                    <br />
-                }
-            }
+        {
+            @cat.Label
+            <br />
+            @foreach (var child in cat.Childs)
+        {
+            @child.Label
+            <br />
+    }
+    }
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.ProductModel.CatalogTypeId)
@@ -81,6 +81,12 @@
             @Html.DisplayFor(model => model.ProductModel.IsFeatured)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.ProductModel.CanCustomize)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductModel.CanCustomize)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.ProductModel.PictureUri)
         </dt>
         <dd>
@@ -97,19 +103,19 @@
         </dt>
         <dd>
             @foreach (var item in Model.ProductModel.CatalogPictures)
-            {
-                <div class="col-md-3">
-                    <img src="@item.PictureUri" class="img-responsive" />
-                    <div>
-                        @Html.DisplayNameFor(model => item.IsActive)
-                        @Html.DisplayFor(model => item.IsActive)
-                    </div>
-                    <div>
-                        @Html.DisplayNameFor(model => item.Order)
-                        @Html.DisplayFor(model => item.Order)
-                    </div>
+        {
+            <div class="col-md-3">
+                <img src="@item.PictureUri" class="img-responsive" />
+                <div>
+                    @Html.DisplayNameFor(model => item.IsActive)
+                    @Html.DisplayFor(model => item.IsActive)
                 </div>
-            }
+                <div>
+                    @Html.DisplayNameFor(model => item.Order)
+                    @Html.DisplayFor(model => item.Order)
+                </div>
+            </div>
+    }
         </dd>
     </dl>
     <hr />
