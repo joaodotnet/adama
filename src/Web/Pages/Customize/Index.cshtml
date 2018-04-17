@@ -28,6 +28,7 @@
                 <span class="dama-customize-small">Escolhe uma opção</span>
             </h4>
         </div>
+        <a name="produtos"></a>
         <div class="row">
             <div class="offset-1 col-10">
                 <div class="row p-sm-3 dama-customize-cards ">
@@ -215,7 +216,7 @@
 
             $('.category-block').click(function () {
                 var url = '@(Url.Page("/Customize/Index", new { CategoryId = 0 }))';
-                url = url.replace('0', $(this).attr('cat-id'));
+                url = url.replace('0', $(this).attr('cat-id')) + '#produtos';
                 window.location.replace(url);
             });
 

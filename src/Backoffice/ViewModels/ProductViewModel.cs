@@ -35,6 +35,8 @@ namespace Backoffice.ViewModels
         public bool IsNew { get; set; }
         [Display(Name = "Destaque")]
         public bool IsFeatured{ get; set; }
+        [Display(Name = "Personalizar")]
+        public bool CanCustomize { get; set; }
         [Display(Name = "Imagem Principal")]
         public IFormFile Picture { get; set; }
         [Display(Name = "URL da Imagem Principal")]

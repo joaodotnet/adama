@@ -43,6 +43,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.ProductModel[0].IsFeatured)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductModel[0].CanCustomize)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -58,15 +61,15 @@
             </td>
             <td>
                 @foreach (var cat in item.CatalogCategories)
-                {
-                    @cat.Label
-                    <br />
-                    @foreach (var child in cat.Childs)
-                    {
-                        @child.Label
-                        <br />
-                    }
-                }
+        {
+            @cat.Label
+            <br />
+            @foreach (var child in cat.Childs)
+    {
+        @child.Label
+        <br />
+}
+}
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CatalogType.Code)
@@ -88,6 +91,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsFeatured)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CanCustomize)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Editar</a> |

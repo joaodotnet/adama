@@ -191,6 +191,9 @@ namespace Infrastructure.Data
                 .IsRequired(true);
             builder.Property(x => x.IsFeatured)
                 .IsRequired(true);
+            builder.Property(x => x.CanCustomize)
+                .IsRequired(true)
+                .HasDefaultValue(false);
         }
 
         private void ConfigureCatalogBrand(EntityTypeBuilder<CatalogIllustration> builder)

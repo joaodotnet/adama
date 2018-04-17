@@ -27,7 +27,8 @@ namespace Web.ViewModels
         public int DeliveryTimeMin { get; set; }
         public int DeliveryTimeMax { get; set; }
         public DeliveryTimeUnitType DeliveryTimeUnit { get; set; }
-
+        public bool CanCustomize { get; set; }
+        public int FirstCategoryId { get; set; }
     }
 
     public class LinkViewModel
