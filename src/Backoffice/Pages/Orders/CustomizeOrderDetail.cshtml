@@ -1,0 +1,111 @@
+﻿@page
+@model Backoffice.Pages.Orders.CustomizeOrderDetailModel
+@{
+    ViewData["Title"] = "Detalhe";
+    List<string> colors = new List<string>();
+    if (!string.IsNullOrEmpty(Model.CustomizeOrder.Colors))
+    {
+        var temp = Model.CustomizeOrder.Colors.Split(',');
+        colors.AddRange(temp.Select(x => x.Replace(';', ',')).ToList());
+    }
+}
+<h2>Encomenda Personalizada nº @Model.CustomizeOrder.Id</h2>
+@Html.Partial("_StatusMessage", Model.StatusMessage)
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomizeOrder.BuyerId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CustomizeOrder.BuyerId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomizeOrder.BuyerName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CustomizeOrder.BuyerName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomizeOrder.BuyerContact)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CustomizeOrder.BuyerContact)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomizeOrder.OrderDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CustomizeOrder.OrderDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomizeOrder.OrderState)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CustomizeOrder.OrderState)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomizeOrder.ProductName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CustomizeOrder.ProductName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomizeOrder.ProductPictureUri)
+        </dt>
+        <dd>
+            <img class="img-responsive" src="@Model.CustomizeOrder.ProductPictureUri" />
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomizeOrder.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CustomizeOrder.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomizeOrder.Text)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CustomizeOrder.Text)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomizeOrder.AttachFileName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CustomizeOrder.AttachFileName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomizeOrder.Colors)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CustomizeOrder.Colors)
+
+            @foreach (var rgb in colors)
+            {
+                <div style='width:20px;height:20px;display:inline;float:left;background-color: @rgb'>&nbsp;</div>
+            }
+            
+        </dd>
+    </dl>
+</div>
+<div>
+    <h4>Mudar de estado para</h4>
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post">
+                <input type="hidden" asp-for="CustomizeOrder.Id" />
+                <div class="form-group">
+                    <select asp-for="CustomizeOrder.OrderState" asp-items="Html.GetEnumSelectList<ApplicationCore.Entities.OrderAggregate.OrderStateType>()" class="form-control"></select>
+                    <span asp-validation-for="CustomizeOrder.OrderState" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Atualizar" class="btn btn-default" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div>
+    <a asp-page="./CustomizeOrders">Voltar para a lista</a>
+</div>

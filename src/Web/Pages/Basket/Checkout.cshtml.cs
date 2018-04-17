@@ -148,7 +148,7 @@ namespace Web.Pages.Basket
                 body += $@"
             <tr>
                 <td width='250px'>
-                    <img width='250' src='{item.ItemOrdered.PictureUri}'
+                    <img width='250' src='{item.ItemOrdered.PictureUri}' />
                 </td>
                 <td style='padding-bottom:20px;vertical-align:bottom'>
                     <table>
@@ -276,9 +276,8 @@ namespace Web.Pages.Basket
         ❤ Dama no Jornal®
     </div>
     <div style='text-align:center;width:550px'>
-        <img width='100' src='https://www.damanojornal.com/loja/images/logo_name.png'
-    </div>
-";
+        <img width='100' src='https://www.damanojornal.com/loja/images/logo_name.png' />
+    </div>";
             return body;
         }
 
