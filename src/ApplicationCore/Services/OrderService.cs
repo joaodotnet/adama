@@ -10,16 +10,19 @@ namespace ApplicationCore.Services
     public class OrderService : IOrderService
     {
         private readonly IAsyncRepository<Order> _orderRepository;
+        private readonly IAsyncRepository<CustomizeOrder> _customizeOrderRepository;
         private readonly IBasketRepository _basketRepository;
         private readonly IAsyncRepository<CatalogItem> _itemRepository;
 
         public OrderService(IBasketRepository basketRepository,
             IAsyncRepository<CatalogItem> itemRepository,
-            IAsyncRepository<Order> orderRepository)
+            IAsyncRepository<Order> orderRepository,
+            IAsyncRepository<CustomizeOrder> customizeOrderRepository)
         {
             _orderRepository = orderRepository;
             _basketRepository = basketRepository;
             _itemRepository = itemRepository;
+            _customizeOrderRepository = customizeOrderRepository;
         }
 
         public async Task<Order> CreateOrderAsync(int basketId, int? taxNumber, Address shippingAddress, Address billingAddress, bool useBillingSameAsShipping, decimal shippingCost)
@@ -49,13 +52,25 @@ namespace ApplicationCore.Services
             
         }
 
-        public async Task UpdateOrderState(int id, OrderStateType orderState)
+        public async Task UpdateOrderState(int id, OrderStateType orderState, bool isCustomizeOrder = false)
         {
-            var order = await _orderRepository.GetByIdAsync(id);
-            if(order != null)
+            if (!isCustomizeOrder)
             {
-                order.OrderState = orderState;
-                await _orderRepository.UpdateAsync(order);
+                var order = await _orderRepository.GetByIdAsync(id);
+                if (order != null)
+                {
+                    order.OrderState = orderState;
+                    await _orderRepository.UpdateAsync(order);
+                }
+            }
+            else
+            {
+                var order = await _customizeOrderRepository.GetByIdAsync(id);
+                if (order != null)
+                {
+                    order.OrderState = orderState;
+                    await _customizeOrderRepository.UpdateAsync(order);
+                }
             }
         }
     }
