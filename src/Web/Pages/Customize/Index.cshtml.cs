@@ -29,11 +29,11 @@ namespace Web.Pages.Customize
         public int? CategoryId { get; set; }
 
         [FromQuery]
-        public int? CatalogId { get; set; }
+        public int? CatalogItemId { get; set; }
 
         public async Task OnGetAsync()
         {            
-            CustomizeModel = await _service.GetCustomizeItems(CategoryId);
+            CustomizeModel = await _service.GetCustomizeItems(CategoryId, CatalogItemId);
             var user = await _userManager.GetUserAsync(User);
             if (user != null)
             {

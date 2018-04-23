@@ -37,7 +37,7 @@ namespace Web.Services
             _settings = settings.Value;
         }
 
-        public async Task<CustomizeViewModel> GetCustomizeItems(int? categoryid)
+        public async Task<CustomizeViewModel> GetCustomizeItems(int? categoryid, int? catalogItemId)
         {
             var categorySpec = new CategorySpecification();
             var cats = await _categoryRepository.ListAsync(categorySpec);
@@ -51,13 +51,14 @@ namespace Web.Services
             return new CustomizeViewModel
             {
                 Categories = cats.Select(x => (x.Id, x.Name)).ToList(),
+                ProductSelected = catalogItemId,
                 CatalogItems = products.Select(x => new CatalogItemViewModel
                 {
                     CatalogItemId = x.Id,
                     CatalogItemName = x.Name,
                     PictureUri = x.PictureUri,
                     Price = x.Price,
-                    ProductSku = x.Sku
+                    ProductSku = x.Sku,                    
                 }).ToList()
             };
         }
@@ -87,8 +88,17 @@ namespace Web.Services
                 $"Produto: {product.Name} ({product.Sku}) <br>" + //Nome de produto (SKU) 
                 $"Descrição da Ilustração: {request.Description} <br>" +
                 $"Frase ou nome: {request.Text} <br>" +
-                $"Cores: {request.Colors} <br>" +
-                $"Ficheiro em anexo: {(request.UploadFile != null ? "Sim" : "Não")}";
+                $"Cores: {request.Colors} <br>";
+            if (!string.IsNullOrEmpty(order.Colors))
+            {
+                var colors = order.Colors.Split(',');
+                foreach (var rgb in colors)
+                {
+                    var rgbText = rgb.Replace(';', ',');
+                    body += $@"<div style='width:20px;height:20px;display:inline;float:left;background-color: {rgbText}'>&nbsp;</div>";
+                }
+            }
+            body += $"<br><br>Ficheiro em anexo: {(request.UploadFile != null ? "Sim" : "Não")}";
             if (request.UploadFile == null)
                 await _emailSender.SendEmailAsync(_settings.ToEmails, $"Dama no Jornal®: Novo Pedido de Encomenda Personalizada #{order.Id}", body);
             else
@@ -141,7 +151,7 @@ namespace Web.Services
             body += $@"
             <tr>
                 <td width='250px'>
-                    <img width='250' src='{order.ItemOrdered.PictureUri}'
+                    <img width='250' src='{order.ItemOrdered.PictureUri}' />
                 </td>
                 <td style='padding-bottom:20px;vertical-align:bottom'>
                     <table>
@@ -204,9 +214,8 @@ namespace Web.Services
         ❤ Dama no Jornal®
     </div>
     <div style='text-align:center;width:550px'>
-        <img width='100' src='https://www.damanojornal.com/loja/images/logo_name.png'
-    </div>
-";
+        <img width='100' src='https://www.damanojornal.com/loja/images/logo_name.png' />
+    </div>";
             return body;
         }
     }

@@ -28,7 +28,7 @@ namespace Infrastructure.Data
         public DbSet<ApplicationCore.Entities.ShopConfigDetail> ShopConfigDetails { get; set; } //Need the full qualified name for generate code
         public DbSet<ApplicationCore.Entities.CatalogAttribute> CatalogAttributes { get; set; }
         public DbSet<CatalogCategory> CatalogCategories { get; set; }
-        public DbSet<CustomizeOrder> CustomizeOrders { get; set; }
+        public DbSet<ApplicationCore.Entities.CustomizeOrder> CustomizeOrders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -191,6 +191,9 @@ namespace Infrastructure.Data
                 .IsRequired(true);
             builder.Property(x => x.IsFeatured)
                 .IsRequired(true);
+            builder.Property(x => x.CanCustomize)
+                .IsRequired(true)
+                .HasDefaultValue(false);
         }
 
         private void ConfigureCatalogBrand(EntityTypeBuilder<CatalogIllustration> builder)

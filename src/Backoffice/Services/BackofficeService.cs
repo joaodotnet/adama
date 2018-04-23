@@ -123,5 +123,20 @@ namespace Backoffice.Services
                 return _mapper.Map<List<CategoryViewModel>>(type.Categories.Select(x => x.Category).ToList());
             return null;
         }
+
+        public async Task<IList<CustomizeOrderViewModel>> GetCustomizeOrdersAsync()
+        {
+            var orders = await _db.CustomizeOrders
+                .OrderByDescending(x => x.Id)
+                .ToListAsync();
+
+            return _mapper.Map<List<CustomizeOrderViewModel>>(orders);
+        }
+
+        public async Task<CustomizeOrderViewModel> GetCustomizeOrderAsync(int id)
+        {
+            var order = await _db.CustomizeOrders.FindAsync(id);
+            return _mapper.Map<CustomizeOrderViewModel>(order);
+        }
     }
 }
