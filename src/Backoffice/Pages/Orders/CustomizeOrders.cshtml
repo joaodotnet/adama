@@ -1,0 +1,102 @@
+﻿@page
+@model Backoffice.Pages.Orders.CustomizeOrdersModel
+@{
+    ViewData["Title"] = "Encomendas Personalizadas";
+}
+<h2>Encomendas Personalizadas</h2>
+<table class="table table-pagination">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomizeOrder[0].Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomizeOrder[0].OrderDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomizeOrder[0].BuyerId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomizeOrder[0].BuyerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomizeOrder[0].BuyerContact)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomizeOrder[0].OrderState)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomizeOrder[0].ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomizeOrder[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomizeOrder[0].Text)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomizeOrder[0].AttachFileName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomizeOrder[0].Colors)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.CustomizeOrder)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td class="text-nowrap">
+                    @Html.DisplayFor(modelItem => item.OrderDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BuyerId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BuyerName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BuyerContact)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderState)
+                </td>
+                <td>
+                    <a asp-page="/Products/Details" asp-route-id="@item.ProductId">
+                        @Html.DisplayFor(modelItem => item.ProductName)
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Text)
+                </td>
+                <td>
+                    @(!string.IsNullOrEmpty(item.AttachFileName) ? "Sim" : "Não")
+                </td>
+                <td>
+                    @{
+                        List<string> colors = new List<string>();
+                        if (!string.IsNullOrEmpty(item.Colors))
+                        {
+                            var temp = item.Colors.Split(',');
+                            colors.AddRange(temp.Select(x => x.Replace(';', ',')).ToList());
+                        }
+                    }
+                    @foreach (var rgb in colors)
+                    {
+                        <div style='width:20px;height:20px;display:inline;float:left;background-color: @rgb'>&nbsp;</div>
+                    }
+                </td>
+                <td>
+                    <a asp-page="./CustomizeOrderDetail" asp-route-id="@item.Id">Detalhe</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

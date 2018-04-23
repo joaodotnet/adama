@@ -18,5 +18,7 @@ namespace Backoffice.Interfaces
         Task<List<OrderViewModel>> GetOrders();
         Task<OrderViewModel> GetOrder(int id);
         Task<List<CategoryViewModel>> GetCategoriesAsync(int productTypeId);
+        Task<IList<CustomizeOrderViewModel>> GetCustomizeOrdersAsync();
+        Task<CustomizeOrderViewModel> GetCustomizeOrderAsync(int id);
     }
 }

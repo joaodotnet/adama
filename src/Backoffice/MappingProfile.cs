@@ -51,6 +51,10 @@ namespace Backoffice
                 .ForMember(dest => dest.PictureUri, opts => opts.MapFrom(src => src.ItemOrdered.PictureUri))
                 .ForMember(dest => dest.ProductName, opts => opts.MapFrom(src => src.ItemOrdered.ProductName));                
             CreateMap<OrderItemDetail, OrderItemAttributeViewModel>();
+            CreateMap<CustomizeOrder, CustomizeOrderViewModel>()
+                .ForMember(dest => dest.ProductId, opts => opts.MapFrom(src => src.ItemOrdered.CatalogItemId))
+                .ForMember(dest => dest.ProductName, opts => opts.MapFrom(src => src.ItemOrdered.ProductName))
+                .ForMember(dest => dest.ProductPictureUri, opts => opts.MapFrom(src => src.ItemOrdered.PictureUri));
         }
     }
 }

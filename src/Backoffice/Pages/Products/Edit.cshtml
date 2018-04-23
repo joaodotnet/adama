@@ -54,6 +54,11 @@
                 <label asp-for="ProductModel.IsFeatured" class="form-check-label"></label>
                 <span asp-validation-for="ProductModel.IsFeatured" class="text-danger"></span>
             </div>
+            <div class="form-check">
+                <input asp-for="ProductModel.CanCustomize" class="form-check-input" />
+                <label asp-for="ProductModel.CanCustomize" class="form-check-label"></label>
+                <span asp-validation-for="ProductModel.CanCustomize" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="ProductModel.Picture" class="control-label"></label>
                 <input type="file" asp-for="ProductModel.Picture" class="form-control" />

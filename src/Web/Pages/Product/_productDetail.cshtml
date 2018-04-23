@@ -39,6 +39,10 @@
         <button id="btnAdd" type="button" class="btn">+</button>
         <input class="dama-product-add ml-2" type="submit" value="[ ADICIONAR ]" />
     </div>
+    @if (Model.CanCustomize)
+    {
+        <div><a asp-page="/Customize/Index" asp-route-CategoryId="@Model.FirstCategoryId" asp-route-CatalogItemId="@Model.ProductId">Quer personalizar a carteira? clique aqui!</a> </div>
+    }
 
     <div class="row dama-product-attr mt-2 mt-md-4">
         <label asp-for="ProductSKU" class="col-3 col-form-label"></label>

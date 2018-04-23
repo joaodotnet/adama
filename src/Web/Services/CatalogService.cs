@@ -248,7 +248,9 @@ namespace Web.Services
                     },
                     DeliveryTimeMin = product.CatalogType.DeliveryTimeMin,
                     DeliveryTimeMax = product.CatalogType.DeliveryTimeMax,
-                    DeliveryTimeUnit = product.CatalogType.DeliveryTimeUnit
+                    DeliveryTimeUnit = product.CatalogType.DeliveryTimeUnit,
+                    CanCustomize = product.CanCustomize,
+                    FirstCategoryId = product.CatalogCategories.FirstOrDefault()?.CategoryId ?? 0
                 };
 
                 //Others prictures
