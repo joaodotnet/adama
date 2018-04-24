@@ -44,7 +44,7 @@ namespace Web.Services
             List<CatalogItem> products = new List<CatalogItem>();
             if (categoryid.HasValue)
             {
-                var catalogSpec = new CatalogFilterSpecification(null, null, categoryid);
+                var catalogSpec = new CatalogFilterSpecification(null, null, categoryid, true);
                 products = await _catalogRepository.ListAsync(catalogSpec);
             }
 
