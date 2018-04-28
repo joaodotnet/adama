@@ -8,7 +8,7 @@
 
 <div class="esh-orders_detail">
     <div class="container">
-        <h2>@ViewData["Title"] &nbsp; #@Model.OrderDetails.OrderNumber</h2>
+        <h2 class="dama-heading-normal-font">@ViewData["Title"] &nbsp; #@Model.OrderDetails.OrderNumber</h2>
         <section class="esh-orders_detail-section">
             <article class="esh-orders_detail-titles row d-none d-sm-flex">
                 <section class="esh-orders_detail-title col-3">Nº Encomenda</section>
@@ -17,7 +17,7 @@
                 <section class="esh-orders_detail-title col-3">Estado</section>
             </article>
 
-            <article class="esh-orders_detail-items row">
+            <article class="esh-orders_detail-items row mt-2">
                 <section class="esh-orders_detail-item col-12 col-sm-3">
                     <span class="dama-orders-title-mobile d-sm-none">Nº Encomenda: </span>@Html.DisplayFor(_ => Model.OrderDetails.OrderNumber)
                 </section>
@@ -48,7 +48,7 @@
                 <section class="esh-orders_detail-title col-12">Morada de Entrega</section>
             </article>
 
-            <article class="esh-orders_detail-items row">
+            <article class="esh-orders_detail-items row mt-2">
                 <section class="esh-orders_detail-item col-12">@Model.OrderDetails.ShippingAddress.Name</section>
             </article>
             <article class="esh-orders_detail-items row">
@@ -68,7 +68,7 @@
             <article class="esh-orders_detail-titles row">
                 <section class="esh-orders_detail-title col-12">Morada de Facturação</section>
             </article>
-            <article class="esh-orders_detail-items row">
+            <article class="esh-orders_detail-items row mt-2">
                 <section class="esh-orders_detail-item col-12">@Model.OrderDetails.BillingAddress.Name</section>
             </article>
             <article class="esh-orders_detail-items row">
@@ -85,7 +85,7 @@
         </section>
 
         <section class="esh-orders_detail-section mt-3">
-            <article class="esh-orders_detail-titles row">
+            <article class="esh-orders_detail-titles row mb-2">
                 <section class="esh-orders_detail-title col-12">DETALHE DA ENCOMENDA</section>
             </article>
 
@@ -135,10 +135,10 @@
 
         }
 
-        <section class="esh-orders_detail-section esh-orders_detail-section--right">
+        <section class="esh-orders_detail-section">
             <article class="esh-orders_detail-titles esh-basket-titles--clean row">
                 <section class="esh-orders_detail-title col-sm-9"></section>
-                <section class="esh-orders_detail-title col-sm-2">TOTAL</section>
+                <section class="esh-orders_detail-title col-sm-2 text-sm-right">TOTAL</section>
             </article>
 
             <article class="esh-orders_detail-items row">
