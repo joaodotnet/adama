@@ -45,17 +45,18 @@
         line-height: 2rem;
     }
 }
-
-.esh-orders-items:nth-of-type(2n + 1):before {
-    background-color: #EEEEFF;
-    content: '';
-    height: 100%;
-    left: 0;
-    margin-left: -100vw;
-    position: absolute;
-    top: 0;
-    width: 200vw;
-    z-index: -1;
+@media (min-width: 576px) {
+    .esh-orders-items:nth-of-type(2n + 1):before {
+        background-color: #EEEEFF;
+        content: '';
+        height: 100%;
+        left: 0;
+        margin-left: -100vw;
+        position: absolute;
+        top: 0;
+        width: 200vw;
+        z-index: -1;
+    }
 }
 
 .esh-orders-item {
@@ -72,17 +73,29 @@
     pointer-events: all;
 }
 
-.esh-orders-link {
-    color: #000000;
+.esh-orders-link-detail,
+.esh-orders-link-detail:active,
+.esh-orders-link-detail:visited {
+    color: #5fcbcb;
     text-decoration: none;
     transition: color 0.35s;
 }
 
-    .esh-orders-link:hover {
-        color: #EF7C8D;
-        text-decoration: underline;
-        transition: color 0.35s;
-    }
+.esh-orders-link-cancel,
+.esh-orders-link-cancel:active,
+.esh-orders-link-cancel:visited {
+    color: #808080;
+    text-decoration: none;
+    transition: color 0.35s;
+}
+
+.esh-orders-link-detail:hover,
+.esh-orders-link-cancel:hover
+{
+    color: #EF7C8D;
+    text-decoration: underline;
+    transition: color 0.35s;
+}
 
 .dama-orders-title-mobile {
     color: #808080;
