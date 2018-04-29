@@ -121,7 +121,7 @@ namespace Web.Pages.Account
                         Response.Cookies.Delete(Constants.BASKET_COOKIENAME);
                     }
 
-                    return LocalRedirect(returnUrl);
+                    return RedirectToPage(returnUrl);
                 }
                 AddErrors(result);
             }
