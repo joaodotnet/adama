@@ -255,21 +255,26 @@ h4 {
     color: #00A69C;
     border: none;
     margin: 0;
+    padding: 0;
 }
 
 .dropdown-item {
-    color: #00A69C !important;
+    color: #f29aa7 !important;
     font-weight: 400;
     font-size: 14px;
     text-decoration: none;
+    padding: 15px;
+    margin: auto;
 }
 
 .dropdown-item:hover {
-    background-color: transparent;
+    background-color: #f29aa7;    
+    transition: background-color 0.35s;
 }
 .dropdown-item:hover > .dropdown-item-text {
-    border-bottom: 3px solid #00A69C;
+    /*border-bottom: 3px solid #00A69C;*/
     background-color: transparent;
+    color:#fff;
 }
 
 .dropdown:hover > .dropdown-menu {
