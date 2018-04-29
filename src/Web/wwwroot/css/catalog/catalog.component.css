@@ -130,16 +130,16 @@
 }
 
 .esh-catalog-name {
-    font-size: 1rem;
-    font-weight: 300;
+    font-size: 18px;
+    font-weight: 600;
     margin-top: .5rem;
     text-align: center;
     text-transform: uppercase;
 }
 
 .esh-catalog-price {
-    font-size: 28px;
-    font-weight: 900;
+    font-size: 17px;
+    font-weight: 100;
     text-align: center;
 }
 
