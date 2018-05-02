@@ -16,6 +16,8 @@ namespace ApplicationCore.Entities.OrderAggregate
         [Display(Name = "Enviado")]
         SENT,
         [Display(Name = "Entregue")]
-        DELIVERED
+        DELIVERED,
+        [Display(Name = "Cancelado")]
+        CANCELED
     }
 }

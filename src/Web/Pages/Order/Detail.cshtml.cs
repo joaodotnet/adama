@@ -58,6 +58,7 @@ namespace Web.Pages.Order
 
         public async Task OnGet(int orderId)
         {
+            //TODO: Check to order belong to user
             var order = await _orderRepository.GetByIdWithItemsAsync(orderId);
             OrderDetails = new OrderViewModel()
             {
