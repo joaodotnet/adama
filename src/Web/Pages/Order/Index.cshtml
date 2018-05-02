@@ -5,6 +5,15 @@
     ViewData["Title"] = "As Minhas Encomendas";
 }
 
+@if (!String.IsNullOrEmpty(Model.StatusMessage))
+{
+    var statusMessageClass = Model.StatusMessage.StartsWith("Erro") ? "danger" : "success";
+    <div class="alert alert-@statusMessageClass alert-dismissible mt-3 pl-3" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Model.StatusMessage
+    </div>
+}
+
 <div class="esh-orders">
     <div class="container">
         <h2 class="dama-heading-normal-font">@ViewData["Title"]</h2>
@@ -46,8 +55,8 @@
                     <section class="esh-orders-item col-12 col-sm-1 mt-2 mb-2 mt-sm-0 mb-sm-0">
                         @if (item.StatusType == ApplicationCore.Entities.OrderAggregate.OrderStateType.PENDING)
                         {
-                            <a class="btn btn-primary btn-block d-sm-none" role="button" asp-page="Cancel" asp-route-orderId="@item.OrderNumber">Cancelar</a>
-                            <a class="esh-orders-link-cancel d-none d-sm-block" role="button" asp-page="Cancel" asp-route-orderId="@item.OrderNumber">Cancelar</a>
+                            <a class="btn btn-primary btn-block d-sm-none btnCancel" role="button" data-order-number="@item.OrderNumber">Cancelar</a>
+                            <a class="esh-orders-link-cancel d-none d-sm-block btnCancel" href="#" role="button" data-order-number="@item.OrderNumber">Cancelar</a>
                         }
                     </section>
                 </article>
@@ -55,3 +64,34 @@
         }
     </div>
 </div>
+<div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cancelar Encomenda</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Tem a certeza que deseja cancelar a encomenda?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+                <a id="cancelAction" href="#" class="btn btn-secondary">Sim</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('.btnCancel').click(function () {
+                var orderNumber = $(this).attr('data-order-number');
+                $('#cancelAction').attr('href', '@(Url.Page("Index","CancelOrder"))' + '&number=' + orderNumber);
+                $('#cancelModal').modal({ show: true });
+            });
+        });
+    </script>
+}

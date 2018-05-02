@@ -50,7 +50,7 @@ namespace ApplicationCore.Services
 
             return await _orderRepository.AddAsync(order);
             
-        }
+        }       
 
         public async Task UpdateOrderState(int id, OrderStateType orderState, bool isCustomizeOrder = false)
         {
@@ -72,6 +72,10 @@ namespace ApplicationCore.Services
                     await _customizeOrderRepository.UpdateAsync(order);
                 }
             }
+        }
+        public async Task<Order> GetOrderAsync(int id)
+        {
+            return await _orderRepository.GetByIdAsync(id);            
         }
     }
 }

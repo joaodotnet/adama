@@ -8,17 +8,29 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Web.Extensions;
 using ApplicationCore.Entities.OrderAggregate;
+using Microsoft.AspNetCore.Mvc;
+using ApplicationCore;
+using Microsoft.Extensions.Options;
 
 namespace Web.Pages.Order
 {
     public class IndexModel : PageModel
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IOrderService _orderService;
+        private readonly IEmailSender _emailSender;
+        private readonly CatalogSettings _settings;
 
-        public IndexModel(IOrderRepository orderRepository)
+        public IndexModel(IOrderRepository orderRepository, IOrderService orderService, IEmailSender emailSender, IOptions<CatalogSettings> settings)
         {
             _orderRepository = orderRepository;
+            _orderService = orderService;
+            _emailSender = emailSender;
+            _settings = settings.Value;
         }
+
+        [TempData]
+        public string StatusMessage { get; set; }
 
         public List<OrderSummary> Orders { get; set; } = new List<OrderSummary>();
 
@@ -47,6 +59,21 @@ namespace Web.Pages.Order
                 })
                 .OrderByDescending(o => o.OrderDate)
                 .ToList();
+        }
+        public async Task<IActionResult> OnGetCancelOrder(int number)
+        {
+            //Check order number is belong to user
+            var order = await _orderRepository.GetByIdAsync(number);
+            if(order != null && order.BuyerId.ToLower() == User.Identity.Name.ToLower())
+            {
+                await _orderService.UpdateOrderState(order.Id, OrderStateType.CANCELED);
+                StatusMessage = $"A encomenda #{number} foi cancelada com sucesso!";
+                var body = $"A encomenda <a href='http://backoffice.damanojornal.com/Orders/Details?id={order.Id}'> #{order.Id}</a> foi cancelada!";
+                await _emailSender.SendEmailAsync(_settings.ToEmails, $"A encomenda #{order.Id} foi cancelada!", body);
+            }
+            else
+                StatusMessage = $"Erro: Encomenda {number} não existe!";
+            return RedirectToPage();
         }
     }
 }
