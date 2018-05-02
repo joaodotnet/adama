@@ -16,13 +16,16 @@ namespace Web.Pages.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IBasketService _basketService;
+        private readonly IEmailSender _emailSender;
 
         public SigninModel(SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
-            IBasketService basketService)
+            IBasketService basketService,
+            IEmailSender emailSender)
         {
             _signInManager = signInManager;
             _basketService = basketService;
+            _emailSender = emailSender;
             _userManager = userManager;
         }
 
@@ -121,11 +124,23 @@ namespace Web.Pages.Account
                         Response.Cookies.Delete(Constants.BASKET_COOKIENAME);
                     }
 
+                    await SendConfirmationEmailAsync();
                     return RedirectToPage(returnUrl);
                 }
                 AddErrors(result);
             }
             return Page();
+        }
+
+        private async Task SendConfirmationEmailAsync()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+                await _emailSender.SendEmailConfirmationAsync(user.Email, callbackUrl);
+            }
         }
 
         private void AddErrors(IdentityResult result)
