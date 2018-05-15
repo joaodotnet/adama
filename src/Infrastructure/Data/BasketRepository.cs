@@ -13,6 +13,8 @@ namespace Infrastructure.Data
         {
         }
 
+        
+
         public Basket GetByIdWithItems(int id)
         {
             return _dbContext.Baskets
@@ -29,6 +31,34 @@ namespace Infrastructure.Data
                 .Include("Items.Details")
                 .Include("Items.Details.CatalogAttribute")
                 .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<Basket> UpdateBasketAsync(Basket value)
+        {
+            var basket = await _dbContext.Baskets
+                .Include(b => b.Items)
+                .Include("Items.Details")
+                .Include("Items.Details.CatalogAttribute")
+                .FirstOrDefaultAsync(x => x.BuyerId == value.BuyerId);
+
+            //Remove all
+            for (int i = 0; i < basket.Items.Count; i++)
+            {
+                basket.RemoveItem(i);
+            }
+            await _dbContext.SaveChangesAsync();
+
+            foreach (var item in value.Items)
+            {
+                basket.AddItem(item.CatalogItemId, item.UnitPrice, item.Quantity);
+            }
+            await _dbContext.SaveChangesAsync();
+            return basket;
+        }
+
+        public async Task DeleteBasketAsync(int id)
+        {
+            _dbContext.Baskets.Remove(await GetByIdAsync(id));
         }
     }
 }
