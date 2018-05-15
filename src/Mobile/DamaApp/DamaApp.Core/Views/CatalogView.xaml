@@ -97,10 +97,10 @@
                 </ListView.Behaviors>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <!--<ViewCell>
-                            <templates:ProductTemplate />
-                        </ViewCell>-->
                         <ViewCell>
+                            <templates:ProductTemplate />
+                        </ViewCell>
+                        <!--<ViewCell>
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -110,26 +110,26 @@
                                     <ColumnDefinition Width="50*" />
                                 </Grid.ColumnDefinitions>
 
-                                <!-- Left column - BindingContext set to ModelPair.Item1  -->
+                                --><!-- Left column - BindingContext set to ModelPair.Item1  --><!--
                                 <templates:ProductTemplate Grid.Column="0" 
                                     BindingContext="{Binding Item1}" />
 
-                                <!-- Right column - BindingContext set to ModelPair.Item2 -->
+                                --><!-- Right column - BindingContext set to ModelPair.Item2 --><!--
                                 <templates:ProductTemplate Grid.Column="1" 
                                     BindingContext="{Binding Item2}" />
 
-                                <!-- Don't show right column for "empty/invalid" models -->
+                                --><!-- Don't show right column for "empty/invalid" models -->
                                 <!--<v:ListViewColumnView.Triggers>
                                     <DataTrigger TargetType="v:ListViewColumnView"
                                              Binding="{Binding Id}"
                                              Value="-1">
                                         <Setter Property="IsVisible" Value="False"/>
                                     </DataTrigger>
-                                </v:ListViewColumnView.Triggers>-->
+                                </v:ListViewColumnView.Triggers>--><!--
 
 
                             </Grid>
-                        </ViewCell>
+                        </ViewCell>-->
                         <!--<Grid
                             ColumnSpacing="0"
                             RowSpacing="0">
