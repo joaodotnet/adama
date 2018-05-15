@@ -4,7 +4,7 @@
     {
         public const string AzureTag = "Azure";
         public const string MockTag = "Mock";
-        public const string DefaultEndpoint = "http://localhost:50929"; // i.e.: "http://YOUR_IP" or "http://YOUR_DNS_NAME"
+        public const string DefaultEndpoint = "http://localhost:50930"; // i.e.: "http://YOUR_IP" or "http://YOUR_DNS_NAME"
         public const string JGToken = "b77380e4-2f31-45f5-831c-8e5116d0475f";
         public const string SusanaToken = "b8d5d98b-3c61-4f21-89e0-e6bb2c22a634";
         public const string SoniaToken = "7989634d-86d6-4001-812c-b85ad9339e68";

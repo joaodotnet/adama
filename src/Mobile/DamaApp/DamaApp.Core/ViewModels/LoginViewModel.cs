@@ -210,7 +210,7 @@ namespace DamaApp.Core.ViewModels
             if (isAuthenticated)
             {
                 //Get 3 diferent Tokens
-                switch(UserName.Value.ToLower())
+                switch (UserName.Value.ToLower())
                 {
                     case "joaofbbg@gmail.com":
                         _settingsService.AuthAccessToken = GlobalSetting.JGToken;
@@ -221,6 +221,23 @@ namespace DamaApp.Core.ViewModels
                     case "sonia.mendez.artesa@gmail.com":
                         _settingsService.AuthAccessToken = GlobalSetting.SoniaToken;
                         break;
+                }
+
+                var disco = await DiscoveryClient.GetAsync("http://localhost:55440");
+
+                if (disco.IsError)
+                {
+                    Console.WriteLine(disco.Error);
+                    return;
+                }
+                // request token
+                var tokenClient = new TokenClient(disco.TokenEndpoint, "client", "secret");
+                var tokenResponse = await tokenClient.RequestClientCredentialsAsync("api1");
+
+                if (tokenResponse.IsError)
+                {
+                    Console.WriteLine(tokenResponse.Error);
+                    return;
                 }
 
                 await NavigationService.NavigateToAsync<MainViewModel>();

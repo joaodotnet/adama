@@ -319,7 +319,7 @@ namespace DamaApp.Core.ViewModels
         private void UpdateEndpoint()
         {
             // Update remote endpoint (save to local storage)
-            GlobalSetting.Instance.BaseEndpoint = _settingsService.UrlBase = _endpoint;
+            //GlobalSetting.Instance.BaseEndpoint = _settingsService.UrlBase = _endpoint;
         }
 
         private void UpdateFakeLocation()
