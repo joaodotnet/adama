@@ -52,6 +52,17 @@ namespace Dama.IdentityServer.Controllers
             return View();
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> LoginApp(string returnUrl = null)
+        {
+            // Clear the existing external cookie to ensure a clean login process
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
+            ViewData["ReturnUrl"] = returnUrl;
+            return View(new LoginViewModel { Email = "dummy@gmail.com", Password = "qqQQ11!!" });
+        }
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -86,6 +97,65 @@ namespace Dama.IdentityServer.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SueLogin(LoginViewModel model, string returnUrl = null)
+        {
+            model.Email = "susana.m.mendez@gmail.com";
+            model.Password = "damasite#2017!";
+            return await LoginApp(model, returnUrl);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SoniaLogin(LoginViewModel model, string returnUrl = null)
+        {
+            model.Email = "sonia.mendez.artesa@gmail.com";
+            model.Password = "damasite#2017!";
+            return await LoginApp(model, returnUrl);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> JueLogin(LoginViewModel model, string returnUrl = null)
+        {
+            model.Email = "joaofbbg@gmail.com";
+            model.Password = "dama#2017!";
+            return await LoginApp(model, returnUrl);
+        }
+
+        private async Task<IActionResult> LoginApp(LoginViewModel model, string returnUrl)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+
+            // This doesn't count login failures towards account lockout
+            // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+            if (result.Succeeded)
+            {
+                _logger.LogInformation("User logged in.");
+                return RedirectToLocal(returnUrl);
+            }
+            if (result.RequiresTwoFactor)
+            {
+                return RedirectToAction(nameof(LoginWith2fa), new { returnUrl, model.RememberMe });
+            }
+            if (result.IsLockedOut)
+            {
+                _logger.LogWarning("User account locked out.");
+                return RedirectToAction(nameof(Lockout));
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return View("LoginApp", model);
+            }
+
         }
 
         [HttpGet]

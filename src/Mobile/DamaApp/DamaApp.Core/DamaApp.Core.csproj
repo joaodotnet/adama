@@ -19,6 +19,6 @@
     <PackageReference Include="SlideOverKit" Version="2.1.6.1" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.3.6" />
-    <PackageReference Include="Xamarin.Forms" Version="3.0.0.446417" />
+    <PackageReference Include="Xamarin.Forms" Version="2.5.1.527436" />
   </ItemGroup>
 </Project>

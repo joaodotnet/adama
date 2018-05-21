@@ -1,0 +1,41 @@
+﻿@using System.Collections.Generic
+@using System.Linq
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Authentication
+@model LoginViewModel
+@inject SignInManager<ApplicationUser> SignInManager
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h2>@ViewData["Title"]</h2>
+<div class="row">
+    <div class="col-md-12">
+        <section>
+            <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                <h4>Quem és tu?</h4>
+                <hr />
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <button type="submit" formaction="SueLogin">
+                            <img src="~/images/Sue.png" class="img-responsive" />
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" formaction="SoniaLogin">
+                            <img src="~/images/Sónia.png" class="img-responsive" />
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" formaction="JueLogin">
+                            <img src="~/images/João.png" class="img-responsive"  />
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+
+</div>
