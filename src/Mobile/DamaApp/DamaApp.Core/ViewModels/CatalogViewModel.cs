@@ -112,17 +112,17 @@ namespace DamaApp.Core.ViewModels
             //    tupleList.Add(new Tuple<CatalogItem, CatalogItem>(prod1, prod2));
             //}
             //TupleProducts = tupleList.ToObservableCollection();
-            TupleProducts = new ObservableCollection<Tuple<CatalogItem, CatalogItem>>();
             Products = await _productsService.GetCatalogAsync();
+            Brands = await _productsService.GetCatalogBrandAsync();
+            Types = await _productsService.GetCatalogTypeAsync();
+            TupleProducts = new ObservableCollection<Tuple<CatalogItem, CatalogItem>>();
             for (int i = 0; i < Products.Count; i += 2)
             {
                 CatalogItem item1 = Products[i];
                 CatalogItem item2 = i + 1 < Products.Count ? Products[i + 1] : null;
 
                 TupleProducts.Add(new Tuple<CatalogItem,CatalogItem>(item1, item2));
-            }
-            Brands = await _productsService.GetCatalogBrandAsync();
-            Types = await _productsService.GetCatalogTypeAsync();
+            }            
 
             IsBusy = false;
         }

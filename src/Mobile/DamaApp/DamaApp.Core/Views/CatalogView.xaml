@@ -8,7 +8,8 @@
              xmlns:animations="clr-namespace:DamaApp.Core.Animations;assembly=DamaApp.Core"
              xmlns:triggers="clr-namespace:DamaApp.Core.Triggers;assembly=DamaApp.Core"
              xmlns:behaviors="clr-namespace:DamaApp.Core.Behaviors;assembly=DamaApp.Core"
-			 viewModelBase:ViewModelLocator.AutoWireViewModel="true"
+             xmlns:flv="clr-namespace:DLToolkit.Forms.Controls;assembly=DLToolkit.Forms.Controls.FlowListView"
+             viewModelBase:ViewModelLocator.AutoWireViewModel="true"
              Title="Catalog">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -81,7 +82,27 @@
                     HorizontalOptions="Center"
                     VerticalOptions="Center"/>
             </Grid>
-            <ListView 
+            <flv:FlowListView x:Name="Products" 
+                              FlowColumnCount="4" 
+                              SeparatorVisibility="None" 
+                              HasUnevenRows="false"
+                              FlowItemsSource="{Binding Products}"
+                              Style="{StaticResource ProductsListStyle}">
+                <flv:FlowListView.Behaviors>
+                    <behaviors:EventToCommandBehavior                    
+                        EventName="FlowItemTapped"
+                        Command="{Binding AddCatalogItemCommand}"
+                        EventArgsConverter="{StaticResource ItemTappedEventArgsConverter}" />
+                </flv:FlowListView.Behaviors>
+
+                <flv:FlowListView.FlowColumnTemplate>
+                    <DataTemplate>
+                        <templates:ProductTemplate />
+                    </DataTemplate>
+                </flv:FlowListView.FlowColumnTemplate>
+
+            </flv:FlowListView>
+            <!--<ListView 
                 x:Name="Products"       
                 IsVisible="{Binding Products.Count, Converter={StaticResource CountToBoolConverter}}"
                 ItemsSource="{Binding TupleProducts}"
@@ -89,19 +110,20 @@
                 SeparatorVisibility="None"
                 CachingStrategy="RecycleElement"
                 Style="{StaticResource ProductsListStyle}">
-                <ListView.Behaviors>
+                --><!--<ListView.Behaviors>
                     <behaviors:EventToCommandBehavior                    
                         EventName="ItemTapped"
                         Command="{Binding AddCatalogItemCommand}"
                         EventArgsConverter="{StaticResource ItemTappedEventArgsConverter}" />
-                </ListView.Behaviors>
+                </ListView.Behaviors>--><!--
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <ViewCell>
+                        --><!--<ViewCell>
                             <templates:ProductTemplate />
-                        </ViewCell>
-                        <!--<ViewCell>
-                            <Grid>
+                        </ViewCell>--><!--
+                        <ViewCell>
+                            <Grid Item
+                                >
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
@@ -109,62 +131,17 @@
                                     <ColumnDefinition Width="50*" />
                                     <ColumnDefinition Width="50*" />
                                 </Grid.ColumnDefinitions>
-
-                                --><!-- Left column - BindingContext set to ModelPair.Item1  --><!--
-                                <templates:ProductTemplate Grid.Column="0" 
-                                    BindingContext="{Binding Item1}" />
-
-                                --><!-- Right column - BindingContext set to ModelPair.Item2 --><!--
-                                <templates:ProductTemplate Grid.Column="1" 
-                                    BindingContext="{Binding Item2}" />
-
-                                --><!-- Don't show right column for "empty/invalid" models -->
-                                <!--<v:ListViewColumnView.Triggers>
-                                    <DataTrigger TargetType="v:ListViewColumnView"
-                                             Binding="{Binding Id}"
-                                             Value="-1">
-                                        <Setter Property="IsVisible" Value="False"/>
-                                    </DataTrigger>
-                                </v:ListViewColumnView.Triggers>--><!--
-
-
+                                    <Image Source="{Binding PictureUri}"                                       
+                                        HorizontalOptions="FillAndExpand"
+                                        VerticalOptions="FillAndExpand" />
                             </Grid>
-                        </ViewCell>-->
-                        <!--<Grid
-                            ColumnSpacing="0"
-                            RowSpacing="0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition></ColumnDefinition>
-                                <ColumnDefinition></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <ListView ItemsSource="{Binding Item1}" Grid.Column="1">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <ViewCell>
-                                            <templates:ProductTemplate />
-                                        </ViewCell>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                            <ListView ItemsSource="{Binding Item2}" Grid.Column="2">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <ViewCell>
-                                            <templates:ProductTemplate />
-                                        </ViewCell>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </Grid>-->
+                        </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-            </ListView>
+            </ListView>-->
         </Grid>
         <!-- INDICATOR -->
-        <ActivityIndicator
+            <ActivityIndicator
             Grid.Row="0"
             Grid.RowSpan="2"
             Color="{StaticResource LightGreenColor}"
@@ -172,12 +149,12 @@
             IsVisible="{Binding IsBusy}"
             VerticalOptions="Center"
             HorizontalOptions="Center">
-            <ActivityIndicator.WidthRequest>
-                <OnPlatform x:TypeArguments="x:Double">
-                    <On Platform="iOS, Android" Value="100" />
-                    <On Platform="UWP, WinRT, WinPhone" Value="400" />
-                </OnPlatform>
-            </ActivityIndicator.WidthRequest>
-        </ActivityIndicator>
-    </Grid>
+                <ActivityIndicator.WidthRequest>
+                    <OnPlatform x:TypeArguments="x:Double">
+                        <On Platform="iOS, Android" Value="100" />
+                        <On Platform="UWP, WinRT, WinPhone" Value="400" />
+                    </OnPlatform>
+                </ActivityIndicator.WidthRequest>
+            </ActivityIndicator>
+        </Grid>
 </ContentPage>

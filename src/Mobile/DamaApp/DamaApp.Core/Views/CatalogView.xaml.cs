@@ -2,6 +2,7 @@
 using DamaApp.Core.ViewModels.Base;
 using SlideOverKit;
 using System;
+using System.Runtime.CompilerServices;
 using Xamarin.Forms;
 
 namespace DamaApp.Core.Views
@@ -44,7 +45,8 @@ namespace DamaApp.Core.Views
         {
             base.OnBindingContextChanged();
 
-            _filterView.BindingContext = BindingContext;
+            _filterView.BindingContext = BindingContext;            
+
         }
 
         private void OnFilterChanged(object sender, EventArgs e)
@@ -62,6 +64,13 @@ namespace DamaApp.Core.Views
             {
                 ShowMenuAction?.Invoke();
             }
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            var viewModel = BindingContext as CatalogViewModel;
         }
     }
 }
