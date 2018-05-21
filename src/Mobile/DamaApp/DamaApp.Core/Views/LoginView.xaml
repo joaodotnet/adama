@@ -111,7 +111,7 @@
         <!-- MOCK AUTH -->
         <Grid
             x:Name="LoginPanel"
-            IsVisible="True"             
+            IsVisible="{Binding IsMock}"
             Padding="0"
             ColumnSpacing="0"
             RowSpacing="0">
@@ -284,7 +284,7 @@
         <Grid
           ColumnSpacing="0"
           RowSpacing="0"
-          IsVisible="False">
+          IsVisible="{Binding IsMock, Converter={StaticResource InverseBoolConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="60" />

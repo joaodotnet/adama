@@ -33,7 +33,7 @@
             }
         }
 
-        public string ClientId { get { return "xamarin"; }}
+        public string ClientId { get { return "mvc"; }}
 
         public string ClientSecret { get { return "secret"; }}
 
@@ -55,7 +55,8 @@
 
         private void UpdateEndpoint(string baseEndpoint)
         {
-            var identityBaseEndpoint = $"{baseEndpoint}/identity";
+            //var identityBaseEndpoint = $"{baseEndpoint}/identity";
+            var identityBaseEndpoint = "http://localhost:5000";
             RegisterWebsite = $"{identityBaseEndpoint}/Account/Register";
             LogoutCallback = $"{identityBaseEndpoint}/Account/Redirecting";
 

@@ -4,6 +4,7 @@ using DamaApp.Core.Services.Location;
 using DamaApp.Core.Services.Settings;
 using DamaApp.Core.ViewModels.Base;
 using DamaApp.Services;
+using DLToolkit.Forms.Controls;
 using System;
 using System.Diagnostics;
 using System.Globalization;
@@ -21,7 +22,7 @@ namespace DamaApp
         public App()
         {
             InitializeComponent();
-
+            FlowListView.Init();
             InitApp();
             if (Device.RuntimePlatform == Device.UWP)
             {

@@ -223,22 +223,22 @@ namespace DamaApp.Core.ViewModels
                         break;
                 }
 
-                var disco = await DiscoveryClient.GetAsync("http://localhost:55440");
+                //var disco = await DiscoveryClient.GetAsync("http://localhost:55440");
 
-                if (disco.IsError)
-                {
-                    Console.WriteLine(disco.Error);
-                    return;
-                }
-                // request token
-                var tokenClient = new TokenClient(disco.TokenEndpoint, "client", "secret");
-                var tokenResponse = await tokenClient.RequestClientCredentialsAsync("api1");
+                //if (disco.IsError)
+                //{
+                //    Console.WriteLine(disco.Error);
+                //    return;
+                //}
+                //// request token
+                //var tokenClient = new TokenClient(disco.TokenEndpoint, "client", "secret");
+                //var tokenResponse = await tokenClient.RequestClientCredentialsAsync("api1");
 
-                if (tokenResponse.IsError)
-                {
-                    Console.WriteLine(tokenResponse.Error);
-                    return;
-                }
+                //if (tokenResponse.IsError)
+                //{
+                //    Console.WriteLine(tokenResponse.Error);
+                //    return;
+                //}
 
                 await NavigationService.NavigateToAsync<MainViewModel>();
                 await NavigationService.RemoveLastFromBackStackAsync();

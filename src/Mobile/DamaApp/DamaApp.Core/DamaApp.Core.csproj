@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Acr.UserDialogs" Version="7.0.1" />
+    <PackageReference Include="DLToolkit.Forms.Controls.FlowListView" Version="2.0.10" />
     <PackageReference Include="IdentityModel" Version="3.6.1" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="PCLCrypto" Version="2.0.147" />
