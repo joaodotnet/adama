@@ -48,7 +48,7 @@ namespace Dama.IdentityServer
                     },
 
                     RedirectUris           = { "http://localhost:50930/xamarincallback" },
-                    PostLogoutRedirectUris = { "http://localhost:50930/signout-callback-oidc" },
+                    PostLogoutRedirectUris = { "http://localhost:50930/xamarincallback/Account/Redirecting" },
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
