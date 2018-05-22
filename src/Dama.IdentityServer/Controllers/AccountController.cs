@@ -14,6 +14,9 @@ using Dama.IdentityServer.Models;
 using Dama.IdentityServer.Models.AccountViewModels;
 using Dama.IdentityServer.Services;
 using Infrastructure.Identity;
+using IdentityServer4;
+using IdentityModel;
+using IdentityServer4.Services;
 
 namespace Dama.IdentityServer.Controllers
 {
@@ -25,17 +28,21 @@ namespace Dama.IdentityServer.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
+        private readonly IIdentityServerInteractionService _interaction;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            IIdentityServerInteractionService interaction
+            )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
+            _interaction = interaction;
         }
 
         [TempData]
@@ -125,7 +132,7 @@ namespace Dama.IdentityServer.Controllers
         public async Task<IActionResult> JueLogin(LoginViewModel model, string returnUrl = null)
         {
             model.Email = "joaofbbg@gmail.com";
-            model.Password = "dama#2017!";
+            model.Password = "dama#2018!";
             return await LoginApp(model, returnUrl);
         }
 
@@ -139,7 +146,8 @@ namespace Dama.IdentityServer.Controllers
             if (result.Succeeded)
             {
                 _logger.LogInformation("User logged in.");
-                return RedirectToLocal(returnUrl);
+                //return RedirectToLocal(returnUrl);
+                return Redirect(returnUrl);
             }
             if (result.RequiresTwoFactor)
             {
@@ -155,7 +163,6 @@ namespace Dama.IdentityServer.Controllers
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                 return View("LoginApp", model);
             }
-
         }
 
         [HttpGet]
@@ -314,11 +321,50 @@ namespace Dama.IdentityServer.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> Logout(LogoutViewModel model)
         {
-            await _signInManager.SignOutAsync();
-            _logger.LogInformation("User logged out.");
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            //await _signInManager.SignOutAsync();
+            //_logger.LogInformation("User logged out.");
+            //return RedirectToAction(nameof(HomeController.Index), "Home");
+            var idp = User?.FindFirst(JwtClaimTypes.IdentityProvider)?.Value;
+
+            if (idp != null && idp != IdentityServerConstants.LocalIdentityProvider)
+            {
+                if (model.LogoutId == null)
+                {
+                    // if there's no current logout context, we need to create one
+                    // this captures necessary info from the current logged in user
+                    // before we signout and redirect away to the external IdP for signout
+                    model.LogoutId = await _interaction.CreateLogoutContextAsync();
+                }
+
+                string url = "/Account/Logout?logoutId=" + model.LogoutId;
+
+                try
+                {
+
+                    // hack: try/catch to handle social providers that throw
+                    await HttpContext.SignOutAsync(idp, new AuthenticationProperties
+                    {
+                        RedirectUri = url
+                    });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogCritical(ex.Message);
+                }
+            }
+
+            // delete authentication cookie
+            await HttpContext.SignOutAsync();
+
+            // set this so UI rendering sees an anonymous user
+            HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity());
+
+            // get context information (client name, post logout redirect URI and iframe for federated signout)
+            var logout = await _interaction.GetLogoutContextAsync(model.LogoutId);
+
+            return Redirect(logout?.PostLogoutRedirectUri);
         }
 
         [HttpPost]
@@ -506,6 +552,35 @@ namespace Dama.IdentityServer.Controllers
         public IActionResult AccessDenied()
         {
             return View();
+        }
+
+        /// <summary>
+        /// Show logout page
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> Logout(string logoutId)
+        {
+            if (User.Identity.IsAuthenticated == false)
+            {
+                // if the user is not authenticated, then just show logged out page
+                return await Logout(new LogoutViewModel { LogoutId = logoutId });
+            }
+
+            //Test for Xamarin. 
+            var context = await _interaction.GetLogoutContextAsync(logoutId);
+            if (context?.ShowSignoutPrompt == false)
+            {
+                //it's safe to automatically sign-out
+                return await Logout(new LogoutViewModel { LogoutId = logoutId });
+            }
+
+            // show the logout prompt. this prevents attacks where the user
+            // is automatically signed out by another malicious web page.
+            var vm = new LogoutViewModel
+            {
+                LogoutId = logoutId
+            };
+            return View(vm);
         }
 
         #region Helpers

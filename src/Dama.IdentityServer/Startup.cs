@@ -44,7 +44,10 @@ namespace Dama.IdentityServer
             services.AddMvc();
 
             // configure identity server with in-memory stores, keys, clients and scopes
-            services.AddIdentityServer()
+            services.AddIdentityServer(options =>
+            {
+                options.UserInteraction.LoginUrl = "/Account/LoginApp";
+            })
                 .AddDeveloperSigningCredential()
                 .AddInMemoryPersistedGrants()
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())

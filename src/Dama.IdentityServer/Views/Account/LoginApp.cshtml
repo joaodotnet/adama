@@ -13,24 +13,25 @@
 <div class="row">
     <div class="col-md-12">
         <section>
-            <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+            <form method="post">
                 <h4>Quem és tu?</h4>
                 <hr />
                 <div asp-validation-summary="All" class="text-danger"></div>
+                <input type="hidden" name="returnurl" value="@ViewData["ReturnUrl"]" />
                 <div class="row">
                     <div class="col-md-4">
                         <button type="submit" formaction="SueLogin">
-                            <img src="~/images/Sue.png" class="img-responsive" />
+                            <img src="~/images/img-sue.png" class="img-responsive" />
                         </button>
                     </div>
                     <div class="col-md-4">
                         <button type="submit" formaction="SoniaLogin">
-                            <img src="~/images/Sónia.png" class="img-responsive" />
+                            <img src="~/images/img-sonia.png" class="img-responsive" />
                         </button>
                     </div>
                     <div class="col-md-4">
                         <button type="submit" formaction="JueLogin">
-                            <img src="~/images/João.png" class="img-responsive"  />
+                            <img src="~/images/img-joao.png" class="img-responsive"  />
                         </button>
                     </div>
                 </div>
