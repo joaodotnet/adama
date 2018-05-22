@@ -32,7 +32,7 @@ namespace DamaApp.Core.Services.Basket
 
             try
             {
-                basket = await _requestProvider.GetAsync<CustomerBasket>(uri);
+                basket = await _requestProvider.GetAsync<CustomerBasket>(uri, token);
             }
             catch (HttpRequestExceptionEx exception) when (exception.HttpCode == System.Net.HttpStatusCode.NotFound)
             {

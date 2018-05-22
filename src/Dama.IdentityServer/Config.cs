@@ -47,12 +47,14 @@ namespace Dama.IdentityServer
                         new Secret("secret".Sha256())
                     },
 
-                    RedirectUris           = { "http://localhost:50930/xamarincallback" },
-                    PostLogoutRedirectUris = { "http://localhost:50930/xamarincallback/Account/Redirecting" },
+                    RedirectUris           = { "http://localhost:50390/xamarincallback" },
+                    PostLogoutRedirectUris = { "http://localhost:50390/xamarincallback/Account/Redirecting" },
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        IdentityServerConstants.StandardScopes.Email,
                         "api1",
                         "basket",
                         "orders",
@@ -60,8 +62,8 @@ namespace Dama.IdentityServer
                         "locations"
 
                     },
-                    AllowOfflineAccess = true
-
+                    AllowOfflineAccess = true,
+                    AllowAccessTokensViaBrowser = true
                 }
             };
         }
