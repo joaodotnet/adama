@@ -53,7 +53,7 @@ namespace DamaApp.Core.Services.Identity
                 return string.Empty;
             }
 
-            return string.Format("{0}?id_token_hint={1}&post_logout_redirect_uri={2}",
+            return string.Format("{0}?logoutId={1}&post_logout_redirect_uri={2}",
                 GlobalSetting.Instance.LogoutEndpoint,
                 token,
                 GlobalSetting.Instance.LogoutCallback);
