@@ -64,9 +64,9 @@
             IdentityEndpoint = $"{connectBaseEndpoint}/authorize";
             UserInfoEndpoint = $"{connectBaseEndpoint}/userinfo";
             TokenEndpoint = $"{connectBaseEndpoint}/token";
-            LogoutEndpoint = $"{identityBaseEndpoint}/Account/Logout";
+            LogoutEndpoint = $"{connectBaseEndpoint}/endsession";//Account/Logout";
 			
-            IdentityCallback = $"{baseEndpoint}/xamarincallback";
+            IdentityCallback = $"{identityBaseEndpoint}/xamarincallback";
         }
     }
 }
