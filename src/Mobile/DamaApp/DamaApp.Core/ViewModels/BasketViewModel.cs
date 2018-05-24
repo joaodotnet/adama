@@ -75,7 +75,7 @@ namespace DamaApp.Core.ViewModels
             var userInfo = await _userService.GetUserInfoAsync(authToken);
 
             // Update Basket
-            var basket = await _basketService.GetBasketAsync(userInfo.Email, authToken);
+            var basket = await _basketService.GetBasketAsync(userInfo.Name, authToken);
 
             if (basket != null && basket.Items != null && basket.Items.Any())
             {
@@ -146,7 +146,7 @@ namespace DamaApp.Core.ViewModels
 
             await _basketService.UpdateBasketAsync(new CustomerBasket
             {
-                BuyerId = userInfo.Email,
+                BuyerId = userInfo.Name,
                 Items = BasketItems.ToList()
             }, authToken);
         }

@@ -33,7 +33,7 @@
             }
         }
 
-        public string ClientId { get { return "mvc"; }}
+        public string ClientId { get { return "xamarin"; }}
 
         public string ClientSecret { get { return "secret"; }}
 

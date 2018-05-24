@@ -35,8 +35,8 @@ namespace Dama.IdentityServer
             {
                 new Client
                 {
-                    ClientId = "mvc",
-                    ClientName = "Dama Client",
+                    ClientId = "xamarin",
+                    ClientName = "xamarin OpenId Client",
                     AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
 
                     RequireConsent = false,
@@ -54,7 +54,6 @@ namespace Dama.IdentityServer
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
-                        IdentityServerConstants.StandardScopes.Email,
                         "api1",
                         "basket",
                         "orders",
@@ -63,7 +62,9 @@ namespace Dama.IdentityServer
 
                     },
                     AllowOfflineAccess = true,
-                    AllowAccessTokensViaBrowser = true
+                    AllowAccessTokensViaBrowser = true,
+                    AbsoluteRefreshTokenLifetime = 0,
+                    RefreshTokenExpiration = TokenExpiration.Sliding
                 }
             };
         }
