@@ -47,6 +47,10 @@ namespace Dama.IdentityServer
             services.AddIdentityServer(options =>
             {
                 options.UserInteraction.LoginUrl = "/Account/LoginApp";
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseSuccessEvents = true;
             })
                 .AddDeveloperSigningCredential()
                 .AddInMemoryPersistedGrants()
