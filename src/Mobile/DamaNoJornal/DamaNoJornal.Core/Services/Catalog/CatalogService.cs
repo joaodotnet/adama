@@ -38,19 +38,29 @@ namespace DamaNoJornal.Core.Services.Catalog
 
         public async Task<ObservableCollection<CatalogItem>> GetCatalogAsync()
         {
-            UriBuilder builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint);
-            builder.Path = $"{ApiUrlBase}/items";
-            string uri = builder.ToString();
-
-            CatalogRoot catalog = await _requestProvider.GetAsync<CatalogRoot>(uri);
-
-            if (catalog?.Data != null)
+            try
             {
-                _fixUriService.FixCatalogItemPictureUri(catalog?.Data);
-                return catalog?.Data.ToObservableCollection();
+
+
+
+                UriBuilder builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint);
+                builder.Path = $"{ApiUrlBase}/items";
+                string uri = builder.ToString();
+
+                CatalogRoot catalog = await _requestProvider.GetAsync<CatalogRoot>(uri);
+
+                if (catalog?.Data != null)
+                {
+                    _fixUriService.FixCatalogItemPictureUri(catalog?.Data);
+                    return catalog?.Data.ToObservableCollection();
+                }
+                else
+                    return new ObservableCollection<CatalogItem>();
             }
-            else
-                return new ObservableCollection<CatalogItem>();
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<ObservableCollection<CatalogBrand>> GetCatalogBrandAsync()
