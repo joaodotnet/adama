@@ -8,6 +8,7 @@
              xmlns:animations="clr-namespace:DamaNoJornal.Core.Animations;assembly=DamaNoJornal.Core"
              xmlns:triggers="clr-namespace:DamaNoJornal.Core.Triggers;assembly=DamaNoJornal.Core"
              xmlns:behaviors="clr-namespace:DamaNoJornal.Core.Behaviors;assembly=DamaNoJornal.Core"
+             xmlns:flv="clr-namespace:DLToolkit.Forms.Controls;assembly=DLToolkit.Forms.Controls.FlowListView"
 			 viewModelBase:ViewModelLocator.AutoWireViewModel="true"
              Title="Catalog">
     <ContentPage.Resources>
@@ -81,6 +82,26 @@
                     HorizontalOptions="Center"
                     VerticalOptions="Center"/>
             </Grid>
+            <!--<flv:FlowListView x:Name="Products" 
+                              FlowColumnCount="4" 
+                              SeparatorVisibility="None" 
+                              HasUnevenRows="True"
+                              FlowItemsSource="{Binding Products}"
+                              Style="{StaticResource ProductsListStyle}">
+                <flv:FlowListView.Behaviors>
+                    <behaviors:EventToCommandBehavior                    
+                        EventName="FlowItemTapped"
+                        Command="{Binding AddCatalogItemCommand}"
+                        EventArgsConverter="{StaticResource ItemTappedEventArgsConverter}" />
+                </flv:FlowListView.Behaviors>
+
+                <flv:FlowListView.FlowColumnTemplate>
+                    <DataTemplate>
+                        <templates:ProductTemplate />
+                    </DataTemplate>
+                </flv:FlowListView.FlowColumnTemplate>
+
+            </flv:FlowListView>-->
             <ListView 
                 x:Name="Products"       
                 IsVisible="{Binding Products.Count, Converter={StaticResource CountToBoolConverter}}"

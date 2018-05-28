@@ -73,5 +73,19 @@ namespace DamaNoJornal.Core.Services.Basket
 
             return Task.FromResult(0);
         }
+
+        public async Task<CustomerBasket> AddBasketItemAsync(CustomerBasket customerBasket, string token)
+        {
+            await Task.Delay(10);
+
+            if (string.IsNullOrEmpty(token))
+            {
+                return new CustomerBasket();
+            }
+
+            MockCustomBasket = customerBasket;
+
+            return MockCustomBasket;
+        }
     }
 }

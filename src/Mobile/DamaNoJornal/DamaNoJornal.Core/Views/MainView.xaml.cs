@@ -15,6 +15,7 @@ namespace DamaNoJornal.Core.Views
         {
             base.OnAppearing();
 
+            MessagingCenter.Unsubscribe<MainViewModel, int>(this, MessageKeys.ChangeTab);
             MessagingCenter.Subscribe<MainViewModel, int>(this, MessageKeys.ChangeTab, (sender, arg) =>
             {
                switch(arg)
@@ -38,7 +39,7 @@ namespace DamaNoJornal.Core.Views
 			await ((BasketViewModel)BasketView.BindingContext).InitializeAsync(null);
 			await ((ProfileViewModel)ProfileView.BindingContext).InitializeAsync(null);
             await ((CampaignViewModel)CampaignView.BindingContext).InitializeAsync(null);
-        }
+        }        
 
         protected override async void OnCurrentPageChanged()
         {

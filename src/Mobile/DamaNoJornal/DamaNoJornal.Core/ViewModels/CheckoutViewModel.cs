@@ -88,7 +88,7 @@ namespace DamaNoJornal.Core.ViewModels
                 // Create Shipping Address
                 ShippingAddress = new Address
                 {
-                    Id = !string.IsNullOrEmpty(userInfo?.UserId) ? new Guid(userInfo.UserId) : Guid.NewGuid(),
+                    Id = Guid.NewGuid(), //!string.IsNullOrEmpty(userInfo?.UserId) ? new Guid(userInfo.UserId) : Guid.NewGuid(),
                     Street = userInfo?.Street,
                     ZipCode = userInfo?.ZipCode,
                     State = userInfo?.State,
@@ -128,7 +128,7 @@ namespace DamaNoJornal.Core.ViewModels
                 if (_settingsService.UseMocks)
                 {
                     // Get number of orders
-                    var orders = await _orderService.GetOrdersAsync(authToken);
+                    var orders = await _orderService.GetOrdersAsync(userInfo.UserId, authToken);
 
                     // Create the OrderNumber
                     Order.OrderNumber = orders.Count + 1;
@@ -149,15 +149,15 @@ namespace DamaNoJornal.Core.ViewModels
                 basket.RequestId = Guid.NewGuid();
 
                 // Create basket checkout
-                await _basketService.CheckoutAsync(basket, authToken);
+                //await _basketService.CheckoutAsync(basket, authToken);
 
-                if (_settingsService.UseMocks)
-                {
+                //if (_settingsService.UseMocks)
+                //{
                     await _orderService.CreateOrderAsync(Order, authToken);
-                }
+                //}
 
                 // Clean Basket
-                await _basketService.ClearBasketAsync(_shippingAddress.Id.ToString(), authToken);
+                await _basketService.ClearBasketAsync(Order.BuyerId, authToken);
 
                 // Reset Basket badge
                 var basketViewModel = ViewModelLocator.Resolve<BasketViewModel>();

@@ -3,7 +3,7 @@
     public class MessageKeys
     {
         // Add product to basket
-        public const string AddProduct = "AddProduct";
+        public const string AddProduct = "AddProduct_FOR_WEB";
 
         // Filter
         public const string Filter = "Filter";

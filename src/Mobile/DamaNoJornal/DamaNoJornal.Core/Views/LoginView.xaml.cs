@@ -24,7 +24,7 @@ namespace DamaNoJornal.Core.Views
 			var vm = BindingContext as LoginViewModel;
             if (vm != null)
             {
-                vm.InvalidateMock();
+                vm.InvalidateMock();                
 
 				if (!vm.IsMock)
 				{

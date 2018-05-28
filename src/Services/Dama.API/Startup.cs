@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using ApplicationCore.Interfaces;
+using ApplicationCore.Services;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -33,7 +34,7 @@ namespace Dama.API
                 //.AddAuthorization()
                 //.AddJsonFormatters();
 
-            ConfigureAuthService(services);
+            //ConfigureAuthService(services);
 
             //services.AddAuthentication("Bearer")
             //    .AddIdentityServerAuthentication(options =>
@@ -79,9 +80,10 @@ namespace Dama.API
                     var message = ex.Message;
                 }
             });
-
+            services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped<IBasketRepository, BasketRepository>();
+            services.AddScoped<IOrderService, OrderService>();
 
         }
 

@@ -11,7 +11,7 @@ namespace DamaNoJornal.Core.Services.Basket
         private readonly IRequestProvider _requestProvider;
         private readonly IFixUriService _fixUriService;
 
-        private const string ApiUrlBase = "api/v1/b/basket";
+        private const string ApiUrlBase = "api/v1/basket";
 
         public BasketService(IRequestProvider requestProvider, IFixUriService fixUriService)
         {
@@ -75,6 +75,18 @@ namespace DamaNoJornal.Core.Services.Basket
 
             var uri = builder.ToString();
             await _requestProvider.DeleteAsync(uri, token);
+        }
+
+        public async Task<CustomerBasket> AddBasketItemAsync(CustomerBasket customerBasket, string token)
+        {
+            var builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint)
+            {
+                Path = $"{ApiUrlBase}/add"
+            };
+
+            var uri = builder.ToString();
+            var result = await _requestProvider.PostAsync(uri, customerBasket, token);
+            return result;
         }
     }
 }

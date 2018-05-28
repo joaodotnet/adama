@@ -4,6 +4,7 @@ using DamaNoJornal.Core.Services.Basket;
 using DamaNoJornal.Core.Services.Settings;
 using DamaNoJornal.Core.Services.User;
 using DamaNoJornal.Core.ViewModels.Base;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -62,7 +63,7 @@ namespace DamaNoJornal.Core.ViewModels
             }
         }
 
-        public ICommand AddCommand => new Command<BasketItem>(async (item) => await AddItemAsync(item));
+        public ICommand AddCommand => new Command<BasketItem>((item) => AddItem(item));
 
         public ICommand CheckoutCommand => new Command(async () => await CheckoutAsync());
 
@@ -85,13 +86,15 @@ namespace DamaNoJornal.Core.ViewModels
                 foreach (var basketItem in basket.Items)
                 {
                     BadgeCount += basketItem.Quantity;
-                    await AddBasketItemAsync(basketItem);
+                    AddBasketItem(basketItem);
                 }
             }
-
+            System.Diagnostics.Debug.WriteLine("############## Unsubcribe 1 #################");
             MessagingCenter.Unsubscribe<CatalogViewModel, CatalogItem>(this, MessageKeys.AddProduct);
+            System.Diagnostics.Debug.WriteLine("############## Subcribe 1 #################");
             MessagingCenter.Subscribe<CatalogViewModel, CatalogItem>(this, MessageKeys.AddProduct, async (sender, arg) =>
             {
+                System.Diagnostics.Debug.WriteLine("############## Executing Subscribe Method #################");
                 BadgeCount++;
 
                 await AddCatalogItemAsync(arg);
@@ -102,32 +105,44 @@ namespace DamaNoJornal.Core.ViewModels
 
         private async Task AddCatalogItemAsync(CatalogItem item)
         {
-            BasketItems.Add(new BasketItem
+            var basketItem = new BasketItem
             {
                 ProductId = item.Id,
                 ProductName = item.Name,
                 PictureUrl = item.PictureUri,
                 UnitPrice = item.Price,
                 Quantity = 1
-            });
+            };
+            BasketItems.Add(basketItem);
 
-            await ReCalculateTotalAsync();
+            ReCalculateTotal();
+
+            var authToken = _settingsService.AuthAccessToken;
+            var userInfo = await _userService.GetUserInfoAsync(authToken);
+
+            var listToSend = new List<BasketItem>();
+            listToSend.Add(basketItem);
+            await _basketService.AddBasketItemAsync(new CustomerBasket
+            {
+                BuyerId = userInfo.UserId,
+                Items = listToSend
+            }, authToken);
         }
 
-        private async Task AddItemAsync(BasketItem item)
+        private void AddItem(BasketItem item)
         {
             BadgeCount++;
-            await AddBasketItemAsync(item);
+            AddBasketItem(item);
             RaisePropertyChanged(() => BasketItems);
         }
 
-        private async Task AddBasketItemAsync(BasketItem item)
+        private void AddBasketItem(BasketItem item)
         {
             BasketItems.Add(item);
-            await ReCalculateTotalAsync();
+            ReCalculateTotal();
         }
 
-        private async Task ReCalculateTotalAsync()
+        private void ReCalculateTotal()
         {
             Total = 0;
 
@@ -141,14 +156,14 @@ namespace DamaNoJornal.Core.ViewModels
                 Total += (orderItem.Quantity * orderItem.UnitPrice);
             }
 
-            var authToken = _settingsService.AuthAccessToken;
-            var userInfo = await _userService.GetUserInfoAsync(authToken);
+            //var authToken = _settingsService.AuthAccessToken;
+            //var userInfo = await _userService.GetUserInfoAsync(authToken);
 
-            await _basketService.UpdateBasketAsync(new CustomerBasket
-            {
-                BuyerId = userInfo.UserId,
-                Items = BasketItems.ToList()
-            }, authToken);
+            //await _basketService.UpdateBasketAsync(new CustomerBasket
+            //{
+            //    BuyerId = userInfo.UserId,
+            //    Items = BasketItems.ToList()
+            //}, authToken);
         }
 
         private async Task CheckoutAsync()

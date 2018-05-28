@@ -214,11 +214,12 @@ namespace DamaNoJornal.Core.ViewModels
                 LoginUrl = logoutRequest;
             }
 
-            if (_settingsService.UseMocks)
-            {
+            //Simulate logout
+            //if (_settingsService.UseMocks)
+            //{
                 _settingsService.AuthAccessToken = string.Empty;
                 _settingsService.AuthIdToken = string.Empty;
-            }
+            //}
 
             _settingsService.UseFakeLocation = false;
         }
@@ -284,7 +285,8 @@ namespace DamaNoJornal.Core.ViewModels
 
         public void InvalidateMock()
         {
-            IsMock = _settingsService.UseMocks;
+            //JG Don't use identity
+            IsMock = true; // _settingsService.UseMocks;
         }
     }
 }
