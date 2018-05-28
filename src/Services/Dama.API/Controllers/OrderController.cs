@@ -46,7 +46,7 @@ namespace Dama.API.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(Order), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> Post([FromBody]OrderViewModel model)
         {
             //Get Basket
@@ -59,8 +59,8 @@ namespace Dama.API.Controllers
 
             //Create Address
             Address address = new Address(null, null, model.Street, model.City, model.Country, model.PostalCode);            
-            var order = await _orderService.CreateOrderAsync(basket.Id,null,address,null,true,0);
-            return Ok(order);
+            await _orderService.CreateOrderAsync(basket.Id,null,address,null,true,0);
+            return Ok();
         }
     }
 }

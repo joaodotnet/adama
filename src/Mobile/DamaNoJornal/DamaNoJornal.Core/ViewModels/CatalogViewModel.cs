@@ -1,6 +1,12 @@
-﻿using DamaNoJornal.Core.Models.Catalog;
+﻿using DamaNoJornal.Core.Models.Basket;
+using DamaNoJornal.Core.Models.Catalog;
+using DamaNoJornal.Core.Models.Navigation;
+using DamaNoJornal.Core.Services.Basket;
 using DamaNoJornal.Core.Services.Catalog;
+using DamaNoJornal.Core.Services.Settings;
+using DamaNoJornal.Core.Services.User;
 using DamaNoJornal.Core.ViewModels.Base;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -16,10 +22,20 @@ namespace DamaNoJornal.Core.ViewModels
         private ObservableCollection<CatalogType> _types;
         private CatalogType _type;
         private ICatalogService _productsService;
+        private ISettingsService _settingsService;
+        private IBasketService _basketService;
+        private IUserService _userService;
 
-        public CatalogViewModel(ICatalogService productsService)
+        public CatalogViewModel(
+            ICatalogService productsService,
+            ISettingsService settingsService,
+            IBasketService basketService,
+            IUserService userService)
         {
             _productsService = productsService;
+            _settingsService = settingsService;
+            _basketService = basketService;
+            _userService = userService;
         }
 
         public ObservableCollection<CatalogItem> Products
@@ -76,11 +92,11 @@ namespace DamaNoJornal.Core.ViewModels
 
         public bool IsFilter { get { return Brand != null || Type != null; } }
 
-        public ICommand AddCatalogItemCommand => new Command<CatalogItem>(AddCatalogItem);
+        public ICommand AddCatalogItemCommand => new Command<CatalogItem>(async (item) => await AddCatalogItemAsync(item));
 
         public ICommand FilterCommand => new Command(async () => await FilterAsync());
 
-		public ICommand ClearFilterCommand => new Command(async () => await ClearFilterAsync());
+        public ICommand ClearFilterCommand => new Command(async () => await ClearFilterAsync());
 
         public override async Task InitializeAsync(object navigationData)
         {
@@ -94,10 +110,36 @@ namespace DamaNoJornal.Core.ViewModels
             IsBusy = false;
         }
 
-        private void AddCatalogItem(CatalogItem catalogItem)
+        private async Task AddCatalogItemAsync(CatalogItem catalogItem)
         {
             // Add new item to Basket
-            MessagingCenter.Send(this, MessageKeys.AddProduct, catalogItem);
+
+            var authToken = _settingsService.AuthAccessToken;
+            var userInfo = await _userService.GetUserInfoAsync(authToken);
+            var basketItem = new BasketItem
+            {
+                ProductId = catalogItem.Id,
+                ProductName = catalogItem.Name,
+                PictureUrl = catalogItem.PictureUri,
+                UnitPrice = catalogItem.Price,
+                Quantity = 1
+            };
+
+
+
+            await _basketService.AddBasketItemAsync(new CustomerBasket
+            {
+                BuyerId = userInfo.UserId,
+                Items = new List<BasketItem> { basketItem }
+            }, authToken);
+
+            //var basketViewModel = ViewModelLocator.Resolve<BasketViewModel>();
+            //if(basketViewModel != null)
+            //    basketViewModel.BadgeCount++;
+            //MessagingCenter.Send(this, MessageKeys.AddProduct, catalogItem);
+
+            await NavigationService.NavigateToAsync<MainViewModel>(new TabParameter { TabIndex = 2 });
+            //await NavigationService.NavigateToAsync<BasketViewModel>(catalogItem);
         }
 
         private async Task FilterAsync()
