@@ -30,5 +30,10 @@ namespace ApplicationCore.Entities
         {
             _items.RemoveAt(index);
         }
+
+        public void RemoveAllItems()
+        {
+            _items.RemoveAll(_ => true);
+        }
     }
 }

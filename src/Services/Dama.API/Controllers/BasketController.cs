@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Dama.API.Controllers
 {
     [Route("api/v1/[controller]")]
-    [Authorize]
+//    [Authorize]
     public class BasketController : Controller
     {
         private readonly IBasketRepository _repository;
@@ -46,8 +46,6 @@ namespace Dama.API.Controllers
             return Ok(BasketToViewModel(basket));
         }
 
-        
-
         // POST /value
         [HttpPost]
         [ProducesResponseType(typeof(Basket), (int)HttpStatusCode.OK)]
@@ -56,7 +54,19 @@ namespace Dama.API.Controllers
             var basket = await _repository.UpdateBasketAsync(ViewModelToBasket(value));
 
             return Ok(basket);
-        }        
+        }
+
+        [Route("add")]
+        [HttpPost]
+        [ProducesResponseType(typeof(Basket), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> AddItem([FromBody]BasketViewModel value)
+        {
+            var basketModel = ViewModelToBasket(value);
+            var basketDb = await GetOrCreateBasketForUser(value.BuyerId);
+            var basket = await _repository.AddBasketItemAsync(basketDb.Id, basketModel.Items.FirstOrDefault());
+
+            return Ok(basket);
+        }
 
         //[Route("checkout")]
         //[HttpPost]
@@ -93,7 +103,7 @@ namespace Dama.API.Controllers
         {
             var basketSpec = new BasketWithItemsSpecification(id);
             var basket = (await _repository.ListAsync(basketSpec)).LastOrDefault();
-            await _repository.DeleteBasketAsync(basket.Id);
+            await _repository.DeleteAsync(basket);
         }
 
         private BasketViewModel BasketToViewModel(Basket basket)
@@ -105,7 +115,7 @@ namespace Dama.API.Controllers
                 {
                     var itemModel = new BasketItemViewModel
                     {
-                        Id = i.Id,
+                       // Id = i.Id,
                         ProductId = i.CatalogItemId,
                         Quantity = i.Quantity,
                         UnitPrice = i.UnitPrice,
@@ -137,6 +147,34 @@ namespace Dama.API.Controllers
             {
                 basket.AddItem(item.ProductId, item.UnitPrice, item.Quantity);
             }
+            return basket;
+        }
+
+        private async Task<Basket> GetOrCreateBasketForUser(string userName)
+        {
+            var basketSpec = new BasketWithItemsSpecification(userName);
+            var baskets = (await _repository.ListAsync(basketSpec));
+            if (baskets == null || baskets.Count == 0)
+            {
+                return await CreateBasketForUser(userName);
+            }
+
+            //Delete previous Baskets
+            if(baskets.Count > 1)
+            {
+                for (int i = 0; i < baskets.Count - 1; i++)
+                {
+                    await _repository.DeleteAsync(baskets[i]);
+                }
+            }
+
+            return baskets.LastOrDefault();
+        }
+
+        private async Task<Basket> CreateBasketForUser(string userId)
+        {
+            var basket = new Basket() { BuyerId = userId };
+            await _repository.AddAsync(basket);
             return basket;
         }
     }

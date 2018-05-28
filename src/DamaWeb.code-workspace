@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "Web"
+		},
+		{
+			"path": "ApplicationCore"
+		},
+		{
+			"path": "Infrastructure"
+		}
+	],
+	"settings": {}
+}

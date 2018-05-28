@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ApplicationCore.Entities;
 using System.Collections.Generic;
 using Ardalis.GuardClauses;
+using ApplicationCore.Specifications;
 
 namespace ApplicationCore.Services
 {
@@ -76,6 +77,12 @@ namespace ApplicationCore.Services
         public async Task<Order> GetOrderAsync(int id)
         {
             return await _orderRepository.GetByIdAsync(id);            
+        }
+
+        public async Task<List<Order>> GetOrdersAsync(string buyerId)
+        {
+            var spec = new OrdersSpecification(buyerId);
+            return await _orderRepository.ListAsync(spec);
         }
     }
 }

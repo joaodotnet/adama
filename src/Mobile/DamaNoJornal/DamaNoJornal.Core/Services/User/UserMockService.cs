@@ -8,16 +8,16 @@ namespace DamaNoJornal.Core.Services.User
     {
         private UserInfo MockUserInfo = new UserInfo
         {
-            UserId = Guid.NewGuid().ToString(),
+            UserId = "joaofbbg@gmail.com",
             Name = "Jhon",
             LastName = "Doe",
             PreferredUsername = "Jdoe",
-            Email = "jdoe@eshop.com",
+            Email = "joaofbbg@gmail.com",
             EmailVerified = true,
             PhoneNumber = "202-555-0165",
             PhoneNumberVerified = true,
             Address = "Seattle, WA",
-            Street = "120 E 87th Street",
+            Street = "Feira de Loulé",
             ZipCode = "98101",
             Country = "United States",
             State = "Seattle",

@@ -16,6 +16,7 @@ namespace DamaNoJornal.Core.Views
 
             SlideMenu = _filterView;
 
+            MessagingCenter.Unsubscribe<CatalogViewModel>(this, MessageKeys.Filter);
             MessagingCenter.Subscribe<CatalogViewModel>(this, MessageKeys.Filter, (sender) =>
             {
                 Filter();

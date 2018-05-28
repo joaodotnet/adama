@@ -3,6 +3,7 @@ using DamaNoJornal.Core.Models.Orders;
 using DamaNoJornal.Core.Models.User;
 using DamaNoJornal.Core.Services.Order;
 using DamaNoJornal.Core.Services.Settings;
+using DamaNoJornal.Core.Services.User;
 using DamaNoJornal.Core.ViewModels.Base;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -16,11 +17,13 @@ namespace DamaNoJornal.Core.ViewModels
         private readonly ISettingsService _settingsService;
         private readonly IOrderService _orderService;
         private ObservableCollection<Order> _orders;
+        private IUserService _userService;
 
-        public ProfileViewModel(ISettingsService settingsService, IOrderService orderService)
+        public ProfileViewModel(ISettingsService settingsService, IOrderService orderService, IUserService userService)
         {
             _settingsService = settingsService;
             _orderService = orderService;
+            _userService = userService;
         }
 
         public ObservableCollection<Order> Orders
@@ -43,7 +46,8 @@ namespace DamaNoJornal.Core.ViewModels
 
             // Get orders
             var authToken = _settingsService.AuthAccessToken;
-            var orders = await _orderService.GetOrdersAsync(authToken);
+            var userInfo = await _userService.GetUserInfoAsync(authToken);
+            var orders = await _orderService.GetOrdersAsync(userInfo.UserId, authToken);
             Orders = orders.ToObservableCollection();
 
             IsBusy = false;

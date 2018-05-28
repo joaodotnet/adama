@@ -1,4 +1,5 @@
-﻿using Windows.Foundation.Metadata;
+﻿using FFImageLoading.Forms.WinUWP;
+using Windows.Foundation.Metadata;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 
@@ -13,6 +14,8 @@ namespace DamaNoJornal.UWP
             LoadApplication(new DamaNoJornal.App());
 
             NativeCustomize();
+
+            CachedImageRenderer.Init();
         }
 
         private void NativeCustomize()

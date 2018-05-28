@@ -12,14 +12,14 @@ namespace DamaNoJornal.Core.Services.Catalog
     {
         private ObservableCollection<CatalogBrand> MockCatalogBrand = new ObservableCollection<CatalogBrand>
         {
-            new CatalogBrand { Id = 1, Brand = "Azure" },
-            new CatalogBrand { Id = 2, Brand = "Visual Studio" }
+            new CatalogBrand { Id = 1, Name = "Azure" },
+            new CatalogBrand { Id = 2, Name = "Visual Studio" }
         };
 
         private ObservableCollection<CatalogType> MockCatalogType = new ObservableCollection<CatalogType>
         {
-            new CatalogType { Id = 1, Type = "Mug" },
-            new CatalogType { Id = 2, Type = "T-Shirt" }
+            new CatalogType { Id = 1, Description = "Mug" },
+            new CatalogType { Id = 2, Description = "T-Shirt" }
         };
 
         private ObservableCollection<CatalogItem> MockCatalog = new ObservableCollection<CatalogItem>
@@ -48,7 +48,7 @@ namespace DamaNoJornal.Core.Services.Catalog
                 .ToObservableCollection();
         }
 
-        public async Task<ObservableCollection<CatalogBrand>> GetCatalogBrandAsync()
+        public async Task<ObservableCollection<CatalogBrand>> GetCatalogCategoryAsync()
         {
             await Task.Delay(10);
 

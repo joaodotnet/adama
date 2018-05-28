@@ -27,6 +27,7 @@ namespace DamaNoJornal.Core.Services.RequestProvider
 
         public async Task<TResult> GetAsync<TResult>(string uri, string token = "")
         {
+            System.Diagnostics.Debug.WriteLine($"Calling Get: {uri}");
             HttpClient httpClient = CreateHttpClient(token);
             HttpResponseMessage response = await httpClient.GetAsync(uri);
 
@@ -41,6 +42,7 @@ namespace DamaNoJornal.Core.Services.RequestProvider
 
         public async Task<TResult> PostAsync<TResult>(string uri, TResult data, string token = "", string header = "")
         {
+            System.Diagnostics.Debug.WriteLine($"Calling Post: {uri}");
             HttpClient httpClient = CreateHttpClient(token);
 
             if (!string.IsNullOrEmpty(header))
@@ -63,7 +65,8 @@ namespace DamaNoJornal.Core.Services.RequestProvider
 
         public async Task<TResult> PostAsync<TResult>(string uri, string data, string clientId, string clientSecret)
         {
-			HttpClient httpClient = CreateHttpClient(string.Empty);
+            System.Diagnostics.Debug.WriteLine($"Calling Post: {uri}");
+            HttpClient httpClient = CreateHttpClient(string.Empty);
 
             if (!string.IsNullOrWhiteSpace(clientId) && !string.IsNullOrWhiteSpace(clientSecret))
 			{
@@ -85,6 +88,7 @@ namespace DamaNoJornal.Core.Services.RequestProvider
 
         public async Task<TResult> PutAsync<TResult>(string uri, TResult data, string token = "", string header = "")
         {
+            System.Diagnostics.Debug.WriteLine($"Calling Put: {uri}");
             HttpClient httpClient = CreateHttpClient(token);
 
             if (!string.IsNullOrEmpty(header))
@@ -107,6 +111,7 @@ namespace DamaNoJornal.Core.Services.RequestProvider
 
         public async Task DeleteAsync(string uri, string token = "")
         {
+            System.Diagnostics.Debug.WriteLine($"Calling Delete: {uri}");
             HttpClient httpClient = CreateHttpClient(token);
             await httpClient.DeleteAsync(uri);
         }

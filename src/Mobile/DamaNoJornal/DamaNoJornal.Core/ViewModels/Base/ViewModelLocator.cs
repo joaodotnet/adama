@@ -88,8 +88,8 @@ namespace DamaNoJornal.Core.ViewModels.Base
             {
                 _container.Register<ICatalogService, CatalogService>();
                 _container.Register<IBasketService, BasketService>();
-                _container.Register<IOrderService, OrderMockService>();
-                _container.Register<IUserService, UserService>();
+                _container.Register<IOrderService, OrderService>();
+                _container.Register<IUserService, UserMockService>();
                 _container.Register<ICampaignService, CampaignMockService>();
 
                 UseMockService = false;

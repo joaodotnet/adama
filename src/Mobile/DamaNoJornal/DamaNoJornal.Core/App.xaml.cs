@@ -50,14 +50,14 @@ namespace DamaNoJornal
             {
                 await InitNavigation();
             }
-            if (_settingsService.AllowGpsLocation && !_settingsService.UseFakeLocation)
-            {
-                await GetGpsLocation();
-            }
-            if (!_settingsService.UseMocks && !string.IsNullOrEmpty(_settingsService.AuthAccessToken))
-            {
-                await SendCurrentLocation();
-            }
+            //if (_settingsService.AllowGpsLocation && !_settingsService.UseFakeLocation)
+            //{
+            //    await GetGpsLocation();
+            //}
+            //if (!_settingsService.UseMocks && !string.IsNullOrEmpty(_settingsService.AuthAccessToken))
+            //{
+            //    await SendCurrentLocation();
+            //}
 
             base.OnResume();
         }

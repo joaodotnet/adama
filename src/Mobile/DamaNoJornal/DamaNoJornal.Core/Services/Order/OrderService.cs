@@ -11,23 +11,29 @@ namespace DamaNoJornal.Core.Services.Order
     {
         private readonly IRequestProvider _requestProvider;
 
-        private const string ApiUrlBase = "mobileshoppingapigw/api/v1/o/orders";
+        private const string ApiUrlBase = "api/v1/orders";
 
         public OrderService(IRequestProvider requestProvider)
         {
             _requestProvider = requestProvider;
         }
 
-        public Task CreateOrderAsync(Models.Orders.Order newOrder, string token)
+        public async Task CreateOrderAsync(Models.Orders.Order newOrder, string token)
         {
-            throw new Exception("Only available in Mock Services!");
+            var builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint)
+            {
+                Path = ApiUrlBase
+            };
+
+            var uri = builder.ToString();
+            var result = await _requestProvider.PostAsync(uri, newOrder, token);            
         }
 
-        public async Task<ObservableCollection<Models.Orders.Order>> GetOrdersAsync(string token)
+        public async Task<ObservableCollection<Models.Orders.Order>> GetOrdersAsync(string id, string token)
         {
             UriBuilder builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint);
 
-            builder.Path = ApiUrlBase;
+            builder.Path = $"{ApiUrlBase}/all/{id}";
 
             string uri = builder.ToString();
 

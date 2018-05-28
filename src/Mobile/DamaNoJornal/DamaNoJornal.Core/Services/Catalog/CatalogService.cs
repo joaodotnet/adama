@@ -13,7 +13,7 @@ namespace DamaNoJornal.Core.Services.Catalog
     {
         private readonly IRequestProvider _requestProvider;
         private readonly IFixUriService _fixUriService;
-		
+
         private const string ApiUrlBase = "api/v1/catalog";
 
         public CatalogService(IRequestProvider requestProvider, IFixUriService fixUriService)
@@ -38,35 +38,25 @@ namespace DamaNoJornal.Core.Services.Catalog
 
         public async Task<ObservableCollection<CatalogItem>> GetCatalogAsync()
         {
-            try
+            UriBuilder builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint);
+            builder.Path = $"{ApiUrlBase}/items";
+            string uri = builder.ToString();
+
+            CatalogRoot catalog = await _requestProvider.GetAsync<CatalogRoot>(uri);
+
+            if (catalog?.Data != null)
             {
-
-
-
-                UriBuilder builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint);
-                builder.Path = $"{ApiUrlBase}/items";
-                string uri = builder.ToString();
-
-                CatalogRoot catalog = await _requestProvider.GetAsync<CatalogRoot>(uri);
-
-                if (catalog?.Data != null)
-                {
-                    _fixUriService.FixCatalogItemPictureUri(catalog?.Data);
-                    return catalog?.Data.ToObservableCollection();
-                }
-                else
-                    return new ObservableCollection<CatalogItem>();
+                _fixUriService.FixCatalogItemPictureUri(catalog?.Data);
+                return catalog?.Data.ToObservableCollection();
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            else
+                return new ObservableCollection<CatalogItem>();
         }
 
-        public async Task<ObservableCollection<CatalogBrand>> GetCatalogBrandAsync()
+        public async Task<ObservableCollection<CatalogBrand>> GetCatalogCategoryAsync()
         {
             UriBuilder builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint);
-            builder.Path = $"{ApiUrlBase}/catalogbrands";
+            builder.Path = $"{ApiUrlBase}/catalogcategories";
             string uri = builder.ToString();
 
             IEnumerable<CatalogBrand> brands = await _requestProvider.GetAsync<IEnumerable<CatalogBrand>>(uri);

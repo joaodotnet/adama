@@ -72,7 +72,7 @@ namespace DamaNoJornal.Core.Services.Order
             Street = "FakeStreet"
         };
 
-        public async Task<ObservableCollection<Models.Orders.Order>> GetOrdersAsync(string token)
+        public async Task<ObservableCollection<Models.Orders.Order>> GetOrdersAsync(string buyerId, string token)
         {
             await Task.Delay(10);
 
@@ -115,6 +115,6 @@ namespace DamaNoJornal.Core.Services.Order
         public Task<bool> CancelOrderAsync(int orderId, string token)
         {
             return Task.FromResult(true);
-        }
+        }        
     }
 }

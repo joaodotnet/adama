@@ -30,21 +30,23 @@ namespace DamaNoJornal.Core.Services.FixUri
 
             try
             {
-                if (!ViewModelLocator.UseMockService
-                    && _settingsService.UrlBase != GlobalSetting.DefaultEndpoint)
+                if (!ViewModelLocator.UseMockService)
+                    //&& _settingsService.UrlBase != GlobalSetting.DefaultEndpoint)
                 {
                     foreach (var catalogItem in catalogItems)
                     {
-                        MatchCollection serverResult = IpRegex.Matches(catalogItem.PictureUri);
-                        MatchCollection localResult = IpRegex.Matches(_settingsService.UrlBase);
+                        //TODO: temporary
+                        //MatchCollection serverResult = IpRegex.Matches(catalogItem.PictureUri);
+                        //MatchCollection localResult = IpRegex.Matches(_settingsService.UrlBase); 
 
-                        if (serverResult.Count != -1 && localResult.Count != -1)
-                        {
-                            var serviceIp = serverResult[0].Value;
-                            var localIp = localResult[0].Value;
+                        //if (serverResult.Count != -1 && localResult.Count != -1)
+                        //{
+                        //    var serviceIp = serverResult[0].Value;
+                        //    var localIp = localResult[0].Value;
 
-                            catalogItem.PictureUri = catalogItem.PictureUri.Replace(serviceIp, localIp);
-                        }
+                        //    catalogItem.PictureUri = catalogItem.PictureUri.Replace(serviceIp, localIp);
+                        //}
+                        catalogItem.PictureUri = catalogItem.PictureUri.Replace("localhost:54855", "localhost:5500");
                     }
                 }
             }
@@ -63,20 +65,21 @@ namespace DamaNoJornal.Core.Services.FixUri
 
             try
             {
-                if (!ViewModelLocator.UseMockService
-                    && _settingsService.UrlBase != GlobalSetting.DefaultEndpoint)
+                if (!ViewModelLocator.UseMockService)
+                    //&& _settingsService.UrlBase != GlobalSetting.DefaultEndpoint)
                 {
                     foreach (var basketItem in basketItems)
                     {
-                        MatchCollection serverResult = IpRegex.Matches(basketItem.PictureUrl);
-                        MatchCollection localResult = IpRegex.Matches(_settingsService.UrlBase);
+                        //MatchCollection serverResult = IpRegex.Matches(basketItem.PictureUrl);
+                        //MatchCollection localResult = IpRegex.Matches(_settingsService.UrlBase);
 
-                        if (serverResult.Count != -1 && localResult.Count != -1)
-                        {
-                            var serviceIp = serverResult[0].Value;
-                            var localIp = localResult[0].Value;
-                            basketItem.PictureUrl = basketItem.PictureUrl.Replace(serviceIp, localIp);
-                        }
+                        //if (serverResult.Count != -1 && localResult.Count != -1)
+                        //{
+                        //    var serviceIp = serverResult[0].Value;
+                        //    var localIp = localResult[0].Value;
+                        //    basketItem.PictureUrl = basketItem.PictureUrl.Replace(serviceIp, localIp);
+                        //}
+                        basketItem.PictureUrl = basketItem.PictureUrl.Replace("localhost:54855", "localhost:5500");
                     }
                 }
             }

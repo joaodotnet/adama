@@ -88,7 +88,7 @@ namespace DamaNoJornal.Core.ViewModels
 
             // Get Catalog, Brands and Types
             Products = await _productsService.GetCatalogAsync();
-            Brands = await _productsService.GetCatalogBrandAsync();
+            Brands = await _productsService.GetCatalogCategoryAsync();
             Types = await _productsService.GetCatalogTypeAsync();
 
             IsBusy = false;
