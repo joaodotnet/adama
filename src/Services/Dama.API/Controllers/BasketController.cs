@@ -33,7 +33,7 @@ namespace Dama.API.Controllers
 
         // GET /id
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(Basket), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(BasketViewModel), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Get(string id)
         {
             var basketSpec = new BasketWithItemsSpecification(id);
@@ -58,14 +58,14 @@ namespace Dama.API.Controllers
 
         [Route("add")]
         [HttpPost]
-        [ProducesResponseType(typeof(Basket), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> AddItem([FromBody]BasketViewModel value)
         {
             var basketModel = ViewModelToBasket(value);
             var basketDb = await GetOrCreateBasketForUser(value.BuyerId);
-            var basket = await _repository.AddBasketItemAsync(basketDb.Id, basketModel.Items.FirstOrDefault());
+            await _repository.AddBasketItemAsync(basketDb.Id, basketModel.Items.FirstOrDefault());
 
-            return Ok(basket);
+            return Ok();
         }
 
         //[Route("checkout")]

@@ -69,11 +69,18 @@ namespace DamaNoJornal.Core.ViewModels
 
         public override async Task InitializeAsync(object navigationData)
         {
+           
             if (BasketItems == null)
                 BasketItems = new ObservableCollection<BasketItem>();
 
             var authToken = _settingsService.AuthAccessToken;
             var userInfo = await _userService.GetUserInfoAsync(authToken);
+
+            //if (navigationData is CatalogItem)
+            //{
+
+            //    await AddCatalogItemAsync((CatalogItem)navigationData);
+            //}
 
             // Update Basket
             var basket = await _basketService.GetBasketAsync(userInfo.UserId, authToken);
@@ -89,18 +96,18 @@ namespace DamaNoJornal.Core.ViewModels
                     AddBasketItem(basketItem);
                 }
             }
-            System.Diagnostics.Debug.WriteLine("############## Unsubcribe 1 #################");
-            MessagingCenter.Unsubscribe<CatalogViewModel, CatalogItem>(this, MessageKeys.AddProduct);
-            System.Diagnostics.Debug.WriteLine("############## Subcribe 1 #################");
-            MessagingCenter.Subscribe<CatalogViewModel, CatalogItem>(this, MessageKeys.AddProduct, async (sender, arg) =>
-            {
-                System.Diagnostics.Debug.WriteLine("############## Executing Subscribe Method #################");
-                BadgeCount++;
+            //System.Diagnostics.Debug.WriteLine("############## Unsubcribe 1 #################");
+            //MessagingCenter.Unsubscribe<CatalogViewModel, CatalogItem>(this, MessageKeys.AddProduct);
+            //System.Diagnostics.Debug.WriteLine("############## Subcribe 1 #################");
+            //MessagingCenter.Subscribe<CatalogViewModel, CatalogItem>(this, MessageKeys.AddProduct, async (sender, arg) =>
+            //{
+            //    System.Diagnostics.Debug.WriteLine("############## Executing Subscribe Method #################");
+            //    BadgeCount++;
 
-                await AddCatalogItemAsync(arg);
-            });
+            //    //await AddCatalogItemAsync(arg);
+            //});
 
-            await base.InitializeAsync(navigationData);
+            //await base.InitializeAsync(navigationData);
         }
 
         private async Task AddCatalogItemAsync(CatalogItem item)
@@ -120,12 +127,10 @@ namespace DamaNoJornal.Core.ViewModels
             var authToken = _settingsService.AuthAccessToken;
             var userInfo = await _userService.GetUserInfoAsync(authToken);
 
-            var listToSend = new List<BasketItem>();
-            listToSend.Add(basketItem);
             await _basketService.AddBasketItemAsync(new CustomerBasket
             {
                 BuyerId = userInfo.UserId,
-                Items = listToSend
+                Items = new List<BasketItem> { basketItem }
             }, authToken);
         }
 
@@ -170,8 +175,10 @@ namespace DamaNoJornal.Core.ViewModels
         {
             if (BasketItems.Any())
             {
+                //System.Diagnostics.Debug.WriteLine($"############## Force Unsubcribe #################");
+                //MessagingCenter.Unsubscribe<CatalogViewModel, CatalogItem>(this, MessageKeys.AddProduct);
                 await NavigationService.NavigateToAsync<CheckoutViewModel>(BasketItems);
             }
-        }
+        }        
     }
 }
