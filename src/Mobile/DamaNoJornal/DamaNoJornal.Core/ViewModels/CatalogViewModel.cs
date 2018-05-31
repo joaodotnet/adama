@@ -113,33 +113,32 @@ namespace DamaNoJornal.Core.ViewModels
         private async Task AddCatalogItemAsync(CatalogItem catalogItem)
         {
             // Add new item to Basket
+            //MessagingCenter.Send(this, MessageKeys.AddProduct, catalogItem);   
+            await NavigationService.NavigateToAsync<BasketViewModel>(catalogItem);
 
-            var authToken = _settingsService.AuthAccessToken;
-            var userInfo = await _userService.GetUserInfoAsync(authToken);
-            var basketItem = new BasketItem
-            {
-                ProductId = catalogItem.Id,
-                ProductName = catalogItem.Name,
-                PictureUrl = catalogItem.PictureUri,
-                UnitPrice = catalogItem.Price,
-                Quantity = 1
-            };
+            //var authToken = _settingsService.AuthAccessToken;
+            //var userInfo = await _userService.GetUserInfoAsync(authToken);
+            //var basketItem = new BasketItem
+            //{
+            //    ProductId = catalogItem.Id,
+            //    ProductName = catalogItem.Name,
+            //    PictureUrl = catalogItem.PictureUri,
+            //    UnitPrice = catalogItem.Price,
+            //    Quantity = 1
+            //};
+
+            //await _basketService.AddBasketItemAsync(new CustomerBasket
+            //{
+            //    BuyerId = userInfo.UserId,
+            //    Items = new List<BasketItem> { basketItem }
+            //}, authToken);
 
 
 
-            await _basketService.AddBasketItemAsync(new CustomerBasket
-            {
-                BuyerId = userInfo.UserId,
-                Items = new List<BasketItem> { basketItem }
-            }, authToken);
 
-            //var basketViewModel = ViewModelLocator.Resolve<BasketViewModel>();
-            //if(basketViewModel != null)
-            //    basketViewModel.BadgeCount++;
-            //MessagingCenter.Send(this, MessageKeys.AddProduct, catalogItem);
-
-            await NavigationService.NavigateToAsync<MainViewModel>(new TabParameter { TabIndex = 2 });
+            //await NavigationService.NavigateToAsync<MainViewModel>(new TabParameter { TabIndex = 2 });
             //await NavigationService.NavigateToAsync<BasketViewModel>(catalogItem);
+            //await NavigationService.RemoveLastFromBackStackAsync();
         }
 
         private async Task FilterAsync()

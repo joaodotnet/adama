@@ -82,7 +82,7 @@
                     HorizontalOptions="Center"
                     VerticalOptions="Center"/>
             </Grid>
-            <!--<flv:FlowListView x:Name="Products" 
+            <flv:FlowListView x:Name="Products" 
                               FlowColumnCount="4" 
                               SeparatorVisibility="None" 
                               HasUnevenRows="True"
@@ -101,8 +101,8 @@
                     </DataTemplate>
                 </flv:FlowListView.FlowColumnTemplate>
 
-            </flv:FlowListView>-->
-            <ListView 
+            </flv:FlowListView>
+            <!--<ListView 
                 x:Name="Products"       
                 IsVisible="{Binding Products.Count, Converter={StaticResource CountToBoolConverter}}"
                 ItemsSource="{Binding Products}"
@@ -123,7 +123,7 @@
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-            </ListView>
+            </ListView>-->
         </Grid>
         <!-- INDICATOR -->
         <ActivityIndicator

@@ -160,8 +160,8 @@ namespace DamaNoJornal.Core.ViewModels
                 await _basketService.ClearBasketAsync(Order.BuyerId, authToken);
 
                 // Reset Basket badge
-                var basketViewModel = ViewModelLocator.Resolve<BasketViewModel>();
-                basketViewModel.BadgeCount = 0;
+                //var basketViewModel = ViewModelLocator.Resolve<BasketViewModel>();
+                //basketViewModel.BadgeCount = 0;
 
                 // Navigate to Orders
                 await NavigationService.NavigateToAsync<MainViewModel>(new TabParameter { TabIndex = 1 });
