@@ -31,6 +31,17 @@ namespace DamaNoJornal.Core.ViewModels
             _settingsService = settingsService;
             _basketService = basketService;
             _userService = userService;
+
+            //System.Diagnostics.Debug.WriteLine("############## Unsubcribe 1 #################");
+            //MessagingCenter.Unsubscribe<CatalogViewModel, CatalogItem>(this, MessageKeys.AddProduct);
+            //System.Diagnostics.Debug.WriteLine("############## Subcribe 1 #################");
+            //MessagingCenter.Subscribe<CatalogViewModel, CatalogItem>(this, MessageKeys.AddProduct, async (sender, arg) =>
+            //{
+            //    System.Diagnostics.Debug.WriteLine("############## Executing Subscribe Method #################");
+            //    BadgeCount++;
+
+            //    await AddCatalogItemAsync(arg);
+            //});
         }
 
         public int BadgeCount
@@ -69,18 +80,18 @@ namespace DamaNoJornal.Core.ViewModels
 
         public override async Task InitializeAsync(object navigationData)
         {
-           
+
             if (BasketItems == null)
                 BasketItems = new ObservableCollection<BasketItem>();
 
             var authToken = _settingsService.AuthAccessToken;
             var userInfo = await _userService.GetUserInfoAsync(authToken);
 
-            //if (navigationData is CatalogItem)
-            //{
+            if (navigationData is CatalogItem)
+            {
 
-            //    await AddCatalogItemAsync((CatalogItem)navigationData);
-            //}
+                await AddCatalogItemAsync((CatalogItem)navigationData);
+            }
 
             // Update Basket
             var basket = await _basketService.GetBasketAsync(userInfo.UserId, authToken);
@@ -104,10 +115,10 @@ namespace DamaNoJornal.Core.ViewModels
             //    System.Diagnostics.Debug.WriteLine("############## Executing Subscribe Method #################");
             //    BadgeCount++;
 
-            //    //await AddCatalogItemAsync(arg);
+            //    await AddCatalogItemAsync(arg);
             //});
 
-            //await base.InitializeAsync(navigationData);
+            await base.InitializeAsync(navigationData);
         }
 
         private async Task AddCatalogItemAsync(CatalogItem item)
@@ -175,10 +186,8 @@ namespace DamaNoJornal.Core.ViewModels
         {
             if (BasketItems.Any())
             {
-                //System.Diagnostics.Debug.WriteLine($"############## Force Unsubcribe #################");
-                //MessagingCenter.Unsubscribe<CatalogViewModel, CatalogItem>(this, MessageKeys.AddProduct);
                 await NavigationService.NavigateToAsync<CheckoutViewModel>(BasketItems);
             }
-        }        
+        }
     }
 }
