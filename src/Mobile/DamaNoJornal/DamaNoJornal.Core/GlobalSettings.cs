@@ -5,6 +5,9 @@
         public const string AzureTag = "Azure";
         public const string MockTag = "Mock";
         public const string DefaultEndpoint = "http://localhost:50390"; // i.e.: "http://YOUR_IP" or "http://YOUR_DNS_NAME"
+        public const string JueAuthToken = "AAABBBCCC_JUE";
+        public const string SueAuthToken = "AAABBBCCC_SUE";
+        public const string SoniaAuthToken = "AAABBBCCC_SONIA";
 
         private string _baseEndpoint;
         private static readonly GlobalSetting _instance = new GlobalSetting();
@@ -35,6 +38,7 @@
         public string ClientSecret { get { return "secret"; }}
 
         public string AuthToken { get; set; }
+        
 
         public string RegisterWebsite { get; set; }
 

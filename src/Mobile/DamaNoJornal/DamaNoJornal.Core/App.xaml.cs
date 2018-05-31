@@ -32,6 +32,8 @@ namespace DamaNoJornal
         private void InitApp()
         {
             _settingsService = ViewModelLocator.Resolve<ISettingsService>();
+            _settingsService.UseMocks = false;
+            _settingsService.UrlBase = "http://localhost:50390";
             if (!_settingsService.UseMocks)
                 ViewModelLocator.UpdateDependencies(_settingsService.UseMocks);
         }

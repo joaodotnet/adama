@@ -90,10 +90,10 @@ namespace DamaNoJornal.Core.ViewModels
                 {
                     Id = Guid.NewGuid(), //!string.IsNullOrEmpty(userInfo?.UserId) ? new Guid(userInfo.UserId) : Guid.NewGuid(),
                     Street = userInfo?.Street,
-                    ZipCode = userInfo?.ZipCode,
+                    ZipCode = userInfo?.PostalCode,
                     State = userInfo?.State,
                     Country = userInfo?.Country,
-                    City = userInfo?.Address
+                    City = userInfo?.City
                 };
 
                 // Create Payment Info
