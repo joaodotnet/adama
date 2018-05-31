@@ -120,7 +120,7 @@ namespace DamaNoJornal.Core.ViewModels
             }
         }
 
-        public ICommand MockSignInCommand => new Command(async () => await MockSignInAsync());
+        public ICommand MockSignInCommand => new Command<string>(async (user) => await MockSignInAsync(user));
 
         public ICommand SignInCommand => new Command(async () => await SignInAsync());
 
@@ -149,34 +149,48 @@ namespace DamaNoJornal.Core.ViewModels
             return base.InitializeAsync(navigationData);
         }
 
-        private async Task MockSignInAsync()
+        private async Task MockSignInAsync(string user)
         {
             IsBusy = true;
             IsValid = true;
-            bool isValid = Validate();
-            bool isAuthenticated = false;
+            //bool isValid = Validate();
+            bool isAuthenticated = true;
 
-            if (isValid)
-            {
-                try
-                {
-                    await Task.Delay(10);
+            //if (isValid)
+            //{
+            //    try
+            //    {
+            //        await Task.Delay(10);
 
-                    isAuthenticated = true;
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"[SignIn] Error signing in: {ex}");
-                }
-            }
-            else
-            {
-                IsValid = false;
-            }
+            //        isAuthenticated = true;
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Debug.WriteLine($"[SignIn] Error signing in: {ex}");
+            //    }
+            //}
+            //else
+            //{
+            //    IsValid = false;
+            //}
 
             if (isAuthenticated)
             {
-                _settingsService.AuthAccessToken = GlobalSetting.Instance.AuthToken;
+                switch (user)
+                {
+                    case "jue":
+                        _settingsService.AuthAccessToken = GlobalSetting.JueAuthToken;
+                        break;
+                    case "sue":
+                        _settingsService.AuthAccessToken = GlobalSetting.SueAuthToken;
+                        break;
+                    case "sonia":
+                        _settingsService.AuthAccessToken = GlobalSetting.SoniaAuthToken;
+                        break;
+                    default:
+                        _settingsService.AuthAccessToken = GlobalSetting.Instance.AuthToken;
+                        break;
+                }                
 
                 await NavigationService.NavigateToAsync<MainViewModel>();
                 await NavigationService.RemoveLastFromBackStackAsync();

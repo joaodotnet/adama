@@ -26,7 +26,7 @@ namespace DamaNoJornal.Core.Models.User
         public string CardSecurityNumber { get; set; }
 
         [JsonProperty("address_city")]
-        public string Address { get; set; }
+        public string City { get; set; }
 
         [JsonProperty("address_country")]
         public string Country { get; set; }
@@ -38,7 +38,7 @@ namespace DamaNoJornal.Core.Models.User
         public string Street { get; set; }
 
         [JsonProperty("address_zip_code")]
-        public string ZipCode { get; set; }
+        public string PostalCode { get; set; }
 
         [JsonProperty("email")]
         public string Email { get; set; }

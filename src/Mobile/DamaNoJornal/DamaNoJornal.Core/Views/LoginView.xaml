@@ -18,7 +18,7 @@
             <converters:FirstValidationErrorConverter x:Key="FirstValidationErrorConverter" />
             <converters:WebNavigatingEventArgsConverter x:Key="WebNavigatingEventArgsConverter" />
             <converters:WebNavigatedEventArgsConverter x:Key="WebNavigatedEventArgsConverter" />
-            
+
             <Style x:Key="TitleLabelStyle"
                 TargetType="{x:Type Label}">
                 <Setter Property="FontFamily"
@@ -42,7 +42,7 @@
                 <Setter Property="TextColor"
                     Value="{StaticResource GreenColor}" />
                 <Setter Property="HorizontalOptions"
-                    Value="Start" />
+                    Value="Center" />
             </Style>
 
             <Style x:Key="LoginButtonStyle"
@@ -88,7 +88,7 @@
                 <Setter Property="Margin"
                     Value="12" />
             </Style>
-            
+
             <animations:StoryBoard
               x:Key="LoginAnimation"
               Target="{x:Reference LoginPanel}">
@@ -144,13 +144,6 @@
                         Text="]"
                         TextColor="{StaticResource LightGreenColor}"/>
                 </StackLayout>
-                <Grid
-                  Grid.Column="1"
-                  HorizontalOptions="Center">
-                    <Label
-                        Text="REGISTER"
-                        TextColor="Gray"/>
-                </Grid>
                 <StackLayout  
                   Grid.Column="2"
                   Orientation="Horizontal"
@@ -165,15 +158,73 @@
                 </StackLayout>
             </Grid>
             <!-- INFO -->
-            <Label
+            <!--<Label
               Grid.Row="1"
               Text="ARE YOU REGISTERED?"
-              Style="{StaticResource TitleLabelStyle}"/>
+              Style="{StaticResource TitleLabelStyle}"/>-->
             <!-- LOGIN FORM -->
             <StackLayout   
                 Grid.Row="2"
                 Margin="24">
-                <Label
+                <StackLayout 
+                    Orientation="Horizontal"
+                    HorizontalOptions="Center">
+                    <StackLayout>
+                        <Button BackgroundColor="LightGray" >
+                            <Button.Image>
+                                <OnPlatform x:TypeArguments="FileImageSource">
+                                    <On Platform="UWP, WinRT, WinPhone" Value="Assets/img-joao.png" />
+                                </OnPlatform>
+                            </Button.Image>
+                            <Button.GestureRecognizers>
+                                <TapGestureRecognizer
+                                Command="{Binding MockSignInCommand}"
+                                CommandParameter="jue"
+                                NumberOfTapsRequired="1" />
+                            </Button.GestureRecognizers>
+                        </Button>
+                        <Label 
+                            Text="João"
+                            Style="{StaticResource HeaderLabelStyle}"/>
+                    </StackLayout>
+                    <StackLayout>
+                        <Button BackgroundColor="LightGray" >
+                            <Button.Image>
+                                <OnPlatform x:TypeArguments="FileImageSource">
+                                    <On Platform="UWP, WinRT, WinPhone" Value="Assets/img-sue.png" />
+                                </OnPlatform>
+                            </Button.Image>
+                            <Button.GestureRecognizers>
+                                <TapGestureRecognizer
+                                Command="{Binding MockSignInCommand}"
+                                CommandParameter="sue"
+                                NumberOfTapsRequired="1" />
+                            </Button.GestureRecognizers>
+                        </Button>
+                        <Label 
+                            Text="Susana"
+                            Style="{StaticResource HeaderLabelStyle}"/>
+                    </StackLayout>
+                    <StackLayout>
+                        <Button BackgroundColor="LightGray" >
+                            <Button.Image>
+                                <OnPlatform x:TypeArguments="FileImageSource">
+                                    <On Platform="UWP, WinRT, WinPhone" Value="Assets/img-sonia.png" />
+                                </OnPlatform>
+                            </Button.Image>
+                            <Button.GestureRecognizers>
+                                <TapGestureRecognizer
+                                Command="{Binding MockSignInCommand}"
+                                CommandParameter="sonia"
+                                NumberOfTapsRequired="1" />
+                            </Button.GestureRecognizers>
+                        </Button>
+                        <Label 
+                            Text="Sonia"
+                            Style="{StaticResource HeaderLabelStyle}"/>
+                    </StackLayout>
+                </StackLayout>
+                <!--<Label
                   Text="User name or email"
                   Style="{StaticResource HeaderLabelStyle}" />
                 <Entry Text="{Binding UserName.Value, Mode=TwoWay}">
@@ -228,9 +279,10 @@
                 </Entry>
 				<Label 
 					Text="{Binding Password.Errors, Converter={StaticResource FirstValidationErrorConverter}"
-					Style="{StaticResource ValidationErrorLabelStyle}" />
+					Style="{StaticResource ValidationErrorLabelStyle}" />-->
             </StackLayout>
             <!-- LOGIN BUTTON -->
+            <!--
             <Grid
                 BackgroundColor="{StaticResource LightGreenColor}"
                 Grid.Row="3"
@@ -245,7 +297,7 @@
                         Command="{Binding MockSignInCommand}"
                         NumberOfTapsRequired="1" />
                 </Grid.GestureRecognizers>
-            </Grid>
+            </Grid>-->
         </Grid>
         <!-- AUTH -->
         <Grid

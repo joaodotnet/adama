@@ -143,6 +143,9 @@
     <Content Include="Assets\fake_product_03.png" />
     <Content Include="Assets\fake_product_04.png" />
     <Content Include="Assets\fake_product_05.png" />
+    <Content Include="Assets\img-joao.png" />
+    <Content Include="Assets\img-sonia.png" />
+    <Content Include="Assets\img-sue.png" />
     <Content Include="Assets\menu_campaigns.png" />
     <Content Include="Assets\menu_cart.png" />
     <Content Include="Assets\menu_filter.png" />
