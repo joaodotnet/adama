@@ -66,8 +66,11 @@
                 Text="FILTER"
                 Style="{StaticResource FilterLabelStyle}"/>
             <Grid.GestureRecognizers>
-                <TapGestureRecognizer 
+                <!--<TapGestureRecognizer 
                         Tapped="OnFilterChanged"
+                        NumberOfTapsRequired="1" />-->
+                <TapGestureRecognizer            
+                        Command="{Binding FilterCommand}"  
                         NumberOfTapsRequired="1" />
             </Grid.GestureRecognizers>
         </Grid>

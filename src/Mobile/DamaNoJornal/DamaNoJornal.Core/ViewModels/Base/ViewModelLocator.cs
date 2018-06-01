@@ -53,6 +53,7 @@ namespace DamaNoJornal.Core.ViewModels.Base
             _container.Register<SettingsViewModel>();
             _container.Register<CampaignViewModel>();
             _container.Register<CampaignDetailsViewModel>();
+            _container.Register<CatalogFilterViewModel>();
 
             // Services - by default, TinyIoC will register interface registrations as singletons.
             _container.Register<INavigationService, NavigationService>();

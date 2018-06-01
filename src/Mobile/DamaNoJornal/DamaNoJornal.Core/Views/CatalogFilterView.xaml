@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DamaNoJornal.Core.Views.CatalogFilterView"
+             xmlns:viewModelBase="clr-namespace:DamaNoJornal.Core.ViewModels.Base;assembly=DamaNoJornal.Core"
+             xmlns:behaviors="clr-namespace:DamaNoJornal.Core.Behaviors;assembly=DamaNoJornal.Core"
+             xmlns:flv="clr-namespace:DLToolkit.Forms.Controls;assembly=DLToolkit.Forms.Controls.FlowListView"
+             viewModelBase:ViewModelLocator.AutoWireViewModel="true"
+             Title="Filtro">
+    <ContentPage.Resources>
+        <Style x:Key="ProductsListStyle" 
+               TargetType="{x:Type ListView}">
+            <Setter Property="RowHeight"
+                        Value="400" />
+            <Setter Property="VerticalOptions"
+                        Value="Center" />
+            <Setter Property="Margin"
+                        Value="0" />
+        </Style>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <flv:FlowListView x:Name="Categories" 
+                              FlowColumnCount="4" 
+                              SeparatorVisibility="None" 
+                              HasUnevenRows="True"
+                              FlowItemsSource="{Binding Categories}"
+                              Style="{StaticResource ProductsListStyle}">
+            <flv:FlowListView.Behaviors>
+                <behaviors:EventToCommandBehavior                    
+                        EventName="FlowItemTapped"
+                        Command="{Binding FilterByCategoryCommand}"
+                        EventArgsConverter="{StaticResource ItemTappedEventArgsConverter}" />
+            </flv:FlowListView.Behaviors>
+
+            <flv:FlowListView.FlowColumnTemplate>
+                <DataTemplate>
+                    <Label 
+                        Text="{Binding Name}"/>
+                </DataTemplate>
+            </flv:FlowListView.FlowColumnTemplate>
+
+        </flv:FlowListView>
+    </ContentPage.Content>
+</ContentPage>

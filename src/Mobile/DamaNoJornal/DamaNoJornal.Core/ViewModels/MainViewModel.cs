@@ -17,8 +17,9 @@ namespace DamaNoJornal.Core.ViewModels
             if (navigationData is TabParameter)
             {
                 // Change selected application tab
-                var tabIndex = ((TabParameter)navigationData).TabIndex;
-                MessagingCenter.Send(this, MessageKeys.ChangeTab, tabIndex);
+                //var tabIndex = ((TabParameter)navigationData).TabIndex;
+                var tabParameter = ((TabParameter)navigationData);
+                MessagingCenter.Send(this, MessageKeys.ChangeTab, tabParameter);
             }
 
             return base.InitializeAsync(navigationData);

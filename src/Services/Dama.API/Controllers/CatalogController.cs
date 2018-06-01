@@ -123,14 +123,39 @@ namespace Dama.API.Controllers
             return Ok(model);
         }
 
+        [HttpGet]
+        [Route("items/type/{catalogTypeId}")]
+        [ProducesResponseType(typeof(PaginatedItemsViewModel<CatalogItem>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> FilterByType(int? catalogTypeId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
+        {
+            var model = await FilterProducts(catalogTypeId, null, pageSize, pageIndex);
+            return Ok(model);
+        }
+
+        [HttpGet]
+        [Route("items/category/{catalogCategoryId}")]
+        [ProducesResponseType(typeof(PaginatedItemsViewModel<CatalogItem>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> FilterByCategory(int? catalogCategoryId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
+        {
+            var model = await FilterProducts(null, catalogCategoryId, pageSize, pageIndex);
+            return Ok(model);
+        }
+
         // GET api/v1/[controller]/items/type/1/brand/null[?pageSize=3&pageIndex=10]
         [HttpGet]
         [Route("[action]/type/{catalogTypeId}/category/{catalogCategoryId}")]
         [ProducesResponseType(typeof(PaginatedItemsViewModel<CatalogItem>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Items(int? catalogTypeId, int? catalogCategoryId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
         {
+            PaginatedItemsViewModel<CatalogItem> model = await FilterProducts(catalogTypeId, catalogCategoryId, pageSize, pageIndex);
+
+            return Ok(model);
+        }
+
+        private async Task<PaginatedItemsViewModel<CatalogItem>> FilterProducts(int? catalogTypeId, int? catalogCategoryId, int pageSize, int pageIndex)
+        {
             var root = (IQueryable<CatalogItem>)_damaContext.CatalogItems
-                .Include(x => x.CatalogCategories);
+                            .Include(x => x.CatalogCategories);
 
             if (catalogTypeId.HasValue)
             {
@@ -150,12 +175,27 @@ namespace Dama.API.Controllers
                 .Take(pageSize)
                 .ToListAsync();
 
+            //Skip CatalogCategories
+            List<CatalogItem> items = itemsOnPage.Select(x => new CatalogItem
+            {
+                CatalogIllustration = x.CatalogIllustration,
+                CatalogType = x.CatalogType,
+                Description = x.Description,
+                Id = x.Id,
+                IsFeatured = x.IsFeatured,
+                IsNew = x.IsNew,
+                Name = x.Name,
+                PictureUri = x.PictureUri,
+                Price = x.Price,
+                ShowOnShop = x.ShowOnShop,
+                Sku = x.Sku
+            }).ToList();
+
             //itemsOnPage = ChangeUriPlaceholder(itemsOnPage);
 
             var model = new PaginatedItemsViewModel<CatalogItem>(
-                pageIndex, pageSize, totalItems, itemsOnPage);
-
-            return Ok(model);
+                pageIndex, pageSize, totalItems, items);
+            return model;
         }
 
         // GET api/v1/[controller]/CatalogTypes

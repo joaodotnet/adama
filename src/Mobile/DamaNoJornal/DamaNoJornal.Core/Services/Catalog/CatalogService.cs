@@ -22,10 +22,15 @@ namespace DamaNoJornal.Core.Services.Catalog
             _fixUriService = fixUriService;
         }
 
-        public async Task<ObservableCollection<CatalogItem>> FilterAsync(int catalogBrandId, int catalogTypeId)
+        public async Task<ObservableCollection<CatalogItem>> FilterAsync(int? catalogBrandId, int? catalogTypeId)
         {
-            UriBuilder builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint);
-            builder.Path = $"{ApiUrlBase}/items/type/{catalogTypeId}/brand/{catalogBrandId}";
+            UriBuilder builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint);   
+            if(catalogTypeId.HasValue && catalogBrandId.HasValue)
+                builder.Path = $"{ApiUrlBase}/items/type/{catalogTypeId}/category/{catalogBrandId}";
+            else if (catalogBrandId.HasValue && !catalogTypeId.HasValue)
+                builder.Path = $"{ApiUrlBase}/items/category/{catalogBrandId}";
+            else
+                builder.Path = $"{ApiUrlBase}/items/type/{catalogTypeId}";
             string uri = builder.ToString();
 
             CatalogRoot catalog = await _requestProvider.GetAsync<CatalogRoot>(uri);
