@@ -3,5 +3,6 @@
     public class TabParameter
     {
         public int TabIndex { get; set; }
+        public object ParameterObj { get; set; }
     }
 }

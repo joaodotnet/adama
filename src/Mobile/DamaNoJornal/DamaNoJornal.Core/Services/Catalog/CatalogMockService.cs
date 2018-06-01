@@ -38,7 +38,7 @@ namespace DamaNoJornal.Core.Services.Catalog
             return MockCatalog;
         }
 
-        public async Task<ObservableCollection<CatalogItem>> FilterAsync(int catalogBrandId, int catalogTypeId)
+        public async Task<ObservableCollection<CatalogItem>> FilterAsync(int? catalogBrandId, int? catalogTypeId)
         {
             await Task.Delay(10);
 

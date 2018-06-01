@@ -25,4 +25,9 @@
     <Folder Include="Services\Permissions\" />
     <Folder Include="Models\Permissions\" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Views\CatalogFilterView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

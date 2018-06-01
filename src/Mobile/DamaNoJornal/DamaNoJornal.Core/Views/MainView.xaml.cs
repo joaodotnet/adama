@@ -1,4 +1,6 @@
-﻿using DamaNoJornal.Core.ViewModels;
+﻿using DamaNoJornal.Core.Models.Catalog;
+using DamaNoJornal.Core.Models.Navigation;
+using DamaNoJornal.Core.ViewModels;
 using DamaNoJornal.Core.ViewModels.Base;
 using Xamarin.Forms;
 
@@ -6,22 +8,19 @@ namespace DamaNoJornal.Core.Views
 {
     public partial class MainView : TabbedPage
     {
+        private object _parameter = null;
         public MainView()
         {
             InitializeComponent();
-        }
-
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
 
             MessagingCenter.Unsubscribe<MainViewModel, int>(this, MessageKeys.ChangeTab);
-            MessagingCenter.Subscribe<MainViewModel, int>(this, MessageKeys.ChangeTab, (sender, arg) =>
+            MessagingCenter.Subscribe<MainViewModel, TabParameter>(this, MessageKeys.ChangeTab, (sender, arg) =>
             {
-               switch(arg)
+                switch (arg.TabIndex)
                 {
                     case 0:
                         CurrentPage = HomeView;
+                        _parameter = arg.ParameterObj;
                         break;
                     case 1:
                         CurrentPage = ProfileView;
@@ -34,8 +33,13 @@ namespace DamaNoJornal.Core.Views
                         break;
                 }
             });
+        }
 
-			await ((CatalogViewModel)HomeView.BindingContext).InitializeAsync(null);
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+			await ((CatalogViewModel)HomeView.BindingContext).InitializeAsync(_parameter);
 			await ((BasketViewModel)BasketView.BindingContext).InitializeAsync(null);
 			await ((ProfileViewModel)ProfileView.BindingContext).InitializeAsync(null);
             await ((CampaignViewModel)CampaignView.BindingContext).InitializeAsync(null);
@@ -60,6 +64,6 @@ namespace DamaNoJornal.Core.Views
                 // Force profile view refresh every time we access it
                 await (ProfileView.BindingContext as ViewModelBase).InitializeAsync(null);
             }
-        }
+        }        
     }
 }

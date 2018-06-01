@@ -102,10 +102,21 @@ namespace DamaNoJornal.Core.ViewModels
         {
             IsBusy = true;
 
+            if (navigationData is CatalogBrand)
+            {
+                Brand = (CatalogBrand)navigationData;
+                System.Diagnostics.Debug.WriteLine($"Category: {Brand.Name}");
+                Products = await _productsService.FilterAsync(Brand?.Id, Type?.Id);
+            }
+            else
+            {
+                Products = await _productsService.GetCatalogAsync();
+            }
+
             // Get Catalog, Brands and Types
-            Products = await _productsService.GetCatalogAsync();
-            Brands = await _productsService.GetCatalogCategoryAsync();
-            Types = await _productsService.GetCatalogTypeAsync();
+            //Products = await _productsService.GetCatalogAsync();
+            //Brands = await _productsService.GetCatalogCategoryAsync();
+            //Types = await _productsService.GetCatalogTypeAsync();
 
             IsBusy = false;
         }
@@ -143,18 +154,19 @@ namespace DamaNoJornal.Core.ViewModels
 
         private async Task FilterAsync()
         {
-            if (Brand == null || Type == null)
-            {
-                return;
-            }
+            await NavigationService.NavigateToAsync<CatalogFilterViewModel>();
+            //if (Brand == null || Type == null)
+            //{
+            //    return;
+            //}
 
-            IsBusy = true;
+            //IsBusy = true;
 
-            // Filter catalog products
-            MessagingCenter.Send(this, MessageKeys.Filter);
-            Products = await _productsService.FilterAsync(Brand.Id, Type.Id);
+            //// Filter catalog products
+            //MessagingCenter.Send(this, MessageKeys.Filter);
+            //Products = await _productsService.FilterAsync(Brand.Id, Type.Id);
 
-            IsBusy = false;
+            //IsBusy = false;
         }
 
         private async Task ClearFilterAsync()
