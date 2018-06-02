@@ -5,40 +5,199 @@
              xmlns:viewModelBase="clr-namespace:DamaNoJornal.Core.ViewModels.Base;assembly=DamaNoJornal.Core"
              xmlns:behaviors="clr-namespace:DamaNoJornal.Core.Behaviors;assembly=DamaNoJornal.Core"
              xmlns:flv="clr-namespace:DLToolkit.Forms.Controls;assembly=DLToolkit.Forms.Controls.FlowListView"
+             xmlns:converters="clr-namespace:DamaNoJornal.Core.Converters;assembly=DamaNoJornal.Core"
              viewModelBase:ViewModelLocator.AutoWireViewModel="true"
              Title="Filtro">
     <ContentPage.Resources>
         <Style x:Key="ProductsListStyle" 
                TargetType="{x:Type ListView}">
             <Setter Property="RowHeight"
-                        Value="400" />
+                        Value="250" />
             <Setter Property="VerticalOptions"
                         Value="Center" />
             <Setter Property="Margin"
                         Value="0" />
         </Style>
+        <Style x:Key="FiltersButtonStyle"  
+             TargetType="{x:Type Button}">
+            <Setter Property="FontFamily"
+                Value="{StaticResource MontserratRegular}" />
+            <Setter Property="TextColor"
+                Value="{StaticResource WhiteColor}" />
+            <!--<Setter Property="BackgroundColor"
+                Value="{StaticResource LightGreenColor}" />-->
+            <Setter Property="HeightRequest"
+                Value="48" />
+            <Setter Property="BorderRadius"
+                Value="0" />
+            <Setter Property="BorderWidth"
+                Value="0" />
+            <Setter Property="HorizontalOptions"
+                Value="FillAndExpand" />
+            <!--<Setter Property="VerticalOptions"
+                Value="Fill" />-->
+        </Style>
+        <Style x:Key="FilterButtonStyle"  
+             TargetType="{x:Type Button}">
+            <Setter Property="FontFamily"
+                Value="{StaticResource MontserratRegular}" />
+            <Setter Property="TextColor"
+                Value="{StaticResource WhiteColor}" />
+            <Setter Property="BackgroundColor"
+                Value="{StaticResource LightGreenColor}" />
+            <Setter Property="HeightRequest"
+                Value="48" />
+            <Setter Property="BorderRadius"
+                Value="0" />
+            <Setter Property="BorderWidth"
+                Value="0" />
+            <Setter Property="HorizontalOptions"
+                Value="FillAndExpand"  />
+            <Setter Property="VerticalOptions"
+                Value="Fill" />
+        </Style>
+
+        <Style
+        x:Key="ClearFilterButtonStyle"
+        TargetType="{x:Type Button}"
+        BasedOn="{StaticResource FilterButtonStyle}">
+            <Setter Property="TextColor"
+                Value="{StaticResource BlackColor}" />
+            <Setter Property="BackgroundColor"
+                Value="{StaticResource GrayColor}" />
+        </Style>
     </ContentPage.Resources>
     <ContentPage.Content>
-        <flv:FlowListView x:Name="Categories" 
+        <StackLayout>
+            <StackLayout 
+                Orientation="Horizontal" 
+                HorizontalOptions="FillAndExpand">
+                <Button                    
+                    BackgroundColor="{Binding CategoryBgButton}"
+                    Text="{Binding CategoryTextButton}" 
+                    Style="{StaticResource FiltersButtonStyle}"
+                    Command="{Binding CategoryCommand}"/>
+                <Button  
+                    BackgroundColor="{Binding TypeBgButton}"
+                    Text="{Binding TypeTextButton}" 
+                    Style="{StaticResource FiltersButtonStyle}"
+                    Command="{Binding TypeCommand}"/>
+            </StackLayout>
+            <flv:FlowListView x:Name="CategoriesList" 
+                              IsVisible="{Binding IsCategoriesListVisible}"
                               FlowColumnCount="4" 
                               SeparatorVisibility="None" 
                               HasUnevenRows="True"
                               FlowItemsSource="{Binding Categories}"
                               Style="{StaticResource ProductsListStyle}">
-            <flv:FlowListView.Behaviors>
-                <behaviors:EventToCommandBehavior                    
+                <flv:FlowListView.Behaviors>
+                    <behaviors:EventToCommandBehavior                    
                         EventName="FlowItemTapped"
-                        Command="{Binding FilterByCategoryCommand}"
+                        Command="{Binding OnCategoryItemTappedCommand}"
                         EventArgsConverter="{StaticResource ItemTappedEventArgsConverter}" />
-            </flv:FlowListView.Behaviors>
+                </flv:FlowListView.Behaviors>
 
-            <flv:FlowListView.FlowColumnTemplate>
-                <DataTemplate>
-                    <Label 
-                        Text="{Binding Name}"/>
-                </DataTemplate>
-            </flv:FlowListView.FlowColumnTemplate>
+                <flv:FlowListView.FlowColumnTemplate>
+                    <DataTemplate>
+                        <StackLayout 
+                        HorizontalOptions="CenterAndExpand" 
+                        VerticalOptions="CenterAndExpand"
+                        HeightRequest="200"
+                        WidthRequest="200"
+                        Margin="5"
+                        BackgroundColor="#ef7c8d">
+                            <Label 
+                            Text="{Binding Name}"
+                            TextColor="White"
+                            FontSize="Medium"
+                            FontFamily="Quicksand"
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalOptions="CenterAndExpand"/>
+                        </StackLayout>
+                    </DataTemplate>
+                </flv:FlowListView.FlowColumnTemplate>
+            </flv:FlowListView>
+            <!--<StackLayout 
+                x:Name="CategorySelected"
+                IsVisible="{Binding IsCategoriesListVisible, Converter={StaticResource InverseBoolConverter}}"
+                HorizontalOptions="CenterAndExpand" 
+                VerticalOptions="CenterAndExpand"
+                HeightRequest="200"
+                WidthRequest="200"
+                Margin="5"
+                BackgroundColor="#ef7c8d">
+                <Label 
+                    Text="{Binding Category.Name}"
+                    TextColor="White"
+                    FontSize="Medium"
+                    FontFamily="Quicksand"
+                    VerticalOptions="CenterAndExpand"
+                    HorizontalOptions="CenterAndExpand"/>
+            </StackLayout>-->
+            <!--<Label 
+                Text="Tipos de Produto"
+                HorizontalOptions="CenterAndExpand"
+                FontSize="Large"/>-->
+            <flv:FlowListView x:Name="TypesList" 
+                              IsVisible="{Binding IsTypeListVisible}"
+                              FlowColumnCount="4" 
+                              SeparatorVisibility="None" 
+                              HasUnevenRows="True"
+                              FlowItemsSource="{Binding Types}"
+                              Style="{StaticResource ProductsListStyle}">
+                <flv:FlowListView.Behaviors>
+                    <behaviors:EventToCommandBehavior                    
+                        EventName="FlowItemTapped"
+                        Command="{Binding OnTypeItemTappedCommand}"
+                        EventArgsConverter="{StaticResource ItemTappedEventArgsConverter}" />
+                </flv:FlowListView.Behaviors>
 
-        </flv:FlowListView>
+                <flv:FlowListView.FlowColumnTemplate>
+                    <DataTemplate>
+                        <StackLayout 
+                        HorizontalOptions="CenterAndExpand" 
+                        VerticalOptions="CenterAndExpand"
+                        HeightRequest="200"
+                        WidthRequest="200"
+                        Margin="5"
+                        BackgroundColor="#ef7c8d">
+                            <Label 
+                            Text="{Binding Description}"
+                            TextColor="White"
+                            FontSize="Medium"
+                            FontFamily="Quicksand"
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalOptions="CenterAndExpand"/>
+                        </StackLayout>
+
+                    </DataTemplate>
+                </flv:FlowListView.FlowColumnTemplate>
+            </flv:FlowListView>
+            <!--<StackLayout 
+                x:Name="TypeSelected"
+                IsVisible="{Binding IsTypeListVisible, Converter={StaticResource InverseBoolConverter}}"
+                HorizontalOptions="CenterAndExpand" 
+                VerticalOptions="CenterAndExpand"
+                HeightRequest="200"
+                WidthRequest="200"
+                Margin="5"
+                BackgroundColor="#ef7c8d">
+                <Label 
+                    Text="{Binding Type.Description}"
+                    TextColor="White"
+                    FontSize="Medium"
+                    FontFamily="Quicksand"
+                    VerticalOptions="CenterAndExpand"
+                    HorizontalOptions="CenterAndExpand"/>
+            </StackLayout>-->
+            <Button 
+              Text="Aplicar" 
+              Style="{StaticResource FilterButtonStyle}"
+              Command="{Binding FilterCommand}"/>
+            <Button
+              Text="Limpar"              
+              Style="{StaticResource ClearFilterButtonStyle}"
+              Command="{Binding ClearFilterCommand}"/>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

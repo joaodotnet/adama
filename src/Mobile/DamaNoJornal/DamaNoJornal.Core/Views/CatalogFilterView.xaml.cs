@@ -16,5 +16,7 @@ namespace DamaNoJornal.Core.Views
 		{
 			InitializeComponent ();
 		}
-	}
+        
+        
+    }
 }

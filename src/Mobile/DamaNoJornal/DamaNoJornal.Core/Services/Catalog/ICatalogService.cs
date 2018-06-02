@@ -8,7 +8,7 @@ namespace DamaNoJornal.Core.Services.Catalog
     {
         Task<ObservableCollection<CatalogBrand>> GetCatalogCategoryAsync();
         Task<ObservableCollection<CatalogItem>> FilterAsync(int? catalogBrandId, int? catalogTypeId);
-        Task<ObservableCollection<CatalogType>> GetCatalogTypeAsync();
+        Task<ObservableCollection<CatalogType>> GetCatalogTypeAsync(int? catalogCategoryId = null);
         Task<ObservableCollection<CatalogItem>> GetCatalogAsync();
     }
 }

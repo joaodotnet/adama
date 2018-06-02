@@ -12,8 +12,9 @@ using System.Threading.Tasks;
 namespace Dama.API.Controllers
 {
     [Route("api/v1/[controller]")]
+    [ApiController]
 //    [Authorize]
-    public class BasketController : Controller
+    public class BasketController : ControllerBase
     {
         private readonly IBasketRepository _repository;
         private readonly IRepository<CatalogItem> _itemRepository;

@@ -1,10 +1,8 @@
 ﻿using DamaNoJornal.Windows.Renderers;
-using System;
 
 [assembly: Xamarin.Forms.Platform.UWP.ExportRenderer(typeof(DLToolkit.Forms.Controls.FlowListView), typeof(CustomListViewRenderer))]
 namespace DamaNoJornal.Windows.Renderers
 {
-    using global::Windows.UI.Xaml.Controls;
     using Xamarin.Forms.Platform.UWP;
 
     public class CustomListViewRenderer : ListViewRenderer
@@ -14,7 +12,7 @@ namespace DamaNoJornal.Windows.Renderers
             base.OnElementChanged(e);
 
             if (List != null)
-                List.SelectionMode = ListViewSelectionMode.None;
+                List.SelectionMode = global::Windows.UI.Xaml.Controls.ListViewSelectionMode.None;
         }
     }
 }
