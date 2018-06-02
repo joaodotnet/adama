@@ -14,7 +14,8 @@ namespace Dama.API.Controllers
 {
     [Produces("application/json")]
     [Route("api/v1/orders")]
-    public class OrderController : Controller
+    [ApiController]
+    public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;
         private readonly IBasketRepository _repository;

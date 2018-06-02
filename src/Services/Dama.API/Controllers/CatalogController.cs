@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 namespace Dama.API.Controllers
 {
     [Route("api/v1/[controller]")]
+    [ApiController]
     public class CatalogController : ControllerBase
     {
         private readonly DamaContext _damaContext;
@@ -32,7 +33,7 @@ namespace Dama.API.Controllers
         [Route("items")]
         [ProducesResponseType(typeof(PaginatedItemsViewModel<CatalogItem>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IEnumerable<CatalogItem>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Items([FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0, [FromQuery] string ids = null)
+        public async Task<IActionResult> Items([FromQuery]int pageSize = 100, [FromQuery]int pageIndex = 0, [FromQuery] string ids = null)
         {
             if (!string.IsNullOrEmpty(ids))
             {
@@ -102,7 +103,7 @@ namespace Dama.API.Controllers
         [HttpGet]
         [Route("[action]/withname/{name:minlength(1)}")]
         [ProducesResponseType(typeof(PaginatedItemsViewModel<CatalogItem>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Items(string name, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
+        public async Task<IActionResult> Items(string name, [FromQuery]int pageSize = 100, [FromQuery]int pageIndex = 0)
         {
 
             var totalItems = await _damaContext.CatalogItems
@@ -126,7 +127,7 @@ namespace Dama.API.Controllers
         [HttpGet]
         [Route("items/type/{catalogTypeId}")]
         [ProducesResponseType(typeof(PaginatedItemsViewModel<CatalogItem>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> FilterByType(int? catalogTypeId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
+        public async Task<IActionResult> FilterByType(int? catalogTypeId, [FromQuery]int pageSize = 100, [FromQuery]int pageIndex = 0)
         {
             var model = await FilterProducts(catalogTypeId, null, pageSize, pageIndex);
             return Ok(model);
@@ -135,7 +136,7 @@ namespace Dama.API.Controllers
         [HttpGet]
         [Route("items/category/{catalogCategoryId}")]
         [ProducesResponseType(typeof(PaginatedItemsViewModel<CatalogItem>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> FilterByCategory(int? catalogCategoryId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
+        public async Task<IActionResult> FilterByCategory(int? catalogCategoryId, [FromQuery]int pageSize = 100, [FromQuery]int pageIndex = 0)
         {
             var model = await FilterProducts(null, catalogCategoryId, pageSize, pageIndex);
             return Ok(model);
@@ -145,7 +146,7 @@ namespace Dama.API.Controllers
         [HttpGet]
         [Route("[action]/type/{catalogTypeId}/category/{catalogCategoryId}")]
         [ProducesResponseType(typeof(PaginatedItemsViewModel<CatalogItem>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Items(int? catalogTypeId, int? catalogCategoryId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
+        public async Task<IActionResult> Items(int? catalogTypeId, int? catalogCategoryId, [FromQuery]int pageSize = 100, [FromQuery]int pageIndex = 0)
         {
             PaginatedItemsViewModel<CatalogItem> model = await FilterProducts(catalogTypeId, catalogCategoryId, pageSize, pageIndex);
 
@@ -200,13 +201,22 @@ namespace Dama.API.Controllers
 
         // GET api/v1/[controller]/CatalogTypes
         [HttpGet]
-        [Route("[action]")]
-        [ProducesResponseType(typeof(List<CatalogItem>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> CatalogTypes()
+        [Route("[action]/{categoryId:int?}")]
+        [ProducesResponseType(typeof(List<CatalogType>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> CatalogTypes(int? categoryId = null)
         {
-            var items = await _damaContext.CatalogTypes
-                .ToListAsync();
-
+            List<CatalogType> items;
+            if (!categoryId.HasValue)
+                items = await _damaContext.CatalogTypes
+                    .ToListAsync();
+            else
+            {
+                items = await _damaContext.CatalogTypeCategories
+                    .Include(x => x.CatalogType)
+                    .Where(x => x.CategoryId == categoryId)
+                    .Select(x => x.CatalogType)
+                    .ToListAsync();
+            }
             return Ok(items);
         }
 

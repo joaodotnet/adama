@@ -55,7 +55,7 @@ namespace DamaNoJornal.Core.Services.Catalog
             return MockCatalogBrand;
         }
 
-        public async Task<ObservableCollection<CatalogType>> GetCatalogTypeAsync()
+        public async Task<ObservableCollection<CatalogType>> GetCatalogTypeAsync(int? catalogCategoryId = null)
         {
             await Task.Delay(10);
 

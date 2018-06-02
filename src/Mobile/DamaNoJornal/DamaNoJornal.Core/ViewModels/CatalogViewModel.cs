@@ -6,6 +6,7 @@ using DamaNoJornal.Core.Services.Catalog;
 using DamaNoJornal.Core.Services.Settings;
 using DamaNoJornal.Core.Services.User;
 using DamaNoJornal.Core.ViewModels.Base;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -66,6 +67,7 @@ namespace DamaNoJornal.Core.ViewModels
                 _brand = value;
                 RaisePropertyChanged(() => Brand);
                 RaisePropertyChanged(() => IsFilter);
+                RaisePropertyChanged(() => FilterText);
             }
         }
 
@@ -87,6 +89,26 @@ namespace DamaNoJornal.Core.ViewModels
                 _type = value;
                 RaisePropertyChanged(() => Type);
                 RaisePropertyChanged(() => IsFilter);
+                RaisePropertyChanged(() => FilterText);
+            }
+        }
+
+        public string FilterText
+        {
+            get
+            {
+                if (Brand != null && Type != null)
+                    return $"Filtrar ({Brand.Name},{Type.Description})";
+                else if (Brand != null)
+                    return $"Filtrar ({Brand.Name})";
+                else if (Type != null)
+                    return $"Filtrar ({Type.Description})";
+                else
+                    return "Filtrar";
+            }
+            set
+            {
+                RaisePropertyChanged(() => FilterText);
             }
         }
 
@@ -96,16 +118,15 @@ namespace DamaNoJornal.Core.ViewModels
 
         public ICommand FilterCommand => new Command(async () => await FilterAsync());
 
-        public ICommand ClearFilterCommand => new Command(async () => await ClearFilterAsync());
-
         public override async Task InitializeAsync(object navigationData)
         {
             IsBusy = true;
 
-            if (navigationData is CatalogBrand)
+            if (navigationData is Tuple<CatalogBrand,CatalogType>)
             {
-                Brand = (CatalogBrand)navigationData;
-                System.Diagnostics.Debug.WriteLine($"Category: {Brand.Name}");
+                var tuple = (Tuple<CatalogBrand,CatalogType>)navigationData;
+                Brand = tuple.Item1;
+                Type = tuple.Item2;                
                 Products = await _productsService.FilterAsync(Brand?.Id, Type?.Id);
             }
             else
@@ -167,17 +188,6 @@ namespace DamaNoJornal.Core.ViewModels
             //Products = await _productsService.FilterAsync(Brand.Id, Type.Id);
 
             //IsBusy = false;
-        }
-
-        private async Task ClearFilterAsync()
-        {
-            IsBusy = true;
-
-            Brand = null;
-            Type = null;
-            Products = await _productsService.GetCatalogAsync();
-
-            IsBusy = false;
         }
     }
 }

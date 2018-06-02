@@ -72,10 +72,13 @@ namespace DamaNoJornal.Core.Services.Catalog
                 return new ObservableCollection<CatalogBrand>();
         }
 
-        public async Task<ObservableCollection<CatalogType>> GetCatalogTypeAsync()
+        public async Task<ObservableCollection<CatalogType>> GetCatalogTypeAsync(int? catalogCategoryId = null)
         {
             UriBuilder builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint);
-            builder.Path = $"{ApiUrlBase}/catalogtypes";
+            if(!catalogCategoryId.HasValue)
+                builder.Path = $"{ApiUrlBase}/catalogtypes";
+            else
+                builder.Path = $"{ApiUrlBase}/catalogtypes/{catalogCategoryId}";
             string uri = builder.ToString();
 
             IEnumerable<CatalogType> types = await _requestProvider.GetAsync<IEnumerable<CatalogType>>(uri);

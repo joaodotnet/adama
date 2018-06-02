@@ -9,6 +9,8 @@ using Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,7 +32,8 @@ namespace Dama.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc()
-                .AddControllersAsServices();
+                .AddControllersAsServices()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
                 //.AddAuthorization()
                 //.AddJsonFormatters();
 
@@ -96,8 +99,13 @@ namespace Dama.API
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
             app.UseCors("CorsPolicy");
 
+            app.UseHttpsRedirection();
             app.UseMvcWithDefaultRoute();
         }
 
