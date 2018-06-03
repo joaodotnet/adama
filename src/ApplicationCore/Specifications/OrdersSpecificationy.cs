@@ -11,5 +11,12 @@ namespace ApplicationCore.Specifications
             AddInclude(o => o.OrderItems);            
 
         }
+
+        public OrdersSpecification(int orderId)
+            : base(o => o.Id == orderId)
+        {
+            AddInclude(o => o.OrderItems);
+
+        }
     }
 }

@@ -90,6 +90,7 @@
                               SeparatorVisibility="None" 
                               HasUnevenRows="True"
                               FlowItemsSource="{Binding Products}"
+                              FlowRowBackgroundColor="White"
                               Style="{StaticResource ProductsListStyle}">
                 <flv:FlowListView.Behaviors>
                     <behaviors:EventToCommandBehavior                    

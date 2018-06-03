@@ -6,7 +6,7 @@
              xmlns:behaviors="clr-namespace:DamaNoJornal.Core.Behaviors;assembly=DamaNoJornal.Core" 
              xmlns:templates="clr-namespace:DamaNoJornal.Core.Views.Templates;assembly=DamaNoJornal.Core"   
              viewModelBase:ViewModelLocator.AutoWireViewModel="true"
-			 Title="Cart">
+			 Title="Carrinho">
     <ContentPage.Resources>
         <ResourceDictionary>
 
@@ -18,6 +18,18 @@
                         Value="{StaticResource LargerSize}" />
                 <Setter Property="HorizontalOptions" 
                         Value="End" />
+            </Style>
+
+            <Style x:Key="MoreButtonStyle" 
+               TargetType="{x:Type Button}">
+                <Setter Property="FontFamily"
+                        Value="{StaticResource MontserratRegular}" />
+                <Setter Property="TextColor"
+                        Value="{StaticResource WhiteColor}" />
+                <Setter Property="HorizontalOptions"
+                        Value="Center" />
+                <Setter Property="VerticalOptions"
+                        Value="Center" />
             </Style>
 
             <Style x:Key="CheckoutButtonStyle" 
@@ -69,7 +81,7 @@
                     <Grid
                         Grid.Row="0">
                         <Label
-                            Text="SHOPPING CART"
+                            Text="CARRINHO DE COMPRAS"
                             Style="{StaticResource ShoppingCartStyle}"/>
                     </Grid>
                     <ScrollView
@@ -87,7 +99,7 @@
 									<behaviors:EventToCommandBehavior
 										EventName="ItemTapped"
 										EventArgsConverter="{StaticResource ItemTappedEventArgsConverter}"
-										Command="{Binding AddCommand}" />
+										Command="{Binding ChooseActionCommand}" />
 								</ListView.Behaviors>
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
@@ -107,7 +119,7 @@
                                     Style="{StaticResource CartTotalStyle}"/>
                                 <Label 
                                     Grid.Row="1"                   
-                                    Text="{Binding Total, StringFormat='${0:N}'}"
+                                    Text="{Binding Total, StringFormat='€{0:N}'}"
                                     TextColor="{StaticResource GreenColor}"
                                     Style="{StaticResource CartTotalStyle}"/>
                             </StackLayout>
@@ -117,26 +129,53 @@
             </Grid>
             <!-- CHECKOUT -->
             <Grid
-                Grid.Row="1"           
-                BackgroundColor="{StaticResource LightGreenColor}"
+                Grid.Row="1"                           
                 Padding="0" 
                 ColumnSpacing="0" 
                 RowSpacing="0">
-                <Label       
-                    Text="[ CHECKOUT ]" 
-                    Style="{StaticResource CheckoutButtonStyle}"/>
-                <Grid.GestureRecognizers>
-                    <TapGestureRecognizer            
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition  />
+                </Grid.ColumnDefinitions>
+                <ContentView
+                    Grid.Column="0"
+                    BackgroundColor="#ef7c8d">
+                    <Button 
+                        Text="[ ADICIONAR MAIS PRODUTOS ]" 
+                        Style="{StaticResource MoreButtonStyle}"
+                        BackgroundColor="Transparent"
+                        VerticalOptions="FillAndExpand"
+                        HorizontalOptions="FillAndExpand"
+                        Command="{Binding MoreProductsCommand}"/>
+                </ContentView>
+                <ContentView
+                    Grid.Column="1"
+                    BackgroundColor="{StaticResource LightGreenColor}">
+                    <Button
+                        Text="[ CHECKOUT ]" 
+                        Style="{StaticResource CheckoutButtonStyle}"
+                        BackgroundColor="Transparent"
+                        VerticalOptions="FillAndExpand"
+                        HorizontalOptions="FillAndExpand"
+                        Command="{Binding CheckoutCommand}"/>
+                </ContentView>                
+                <!--<Grid.GestureRecognizers>
+                    <TapGestureRecognizer    
+                        Grid.Column="0"
+                        Command="{Binding MoreProductsCommand}"  
+                        NumberOfTapsRequired="1" />
+                    <TapGestureRecognizer    
+                        Grid.Column="1"
                         Command="{Binding CheckoutCommand}"  
                         NumberOfTapsRequired="1" />
-                </Grid.GestureRecognizers>
+                </Grid.GestureRecognizers>-->
             </Grid>
         </Grid>
         <!-- EMPTY SHOPPING CART -->
         <Grid             
             IsVisible="{Binding BasketItems.Count, Converter={StaticResource InverseCountToBoolConverter}}">
             <Label 
-                Text="EMPTY SHOPPING CART"
+                Text="CARRINHO DE COMPRAS VAZIO"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"/>
         </Grid>

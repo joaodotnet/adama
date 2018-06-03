@@ -2,11 +2,11 @@
 {
     public enum OrderStatus
     {
-        Submitted,
-        AwaitingValidation,
-        StockConfirmed,
-        Paid,
-        Shipped,
-        Cancelled
+        PENDING,
+        SUBMITTED, //Feito a transfência
+        PREPARING,
+        SENT,
+        DELIVERED,
+        CANCELED
     }
 }

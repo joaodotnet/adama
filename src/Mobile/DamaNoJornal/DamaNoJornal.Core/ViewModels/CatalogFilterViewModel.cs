@@ -150,7 +150,7 @@ namespace DamaNoJornal.Core.ViewModels
         }
 
         public ICommand OnCategoryItemTappedCommand => new Command<CatalogBrand>(async (item) => await FilterByCategoryAsync(item));
-        public ICommand OnTypeItemTappedCommand => new Command<CatalogType>( (item) => FilterByType(item));
+        public ICommand OnTypeItemTappedCommand => new Command<CatalogType>( async (item) => await FilterByTypeAsync(item));
         public ICommand CategoryCommand => new Command(ShowCategories);
         public ICommand TypeCommand => new Command(async() => await ShowTypesAsync());
 
@@ -210,12 +210,19 @@ namespace DamaNoJornal.Core.ViewModels
             //await NavigationService.NavigateToAsync<MainViewModel>(new TabParameter { TabIndex = 0, ParameterObj = item });
         }
 
-        private void FilterByType(CatalogType item)
+        private async Task FilterByTypeAsync(CatalogType item)
         {
             Type = item;
-            IsTypeListVisible = false;
-            CategoryBgButton = _bgBtnUnPopout;
-            TypeBgButton = _bgBtnUnPopout;
+            //IsTypeListVisible = false;
+            //CategoryBgButton = _bgBtnUnPopout;
+            //TypeBgButton = _bgBtnUnPopout;
+
+            await NavigationService.NavigateToAsync<MainViewModel>(new TabParameter
+            {
+                TabIndex = 0,
+                ParameterObj = new Tuple<CatalogBrand, CatalogType>(Category, Type)
+            });
+            await NavigationService.RemoveBackStackAsync();
         }
 
         private async Task FilterAsync()

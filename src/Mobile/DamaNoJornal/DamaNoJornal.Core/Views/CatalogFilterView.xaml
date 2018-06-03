@@ -88,6 +88,7 @@
                               FlowColumnCount="4" 
                               SeparatorVisibility="None" 
                               HasUnevenRows="True"
+                              FlowRowBackgroundColor="White"
                               FlowItemsSource="{Binding Categories}"
                               Style="{StaticResource ProductsListStyle}">
                 <flv:FlowListView.Behaviors>
@@ -144,6 +145,7 @@
                               SeparatorVisibility="None" 
                               HasUnevenRows="True"
                               FlowItemsSource="{Binding Types}"
+                              FlowRowBackgroundColor="White"
                               Style="{StaticResource ProductsListStyle}">
                 <flv:FlowListView.Behaviors>
                     <behaviors:EventToCommandBehavior                    

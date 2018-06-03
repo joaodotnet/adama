@@ -18,16 +18,19 @@ namespace Dama.API.Controllers
     {
         private readonly IBasketRepository _repository;
         private readonly IRepository<CatalogItem> _itemRepository;
+        private readonly IRepository<BasketItem> _basketItemRepository;
         //private readonly IIdentityService _identitySvc;
         //private readonly IEventBus _eventBus;
 
         public BasketController(IBasketRepository repository,
-            IRepository<CatalogItem> itemRepository)
+            IRepository<CatalogItem> itemRepository,
+            IRepository<BasketItem> basketItemRepository)
             //IIdentityService identityService,
             //IEventBus eventBus)
         {
             _repository = repository;
             _itemRepository = itemRepository;
+            _basketItemRepository = basketItemRepository;
             //_identitySvc = identityService;
             //_eventBus = eventBus;
         }
@@ -99,12 +102,22 @@ namespace Dama.API.Controllers
         //}
 
         // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public async Task DeleteAsync(string id)
+        [HttpDelete("{buyerId}")]
+        public async Task DeleteAsync(string buyerId)
         {
-            var basketSpec = new BasketWithItemsSpecification(id);
+            var basketSpec = new BasketWithItemsSpecification(buyerId);
             var basket = (await _repository.ListAsync(basketSpec)).LastOrDefault();
             await _repository.DeleteAsync(basket);
+        }
+
+        // DELETE api/values/5
+        [HttpDelete("{buyerId}/deleteItem/{basketItemId}")]
+        public async Task DeleteAsync(string buyerId, int basketItemId)
+        {
+            var basketSpec = new BasketWithItemsSpecification(buyerId);
+            var basket = (await _repository.ListAsync(basketSpec)).LastOrDefault();
+            if (basket.Items.Any(x => x.Id == basketItemId))
+                _basketItemRepository.Delete(_basketItemRepository.GetById(basketItemId));
         }
 
         private BasketViewModel BasketToViewModel(Basket basket)
@@ -116,7 +129,7 @@ namespace Dama.API.Controllers
                 {
                     var itemModel = new BasketItemViewModel
                     {
-                       // Id = i.Id,
+                        Id = i.Id,
                         ProductId = i.CatalogItemId,
                         Quantity = i.Quantity,
                         UnitPrice = i.UnitPrice,

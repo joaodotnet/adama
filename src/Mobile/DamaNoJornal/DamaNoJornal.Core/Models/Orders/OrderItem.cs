@@ -5,16 +5,14 @@ namespace DamaNoJornal.Core.Models.Orders
 {
     public class OrderItem
     {
-        public string ProductId { get; set; }
+        public int ProductId { get; set; }
         public Guid? OrderId { get; set; }
 
         [JsonProperty("unitprice")]
         public decimal UnitPrice { get; set; }
 
-        [JsonProperty("productname")]
         public string ProductName { get; set; }
 
-        [JsonProperty("pictureurl")]
         public string PictureUrl { get; set; }
 
         [JsonProperty("units")]

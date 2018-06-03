@@ -7,9 +7,9 @@ namespace DamaNoJornal.Core.Models.Basket
     {
         private int _quantity;
 
-        public string Id { get; set; }
+        public int Id { get; set; }
        
-        public string ProductId { get; set; }
+        public int ProductId { get; set; }
 
         public string ProductName { get; set; }
 
