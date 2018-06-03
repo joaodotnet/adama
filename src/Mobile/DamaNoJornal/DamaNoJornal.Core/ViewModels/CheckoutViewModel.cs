@@ -110,7 +110,7 @@ namespace DamaNoJornal.Core.ViewModels
                 {
                     BuyerId = userInfo.UserId,
                     OrderItems = CreateOrderItems(orderItems),
-                    OrderStatus = OrderStatus.Submitted,
+                    OrderStatus = OrderStatus.SUBMITTED,
                     OrderDate = DateTime.Now,
                     CardHolderName = paymentInfo.CardHolderName,
                     CardNumber = paymentInfo.CardNumber,
@@ -121,8 +121,8 @@ namespace DamaNoJornal.Core.ViewModels
                     ShippingCountry = _shippingAddress.Country,
                     ShippingStreet = _shippingAddress.Street,
                     ShippingCity = _shippingAddress.City,
-                    ShippingZipCode = _shippingAddress.ZipCode,
-                    Total = CalculateTotal(CreateOrderItems(orderItems))
+                    ShippingZipCode = _shippingAddress.ZipCode
+                    //Total = CalculateTotal(CreateOrderItems(orderItems))
                 };
 
                 if (_settingsService.UseMocks)

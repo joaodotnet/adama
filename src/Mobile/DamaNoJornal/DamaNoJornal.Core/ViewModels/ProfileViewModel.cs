@@ -34,7 +34,7 @@ namespace DamaNoJornal.Core.ViewModels
                 _orders = value;
                 RaisePropertyChanged(() => Orders);
             }
-        }
+        }        
 
         public ICommand LogoutCommand => new Command(async () => await LogoutAsync());
 

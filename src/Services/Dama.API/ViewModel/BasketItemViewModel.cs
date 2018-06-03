@@ -6,7 +6,7 @@ namespace Dama.API.ViewModels
     {
         public int Quantity { get; set; }
 
-        //public int Id { get; set; }
+        public int Id { get; set; }
        
         public int ProductId { get; set; }
 

@@ -10,5 +10,6 @@ namespace DamaNoJornal.Core.Services.Basket
         Task<CustomerBasket> AddBasketItemAsync(CustomerBasket customerBasket, string token);
         Task CheckoutAsync(BasketCheckout basketCheckout, string token);
         Task ClearBasketAsync(string guidUser, string token);
+        Task DeleteBasketItemAsync(string buyerId, int basketId, string token);
     }
 }

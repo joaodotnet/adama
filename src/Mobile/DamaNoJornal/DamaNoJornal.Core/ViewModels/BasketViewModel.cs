@@ -74,9 +74,11 @@ namespace DamaNoJornal.Core.ViewModels
             }
         }
 
-        public ICommand AddCommand => new Command<BasketItem>((item) => AddItem(item));
+        public ICommand ChooseActionCommand => new Command<BasketItem>(async (item) => await ShowDialogAsync(item));
 
         public ICommand CheckoutCommand => new Command(async () => await CheckoutAsync());
+
+        public ICommand MoreProductsCommand => new Command(async () => await MoreProductsAsync());
 
         public override async Task InitializeAsync(object navigationData)
         {
@@ -145,17 +147,37 @@ namespace DamaNoJornal.Core.ViewModels
             }, authToken);
         }
 
-        private void AddItem(BasketItem item)
+        private async Task ShowDialogAsync(BasketItem item)
         {
-            BadgeCount++;
-            AddBasketItem(item);
-            RaisePropertyChanged(() => BasketItems);
+            IsBusy = true;
+            var result = await DialogService.ShowDialogAsync("Deseja eliminar?", "Apagar Produto", "Apagar", "Cancelar");
+            if(result.Ok)
+            {
+                await DeleteBasketItemAsync(item);
+                BadgeCount--;
+                BasketItems.Remove(item);
+            }
+
+            //BadgeCount++;
+            //await DeleteBasketItemAsync(item);
+            //RaisePropertyChanged(() => BasketItems);
+            IsBusy = false;
         }
 
         private void AddBasketItem(BasketItem item)
         {
             BasketItems.Add(item);
             ReCalculateTotal();
+        }
+
+        private async Task DeleteBasketItemAsync(BasketItem item)
+        {
+            var authToken = _settingsService.AuthAccessToken;
+            var userInfo = await _userService.GetUserInfoAsync(authToken);
+
+            BasketItems.Remove(item);
+            ReCalculateTotal();
+            await _basketService.DeleteBasketItemAsync(userInfo.UserId, item.Id, authToken);
         }
 
         private void ReCalculateTotal()
@@ -188,6 +210,12 @@ namespace DamaNoJornal.Core.ViewModels
             {
                 await NavigationService.NavigateToAsync<CheckoutViewModel>(BasketItems);
             }
+        }
+
+        private async Task MoreProductsAsync()
+        {
+            await NavigationService.NavigateToAsync<MainViewModel>();
+            await NavigationService.RemoveBackStackAsync();
         }
     }
 }

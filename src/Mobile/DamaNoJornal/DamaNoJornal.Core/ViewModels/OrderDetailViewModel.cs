@@ -67,7 +67,7 @@ namespace DamaNoJornal.Core.ViewModels
                 // Get order detail info
                 var authToken = _settingsService.AuthAccessToken;
                 Order = await _ordersService.GetOrderAsync(order.OrderNumber, authToken);
-                IsSubmittedOrder = Order.OrderStatus == OrderStatus.Submitted;
+                IsSubmittedOrder = Order.OrderStatus == OrderStatus.SUBMITTED;
                 OrderStatusText = Order.OrderStatus.ToString().ToUpper();
 
                 IsBusy = false;
@@ -82,7 +82,7 @@ namespace DamaNoJornal.Core.ViewModels
 
             if (result)
             {
-                OrderStatusText = OrderStatus.Cancelled.ToString().ToUpper();
+                OrderStatusText = OrderStatus.CANCELED.ToString().ToUpper();
             }
             else
             {

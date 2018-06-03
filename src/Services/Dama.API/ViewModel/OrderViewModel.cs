@@ -11,14 +11,14 @@ namespace Dama.API.ViewModel
         [Required]
         public string BuyerId { get; set; }
         [Required]
-        public string City { get; set; }
+        public string ShippingCity { get; set; }
         [Required]
-        public string Street { get; set; }        
-        public string State { get; set; }
+        public string ShippingStreet { get; set; }        
+        public string ShippingState { get; set; }
         [Required]
-        public string Country { get; set; }
+        public string ShippingCountry { get; set; }
 
-        public string PostalCode { get; set; }
+        public string ShippingZipCode { get; set; }
         
         public string CardNumber { get; set; }
         

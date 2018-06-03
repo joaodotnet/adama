@@ -42,7 +42,7 @@
                 Grid.Row="0"
                 Margin="12">
                 <Label 
-                    Text="ORDER NUMBER"
+                    Text="NÚMERO DA ENCOMENDA"
                     Style="{StaticResource OrderTitleStyle}"/>
                 <Label 
                     Text="{Binding OrderNumber, Converter={StaticResource ToUpperConverter}}"
@@ -56,7 +56,7 @@
                     Text="TOTAL"
                     Style="{StaticResource OrderTitleStyle}"/>
                 <Label 
-                    Text="{Binding Total, StringFormat='${0:N}', Converter={StaticResource ToUpperConverter}}" 
+                    Text="{Binding Total, StringFormat='€{0:N}', Converter={StaticResource ToUpperConverter}}" 
                     Style="{StaticResource OrderContentStyle}"/>
             </StackLayout>
             <StackLayout
@@ -64,7 +64,7 @@
                 Grid.Row="0"
                 Margin="12">
                 <Label 
-                    Text="DATE"
+                    Text="DATA"
                     Style="{StaticResource OrderTitleStyle}"/>
                 <Label 
                     Text="{Binding OrderDate, Converter={StaticResource DatetimeConverter}}"
@@ -75,10 +75,10 @@
                 Grid.Row="1" 
                 Margin="12">
                 <Label 
-                    Text="STATUS"
+                    Text="Nº PRODUTOS"
                     Style="{StaticResource OrderTitleStyle}"/>
                 <Label 
-                    Text="{Binding OrderStatus, Converter={StaticResource ToUpperConverter}}"
+                    Text="{Binding TotalOrderItems, Converter={StaticResource ToUpperConverter}}"
                     Style="{StaticResource OrderContentStyle}"/>
             </StackLayout>
             <Grid 

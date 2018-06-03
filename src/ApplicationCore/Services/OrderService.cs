@@ -5,6 +5,7 @@ using ApplicationCore.Entities;
 using System.Collections.Generic;
 using Ardalis.GuardClauses;
 using ApplicationCore.Specifications;
+using System.Linq;
 
 namespace ApplicationCore.Services
 {
@@ -76,7 +77,8 @@ namespace ApplicationCore.Services
         }
         public async Task<Order> GetOrderAsync(int id)
         {
-            return await _orderRepository.GetByIdAsync(id);            
+            var spec = new OrdersSpecification(id);
+            return (await _orderRepository.ListAsync(spec)).FirstOrDefault();
         }
 
         public async Task<List<Order>> GetOrdersAsync(string buyerId)

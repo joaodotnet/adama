@@ -7,7 +7,7 @@
              xmlns:templates="clr-namespace:DamaNoJornal.Core.Views.Templates;assembly=DamaNoJornal.Core"
              xmlns:behaviors="clr-namespace:DamaNoJornal.Core.Behaviors;assembly=DamaNoJornal.Core"
 			 viewModelBase:ViewModelLocator.AutoWireViewModel="true"
-             Title="My profile">
+             Title="Encomendas">
     <ContentPage.Resources>
         <ResourceDictionary>
 
@@ -64,14 +64,14 @@
             </Grid.RowDefinitions>
             <Label 
                 Grid.Row="0"
-                Text="MY ORDERS"
+                Text="AS MINHAS ENCOMENDAS"
                 Style="{StaticResource MyOrdersLabelStyle}"/>
             <Grid 
                 Grid.Row="1">
                 <Grid 
                     IsVisible="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}">
                     <Label 
-                        Text="NO ORDERS"      
+                        Text="NÃO EXISTEM ENCOMENDAS"      
                         IsVisible="{Binding Orders.Count, Converter={StaticResource InverseCountToBoolConverter}}"
                         HorizontalOptions="Center"
                         VerticalOptions="Center"/>

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DamaNoJornal.Core.Models.Orders
 {
@@ -11,30 +12,23 @@ namespace DamaNoJornal.Core.Models.Orders
             SequenceNumber = 1;
             OrderItems = new List<OrderItem>();
         }
-
+        
         public string BuyerId { get; set; }
-
         public int SequenceNumber { get; set; }
 
-        [JsonProperty("date")]
         public DateTime OrderDate { get; set; }
 
-        [JsonProperty("status")]
+        [JsonProperty("orderState")]
         public OrderStatus OrderStatus { get; set; }
 
-        [JsonProperty("city")]
         public string ShippingCity { get; set; }
 
-        [JsonProperty("street")]
         public string ShippingStreet { get; set; }
 
-        [JsonProperty("state")]
         public string ShippingState { get; set; }
 
-        [JsonProperty("country")]
         public string ShippingCountry { get; set; }
 
-        [JsonProperty("zipCode")]
         public string ShippingZipCode { get; set; }
 
         public int CardTypeId { get; set; }
@@ -47,13 +41,31 @@ namespace DamaNoJornal.Core.Models.Orders
 
         public string CardSecurityNumber { get; set; }
 
-        [JsonProperty("orderitems")]
+        [JsonProperty("orderItems")]
         public List<OrderItem> OrderItems { get; set; }
 
-        [JsonProperty("total")]
-        public decimal Total { get; set; }
+        public decimal ShippingCost { get; set; }
 
-        [JsonProperty("ordernumber")]
+        [JsonProperty("id")]
         public int OrderNumber { get; set; }
+
+        public decimal Total
+        {
+            get
+            {
+                var total = 0m;
+                foreach (var item in OrderItems)
+                {
+                    total += item.Total;
+                }
+                return total + ShippingCost;
+            }
+        }
+
+        public int TotalOrderItems { get
+            {
+                return OrderItems.Sum(x => x.Quantity);
+            }
+        }
     }
 }

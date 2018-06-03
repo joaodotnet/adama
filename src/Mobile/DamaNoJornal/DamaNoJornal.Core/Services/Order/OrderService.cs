@@ -1,8 +1,12 @@
-﻿using DamaNoJornal.Core.Models.Basket;
+﻿using DamaNoJornal.Core.Extensions;
+using DamaNoJornal.Core.Models.Basket;
 using DamaNoJornal.Core.Models.Orders;
+using DamaNoJornal.Core.Services.Order.Models;
 using DamaNoJornal.Core.Services.RequestProvider;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DamaNoJornal.Core.Services.Order
@@ -18,7 +22,7 @@ namespace DamaNoJornal.Core.Services.Order
             _requestProvider = requestProvider;
         }
 
-        public async Task CreateOrderAsync(Models.Orders.Order newOrder, string token)
+        public async Task CreateOrderAsync(Core.Models.Orders.Order newOrder, string token)
         {
             var builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint)
             {
@@ -29,7 +33,7 @@ namespace DamaNoJornal.Core.Services.Order
             var result = await _requestProvider.PostAsync(uri, newOrder, token);            
         }
 
-        public async Task<ObservableCollection<Models.Orders.Order>> GetOrdersAsync(string id, string token)
+        public async Task<ObservableCollection<Core.Models.Orders.Order>> GetOrdersAsync(string id, string token)
         {
             UriBuilder builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint);
 
@@ -37,14 +41,14 @@ namespace DamaNoJornal.Core.Services.Order
 
             string uri = builder.ToString();
 
-            ObservableCollection<Models.Orders.Order> orders =
-                await _requestProvider.GetAsync<ObservableCollection<Models.Orders.Order>>(uri, token);
+            IEnumerable<Models.OrderEntity> orders =
+                await _requestProvider.GetAsync<IEnumerable<Models.OrderEntity>>(uri, token);
 
-            return orders;
+            return MapToModelOrders(orders.OrderByDescending(x => x.OrderDate).ToList());
 
-        }
+        }        
 
-        public async Task<Models.Orders.Order> GetOrderAsync(int orderId, string token)
+        public async Task<Core.Models.Orders.Order> GetOrderAsync(int orderId, string token)
         {
             try
             {
@@ -54,18 +58,18 @@ namespace DamaNoJornal.Core.Services.Order
 
                 string uri = builder.ToString();
 
-                Models.Orders.Order order =
-                    await _requestProvider.GetAsync<Models.Orders.Order>(uri, token);
+                OrderEntity order =
+                    await _requestProvider.GetAsync<OrderEntity>(uri, token);
 
-                return order;
+                return MaptoOrder(order);
             }
             catch
             {
-                return new Models.Orders.Order();
+                return new Core.Models.Orders.Order();
             }
         }
 
-        public BasketCheckout MapOrderToBasket(Models.Orders.Order order)
+        public BasketCheckout MapOrderToBasket(Core.Models.Orders.Order order)
         {
             return new BasketCheckout()
             {
@@ -105,6 +109,40 @@ namespace DamaNoJornal.Core.Services.Order
             }
 
             return true;
+        }
+
+        private ObservableCollection<Core.Models.Orders.Order> MapToModelOrders(IEnumerable<OrderEntity> orders)
+        {
+            ObservableCollection<Core.Models.Orders.Order> returnOrders = new ObservableCollection<Core.Models.Orders.Order>();
+            foreach (var order in orders)
+            {
+                returnOrders.Add(MaptoOrder(order));
+            }
+            return returnOrders;
+        }
+
+        private Core.Models.Orders.Order MaptoOrder(OrderEntity order)
+        {
+            return new Core.Models.Orders.Order
+            {
+                OrderNumber = order.Id,
+                OrderDate = order.OrderDate.DateTime,
+                BuyerId = order.BuyerId,
+                OrderStatus = order.OrderState,
+                ShippingCity = order.ShipToAddress.City,
+                ShippingCost = order.ShippingCost,
+                ShippingCountry = order.ShipToAddress.Country,
+                ShippingStreet = order.ShipToAddress.Street,
+                ShippingZipCode = order.ShipToAddress.PostalCode,
+                OrderItems = order.OrderItems.Select(i => new OrderItem
+                {
+                    ProductId = i.ItemOrdered.CatalogItemId,
+                    PictureUrl = i.ItemOrdered.PictureUri,
+                    ProductName = i.ItemOrdered.ProductName,
+                    Quantity = i.Units,
+                    UnitPrice = i.UnitPrice
+                }).ToList()
+            };
         }
     }
 }

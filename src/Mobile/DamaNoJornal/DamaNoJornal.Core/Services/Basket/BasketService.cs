@@ -88,5 +88,16 @@ namespace DamaNoJornal.Core.Services.Basket
             var result = await _requestProvider.PostAsync(uri, customerBasket, token);
             return result;
         }
+
+        public async Task DeleteBasketItemAsync(string buyerId, int basketId, string token)
+        {
+            var builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint)
+            {
+                Path = $"{ApiUrlBase}/{buyerId}/deleteItem/{basketId}"
+            };
+
+            var uri = builder.ToString();
+            await _requestProvider.DeleteAsync(uri, token);            
+        }
     }
 }
