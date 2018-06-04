@@ -108,7 +108,7 @@ namespace DamaNoJornal.Core.ViewModels
                 // Create new Order
                 Order = new Order
                 {
-                    BuyerId = userInfo.UserId,
+                    BuyerId = userInfo.Email,
                     OrderItems = CreateOrderItems(orderItems),
                     OrderStatus = OrderStatus.SUBMITTED,
                     OrderDate = DateTime.Now,
@@ -144,6 +144,7 @@ namespace DamaNoJornal.Core.ViewModels
             try
             {
                 var authToken = _settingsService.AuthAccessToken;
+                var userInfo = await _userService.GetUserInfoAsync(authToken);
 
                 var basket = _orderService.MapOrderToBasket(Order);
                 basket.RequestId = Guid.NewGuid();
@@ -157,7 +158,7 @@ namespace DamaNoJornal.Core.ViewModels
                 //}
 
                 // Clean Basket
-                await _basketService.ClearBasketAsync(Order.BuyerId, authToken);
+                await _basketService.ClearBasketAsync(userInfo.UserId, authToken);
 
                 // Reset Basket badge
                 //var basketViewModel = ViewModelLocator.Resolve<BasketViewModel>();

@@ -43,17 +43,17 @@ namespace DamaNoJornal.Core.Services.Basket
             return basket;
         }
 
-        public async Task<CustomerBasket> UpdateBasketAsync(CustomerBasket customerBasket, string token)
-        {
-            var builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint)
-            {
-                Path = ApiUrlBase
-            };
+        //public async Task<CustomerBasket> UpdateBasketAsync(CustomerBasket customerBasket, string token)
+        //{
+        //    var builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint)
+        //    {
+        //        Path = ApiUrlBase
+        //    };
 
-            var uri = builder.ToString();
-            var result = await _requestProvider.PostAsync(uri, customerBasket, token);
-            return result;
-        }
+        //    var uri = builder.ToString();
+        //    var result = await _requestProvider.PostAsync(uri, customerBasket, token);
+        //    return result;
+        //}
 
         public async Task CheckoutAsync(BasketCheckout basketCheckout, string token)
         {
@@ -89,11 +89,11 @@ namespace DamaNoJornal.Core.Services.Basket
             return result;
         }
 
-        public async Task DeleteBasketItemAsync(string buyerId, int basketId, string token)
+        public async Task DeleteBasketItemAsync(string userId, int basketId, string token)
         {
             var builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint)
             {
-                Path = $"{ApiUrlBase}/{buyerId}/deleteItem/{basketId}"
+                Path = $"{ApiUrlBase}/{userId}/deleteItem/{basketId}"
             };
 
             var uri = builder.ToString();

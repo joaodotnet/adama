@@ -8,7 +8,7 @@ namespace DamaNoJornal.Core.Services.User
     {
         private UserInfo JueUserInfo = new UserInfo
         {
-            UserId = "jue@damanojornal.com",
+            UserId = "612843e9-0c7c-453e-b969-fb42a88bda35",
             Name = "João",
             LastName = "da Dama",
             PreferredUsername = "jue@damanojornal.com",
@@ -22,7 +22,7 @@ namespace DamaNoJornal.Core.Services.User
 
         private UserInfo SueUserInfo = new UserInfo
         {
-            UserId = "sue@damanojornal.com",
+            UserId = "f672e2f8-5259-4dcb-8491-ceab99973414",
             Name = "Susana",
             LastName = "Mendez",
             PreferredUsername = "sue@damanojornal.com",
@@ -36,7 +36,7 @@ namespace DamaNoJornal.Core.Services.User
 
         private UserInfo MotherUserInfo = new UserInfo
         {
-            UserId = "sonia@damanojornal.com",
+            UserId = "53670bd4-9c38-49c9-8dfe-b690ec4429f5",
             Name = "Sonia",
             LastName = "Mendez",
             PreferredUsername = "sonia@damanojornal.com",
