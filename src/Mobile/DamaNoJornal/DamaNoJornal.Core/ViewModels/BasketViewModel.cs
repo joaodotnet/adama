@@ -91,7 +91,6 @@ namespace DamaNoJornal.Core.ViewModels
 
             if (navigationData is CatalogItem)
             {
-
                 await AddCatalogItemAsync((CatalogItem)navigationData);
             }
 
@@ -142,7 +141,7 @@ namespace DamaNoJornal.Core.ViewModels
 
             await _basketService.AddBasketItemAsync(new CustomerBasket
             {
-                BuyerId = userInfo.UserId,
+                BuyerId = userInfo.Email,
                 Items = new List<BasketItem> { basketItem }
             }, authToken);
         }

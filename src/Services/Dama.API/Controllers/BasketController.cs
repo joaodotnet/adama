@@ -2,7 +2,9 @@
 using ApplicationCore.Interfaces;
 using ApplicationCore.Specifications;
 using Dama.API.ViewModels;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -19,20 +21,19 @@ namespace Dama.API.Controllers
         private readonly IBasketRepository _repository;
         private readonly IRepository<CatalogItem> _itemRepository;
         private readonly IRepository<BasketItem> _basketItemRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
         //private readonly IIdentityService _identitySvc;
         //private readonly IEventBus _eventBus;
 
         public BasketController(IBasketRepository repository,
             IRepository<CatalogItem> itemRepository,
-            IRepository<BasketItem> basketItemRepository)
-            //IIdentityService identityService,
-            //IEventBus eventBus)
+            IRepository<BasketItem> basketItemRepository,
+            UserManager<ApplicationUser> userManager)            
         {
             _repository = repository;
             _itemRepository = itemRepository;
             _basketItemRepository = basketItemRepository;
-            //_identitySvc = identityService;
-            //_eventBus = eventBus;
+            _userManager = userManager;
         }
 
         // GET /id
@@ -40,7 +41,8 @@ namespace Dama.API.Controllers
         [ProducesResponseType(typeof(BasketViewModel), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Get(string id)
         {
-            var basketSpec = new BasketWithItemsSpecification(id);
+            var user = await _userManager.FindByIdAsync(id);
+            var basketSpec = new BasketWithItemsSpecification(user.Email);
             var basket = (await _repository.ListAsync(basketSpec)).LastOrDefault();
             if (basket == null)
             {
@@ -51,14 +53,14 @@ namespace Dama.API.Controllers
         }
 
         // POST /value
-        [HttpPost]
-        [ProducesResponseType(typeof(Basket), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Post([FromBody]BasketViewModel value)
-        {
-            var basket = await _repository.UpdateBasketAsync(ViewModelToBasket(value));
+        //[HttpPost]
+        //[ProducesResponseType(typeof(Basket), (int)HttpStatusCode.OK)]
+        //public async Task<IActionResult> Post([FromBody]BasketViewModel value)
+        //{
+        //    var basket = await _repository.UpdateBasketAsync(ViewModelToBasket(value));
 
-            return Ok(basket);
-        }
+        //    return Ok(basket);
+        //}
 
         [Route("add")]
         [HttpPost]
@@ -102,19 +104,21 @@ namespace Dama.API.Controllers
         //}
 
         // DELETE api/values/5
-        [HttpDelete("{buyerId}")]
-        public async Task DeleteAsync(string buyerId)
+        [HttpDelete("{userId}")]
+        public async Task DeleteAsync(string userId)
         {
-            var basketSpec = new BasketWithItemsSpecification(buyerId);
+            var user = await _userManager.FindByIdAsync(userId);
+            var basketSpec = new BasketWithItemsSpecification(user.Email);
             var basket = (await _repository.ListAsync(basketSpec)).LastOrDefault();
             await _repository.DeleteAsync(basket);
         }
 
         // DELETE api/values/5
-        [HttpDelete("{buyerId}/deleteItem/{basketItemId}")]
-        public async Task DeleteAsync(string buyerId, int basketItemId)
+        [HttpDelete("{userId}/deleteItem/{basketItemId}")]
+        public async Task DeleteAsync(string userId, int basketItemId)
         {
-            var basketSpec = new BasketWithItemsSpecification(buyerId);
+            var user = await _userManager.FindByIdAsync(userId);
+            var basketSpec = new BasketWithItemsSpecification(user.Email);
             var basket = (await _repository.ListAsync(basketSpec)).LastOrDefault();
             if (basket.Items.Any(x => x.Id == basketItemId))
                 _basketItemRepository.Delete(_basketItemRepository.GetById(basketItemId));

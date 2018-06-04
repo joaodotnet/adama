@@ -7,7 +7,9 @@ using ApplicationCore.Entities.OrderAggregate;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Specifications;
 using Dama.API.ViewModel;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dama.API.Controllers
@@ -19,19 +21,22 @@ namespace Dama.API.Controllers
     {
         private readonly IOrderService _orderService;
         private readonly IBasketRepository _repository;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public OrderController(IOrderService orderService, IBasketRepository basketRepository)
+        public OrderController(IOrderService orderService, IBasketRepository basketRepository, UserManager<ApplicationUser> userManager)
         {
             _orderService = orderService;
             _repository = basketRepository;
+            _userManager = userManager;
         }
 
-        [Route("all/{buyerId}")]
+        [Route("all/{userId}")]
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Order>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetOrders(string buyerId)
+        public async Task<IActionResult> GetOrders(string userId)
         {
-            var orders = await _orderService.GetOrdersAsync(buyerId);
+            var user = await _userManager.FindByIdAsync(userId);
+            var orders = await _orderService.GetOrdersAsync(user.Email);
 
             return Ok(orders);
         }

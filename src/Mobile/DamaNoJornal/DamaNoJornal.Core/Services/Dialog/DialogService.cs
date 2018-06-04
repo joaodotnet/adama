@@ -12,7 +12,7 @@ namespace DamaNoJornal.Services
 
         public Task<PromptResult> ShowDialogAsync(string message, string title, string buttonOk, string buttonCancel)
         {
-            return UserDialogs.Instance.PromptAsync(message, title, buttonOk, buttonCancel, "hum?");
+            return UserDialogs.Instance.PromptAsync(message, title, buttonOk, buttonCancel);
         }
     }
 }
