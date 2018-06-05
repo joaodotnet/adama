@@ -7,7 +7,7 @@
         public const string DefaultEndpoint = "https://localhost:50390"; // i.e.: "http://YOUR_IP" or "http://YOUR_DNS_NAME"
         public const string JueAuthToken = "AAABBBCCC_JUE";
         public const string SueAuthToken = "AAABBBCCC_SUE";
-        public const string SoniaAuthToken = "AAABBBCCC_SONIA";
+        public const string SoniaAuthToken = "AAABBBCCC_SONIA";       
 
         private string _baseEndpoint;
         private static readonly GlobalSetting _instance = new GlobalSetting();
@@ -53,6 +53,10 @@
         public string IdentityCallback { get; set; }
 
         public string LogoutCallback { get; set; }
+
+        public string JueUserId { get; set; }
+        public string SueUserId { get; set; }
+        public string MotherUserId { get; set; }
 
         private void UpdateEndpoint(string baseEndpoint)
         {

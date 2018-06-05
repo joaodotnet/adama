@@ -189,9 +189,66 @@
                             </Entry.Style>
                         </Entry>
                     </StackLayout>
+                    <StackLayout
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Style="{StaticResource SettingsStackLayoutStyle}"
+                        IsVisible="{Binding UseAzureServices}">
+                        <Label
+                            Text="João User Id"
+                            Style="{StaticResource HeaderLabelStyle}"/>
+                        <Entry
+                            Text="{Binding JueUserId, Mode=TwoWay}">
+                            <Entry.Style>
+                                <OnPlatform x:TypeArguments="Style">
+                                    <On Platform="iOS, Android" Value="{StaticResource SettingsEntryStyle}" />
+                                    <On Platform="UWP, WinRT, WinPhone" Value="{StaticResource SettingsUwpEntryStyle}" />
+                                </OnPlatform>
+                            </Entry.Style>
+                        </Entry>
+                    </StackLayout>
+                    <StackLayout
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Style="{StaticResource SettingsStackLayoutStyle}"
+                        IsVisible="{Binding UseAzureServices}">
+                        <Label
+                            Text="Susana User Id"
+                            Style="{StaticResource HeaderLabelStyle}"/>
+                        <Entry
+                            Text="{Binding SueUserId, Mode=TwoWay}">
+                            <Entry.Style>
+                                <OnPlatform x:TypeArguments="Style">
+                                    <On Platform="iOS, Android" Value="{StaticResource SettingsEntryStyle}" />
+                                    <On Platform="UWP, WinRT, WinPhone" Value="{StaticResource SettingsUwpEntryStyle}" />
+                                </OnPlatform>
+                            </Entry.Style>
+                        </Entry>
+                    </StackLayout>
+                    <StackLayout
+                        Grid.Row="5"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Style="{StaticResource SettingsStackLayoutStyle}"
+                        IsVisible="{Binding UseAzureServices}">
+                        <Label
+                            Text="Mother User Id"
+                            Style="{StaticResource HeaderLabelStyle}"/>
+                        <Entry
+                            Text="{Binding MotherUserId, Mode=TwoWay}">
+                            <Entry.Style>
+                                <OnPlatform x:TypeArguments="Style">
+                                    <On Platform="iOS, Android" Value="{StaticResource SettingsEntryStyle}" />
+                                    <On Platform="UWP, WinRT, WinPhone" Value="{StaticResource SettingsUwpEntryStyle}" />
+                                </OnPlatform>
+                            </Entry.Style>
+                        </Entry>
+                    </StackLayout>
 
                     <!-- USE LOCATIONS -->
-                    <StackLayout 
+                    <!--<StackLayout 
                         Grid.Column="0"                       
                         Grid.Row="3"
                         IsVisible="{Binding UserIsLogged}"
@@ -203,7 +260,7 @@
                             Text="{Binding DescriptionUseFakeLocation}"
                             Style="{StaticResource SettingsDescriptionStyle}"/>
                     </StackLayout>
-                    <!-- ON / OFF -->
+                    --><!-- ON / OFF --><!--
                     <controls:ToggleButton 
                         Grid.Column="1" 
                         Grid.Row="3"   
@@ -226,7 +283,7 @@
                             </OnPlatform>
                         </controls:ToggleButton.UnCheckedImage>
                     </controls:ToggleButton>
-                    <!-- FAKE LOCATIONS -->
+                    --><!-- FAKE LOCATIONS --><!--
                     <StackLayout
                         Grid.Row="4"
                         Grid.Column="0"
@@ -263,7 +320,7 @@
                             Command="{Binding ToggleSendLocationCommand}"
                             Text="Send Location"/>
                     </StackLayout>
-                    <!-- ALLOW GPS LOCATION -->
+                    --><!-- ALLOW GPS LOCATION --><!--
                     <StackLayout 
                         Grid.Column="0"                       
                         Grid.Row="5"
@@ -280,7 +337,7 @@
                             Text="{Binding GpsWarningMessage}"
                             Style="{StaticResource SettingsWarningMessageStyle}"/>
                     </StackLayout>
-                    <!-- ON / OFF -->
+                    --><!-- ON / OFF --><!--
                     <controls:ToggleButton 
                         Grid.Column="1" 
                         Grid.Row="5" 
@@ -302,7 +359,7 @@
                                 <On Platform="UWP, WinRT, WinPhone" Value="Assets/switchOff.png" />
                             </OnPlatform>
                         </controls:ToggleButton.UnCheckedImage>
-                    </controls:ToggleButton>
+                    </controls:ToggleButton>-->
                 </Grid>
             </StackLayout>
         </ScrollView>
