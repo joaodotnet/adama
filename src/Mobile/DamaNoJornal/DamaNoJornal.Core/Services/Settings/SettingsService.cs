@@ -16,11 +16,17 @@ namespace DamaNoJornal.Core.Services.Settings
         private const string IdLatitude = "latitude";
         private const string IdLongitude = "longitude";
         private const string IdAllowGpsLocation = "allow_gps_location";
+        private const string IdJueUserId = "jue_user_id";
+        private const string IdSueUserId = "sue_user_id";
+        private const string IdMotherUserId = "mother_user_id";
         private readonly string AccessTokenDefault = string.Empty;
         private readonly string IdTokenDefault = string.Empty;
         private readonly bool UseMocksDefault = true;
         private readonly bool UseFakeLocationDefault = false;
         private readonly bool AllowGpsLocationDefault = false;
+        private readonly string JueUserIdDefault = string.Empty;
+        private readonly string SueUserIdDefault = string.Empty;
+        private readonly string MotherUserIdDefault = string.Empty;
         private readonly double FakeLatitudeDefault = 47.604610d;
         private readonly double FakeLongitudeDefault = -122.315752d;
         private readonly string UrlBaseDefault = GlobalSetting.Instance.BaseEndpoint;
@@ -76,6 +82,22 @@ namespace DamaNoJornal.Core.Services.Settings
             get => GetValueOrDefault(IdAllowGpsLocation, AllowGpsLocationDefault);
             set => AddOrUpdateValue(IdAllowGpsLocation, value);
         }
+        public string JueUserId
+        {
+            get => GetValueOrDefault(IdJueUserId, JueUserIdDefault);
+            set => AddOrUpdateValue(IdJueUserId, value);
+        }
+        public string SueUserId
+        {
+            get => GetValueOrDefault(IdSueUserId, SueUserIdDefault);
+            set => AddOrUpdateValue(IdSueUserId, value);
+        }
+        public string MotherUserId
+        {
+            get => GetValueOrDefault(IdMotherUserId, MotherUserIdDefault);
+            set => AddOrUpdateValue(IdMotherUserId, value);
+        }
+
 
         #endregion
 

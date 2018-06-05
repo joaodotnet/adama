@@ -22,10 +22,14 @@ namespace DamaNoJornal.Core.ViewModels
         private string _titleAllowGpsLocation;
         private string _descriptionAllowGpsLocation;
         private bool _useFakeLocation;
-        private string _endpoint;
+        private string _endpoint;        
         private double _latitude;
         private double _longitude;
         private string _gpsWarningMessage;
+        private string _jueUserId;
+        private string _sueUserId;
+        private string _motherUserId;
+
 
         private readonly ISettingsService _settingsService;
         private readonly ILocationService _locationService;
@@ -197,6 +201,54 @@ namespace DamaNoJornal.Core.ViewModels
             }
         }
 
+        public string JueUserId
+        {
+            get => _jueUserId;
+            set
+            {
+                _jueUserId = value;
+
+                if (!string.IsNullOrEmpty(_jueUserId))
+                {
+                    UpdateJueUserId();
+                }
+
+                RaisePropertyChanged(() => JueUserId);
+            }
+        }
+
+        public string SueUserId
+        {
+            get => _jueUserId;
+            set
+            {
+                _jueUserId = value;
+
+                if (!string.IsNullOrEmpty(_sueUserId))
+                {
+                    UpdateSueUserId();
+                }
+
+                RaisePropertyChanged(() => SueUserId);
+            }
+        }
+        public string MotherUserId
+        {
+            get => _jueUserId;
+            set
+            {
+                _jueUserId = value;
+
+                if (!string.IsNullOrEmpty(_motherUserId))
+                {
+                    UpdateMotherUserId();
+                }
+
+                RaisePropertyChanged(() => MotherUserId);
+            }
+        }
+
+
         public bool UserIsLogged => !string.IsNullOrEmpty(_settingsService.AuthAccessToken);
 
         public ICommand ToggleMockServicesCommand => new Command(async () => await ToggleMockServicesAsync());
@@ -320,6 +372,24 @@ namespace DamaNoJornal.Core.ViewModels
         {
             // Update remote endpoint (save to local storage)
             GlobalSetting.Instance.BaseEndpoint = _settingsService.UrlBase = _endpoint;
+        }
+
+        private void UpdateJueUserId()
+        {
+            // Update remote endpoint (save to local storage)
+            GlobalSetting.Instance.JueUserId = _settingsService.JueUserId = _jueUserId;
+        }
+
+        private void UpdateSueUserId()
+        {
+            // Update remote endpoint (save to local storage)
+            GlobalSetting.Instance.SueUserId = _settingsService.SueUserId = _sueUserId;
+        }
+
+        private void UpdateMotherUserId()
+        {
+            // Update remote endpoint (save to local storage)
+            GlobalSetting.Instance.MotherUserId = _settingsService.MotherUserId = _motherUserId;
         }
 
         private void UpdateFakeLocation()

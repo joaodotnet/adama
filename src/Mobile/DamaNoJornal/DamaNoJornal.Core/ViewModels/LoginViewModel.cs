@@ -1,4 +1,5 @@
-﻿using DamaNoJornal.Core.Models.User;
+﻿using DamaNoJornal.Core.Models.Location;
+using DamaNoJornal.Core.Models.User;
 using DamaNoJornal.Core.Services.Identity;
 using DamaNoJornal.Core.Services.OpenUrl;
 using DamaNoJornal.Core.Services.Settings;
@@ -6,6 +7,8 @@ using DamaNoJornal.Core.Validations;
 using DamaNoJornal.Core.ViewModels.Base;
 using IdentityModel.Client;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -25,6 +28,8 @@ namespace DamaNoJornal.Core.ViewModels
         private ISettingsService _settingsService;
         private IOpenUrlService _openUrlService;
         private IIdentityService _identityService;
+        //private ObservableCollection<Place> _places;
+        private Place _place;
 
         public LoginViewModel(
             ISettingsService settingsService,
@@ -120,6 +125,34 @@ namespace DamaNoJornal.Core.ViewModels
             }
         }
 
+        //public ObservableCollection<Place> Places
+        //{
+        //    get { return _places; }
+        //    set
+        //    {
+        //        _places = value;
+        //        RaisePropertyChanged(() => Places);
+        //    }
+        //}
+
+        public Place PlaceSelected
+        {
+            get => _place;
+            set
+            {
+                _place = value;
+                RaisePropertyChanged(() => PlaceSelected);
+            }
+        }
+        private static Place place1 = new Place { Id = 1, Name = "Feira Popular de Loulé" };
+        private static Place place2 = new Place { Id = 2, Name = "Feira da Serra de São Brás" };
+        private List<Place> _places = new List<Place> { place1, place2 };
+        public List<Place> Places => _places;
+
+        //public Place PlaceSelected => place1;        
+
+
+
         public ICommand MockSignInCommand => new Command<string>(async (user) => await MockSignInAsync(user));
 
         public ICommand SignInCommand => new Command(async () => await SignInAsync());
@@ -145,7 +178,14 @@ namespace DamaNoJornal.Core.ViewModels
                     Logout();
                 }
             }
-
+            //Places = new ObservableCollection<Place>
+            //{
+            //    new Place { Id = 1, Name = "Feira de Popular Loulé" },
+            //    new Place { Id = 2, Name = "Feira da Serra de São Brás"}
+            //};
+            //PlaceSelected = Places[0];
+            PlaceSelected = place1;
+            
             return base.InitializeAsync(navigationData);
         }
 

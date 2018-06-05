@@ -33,6 +33,8 @@ namespace DamaNoJornal.Services
         {
             if (string.IsNullOrEmpty(_settingsService.AuthAccessToken))
                 return NavigateToAsync<LoginViewModel>();
+            else if(string.IsNullOrEmpty(_settingsService.JueUserId)) //TODO: check if currentUser
+                return NavigateToAsync<LoginViewModel>();
             else
                 return NavigateToAsync<MainViewModel>();
         }
