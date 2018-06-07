@@ -10,7 +10,7 @@
              xmlns:behaviors="clr-namespace:DamaNoJornal.Core.Behaviors;assembly=DamaNoJornal.Core"
              xmlns:flv="clr-namespace:DLToolkit.Forms.Controls;assembly=DLToolkit.Forms.Controls.FlowListView"
 			 viewModelBase:ViewModelLocator.AutoWireViewModel="true"
-             Title="Catalog">
+             Title="Produtos">
     <ContentPage.Resources>
         <ResourceDictionary>
 

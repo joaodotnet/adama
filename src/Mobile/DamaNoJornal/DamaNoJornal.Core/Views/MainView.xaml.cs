@@ -28,9 +28,6 @@ namespace DamaNoJornal.Core.Views
                     case 2:
                         CurrentPage = BasketView;
                         break;
-                    case 3:
-                        CurrentPage = CampaignView;
-                        break;
                 }
             });
         }
@@ -41,8 +38,7 @@ namespace DamaNoJornal.Core.Views
 
 			await ((CatalogViewModel)HomeView.BindingContext).InitializeAsync(_parameter);
 			await ((BasketViewModel)BasketView.BindingContext).InitializeAsync(null);
-			await ((ProfileViewModel)ProfileView.BindingContext).InitializeAsync(null);
-            await ((CampaignViewModel)CampaignView.BindingContext).InitializeAsync(null);
+			await ((ProfileViewModel)ProfileView.BindingContext).InitializeAsync(null);           
         }        
 
         protected override async void OnCurrentPageChanged()
@@ -53,11 +49,6 @@ namespace DamaNoJornal.Core.Views
             {
                 // Force basket view refresh every time we access it
                 await (BasketView.BindingContext as ViewModelBase).InitializeAsync(null);
-            }
-            else if (CurrentPage is CampaignView)
-            {
-                // Force campaign view refresh every time we access it
-                await (CampaignView.BindingContext as ViewModelBase).InitializeAsync(null);
             }
             else if (CurrentPage is ProfileView)
             {
