@@ -58,14 +58,4 @@
             </OnPlatform>
         </views:BasketView.Icon>
     </views:BasketView>
-    <!-- CAMPAIGNS -->
-    <views:CampaignView  
-        x:Name="CampaignView">
-        <views:CampaignView.Icon>
-            <OnPlatform x:TypeArguments="FileImageSource">
-                <On Platform="iOS, Android" Value="menu_campaigns" />
-                <On Platform="UWP, WinRT, WinPhone" Value="Assets\menu_campaigns.png" />
-            </OnPlatform>
-        </views:CampaignView.Icon>
-    </views:CampaignView>
 </TabbedPage>
