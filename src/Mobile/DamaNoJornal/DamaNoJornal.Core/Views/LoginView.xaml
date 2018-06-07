@@ -302,11 +302,11 @@
               Text="Local"
               Style="{StaticResource TitleLabelStyle}"/>
             <Picker
+                x:Name="PickerPlaces"
               Grid.Row="4"
               ItemsSource="{Binding Places}"
               SelectedItem="{Binding PlaceSelected, Mode=TwoWay}"
               Style="{StaticResource FilterPickerStyle}">
-                <Picker.SelectedIndex>0</Picker.SelectedIndex>
                 <Picker.HeightRequest>
                     <OnPlatform x:TypeArguments="x:Double">
                         <On Platform="iOS, Android" Value="48" />

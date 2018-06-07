@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Services;
+using Dama.API.Extensions;
 using Infrastructure.Data;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -33,6 +34,8 @@ namespace Dama.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<ApiSettings>(Configuration.GetSection("ApiSettings"));
+
             services.AddMvc()
                 .AddControllersAsServices()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -121,7 +124,7 @@ namespace Dama.API
                 app.UseHsts();
             }
             app.UseCors("CorsPolicy");
-
+            //app.AddBasicAuthentication();
             app.UseHttpsRedirection();
             app.UseMvcWithDefaultRoute();
         }

@@ -102,7 +102,7 @@
             <!-- PRICE -->
             <Label 
                 Grid.Row="2"
-                Text="{Binding Price, StringFormat='${0:N}'}"
+                Text="{Binding Price, StringFormat='€{0:N}'}"
                 Style="{StaticResource ProductPriceStyle}"/>
         </Grid>
     </ContentView.Content>

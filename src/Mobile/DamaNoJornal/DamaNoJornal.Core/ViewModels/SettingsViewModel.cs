@@ -48,6 +48,10 @@ namespace DamaNoJornal.Core.ViewModels
             _useFakeLocation = _settingsService.UseFakeLocation;
             _allowGpsLocation = _settingsService.AllowGpsLocation;
             _gpsWarningMessage = string.Empty;
+
+            _jueUserId = settingsService.JueUserId;
+            _sueUserId = settingsService.SueUserId;
+            _motherUserId = settingsService.MotherUserId;
         }
 
         public string TitleUseAzureServices
@@ -219,10 +223,10 @@ namespace DamaNoJornal.Core.ViewModels
 
         public string SueUserId
         {
-            get => _jueUserId;
+            get => _sueUserId;
             set
             {
-                _jueUserId = value;
+                _sueUserId = value;
 
                 if (!string.IsNullOrEmpty(_sueUserId))
                 {
@@ -234,10 +238,10 @@ namespace DamaNoJornal.Core.ViewModels
         }
         public string MotherUserId
         {
-            get => _jueUserId;
+            get => _motherUserId;
             set
             {
-                _jueUserId = value;
+                _motherUserId = value;
 
                 if (!string.IsNullOrEmpty(_motherUserId))
                 {

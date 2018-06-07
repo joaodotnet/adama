@@ -101,7 +101,7 @@
                         Text="ORDER NUMBER"
                         Style="{StaticResource OrderTitleStyle}"/>
                         <Label 
-                        Text="{Binding Order.OrderNumber, Converter={StaticResource ToUpperConverter}}"
+                        Text="APAGAR"
                         Style="{StaticResource OrderContentStyle}"/>
                     </StackLayout>
                     <StackLayout
@@ -139,7 +139,7 @@
                     </StackLayout>
                 </Grid>
                 <!-- SHIPPING ADDRESS -->
-                <Grid
+                <!--<Grid
 					Grid.Row="1"
                     Margin="12">
                     <Grid.RowDefinitions>
@@ -156,16 +156,13 @@
                             Text="{Binding ShippingAddress.Street}"
                             Style="{StaticResource AddressStyle}"/>
                         <Label
-                            Text="{Binding ShippingAddress.ZipCode}"   
-                            Style="{StaticResource AddressStyle}"/>
-                        <Label
-                            Text="{Binding ShippingAddress.State}"   
+                            Text="CODIGO POSTAL"   
                             Style="{StaticResource AddressStyle}"/>
                         <Label
                             Text="{Binding ShippingAddress.Country}"   
                             Style="{StaticResource AddressStyle}"/>
                     </StackLayout>
-                </Grid>
+                </Grid>-->
                 <!-- ORDER ITEMS -->
                 <Grid Grid.Row="2">
                     <Grid.RowDefinitions>

@@ -26,11 +26,12 @@ namespace DamaNoJornal.Core.Views
             {
                 vm.InvalidateMock();                
 
-				if (!vm.IsMock)
+                if (!vm.IsMock)
 				{
 					_animate = true;
 					await AnimateIn();
 				}
+                PickerPlaces.SelectedIndex = 0;
             }
         }
 
