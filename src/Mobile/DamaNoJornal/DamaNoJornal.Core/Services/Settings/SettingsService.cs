@@ -19,6 +19,7 @@ namespace DamaNoJornal.Core.Services.Settings
         private const string IdJueUserId = "jue_user_id";
         private const string IdSueUserId = "sue_user_id";
         private const string IdMotherUserId = "mother_user_id";
+        private const string IdPlace = "place_id";
         private readonly string AccessTokenDefault = string.Empty;
         private readonly string IdTokenDefault = string.Empty;
         private readonly bool UseMocksDefault = true;
@@ -27,6 +28,7 @@ namespace DamaNoJornal.Core.Services.Settings
         private readonly string JueUserIdDefault = string.Empty;
         private readonly string SueUserIdDefault = string.Empty;
         private readonly string MotherUserIdDefault = string.Empty;
+        private readonly int PlaceIdDefault = 1;
         private readonly double FakeLatitudeDefault = 47.604610d;
         private readonly double FakeLongitudeDefault = -122.315752d;
         private readonly string UrlBaseDefault = GlobalSetting.Instance.BaseEndpoint;
@@ -96,6 +98,11 @@ namespace DamaNoJornal.Core.Services.Settings
         {
             get => GetValueOrDefault(IdMotherUserId, MotherUserIdDefault);
             set => AddOrUpdateValue(IdMotherUserId, value);
+        }
+        public string PlaceId
+        {
+            get => GetValueOrDefault(IdPlace, PlaceIdDefault.ToString());
+            set => AddOrUpdateValue(IdPlace, value);
         }
 
 

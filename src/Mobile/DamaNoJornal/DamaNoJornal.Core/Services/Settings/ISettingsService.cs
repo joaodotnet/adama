@@ -15,6 +15,7 @@ namespace DamaNoJornal.Core.Services.Settings
         string JueUserId { get; set; }
         string SueUserId { get; set; }
         string MotherUserId { get; set; }
+        string PlaceId { get; set; }
 
         bool GetValueOrDefault(string key, bool defaultValue);
         string GetValueOrDefault(string key, string defaultValue);

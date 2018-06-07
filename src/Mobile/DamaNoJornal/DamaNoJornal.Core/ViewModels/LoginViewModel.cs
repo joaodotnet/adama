@@ -144,10 +144,8 @@ namespace DamaNoJornal.Core.ViewModels
                 RaisePropertyChanged(() => PlaceSelected);
             }
         }
-        private static Place place1 = new Place { Id = 1, Name = "Feira Popular de Loulé" };
-        private static Place place2 = new Place { Id = 2, Name = "Feira da Serra de São Brás" };
-        private List<Place> _places = new List<Place> { place1, place2 };
-        public List<Place> Places => _places;
+        
+        public List<Place> Places => GlobalSetting.Places;
 
         //public Place PlaceSelected => place1;        
 
@@ -178,13 +176,6 @@ namespace DamaNoJornal.Core.ViewModels
                     Logout();
                 }
             }
-            //Places = new ObservableCollection<Place>
-            //{
-            //    new Place { Id = 1, Name = "Feira de Popular Loulé" },
-            //    new Place { Id = 2, Name = "Feira da Serra de São Brás"}
-            //};
-            //PlaceSelected = Places[0];
-            PlaceSelected = place1;
             
             return base.InitializeAsync(navigationData);
         }
@@ -230,8 +221,8 @@ namespace DamaNoJornal.Core.ViewModels
                     default:
                         _settingsService.AuthAccessToken = GlobalSetting.Instance.AuthToken;
                         break;
-                }                
-
+                }
+                _settingsService.PlaceId = PlaceSelected.Id.ToString();
                 await NavigationService.NavigateToAsync<MainViewModel>();
                 await NavigationService.RemoveLastFromBackStackAsync();
             }

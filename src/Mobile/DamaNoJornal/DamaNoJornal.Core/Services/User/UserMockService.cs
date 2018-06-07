@@ -1,4 +1,5 @@
 ﻿using DamaNoJornal.Core.Models.User;
+using DamaNoJornal.Core.Services.Settings;
 using System;
 using System.Threading.Tasks;
 
@@ -6,9 +7,15 @@ namespace DamaNoJornal.Core.Services.User
 {
     public class UserMockService : IUserService
     {
+        private readonly ISettingsService _settingsService;
+
+        public UserMockService(ISettingsService settingsService)
+        {
+            _settingsService = settingsService;
+        }
         private UserInfo JueUserInfo = new UserInfo
         {
-            UserId = "612843e9-0c7c-453e-b969-fb42a88bda35",
+            //UserId = "612843e9-0c7c-453e-b969-fb42a88bda35",
             Name = "João",
             LastName = "da Dama",
             PreferredUsername = "jue@damanojornal.com",
@@ -22,7 +29,7 @@ namespace DamaNoJornal.Core.Services.User
 
         private UserInfo SueUserInfo = new UserInfo
         {
-            UserId = "f672e2f8-5259-4dcb-8491-ceab99973414",
+            //UserId = "f672e2f8-5259-4dcb-8491-ceab99973414",
             Name = "Susana",
             LastName = "Mendez",
             PreferredUsername = "sue@damanojornal.com",
@@ -36,7 +43,7 @@ namespace DamaNoJornal.Core.Services.User
 
         private UserInfo MotherUserInfo = new UserInfo
         {
-            UserId = "53670bd4-9c38-49c9-8dfe-b690ec4429f5",
+            //UserId = "53670bd4-9c38-49c9-8dfe-b690ec4429f5",
             Name = "Sonia",
             LastName = "Mendez",
             PreferredUsername = "sonia@damanojornal.com",
@@ -51,13 +58,16 @@ namespace DamaNoJornal.Core.Services.User
         public async Task<UserInfo> GetUserInfoAsync(string authToken)
         {
             await Task.Delay(10);
+            JueUserInfo.UserId = _settingsService.JueUserId;
             switch (authToken)
             {
                 case GlobalSetting.JueAuthToken:
                     return JueUserInfo;
                 case GlobalSetting.SueAuthToken:
+                    SueUserInfo.UserId = _settingsService.SueUserId;
                     return SueUserInfo;
                 case GlobalSetting.SoniaAuthToken:
+                    MotherUserInfo.UserId = _settingsService.MotherUserId;
                     return MotherUserInfo;
                 default:
                     return JueUserInfo;

@@ -10,6 +10,7 @@ using DamaNoJornal.Core.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -106,6 +107,7 @@ namespace DamaNoJornal.Core.ViewModels
                 };
 
                 // Create new Order
+                var place = GlobalSetting.Places.SingleOrDefault(x => x.Id.ToString() == _settingsService.PlaceId);
                 Order = new Order
                 {
                     BuyerId = userInfo.Email,
@@ -117,11 +119,11 @@ namespace DamaNoJornal.Core.ViewModels
                     CardSecurityNumber = paymentInfo.SecurityNumber,
                     CardExpiration = DateTime.Now.AddYears(5),
                     CardTypeId = paymentInfo.CardType.Id,
-                    ShippingState = _shippingAddress.State,
-                    ShippingCountry = _shippingAddress.Country,
-                    ShippingStreet = _shippingAddress.Street,
-                    ShippingCity = _shippingAddress.City,
-                    ShippingZipCode = _shippingAddress.ZipCode
+                    //ShippingState = _shippingAddress.State,
+                    ShippingCountry = place.Country,
+                    ShippingStreet = place.Name,
+                    ShippingCity = place.City,
+                    ShippingZipCode = place.PostalCode
                     //Total = CalculateTotal(CreateOrderItems(orderItems))
                 };
 
