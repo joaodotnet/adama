@@ -1,4 +1,5 @@
 ﻿using DamaNoJornal.Core.Models.Navigation;
+using DamaNoJornal.Core.Models.User;
 using DamaNoJornal.Core.ViewModels.Base;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -9,6 +10,8 @@ namespace DamaNoJornal.Core.ViewModels
     public class MainViewModel : ViewModelBase
     {
         public ICommand SettingsCommand => new Command(async () => await SettingsAsync());
+
+        public ICommand LogoutCommand => new Command(async () => await LogoutAsync());
 
         public override Task InitializeAsync(object navigationData)
         {
@@ -28,6 +31,17 @@ namespace DamaNoJornal.Core.ViewModels
         private async Task SettingsAsync()
         {
             await NavigationService.NavigateToAsync<SettingsViewModel>();
+        }
+
+        private async Task LogoutAsync()
+        {
+            IsBusy = true;
+
+            // Logout
+            await NavigationService.NavigateToAsync<LoginViewModel>(new LogoutParameter { Logout = true });
+            await NavigationService.RemoveBackStackAsync();
+
+            IsBusy = false;
         }
     }
 }

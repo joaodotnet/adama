@@ -16,6 +16,16 @@
     </TabbedPage.Title>
     <ContentPage.ToolbarItems>
         <ToolbarItem 
+            Command="{Binding LogoutCommand}"
+            Text="Sair">
+            <ToolbarItem.Icon>
+                <OnPlatform x:TypeArguments="FileImageSource">
+                    <On Platform="iOS, Android" Value="logout-512.png" />
+                    <On Platform="UWP, WinRT, WinPhone" Value="Assets/logout-512.png" />
+                </OnPlatform>
+            </ToolbarItem.Icon>
+        </ToolbarItem>
+        <ToolbarItem 
             Command="{Binding SettingsCommand}"
             Text="Settings">
             <ToolbarItem.Icon>
@@ -58,4 +68,14 @@
             </OnPlatform>
         </views:BasketView.Icon>
     </views:BasketView>
+
+    <!--<views:CampaignView
+        x:Name="DummyView">
+        <views:CampaignView.Icon>
+            <OnPlatform x:TypeArguments="FileImageSource">
+                <On Platform="iOS, Android" Value="img-joao.png" />
+                <On Platform="UWP, WinRT, WinPhone" Value="Assets\img-joao.png" />
+            </OnPlatform>
+        </views:CampaignView.Icon>
+    </views:CampaignView>-->
 </TabbedPage>
