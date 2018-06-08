@@ -262,8 +262,9 @@ namespace DamaNoJornal.Core.ViewModels
             //Simulate logout
             //if (_settingsService.UseMocks)
             //{
-                _settingsService.AuthAccessToken = string.Empty;
-                _settingsService.AuthIdToken = string.Empty;
+            _settingsService.AuthAccessToken = string.Empty;
+            _settingsService.AuthIdToken = string.Empty;
+            _settingsService.PlaceId = string.Empty;
             //}
 
             _settingsService.UseFakeLocation = false;

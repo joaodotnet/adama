@@ -146,6 +146,7 @@
     <Content Include="Assets\img-joao.png" />
     <Content Include="Assets\img-sonia.png" />
     <Content Include="Assets\img-sue.png" />
+    <Content Include="Assets\logout-512.png" />
     <Content Include="Assets\menu_campaigns.png" />
     <Content Include="Assets\menu_cart.png" />
     <Content Include="Assets\menu_filter.png" />

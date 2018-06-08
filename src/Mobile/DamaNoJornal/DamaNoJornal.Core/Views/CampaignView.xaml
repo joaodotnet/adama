@@ -8,7 +8,7 @@
              xmlns:triggers="clr-namespace:DamaNoJornal.Core.Triggers;assembly=DamaNoJornal.Core"
              xmlns:behaviors="clr-namespace:DamaNoJornal.Core.Behaviors;assembly=DamaNoJornal.Core"
 			 viewModelBase:ViewModelLocator.AutoWireViewModel="true"
-             Title="Campaigns">
+             Title="Olá João">
     <ContentPage.Resources>
         <ResourceDictionary>
 
