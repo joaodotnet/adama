@@ -9,6 +9,7 @@ using DamaNoJornal.Core.Helpers;
 using IdentityModel;
 using PCLCrypto;
 using static PCLCrypto.WinRTCrypto;
+using DamaNoJornal.Core.Models.User;
 
 namespace DamaNoJornal.Core.Services.Identity
 {
@@ -25,7 +26,7 @@ namespace DamaNoJornal.Core.Services.Identity
         public string CreateAuthorizationRequest()
         {
             // Create URI to authorization endpoint
-            var authorizeRequest = new AuthorizeRequest(GlobalSetting.Instance.IdentityEndpoint);
+            var authorizeRequest = new AuthorizeRequest(GlobalSetting.Instance.BaseEndpoint);
 
             // Dictionary with values for the authorize request
             var dic = new Dictionary<string, string>();
@@ -64,6 +65,16 @@ namespace DamaNoJornal.Core.Services.Identity
             string data = string.Format("grant_type=authorization_code&code={0}&redirect_uri={1}&code_verifier={2}", code, WebUtility.UrlEncode(GlobalSetting.Instance.IdentityCallback), _codeVerifier);
             var token = await _requestProvider.PostAsync<UserToken>(GlobalSetting.Instance.TokenEndpoint, data, GlobalSetting.Instance.ClientId, GlobalSetting.Instance.ClientSecret);
             return token;
+        }
+
+        public async Task<List<UserInfo>> GetStaffUsersAsync()
+        {
+            UriBuilder builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint)
+            {
+                Path = $"identity/getstaffusers"
+            };
+            string uri = builder.ToString();
+            return await _requestProvider.GetAsync<List<UserInfo>>(uri);
         }
 
         private string CreateCodeChallenge()

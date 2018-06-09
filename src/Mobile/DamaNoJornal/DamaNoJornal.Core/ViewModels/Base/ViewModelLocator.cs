@@ -81,7 +81,7 @@ namespace DamaNoJornal.Core.ViewModels.Base
                 _container.Register<IBasketService, BasketMockService>();
                 _container.Register<IOrderService, OrderMockService>();
                 _container.Register<IUserService, UserMockService>();
-                _container.Register<ICampaignService, CampaignMockService>();
+                //_container.Register<ICampaignService, CampaignMockService>();
 
                 UseMockService = true;
             }
@@ -90,8 +90,8 @@ namespace DamaNoJornal.Core.ViewModels.Base
                 _container.Register<ICatalogService, CatalogService>();
                 _container.Register<IBasketService, BasketService>();
                 _container.Register<IOrderService, OrderService>();
-                _container.Register<IUserService, UserMockService>();
-                _container.Register<ICampaignService, CampaignMockService>();
+                _container.Register<IUserService, UserService>();
+                //_container.Register<ICampaignService, CampaignMockService>();
 
                 UseMockService = false;
             }

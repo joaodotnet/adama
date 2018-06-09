@@ -8,6 +8,7 @@ namespace Infrastructure.Identity
     public static class AppIdentityDbContextSeed
     {
         private static string _roleAdmin = "Admin";
+        private static string _roleStaff = "Staff";
 
         public static async Task EnsureRoleAdminCreated(IServiceProvider services)
         {
@@ -18,34 +19,41 @@ namespace Infrastructure.Identity
             {
                 var result = await rolemanager.CreateAsync(new IdentityRole(_roleAdmin));
             }
+
+            if (rolemanager.FindByNameAsync(_roleStaff).Result == null)
+            {
+                var result = await rolemanager.CreateAsync(new IdentityRole(_roleStaff));
+            }
+
         }
 
         public static async Task SeedAsync(UserManager<ApplicationUser> userManager)
         {
-            var defaultUser = await userManager.FindByEmailAsync("joaofbbg@gmail.com");
-            if (defaultUser == null)
-            {
-                defaultUser = new ApplicationUser { UserName = "joaofbbg@gmail.com", Email = "joaofbbg@gmail.com" };
-                await userManager.CreateAsync(defaultUser, "dama#2017!");
-            }
+            //Admin Users
+            await CreateUserAsync("joaofbbg@gmail.com", "dama#2018!", null, null, _roleAdmin);
+            await CreateUserAsync("susana.m.mendez@gmail.com", "damasite#2017!", null, null, _roleAdmin);
 
-            if(!await userManager.IsInRoleAsync(defaultUser,_roleAdmin))
-            {
-                await userManager.AddToRoleAsync(defaultUser, _roleAdmin);
-            }
+            //Seed Staf Users
+            await CreateUserAsync("jue@damanojornal.com", "dama#2018!", "João", "Gonçalves", _roleStaff);
 
-            var damaUser = await userManager.FindByEmailAsync("susana.m.mendez@gmail.com");
-            if(damaUser == null)
-            {
-                damaUser = new ApplicationUser { UserName = "susana.m.mendez@gmail.com", Email = "susana.m.mendez@gmail.com" };
-                await userManager.CreateAsync(damaUser, "damasite#2017!");
-            }
+            await CreateUserAsync("sue@damanojornal.com", "dama#2018!", "Susana", "Mendez", _roleStaff);
+            await CreateUserAsync("sonia@damanojornal.com", "dama#2018!", "Sónia", "Mendez", _roleStaff);
 
-            if (!await userManager.IsInRoleAsync(damaUser, _roleAdmin))
+            //local Function
+            async Task CreateUserAsync(string email, string password, string firstName, string lastName, string role)
             {
-                await userManager.AddToRoleAsync(damaUser, _roleAdmin);
-            }
+                var defaultUser = await userManager.FindByEmailAsync(email);
+                if (defaultUser == null)
+                {
+                    defaultUser = new ApplicationUser { UserName = email, Email = email, FirstName = firstName, LastName = lastName };
+                    await userManager.CreateAsync(defaultUser, password);
+                }
 
+                if (!await userManager.IsInRoleAsync(defaultUser, role))
+                {
+                    await userManager.AddToRoleAsync(defaultUser, role);
+                }
+            }
         }
     }
 }

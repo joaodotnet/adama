@@ -189,7 +189,7 @@
                             </Entry.Style>
                         </Entry>
                     </StackLayout>
-                    <StackLayout
+                    <!--<StackLayout
                         Grid.Row="3"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
@@ -245,7 +245,7 @@
                                 </OnPlatform>
                             </Entry.Style>
                         </Entry>
-                    </StackLayout>
+                    </StackLayout>-->
 
                     <!-- USE LOCATIONS -->
                     <!--<StackLayout 

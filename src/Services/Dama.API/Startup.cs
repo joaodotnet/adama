@@ -39,34 +39,8 @@ namespace Dama.API
             services.AddMvc()
                 .AddControllersAsServices()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-                //.AddAuthorization()
-                //.AddJsonFormatters();
-
-            //ConfigureAuthService(services);
-
-            //services.AddAuthentication("Bearer")
-            //    .AddIdentityServerAuthentication(options =>
-            //    {
-            //        options.Authority = "http://localhost:5000";
-            //        options.RequireHttpsMetadata = false;
-            //        options.ApiName = "basket";
-            //    });
-
 
             services.Configure<CatalogSettings>(Configuration);
-
-            // Add framework services.
-            //services.AddSwaggerGen(options =>
-            //{
-            //    options.DescribeAllEnumsAsStrings();
-            //    options.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
-            //    {
-            //        Title = "Dama no Jornal - Dama HTTP API",
-            //        Version = "v1",
-            //        Description = "The Dama HTTP API.",
-            //        TermsOfService = "Terms Of Service"
-            //    });
-            //});
 
             services.AddCors(options =>
             {
@@ -119,34 +93,11 @@ namespace Dama.API
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseHsts();
-            }
+
             app.UseCors("CorsPolicy");
             app.AddBasicAuthentication();
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseMvcWithDefaultRoute();
-        }
-
-        private void ConfigureAuthService(IServiceCollection services)
-        {
-            // prevent from mapping "sub" claim to nameidentifier.
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-
-            var identityUrl = Configuration.GetValue<string>("IdentityUrl");
-
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-            }).AddJwtBearer(options =>
-            {
-                options.Authority = identityUrl;
-                options.RequireHttpsMetadata = false;
-                options.Audience = "basket";
-            });
         }
     }
 }

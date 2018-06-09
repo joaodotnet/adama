@@ -3,6 +3,7 @@ using DamaNoJornal.Core.Helpers;
 using DamaNoJornal.Core.Models.Catalog;
 using DamaNoJornal.Core.Models.Navigation;
 using DamaNoJornal.Core.Services.Settings;
+using DamaNoJornal.Core.Services.User;
 using DamaNoJornal.Core.ViewModels;
 using DamaNoJornal.Core.ViewModels.Base;
 using Xamarin.Forms;
@@ -46,10 +47,11 @@ namespace DamaNoJornal.Core.Views
             await ((ProfileViewModel)ProfileView.BindingContext).InitializeAsync(null);
 
             _settingsService = ViewModelLocator.Resolve<ISettingsService>();
-            var info = Utils.GetLoginProfileInfo(_settingsService.AuthAccessToken);
+            var userService = ViewModelLocator.Resolve<IUserService>();
+            var user = await userService.GetUserInfoAsync(_settingsService.AuthAccessToken);
             //this.Children.Add(new Page());
-            this.Children[3].Title = info.Title;
-            this.Children[3].Icon = info.PictureUri;            
+            this.Children[3].Title = $"Olá {user.Name}";
+            this.Children[3].Icon = Utils.GetLoginPicturiSource(user.Email);
         }
 
         protected override async void OnCurrentPageChanged()

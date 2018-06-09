@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -207,19 +208,19 @@ namespace DamaNoJornal.Core.ViewModels
 
             if (isAuthenticated)
             {
+                var staffList = await _identityService.GetStaffUsersAsync();
                 switch (user)
                 {
                     case "jue":
-                        _settingsService.AuthAccessToken = GlobalSetting.JueAuthToken;
+                        _settingsService.AuthAccessToken = GlobalSetting.Instance.AuthToken = staffList.SingleOrDefault(x => x.Email == "jue@damanojornal.com").UserId;
                         break;
                     case "sue":
-                        _settingsService.AuthAccessToken = GlobalSetting.SueAuthToken;
+                        _settingsService.AuthAccessToken = GlobalSetting.Instance.AuthToken = staffList.SingleOrDefault(x => x.Email == "sue@damanojornal.com").UserId;
                         break;
                     case "sonia":
-                        _settingsService.AuthAccessToken = GlobalSetting.SoniaAuthToken;
+                        _settingsService.AuthAccessToken = GlobalSetting.Instance.AuthToken = staffList.SingleOrDefault(x => x.Email == "sonia@damanojornal.com").UserId;
                         break;
-                    default:
-                        _settingsService.AuthAccessToken = GlobalSetting.Instance.AuthToken;
+                    default:                        
                         break;
                 }
                 _settingsService.PlaceId = PlaceSelected.Id.ToString();
