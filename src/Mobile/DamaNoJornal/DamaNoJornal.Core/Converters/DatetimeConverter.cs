@@ -12,7 +12,7 @@ namespace DamaNoJornal.Core.Converters
             {
                 var date = (DateTime)value;
 
-                return date.ToString("MMMM dd yyyy").ToUpper();
+                return date.ToString("dd MMMM yyyy", culture).ToUpper();
             }
 
             return value;

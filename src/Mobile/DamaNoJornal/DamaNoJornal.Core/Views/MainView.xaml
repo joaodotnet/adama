@@ -47,15 +47,15 @@
         </views:CatalogView.Icon>
     </views:CatalogView>
     <!-- PROFILE -->
-    <views:ProfileView
-        x:Name="ProfileView">
-        <views:ProfileView.Icon>
+    <views:OrdersView
+        x:Name="OrdersView">
+        <views:OrdersView.Icon>
             <OnPlatform x:TypeArguments="FileImageSource">
                 <On Platform="iOS, Android" Value="menu_profile" />
                 <On Platform="UWP, WinRT, WinPhone" Value="Assets\menu_profile.png" />
             </OnPlatform>
-        </views:ProfileView.Icon>
-    </views:ProfileView>
+        </views:OrdersView.Icon>
+    </views:OrdersView>
     <!-- BASKET -->
     <views:BasketView
         x:Name="BasketView"
@@ -69,13 +69,13 @@
         </views:BasketView.Icon>
     </views:BasketView>
 
-    <!--<views:CampaignView
-        x:Name="DummyView">
-        <views:CampaignView.Icon>
+    <views:ProfileView
+        x:Name="ProfileView">
+        <views:ProfileView.Icon>
             <OnPlatform x:TypeArguments="FileImageSource">
                 <On Platform="iOS, Android" Value="img-joao.png" />
                 <On Platform="UWP, WinRT, WinPhone" Value="Assets\img-joao.png" />
             </OnPlatform>
-        </views:CampaignView.Icon>
-    </views:CampaignView>-->
+        </views:ProfileView.Icon>
+    </views:ProfileView>
 </TabbedPage>
