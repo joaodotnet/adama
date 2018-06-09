@@ -288,7 +288,7 @@ __pycache__/
 *.xsd.cs
 
 #ignore
-src/Web/wwwroot/images/news/
-src/Web/wwwroot/images/products/
-src/Web/wwwroot/images/producttypes/
+src/Web/DamaWeb/wwwroot/images/news/
+src/Web/DamaWeb/wwwroot/images/products/
+src/Web/DamaWeb/wwwroot/images/producttypes/
 .vscode/

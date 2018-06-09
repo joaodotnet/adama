@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.27703.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dama.API", "src\Services\Dama.API\Dama.API.csproj", "{A062338A-8473-4F08-98D6-29ECFF8E38B4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationCore", "src\ApplicationCore\ApplicationCore.csproj", "{C942613A-C4CE-42EB-9305-F177B959F442}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationCore", "src\Libraries\ApplicationCore\ApplicationCore.csproj", "{C942613A-C4CE-42EB-9305-F177B959F442}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Infrastructure\Infrastructure.csproj", "{E7DAD4B7-274A-49B9-AAEB-65AE34739A0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Libraries\Infrastructure\Infrastructure.csproj", "{E7DAD4B7-274A-49B9-AAEB-65AE34739A0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
