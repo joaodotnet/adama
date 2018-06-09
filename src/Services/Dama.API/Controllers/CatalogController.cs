@@ -57,23 +57,6 @@ namespace Dama.API.Controllers
             return Ok(model);
         }
 
-        private IActionResult GetItemsByIds(string ids)
-        {
-            var numIds = ids.Split(',')
-                .Select(id => (Ok: int.TryParse(id, out int x), Value: x));
-            if (!numIds.All(nid => nid.Ok))
-            {
-                return BadRequest("ids value invalid. Must be comma-separated list of numbers");
-            }
-
-            var idsToSelect = numIds.Select(id => id.Value);
-            var items = _damaContext.CatalogItems.Where(ci => idsToSelect.Contains(ci.Id)).ToList();
-
-            //items = ChangeUriPlaceholder(items);
-            return Ok(items);
-
-        }
-
         [HttpGet]
         [Route("items/{id:int}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -153,6 +136,39 @@ namespace Dama.API.Controllers
             return Ok(model);
         }
 
+        // GET api/v1/[controller]/CatalogTypes
+        [HttpGet]
+        [Route("[action]/{categoryId:int?}")]
+        [ProducesResponseType(typeof(List<CatalogType>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> CatalogTypes(int? categoryId = null)
+        {
+            List<CatalogType> items;
+            if (!categoryId.HasValue)
+                items = await _damaContext.CatalogTypes
+                    .ToListAsync();
+            else
+            {
+                items = await _damaContext.CatalogTypeCategories
+                    .Include(x => x.CatalogType)
+                    .Where(x => x.CategoryId == categoryId)
+                    .Select(x => x.CatalogType)
+                    .ToListAsync();
+            }
+            return Ok(items);
+        }
+
+        // GET api/v1/[controller]/CatalogCategories
+        [HttpGet]
+        [Route("[action]")]
+        [ProducesResponseType(typeof(List<Category>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> CatalogCategories()
+        {
+            var items = await _damaContext.Categories
+                .ToListAsync();
+
+            return Ok(items);
+        }
+
         private async Task<PaginatedItemsViewModel<CatalogItem>> FilterProducts(int? catalogTypeId, int? catalogCategoryId, int pageSize, int pageIndex)
         {
             var root = (IQueryable<CatalogItem>)_damaContext.CatalogItems
@@ -199,37 +215,21 @@ namespace Dama.API.Controllers
             return model;
         }
 
-        // GET api/v1/[controller]/CatalogTypes
-        [HttpGet]
-        [Route("[action]/{categoryId:int?}")]
-        [ProducesResponseType(typeof(List<CatalogType>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> CatalogTypes(int? categoryId = null)
+        private IActionResult GetItemsByIds(string ids)
         {
-            List<CatalogType> items;
-            if (!categoryId.HasValue)
-                items = await _damaContext.CatalogTypes
-                    .ToListAsync();
-            else
+            var numIds = ids.Split(',')
+                .Select(id => (Ok: int.TryParse(id, out int x), Value: x));
+            if (!numIds.All(nid => nid.Ok))
             {
-                items = await _damaContext.CatalogTypeCategories
-                    .Include(x => x.CatalogType)
-                    .Where(x => x.CategoryId == categoryId)
-                    .Select(x => x.CatalogType)
-                    .ToListAsync();
+                return BadRequest("ids value invalid. Must be comma-separated list of numbers");
             }
-            return Ok(items);
-        }
 
-        // GET api/v1/[controller]/CatalogCategories
-        [HttpGet]
-        [Route("[action]")]
-        [ProducesResponseType(typeof(List<Category>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> CatalogCategories()
-        {
-            var items = await _damaContext.Categories
-                .ToListAsync();
+            var idsToSelect = numIds.Select(id => id.Value);
+            var items = _damaContext.CatalogItems.Where(ci => idsToSelect.Contains(ci.Id)).ToList();
 
+            //items = ChangeUriPlaceholder(items);
             return Ok(items);
+
         }
 
         //PUT api/v1/[controller]/items

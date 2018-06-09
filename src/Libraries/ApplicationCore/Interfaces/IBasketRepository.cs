@@ -9,8 +9,6 @@ namespace ApplicationCore.Interfaces
     {
         Basket GetByIdWithItems(int id);
         Task<Basket> GetByIdWithItemsAsync(int id);
-        Task<Basket> UpdateBasketAsync(Basket value);
         Task<Basket> AddBasketItemAsync(int id, BasketItem value);
-        Task DeleteBasketAsync(int id);
     }
 }

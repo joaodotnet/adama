@@ -32,47 +32,7 @@ namespace Infrastructure.Data
                 .Include("Items.Details.CatalogAttribute")
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
-
-        public async Task<Basket> UpdateBasketAsync(Basket value)
-        {
-            var basket = await _dbContext.Baskets
-                .Include(b => b.Items)
-                .Include("Items.Details")
-                .Include("Items.Details.CatalogAttribute")
-                .FirstOrDefaultAsync(x => x.BuyerId == value.BuyerId);            
-
-            if(basket == null)
-            {
-                basket = value;
-                _dbContext.Baskets.Add(value);
-            }
-            else
-            {
-                //Remove all
-                basket.RemoveAllItems();
-                //Add again
-                foreach (var item in value.Items)
-                {
-                    basket.AddItem(item.CatalogItemId, item.UnitPrice, item.Quantity);
-                }
-            }
-            //await _dbContext.SaveChangesAsync();
-
-            //for (int i = 0; i < basket.Items.Count; i++)
-            //{
-            //    basket.RemoveItem(i);
-            //}
-
-           
-            await _dbContext.SaveChangesAsync();
-            return basket;
-        }
-
-        public async Task DeleteBasketAsync(int id)
-        {
-            _dbContext.Baskets.Remove(await GetByIdAsync(id));
-        }
-
+      
         public async Task<Basket> AddBasketItemAsync(int id, BasketItem item)
         {
            var basket = await _dbContext.Baskets

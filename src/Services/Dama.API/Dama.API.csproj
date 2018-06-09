@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ApplicationCore\ApplicationCore.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Libraries\ApplicationCore\ApplicationCore.csproj" />
+    <ProjectReference Include="..\..\Libraries\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
