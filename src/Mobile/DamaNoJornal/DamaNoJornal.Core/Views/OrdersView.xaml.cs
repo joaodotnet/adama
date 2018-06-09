@@ -2,10 +2,9 @@
 
 namespace DamaNoJornal.Core.Views
 {
-    public partial class CampaignView : ContentPage
+    public partial class OrdersView : ContentPage
     {
-
-        public CampaignView()
+        public OrdersView()
         {
             InitializeComponent();
         }

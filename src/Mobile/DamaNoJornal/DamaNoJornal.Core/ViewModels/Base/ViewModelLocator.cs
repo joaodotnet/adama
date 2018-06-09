@@ -49,9 +49,9 @@ namespace DamaNoJornal.Core.ViewModels.Base
             _container.Register<LoginViewModel>();
             _container.Register<MainViewModel>();
             _container.Register<OrderDetailViewModel>();
-            _container.Register<ProfileViewModel>();
+            _container.Register<OrdersViewModel>();
             _container.Register<SettingsViewModel>();
-            _container.Register<CampaignViewModel>();
+            _container.Register<ProfileViewModel>();
             _container.Register<CampaignDetailsViewModel>();
             _container.Register<CatalogFilterViewModel>();
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using DamaNoJornal.Core.Helpers;
 using DamaNoJornal.Core.Models.Catalog;
 using DamaNoJornal.Core.Models.Navigation;
 using DamaNoJornal.Core.Services.Settings;
@@ -26,7 +27,7 @@ namespace DamaNoJornal.Core.Views
                         _parameter = arg.ParameterObj;
                         break;
                     case 1:
-                        CurrentPage = ProfileView;
+                        CurrentPage = OrdersView;
                         break;
                     case 2:
                         CurrentPage = BasketView;
@@ -41,37 +42,14 @@ namespace DamaNoJornal.Core.Views
 
 			await ((CatalogViewModel)HomeView.BindingContext).InitializeAsync(_parameter);
 			await ((BasketViewModel)BasketView.BindingContext).InitializeAsync(null);
-			await ((ProfileViewModel)ProfileView.BindingContext).InitializeAsync(null);
+			await ((OrdersViewModel)OrdersView.BindingContext).InitializeAsync(null);
+            await ((ProfileViewModel)ProfileView.BindingContext).InitializeAsync(null);
 
-            var info = GetProfileInfo();
-            this.Children.Add(new Page());
-            this.Children[3].Title = info.Item1;
-            this.Children[3].Icon = info.Item2;            
-        }
-
-        private (string,string) GetProfileInfo()
-        {
             _settingsService = ViewModelLocator.Resolve<ISettingsService>();
-            string title = "Olá ";
-            string iconPath = "";
-            switch (_settingsService.AuthAccessToken)
-            {
-                case GlobalSetting.JueAuthToken:
-                    title += "João";
-                    iconPath = "Assets\\img-joao.png";
-                    break;
-                case GlobalSetting.SueAuthToken:
-                    title += "Susana";
-                    iconPath = "Assets\\img-sue.png";
-                    break;
-                case GlobalSetting.SoniaAuthToken:
-                    title += "Sónia";
-                    iconPath = "Assets\\img-sonia.png";
-                    break;
-                default:
-                    break;
-            }
-            return (title, iconPath);
+            var info = Utils.GetLoginProfileInfo(_settingsService.AuthAccessToken);
+            //this.Children.Add(new Page());
+            this.Children[3].Title = info.Title;
+            this.Children[3].Icon = info.PictureUri;            
         }
 
         protected override async void OnCurrentPageChanged()
@@ -83,10 +61,10 @@ namespace DamaNoJornal.Core.Views
                 // Force basket view refresh every time we access it
                 await (BasketView.BindingContext as ViewModelBase).InitializeAsync(null);
             }
-            else if (CurrentPage is ProfileView)
+            else if (CurrentPage is OrdersView)
             {
                 // Force profile view refresh every time we access it
-                await (ProfileView.BindingContext as ViewModelBase).InitializeAsync(null);
+                await (OrdersView.BindingContext as ViewModelBase).InitializeAsync(null);
             }
         }        
     }

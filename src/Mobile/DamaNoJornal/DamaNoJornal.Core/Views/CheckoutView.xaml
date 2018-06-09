@@ -93,7 +93,7 @@
                         <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <StackLayout
+                    <!--<StackLayout
                         Grid.Column="0"
                         Grid.Row="0"
                         Margin="12">
@@ -103,30 +103,52 @@
                         <Label 
                         Text="APAGAR"
                         Style="{StaticResource OrderContentStyle}"/>
-                    </StackLayout>
+                    </StackLayout>-->
                     <StackLayout
-                        Grid.Column="0"
-                        Grid.Row="1" 
+                        Grid.Column="1"
+                        Grid.Row="0" 
                         Margin="12">
                         <Label 
                             Text="TOTAL"
                             Style="{StaticResource OrderTitleStyle}"/>
                         <Label 
-                            Text="{Binding Order.Total, StringFormat='${0:N}', Converter={StaticResource ToUpperConverter}}" 
+                            Text="{Binding Order.Total, StringFormat='€{0:N}', Converter={StaticResource ToUpperConverter}}" 
                             Style="{StaticResource OrderContentStyle}"/>
                     </StackLayout>
                     <StackLayout
-                        Grid.Column="1"
+                        Grid.Column="0"
                         Grid.Row="0"
                         Margin="12">
                         <Label 
-                            Text="DATE"
+                            Text="DATA"
                             Style="{StaticResource OrderTitleStyle}"/>
                         <Label 
                             Text="{Binding Order.OrderDate, Converter={StaticResource DatetimeConverter}}"
                             Style="{StaticResource OrderContentStyle}"/>
                     </StackLayout>
                     <StackLayout
+                        Grid.Column="0"
+                        Grid.Row="1"
+                        Margin="12">
+                        <Label 
+                            Text="EVENTO"
+                            Style="{StaticResource OrderTitleStyle}"/>
+                        <Label
+                            Text="{Binding ShippingAddress.Street, Converter={StaticResource ToUpperConverter}}"
+                            Style="{StaticResource AddressStyle}"/>
+                    </StackLayout>
+                    <StackLayout
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        Margin="12">
+                        <Label 
+                            Text="LOCAL"
+                            Style="{StaticResource OrderTitleStyle}"/>
+                        <Label
+                            Text="{Binding ShippingAddress.City, Converter={StaticResource ToUpperConverter}}"
+                            Style="{StaticResource AddressStyle}"/>
+                    </StackLayout>
+                    <!--<StackLayout
                         Grid.Column="1"
                         Grid.Row="1" 
                         Margin="12">
@@ -136,7 +158,8 @@
                         <Label 
                             Text="{Binding Order.OrderStatus, Converter={StaticResource ToUpperConverter}}"
                             Style="{StaticResource OrderContentStyle}"/>
-                    </StackLayout>
+                    </StackLayout>-->
+                    
                 </Grid>
                 <!-- SHIPPING ADDRESS -->
                 <!--<Grid
@@ -195,7 +218,7 @@
                             Style="{StaticResource OrderTotalStyle}"/>
                         <Label 
                             Grid.Row="1"                   
-                            Text="{Binding Order.Total, StringFormat='${0:N}'}"
+                            Text="{Binding Order.Total, StringFormat='€{0:N}'}"
                             TextColor="{StaticResource GreenColor}"
                             Style="{StaticResource OrderTotalStyle}"/>
                     </StackLayout>
