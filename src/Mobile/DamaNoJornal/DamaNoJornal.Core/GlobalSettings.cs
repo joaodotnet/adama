@@ -42,9 +42,9 @@ namespace DamaNoJornal.Core
             }
         }
 
-        public string ClientId { get { return "xamarin"; }}
+        public string ClientId { get { return "dama.client"; }}
 
-        public string ClientSecret { get { return "secret"; }}
+        public string ClientSecret { get { return "dama.secret"; }}
 
         public string AuthToken { get; set; }
         

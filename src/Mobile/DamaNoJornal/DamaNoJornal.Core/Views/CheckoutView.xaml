@@ -134,7 +134,7 @@
                             Text="EVENTO"
                             Style="{StaticResource OrderTitleStyle}"/>
                         <Label
-                            Text="{Binding ShippingAddress.Street, Converter={StaticResource ToUpperConverter}}"
+                            Text="{Binding Order.ShippingStreet, Converter={StaticResource ToUpperConverter}}"
                             Style="{StaticResource AddressStyle}"/>
                     </StackLayout>
                     <StackLayout
@@ -145,7 +145,7 @@
                             Text="LOCAL"
                             Style="{StaticResource OrderTitleStyle}"/>
                         <Label
-                            Text="{Binding ShippingAddress.City, Converter={StaticResource ToUpperConverter}}"
+                            Text="{Binding Order.ShippingCity, Converter={StaticResource ToUpperConverter}}"
                             Style="{StaticResource AddressStyle}"/>
                     </StackLayout>
                     <!--<StackLayout
