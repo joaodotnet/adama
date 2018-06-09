@@ -6,28 +6,24 @@ namespace DamaNoJornal.Core.Helpers
 {
     public static class Utils
     {
-        public static (string Title, string PictureUri) GetLoginProfileInfo(string authAccessToken)
+        public static string GetLoginPicturiSource(string email)
         {
-            string title = "Olá ";
             string iconPath = "";
-            switch (authAccessToken)
+            switch (email)
             {
-                case GlobalSetting.JueAuthToken:
-                    title += "João";
+                case "jue@damanojornal.com":
                     iconPath = "Assets\\img-joao.png";
                     break;
-                case GlobalSetting.SueAuthToken:
-                    title += "Susana";
+                case "sue@damanojornal.com":
                     iconPath = "Assets\\img-sue.png";
                     break;
-                case GlobalSetting.SoniaAuthToken:
-                    title += "Sónia";
+                case "sonia@damanojornal.com":
                     iconPath = "Assets\\img-sonia.png";
                     break;
                 default:
                     break;
             }
-            return (title, iconPath);
+            return iconPath;
         }
     }
 }

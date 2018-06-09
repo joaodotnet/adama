@@ -1,6 +1,8 @@
 ﻿using DamaNoJornal.Core.Models.User;
+using DamaNoJornal.Core.Services.RequestProvider;
 using DamaNoJornal.Core.Services.Settings;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DamaNoJornal.Core.Services.User
@@ -58,20 +60,21 @@ namespace DamaNoJornal.Core.Services.User
         public async Task<UserInfo> GetUserInfoAsync(string authToken)
         {
             await Task.Delay(10);
-            JueUserInfo.UserId = _settingsService.JueUserId;
-            switch (authToken)
-            {
-                case GlobalSetting.JueAuthToken:
-                    return JueUserInfo;
-                case GlobalSetting.SueAuthToken:
-                    SueUserInfo.UserId = _settingsService.SueUserId;
-                    return SueUserInfo;
-                case GlobalSetting.SoniaAuthToken:
-                    MotherUserInfo.UserId = _settingsService.MotherUserId;
-                    return MotherUserInfo;
-                default:
-                    return JueUserInfo;
-            }
+            return JueUserInfo;
+            //JueUserInfo.UserId = _settingsService.JueUserId;
+            //switch (authToken)
+            //{
+            //    case GlobalSetting.JueAuthToken:
+            //        return JueUserInfo;
+            //    case GlobalSetting.SueAuthToken:
+            //        SueUserInfo.UserId = _settingsService.SueUserId;
+            //        return SueUserInfo;
+            //    case GlobalSetting.SoniaAuthToken:
+            //        MotherUserInfo.UserId = _settingsService.MotherUserId;
+            //        return MotherUserInfo;
+            //    default:
+            //        return JueUserInfo;
+            //}
         }
     }
 }

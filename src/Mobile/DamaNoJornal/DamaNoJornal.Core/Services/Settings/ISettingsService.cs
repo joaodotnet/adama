@@ -11,10 +11,7 @@ namespace DamaNoJornal.Core.Services.Settings
         bool UseFakeLocation { get; set; }
         string Latitude { get; set; }
         string Longitude { get; set; }
-        bool AllowGpsLocation { get; set; }
-        string JueUserId { get; set; }
-        string SueUserId { get; set; }
-        string MotherUserId { get; set; }
+        bool AllowGpsLocation { get; set; }      
         string PlaceId { get; set; }
 
         bool GetValueOrDefault(string key, bool defaultValue);

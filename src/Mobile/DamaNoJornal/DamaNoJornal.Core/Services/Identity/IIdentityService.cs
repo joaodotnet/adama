@@ -1,4 +1,6 @@
 ﻿using DamaNoJornal.Core.Models.Token;
+using DamaNoJornal.Core.Models.User;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DamaNoJornal.Core.Services.Identity
@@ -8,5 +10,6 @@ namespace DamaNoJornal.Core.Services.Identity
         string CreateAuthorizationRequest();
         string CreateLogoutRequest(string token);
         Task<UserToken> GetTokenAsync(string code);
+        Task<List<UserInfo>> GetStaffUsersAsync();
     }
 }
