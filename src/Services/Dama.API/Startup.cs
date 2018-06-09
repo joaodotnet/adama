@@ -124,7 +124,7 @@ namespace Dama.API
                 app.UseHsts();
             }
             app.UseCors("CorsPolicy");
-            //app.AddBasicAuthentication();
+            app.AddBasicAuthentication();
             app.UseHttpsRedirection();
             app.UseMvcWithDefaultRoute();
         }

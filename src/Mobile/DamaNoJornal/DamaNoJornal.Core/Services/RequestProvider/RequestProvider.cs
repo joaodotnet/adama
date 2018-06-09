@@ -6,6 +6,7 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace DamaNoJornal.Core.Services.RequestProvider
@@ -121,10 +122,13 @@ namespace DamaNoJornal.Core.Services.RequestProvider
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            if (!string.IsNullOrEmpty(token))
-            {
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            }
+            //if (!string.IsNullOrEmpty(token))
+            //{
+            //    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            //}
+            var byteArray = Encoding.ASCII.GetBytes($"{GlobalSetting.Instance.ClientId}:{GlobalSetting.Instance.ClientSecret}");
+
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
             return httpClient;
         }
 

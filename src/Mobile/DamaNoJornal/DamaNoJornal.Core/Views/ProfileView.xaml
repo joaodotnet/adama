@@ -2,12 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DamaNoJornal.Core.Views.ProfileView"   
-             xmlns:templates="clr-namespace:DamaNoJornal.Core.Views.Templates;assembly=DamaNoJornal.Core"
 		     xmlns:viewModelBase="clr-namespace:DamaNoJornal.Core.ViewModels.Base;assembly=DamaNoJornal.Core"
-             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-             xmlns:animations="clr-namespace:DamaNoJornal.Core.Animations;assembly=DamaNoJornal.Core"
-             xmlns:triggers="clr-namespace:DamaNoJornal.Core.Triggers;assembly=DamaNoJornal.Core"
-             xmlns:behaviors="clr-namespace:DamaNoJornal.Core.Behaviors;assembly=DamaNoJornal.Core"
 			 viewModelBase:ViewModelLocator.AutoWireViewModel="true"
              Title="Perfil">
     <ContentPage.Resources>

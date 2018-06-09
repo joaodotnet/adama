@@ -48,14 +48,6 @@
             <RowDefinition Height="60" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <!-- LOG OUT BUTTON -->
-        <!--<Button         
-            Grid.Row="0"
-            Text="LOG OUT" 
-            TextColor="{StaticResource BlackColor}"
-            BackgroundColor="{StaticResource GrayColor}"
-            Command="{Binding LogoutCommand}" />-->
-        <!-- ORDERS -->
         <Grid
             Grid.Row="1">
             <Grid.RowDefinitions>

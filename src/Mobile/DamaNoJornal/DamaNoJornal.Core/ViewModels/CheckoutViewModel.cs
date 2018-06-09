@@ -21,7 +21,6 @@ namespace DamaNoJornal.Core.ViewModels
     {
         private ObservableCollection<BasketItem> _orderItems;
         private Order _order;
-        private Address _shippingAddress;
 
         private ISettingsService _settingsService;
         private IBasketService _basketService;
@@ -60,16 +59,6 @@ namespace DamaNoJornal.Core.ViewModels
             }
         }
 
-        public Address ShippingAddress
-        {
-            get { return _shippingAddress; }
-            set
-            {
-                _shippingAddress = value;
-                RaisePropertyChanged(() => ShippingAddress);
-            }
-        }
-
         public ICommand CheckoutCommand => new Command(async () => await CheckoutAsync());
 
         public override async Task InitializeAsync(object navigationData)
@@ -85,17 +74,6 @@ namespace DamaNoJornal.Core.ViewModels
 
                 var authToken = _settingsService.AuthAccessToken;
                 var userInfo = await _userService.GetUserInfoAsync(authToken);
-
-                // Create Shipping Address
-                ShippingAddress = new Address
-                {
-                    Id = Guid.NewGuid(), //!string.IsNullOrEmpty(userInfo?.UserId) ? new Guid(userInfo.UserId) : Guid.NewGuid(),
-                    Street = userInfo?.Street,
-                    ZipCode = userInfo?.PostalCode,
-                    State = userInfo?.State,
-                    Country = userInfo?.Country,
-                    City = userInfo?.City
-                };
 
                 // Create Payment Info
                 var paymentInfo = new PaymentInfo
@@ -119,23 +97,11 @@ namespace DamaNoJornal.Core.ViewModels
                     CardSecurityNumber = paymentInfo.SecurityNumber,
                     CardExpiration = DateTime.Now.AddYears(5),
                     CardTypeId = paymentInfo.CardType.Id,
-                    //ShippingState = _shippingAddress.State,
                     ShippingCountry = place.Country,
                     ShippingStreet = place.Name,
                     ShippingCity = place.City,
                     ShippingZipCode = place.PostalCode
-                    //Total = CalculateTotal(CreateOrderItems(orderItems))
                 };
-
-                if (_settingsService.UseMocks)
-                {
-                    // Get number of orders
-                    var orders = await _orderService.GetOrdersAsync(userInfo.UserId, authToken);
-
-                    // Create the OrderNumber
-                    Order.OrderNumber = orders.Count + 1;
-                    RaisePropertyChanged(() => Order);
-                }
 
                 IsBusy = false;
             }
@@ -151,14 +117,8 @@ namespace DamaNoJornal.Core.ViewModels
                 var basket = _orderService.MapOrderToBasket(Order);
                 basket.RequestId = Guid.NewGuid();
 
-                // Create basket checkout
-                //await _basketService.CheckoutAsync(basket, authToken);
-
-                //if (_settingsService.UseMocks)
-                //{
-                    await _orderService.CreateOrderAsync(Order, authToken);
-                //}
-
+                await _orderService.CreateOrderAsync(Order, authToken);
+               
                 // Clean Basket
                 await _basketService.ClearBasketAsync(userInfo.UserId, authToken);
 
@@ -171,12 +131,12 @@ namespace DamaNoJornal.Core.ViewModels
                 await NavigationService.RemoveLastFromBackStackAsync();
 
                 // Show Dialog
-                await DialogService.ShowAlertAsync("Order sent successfully!", "Checkout", "Ok");
+                await DialogService.ShowAlertAsync("Encomenda efectuado com sucesso!", "Checkout", "Ok");
                 await NavigationService.RemoveLastFromBackStackAsync();
             }
-            catch
+            catch(Exception ex)
             {
-                await DialogService.ShowAlertAsync("An error ocurred. Please, try again.", "Oops!", "Ok");
+                await DialogService.ShowAlertAsync($"Ocorreu um erro: {ex.Message}", "Oops!", "Ok");
             }
         }
 

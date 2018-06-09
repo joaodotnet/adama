@@ -36,8 +36,6 @@ namespace DamaNoJornal.Core.ViewModels
             }
         }        
 
-        //public ICommand LogoutCommand => new Command(async () => await LogoutAsync());
-
         public ICommand OrderDetailCommand => new Command<Order>(async (order) => await OrderDetailAsync(order));
 
         public override async Task InitializeAsync(object navigationData)
@@ -52,17 +50,6 @@ namespace DamaNoJornal.Core.ViewModels
 
             IsBusy = false;
         }
-
-        //private async Task LogoutAsync()
-        //{
-        //    IsBusy = true;
-
-        //    // Logout
-        //    await NavigationService.NavigateToAsync<LoginViewModel>(new LogoutParameter { Logout = true });
-        //    await NavigationService.RemoveBackStackAsync();
-
-        //    IsBusy = false;
-        //}
 
         private async Task OrderDetailAsync(Order order)
         {
