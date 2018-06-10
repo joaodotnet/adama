@@ -80,7 +80,7 @@
             <Grid 
                 IsVisible="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}">
                 <Label 
-                    Text="NO PRODUCTS FOUND"      
+                    Text="NÃO FORAM ENCONTRADOS PRODUTOS"      
                     IsVisible="{Binding Products.Count, Converter={StaticResource InverseCountToBoolConverter}}"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"/>

@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DamaNoJornal.UWP")]
+[assembly: AssemblyTitle("DamaNoJornal")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("DamaNoJornal.UWP")]
-[assembly: AssemblyCopyright("Copyright Microsoft © 2017")]
+[assembly: AssemblyCompany("JS-company")]
+[assembly: AssemblyProduct("damanojornal app")]
+[assembly: AssemblyCopyright("© Copyright 2018 Dama no Jornal | All Rights Reserved")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

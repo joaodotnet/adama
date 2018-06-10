@@ -10,9 +10,9 @@ namespace DamaNoJornal.Services
             return UserDialogs.Instance.AlertAsync(message, title, buttonLabel);
         }
 
-        public Task<PromptResult> ShowDialogAsync(string message, string title, string buttonOk, string buttonCancel)
+        public Task<bool> ShowDialogAsync(string message, string title, string buttonOk, string buttonCancel)
         {
-            return UserDialogs.Instance.PromptAsync(message, title, buttonOk, buttonCancel);
+            return UserDialogs.Instance.ConfirmAsync(message, title, buttonOk, buttonCancel);
         }
     }
 }

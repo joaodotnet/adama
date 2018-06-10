@@ -150,7 +150,7 @@ namespace DamaNoJornal.Core.ViewModels
         {
             IsBusy = true;
             var result = await DialogService.ShowDialogAsync("Deseja eliminar?", "Apagar Produto", "Apagar", "Cancelar");
-            if(result.Ok)
+            if(result)
             {
                 await DeleteBasketItemAsync(item);
                 BadgeCount--;
