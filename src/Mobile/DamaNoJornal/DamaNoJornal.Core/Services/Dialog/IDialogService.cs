@@ -6,6 +6,6 @@ namespace DamaNoJornal.Services
     public interface IDialogService
     {
         Task ShowAlertAsync(string message, string title, string buttonLabel);
-        Task<PromptResult> ShowDialogAsync(string message, string title, string buttonOk, string buttonCancel);
+        Task<bool> ShowDialogAsync(string message, string title, string buttonOk, string buttonCancel);
     }
 }

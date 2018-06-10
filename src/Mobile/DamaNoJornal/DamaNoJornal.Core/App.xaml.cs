@@ -33,7 +33,7 @@ namespace DamaNoJornal
         {
             _settingsService = ViewModelLocator.Resolve<ISettingsService>();
             _settingsService.UseMocks = false;
-            _settingsService.UrlBase = "http://localhost:50390";
+            //_settingsService.UrlBase = "http://ec2-54-93-208-80.eu-central-1.compute.amazonaws.com:5859";
             if (!_settingsService.UseMocks)
                 ViewModelLocator.UpdateDependencies(_settingsService.UseMocks);
         }
