@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Web.Interfaces;
-using Web.ViewModels;
+using DamaWeb.Interfaces;
+using DamaWeb.ViewModels;
 
-namespace Web.Pages.Product
+namespace DamaWeb.Pages.Product
 {
     public class IndexModel : PageModel
     {

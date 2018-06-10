@@ -7,7 +7,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Web.Pages.Account.Manage
+namespace DamaWeb.Pages.Account.Manage
 {
     public class GenerateRecoveryCodesModel : PageModel
     {

@@ -7,7 +7,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
-namespace Web.Pages.Account.Manage
+namespace DamaWeb.Pages.Account.Manage
 {
     public class ChangePasswordModel : PageModel
     {

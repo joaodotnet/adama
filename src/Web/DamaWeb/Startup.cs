@@ -10,8 +10,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
-using Web.Interfaces;
-using Web.Services;
+using DamaWeb.Interfaces;
+using DamaWeb.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,8 +20,9 @@ using System.Text;
 using AutoMapper;
 using ApplicationCore;
 using System.Globalization;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Web
+namespace DamaWeb
 {
     public class Startup
     {
@@ -56,7 +57,7 @@ namespace Web
         }
 
         public void ConfigureProductionServices(IServiceCollection services)
-        {
+        {            
             // use real database
             services.AddDbContext<DamaContext>(c =>
             {
@@ -81,6 +82,13 @@ namespace Web
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
                     options.Password.RequireDigit = false;
@@ -137,7 +145,8 @@ namespace Web
                     options.Conventions.AddPageRoute("/Search/Index", "procurar/{q?}");
                     options.Conventions.AddPageRoute("/Customize/Index", "personalizar/");
                     options.Conventions.AddPageRoute("/Customize/Result", "personalizar/resultado");
-                });
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             _services = services;
         }
@@ -151,15 +160,15 @@ namespace Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
-                ListAllRegisteredServices(app);
                 app.UseDatabaseErrorPage();
             }
             else
             {
                 app.UseExceptionHandler("/Catalog/Error");
+                app.UseHsts();
             }
 
+            app.UseHttpsRedirection();
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("pt-PT"),
@@ -170,6 +179,7 @@ namespace Web
             });
 
             app.UseStaticFiles();
+            app.UseCookiePolicy();
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {

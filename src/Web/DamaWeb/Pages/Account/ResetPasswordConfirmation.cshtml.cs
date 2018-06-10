@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Web.Pages.Account
+namespace DamaWeb.Pages.Account
 {
     public class ResetPasswordConfirmationModel : PageModel
     {

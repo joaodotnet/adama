@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Web.Extensions
+namespace DamaWeb.Extensions
 {
     public static class EnumHelper<T>
     {

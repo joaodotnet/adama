@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Web.ViewModels;
+using DamaWeb.ViewModels;
 
-namespace Web.Interfaces
+namespace DamaWeb.Interfaces
 {
     public interface ICustomizeViewModelService
     {

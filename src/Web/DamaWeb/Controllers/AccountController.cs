@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace Web.Controllers
+namespace DamaWeb.Controllers
 {
     [Route("[controller]/[action]")]
     public class AccountController : Controller

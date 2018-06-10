@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ardalis.GuardClauses" Version="1.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.0.2" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
+    <PackageReference Include="Ardalis.GuardClauses" Version="1.2.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.1.0" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
     <PackageReference Include="System.Security.Claims" Version="4.3.0" />
   </ItemGroup>
 

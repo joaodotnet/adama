@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 
-namespace Web.Pages.Account.Manage
+namespace DamaWeb.Pages.Account.Manage
 {
     public static class ManageNavPages
     {

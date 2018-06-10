@@ -7,7 +7,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
-namespace Web.Pages.Account
+namespace DamaWeb.Pages.Account
 {
     public class LoginWithRecoveryCodeModel : PageModel
     {

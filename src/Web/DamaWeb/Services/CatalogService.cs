@@ -2,8 +2,8 @@
 using ApplicationCore.Specifications;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ApplicationCore.Entities;
-using Web.Interfaces;
-using Web.ViewModels;
+using DamaWeb.Interfaces;
+using DamaWeb.ViewModels;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
-using Web.Extensions;
+using DamaWeb.Extensions;
 
-namespace Web.Services
+namespace DamaWeb.Services
 {
     /// <summary>
     /// This is a UI-specific service so belongs in UI project. It does not contain any business logic and works

@@ -5,13 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace DamaWeb.Pages.Basket
+namespace DamaWeb.Pages
 {
-    public class ResultModel : PageModel
+    public class PrivacyModel : PageModel
     {
         public void OnGet()
         {
-
         }
     }
 }

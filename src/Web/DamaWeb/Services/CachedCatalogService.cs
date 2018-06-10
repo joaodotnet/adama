@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using Web.Interfaces;
-using Web.ViewModels;
+using DamaWeb.Interfaces;
+using DamaWeb.ViewModels;
 using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ApplicationCore.Specifications;
 
-namespace Web.Services
+namespace DamaWeb.Services
 {
     public class CachedCatalogService : ICatalogService
     {
