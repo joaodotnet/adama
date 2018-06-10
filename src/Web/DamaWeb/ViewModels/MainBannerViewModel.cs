@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Web.ViewModels
+namespace DamaWeb.ViewModels
 {
     public class MainBannerViewModel
     {

@@ -6,13 +6,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.ComponentModel.DataAnnotations;
-using Web.Extensions;
+using DamaWeb.Extensions;
 using ApplicationCore.Entities.OrderAggregate;
 using Microsoft.AspNetCore.Mvc;
 using ApplicationCore;
 using Microsoft.Extensions.Options;
 
-namespace Web.Pages.Order
+namespace DamaWeb.Pages.Order
 {
     public class IndexModel : PageModel
     {

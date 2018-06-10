@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Authentication;
 using System;
 using System.ComponentModel.DataAnnotations;
 using ApplicationCore.Interfaces;
-using Web.ViewModels;
+using DamaWeb.ViewModels;
 
-namespace Web.Pages.Account
+namespace DamaWeb.Pages.Account
 {
     public class SigninModel : PageModel
     {

@@ -9,11 +9,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Web.Extensions;
-using Web.Interfaces;
-using Web.ViewModels;
+using DamaWeb.Extensions;
+using DamaWeb.Interfaces;
+using DamaWeb.ViewModels;
 
-namespace Web.Services
+namespace DamaWeb.Services
 {
     public class CustomizeViewModelService : ICustomizeViewModelService
     {

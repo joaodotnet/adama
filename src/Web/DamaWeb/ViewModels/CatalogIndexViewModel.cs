@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 
-namespace Web.ViewModels
+namespace DamaWeb.ViewModels
 {
     public class CatalogIndexViewModel
     {

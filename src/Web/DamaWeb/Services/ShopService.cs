@@ -1,7 +1,7 @@
 ﻿using ApplicationCore.Entities;
 using AutoMapper;
-using Web.Interfaces;
-using Web.ViewModels;
+using DamaWeb.Interfaces;
+using DamaWeb.ViewModels;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Infrastructure.Identity;
 
-namespace Web.Services
+namespace DamaWeb.Services
 {
     public class ShopService : IShopService
     {

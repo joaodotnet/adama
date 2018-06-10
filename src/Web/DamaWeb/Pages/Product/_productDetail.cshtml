@@ -16,7 +16,7 @@
     </div>
 
     <p class="dama-product-description mb-md-4">@Model.ProductDescription</p>
-    <small>Tempo de entrega entre @Model.DeliveryTimeMin a @Model.DeliveryTimeMax @(Web.Extensions.EnumHelper<ApplicationCore.Entities.DeliveryTimeUnitType>.GetDisplayValue(Model.DeliveryTimeUnit))</small>
+    <small>Tempo de entrega entre @Model.DeliveryTimeMin a @Model.DeliveryTimeMax @(DamaWeb.Extensions.EnumHelper<ApplicationCore.Entities.DeliveryTimeUnitType>.GetDisplayValue(Model.DeliveryTimeUnit))</small>
 
     @for (int i = 0; i < Model.Attributes.Count; i++)
     {

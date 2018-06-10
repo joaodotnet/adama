@@ -7,10 +7,10 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Web.Interfaces;
-using Web.ViewModels;
+using DamaWeb.Interfaces;
+using DamaWeb.ViewModels;
 
-namespace Web.Pages.Account.Manage
+namespace DamaWeb.Pages.Account.Manage
 {
     public class AddressesModel : PageModel
     {

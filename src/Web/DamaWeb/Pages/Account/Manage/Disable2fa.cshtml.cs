@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
-namespace Web.Pages.Account.Manage
+namespace DamaWeb.Pages.Account.Manage
 {
     public class Disable2faModel : PageModel
     {

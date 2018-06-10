@@ -5,11 +5,11 @@ using System.Linq;
 using System;
 using ApplicationCore.Entities.OrderAggregate;
 using System.Collections.Generic;
-using Web.Extensions;
+using DamaWeb.Extensions;
 using ApplicationCore.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace Web.Pages.Order
+namespace DamaWeb.Pages.Order
 {
     public class DetailModel : PageModel
     {

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Web.ViewModels
+namespace DamaWeb.ViewModels
 {
     public class CustomizeViewModel
     {

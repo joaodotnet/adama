@@ -1,8 +1,8 @@
-﻿using Web.ViewModels;
+﻿using DamaWeb.ViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Web.Interfaces
+namespace DamaWeb.Interfaces
 {
     public interface IBasketViewModelService
     {

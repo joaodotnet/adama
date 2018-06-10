@@ -1,4 +1,4 @@
-﻿namespace Web
+﻿namespace DamaWeb
 {
     public static class Constants
     {

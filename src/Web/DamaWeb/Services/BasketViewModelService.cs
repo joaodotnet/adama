@@ -4,11 +4,11 @@ using ApplicationCore.Entities;
 using System.Linq;
 using System.Collections.Generic;
 using ApplicationCore.Specifications;
-using Web.Interfaces;
-using Web.ViewModels;
-using Web.Extensions;
+using DamaWeb.Interfaces;
+using DamaWeb.ViewModels;
+using DamaWeb.Extensions;
 
-namespace Web.Services
+namespace DamaWeb.Services
 {
     public class BasketViewModelService : IBasketViewModelService
     {
