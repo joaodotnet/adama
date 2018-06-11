@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 using Infrastructure.Identity;
+using ApplicationCore.Interfaces;
 
 namespace DamaWeb.Services
 {
@@ -17,12 +18,14 @@ namespace DamaWeb.Services
     {
         private readonly DamaContext _db;
         private readonly AppIdentityDbContext _identityDb;
+        private readonly IUriComposer _uriComposer;
         private readonly IMapper _mapper;
-        public ShopService(DamaContext db, IMapper mapper, AppIdentityDbContext identity)
+        public ShopService(DamaContext db, IMapper mapper, AppIdentityDbContext identity, IUriComposer uriComposer)
         {
             _db = db;
             _mapper = mapper;
             _identityDb = identity;
+            _uriComposer = uriComposer;
         }
 
         //public async Task<CatalogType> GetCatalogType(string type)
@@ -55,6 +58,12 @@ namespace DamaWeb.Services
                 .Include(x => x.ShopConfig)
                 .Where(x => x.ShopConfig.Type == ShopConfigType.NEWS_BANNER && x.ShopConfig.IsActive && x.IsActive)
                 .ToListAsync();
+
+            bannerConfig.ForEach(x =>
+            {
+                x.PictureUri = _uriComposer.ComposePicUri(x.PictureUri);
+            });
+
             return _mapper.Map<List<MainBannerViewModel>>(bannerConfig);
         }
 
