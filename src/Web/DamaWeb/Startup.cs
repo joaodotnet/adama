@@ -165,10 +165,10 @@ namespace DamaWeb
             else
             {
                 app.UseExceptionHandler("/Catalog/Error");
-                app.UseHsts();
+                //app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("pt-PT"),
