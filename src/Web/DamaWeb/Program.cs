@@ -18,7 +18,7 @@ namespace DamaWeb
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseUrls("https://0.0.0.0:44372/","http://0.0.0.0:5500/")
+                .UseUrls("http://0.0.0.0:5500/")
                 .UseStartup<Startup>();
     }
 }
