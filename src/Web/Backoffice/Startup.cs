@@ -20,6 +20,7 @@ using Backoffice.Interfaces;
 using Infrastructure.Services;
 using ApplicationCore;
 using ApplicationCore.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Backoffice
 {
@@ -35,6 +36,13 @@ namespace Backoffice
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
             services.AddDbContext<AppIdentityDbContext>(options =>
                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
 
@@ -67,7 +75,8 @@ namespace Backoffice
                     options.Conventions.AuthorizeFolder("/ShopConfig", "RequireAdministratorRole");
                     options.Conventions.AuthorizeFolder("/Orders", "RequireAdministratorRole");
                     options.Conventions.AuthorizePage("/Index", "RequireAdministratorRole");
-                });
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);            
 
             services.AddAutoMapper();
 
@@ -88,7 +97,6 @@ namespace Backoffice
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
                 app.UseDatabaseErrorPage();
             }
             else
@@ -106,6 +114,7 @@ namespace Backoffice
             });
 
             app.UseStaticFiles();
+            app.UseCookiePolicy();
 
             app.UseAuthentication();
 
