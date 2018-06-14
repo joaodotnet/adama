@@ -1,4 +1,6 @@
-﻿namespace DamaNoJornal.Core.Models.Catalog
+﻿using System.Collections.Generic;
+
+namespace DamaNoJornal.Core.Models.Catalog
 {
     public class CatalogItem
     {
@@ -11,5 +13,6 @@
         public string CatalogBrand { get; set; }
         public int CatalogTypeId { get; set; }
         public string CatalogType { get; set; }
+        public ICollection<CatalogAttribute> CatalogAttributes { get; set; }
     }
 }

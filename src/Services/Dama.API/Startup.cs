@@ -38,6 +38,10 @@ namespace Dama.API
             services.Configure<ApiSettings>(Configuration.GetSection("ApiSettings"));
 
             services.AddMvc()
+                .AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                })
                 .AddControllersAsServices()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
