@@ -43,7 +43,8 @@ namespace Dama.API.Controllers
             var totalItems = await _damaContext.CatalogItems
                 .LongCountAsync();
 
-            var itemsOnPage = await _damaContext.CatalogItems
+            var itemsOnPage = await _damaContext.CatalogItems    
+                .Include(c => c.CatalogAttributes)
                 .OrderBy(c => c.Name)
                 .Skip(pageSize * pageIndex)
                 .Take(pageSize)

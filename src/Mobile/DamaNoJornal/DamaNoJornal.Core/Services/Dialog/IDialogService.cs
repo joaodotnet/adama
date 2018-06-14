@@ -7,5 +7,6 @@ namespace DamaNoJornal.Services
     {
         Task ShowAlertAsync(string message, string title, string buttonLabel);
         Task<bool> ShowDialogAsync(string message, string title, string buttonOk, string buttonCancel);
+        Task<string> ShowPromptAsync(string title, string buttonCancel, string[] options);
     }
 }

@@ -14,5 +14,10 @@ namespace DamaNoJornal.Services
         {
             return UserDialogs.Instance.ConfirmAsync(message, title, buttonOk, buttonCancel);
         }
+
+        public Task<string> ShowPromptAsync(string title, string buttonCancel,string[] options)
+        {
+            return UserDialogs.Instance.ActionSheetAsync(title, buttonCancel, null, null, options);
+        }
     }
 }
