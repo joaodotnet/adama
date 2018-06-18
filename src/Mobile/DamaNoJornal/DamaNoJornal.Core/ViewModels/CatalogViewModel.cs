@@ -148,7 +148,7 @@ namespace DamaNoJornal.Core.ViewModels
             //Testing            
             if(catalogItem.CatalogAttributes?.Count > 0)
             {
-                var result = await DialogService.ShowPromptAsync("Atributos", "Cancelar", catalogItem.CatalogAttributes.Select(x => x.Name).ToArray());
+                var result = await DialogService.ShowPromptAsync("Atributos", "Cancelar", catalogItem.CatalogAttributes.Select(x => $"{x.GetTypeDescription()} {x.Name}").ToArray());
                 if(!string.IsNullOrEmpty(result))
                 {
                     System.Diagnostics.Debug.WriteLine($"############## Atributo: {result} #################");

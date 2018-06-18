@@ -89,6 +89,7 @@ namespace Backoffice
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddSingleton<IEmailSender>(new EmailSender(Configuration.Get<BackofficeSettings>()));
+            services.AddScoped<IATService, ATService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
