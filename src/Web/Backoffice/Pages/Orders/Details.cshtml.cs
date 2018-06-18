@@ -16,11 +16,13 @@ namespace Backoffice.Pages.Orders
     {
         private readonly IBackofficeService _service;
         private readonly IOrderService _orderService;
+        private readonly IATService _atService;
 
-        public DetailsModel(IBackofficeService service, IOrderService orderService)
+        public DetailsModel(IBackofficeService service, IOrderService orderService, IATService atService)
         {
             _service = service;
             _orderService = orderService;
+            _atService = atService;
         }
 
         [BindProperty]
@@ -46,6 +48,21 @@ namespace Backoffice.Pages.Orders
                 return RedirectToPage(new { id = OrderModel.Id });                
             }
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostRegisterInvoiceAsync()
+        {
+            try
+            {
+                await _atService.CreateInvoiceAsync();
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"{ex.Message} ( {ex.InnerException?.Message})";
+                return RedirectToPage(new { id = OrderModel.Id });
+            }
+            StatusMessage = "Sucess!!!";
+            return RedirectToPage(new { id = OrderModel.Id });
         }
     }
 }
