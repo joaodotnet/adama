@@ -21,6 +21,7 @@ using Infrastructure.Services;
 using ApplicationCore;
 using ApplicationCore.Services;
 using Microsoft.AspNetCore.Mvc;
+using Infrastructure.Logging;
 
 namespace Backoffice
 {
@@ -74,6 +75,7 @@ namespace Backoffice
                     options.Conventions.AuthorizeFolder("/ProductType", "RequireAdministratorRole");
                     options.Conventions.AuthorizeFolder("/ShopConfig", "RequireAdministratorRole");
                     options.Conventions.AuthorizeFolder("/Orders", "RequireAdministratorRole");
+                    options.Conventions.AuthorizeFolder("/Sage", "RequireAdministratorRole");
                     options.Conventions.AuthorizePage("/Index", "RequireAdministratorRole");
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);            
@@ -83,13 +85,15 @@ namespace Backoffice
             // Register no-op EmailSender used by account confirmation and password reset during development
             // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
             services.Configure<BackofficeSettings>(Configuration);
+            services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
             services.AddScoped<IBackofficeService, BackofficeService>();
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddSingleton<IEmailSender>(new EmailSender(Configuration.Get<BackofficeSettings>()));
-            services.AddScoped<IATService, ATService>();
+            services.AddScoped<ISageService, SageService>();
+            services.AddScoped<IAuthConfigRepository, AuthConfigRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

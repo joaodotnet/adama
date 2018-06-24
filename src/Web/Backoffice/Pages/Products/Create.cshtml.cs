@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Backoffice.Interfaces;
 using Microsoft.Extensions.Options;
 using Backoffice.Extensions;
+using ApplicationCore;
 
 namespace Backoffice.Pages.Products
 {

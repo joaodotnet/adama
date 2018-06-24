@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ApplicationCore.DTOs;
 using ApplicationCore.Entities.OrderAggregate;
 using ApplicationCore.Interfaces;
 using Backoffice.Extensions;
@@ -16,13 +17,11 @@ namespace Backoffice.Pages.Orders
     {
         private readonly IBackofficeService _service;
         private readonly IOrderService _orderService;
-        private readonly IATService _atService;
 
-        public DetailsModel(IBackofficeService service, IOrderService orderService, IATService atService)
+        public DetailsModel(IBackofficeService service, IOrderService orderService)
         {
             _service = service;
             _orderService = orderService;
-            _atService = atService;
         }
 
         [BindProperty]
@@ -52,16 +51,11 @@ namespace Backoffice.Pages.Orders
 
         public async Task<IActionResult> OnPostRegisterInvoiceAsync()
         {
-            try
-            {
-                await _atService.CreateInvoiceAsync();
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = $"{ex.Message} ( {ex.InnerException?.Message})";
-                return RedirectToPage(new { id = OrderModel.Id });
-            }
-            StatusMessage = "Sucess!!!";
+            SageResponseDTO response = await _service.RegisterInvoiceAsync(OrderModel.Id);
+            if (response.Message == "Success")
+                StatusMessage = $"Sucesso foi criado a fatura: {response.InvoiceNumber}";
+            else
+                StatusMessage = $"Erro: {response.Message}, Resposta: {response.ResponseBody}";
             return RedirectToPage(new { id = OrderModel.Id });
         }
     }

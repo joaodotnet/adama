@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using ApplicationCore.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -12,6 +13,7 @@ namespace Infrastructure.Identity
         }
 
         public DbSet<UserAddress> UserAddresses { get; set; }
+        public DbSet<AuthConfig> AuthConfigs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -25,20 +27,13 @@ namespace Infrastructure.Identity
                 .HasForeignKey(x => x.UserId)
                 .IsRequired();
 
-            //builder.Entity<UserAddress>().Property(x => x.Street)
-            //    .IsRequired();
+            builder.Entity<AuthConfig>().ToTable("AuthConfig");
 
-            //builder.Entity<UserAddress>().Property(x => x.City)
-            //    .IsRequired();
+            builder.Entity<AuthConfig>().Property(x => x.AccessToken)
+                .HasMaxLength(255);
 
-            //builder.Entity<UserAddress>().Property(x => x.Country)
-            //    .IsRequired();
-
-            //builder.Entity<UserAddress>().Property(x => x.PostalCode)
-            //    .IsRequired();
-
-            //builder.Entity<UserAddress>().Property(x => x.DefaultAddress)
-            //    .IsRequired();
+            builder.Entity<AuthConfig>().Property(x => x.RefreshToken)
+                .HasMaxLength(255);
         }
     }
 
