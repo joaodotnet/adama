@@ -1,0 +1,29 @@
+﻿@page
+@model Backoffice.Pages.Sage.IndexModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Sage API</h2>
+
+<h4>Pedido</h4>
+<a asp-page-handler="SageAuth" class="btn btn-default">Sage Authentication</a>
+<a asp-page-handler="RefreshToken" class="btn btn-default">Refresh Token</a>
+<a asp-page-handler="AccountData" class="btn btn-default">Get Account Data</a>
+<a asp-page-handler="CreateInvoice" class="btn btn-primary">Create Invoice</a>
+<hr />
+<form method="post" >
+    Url: <input type="text" name="url" />
+    <input type="submit" value="Obter Dados" />
+    Fatura nº: <input type="text" name="id" />
+    Valor a pagar: <input type="number" name="amount" />
+    <input type="submit" value="Pagar fatura" asp-page-handler="PaymentInvoice" />
+</form>
+
+<div>
+    <h4>Resultado</h4>
+    <pre>
+    @Html.Raw(Model.Result)
+    </pre>
+</div>
+

@@ -11,6 +11,7 @@ using AutoMapper;
 using Backoffice.ViewModels;
 using Backoffice.Interfaces;
 using Microsoft.Extensions.Options;
+using ApplicationCore;
 
 namespace Backoffice.Pages.Products
 {

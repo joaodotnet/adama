@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Entities.OrderAggregate;
+﻿using ApplicationCore.DTOs;
+using ApplicationCore.Entities.OrderAggregate;
 using ApplicationCore.Interfaces;
 using AutoMapper;
 using Backoffice.Extensions;
@@ -20,11 +21,13 @@ namespace Backoffice.Services
     {
         private readonly DamaContext _db;
         private readonly IMapper _mapper;
+        private readonly ISageService _sageService;
 
-        public BackofficeService(DamaContext context, IMapper mapper)
+        public BackofficeService(DamaContext context, IMapper mapper, ISageService sageService)
         {
             _db = context;
             _mapper = mapper;
+            this._sageService = sageService;
         }
         public bool CheckIfFileExists(string fullpath, string fileName)
         {
@@ -137,6 +140,20 @@ namespace Backoffice.Services
         {
             var order = await _db.CustomizeOrders.FindAsync(id);
             return _mapper.Map<CustomizeOrderViewModel>(order);
+        }
+
+        public async Task<SageResponseDTO> RegisterInvoiceAsync(int id)
+        {
+            throw new NotImplementedException();
+            //var order = await _db.Orders
+            //    .Include(x => x.OrderItems)
+            //    .ThenInclude(i => i.ItemOrdered)
+            //    .SingleOrDefaultAsync(x => x.Id == id);
+
+            //if(order.TaxNumber.HasValue)
+            //{
+            //    _sageService.CreateInvoiceWithTaxNumber(order.OrderItems, order.BillingToAddress.Name, order.TaxNumber, order.BillingToAddress.Street, order.BillingToAddress.PostalCode, order.BillingToAddress.City);
+            //}
         }
     }
 }

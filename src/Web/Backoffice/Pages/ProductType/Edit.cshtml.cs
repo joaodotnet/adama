@@ -12,6 +12,7 @@ using Backoffice.ViewModels;
 using AutoMapper;
 using Backoffice.Interfaces;
 using Microsoft.Extensions.Options;
+using ApplicationCore;
 
 namespace Backoffice.Pages.ProductType
 {

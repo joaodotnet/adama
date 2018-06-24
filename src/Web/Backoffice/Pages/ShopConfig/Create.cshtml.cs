@@ -15,6 +15,7 @@ using Microsoft.Extensions.Options;
 using Backoffice.Extensions;
 using Backoffice.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using ApplicationCore;
 
 namespace Backoffice.Pages.ShopConfig
 {

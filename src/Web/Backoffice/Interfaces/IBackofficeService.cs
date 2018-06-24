@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Entities.OrderAggregate;
+﻿using ApplicationCore.DTOs;
+using ApplicationCore.Entities.OrderAggregate;
 using Backoffice.ViewModels;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -20,5 +21,6 @@ namespace Backoffice.Interfaces
         Task<List<CategoryViewModel>> GetCategoriesAsync(int productTypeId);
         Task<IList<CustomizeOrderViewModel>> GetCustomizeOrdersAsync();
         Task<CustomizeOrderViewModel> GetCustomizeOrderAsync(int id);
+        Task<SageResponseDTO> RegisterInvoiceAsync(int id);
     }
 }
