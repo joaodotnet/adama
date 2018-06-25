@@ -144,16 +144,45 @@ namespace Backoffice.Services
 
         public async Task<SageResponseDTO> RegisterInvoiceAsync(int id)
         {
-            throw new NotImplementedException();
-            //var order = await _db.Orders
-            //    .Include(x => x.OrderItems)
-            //    .ThenInclude(i => i.ItemOrdered)
-            //    .SingleOrDefaultAsync(x => x.Id == id);
+            var order = await _db.Orders
+                .Include(x => x.OrderItems)
+                .ThenInclude(i => i.ItemOrdered)
+                .SingleOrDefaultAsync(x => x.Id == id);
 
-            //if(order.TaxNumber.HasValue)
-            //{
-            //    _sageService.CreateInvoiceWithTaxNumber(order.OrderItems, order.BillingToAddress.Name, order.TaxNumber, order.BillingToAddress.Street, order.BillingToAddress.PostalCode, order.BillingToAddress.City);
-            //}
+            List<OrderItem> items = new List<OrderItem>();
+            foreach (var item in order.OrderItems)
+            {
+                items.Add(new OrderItem(item.ItemOrdered, item.UnitPrice, item.Units));
+            }
+
+            SageResponseDTO response;
+           
+            if (order.TaxNumber.HasValue)
+            {
+                response = await _sageService.CreateInvoiceWithTaxNumber(
+                    items,
+                    order.BillingToAddress.Name,
+                    order.TaxNumber.Value.ToString(),
+                    order.BillingToAddress.Street,
+                    order.BillingToAddress.PostalCode,
+                    order.BillingToAddress.City,
+                    order.Id);
+            }
+            else
+                response = await _sageService.CreateAnonymousInvoice(items, order.Id);
+
+            if(response.InvoiceId.HasValue)
+            {
+                order.SalesInvoiceId = response.InvoiceId.Value;
+                order.SalesInvoiceNumber = response.InvoiceNumber;                
+                await _db.SaveChangesAsync();
+
+                //Payment
+                await _sageService.InvoicePayment(order.SalesInvoiceId.Value, order.Total());
+                
+            }
+            
+            return response;
         }
     }
 }

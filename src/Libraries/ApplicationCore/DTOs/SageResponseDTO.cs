@@ -14,5 +14,6 @@ namespace ApplicationCore.DTOs
 
         public long? InvoiceId { get; set; }
         public string InvoiceNumber { get; set; }
+        public long? PaymentId { get; set; }
     }
 }

@@ -39,6 +39,8 @@ namespace Backoffice.ViewModels
         public OrderStateType OrderState { get; set; }
         [Display(Name = "Nº Produtos")]
         public int ItemsCount { get; set; }
+        [Display(Name = "Fatura Nº")]
+        public string SalesInvoiceNumber { get; set; }
         public List<OrderItemViewModel> Items { get; set; }
     }
 }

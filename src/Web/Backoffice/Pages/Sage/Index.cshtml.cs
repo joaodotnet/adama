@@ -64,7 +64,7 @@ namespace Backoffice.Pages.Sage
             {
                 new OrderItem(new CatalogItemOrdered(product.Id, product.Name, product.PictureUri),product.Price, 1)
             };
-            Result = (await _sageService.CreateAnonymousInvoice(orderItems)).ResponseBody;
+            Result = (await _sageService.CreateAnonymousInvoice(orderItems,0)).ResponseBody;
             return Page();
         }
 
