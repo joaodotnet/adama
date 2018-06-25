@@ -2,6 +2,12 @@
 	"folders": [
 		{
 			"path": "Web"
+		},
+		{
+			"path": "Libraries\\ApplicationCore"
+		},
+		{
+			"path": "Libraries\\Infrastructure"
 		}
 	],
 	"settings": {}

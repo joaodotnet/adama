@@ -266,6 +266,9 @@ namespace Infrastructure.Data
                 .IsRequired()
                 .HasDefaultValue(OrderStateType.PENDING);
 
+            builder.Property(x => x.SalesInvoiceNumber)
+                .HasMaxLength(255);
+
             var navigation = builder.Metadata.FindNavigation(nameof(Order.OrderItems));
 
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);

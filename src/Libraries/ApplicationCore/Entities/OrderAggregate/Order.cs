@@ -29,6 +29,9 @@ namespace ApplicationCore.Entities.OrderAggregate
         public decimal ShippingCost { get; private set; }
         public Boolean UseBillingSameAsShipping { get; private set; }
         public OrderStateType OrderState { get; set; }
+        public long? SalesInvoiceId { get; set; }
+        public string SalesInvoiceNumber { get; set; }
+        public long? SalesPaymentId { get; set; }
 
         // DDD Patterns comment
         // Using a private collection field, better for DDD Aggregate's encapsulation

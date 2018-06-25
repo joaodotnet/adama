@@ -38,6 +38,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.OrdersModel[0].OrderState)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrdersModel[0].SalesInvoiceNumber)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -70,7 +73,10 @@
                 @Html.DisplayFor(modelItem => item.OrderState)
             </td>
             <td>
-                <a asp-page="./Details" asp-route-id="@item.Id">Detalhe</a> 
+                @Html.DisplayFor(modelItem => item.SalesInvoiceNumber)
+            </td>
+            <td>
+                <a asp-page="./Details" asp-route-id="@item.Id">Detalhe</a>
             </td>
         </tr>
         }

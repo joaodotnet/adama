@@ -62,7 +62,7 @@ namespace Infrastructure.Services
             return (access_token, refresh_token);
         }
 
-        public async Task<SageResponseDTO> CreateAnonymousInvoice(List<OrderItem> orderItems)
+        public async Task<SageResponseDTO> CreateAnonymousInvoice(List<OrderItem> orderItems, int referenceId)
         {
             if (orderItems == null || orderItems.Count == 0)
                 return new SageResponseDTO { Message = "Error Input Data", ResponseBody = "Error: No items" };
@@ -72,7 +72,8 @@ namespace Infrastructure.Services
                 new KeyValuePair<string,string>("sales_invoice[date]",DateTime.Now.ToString("dd-MM-yyyy")),
                 new KeyValuePair<string,string>("sales_invoice[due_date]", DateTime.Now.AddMonths(1).ToString("dd-MM-yyyy")),
                 new KeyValuePair<string,string>("sales_invoice[carriage_tax_rate_id]", "4"),
-                new KeyValuePair<string,string>("sales_invoice[vat_exemption_reason_id]", "10")
+                new KeyValuePair<string,string>("sales_invoice[vat_exemption_reason_id]", "10"),
+                new KeyValuePair<string,string>("sales_invoice[reference]", referenceId.ToString())
             };
             AddLinesToBody(orderItems, body);
             return await CreateInvoice(body);
@@ -80,7 +81,7 @@ namespace Infrastructure.Services
 
 
 
-        public async Task<SageResponseDTO> CreateInvoiceWithTaxNumber(List<OrderItem> orderItems, string customerName, string taxNumber, string address, string postalCode, string city)
+        public async Task<SageResponseDTO> CreateInvoiceWithTaxNumber(List<OrderItem> orderItems, string customerName, string taxNumber, string address, string postalCode, string city, int referenceId)
         {
             if (orderItems == null || orderItems.Count == 0)
                 return new SageResponseDTO { Message = "Error Input Data", ResponseBody = "Error: No items" };
@@ -96,7 +97,8 @@ namespace Infrastructure.Services
                 new KeyValuePair<string,string>("sales_invoice[main_address_locality]", city),
                 new KeyValuePair<string,string>("sales_invoice[main_address_country_id]", "175"),
                 new KeyValuePair<string,string>("sales_invoice[carriage_tax_rate_id]", "4"),
-                new KeyValuePair<string,string>("sales_invoice[vat_exemption_reason_id]", "10")
+                new KeyValuePair<string,string>("sales_invoice[vat_exemption_reason_id]", "10"),
+                new KeyValuePair<string,string>("sales_invoice[reference]", referenceId.ToString())
             };
 
             AddLinesToBody(orderItems, body);
