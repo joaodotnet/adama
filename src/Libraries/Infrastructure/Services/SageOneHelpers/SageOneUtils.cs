@@ -14,12 +14,12 @@ namespace Infrastructure.Services.SageOneHelpers
     public static class SageOneUtils
     {
        
-        public static void SetHeaders (HttpClient httpClient, string signature, string nonce )
+        public static void SetHeaders (HttpClient httpClient, string signature, string nonce, bool getPdf = false )
         {
             // Set the required header values on the web request
             httpClient.DefaultRequestHeaders.Add("X-Signature", signature);
             httpClient.DefaultRequestHeaders.Add("X-Nonce", nonce);
-            httpClient.DefaultRequestHeaders.Add("Accept", "*/*");
+            httpClient.DefaultRequestHeaders.Add("Accept", !getPdf ? "*/*" : "application/pdf");
             httpClient.DefaultRequestHeaders.Add("User-Agent", "damanojornal");
             httpClient.Timeout = new TimeSpan(0,0,100000);            
         }

@@ -32,11 +32,11 @@ namespace Infrastructure.Services.SageOneHelpers
             _authConfig = _authRepository.GetAuthConfigAsync(DamaApplicationId.DAMA_BACKOFFICE).Result;
             _logger = logger;
         }
-        protected HttpRequestMessage GenerateRequest(HttpMethod method, Uri uri, List<KeyValuePair<string, string>> body, HttpClient httpClient)
+        protected HttpRequestMessage GenerateRequest(HttpMethod method, Uri uri, List<KeyValuePair<string, string>> body, HttpClient httpClient, bool getPdf = false)
         {
             var nonce = SageOneUtils.GenerateNonce();
             var signature = SageOneAPIRequestSigner.GenerateSignature(method.ToString().ToUpper(), uri, body, _settings.SigningSecret, _authConfig.AccessToken, nonce); //"TestSigningSecret"
-            SageOneUtils.SetHeaders(httpClient, signature, nonce);
+            SageOneUtils.SetHeaders(httpClient, signature, nonce, getPdf);
             HttpRequestMessage request = new HttpRequestMessage(method, uri);
             request.Content = new StringContent(SageOneUtils.ConvertPostParams(body),
                                                 body == null ? null : Encoding.UTF8,

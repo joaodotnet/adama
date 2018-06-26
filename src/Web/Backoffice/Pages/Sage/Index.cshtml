@@ -15,9 +15,11 @@
 <form method="post" >
     Url: <input type="text" name="url" />
     <input type="submit" value="Obter Dados" />
+    <br /><br />
     Fatura nº: <input type="text" name="id" />
     Valor a pagar: <input type="number" name="amount" />
     <input type="submit" value="Pagar fatura" asp-page-handler="PaymentInvoice" />
+    <input type="submit" value="Imprimir PDF" asp-page-handler="DownloadPDF" />
 </form>
 
 <div>

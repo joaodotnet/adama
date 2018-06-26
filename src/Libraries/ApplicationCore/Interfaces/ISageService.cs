@@ -12,7 +12,8 @@ namespace ApplicationCore.Interfaces
         Task<SageResponseDTO> CreateInvoiceWithTaxNumber(List<OrderItem> orderItems, string customerName, string taxNumber, string address, string postalCode, string city, int referenceId);
         Task<string> GetAccountData();
         Task<string> GetDataAsync(string url);
+        Task<byte[]> GetPDFInvoice(long id);
         Task<string> InvoicePayment(long id, decimal amount);
-        Task<(string AccessToken, string RefreshToken)> GetAccessTokenByRefreshAsync();
+        Task<(string AccessToken, string RefreshToken)> GetAccessTokenByRefreshAsync();        
     }
 }

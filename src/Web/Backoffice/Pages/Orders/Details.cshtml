@@ -162,6 +162,7 @@
                             else
                             {
                                 <input type="button" class="btn btn-info" value="Fatura já criada!" disabled />
+                                <a asp-page-handler="InvoicePDF" asp-route-id="@Model.OrderModel.Id" asp-route-invoiceId="@Model.OrderModel.SalesInvoiceId">Imprimir Fatura</a>
                             }
                         </div>
                     </div>

@@ -62,6 +62,19 @@ namespace Backoffice.Services
             return uriPath + filename; 
         }
 
+        public async Task SaveFileAsync(byte[] bytes, string fullPath, string filename)
+        {
+            var filePath = Path.Combine(
+                fullPath,
+                filename);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await stream.WriteAsync(bytes, 0, bytes.Length);
+            }
+
+        }
+
         public async Task<string> GetSku(int typeId, int illustationId, int? attributeId = null)
         {
             var type = await _db.CatalogTypes                
@@ -183,6 +196,11 @@ namespace Backoffice.Services
             }
             
             return response;
+        }
+
+        public Task<byte[]> GetInvoicePDF(int invoiceId)
+        {
+            return _sageService.GetPDFInvoice(invoiceId);
         }
     }
 }
