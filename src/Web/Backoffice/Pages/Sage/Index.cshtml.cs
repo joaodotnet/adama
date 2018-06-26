@@ -26,6 +26,8 @@ namespace Backoffice.Pages.Sage
             _context = context;
         }
         public string Result { get; set; }
+        [TempData]
+        public bool GetPDF { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
             //Check if has auth tokens
@@ -81,8 +83,16 @@ namespace Backoffice.Pages.Sage
                 Result = "Erro. URL não pode ser null";
                 return Page();
             }
-            Result = await _sageService.GetDataAsync(@url);
+            Result = await _sageService.GetDataAsync(@url);            
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostDownloadPDF(int id)
+        {
+            var bytes = await _sageService.GetPDFInvoice(id);
+            return File(bytes, "application/pdf",
+                $"DamaNoJornal#{id}.pdf");
+            
         }
     }
 }

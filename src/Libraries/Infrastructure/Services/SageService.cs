@@ -118,8 +118,9 @@ namespace Infrastructure.Services
                 var httpClient = CreateHttpClient(_authConfig.AccessToken);
                 HttpRequestMessage request = GenerateRequest(HttpMethod.Post, uri, body, httpClient);
                 var response = await httpClient.SendAsync(request);
-                var responseObj = await HandleResponse(response, HttpMethod.Post, uri, body);
-                if(responseObj.StatusCode == HttpStatusCode.Created)
+                var result = await HandleResponse(response, HttpMethod.Post, uri, body);
+                var responseObj = await FormatResponse(result);
+                if (responseObj.StatusCode == HttpStatusCode.Created)
                 {
                     JObject jObject = JObject.Parse(responseObj.ResponseBody);
                     responseObj.InvoiceId = (long)jObject["id"];
@@ -158,9 +159,9 @@ namespace Infrastructure.Services
                 HttpRequestMessage request = GenerateRequest(HttpMethod.Post, uri, body, httpClient);
                 var response = await httpClient.SendAsync(request);
 
-                var responseObj = await HandleResponse(response, HttpMethod.Post, uri, body);
+                var result = await HandleResponse(response, HttpMethod.Post, uri, body);
                 //var json = new { StatusCode = response.StatusCode, ResponseBody = await response.Content.ReadAsStringAsync() };
-                return JsonConvert.SerializeObject(responseObj, Formatting.Indented);
+                return JsonConvert.SerializeObject(await FormatResponse(result), Formatting.Indented);
             }
             catch (Exception ex)
             {
@@ -189,9 +190,9 @@ namespace Infrastructure.Services
 
                 HttpRequestMessage request = GenerateRequest(HttpMethod.Get, uri, null, httpClient);
                 var response = await httpClient.SendAsync(request);
-                var responseObj = await HandleResponse(response, HttpMethod.Get, uri, null);
+                var result = await HandleResponse(response, HttpMethod.Get, uri, null);
                 //var json = new { StatusCode = response.StatusCode, ResponseBody = await response.Content.ReadAsStringAsync() };
-                return JsonConvert.SerializeObject(responseObj, Formatting.Indented);
+                return JsonConvert.SerializeObject(await FormatResponse(result), Formatting.Indented);
             }
             catch (Exception ex)
             {
@@ -217,10 +218,10 @@ namespace Infrastructure.Services
                 var uri = builder.Uri;
                 var httpClient = CreateHttpClient(_authConfig.AccessToken);
                 HttpRequestMessage request = GenerateRequest(HttpMethod.Get, uri, null, httpClient);
-                var response = await httpClient.SendAsync(request);
-                var responseObj = await HandleResponse(response, HttpMethod.Get, uri, null);
+                var response = await httpClient.SendAsync(request);                
+                var result = await HandleResponse(response, HttpMethod.Get, uri, null);
                 //var json = new { StatusCode = response.StatusCode, ResponseBody = await response.Content.ReadAsStringAsync() };
-                return JsonConvert.SerializeObject(responseObj, Formatting.Indented);
+                return JsonConvert.SerializeObject(await FormatResponse(result), Formatting.Indented);
             }
             catch (Exception ex)
             {
@@ -233,6 +234,20 @@ namespace Infrastructure.Services
                 };
                 return JsonConvert.SerializeObject(json, Formatting.Indented);
             }
+        }
+
+        public async Task<byte[]> GetPDFInvoice(long invoiceId)
+        {
+            var builder = new UriBuilder(_baseUrl)
+            {
+                Path = $"/accounts/v2/sales_invoices/{invoiceId}"
+            };
+            var uri = builder.Uri;
+            var httpClient = CreateHttpClient(_authConfig.AccessToken);
+            HttpRequestMessage request = GenerateRequest(HttpMethod.Get, uri, null, httpClient, true);
+            var response = await httpClient.SendAsync(request);
+            var result = await HandleResponse(response, HttpMethod.Get, uri, null);
+            return await result.Content.ReadAsByteArrayAsync();
         }
 
         private static void AddLinesToBody(List<OrderItem> orderItems, List<KeyValuePair<string, string>> body)
@@ -255,7 +270,7 @@ namespace Infrastructure.Services
             }
         }
 
-        private async Task<SageResponseDTO> HandleResponse(HttpResponseMessage response, HttpMethod httpMethod, Uri uri, List<KeyValuePair<string, string>> body)
+        private async Task<HttpResponseMessage> HandleResponse(HttpResponseMessage response, HttpMethod httpMethod, Uri uri, List<KeyValuePair<string, string>> body)
         {
             if (!response.IsSuccessStatusCode)
             {
@@ -280,8 +295,13 @@ namespace Infrastructure.Services
                     }
                 }
             }
-            return new SageResponseDTO { StatusCode = response.StatusCode, Message = "Success", ResponseBody = await response.Content.ReadAsStringAsync() };
+            return response;
+            
         }
 
+        private async Task<SageResponseDTO> FormatResponse(HttpResponseMessage message)
+        {
+            return new SageResponseDTO { StatusCode = message.StatusCode, Message = "Success", ResponseBody = await message.Content.ReadAsStringAsync() };
+        }        
     }
 }

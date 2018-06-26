@@ -41,6 +41,7 @@ namespace Backoffice.ViewModels
         public int ItemsCount { get; set; }
         [Display(Name = "Fatura Nº")]
         public string SalesInvoiceNumber { get; set; }
+        public long? SalesInvoiceId { get; set; }
         public List<OrderItemViewModel> Items { get; set; }
     }
 }
