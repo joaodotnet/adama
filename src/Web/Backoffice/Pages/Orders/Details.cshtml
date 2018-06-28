@@ -151,28 +151,35 @@
                     <select asp-for="OrderModel.OrderState" asp-items="Html.GetEnumSelectList<ApplicationCore.Entities.OrderAggregate.OrderStateType>()" class="form-control"></select>
                     <span asp-validation-for="OrderModel.OrderState" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-6"><input type="submit" value="Atualizar" class="btn btn-default" /></div>
-                        <div class="col-md-6">
-                            @if (string.IsNullOrEmpty(Model.OrderModel.SalesInvoiceNumber))
-                            {
-                                <input type="submit" value="Criar Fatura" class="btn btn-success" asp-page-handler="RegisterInvoice" />
-                            }
-                            else
-                            {
-                                <input type="button" class="btn btn-info" value="Fatura já criada!" disabled />
-                                <a asp-page-handler="InvoicePDF" asp-route-id="@Model.OrderModel.Id" asp-route-invoiceId="@Model.OrderModel.SalesInvoiceId">Imprimir Fatura</a>
-                            }
-                        </div>
-                    </div>
-                    
-                   
-                </div>
+                <input type="submit" value="Atualizar" class="btn btn-default" />                
             </form>           
         </div>
     </div>
+    <h4>Pagamento</h4>
+    <div class="row">
+        <div class="col-md-4">            
+                @if (!Model.OrderModel.SalesInvoiceId.HasValue)
+                {
+                    <form method="post">
+                        <input type="hidden" asp-for="OrderModel.Id" />
+                        <div class="form-group">
+                            <select asp-for="OrderModel.PaymentTypeSelected" asp-items="Html.GetEnumSelectList<ApplicationCore.DTOs.PaymentType>()" class="form-control"></select>
+                            <span asp-validation-for="OrderModel.PaymentTypeSelected" class="text-danger"></span>
+                        </div>
+                        <input type="submit" value="Criar Fatura/Recibo" class="btn btn-success" asp-page-handler="RegisterInvoice" />
+                    </form>
+                }                
+                else
+                {
+                    <span class="bold">Fatura nº @Model.OrderModel.SalesInvoiceNumber</span><br>
+                    <a asp-page-handler="InvoicePDF" asp-route-id="@Model.OrderModel.Id" asp-route-invoiceId="@Model.OrderModel.SalesInvoiceId">Imprimir Fatura</a> 
+                    <span>|</span>
+                    <a asp-page-handler="ReceiptPDF" asp-route-id="@Model.OrderModel.Id" asp-route-invoiceId="@Model.OrderModel.SalesInvoiceId" asp-route-paymentId="@Model.OrderModel.SalesPaymentId">Imprimir Recibo</a>
+                }            
+        </div>
+    </div>
 </div>
+<hr/>
 <div>
     <a asp-page="./Index">Voltar para a lista</a>
 </div>

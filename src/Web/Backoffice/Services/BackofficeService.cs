@@ -155,7 +155,7 @@ namespace Backoffice.Services
             return _mapper.Map<CustomizeOrderViewModel>(order);
         }
 
-        public async Task<SageResponseDTO> RegisterInvoiceAsync(int id)
+        public async Task<SageResponseDTO> RegisterInvoiceAsync(int id, PaymentType paymentType)
         {
             var order = await _db.Orders
                 .Include(x => x.OrderItems)
@@ -187,20 +187,46 @@ namespace Backoffice.Services
             if(response.InvoiceId.HasValue)
             {
                 order.SalesInvoiceId = response.InvoiceId.Value;
-                order.SalesInvoiceNumber = response.InvoiceNumber;                
-                await _db.SaveChangesAsync();
+                order.SalesInvoiceNumber = response.InvoiceNumber;                                
 
-                //Payment
-                await _sageService.InvoicePayment(order.SalesInvoiceId.Value, order.Total());
-                
+                //Payment                
+                var responsePayment = await _sageService.InvoicePayment(order.SalesInvoiceId.Value, paymentType, order.Total());
+
+                if(responsePayment != null && responsePayment.PaymentId.HasValue)
+                {
+                    order.SalesPaymentId = responsePayment.PaymentId;
+                }
+                await _db.SaveChangesAsync();
             }
             
             return response;
         }
 
-        public Task<byte[]> GetInvoicePDF(int invoiceId)
+        public async Task<SageResponseDTO> RegisterPaymentAsync(int id, PaymentType paymentTypeSelected)
+        {
+            var order = await _db.Orders
+                .SingleOrDefaultAsync(x => x.Id == id);
+
+            //Payment
+            var response = await _sageService.InvoicePayment(order.SalesInvoiceId.Value, paymentTypeSelected, order.Total());
+
+            if(response != null && response.PaymentId.HasValue)
+            {
+                order.SalesPaymentId = response.PaymentId;
+                await _db.SaveChangesAsync();
+            }
+
+            return response;
+        }
+
+        public Task<byte[]> GetInvoicePDF(long invoiceId)
         {
             return _sageService.GetPDFInvoice(invoiceId);
+        }
+
+        public Task<byte[]> GetReceiptPDF(long invoiceId, long paymentId)
+        {
+            return _sageService.GetPDFReceipt(invoiceId, paymentId);
         }
     }
 }

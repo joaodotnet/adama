@@ -55,7 +55,7 @@ namespace Backoffice.Pages.Orders
 
         public async Task<IActionResult> OnPostRegisterInvoiceAsync()
         {
-            SageResponseDTO response = await _service.RegisterInvoiceAsync(OrderModel.Id);
+            SageResponseDTO response = await _service.RegisterInvoiceAsync(OrderModel.Id, OrderModel.PaymentTypeSelected);
             if (response.Message == "Success")
                 StatusMessage = $"Sucesso foi criado a fatura: {response.InvoiceNumber}";
             else
@@ -63,7 +63,17 @@ namespace Backoffice.Pages.Orders
             return RedirectToPage(new { id = OrderModel.Id });
         }
 
-        public async Task<IActionResult> OnGetInvoicePDFAsync(int id, int invoiceId)
+        // public async Task<IActionResult> OnPostCreatePaymentAsync()
+        // {
+        //     SageResponseDTO response = await _service.RegisterPaymentAsync(OrderModel.Id, OrderModel.PaymentTypeSelected);
+        //     if (response.Message == "Success")
+        //         StatusMessage = $"Sucesso foi criado o recibo sobre a fatura {OrderModel.SalesInvoiceNumber}";
+        //     else
+        //         StatusMessage = $"Erro: {response.Message}, Resposta: {response.ResponseBody}";
+        //     return RedirectToPage(new { id = OrderModel.Id });
+        // }
+
+        public async Task<IActionResult> OnGetInvoicePDFAsync(int id, long invoiceId)
         {
             var fileName = $"DamanoJornalFatura#{id}.pdf";
             //Check if file already exist
@@ -75,10 +85,35 @@ namespace Backoffice.Pages.Orders
             {
                 var bytes = await _service.GetInvoicePDF(invoiceId);
 
-                await _service.SaveFileAsync(bytes, _settings.InvoicesFolderFullPath, fileName);
+                if(bytes.Length > 0)
+                    await _service.SaveFileAsync(bytes, _settings.InvoicesFolderFullPath, fileName);
 
                 return File(bytes, "application/pdf",fileName);
             }
+
+        }
+
+        public async Task<IActionResult> OnGetReceiptPDFAsync(int id, long? invoiceId, long? paymentId)
+        {
+            if(!invoiceId.HasValue || !paymentId.HasValue)
+            {
+                return NotFound();
+            }
+           var fileName = $"DamanoJornalRecibo#{id}.pdf";
+           //Check if file already exist
+           if (_service.CheckIfFileExists(_settings.InvoicesFolderFullPath, fileName))
+           {
+               return File($"/invoices/{fileName}", "application/pdf");
+           }
+           else
+           {
+               var bytes = await _service.GetReceiptPDF(invoiceId.Value,paymentId.Value);
+
+                if(bytes.Length > 0)
+                    await _service.SaveFileAsync(bytes, _settings.InvoicesFolderFullPath, fileName);
+
+               return File(bytes, "application/pdf", fileName);
+           }
 
         }
     }
