@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Entities.OrderAggregate;
+﻿using ApplicationCore.DTOs;
+using ApplicationCore.Entities.OrderAggregate;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -42,6 +43,8 @@ namespace Backoffice.ViewModels
         [Display(Name = "Fatura Nº")]
         public string SalesInvoiceNumber { get; set; }
         public long? SalesInvoiceId { get; set; }
+        public long? SalesPaymentId { get; set; }
+        public PaymentType PaymentTypeSelected { get; set; }
         public List<OrderItemViewModel> Items { get; set; }
     }
 }

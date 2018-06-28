@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ApplicationCore;
+using ApplicationCore.DTOs;
 using ApplicationCore.Entities.OrderAggregate;
 using ApplicationCore.Interfaces;
 using Infrastructure.Data;
@@ -72,7 +73,7 @@ namespace Backoffice.Pages.Sage
 
         public async Task<IActionResult> OnPostPaymentInvoiceAsync(int id, decimal amount)
         {
-            Result = await _sageService.InvoicePayment(id, amount);
+            Result = (await _sageService.InvoicePayment(id, PaymentType.CASH, amount)).ResponseBody;
             return Page();
         }
 

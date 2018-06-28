@@ -103,7 +103,7 @@ namespace Infrastructure.Services
 
             AddLinesToBody(orderItems, body);
             return await CreateInvoice(body);
-        }        
+        }
 
         private async Task<SageResponseDTO> CreateInvoice(List<KeyValuePair<string, string>> body)
         {
@@ -138,15 +138,17 @@ namespace Infrastructure.Services
             }
         }
 
-        public async Task<string> InvoicePayment(long id, decimal amount)
+        public async Task<SageResponseDTO> InvoicePayment(long id, PaymentType paymentType, decimal amount)
         {
             try
             {
+                var sagePaymentConfig = GetSagePaymentType(paymentType);
                 List<KeyValuePair<string, string>> body = new List<KeyValuePair<string, string>> {
                     new KeyValuePair<string,string>("sales_invoice_payment[date]",DateTime.Now.ToString("dd-MM-yyyy")),
                     new KeyValuePair<string,string>("sales_invoice_payment[amount]", amount.ToString(CultureInfo.InvariantCulture)),
-                    new KeyValuePair<string,string>("sales_invoice_payment[bank_account_id]", "95589"),
-                    new KeyValuePair<string,string>("sales_invoice_payment[payment_type_id]", "5") };
+                    new KeyValuePair<string,string>("sales_invoice_payment[bank_account_id]", sagePaymentConfig.BankId),
+                    new KeyValuePair<string,string>("sales_invoice_payment[payment_type_id]", sagePaymentConfig.TypeId) 
+                };
 
                 var builder = new UriBuilder(_baseUrl)
                 {
@@ -160,21 +162,24 @@ namespace Infrastructure.Services
                 var response = await httpClient.SendAsync(request);
 
                 var result = await HandleResponse(response, HttpMethod.Post, uri, body);
+                var responseObj = await FormatResponse(result);
+                if (responseObj.StatusCode == HttpStatusCode.Created)
+                {
+                    JObject jObject = JObject.Parse(responseObj.ResponseBody);
+                    responseObj.PaymentId = (long)jObject["id"];
+                }
                 //var json = new { StatusCode = response.StatusCode, ResponseBody = await response.Content.ReadAsStringAsync() };
-                return JsonConvert.SerializeObject(await FormatResponse(result), Formatting.Indented);
+                return responseObj;
             }
             catch (Exception ex)
             {
-                var json = new
+                var responseError = new SageResponseDTO
                 {
-                    ExceptionMessage = ex.Message,
-                    StackTrace = ex.StackTrace,
-                    InnerExceptionMessage = ex.InnerException?.Message,
-                    InnerExceptionStackTrace = ex.InnerException?.StackTrace
+                    Message = $"Error exception: {ex.Message}",
                 };
-                return JsonConvert.SerializeObject(json, Formatting.Indented);
+                return responseError;
             }
-        }
+        }        
 
         public async Task<string> GetAccountData()
         {
@@ -218,7 +223,7 @@ namespace Infrastructure.Services
                 var uri = builder.Uri;
                 var httpClient = CreateHttpClient(_authConfig.AccessToken);
                 HttpRequestMessage request = GenerateRequest(HttpMethod.Get, uri, null, httpClient);
-                var response = await httpClient.SendAsync(request);                
+                var response = await httpClient.SendAsync(request);
                 var result = await HandleResponse(response, HttpMethod.Get, uri, null);
                 //var json = new { StatusCode = response.StatusCode, ResponseBody = await response.Content.ReadAsStringAsync() };
                 return JsonConvert.SerializeObject(await FormatResponse(result), Formatting.Indented);
@@ -248,6 +253,32 @@ namespace Infrastructure.Services
             var response = await httpClient.SendAsync(request);
             var result = await HandleResponse(response, HttpMethod.Get, uri, null);
             return await result.Content.ReadAsByteArrayAsync();
+        }
+
+        public async Task<byte[]> GetPDFReceipt(long invoiceId, long paymentId)
+        {
+            var builder = new UriBuilder(_baseUrl)
+            {
+                Path = $"/accounts/v2/sales_invoices/{invoiceId}/payments/{paymentId}"
+            };
+            var uri = builder.Uri;
+            var httpClient = CreateHttpClient(_authConfig.AccessToken);
+            HttpRequestMessage request = GenerateRequest(HttpMethod.Get, uri, null, httpClient, true);
+            var response = await httpClient.SendAsync(request);
+            var result = await HandleResponse(response, HttpMethod.Get, uri, null);
+            return await result.Content.ReadAsByteArrayAsync();
+        }
+
+        private (string TypeId, string BankId) GetSagePaymentType(PaymentType paymentType)
+        {
+            switch (paymentType)
+            {
+                case PaymentType.TRANSFER:
+                    return ("4","95588");
+                case PaymentType.CASH:
+                default:
+                    return ("5","95589");
+            }
         }
 
         private static void AddLinesToBody(List<OrderItem> orderItems, List<KeyValuePair<string, string>> body)
@@ -296,12 +327,12 @@ namespace Infrastructure.Services
                 }
             }
             return response;
-            
+
         }
 
         private async Task<SageResponseDTO> FormatResponse(HttpResponseMessage message)
         {
             return new SageResponseDTO { StatusCode = message.StatusCode, Message = "Success", ResponseBody = await message.Content.ReadAsStringAsync() };
-        }        
+        }
     }
 }

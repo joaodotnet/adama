@@ -13,7 +13,8 @@ namespace ApplicationCore.Interfaces
         Task<string> GetAccountData();
         Task<string> GetDataAsync(string url);
         Task<byte[]> GetPDFInvoice(long id);
-        Task<string> InvoicePayment(long id, decimal amount);
-        Task<(string AccessToken, string RefreshToken)> GetAccessTokenByRefreshAsync();        
+        Task<SageResponseDTO> InvoicePayment(long id,PaymentType paymentType, decimal amount);
+        Task<(string AccessToken, string RefreshToken)> GetAccessTokenByRefreshAsync();
+        Task<byte[]> GetPDFReceipt(long invoiceId, long paymentId);
     }
 }
