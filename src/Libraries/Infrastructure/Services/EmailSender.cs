@@ -2,6 +2,7 @@
 using ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Mail;
@@ -28,7 +29,14 @@ namespace Infrastructure.Services
 
             return Task.FromResult(0);
         }
-        public async Task Execute(string email, string subject, string message, string bccEmails, IFormFile attachFile)
+
+        public Task SendGenericEmailAsync(string email, string subject, string textBody, string bccEmails = null, List<(string,byte[])> files = null)
+        {
+            var message = CreateGenericBody(textBody);
+            Execute(email, subject, message, bccEmails, null,files).Wait();
+            return Task.FromResult(0);
+        }
+        public async Task Execute(string email, string subject, string message, string bccEmails, IFormFile attachFile, List<(string FileName, byte[] Bytes)> files = null)
         {
             try
             {
@@ -37,14 +45,21 @@ namespace Infrastructure.Services
                     From = new MailAddress(_appSettings.FromEmail, "Dama no Jornal")
                 };
                 mail.To.Add(email);
-                if(!string.IsNullOrEmpty(bccEmails))
+                if (!string.IsNullOrEmpty(bccEmails))
                     mail.Bcc.Add(bccEmails);
                 mail.Subject = subject;
                 mail.Body = message;
                 mail.IsBodyHtml = true;
                 mail.Priority = MailPriority.Normal;
                 if (attachFile != null)
-                    mail.Attachments.Add(new Attachment(attachFile.OpenReadStream(),attachFile.FileName));
+                    mail.Attachments.Add(new Attachment(attachFile.OpenReadStream(), attachFile.FileName));
+                else if(files != null)
+                {
+                    foreach (var item in files)
+                    {
+                        mail.Attachments.Add(new Attachment(new MemoryStream(item.Bytes), item.FileName));
+                    }
+                }
 
                 using (SmtpClient smtp = new SmtpClient(_appSettings.SmtpServer, _appSettings.SmtpPort))
                 {
@@ -58,6 +73,34 @@ namespace Infrastructure.Services
                 //_logger.LogWarning($"Error while sending email: {ex.Message}");
                 throw ex;
             }
+        }
+
+        private string CreateGenericBody(string textBody)
+        {
+            string body = $@"
+<table style='width:550px;'>
+    <tr>
+        <td width='400px' style='vertical-align:bottom'>
+            {textBody}
+        </td>
+        <td>
+            <img src='https://www.damanojornal.com/loja/images/dama_bird.png' width='150' />
+        </td>
+    </tr>
+</table>
+<div style='width:550px'>
+    <img width='100%' src='https://www.damanojornal.com/loja/images/linha-coracao.png' />
+</div>    
+<div style='margin-top:20px;text-align:center;width:550px'>
+    <strong>Muito Obrigada,</strong>
+</div>
+<div style='color: #EF7C8D;text-align:center;width:550px'>
+    ❤ Dama no Jornal®
+</div>
+<div style='text-align:center;width:550px'>
+    <img width='100' src='https://www.damanojornal.com/loja/images/logo_name.png' />
+</div>";
+            return body;
         }
     }
 }

@@ -26,5 +26,6 @@ namespace Backoffice.Interfaces
         Task<byte[]> GetInvoicePDF(long invoiceId);
         Task<SageResponseDTO> RegisterPaymentAsync(int id, PaymentType paymentTypeSelected);
         Task<byte[]> GetReceiptPDF(long invoiceId, long paymentId);
+        Task<List<(string,byte[])>> GetOrderDocumentsAsync(int id);
     }
 }

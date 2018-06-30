@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.DTOs;
 using ApplicationCore.Entities.OrderAggregate;
+using Infrastructure.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,6 +15,7 @@ namespace Backoffice.ViewModels
         public int Id { get; set; }
         [Display(Name = "Email")]
         public string BuyerId { get; set; }
+        public ApplicationUser User { get; set; }
         [Display(Name = "NIF")]
         public int? TaxNumber { get; set; }
         [DisplayFormat(ApplyFormatInEditMode = true,DataFormatString = "{0:yyy-MM-dd HH:mm:ss}")]

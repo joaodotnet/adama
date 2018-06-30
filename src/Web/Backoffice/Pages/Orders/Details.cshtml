@@ -175,6 +175,10 @@
                     <a asp-page-handler="InvoicePDF" asp-route-id="@Model.OrderModel.Id" asp-route-invoiceId="@Model.OrderModel.SalesInvoiceId">Imprimir Fatura</a> 
                     <span>|</span>
                     <a asp-page-handler="ReceiptPDF" asp-route-id="@Model.OrderModel.Id" asp-route-invoiceId="@Model.OrderModel.SalesInvoiceId" asp-route-paymentId="@Model.OrderModel.SalesPaymentId">Imprimir Recibo</a>
+                    <form method="post">
+                        <input type="hidden" asp-for="OrderModel.Id" />
+                        <button type="submit" asp-page-handler="SendEmailToClient" class="btn btn-info">Enviar mail a cliente</button>
+                    </form>
                 }            
         </div>
     </div>

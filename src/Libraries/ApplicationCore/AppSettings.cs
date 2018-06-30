@@ -20,5 +20,7 @@ namespace ApplicationCore
         public string CallbackURL { get; set; }
         public string ClientSecret { get; set; }
         public string SigningSecret { get; set; }
+        public string InvoiceNameFormat { get; set; } = "DamanoJornalFatura#{0}.pdf";
+        public string ReceiptNameFormat { get; set; } = "DamanoJornalRecibo#{0}.pdf";
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ApplicationCore;
@@ -16,16 +17,18 @@ using Microsoft.Extensions.Options;
 namespace Backoffice.Pages.Orders
 {
     public class DetailsModel : PageModel
-    {
+    {        
         private readonly IBackofficeService _service;
         private readonly IOrderService _orderService;
         private readonly BackofficeSettings _settings;
+        private readonly IEmailSender _emailSender;
 
-        public DetailsModel(IBackofficeService service, IOrderService orderService, IOptions<BackofficeSettings> options)
+        public DetailsModel(IBackofficeService service, IOrderService orderService, IOptions<BackofficeSettings> options, IEmailSender emailSender)
         {
             _service = service;
             _orderService = orderService;
             _settings = options.Value;
+            _emailSender = emailSender;
         }
 
         [BindProperty]
@@ -75,11 +78,15 @@ namespace Backoffice.Pages.Orders
 
         public async Task<IActionResult> OnGetInvoicePDFAsync(int id, long invoiceId)
         {
-            var fileName = $"DamanoJornalFatura#{id}.pdf";
+            var fileName = string.Format(_settings.InvoiceNameFormat,id);
             //Check if file already exist
             if (_service.CheckIfFileExists(_settings.InvoicesFolderFullPath, fileName))
             {
-                return File($"/invoices/{fileName}", "application/pdf");
+                byte[] fileBytes = await System.IO.File.ReadAllBytesAsync(
+                    Path.Combine(
+                        _settings.InvoicesFolderFullPath,
+                        fileName));
+                return File(fileBytes, "application/pdf");
             }
             else
             {
@@ -99,11 +106,15 @@ namespace Backoffice.Pages.Orders
             {
                 return NotFound();
             }
-           var fileName = $"DamanoJornalRecibo#{id}.pdf";
+            var fileName = string.Format(_settings.ReceiptNameFormat, id);
            //Check if file already exist
            if (_service.CheckIfFileExists(_settings.InvoicesFolderFullPath, fileName))
            {
-               return File($"/invoices/{fileName}", "application/pdf");
+                byte[] fileBytes = await System.IO.File.ReadAllBytesAsync(
+                   Path.Combine(
+                       _settings.InvoicesFolderFullPath,
+                       fileName));
+                return File(fileBytes, "application/pdf");
            }
            else
            {
@@ -114,7 +125,24 @@ namespace Backoffice.Pages.Orders
 
                return File(bytes, "application/pdf", fileName);
            }
+        }
 
+        public async Task<ActionResult> OnPostSendEmailToClient()
+        {
+            var order = await _service.GetOrder(OrderModel.Id);
+            if (order == null)
+                return NotFound();
+
+            var name = order.User != null ? $"{order.User.FirstName} {order.User.LastName}" : order.BuyerId;
+            var body = $"Olá {name}!<br>" +
+                $"Recebemos o pagamento relativo à encomenda #{order.Id}.<br>" +
+                $"Enviamos, em anexo, a fatura e o recibo relativo à encomenda.";
+
+            var files = await _service.GetOrderDocumentsAsync(order.Id);
+
+            await _emailSender.SendGenericEmailAsync(order.BuyerId, $"Faturação DamaNoJornal - Encomenda #{order.Id}", body, _settings.ToEmails, files);
+            StatusMessage = "Mensagem Enviada";
+            return RedirectToPage(new { id = OrderModel.Id });
         }
     }
 }
