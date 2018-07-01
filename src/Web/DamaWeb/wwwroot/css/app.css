@@ -149,13 +149,13 @@ h4 {
 }
 
 .btn-primary {
-    background-color: #f5b0b9;
+    background-color: #f18e9b;
     border-color: #fff;
-    color: #fff;    
+    color: #fff;
 }
 
 .btn-primary:hover {
-    background-color: #ef7e8e;
+    background-color: #e9495f;
     border-color: #fff;
 }
 
@@ -522,4 +522,12 @@ h4 {
 
 .nav-pills .nav-link.active {
     background-color: #5fcbcb;
+}
+
+.btn-link {
+    color: #5fcbcb;
+}
+
+.btn-link:hover {
+    color: #609f9f;
 }

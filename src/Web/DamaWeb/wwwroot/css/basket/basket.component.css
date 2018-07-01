@@ -58,7 +58,7 @@
 }
 
 .esh-basket-checkout {
-    background-color: #EF7C8D;
+    background-color: #f18e9b;
     /*border: 0;
     border-radius: 0;*/
     color: #FFFFFF;
@@ -72,10 +72,10 @@
     transition: all 0.35s;
 }
 
-    .esh-basket-checkout:hover {
-        background-color: #eb6075;
-        transition: all 0.35s;
-    }
+.esh-basket-checkout:hover {
+    background-color: #e9495f;
+    transition: all 0.35s;
+}
 
 @media (max-width: 576px) {
     .esh-basket-checkout {

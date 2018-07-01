@@ -24,14 +24,14 @@
                     <div id="chooseDeliverySection" class="collapse show" aria-labelledby="headingOne" data-parent="#checkoutAccordion">
                         <div class="card-body text-center">
                             <div class="form-check-inline">
-                                <input asp-for="UserAddress.UseUserAddress" class="form-check-input" type="radio" value="1">
-                                <label class="form-check-label" for="exampleRadios1">
+                                <label class="form-check-label">
+                                    <input asp-for="UserAddress.UseUserAddress" class="form-check-input" type="radio" value="1">
                                     Na sua morada
-                                </label>
+                                </label>                                
                             </div>
-                            <div class="form-check-inline">
-                                <input asp-for="UserAddress.UseUserAddress" class="form-check-input" type="radio" value="2">
-                                <label class="form-check-label" for="exampleRadios2">
+                            <div class="form-check-inline">                                
+                                <label class="form-check-label">
+                                    <input asp-for="UserAddress.UseUserAddress" class="form-check-input" type="radio" value="2">
                                     Levantar na nossa loja em Loulé
                                 </label>
                             </div>
@@ -102,7 +102,9 @@
                                 <label class="form-check-label" asp-for="UserAddress.SaveAddress"></label>
                                 <span asp-validation-for="UserAddress.SaveAddress" class="text-danger"></span>
                             </div>
-                            <a href="" class="btn btn-default">Seguinte</a>
+                            <div class="text-center">
+                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#billingSection">Seguinte</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -126,14 +128,12 @@
                                 <input asp-for="UserAddress.InvoiceTaxNumber" class="form-control">
                                 <span asp-validation-for="UserAddress.InvoiceTaxNumber" class="text-danger"></span>
                             </div>
-                            @*<div id="grpSameAsShipping" class="form-check @(Model.UserAddress.UseUserAddress == 2 ? "d-none": "d-block")">*@
                             <div id="grpSameAsShipping" class="form-check">
                                 <label class="form-check-label">
                                     <input asp-for="UserAddress.UseSameAsShipping" class="form-check-input" type="checkbox" />
                                     <strong>Usar a mesma morada na fatura</strong>
                                 </label>
                             </div>
-                            @*<div id="invoice-address-controls" class="@( (Model.UserAddress.UseSameAsShipping && (Model.UserAddress.UseUserAddress == 1 || Model.UserAddress.UseUserAddress == 0)) ? "d-none":"d-block")">*@
                             <div id="invoice-address-controls">
                                 <div class="form-group">
                                     <label asp-for="UserAddress.InvoiceAddressStreet"></label>
@@ -163,159 +163,14 @@
                                     <span asp-validation-for="UserAddress.InvoiceSaveAddress" class="text-danger"></span>
                                 </div>
                             </div>
+                            <div class="text-center">
+                                <input class="btn btn-default esh-basket-checkout p-1 m-auto" type="submit" value="[ Finalizar Encomenda ]" />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-
-
-
-        @*<div class="col-sm-9">
-                <h4>Como quer receber a sua encomenda?</h4>
-                <div asp-validation-summary="All" class="text-danger"></div>
-
-                <div class="form-group">
-                    <div class="form-check">
-                        <label class="form-check-label">
-                            <input asp-for="UserAddress.UseUserAddress" class="form-check-input" type="radio" value="1">
-                            <strong>Na sua morada</strong>
-                        </label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="form-check">
-                        <label class="form-check-label">
-                            <input asp-for="UserAddress.UseUserAddress" class="form-check-input" type="radio" value="2">
-                            <strong>Levantar na loja</strong>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="row mr-1 ml-1">
-                    <div id="user-address-col" class="col-sm-6 @(Model.UserAddress.UseUserAddress == 1 ? "d-block" : "d-none")">
-                        <h4>Morada de Envio</h4>
-                        <div class="form-group">
-                            <label asp-for="UserAddress.Name"></label>
-                            <input asp-for="UserAddress.Name" class="form-control">
-                            <span asp-validation-for="UserAddress.Name" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="UserAddress.ShipAddressPhoneNumber"></label>
-                            <input asp-for="UserAddress.ShipAddressPhoneNumber" class="form-control">
-                            <span asp-validation-for="UserAddress.ShipAddressPhoneNumber" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="UserAddress.Street"></label>
-                            <input class="form-control" asp-for="UserAddress.Street">
-                            <span asp-validation-for="UserAddress.Street" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="UserAddress.City"></label>
-                            <input class="form-control" asp-for="UserAddress.City">
-                            <span asp-validation-for="UserAddress.City" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="UserAddress.PostalCode"></label>
-                            <input class="form-control" asp-for="UserAddress.PostalCode">
-                            <span asp-validation-for="UserAddress.PostalCode" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="UserAddress.Country"></label>
-                            <select class="form-control" asp-for="UserAddress.Country">
-                                <option>Portugal</option>
-                            </select>
-                            <span asp-validation-for="UserAddress.Country" class="text-danger"></span>
-                        </div>
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" asp-for="UserAddress.SaveAddress">
-                            <label class="form-check-label" asp-for="UserAddress.SaveAddress"></label>
-                            <span asp-validation-for="UserAddress.SaveAddress" class="text-danger"></span>
-                        </div>
-
-                    </div>
-                    <div id="store-location-col" class="col-sm-6 dama-checkout-text mt-2 mt-sm-0 @(Model.UserAddress.UseUserAddress == 2 ? "d-block" : "d-none")">
-                        <h4>Morada de Entrega</h4>
-                        <div class="form-group">
-                            <label asp-for="UserAddress.Name"></label>
-                            <input asp-for="UserAddress.Name" class="form-control">
-                            <span asp-validation-for="UserAddress.Name" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="UserAddress.ContactPhoneNumber"></label>
-                            <input asp-for="UserAddress.ContactPhoneNumber" class="form-control">
-                            <span asp-validation-for="UserAddress.ContactPhoneNumber" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label>Morada</label>
-                            <div class="">
-                                <span>Mercado de Loulé, Praça da Republica, 8100-270 Loulé</span>
-                            </div>
-                            <div>
-                                <span>Banca Nº 44 - <a href="http://saborcomtradicao.com/" target="_blank"> Sabor com Tradição </a></span>
-                            </div>
-                        </div>
-                        <div>
-                            <laebel>Mapa</laebel>
-                        </div>
-                        <div class="mt-3">
-                            <iframe width="100%" height="300"
-                                    frameborder="0" style="border:0"
-                                    src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB2Av0vyWQSV7OOZK_LdJ3i52TSC8pLPF8&q=Mercado+Municipal+de+Loulé+(Desde+1908)" allowfullscreen></iframe>
-                        </div>
-
-                    </div>
-                    <div id="billing-address-col" class="col-6 @(Model.UserAddress.UseUserAddress == 1 || Model.UserAddress.UseUserAddress == 2  ? "d-block" : "d-none")">
-                        <h4>Morada de Faturação</h4>
-                        <div class="form-group">
-                            <label asp-for="UserAddress.InvoiceName"></label>
-                            <input asp-for="UserAddress.InvoiceName" class="form-control">
-                            <span asp-validation-for="UserAddress.InvoiceName" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="UserAddress.InvoiceTaxNumber"></label>
-                            <input asp-for="UserAddress.InvoiceTaxNumber" class="form-control">
-                            <span asp-validation-for="UserAddress.InvoiceTaxNumber" class="text-danger"></span>
-                        </div>
-                        <div id="grpSameAsShipping" class="form-check @(Model.UserAddress.UseUserAddress == 2 ? "d-none": "d-block")">
-                            <label class="form-check-label">
-                                <input asp-for="UserAddress.UseSameAsShipping" class="form-check-input" type="checkbox" />
-                                <strong>Usar a mesma morada na fatura</strong>
-                            </label>
-                        </div>
-                        <div id="invoice-address-controls" class="@( (Model.UserAddress.UseSameAsShipping && (Model.UserAddress.UseUserAddress == 1 || Model.UserAddress.UseUserAddress == 0)) ? "d-none":"d-block")">
-                            <div class="form-group">
-                                <label asp-for="UserAddress.InvoiceAddressStreet"></label>
-                                <input class="form-control" asp-for="UserAddress.InvoiceAddressStreet">
-                                <span asp-validation-for="UserAddress.InvoiceAddressStreet" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="UserAddress.InvoiceAddressCity"></label>
-                                <input class="form-control" asp-for="UserAddress.InvoiceAddressCity">
-                                <span asp-validation-for="UserAddress.InvoiceAddressCity" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="UserAddress.InvoiceAddressPostalCode"></label>
-                                <input class="form-control" asp-for="UserAddress.InvoiceAddressPostalCode">
-                                <span asp-validation-for="UserAddress.InvoiceAddressPostalCode" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="UserAddress.InvoiceAddressCountry"></label>
-                                <select class="form-control" asp-for="UserAddress.InvoiceAddressCountry">
-                                    <option>Portugal</option>
-                                </select>
-                                <span asp-validation-for="UserAddress.InvoiceAddressCountry" class="text-danger"></span>
-                            </div>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" asp-for="UserAddress.InvoiceSaveAddress">
-                                <label class="form-check-label" asp-for="UserAddress.InvoiceSaveAddress"></label>
-                                <span asp-validation-for="UserAddress.InvoiceSaveAddress" class="text-danger"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>*@
         <div class="col-sm-3 bg-light pt-2 mt-3 mt-sm-0" style="min-height:450px">
             <h4>Resumo da encomenda</h4>
             <article class="row m-0">
@@ -385,7 +240,7 @@
 
         ShowDisableAddressControls(@Model.UserAddress.UseSameAsShipping.ToString().ToLower());
 
-        function ShowDisableAddressControls(isChecked) {            
+        function ShowDisableAddressControls(isChecked) {
             if (isChecked) {
                 $('#UserAddress_InvoiceAddressStreet').val($('#UserAddress_Street').val());
                 $('#UserAddress_InvoiceAddressStreet').prop('disabled', true);
@@ -406,8 +261,8 @@
             }
         }
 
-        function form1SectionIsValid(controlToShow) {
-            
+        function formIsValid(controlToShow) {
+
             if (controlToShow == "deliverySection" || controlToShow == "billingSection") {
 
                 if ($('#UserAddress_UseUserAddress').valid() == false) {
@@ -439,6 +294,7 @@
             return true;
         }
         $(document).ready(function () {
+
             $('#damaMapSection').hide();
             $('input[type=radio][name="UserAddress.UseUserAddress"]').click(function () {
                 if (this.value == '1') {
@@ -452,20 +308,15 @@
                     $('#UserAddress_PostalCode').val(originUserPostalCode);
                     $('#UserAddress_PostalCode').prop('disabled', false);
                     $('#damaMapSection').hide();
-                    $('#deliveryAddress').removeClass('col-6').addClass('col-12');
-                    ShowDisableAddressControls(@Model.UserAddress.UseSameAsShipping.ToString().ToLower());
+                    $('#deliveryAddress').removeClass('col-6').addClass('col-12');                    
                     $('#UserAddress_UseSameAsShipping').prop('disabled', false);
-                    //$('#user-address-col').addClass('d-none').addClass('d-block');
-                    //$('#store-location-col').removeClass('d-block').addClass('d-none');
-                    //$('#billing-address-col').removeClass('d-none').addClass('d-block');
-                    //$('#grpSameAsShipping').removeClass('d-none').addClass('d-block');
 
+                    ShowDisableAddressControls(@Model.UserAddress.UseSameAsShipping.ToString().ToLower());
                 }
                 else if (this.value == '2') {
 
                     $('#shipping-cost').removeClass('d-flex').addClass('d-none');
-                    $('#basket-total').text(toNumber(@Model.BasketModel.SubTotal().ToString().Replace(',', '.')));
-
+                    $('#basket-total').text(toNumber(@Model.BasketModel.SubTotal().ToString().Replace(',', '.')));              
                     $('#UserAddress_Street').val('Mercado de Loulé, Praça da Republica');
                     $('#UserAddress_Street').prop('disabled', true);
                     $('#UserAddress_City').val('Loulé');
@@ -474,13 +325,9 @@
                     $('#UserAddress_PostalCode').prop('disabled', true);
                     $('#damaMapSection').show();
                     $('#deliveryAddress').removeClass('col-12').addClass('col-6');
-                    ShowDisableAddressControls(false);
                     $('#UserAddress_UseSameAsShipping').prop('disabled', true);
-                    //$('#user-address-col').removeClass('d-block').addClass('d-none');
-                    //$('#store-location-col').addClass('d-none').addClass('d-block');
-                    //$('#billing-address-col').removeClass('d-none').addClass('d-block');
-                    //$('#grpSameAsShipping').removeClass('d-block').addClass('d-none');
 
+                    ShowDisableAddressControls(false);
                  }
 
                  $('#deliverySection').collapse("show");
@@ -490,59 +337,9 @@
                 ShowDisableAddressControls(this.checked);
             });
 
-            //$('#checkoutAccordion').on('hide.bs.collapse', function (e) {
-            //    console.log("OnHideEvent: " + $(e.target).attr('id'));
-            //    return form1SectionIsValid($(e.target).attr('id'));
-            //});
             $('#checkoutAccordion').on('show.bs.collapse', function (e) {
-                console.log("OnShowEvent: " + $(e.target).attr('id'));                
-                return form1SectionIsValid($(e.target).attr('id'));
+                return formIsValid($(e.target).attr('id'));
             });
-
-
-            @*if($('input[type=radio][name="UserAddress.UseUserAddress"][checked]').val() == '2')
-            {
-                 $('#shipping-cost').removeClass('d-flex').addClass('d-none');
-                 $('#basket-total').text(toNumber(@Model.BasketModel.SubTotal().ToString().Replace(',', '.')));
-            }
-
-            $('input[type=radio][name="UserAddress.UseUserAddress"]').click(function () {
-                if (this.value == '1') {
-                    $('#shipping-cost').removeClass('d-none').addClass('d-flex');
-                    $('#basket-total').text(toNumber(@Model.BasketModel.Total().ToString().Replace(',','.')));
-                    $('#user-address-col').addClass('d-none').addClass('d-block');
-                    $('#store-location-col').removeClass('d-block').addClass('d-none');
-                    $('#billing-address-col').removeClass('d-none').addClass('d-block');
-                    $('#grpSameAsShipping').removeClass('d-none').addClass('d-block');
-                    //$('#invoice-address-controls').removeClass('d-none').addClass('d-block');
-
-                    //$('#user-address-controls').removeClass('d-none');
-                    //$('#store-location-controls').addClass('d-none');
-                }
-                else if (this.value == '2') {
-
-                    $('#shipping-cost').removeClass('d-flex').addClass('d-none');
-                    $('#basket-total').text(toNumber(@Model.BasketModel.SubTotal().ToString().Replace(',', '.')));
-                    $('#user-address-col').removeClass('d-block').addClass('d-none');
-                    $('#store-location-col').addClass('d-none').addClass('d-block');
-                    $('#billing-address-col').removeClass('d-none').addClass('d-block');
-                    $('#grpSameAsShipping').removeClass('d-block').addClass('d-none');
-                    //$('#invoice-address-controls').removeClass('d-block').addClass('d-none');
-                    //$('#user-address-controls').addClass('d-none');
-                    //$('#store-location-controls').removeClass('d-none');
-                }
-            });
-
-            $('#UserAddress_UseSameAsShipping').click(function () {
-                if (this.checked) {
-                    $('#invoice-address-controls').removeClass('d-block').addClass('d-none');
-                }
-                else {
-                    $('#invoice-address-controls').removeClass('d-none').addClass('d-block');
-                }
-            });*@
-
-
         });
     </script>
 }
