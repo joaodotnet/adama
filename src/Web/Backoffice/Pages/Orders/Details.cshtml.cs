@@ -135,8 +135,10 @@ namespace Backoffice.Pages.Orders
 
             var name = order.User != null ? $"{order.User.FirstName} {order.User.LastName}" : order.BuyerId;
             var body = $"Olá {name}!<br>" +
-                $"Recebemos o pagamento relativo à encomenda #{order.Id}.<br>" +
-                $"Enviamos, em anexo, a fatura e o recibo relativo à encomenda.";
+                $"Obrigado por comprar na DamaNoJornal, o pagamento relativo à encomenda #{order.Id} foi recepcionado.<br>" +
+                $"Enviamos, em anexo, a fatura e o recibo relativo à encomenda. <br>" +
+                $"Estamos a preparar a expedição.";
+                
 
             var files = await _service.GetOrderDocumentsAsync(order.Id);
 

@@ -172,8 +172,8 @@ namespace Infrastructure.Data
             builder.Property(ci => ci.Price)
                 .IsRequired(true);
 
-            builder.Property(ci => ci.PictureUri)
-                .IsRequired(true);
+            //builder.Property(ci => ci.PictureUri)
+            //    .IsRequired(true);
 
             builder.HasOne(ci => ci.CatalogIllustration)
                 .WithMany()

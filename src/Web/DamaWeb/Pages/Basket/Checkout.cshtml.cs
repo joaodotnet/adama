@@ -95,7 +95,7 @@ namespace DamaWeb.Pages.Basket
                 if (UserAddress.UseUserAddress == 1)
                 {
                     shippingcost = BasketModel.DefaultShippingCost;
-                    address = new Address(UserAddress.Name, UserAddress.ShipAddressPhoneNumber, UserAddress.Street, UserAddress.City, UserAddress.Country, UserAddress.PostalCode); //, UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);                    
+                    address = new Address(UserAddress.Name, UserAddress.ContactPhoneNumber, UserAddress.Street, UserAddress.City, UserAddress.Country, UserAddress.PostalCode); //, UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);                    
                 }
                 Address billingAddress = null;
                 if (UserAddress.UseUserAddress == 1 && !UserAddress.UseSameAsShipping)
@@ -328,8 +328,8 @@ namespace DamaWeb.Pages.Basket
             {
                 if (string.IsNullOrEmpty(UserAddress.Name))
                     ModelState.AddModelError("UserAddress.Name", "O campo Nome é obrigatório");
-                if (!UserAddress.ShipAddressPhoneNumber.HasValue)
-                    ModelState.AddModelError("UserAddress.ShipAddressPhoneNumber", "O campo Telefone é obrigatório");
+                //if (!UserAddress.ShipAddressPhoneNumber.HasValue)
+                //    ModelState.AddModelError("UserAddress.ShipAddressPhoneNumber", "O campo Telefone é obrigatório");
                 if (string.IsNullOrEmpty(UserAddress.Street))
                     ModelState.AddModelError("UserAddress.Street", "O campo Morada é obrigatório.");
                 if (string.IsNullOrEmpty(UserAddress.City))
@@ -341,8 +341,8 @@ namespace DamaWeb.Pages.Basket
             }
             else if(UserAddress.UseUserAddress == 2)
             {                
-                if (!UserAddress.ContactPhoneNumber.HasValue)
-                    ModelState.AddModelError("UserAddress.ContactPhoneNumber", "O campo Telefone é obrigatório");
+                //if (!UserAddress.ContactPhoneNumber.HasValue)
+                //    ModelState.AddModelError("UserAddress.ContactPhoneNumber", "O campo Telefone é obrigatório");
                 
                 if(UserAddress.InvoiceTaxNumber.HasValue)
                 {
