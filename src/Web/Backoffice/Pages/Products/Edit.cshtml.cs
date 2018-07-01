@@ -235,10 +235,10 @@ namespace Backoffice.Pages.Products
 
         private bool ValidatePictures()
         {
-            if (string.IsNullOrEmpty(ProductModel.PictureUri) && ProductModel.Picture == null)
-            {
-                ModelState.AddModelError("", "A imagem principal é obrigatória!");
-            }
+            // if (string.IsNullOrEmpty(ProductModel.PictureUri) && ProductModel.Picture == null)
+            // {
+            //     ModelState.AddModelError("", "A imagem principal é obrigatória!");
+            // }
 
             if (ProductModel.Picture != null && ProductModel.Picture.Length > 2097152)
             {

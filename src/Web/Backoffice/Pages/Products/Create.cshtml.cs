@@ -61,7 +61,7 @@ namespace Backoffice.Pages.Products
             ProductModel.Sku = await _service.GetSku(ProductModel.CatalogTypeId, ProductModel.CatalogIllustrationId);
 
             //Save Main Image            
-            if (ProductModel.Picture.Length > 0)
+            if (ProductModel.Picture?.Length > 0)
             {
                 var lastCatalogItemId = (await _context.CatalogItems.LastAsync())?.Id ?? 0;
 
@@ -127,10 +127,10 @@ namespace Backoffice.Pages.Products
 
         private bool ValidatePictures()
         {
-            if (ProductModel.Picture == null || ProductModel.Picture.Length == 0)
-            {
-                ModelState.AddModelError("", "A menina quer por favor escolher uma imagem principal, obrigado! Ass.: O seu amor!");                
-            }
+            // if (ProductModel.Picture == null || ProductModel.Picture.Length == 0)
+            // {
+            //     ModelState.AddModelError("", "A menina quer por favor escolher uma imagem principal, obrigado! Ass.: O seu amor!");                
+            // }
 
             if (ProductModel.Picture?.Length > 2097152)
             {
