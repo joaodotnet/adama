@@ -51,34 +51,34 @@
                     </div>
                     <div id="deliverySection" class="collapse" aria-labelledby="headingTwo" data-parent="#checkoutAccordion">
                         <div class="card-body">
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label asp-for="UserAddress.Name"></label>
                                 <input asp-for="UserAddress.Name" class="form-control">
                                 <span asp-validation-for="UserAddress.Name" class="text-danger"></span>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label asp-for="UserAddress.ContactPhoneNumber"></label>
                                 <input asp-for="UserAddress.ContactPhoneNumber" class="form-control">
                                 <span asp-validation-for="UserAddress.ContactPhoneNumber" class="text-danger"></span>
                             </div>
                             <div class="row p-0 m-0">
                                 <div id="deliveryAddress" class="col-12 p-0">
-                                    <div class="form-group">
+                                    <div class="form-group required">
                                         <label asp-for="UserAddress.Street"></label>
                                         <input class="form-control" asp-for="UserAddress.Street">
                                         <span asp-validation-for="UserAddress.Street" class="text-danger"></span>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group required">
                                         <label asp-for="UserAddress.City"></label>
                                         <input class="form-control" asp-for="UserAddress.City">
                                         <span asp-validation-for="UserAddress.City" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
+                                    </div> 
+                                    <div class="form-group required">
                                         <label asp-for="UserAddress.PostalCode"></label>
                                         <input class="form-control" asp-for="UserAddress.PostalCode">
                                         <span asp-validation-for="UserAddress.PostalCode" class="text-danger"></span>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group required">
                                         <label asp-for="UserAddress.Country"></label>
                                         <select class="form-control" asp-for="UserAddress.Country">
                                             <option>Portugal</option>
@@ -231,11 +231,11 @@
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
     <script>
-        var originUserAddress = '@Model.UserAddress.Street',
-            originUserCity = '@Model.UserAddress.City',
+        var originUserAddress = '@Html.Raw(Model.UserAddress.Street)',
+            originUserCity = '@Html.Raw(Model.UserAddress.City)',
             originUserPostalCode = '@Model.UserAddress.PostalCode';
-        var originBillingUserAddress = '@Model.UserAddress.InvoiceAddressStreet',
-            originBillingUserCity = '@Model.UserAddress.InvoiceAddressCity',
+        var originBillingUserAddress = '@Html.Raw(Model.UserAddress.InvoiceAddressStreet)',
+            originBillingUserCity = '@Html.Raw(Model.UserAddress.InvoiceAddressCity)',
             originBillingUserPostalCode = '@Model.UserAddress.InvoiceAddressPostalCode';
 
         ShowDisableAddressControls(@Model.UserAddress.UseSameAsShipping.ToString().ToLower());
