@@ -6,7 +6,7 @@ namespace ApplicationCore.Entities.OrderAggregate
     public class Address // ValueObject
     {
         public String Name { get; private set; }
-        public int? PhoneNumber { get; set; }
+        
         public String Street { get; private set; }
 
         public String City { get; private set; }
@@ -17,10 +17,9 @@ namespace ApplicationCore.Entities.OrderAggregate
 
         public Address() { }
 
-        public Address(string name, int? phoneNumber, string street, string city, string country, string postalCode) 
+        public Address(string name, string street, string city, string country, string postalCode) 
         {
-            Name = name;
-            PhoneNumber = phoneNumber;
+            Name = name;            
             Street = street;
             City = city;
             Country = country;

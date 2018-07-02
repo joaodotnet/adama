@@ -16,7 +16,7 @@ namespace DamaWeb.ViewModels
         public string Name { get; set; }
         [Display(Name = "Telefone")]
         [Required(ErrorMessage = "O campo Telefone é obrigatório")]
-        public int? ContactPhoneNumber { get; set; }
+        public string ContactPhoneNumber { get; set; }
         [Display(Name = "Morada")]
         [StringLength(50, ErrorMessage = "O campo Morada têm que ter no máximo 50 caracteres!")]
         [Required(ErrorMessage = "O campo Morada é obrigatório")]       
@@ -32,6 +32,7 @@ namespace DamaWeb.ViewModels
         public string Country { get; set; }
         [Display(Name = "Código Postal")]
         [Required(ErrorMessage = "O campo Código Postal é obrigatório")]
+        [RegularExpression("^\\d{4}-\\d{3}?$", ErrorMessage = "O Código Postal deverá ter o formato 8000-100")]
         public string PostalCode { get; set; }
         [Display(Name = "Guardar sua morada na sua conta")]
         public bool SaveAddress { get; set; } = true;
@@ -48,6 +49,7 @@ namespace DamaWeb.ViewModels
         [Display(Name = "País")]
         public string InvoiceAddressCountry { get; set; }
         [Display(Name = "Código Postal")]
+        [RegularExpression("^\\d{4}-\\d{3}?$", ErrorMessage = "O Código Postal (Faturação) deverá ter o formato 8000-100")]
         public string InvoiceAddressPostalCode { get; set; }
         [Display(Name = "Guardar sua morada na sua conta")]
         public bool InvoiceSaveAddress { get; set; } = true;

@@ -60,6 +60,9 @@ namespace DamaWeb.Pages.Basket
         public AddressViewModel UserAddress { get; set; } = new AddressViewModel();
 
         [BindProperty]
+        public bool WantInvoice { get; set; } = false;
+
+        [BindProperty]
         public DeliveryTimeDTO DeliveryTime { get; set; } = new DeliveryTimeDTO();
 
         public async Task OnGet()
@@ -69,6 +72,7 @@ namespace DamaWeb.Pages.Basket
             {
                 UserAddress = await _shopService.GetUserAddress(user.Id);
                 UserAddress.InvoiceTaxNumber = user.NIF;
+                UserAddress.ContactPhoneNumber = await _userManager.GetPhoneNumberAsync(user);
             }
             await SetBasketModelAsync();
 
@@ -84,6 +88,7 @@ namespace DamaWeb.Pages.Basket
                 //Save Address
                 if (UserAddress.SaveAddress)
                 {
+                    await _userManager.SetPhoneNumberAsync(user, UserAddress.ContactPhoneNumber);
                     await _shopService.AddorUpdateUserAddress(user, UserAddress);
                 }
                 if (UserAddress.InvoiceSaveAddress)
@@ -91,25 +96,33 @@ namespace DamaWeb.Pages.Basket
 
                 //Update Total if User
                 decimal shippingcost = 0;
-                Address address = new Address(UserAddress.Name, UserAddress.ContactPhoneNumber, "Mercado de Loulé - Banca nº 44, Praça da Republica", "Loulé", "Portugal", "8100-270"); //,UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);
+                Address address = new Address(UserAddress.Name, "Mercado de Loulé - Banca nº 44, Praça da Republica", "Loulé", "Portugal", "8100-270"); //,UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);
                 if (UserAddress.UseUserAddress == 1)
                 {
                     shippingcost = BasketModel.DefaultShippingCost;
-                    address = new Address(UserAddress.Name, UserAddress.ContactPhoneNumber, UserAddress.Street, UserAddress.City, UserAddress.Country, UserAddress.PostalCode); //, UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);                    
+                    address = new Address(UserAddress.Name, UserAddress.Street, UserAddress.City, UserAddress.Country, UserAddress.PostalCode); //, UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);                    
                 }
-                Address billingAddress = new Address(UserAddress.InvoiceName, UserAddress.ContactPhoneNumber, UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);
-                if(UserAddress.UseSameAsShipping)
-                    billingAddress = new Address(UserAddress.InvoiceName, address.PhoneNumber, address.Street, address.City, address.Country, address.PostalCode);
+                Address billingAddress = null;
+                int? taxNumber = null;
+                if (WantInvoice)
+                {
+                    taxNumber = UserAddress.InvoiceTaxNumber;
+                    if (UserAddress.UseSameAsShipping)
+                        billingAddress = new Address(UserAddress.InvoiceName, address.Street, address.City, address.Country, address.PostalCode);
+                    else
+                        billingAddress = new Address(UserAddress.InvoiceName, UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);
+                }
 
-                //if(UserAddress.UseSameAsShipping && UserAddress.UseUserAddress.Value == 2)
-                //if (UserAddress.UseUserAddress == 1 && !UserAddress.UseSameAsShipping)
-                //    billingAddress = new Address(UserAddress.InvoiceName, UserAddress.ContactPhoneNumber, UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);
-                //else if (UserAddress.UseUserAddress == 1 && UserAddress.UseSameAsShipping)
-                //    billingAddress = new Address(UserAddress.InvoiceName, address.PhoneNumber, address.Street, address.City, address.Country, address.PostalCode);
-                //else if (UserAddress.UseUserAddress == 2)
-                //    billingAddress = new Address(UserAddress.InvoiceName, UserAddress.ContactPhoneNumber, UserAddress.InvoiceAddressStreet,UserAddress.InvoiceAddressCity,UserAddress.InvoiceAddressCountry,UserAddress.InvoiceAddressPostalCode);
 
-                var resOrder = await _orderService.CreateOrderAsync(BasketModel.Id, UserAddress.InvoiceTaxNumber, address, billingAddress, UserAddress.UseSameAsShipping, shippingcost);                
+                    //if(UserAddress.UseSameAsShipping && UserAddress.UseUserAddress.Value == 2)
+                    //if (UserAddress.UseUserAddress == 1 && !UserAddress.UseSameAsShipping)
+                    //    billingAddress = new Address(UserAddress.InvoiceName, UserAddress.ContactPhoneNumber, UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);
+                    //else if (UserAddress.UseUserAddress == 1 && UserAddress.UseSameAsShipping)
+                    //    billingAddress = new Address(UserAddress.InvoiceName, address.PhoneNumber, address.Street, address.City, address.Country, address.PostalCode);
+                    //else if (UserAddress.UseUserAddress == 2)
+                    //    billingAddress = new Address(UserAddress.InvoiceName, UserAddress.ContactPhoneNumber, UserAddress.InvoiceAddressStreet,UserAddress.InvoiceAddressCity,UserAddress.InvoiceAddressCountry,UserAddress.InvoiceAddressPostalCode);
+
+                    var resOrder = await _orderService.CreateOrderAsync(BasketModel.Id, UserAddress.ContactPhoneNumber, taxNumber, address, billingAddress, UserAddress.UseSameAsShipping, shippingcost);                
 
                 await _basketService.DeleteBasketAsync(BasketModel.Id);
 
@@ -212,20 +225,23 @@ namespace DamaWeb.Pages.Basket
     </div>
     <div style='margin-top:20px;width:550px'>
         <img width='100%' src='https://www.damanojornal.com/loja/images/linha-coracao.png' />
-    </div>
-    <div style='background-color:#eeebeb;width:550px;padding: 5px;'>
+    </div>";
+            if(WantInvoice)
+            { 
+    body +=$@"<div style='background-color:#eeebeb;width:550px;padding: 5px;'>
         <h3 style='margin-top:20px;text-align:center;width:550px'>INFORMAÇÔES DE FACTURAÇÂO</h3>
         <div style='text-align:center;width:550px'>
             <strong>{order.BillingToAddress.Name}</strong>";
             if (order.TaxNumber.HasValue)
                 body += $"({order.TaxNumber})";
-            body += $@"
+                body += $@"
             <br />
             {order.BillingToAddress.Street}<br />
             {order.BillingToAddress.PostalCode} {order.BillingToAddress.City}
         </div>
-    </div>
-    <div style='margin-top:20px;background-color:#eeebeb;width:550px;padding: 5px;'>
+    </div>";
+            }
+    body +=$@"<div style='margin-top:20px;background-color:#eeebeb;width:550px;padding: 5px;'>
         <h3 style='text-align:center'>INFORMAÇÕES DE ENVIO*</h3>
         <div style='text-align:center;width:550px'>
             <strong>{order.ShipToAddress.Name}</strong>";            
@@ -233,7 +249,7 @@ namespace DamaWeb.Pages.Basket
                 body += $"({order.TaxNumber})";
 
             body += $@"<br />
-            Telefone: {order.ShipToAddress.PhoneNumber}<br/>
+            Telefone: {order.PhoneNumber}<br/>
             {order.ShipToAddress.Street}<br />
             {order.ShipToAddress.PostalCode} {order.ShipToAddress.City}
         </div>
@@ -332,7 +348,7 @@ namespace DamaWeb.Pages.Basket
             {
                 if (string.IsNullOrEmpty(UserAddress.Name))
                     ModelState.AddModelError("UserAddress.Name", "O campo Nome é obrigatório");
-                if (!UserAddress.ContactPhoneNumber.HasValue)
+                if (string.IsNullOrEmpty(UserAddress.ContactPhoneNumber))
                     ModelState.AddModelError("UserAddress.ContactPhoneNumber", "O campo Telefone é obrigatório");
                 if (string.IsNullOrEmpty(UserAddress.Street))
                     ModelState.AddModelError("UserAddress.Street", "O campo Morada é obrigatório.");
@@ -344,18 +360,24 @@ namespace DamaWeb.Pages.Basket
                     ModelState.AddModelError("UserAddress.Country", "O campo País é obrigatório.");                
             }
 
-            if (UserAddress.InvoiceTaxNumber.HasValue && !UserAddress.UseSameAsShipping)
+            if (WantInvoice)
             {
-                if (string.IsNullOrEmpty(UserAddress.InvoiceName))
-                    ModelState.AddModelError("UserAddress.InvoiceName", "O campo Nome (Faturação) é obrigatório");
-                if (string.IsNullOrEmpty(UserAddress.InvoiceAddressStreet))
-                    ModelState.AddModelError("UserAddress.InvoiceAddressStreet", "O campo Morada (Faturação) é obrigatório.");
-                if (string.IsNullOrEmpty(UserAddress.InvoiceAddressCity))
-                    ModelState.AddModelError("UserAddress.InvoiceAddressCity", "O campo Cidade (Faturação) é obrigatório.");
-                if (string.IsNullOrEmpty(UserAddress.InvoiceAddressPostalCode))
-                    ModelState.AddModelError("UserAddress.InvoiceAddressPostalCode", "O campo Código Postal (Faturação) é obrigatório.");
-                if (string.IsNullOrEmpty(UserAddress.InvoiceAddressCountry))
-                    ModelState.AddModelError("UserAddress.InvoiceAddressCountry", "O campo País (Faturação) é obrigatório.");
+                if (!UserAddress.InvoiceTaxNumber.HasValue)
+                    ModelState.AddModelError("UserAddress.InvoiceTaxNumber", "O campo NIF é obrigatório");
+
+                if (!UserAddress.UseSameAsShipping)
+                {
+                    if (string.IsNullOrEmpty(UserAddress.InvoiceName))
+                        ModelState.AddModelError("UserAddress.InvoiceName", "O campo Nome (Faturação) é obrigatório");
+                    if (string.IsNullOrEmpty(UserAddress.InvoiceAddressStreet))
+                        ModelState.AddModelError("UserAddress.InvoiceAddressStreet", "O campo Morada (Faturação) é obrigatório.");
+                    if (string.IsNullOrEmpty(UserAddress.InvoiceAddressCity))
+                        ModelState.AddModelError("UserAddress.InvoiceAddressCity", "O campo Cidade (Faturação) é obrigatório.");
+                    if (string.IsNullOrEmpty(UserAddress.InvoiceAddressPostalCode))
+                        ModelState.AddModelError("UserAddress.InvoiceAddressPostalCode", "O campo Código Postal (Faturação) é obrigatório.");
+                    if (string.IsNullOrEmpty(UserAddress.InvoiceAddressCountry))
+                        ModelState.AddModelError("UserAddress.InvoiceAddressCountry", "O campo País (Faturação) é obrigatório.");
+                }
             }
 
             //if(UserAddress.UseUserAddress == 1 && !UserAddress.UseSameAsShipping)

@@ -118,52 +118,60 @@
                     </div>
                     <div id="billingSection" class="collapse" aria-labelledby="headingThree" data-parent="#checkoutAccordion">
                         <div class="card-body">
-                            <div class="form-group">
-                                <label asp-for="UserAddress.InvoiceName"></label>
-                                <input asp-for="UserAddress.InvoiceName" class="form-control">
-                                <span asp-validation-for="UserAddress.InvoiceName" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="UserAddress.InvoiceTaxNumber"></label>
-                                <input asp-for="UserAddress.InvoiceTaxNumber" class="form-control">
-                                <span asp-validation-for="UserAddress.InvoiceTaxNumber" class="text-danger"></span>
-                            </div>
-                            <div id="grpSameAsShipping" class="form-check">
+                            <div class="form-check text-center">
                                 <label class="form-check-label">
-                                    <input asp-for="UserAddress.UseSameAsShipping" class="form-check-input" type="checkbox" />
-                                    <strong>Usar a mesma morada na fatura</strong>
+                                    <input asp-for="WantInvoice" class="form-check-input" type="checkbox" />
+                                    Deseja fatura com NIF?
                                 </label>
                             </div>
-                            <div id="invoice-address-controls">
+                            <div id="billing-group">
                                 <div class="form-group">
-                                    <label asp-for="UserAddress.InvoiceAddressStreet"></label>
-                                    <input class="form-control" asp-for="UserAddress.InvoiceAddressStreet">
-                                    <span asp-validation-for="UserAddress.InvoiceAddressStreet" class="text-danger"></span>
+                                    <label asp-for="UserAddress.InvoiceName"></label>
+                                    <input asp-for="UserAddress.InvoiceName" class="form-control">
+                                    <span asp-validation-for="UserAddress.InvoiceName" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label asp-for="UserAddress.InvoiceAddressCity"></label>
-                                    <input class="form-control" asp-for="UserAddress.InvoiceAddressCity">
-                                    <span asp-validation-for="UserAddress.InvoiceAddressCity" class="text-danger"></span>
+                                    <label asp-for="UserAddress.InvoiceTaxNumber"></label>
+                                    <input asp-for="UserAddress.InvoiceTaxNumber" class="form-control">
+                                    <span asp-validation-for="UserAddress.InvoiceTaxNumber" class="text-danger"></span>
                                 </div>
-                                <div class="form-group">
-                                    <label asp-for="UserAddress.InvoiceAddressPostalCode"></label>
-                                    <input class="form-control" asp-for="UserAddress.InvoiceAddressPostalCode">
-                                    <span asp-validation-for="UserAddress.InvoiceAddressPostalCode" class="text-danger"></span>
+                                <div id="grpSameAsShipping" class="form-check">
+                                    <label class="form-check-label">
+                                        <input asp-for="UserAddress.UseSameAsShipping" class="form-check-input" type="checkbox" />
+                                        <strong>Usar a mesma morada na fatura</strong>
+                                    </label>
                                 </div>
-                                <div class="form-group">
-                                    <label asp-for="UserAddress.InvoiceAddressCountry"></label>
-                                    <select class="form-control" asp-for="UserAddress.InvoiceAddressCountry">
-                                        <option>Portugal</option>
-                                    </select>
-                                    <span asp-validation-for="UserAddress.InvoiceAddressCountry" class="text-danger"></span>
-                                </div>
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" asp-for="UserAddress.InvoiceSaveAddress">
-                                    <label class="form-check-label" asp-for="UserAddress.InvoiceSaveAddress"></label>
-                                    <span asp-validation-for="UserAddress.InvoiceSaveAddress" class="text-danger"></span>
+                                <div id="invoice-address-controls">
+                                    <div class="form-group">
+                                        <label asp-for="UserAddress.InvoiceAddressStreet"></label>
+                                        <input class="form-control" asp-for="UserAddress.InvoiceAddressStreet">
+                                        <span asp-validation-for="UserAddress.InvoiceAddressStreet" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="UserAddress.InvoiceAddressCity"></label>
+                                        <input class="form-control" asp-for="UserAddress.InvoiceAddressCity">
+                                        <span asp-validation-for="UserAddress.InvoiceAddressCity" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="UserAddress.InvoiceAddressPostalCode"></label>
+                                        <input class="form-control" asp-for="UserAddress.InvoiceAddressPostalCode">
+                                        <span asp-validation-for="UserAddress.InvoiceAddressPostalCode" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="UserAddress.InvoiceAddressCountry"></label>
+                                        <select class="form-control" asp-for="UserAddress.InvoiceAddressCountry">
+                                            <option>Portugal</option>
+                                        </select>
+                                        <span asp-validation-for="UserAddress.InvoiceAddressCountry" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" asp-for="UserAddress.InvoiceSaveAddress">
+                                        <label class="form-check-label" asp-for="UserAddress.InvoiceSaveAddress"></label>
+                                        <span asp-validation-for="UserAddress.InvoiceSaveAddress" class="text-danger"></span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="text-center">
+                            <div class="text-center mt-3">
                                 <input class="btn btn-default esh-basket-checkout p-1 m-auto" type="submit" value="[ Finalizar Encomenda ]" />
                             </div>
                         </div>
@@ -230,7 +238,7 @@
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
-    <script>
+<script>
         var originUserAddress = '@Html.Raw(Model.UserAddress.Street)',
             originUserCity = '@Html.Raw(Model.UserAddress.City)',
             originUserPostalCode = '@Model.UserAddress.PostalCode';
@@ -296,6 +304,16 @@
         $(document).ready(function () {
 
             $('#damaMapSection').hide();
+
+            @if(Model.WantInvoice)
+            {
+                <text>$('#billing-group').show();</text>
+            }
+            else
+            {
+                <text>$('#billing-group').hide();</text>
+            }
+
             $('input[type=radio][name="UserAddress.UseUserAddress"]').click(function () {
                 if (this.value == '1') {
                     $('#shipping-cost').removeClass('d-none').addClass('d-flex');
@@ -308,7 +326,7 @@
                     $('#UserAddress_PostalCode').val(originUserPostalCode);
                     $('#UserAddress_PostalCode').prop('disabled', false);
                     $('#damaMapSection').hide();
-                    $('#deliveryAddress').removeClass('col-6').addClass('col-12');                    
+                    $('#deliveryAddress').removeClass('col-6').addClass('col-12');
                     $('#UserAddress_UseSameAsShipping').prop('disabled', false);
 
                     ShowDisableAddressControls(@Model.UserAddress.UseSameAsShipping.ToString().ToLower());
@@ -316,7 +334,7 @@
                 else if (this.value == '2') {
 
                     $('#shipping-cost').removeClass('d-flex').addClass('d-none');
-                    $('#basket-total').text(toNumber(@Model.BasketModel.SubTotal().ToString().Replace(',', '.')));              
+                    $('#basket-total').text(toNumber(@Model.BasketModel.SubTotal().ToString().Replace(',', '.')));
                     $('#UserAddress_Street').val('Mercado de Loulé, Praça da Republica');
                     $('#UserAddress_Street').prop('disabled', true);
                     $('#UserAddress_City').val('Loulé');
@@ -328,7 +346,7 @@
                     $('#UserAddress_UseSameAsShipping').prop('disabled', true);
 
                     ShowDisableAddressControls(false);
-                 }
+                }
 
                  $('#deliverySection').collapse("show");
             });
@@ -340,6 +358,13 @@
             $('#checkoutAccordion').on('show.bs.collapse', function (e) {
                 return formIsValid($(e.target).attr('id'));
             });
+
+            $('#WantInvoice').change(function () {
+                if ($(this).is(":checked")) 
+                    $('#billing-group').show();
+                else
+                    $('#billing-group').hide();
+            });
         });
-    </script>
+</script>
 }
