@@ -35,11 +35,19 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-page="/Index">Home</a></li>
-                    <li><a asp-page="/Category/Index">Categorias</a></li>
-                    <li><a asp-page="/ProductType/Index">Tipos de Produto</a></li>
-                    <li><a asp-page="/Illustrations/Index">Ilustrações</a></li>
-                    <li><a asp-page="/Products/Index">Produtos</a></li>
-                    <li><a asp-page="/ShopConfig/Index">Loja</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            Configurações <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-page="/Category/Index">Categorias</a></li>
+                            <li><a asp-page="/ProductType/Index">Tipos de Produto</a></li>
+                            <li><a asp-page="/Illustrations/Index">Ilustrações</a></li>
+                            <li><a asp-page="/Products/Index">Produtos</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a asp-page="/ShopConfig/Index">Loja</a></li>
+                        </ul>
+                    </li>                    
                     <li><a asp-page="/Orders/Index">Encomendas</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")

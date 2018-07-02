@@ -183,8 +183,6 @@ namespace Infrastructure.Data
                 .WithMany(x => x.CatalogItems)
                 .HasForeignKey(ci => ci.CatalogTypeId);
 
-            builder.Property(x => x.Description)
-                .HasMaxLength(255);
             builder.Property(x => x.ShowOnShop)
                 .IsRequired(true);
             builder.Property(x => x.IsNew)

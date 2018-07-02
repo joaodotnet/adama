@@ -13,8 +13,7 @@ namespace Backoffice.ViewModels
         [StringLength(100)]
         [Display(Name = "Nome")]
         public string Name { get; set; }
-        [StringLength(255)]
-        [Display(Name = "Descrição")]
+        [Display(Name = "Descrição")]        
         public string Description { get; set; }                
         [Required]
         [Display(Name = "Preço")]

@@ -98,6 +98,9 @@ namespace DamaWeb.Pages.Basket
                     address = new Address(UserAddress.Name, UserAddress.ContactPhoneNumber, UserAddress.Street, UserAddress.City, UserAddress.Country, UserAddress.PostalCode); //, UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);                    
                 }
                 Address billingAddress = new Address(UserAddress.InvoiceName, UserAddress.ContactPhoneNumber, UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);
+                if(UserAddress.UseSameAsShipping)
+                    billingAddress = new Address(UserAddress.InvoiceName, address.PhoneNumber, address.Street, address.City, address.Country, address.PostalCode);
+
                 //if(UserAddress.UseSameAsShipping && UserAddress.UseUserAddress.Value == 2)
                 //if (UserAddress.UseUserAddress == 1 && !UserAddress.UseSameAsShipping)
                 //    billingAddress = new Address(UserAddress.InvoiceName, UserAddress.ContactPhoneNumber, UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);
@@ -341,7 +344,7 @@ namespace DamaWeb.Pages.Basket
                     ModelState.AddModelError("UserAddress.Country", "O campo País é obrigatório.");                
             }
 
-            if (UserAddress.InvoiceTaxNumber.HasValue)
+            if (UserAddress.InvoiceTaxNumber.HasValue && !UserAddress.UseSameAsShipping)
             {
                 if (string.IsNullOrEmpty(UserAddress.InvoiceName))
                     ModelState.AddModelError("UserAddress.InvoiceName", "O campo Nome (Faturação) é obrigatório");
