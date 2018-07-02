@@ -80,23 +80,23 @@ namespace Backoffice.Pages.ProductType
                 return Page();
             }
 
-            //Save Image
-            if (ProductTypeModel?.Picture?.Length > 0)
-            {
-                ProductTypeModel.PictureUri = await _service.SaveFileAsync(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureFullPath, _backofficeSettings.WebProductTypesPictureUri, ProductTypeModel.Id.ToString());
-            }
-
-            //Get entity
+           //Get entity
             var productTypeEntity = await _context.CatalogTypes
                 .Include(x => x.Categories)
                 .SingleOrDefaultAsync(x => x.Id == ProductTypeModel.Id);
 
-            if(productTypeEntity != null)
+                 //Save Image
+            if (ProductTypeModel?.Picture?.Length > 0)
             {
                 if(!string.IsNullOrEmpty(productTypeEntity.PictureUri))
                 {
                     _service.DeleteFile(_backofficeSettings.WebProductTypesPictureFullPath, Utils.GetFileName(productTypeEntity.PictureUri));
                 }
+                ProductTypeModel.PictureUri = await _service.SaveFileAsync(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureFullPath, _backofficeSettings.WebProductTypesPictureUri, ProductTypeModel.Id.ToString());
+            }
+
+            if(productTypeEntity != null)
+            {                
                 productTypeEntity.Code = ProductTypeModel.Code;
                 productTypeEntity.Description = ProductTypeModel.Description;
                 productTypeEntity.DeliveryTimeMin = ProductTypeModel.DeliveryTimeMin;

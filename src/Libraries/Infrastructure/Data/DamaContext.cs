@@ -264,6 +264,9 @@ namespace Infrastructure.Data
                 .IsRequired()
                 .HasDefaultValue(OrderStateType.PENDING);
 
+            builder.Property(x => x.PhoneNumber)
+                .HasMaxLength(100);
+
             builder.Property(x => x.SalesInvoiceNumber)
                 .HasMaxLength(255);
 
@@ -271,9 +274,8 @@ namespace Infrastructure.Data
 
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
 
-            builder.Property(x => x.UseBillingSameAsShipping)
-                .IsRequired()
-                .HasDefaultValue(true);
+            //builder.Property(x => x.UseBillingSameAsShipping)
+            //    .IsRequired();
 
             builder.OwnsOne(o => o.ShipToAddress);
             builder.OwnsOne(o => o.BillingToAddress);

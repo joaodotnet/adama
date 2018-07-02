@@ -6,14 +6,16 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(DamaContext))]
-    partial class CatalogContextModelSnapshot : ModelSnapshot
+    [Migration("20180702172529_PhoneNumberChange")]
+    partial class PhoneNumberChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -390,7 +392,9 @@ namespace Infrastructure.Data.Migrations
 
                     b.Property<int?>("TaxNumber");
 
-                    b.Property<bool>("UseBillingSameAsShipping");
+                    b.Property<bool>("UseBillingSameAsShipping")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(true);
 
                     b.HasKey("Id");
 

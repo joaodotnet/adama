@@ -115,7 +115,7 @@ namespace DamaWeb.Services
                         AddressType = addressType
                     };
                     if(addressType == AddressType.SHIPPING)
-                    {
+                    {                        
                         newAddress.Street = addressModel.Street;
                         newAddress.City = addressModel.City;
                         newAddress.PostalCode = addressModel.PostalCode;

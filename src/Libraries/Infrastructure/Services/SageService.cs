@@ -68,7 +68,7 @@ namespace Infrastructure.Services
                 return new SageResponseDTO { Message = "Error Input Data", ResponseBody = "Error: No items" };
 
             List<KeyValuePair<string, string>> body = new List<KeyValuePair<string, string>>
-            {
+            {                
                 new KeyValuePair<string,string>("sales_invoice[date]",DateTime.Now.ToString("dd-MM-yyyy")),
                 new KeyValuePair<string,string>("sales_invoice[due_date]", DateTime.Now.AddMonths(1).ToString("dd-MM-yyyy")),
                 new KeyValuePair<string,string>("sales_invoice[carriage_tax_rate_id]", "4"),

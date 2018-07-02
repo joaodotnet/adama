@@ -11,23 +11,28 @@ namespace ApplicationCore.Entities.OrderAggregate
         {
         }
 
-        public Order(string buyerId, int? taxNumber, Address shipToAddress, Address billingAddress, bool useBillingSameAsShipping, List<OrderItem> items, decimal shippingCost)
+        public Order(string buyerId, string phoneNumber, int? taxNumber, Address shipToAddress, Address billingAddress, bool useBillingSameAsShipping, List<OrderItem> items, decimal shippingCost)
         {
             ShipToAddress = shipToAddress;
-            BillingToAddress = billingAddress;
+            if (billingAddress != null)
+                BillingToAddress = billingAddress;
+            else
+                BillingToAddress = new Address();
             UseBillingSameAsShipping = useBillingSameAsShipping;
             ShippingCost = shippingCost;
             _orderItems = items;
             BuyerId = buyerId;
             TaxNumber = taxNumber;
+            PhoneNumber = phoneNumber;
         }
         public string BuyerId { get; private set; }
         public int? TaxNumber { get; private set; }
+        public string PhoneNumber { get; private set; }
         public DateTimeOffset OrderDate { get; private set; } = DateTimeOffset.Now;
         public Address ShipToAddress { get; private set; }
         public Address BillingToAddress { get; private set; }
         public decimal ShippingCost { get; private set; }
-        public Boolean UseBillingSameAsShipping { get; private set; }
+        public bool UseBillingSameAsShipping { get; private set; }
         public OrderStateType OrderState { get; set; }
         public long? SalesInvoiceId { get; set; }
         public string SalesInvoiceNumber { get; set; }
