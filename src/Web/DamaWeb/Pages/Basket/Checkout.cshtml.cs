@@ -89,7 +89,8 @@ namespace DamaWeb.Pages.Basket
                 if (UserAddress.SaveAddress)
                 {
                     await _userManager.SetPhoneNumberAsync(user, UserAddress.ContactPhoneNumber);
-                    await _shopService.AddorUpdateUserAddress(user, UserAddress);
+                    if(UserAddress.UseUserAddress == 1)
+                        await _shopService.AddorUpdateUserAddress(user, UserAddress);
                 }
                 if (UserAddress.InvoiceSaveAddress)
                     await _shopService.AddorUpdateUserAddress(user, UserAddress, AddressType.BILLING);
@@ -359,6 +360,13 @@ namespace DamaWeb.Pages.Basket
                 if (string.IsNullOrEmpty(UserAddress.Country))
                     ModelState.AddModelError("UserAddress.Country", "O campo País é obrigatório.");                
             }
+            else if(UserAddress.UseUserAddress == 2)
+            {
+                UserAddress.Street = "Mercado de Loulé - Banca nº 44, Praça da Republica";
+                UserAddress.City = "Loulé";
+                UserAddress.PostalCode = "8100-270";
+                UserAddress.Country = "Portugal";
+            }
 
             if (WantInvoice)
             {
@@ -391,6 +399,7 @@ namespace DamaWeb.Pages.Basket
             //    if (string.IsNullOrEmpty(UserAddress.InvoiceAddressCountry))
             //        ModelState.AddModelError("UserAddress.InvoiceAddressCountry", "O campo País (Faturação) é obrigatório.");
             //}
+            
             return ModelState.IsValid;
         }
 

@@ -72,7 +72,7 @@
                                         <label asp-for="UserAddress.City"></label>
                                         <input class="form-control" asp-for="UserAddress.City">
                                         <span asp-validation-for="UserAddress.City" class="text-danger"></span>
-                                    </div> 
+                                    </div>
                                     <div class="form-group required">
                                         <label asp-for="UserAddress.PostalCode"></label>
                                         <input class="form-control" asp-for="UserAddress.PostalCode">
@@ -85,23 +85,24 @@
                                         </select>
                                         <span asp-validation-for="UserAddress.Country" class="text-danger"></span>
                                     </div>
-                                </div>
-                                <div id="damaMapSection" class="col-6">
-                                    <div>
-                                        <span>Banca Nº 44 - <a class="underline" href="http://saborcomtradicao.com/" target="_blank"> Sabor com Tradição </a></span>
-                                    </div>
-                                    <div>
-                                        <iframe width="100%" height="300"
-                                                frameborder="0" style="border:0"
-                                                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB2Av0vyWQSV7OOZK_LdJ3i52TSC8pLPF8&q=Mercado+Municipal+de+Loulé+(Desde+1908)" allowfullscreen></iframe>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" asp-for="UserAddress.SaveAddress">
+                                        <label class="form-check-label" asp-for="UserAddress.SaveAddress"></label>
+                                        <span asp-validation-for="UserAddress.SaveAddress" class="text-danger"></span>
                                     </div>
                                 </div>
+
                             </div>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" asp-for="UserAddress.SaveAddress">
-                                <label class="form-check-label" asp-for="UserAddress.SaveAddress"></label>
-                                <span asp-validation-for="UserAddress.SaveAddress" class="text-danger"></span>
-                            </div>
+                            <div id="damaMapSection">
+                                <div class="text-center">
+                                    <span>Mercado de Loulé, Praça da Republica, Banca Nº 44 - <a class="underline" href="http://saborcomtradicao.com/" target="_blank"> Sabor com Tradição </a></span>                                    
+                                </div>
+                                <div class="mt-3">
+                                    <iframe width="100%" height="300"
+                                            frameborder="0" style="border:0"
+                                            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB2Av0vyWQSV7OOZK_LdJ3i52TSC8pLPF8&q=Mercado+Municipal+de+Loulé+(Desde+1908)" allowfullscreen></iframe>
+                                </div>
+                            </div>                            
                             <div class="text-center">
                                 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#billingSection">Seguinte</button>
                             </div>
@@ -258,7 +259,7 @@
                 $('#UserAddress_InvoiceAddressPostalCode').prop('disabled', true);
                 $('#UserAddress_InvoiceAddressCountry').prop('disabled', true);
             }
-            else {
+            else {                
                 $('#UserAddress_InvoiceAddressStreet').val(originBillingUserAddress);
                 $('#UserAddress_InvoiceAddressStreet').prop('disabled', false);
                 $('#UserAddress_InvoiceAddressCity').val(originBillingUserCity);
@@ -301,10 +302,25 @@
 
             return true;
         }
-        $(document).ready(function () {
+    $(document).ready(function () {
 
-            $('#damaMapSection').hide();
+            //Show Map or Delivery Address
+            @if (!Model.UserAddress.UseUserAddress.HasValue || Model.UserAddress.UseUserAddress == 1 )
+            {
+                <text>
+                $('#damaMapSection').hide();
+                $('#deliveryAddress').show();
+                </text>
+            }
+            else
+            { 
+                <text>
+                $('#damaMapSection').show();
+                $('#deliveryAddress').hide();
+                </text>
+            }
 
+            //Show Billing Address or Nor
             @if(Model.WantInvoice)
             {
                 <text>$('#billing-group').show();</text>
@@ -314,19 +330,29 @@
                 <text>$('#billing-group').hide();</text>
             }
 
+            //Disabled Use same address or not
+            @if(Model.UserAddress.UseUserAddress == 2)
+            {
+                <text>                
+                $('#UserAddress_UseSameAsShipping').prop('disabled', true);
+                </text>
+
+            }
+
             $('input[type=radio][name="UserAddress.UseUserAddress"]').click(function () {
                 if (this.value == '1') {
                     $('#shipping-cost').removeClass('d-none').addClass('d-flex');
                     $('#basket-total').text(toNumber(@Model.BasketModel.Total().ToString().Replace(',','.')));
 
                     $('#UserAddress_Street').val(originUserAddress);
-                    $('#UserAddress_Street').prop('disabled', false);
+                    //$('#UserAddress_Street').prop('disabled', false);
                     $('#UserAddress_City').val(originUserCity);
-                    $('#UserAddress_City').prop('disabled', false);
+                    //$('#UserAddress_City').prop('disabled', false);
                     $('#UserAddress_PostalCode').val(originUserPostalCode);
-                    $('#UserAddress_PostalCode').prop('disabled', false);
+                    //$('#UserAddress_PostalCode').prop('disabled', false);
                     $('#damaMapSection').hide();
                     $('#deliveryAddress').removeClass('col-6').addClass('col-12');
+                    $('#deliveryAddress').show();
                     $('#UserAddress_UseSameAsShipping').prop('disabled', false);
 
                     ShowDisableAddressControls(@Model.UserAddress.UseSameAsShipping.ToString().ToLower());
@@ -336,16 +362,18 @@
                     $('#shipping-cost').removeClass('d-flex').addClass('d-none');
                     $('#basket-total').text(toNumber(@Model.BasketModel.SubTotal().ToString().Replace(',', '.')));
                     $('#UserAddress_Street').val('Mercado de Loulé, Praça da Republica');
-                    $('#UserAddress_Street').prop('disabled', true);
+                    //$('#UserAddress_Street').prop('disabled', true);
                     $('#UserAddress_City').val('Loulé');
-                    $('#UserAddress_City').prop('disabled', true);
+                    //$('#UserAddress_City').prop('disabled', true);
                     $('#UserAddress_PostalCode').val("8100-270");
-                    $('#UserAddress_PostalCode').prop('disabled', true);
+                    //$('#UserAddress_PostalCode').prop('disabled', true);
                     $('#damaMapSection').show();
                     $('#deliveryAddress').removeClass('col-12').addClass('col-6');
+                    $('#deliveryAddress').hide();
                     $('#UserAddress_UseSameAsShipping').prop('disabled', true);
 
                     ShowDisableAddressControls(false);
+
                 }
 
                  $('#deliverySection').collapse("show");
