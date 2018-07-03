@@ -22,7 +22,7 @@ namespace Backoffice.Interfaces
         Task<List<CategoryViewModel>> GetCategoriesAsync(int productTypeId);
         Task<IList<CustomizeOrderViewModel>> GetCustomizeOrdersAsync();
         Task<CustomizeOrderViewModel> GetCustomizeOrderAsync(int id);
-        Task<SageResponseDTO> RegisterInvoiceAsync(int id, PaymentType paymentTypeSelected);
+        Task<SageResponseDTO> RegisterInvoiceAsync(int id);
         Task<byte[]> GetInvoicePDF(long invoiceId);
         Task<SageResponseDTO> RegisterPaymentAsync(int id, PaymentType paymentTypeSelected);
         Task<byte[]> GetReceiptPDF(long invoiceId, long paymentId);

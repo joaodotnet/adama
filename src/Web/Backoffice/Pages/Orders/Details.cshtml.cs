@@ -58,7 +58,7 @@ namespace Backoffice.Pages.Orders
 
         public async Task<IActionResult> OnPostRegisterInvoiceAsync()
         {
-            SageResponseDTO response = await _service.RegisterInvoiceAsync(OrderModel.Id, OrderModel.PaymentTypeSelected);
+            SageResponseDTO response = await _service.RegisterInvoiceAsync(OrderModel.Id);
             if (response.Message == "Success")
                 StatusMessage = $"Sucesso foi criado a fatura: {response.InvoiceNumber}";
             else
@@ -133,14 +133,25 @@ namespace Backoffice.Pages.Orders
             if (order == null)
                 return NotFound();
 
+            var fileName = string.Format(_settings.InvoiceNameFormat, OrderModel.Id);
+            List<(string, byte[])> files = new List<(string, byte[])>();
+            //Check if file already exist
+            if (!_service.CheckIfFileExists(_settings.InvoicesFolderFullPath, fileName))
+            {
+                files.Add((fileName,await _service.GetInvoicePDF(order.SalesInvoiceId.Value)));
+            }
+            else
+            {
+                var invoicePath = Path.Combine(_settings.InvoicesFolderFullPath, fileName);
+                files.Add((fileName, await System.IO.File.ReadAllBytesAsync(invoicePath)));
+            }
+            //var files = await _service.GetOrderDocumentsAsync(order.Id);
+
             var name = order.User != null ? $"{order.User.FirstName} {order.User.LastName}" : order.BuyerId;
             var body = $"Olá {name}!<br>" +
                 $"Obrigado por comprar na DamaNoJornal, o pagamento relativo à encomenda #{order.Id} foi recepcionado.<br>" +
-                $"Enviamos, em anexo, a fatura e o recibo relativo à encomenda. <br>" +
+                $"Enviamos, em anexo, a fatura relativo à encomenda. <br>" +
                 $"Estamos a preparar a expedição.";
-                
-
-            var files = await _service.GetOrderDocumentsAsync(order.Id);
 
             await _emailSender.SendGenericEmailAsync(order.BuyerId, $"Faturação DamaNoJornal - Encomenda #{order.Id}", body, _settings.ToEmails, files);
             StatusMessage = "Mensagem Enviada";

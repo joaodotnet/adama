@@ -169,7 +169,7 @@ namespace Backoffice.Services
             return _mapper.Map<CustomizeOrderViewModel>(order);
         }
 
-        public async Task<SageResponseDTO> RegisterInvoiceAsync(int id, PaymentType paymentType)
+        public async Task<SageResponseDTO> RegisterInvoiceAsync(int id)
         {
             var order = await _damaContext.Orders
                 .Include(x => x.OrderItems)
@@ -203,13 +203,13 @@ namespace Backoffice.Services
                 order.SalesInvoiceId = response.InvoiceId.Value;
                 order.SalesInvoiceNumber = response.InvoiceNumber;                                
 
-                //Payment                
-                var responsePayment = await _sageService.InvoicePayment(order.SalesInvoiceId.Value, paymentType, order.Total());
+                ////Payment                
+                //var responsePayment = await _sageService.InvoicePayment(order.SalesInvoiceId.Value, paymentType, order.Total());
 
-                if(responsePayment != null && responsePayment.PaymentId.HasValue)
-                {
-                    order.SalesPaymentId = responsePayment.PaymentId;
-                }
+                //if(responsePayment != null && responsePayment.PaymentId.HasValue)
+                //{
+                //    order.SalesPaymentId = responsePayment.PaymentId;
+                //}
                 await _damaContext.SaveChangesAsync();
             }
             
@@ -246,14 +246,14 @@ namespace Backoffice.Services
         public async Task<List<(string, byte[])>> GetOrderDocumentsAsync(int id)
         {
             var invoiceFileName = string.Format(_settings.InvoiceNameFormat, id);
-            var receiptFileName = string.Format(_settings.ReceiptNameFormat, id);
+            //var receiptFileName = string.Format(_settings.ReceiptNameFormat, id);
             var invoicePath = Path.Combine(_settings.InvoicesFolderFullPath, invoiceFileName);
-            var receiptPath = Path.Combine(_settings.InvoicesFolderFullPath, receiptFileName);
+            //var receiptPath = Path.Combine(_settings.InvoicesFolderFullPath, receiptFileName);
             List<(string Filename, byte[] Bytes)> files = new List<(string,byte[])>();
             if (File.Exists(invoicePath))
                 files.Add((invoiceFileName, await File.ReadAllBytesAsync(invoicePath)));
-            if (File.Exists(receiptPath))
-                files.Add((receiptFileName, await File.ReadAllBytesAsync(receiptPath)));
+            //if (File.Exists(receiptPath))
+            //    files.Add((receiptFileName, await File.ReadAllBytesAsync(receiptPath)));
 
             return files;
         }
