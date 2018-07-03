@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace DamaWeb.ViewModels
         public string ContactPhoneNumber { get; set; }
         [Display(Name = "Morada")]
         [StringLength(50, ErrorMessage = "O campo Morada têm que ter no máximo 50 caracteres!")]
-        [Required(ErrorMessage = "O campo Morada é obrigatório")]       
+        [Required(ErrorMessage = "O campo Morada é obrigatório")]               
         public string Street { get; set; }
         [Display(Name = "Morada (Linha 2)")]
         [StringLength(50, ErrorMessage = "O campo Morada (Linha 2) têm que ter no máximo 50 caracteres!")]
@@ -54,4 +55,33 @@ namespace DamaWeb.ViewModels
         [Display(Name = "Guardar sua morada na sua conta")]
         public bool InvoiceSaveAddress { get; set; } = true;
     }
+
+    //public class RequiredIfAttribute : ValidationAttribute, IClientModelValidator
+    //{
+
+    //    public RequiredIfAttribute()
+    //    {
+    //    }
+
+    //    public void AddValidation(ClientModelValidationContext context)
+    //    {
+    //        var error = FormatErrorMessage(context.ModelMetadata.GetDisplayName());
+    //        context.Attributes.Add("data-val", "true");
+    //        context.Attributes.Add("data-val-error", error);
+    //    }
+
+    //    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+    //    {
+    //        AddressViewModel address = (AddressViewModel)validationContext.ObjectInstance;
+
+    //        string valueToCheck = value as string;
+
+    //        if (address.UseUserAddress == 1 && !string.IsNullOrEmpty(valueToCheck))
+    //        {
+    //            return new ValidationResult("O campo Morada é obrigatório.");
+    //        }
+
+    //        return ValidationResult.Success;
+    //    }
+    //}
 }
