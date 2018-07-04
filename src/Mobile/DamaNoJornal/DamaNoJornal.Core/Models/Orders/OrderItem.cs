@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace DamaNoJornal.Core.Models.Orders
 {
@@ -19,6 +20,7 @@ namespace DamaNoJornal.Core.Models.Orders
         public int Quantity { get; set; }
 
         public decimal Discount { get; set; }
+        public ICollection<OrderItemDetail> Details { get; set; } = new List<OrderItemDetail>();
         public decimal Total { get { return Quantity * UnitPrice; } }
 
         public override string ToString()

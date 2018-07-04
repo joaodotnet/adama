@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Dama.API.ViewModels
 {
@@ -15,6 +16,8 @@ namespace Dama.API.ViewModels
         public decimal UnitPrice { get; set; }
 
         public decimal OldUnitPrice { get; set; }
+
+        public List<BasketItemAttributeViewModel> Attributes { get; set; } = new List<BasketItemAttributeViewModel>();
 
         public bool HasNewPrice
         {
