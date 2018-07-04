@@ -123,11 +123,11 @@ namespace DamaNoJornal.Core.ViewModels
         {
             IsBusy = true;
 
-            if (navigationData is Tuple<CatalogBrand,CatalogType>)
+            if (navigationData is Tuple<CatalogBrand, CatalogType>)
             {
-                var tuple = (Tuple<CatalogBrand,CatalogType>)navigationData;
+                var tuple = (Tuple<CatalogBrand, CatalogType>)navigationData;
                 Brand = tuple.Item1;
-                Type = tuple.Item2;                
+                Type = tuple.Item2;
                 Products = await _productsService.FilterAsync(Brand?.Id, Type?.Id);
             }
             else
@@ -147,21 +147,28 @@ namespace DamaNoJornal.Core.ViewModels
         {
             //Attributes
             List<CatalogAttribute> attributesSelected = new List<CatalogAttribute>();
-            if(catalogItem.CatalogAttributes?.Count > 0)
+
+            //For each catalog attribute
+            if (catalogItem.CatalogAttributes?.Count > 0)
             {
-                var result = await DialogService.ShowPromptAsync("Atributos", "Cancelar", catalogItem.CatalogAttributes.Select(x => $"{AttributeTypeHelper.GetTypeDescription(x.Type)} {x.Name}").ToArray());
-                if(!string.IsNullOrEmpty(result))
+                var group = catalogItem.CatalogAttributes.GroupBy(x => x.Type);
+                foreach (var item in group)
                 {
-                    var attribute = catalogItem.CatalogAttributes.SingleOrDefault(x => result.Contains(x.Name));
-                    if(attribute != null)
-                        attributesSelected.Add(attribute);
-                    System.Diagnostics.Debug.WriteLine($"############## Atributo: {result} #################");
+                    var result = await DialogService.ShowPromptAsync("Atributos", "Cancelar", item.Select(x => $"{AttributeTypeHelper.GetTypeDescription(item.Key)} {x.Name}").ToArray());
+                    if (!string.IsNullOrEmpty(result))
+                    {
+                        var attribute = item.SingleOrDefault(x => result.Contains(x.Name));
+                        if (attribute != null)
+                            attributesSelected.Add(attribute);
+                        System.Diagnostics.Debug.WriteLine($"############## Atributo: {result} #################");
+                    }
                 }
             }
 
+
             // Add new item to Basket
             //MessagingCenter.Send(this, MessageKeys.AddProduct, catalogItem);   
-            await NavigationService.NavigateToAsync<BasketViewModel>((catalogItem,attributesSelected));
+            await NavigationService.NavigateToAsync<BasketViewModel>((catalogItem, attributesSelected));
         }
 
         private async Task FilterAsync()

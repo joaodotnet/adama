@@ -6,7 +6,7 @@ namespace DamaNoJornal.Core.Converters
 {
     public class AttributesToHeightConverter : IValueConverter
     {
-        private const int ItemHeight = 10;
+        private const int ItemHeight = 20;
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
