@@ -62,26 +62,28 @@ namespace Infrastructure.Services
             return (access_token, refresh_token);
         }
 
-        public async Task<SageResponseDTO> CreateAnonymousInvoice(List<OrderItem> orderItems, int referenceId)
+        public async Task<SageResponseDTO> CreateAnonymousInvoice(List<OrderItem> orderItems, int referenceId, decimal carriageAmount)
         {
             if (orderItems == null || orderItems.Count == 0)
                 return new SageResponseDTO { Message = "Error Input Data", ResponseBody = "Error: No items" };
 
             List<KeyValuePair<string, string>> body = new List<KeyValuePair<string, string>>
-            {                
+            {
                 new KeyValuePair<string,string>("sales_invoice[date]",DateTime.Now.ToString("dd-MM-yyyy")),
                 new KeyValuePair<string,string>("sales_invoice[due_date]", DateTime.Now.AddMonths(1).ToString("dd-MM-yyyy")),
-                new KeyValuePair<string,string>("sales_invoice[carriage_tax_rate_id]", "4"),
-                new KeyValuePair<string,string>("sales_invoice[vat_exemption_reason_id]", "10"),
+                //new KeyValuePair<string,string>("sales_invoice[carriage_tax_rate_id]", "4"),
+                //new KeyValuePair<string,string>("sales_invoice[vat_exemption_reason_id]", "10"),
                 new KeyValuePair<string,string>("sales_invoice[reference]", referenceId.ToString())
             };
+
+            SetCarriageAmount(carriageAmount, body);
+
             AddLinesToBody(orderItems, body);
+
             return await CreateInvoice(body);
-        }
+        }        
 
-
-
-        public async Task<SageResponseDTO> CreateInvoiceWithTaxNumber(List<OrderItem> orderItems, string customerName, string taxNumber, string address, string postalCode, string city, int referenceId)
+        public async Task<SageResponseDTO> CreateInvoiceWithTaxNumber(List<OrderItem> orderItems, string customerName, string taxNumber, string address, string postalCode, string city, int referenceId, decimal carriageAmount)
         {
             if (orderItems == null || orderItems.Count == 0)
                 return new SageResponseDTO { Message = "Error Input Data", ResponseBody = "Error: No items" };
@@ -96,10 +98,12 @@ namespace Infrastructure.Services
                 new KeyValuePair<string,string>("sales_invoice[main_address_postcode]", postalCode),
                 new KeyValuePair<string,string>("sales_invoice[main_address_locality]", city),
                 new KeyValuePair<string,string>("sales_invoice[main_address_country_id]", "175"),
-                new KeyValuePair<string,string>("sales_invoice[carriage_tax_rate_id]", "4"),
+                //new KeyValuePair<string,string>("sales_invoice[carriage_tax_rate_id]", "4"),
                 new KeyValuePair<string,string>("sales_invoice[vat_exemption_reason_id]", "10"),
                 new KeyValuePair<string,string>("sales_invoice[reference]", referenceId.ToString())
             };
+
+            SetCarriageAmount(carriageAmount, body);
 
             AddLinesToBody(orderItems, body);
             return await CreateInvoice(body);
@@ -268,6 +272,20 @@ namespace Infrastructure.Services
             var result = await HandleResponse(response, HttpMethod.Get, uri, null);
             return await result.Content.ReadAsByteArrayAsync();
         }
+        private static void SetCarriageAmount(decimal carriageAmount, List<KeyValuePair<string, string>> body)
+        {
+            //Check carriage
+            if (carriageAmount > 0)
+            {                
+                var carriageNet = Math.Ceiling(carriageAmount / 1.23m);
+                double multiplier = Math.Pow(10, Convert.ToDouble(2));
+                var carriageNetRoundUp = (Convert.ToDouble(carriageNet) * multiplier) / multiplier;
+                body.Add(new KeyValuePair<string, string>("sales_invoice[carriage]", carriageNetRoundUp.ToString(CultureInfo.InvariantCulture)));
+                body.Add(new KeyValuePair<string, string>("sales_invoice[carriage_tax_rate_id]", "1"));
+                //body.Add(new KeyValuePair<string, string>("sales_invoice[vat_exemption_reason_id]", "10"));
+            }
+        }
+
 
         private (string TypeId, string BankId) GetSagePaymentType(PaymentType paymentType)
         {

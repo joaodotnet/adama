@@ -193,10 +193,11 @@ namespace Backoffice.Services
                     order.BillingToAddress.Street,
                     order.BillingToAddress.PostalCode,
                     order.BillingToAddress.City,
-                    order.Id);
+                    order.Id,
+                    order.ShippingCost);
             }
             else
-                response = await _sageService.CreateAnonymousInvoice(items, order.Id);
+                response = await _sageService.CreateAnonymousInvoice(items, order.Id, order.ShippingCost);
 
             if(response.InvoiceId.HasValue)
             {
