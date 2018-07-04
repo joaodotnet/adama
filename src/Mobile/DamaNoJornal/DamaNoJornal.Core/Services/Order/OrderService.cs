@@ -1,5 +1,6 @@
 ﻿using DamaNoJornal.Core.Extensions;
 using DamaNoJornal.Core.Models.Basket;
+using DamaNoJornal.Core.Models.Catalog;
 using DamaNoJornal.Core.Models.Orders;
 using DamaNoJornal.Core.Services.Order.Models;
 using DamaNoJornal.Core.Services.RequestProvider;
@@ -140,7 +141,13 @@ namespace DamaNoJornal.Core.Services.Order
                     PictureUrl = i.ItemOrdered.PictureUri,
                     ProductName = i.ItemOrdered.ProductName,
                     Quantity = i.Units,
-                    UnitPrice = i.UnitPrice
+                    UnitPrice = i.UnitPrice,
+                    Details = i.Details.Select(d => new OrderItemDetail
+                    {
+                        Id = d.Id,
+                        AttributeType = d.AttributeType,
+                        AttributeName = $"{AttributeTypeHelper.GetTypeDescription(d.AttributeType)} {d.AttributeName}"
+                    }).ToList()
                 }).ToList()
             };
         }

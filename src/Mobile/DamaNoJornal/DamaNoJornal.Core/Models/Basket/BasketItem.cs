@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace DamaNoJornal.Core.Models.Basket
@@ -16,6 +17,7 @@ namespace DamaNoJornal.Core.Models.Basket
         public decimal UnitPrice { get; set; }
 
         public decimal OldUnitPrice { get; set; }
+        public List<BasketItemAttribute> Attributes { get; set; } = new List<BasketItemAttribute>();
 
         public bool HasNewPrice
         {

@@ -176,6 +176,7 @@
             <converters:InverseCountToBoolConverter x:Key="InverseCountToBoolConverter" />
             <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
             <converters:ItemsToHeightConverter x:Key="ItemsToHeightConverter" />
+            <converters:AttributesToHeightConverter x:Key="AttributesToHeightConverter" />
             <converters:ToUpperConverter x:Key="ToUpperConverter" />
 
             <!-- EXPLICIT STYLES -->

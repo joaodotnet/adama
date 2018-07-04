@@ -1,4 +1,5 @@
 ﻿using DamaNoJornal.Core.Models.Basket;
+using DamaNoJornal.Core.Models.Catalog;
 using DamaNoJornal.Core.Models.Navigation;
 using DamaNoJornal.Core.Models.Orders;
 using DamaNoJornal.Core.Models.User;
@@ -155,7 +156,13 @@ namespace DamaNoJornal.Core.ViewModels
                         ProductName = basketItem.ProductName,
                         PictureUrl = basketItem.PictureUrl,
                         Quantity = basketItem.Quantity,
-                        UnitPrice = basketItem.UnitPrice
+                        UnitPrice = basketItem.UnitPrice,
+                        Details = basketItem.Attributes.Select(x => new OrderItemDetail
+                        {
+                            Id = x.Id,
+                            AttributeType = x.Type,
+                            AttributeName = $"{AttributeTypeHelper.GetTypeDescription(x.Type)} {x.Name}"
+                        }).ToList()
                     });
                 }
             }

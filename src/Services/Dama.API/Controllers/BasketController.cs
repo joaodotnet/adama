@@ -145,11 +145,13 @@ namespace Dama.API.Controllers
                         itemModel.PictureUrl = item.PictureUri;
                         itemModel.ProductName = item.Name;
                     }
-                    //itemModel.Attributes = i.Details.Select(d => new AttributeViewModel
-                    //{
-                    //    Name = d.CatalogAttribute.Name,
-                    //    Label = EnumHelper<CatalogAttributeType>.GetDisplayValue(d.CatalogAttribute.Type)
-                    //}).ToList();
+                    itemModel.Attributes = i.Details.Select(d => new BasketItemAttributeViewModel
+                    {
+                        Id = d.CatalogAttribute.Id,
+                        Name = d.CatalogAttribute.Name,
+                        Price = d.CatalogAttribute.Price,
+                        Type = d.CatalogAttribute.Type
+                    }).ToList();
                     return itemModel;
                 }).ToList()
             };
@@ -163,7 +165,7 @@ namespace Dama.API.Controllers
             };
             foreach (var item in model.Items)
             {
-                basket.AddItem(item.ProductId, item.UnitPrice, item.Quantity);
+                basket.AddItem(item.ProductId, item.UnitPrice, item.Quantity, item.Attributes.Select(x => x.Id).ToList());
             }
             return basket;
         }

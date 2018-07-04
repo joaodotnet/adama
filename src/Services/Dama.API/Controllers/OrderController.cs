@@ -64,9 +64,9 @@ namespace Dama.API.Controllers
             }
 
             //Create Address
-            Address address = new Address(null, null, model.ShippingStreet, model.ShippingCity, model.ShippingCountry, model.ShippingZipCode);
+            Address address = new Address(null, model.ShippingStreet, model.ShippingCity, model.ShippingCountry, model.ShippingZipCode);
             Address billAddress = new Address();
-            var order = await _orderService.CreateOrderAsync(basket.Id,null,address, billAddress, true,0);
+            var order = await _orderService.CreateOrderAsync(basket.Id, null, null,address, billAddress, true,0);
 
             //Update to Submitted
             await _orderService.UpdateOrderState(order.Id, OrderStateType.SUBMITTED);

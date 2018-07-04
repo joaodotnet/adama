@@ -144,23 +144,24 @@ namespace DamaNoJornal.Core.ViewModels
         }
 
         private async Task AddCatalogItemAsync(CatalogItem catalogItem)
-        {           
-            //Testing            
+        {
+            //Attributes
+            List<CatalogAttribute> attributesSelected = new List<CatalogAttribute>();
             if(catalogItem.CatalogAttributes?.Count > 0)
             {
-                var result = await DialogService.ShowPromptAsync("Atributos", "Cancelar", catalogItem.CatalogAttributes.Select(x => $"{x.GetTypeDescription()} {x.Name}").ToArray());
+                var result = await DialogService.ShowPromptAsync("Atributos", "Cancelar", catalogItem.CatalogAttributes.Select(x => $"{AttributeTypeHelper.GetTypeDescription(x.Type)} {x.Name}").ToArray());
                 if(!string.IsNullOrEmpty(result))
                 {
+                    var attribute = catalogItem.CatalogAttributes.SingleOrDefault(x => result.Contains(x.Name));
+                    if(attribute != null)
+                        attributesSelected.Add(attribute);
                     System.Diagnostics.Debug.WriteLine($"############## Atributo: {result} #################");
                 }
             }
 
             // Add new item to Basket
             //MessagingCenter.Send(this, MessageKeys.AddProduct, catalogItem);   
-            await NavigationService.NavigateToAsync<BasketViewModel>(catalogItem);
-
-
-
+            await NavigationService.NavigateToAsync<BasketViewModel>((catalogItem,attributesSelected));
         }
 
         private async Task FilterAsync()

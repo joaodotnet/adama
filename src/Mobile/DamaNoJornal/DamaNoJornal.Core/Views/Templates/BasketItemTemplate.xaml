@@ -116,13 +116,30 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <!-- NAME -->
                 <Label
                     Grid.Row="0"
                     Text="{Binding ProductName, Converter={StaticResource ToUpperConverter}}"/>
+                <!-- ATTRIBUTES -->
+                <ListView
+                    Grid.Row="1"
+                    ItemsSource="{Binding Attributes}"                              
+                    HeightRequest="{Binding Attributes.Count, Converter={StaticResource AttributesToHeightConverter}}"
+                    HasUnevenRows="True"
+                    SeparatorVisibility="None"                    
+                    CachingStrategy="RecycleElement">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Label Text="{Binding DisplayName}"/>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
                 <Grid
-                    Grid.Row="1">
+                    Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
@@ -140,7 +157,7 @@
                 </Grid>
                 <!-- TOTAL -->
                 <Label
-                    Grid.Row="2"
+                    Grid.Row="3"
                     Text="{Binding Total, StringFormat='€{0:N}'}"
                     Style="{StaticResource OrderTotalStyle}"/>
             </Grid>

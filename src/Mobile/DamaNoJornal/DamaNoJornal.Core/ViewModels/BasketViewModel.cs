@@ -4,6 +4,7 @@ using DamaNoJornal.Core.Services.Basket;
 using DamaNoJornal.Core.Services.Settings;
 using DamaNoJornal.Core.Services.User;
 using DamaNoJornal.Core.ViewModels.Base;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -89,9 +90,10 @@ namespace DamaNoJornal.Core.ViewModels
             var authToken = _settingsService.AuthAccessToken;
             var userInfo = await _userService.GetUserInfoAsync(authToken);
 
-            if (navigationData is CatalogItem)
+            if (navigationData is ValueTuple<CatalogItem,List<CatalogAttribute>>)
             {
-                await AddCatalogItemAsync((CatalogItem)navigationData);
+                var catalogItem = (ValueTuple<CatalogItem, List<CatalogAttribute>>)navigationData;
+                await AddCatalogItemAsync(catalogItem.Item1,catalogItem.Item2);
             }
 
             // Update Basket
@@ -122,7 +124,7 @@ namespace DamaNoJornal.Core.ViewModels
             await base.InitializeAsync(navigationData);
         }
 
-        private async Task AddCatalogItemAsync(CatalogItem item)
+        private async Task AddCatalogItemAsync(CatalogItem item, List<CatalogAttribute> attributes)
         {
             var basketItem = new BasketItem
             {
@@ -130,7 +132,14 @@ namespace DamaNoJornal.Core.ViewModels
                 ProductName = item.Name,
                 PictureUrl = item.PictureUri,
                 UnitPrice = item.Price,
-                Quantity = 1
+                Quantity = 1,
+                Attributes = attributes.Select(x => new BasketItemAttribute
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Price = x.Price,
+                    Type = x.Type
+                }).ToList()
             };
             BasketItems.Add(basketItem);
 

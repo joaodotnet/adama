@@ -41,7 +41,7 @@ namespace Infrastructure.Data
                 .Include("Items.Details.CatalogAttribute")
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            basket.AddItem(item.CatalogItemId, item.UnitPrice, item.Quantity);
+            basket.AddItem(item.CatalogItemId, item.UnitPrice, item.Quantity, item.Details.Select(x => x.CatalogAttributeId).ToList());
 
             await _dbContext.SaveChangesAsync();
 
