@@ -109,6 +109,8 @@ namespace Backoffice.Pages.Products
             prod.Sku += "_" + prod.Id;
             await _context.SaveChangesAsync();
 
+            //Create Price
+            //await _service.CreateCatalogPrice(prod.Id, prod.Price);
             return RedirectToPage("./Index");
         }
 

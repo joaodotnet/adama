@@ -9,6 +9,7 @@ using ApplicationCore.Entities;
 using Infrastructure.Data;
 using AutoMapper;
 using Backoffice.ViewModels;
+using Backoffice.Interfaces;
 
 namespace Backoffice.Pages.Products.Attributes
 {
@@ -16,11 +17,13 @@ namespace Backoffice.Pages.Products.Attributes
     {
         private readonly DamaContext _context;
         private readonly IMapper _mapper;
+        private readonly IBackofficeService _service;
 
-        public DeleteModel(DamaContext context, IMapper mapper)
+        public DeleteModel(DamaContext context, IMapper mapper, IBackofficeService service)
         {
             _context = context;
             _mapper = mapper;
+            _service = service;
         }
 
         [BindProperty]
@@ -61,6 +64,9 @@ namespace Backoffice.Pages.Products.Attributes
             {
                 _context.CatalogAttributes.Remove(ca);
                 await _context.SaveChangesAsync();
+
+                
+                //await _service.DeleteCatalogPrice(ca.CatalogItemId, ca.Id);
             }
 
             return RedirectToPage("/Products/Edit", new { id = ca.CatalogItemId });

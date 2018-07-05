@@ -1,5 +1,6 @@
 ﻿using ApplicationCore;
 using ApplicationCore.DTOs;
+using ApplicationCore.Entities;
 using ApplicationCore.Entities.OrderAggregate;
 using ApplicationCore.Interfaces;
 using AutoMapper;
@@ -257,6 +258,60 @@ namespace Backoffice.Services
             //    files.Add((receiptFileName, await File.ReadAllBytesAsync(receiptPath)));
 
             return files;
+        }
+
+        public async Task CreateCatalogPrice(int catalogItemId, decimal price)
+        {
+            if(!_damaContext.CatalogPrices.Any(x => x.CatalogItemId == catalogItemId))
+            {
+                _damaContext.CatalogPrices.Add(new ApplicationCore.Entities.CatalogPrice
+                {
+                    CatalogItemId = catalogItemId,
+                    Price = price,
+                    Active = true
+                });
+                await _damaContext.SaveChangesAsync();
+            }            
+        }
+
+        public async Task AddOrUpdateCatalogPrice(int catalogItemId, int catalogAttributeId, decimal price)
+        {
+            var catalogPrice = await _damaContext.CatalogPrices.SingleOrDefaultAsync(x =>
+                x.CatalogItemId == catalogItemId &&
+                (x.CatalogAttribute1Id == catalogAttributeId || x.CatalogAttribute2Id == catalogAttributeId || x.CatalogAttribute3Id == catalogAttributeId));
+            if(catalogPrice == null)
+            {
+                var catalogPrices = _damaContext.CatalogPrices.Where(x => x.CatalogItemId == catalogItemId).ToList();
+                catalogPrice = new CatalogPrice { CatalogItemId = catalogItemId, Active = true };
+                if (!catalogPrice.CatalogAttribute1Id.HasValue)
+                    catalogPrice.CatalogAttribute1Id = catalogAttributeId;
+                else if (!catalogPrice.CatalogAttribute2Id.HasValue)
+                    catalogPrice.CatalogAttribute2Id = catalogAttributeId;
+                else if (!catalogPrice.CatalogAttribute3Id.HasValue)
+                    catalogPrice.CatalogAttribute3Id = catalogAttributeId;
+                else
+                    throw new Exception("ATTRIBUTE LIMIT REACH");
+
+            }
+            else
+            {
+                catalogPrice.Price = price;
+                catalogPrice.Active = true;
+            }
+            await _damaContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteCatalogPrice(int catalogItemId, int catalogAttributeId)
+        {
+            var catalogPrice = await _damaContext.CatalogPrices.SingleOrDefaultAsync(x =>
+                x.CatalogItemId == catalogItemId &&
+                (x.CatalogAttribute1Id == catalogAttributeId || x.CatalogAttribute2Id == catalogAttributeId || x.CatalogAttribute3Id == catalogAttributeId));
+            if (catalogPrice != null)
+            {
+
+                catalogPrice.Active = false;
+                await _damaContext.SaveChangesAsync();
+            }
         }
     }
 }
