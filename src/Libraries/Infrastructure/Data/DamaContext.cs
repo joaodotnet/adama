@@ -29,6 +29,7 @@ namespace Infrastructure.Data
         public DbSet<ApplicationCore.Entities.CatalogAttribute> CatalogAttributes { get; set; }
         public DbSet<CatalogCategory> CatalogCategories { get; set; }
         public DbSet<ApplicationCore.Entities.CustomizeOrder> CustomizeOrders { get; set; }
+        public DbSet<CatalogPrice> CatalogPrices { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

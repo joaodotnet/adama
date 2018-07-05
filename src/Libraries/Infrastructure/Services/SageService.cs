@@ -72,13 +72,14 @@ namespace Infrastructure.Services
                 new KeyValuePair<string,string>("sales_invoice[date]",DateTime.Now.ToString("dd-MM-yyyy")),
                 new KeyValuePair<string,string>("sales_invoice[due_date]", DateTime.Now.AddMonths(1).ToString("dd-MM-yyyy")),
                 //new KeyValuePair<string,string>("sales_invoice[carriage_tax_rate_id]", "4"),
-                //new KeyValuePair<string,string>("sales_invoice[vat_exemption_reason_id]", "10"),
+                new KeyValuePair<string,string>("sales_invoice[vat_exemption_reason_id]", "10"),
                 new KeyValuePair<string,string>("sales_invoice[reference]", referenceId.ToString())
             };
 
-            SetCarriageAmount(carriageAmount, body);
+            
 
-            AddLinesToBody(orderItems, body);
+            var idx = AddLinesToBody(orderItems, body);
+            SetCarriageAmount(idx, carriageAmount, body);
 
             return await CreateInvoice(body);
         }        
@@ -101,11 +102,11 @@ namespace Infrastructure.Services
                 //new KeyValuePair<string,string>("sales_invoice[carriage_tax_rate_id]", "4"),
                 new KeyValuePair<string,string>("sales_invoice[vat_exemption_reason_id]", "10"),
                 new KeyValuePair<string,string>("sales_invoice[reference]", referenceId.ToString())
-            };
+            };            
 
-            SetCarriageAmount(carriageAmount, body);
+            var idx = AddLinesToBody(orderItems, body);
+            SetCarriageAmount(idx, carriageAmount, body);
 
-            AddLinesToBody(orderItems, body);
             return await CreateInvoice(body);
         }
 
@@ -272,17 +273,29 @@ namespace Infrastructure.Services
             var result = await HandleResponse(response, HttpMethod.Get, uri, null);
             return await result.Content.ReadAsByteArrayAsync();
         }
-        private static void SetCarriageAmount(decimal carriageAmount, List<KeyValuePair<string, string>> body)
+        private static void SetCarriageAmount(int index, decimal carriageAmount, List<KeyValuePair<string, string>> body)
         {
             //Check carriage
             if (carriageAmount > 0)
-            {                
-                var carriageNet = Math.Ceiling(carriageAmount / 1.23m);
-                double multiplier = Math.Pow(10, Convert.ToDouble(2));
-                var carriageNetRoundUp = (Convert.ToDouble(carriageNet) * multiplier) / multiplier;
-                body.Add(new KeyValuePair<string, string>("sales_invoice[carriage]", carriageNetRoundUp.ToString(CultureInfo.InvariantCulture)));
-                body.Add(new KeyValuePair<string, string>("sales_invoice[carriage_tax_rate_id]", "1"));
+            {
+                //var carriageNet = Math.Ceiling(carriageAmount / 1.23m);
+                //double multiplier = Math.Pow(10, Convert.ToDouble(2));
+                //var carriageNetRoundUp = (Convert.ToDouble(carriageNet) * multiplier) / multiplier;
+                //body.Add(new KeyValuePair<string, string>("sales_invoice[carriage]", carriageNetRoundUp.ToString(CultureInfo.InvariantCulture)));
+                //body.Add(new KeyValuePair<string, string>("sales_invoice[carriage_tax_rate_id]", "1"));
                 //body.Add(new KeyValuePair<string, string>("sales_invoice[vat_exemption_reason_id]", "10"));
+
+                body.AddRange(new List<KeyValuePair<string, string>>
+                {
+                    new KeyValuePair<string, string>(
+                        $"sales_invoice[line_items_attributes][{index}][description]", "Despesas de Envio"),
+                    new KeyValuePair<string, string>(
+                        $"sales_invoice[line_items_attributes][{index}][quantity]", $"1"),
+                    new KeyValuePair<string, string>(
+                        $"sales_invoice[line_items_attributes][{index}][unit_price]", $"{carriageAmount.ToString(CultureInfo.InstalledUICulture)}"),
+                    new KeyValuePair<string, string>($"sales_invoice[line_items_attributes][{index}][tax_rate_id]", "4"),
+                    new KeyValuePair<string, string>($"sales_invoice[line_items_attributes][{index}][vat_exemption_reason_id]", "10")
+                });
             }
         }
 
@@ -299,24 +312,26 @@ namespace Infrastructure.Services
             }
         }
 
-        private static void AddLinesToBody(List<OrderItem> orderItems, List<KeyValuePair<string, string>> body)
+        private static int AddLinesToBody(List<OrderItem> orderItems, List<KeyValuePair<string, string>> body)
         {
-            for (int i = 0; i < orderItems.Count; i++)
+            int idx = 0;
+            for (; idx < orderItems.Count; idx++)
             {
                 body.AddRange(new List<KeyValuePair<string, string>>
                 {
                     new KeyValuePair<string, string>(
-                        $"sales_invoice[line_items_attributes][{i}][description]",
-                        $"{orderItems[i].ItemOrdered.ProductName}"),
-                    new KeyValuePair<string, string>($"sales_invoice[line_items_attributes][{i}][quantity]",
-                        $"{orderItems[i].Units}"),
+                        $"sales_invoice[line_items_attributes][{idx}][description]",
+                        $"{orderItems[idx].ItemOrdered.ProductName}"),
+                    new KeyValuePair<string, string>($"sales_invoice[line_items_attributes][{idx}][quantity]",
+                        $"{orderItems[idx].Units}"),
                     new KeyValuePair<string, string>(
-                        $"sales_invoice[line_items_attributes][{i}][unit_price]",
-                        $"{orderItems[i].UnitPrice.ToString(CultureInfo.InvariantCulture)}"),
-                    new KeyValuePair<string, string>($"sales_invoice[line_items_attributes][{i}][tax_rate_id]", "4"),
-                    new KeyValuePair<string, string>($"sales_invoice[line_items_attributes][{i}][vat_exemption_reason_id]", "10")
+                        $"sales_invoice[line_items_attributes][{idx}][unit_price]",
+                        $"{orderItems[idx].UnitPrice.ToString(CultureInfo.InvariantCulture)}"),
+                    new KeyValuePair<string, string>($"sales_invoice[line_items_attributes][{idx}][tax_rate_id]", "4"),
+                    new KeyValuePair<string, string>($"sales_invoice[line_items_attributes][{idx}][vat_exemption_reason_id]", "10")
                 });
             }
+            return idx;
         }
 
         private async Task<HttpResponseMessage> HandleResponse(HttpResponseMessage response, HttpMethod httpMethod, Uri uri, List<KeyValuePair<string, string>> body)
