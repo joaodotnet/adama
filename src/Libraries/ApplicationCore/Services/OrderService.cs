@@ -38,14 +38,14 @@ namespace ApplicationCore.Services
                 var catalogItem = await _itemRepository.GetByIdAsync(item.CatalogItemId);
                 var itemOrdered = new CatalogItemOrdered(catalogItem.Id, catalogItem.Name, catalogItem.PictureUri);
                 var orderItem = new OrderItem(itemOrdered, item.UnitPrice, item.Quantity);
-                foreach (var attribute in item.Details)
-                {
-                    orderItem.Details.Add(new OrderItemDetail
-                    {
-                        AttributeType = attribute.CatalogAttribute.Type,
-                        AttributeName = attribute.CatalogAttribute.Name
-                    });
-                }
+                //foreach (var attribute in item.Details)
+                //{
+                //    orderItem.Details.Add(new OrderItemDetail
+                //    {
+                //        AttributeType = attribute.CatalogAttribute.Type,
+                //        AttributeName = attribute.CatalogAttribute.Name
+                //    });
+                //}
                 items.Add(orderItem);
             }
             var order = new Order(basket.BuyerId, phoneNumber, taxNumber, shippingAddress, billingAddress, useBillingSameAsShipping, items, shippingCost);

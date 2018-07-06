@@ -52,6 +52,8 @@ namespace Backoffice.Pages.Products
                 .Include(p => p.CatalogType)
                 .Include(p => p.CatalogAttributes)
                 .ThenInclude(ca => ca.ReferenceCatalogItem)
+                .Include(p => p.CatalogAttributes)
+                .ThenInclude(ca => ca.Attribute)
                 .Include(p => p.CatalogPictures)
                 .SingleOrDefaultAsync(m => m.Id == id));
 
@@ -210,7 +212,7 @@ namespace Backoffice.Pages.Products
                     //Validate
                     //if (string.IsNullOrEmpty(item.Code))
                     //    ModelState.AddModelError("", "O código do atributo é obrigatório");
-                    if (string.IsNullOrEmpty(item.Name))
+                    if (item.AttributeId > 0)
                         ModelState.AddModelError("", "O nome do atributo é obrigatório");
                     if (!ModelState.IsValid)
                     {

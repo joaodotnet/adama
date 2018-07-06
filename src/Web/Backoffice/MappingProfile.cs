@@ -1,6 +1,7 @@
 ﻿using ApplicationCore.Entities;
 using ApplicationCore.Entities.OrderAggregate;
 using AutoMapper;
+using Backoffice.Extensions;
 using Backoffice.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -27,9 +28,9 @@ namespace Backoffice
             CreateMap<IllustrationTypeViewModel, IllustrationType>();
             CreateMap<CatalogItem, ProductViewModel>();
             CreateMap<ProductViewModel, CatalogItem>();
-            CreateMap<CatalogAttribute, ProductAttributeViewModel>();
-                //.ForMember(dest => dest.Sku,
-                //opts => opts.MapFrom(src => $"{src.CatalogItem.CatalogType.Code}_{src.CatalogItem.CatalogIllustration.Code}{src.CatalogItem.CatalogIllustration.IllustrationType.Code}_{src.Code}"));
+            CreateMap<CatalogAttribute, ProductAttributeViewModel>()
+                .ForMember(dest => dest.AttributeName,
+                opts => opts.MapFrom(src => $"{EnumHelper<AttributeType>.GetDisplayValue(src.Attribute.Type)} {src.Attribute.Name}"));
             CreateMap<ProductAttributeViewModel, CatalogAttribute>();
             CreateMap<ShopConfigViewModel, ShopConfig>();
             CreateMap<ShopConfig, ShopConfigViewModel>();

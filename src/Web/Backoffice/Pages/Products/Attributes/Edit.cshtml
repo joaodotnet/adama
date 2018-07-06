@@ -20,15 +20,10 @@
             <span asp-validation-for="CatalogAttributeModel.Sku" class="text-danger"></span>
         </div>*@
             <div class="form-group">
-                <label asp-for="CatalogAttributeModel.Type" class="control-label"></label>
-                <select asp-for="CatalogAttributeModel.Type" asp-items="Html.GetEnumSelectList<ApplicationCore.Entities.CatalogAttributeType>()" class="form-control"></select>
-                <span asp-validation-for="CatalogAttributeModel.Type" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CatalogAttributeModel.Name" class="control-label"></label>
-                <input asp-for="CatalogAttributeModel.Name" class="form-control" />
-                <span asp-validation-for="CatalogAttributeModel.Name" class="text-danger"></span>
-            </div>
+                <label asp-for="CatalogAttributeModel.AttributeId" class="control-label"></label>
+                <select asp-for="CatalogAttributeModel.AttributeId" asp-items="ViewBag.Attributes" class="form-control"></select>
+                <span asp-validation-for="CatalogAttributeModel.AttributeId" class="text-danger"></span>
+            </div>            
             <div class="form-group">
                 <label asp-for="CatalogAttributeModel.Price" class="control-label"></label>
                 +<input asp-for="CatalogAttributeModel.Price" class="form-control decimal" />

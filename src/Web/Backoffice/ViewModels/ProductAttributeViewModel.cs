@@ -1,16 +1,15 @@
 ﻿using ApplicationCore.Entities;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Backoffice.ViewModels
 {
     public class ProductAttributeViewModel
     {
-        public int Id { get; set; }        
-        [Display(Name = "Tipo")]
-        public CatalogAttributeType Type { get; set; }        
-        [StringLength(100)]
+        public int Id { get; set; }
+        public int AttributeId { get; set; }
         [Display(Name = "Nome")]
-        public string Name { get; set; }
+        public string AttributeName { get; set; }
         [Display(Name = "Preço")]
         public decimal? Price { get; set; }
         public int CatalogItemId { get; set; }

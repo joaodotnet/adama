@@ -29,6 +29,7 @@ namespace Infrastructure.Data
         public DbSet<ApplicationCore.Entities.CatalogAttribute> CatalogAttributes { get; set; }
         public DbSet<CatalogCategory> CatalogCategories { get; set; }
         public DbSet<ApplicationCore.Entities.CustomizeOrder> CustomizeOrders { get; set; }
+        public DbSet<ApplicationCore.Entities.Attribute> Attributes { get; set; }
         public DbSet<CatalogPrice> CatalogPrices { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -49,6 +50,29 @@ namespace Infrastructure.Data
             builder.Entity<CatalogTypeCategory>(ConfigureCatalogTypeCategory);
             builder.Entity<CatalogCategory>(ConfigureCatalogCategories);
             builder.Entity<CustomizeOrder>(ConfigureCustomizeOrders);
+            builder.Entity<ApplicationCore.Entities.Attribute>(ConfigureAttributes);
+            builder.Entity<CatalogPrice>(ConfigureCatalogPrice);
+        }
+
+        private void ConfigureCatalogPrice(EntityTypeBuilder<CatalogPrice> builder)
+        {
+            builder.ToTable("CatalogPrice");
+
+            //builder.HasOne(x => x.Attribute1)
+            //    .WithMany(a => a.CatalogAttributes)
+            //    .HasForeignKey(x => x.AttributeId)
+        }
+
+        private void ConfigureAttributes(EntityTypeBuilder<ApplicationCore.Entities.Attribute> builder)
+        {
+            builder.ToTable("Attribute");
+
+            builder.Property(x => x.Name)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            builder.Property(x => x.Type)
+                .IsRequired();
         }
 
         private void ConfigureCustomizeOrders(EntityTypeBuilder<CustomizeOrder> builder)
@@ -97,13 +121,12 @@ namespace Infrastructure.Data
             builder.ToTable("CatalogAttribute");
             //builder.HasIndex(x => x.Sku)
             //    .IsUnique();
-            builder.Property(x => x.Sku)
-                .HasMaxLength(255);
-            builder.Property(x => x.Type)
-                .IsRequired();            
-            builder.Property(x => x.Name)
-                .IsRequired()
-                .HasMaxLength(100);
+            //builder.Property(x => x.Sku)
+            //    .HasMaxLength(255);
+            builder.HasOne(x => x.Attribute)
+                .WithMany(a => a.CatalogAttributes)
+                .HasForeignKey(x => x.AttributeId)
+                .IsRequired();
             builder.HasOne(x => x.CatalogItem)
                 .WithMany(p => p.CatalogAttributes)
                 .HasForeignKey(x => x.CatalogItemId);

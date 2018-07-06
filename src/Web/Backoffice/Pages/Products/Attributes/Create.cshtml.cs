@@ -10,6 +10,7 @@ using Infrastructure.Data;
 using Backoffice.ViewModels;
 using AutoMapper;
 using Backoffice.Interfaces;
+using Backoffice.Extensions;
 
 namespace Backoffice.Pages.Products.Attributes
 {
@@ -32,6 +33,9 @@ namespace Backoffice.Pages.Products.Attributes
             if (prod == null)
                 return NotFound();
 
+            var attributes = _context.Attributes.Select(x => new { x.Id, Name = $"{EnumHelper<AttributeType>.GetDisplayValue(x.Type)} {x.Name}" });
+            ViewData["Attributes"] = new SelectList(attributes.OrderBy(x => x.Name), "Id", "Name");
+
             CatalogAttributeModel.CatalogItemId = id;
             CatalogAttributeModel.CatalogItem = _mapper.Map<ProductViewModel>(prod);
             
@@ -44,6 +48,9 @@ namespace Backoffice.Pages.Products.Attributes
 
         public async Task<IActionResult> OnPostAsync()
         {
+            var attributes = _context.Attributes.Select(x => new { x.Id, Name = $"{EnumHelper<AttributeType>.GetDisplayValue(x.Type)} {x.Name}" });
+            ViewData["Attributes"] = new SelectList(attributes.OrderBy(x => x.Name), "Id", "Name");
+
             if (!ModelState.IsValid)
             {
                 return Page();
