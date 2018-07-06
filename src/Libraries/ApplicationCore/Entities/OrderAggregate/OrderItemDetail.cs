@@ -7,7 +7,7 @@ namespace ApplicationCore.Entities.OrderAggregate
     {
         public int OrderItemId { get; set; }
         public OrderItem OrderItem { get; set; }
-        public CatalogAttributeType AttributeType { get; set; }
+        public AttributeType AttributeType { get; set; }
         public string AttributeName { get; set; }
 
         //protected OrderItemDetail()

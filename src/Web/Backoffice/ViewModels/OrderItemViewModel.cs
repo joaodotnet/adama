@@ -28,7 +28,7 @@ namespace Backoffice.ViewModels
     public class OrderItemAttributeViewModel
     {
         [Display(Name = "Tipo de Atributo")]
-        public CatalogAttributeType AttributeType { get; set; }
+        public AttributeType AttributeType { get; set; }
         [Display(Name = "Valor")]
         public string AttributeName { get; set; }
     }

@@ -74,11 +74,8 @@
                 <thead>
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.ProductModel.CatalogAttributes[0].Type)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.ProductModel.CatalogAttributes[0].Name)
-                        </th>
+                            @Html.DisplayNameFor(model => model.ProductModel.CatalogAttributes[0].AttributeName)
+                        </th>                       
                         <th>
                             @Html.DisplayNameFor(model => model.ProductModel.CatalogAttributes[0].Price)
                         </th>
@@ -96,10 +93,7 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(model => Model.ProductModel.CatalogAttributes[i].Type)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(model => Model.ProductModel.CatalogAttributes[i].Name)
+                                    @Html.DisplayFor(model => Model.ProductModel.CatalogAttributes[i].AttributeName)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(model => Model.ProductModel.CatalogAttributes[i].Price)
@@ -108,8 +102,8 @@
                                     <a asp-page="/Products/Edit" asp-route-id="@Model.ProductModel.CatalogAttributes[i].ReferenceCatalogItemId"> @Html.DisplayFor(modelItem => Model.ProductModel.CatalogAttributes[i].ReferenceCatalogItem.Name) </a>
                                 </td>
                                 <td>
-                                    <a asp-page="./Attributes/Edit" asp-route-id="@Model.ProductModel.CatalogAttributes[i].Id" onclick="return confirm('A menina gravou?');">Editar</a> |
-                                    <a asp-page="./Attributes/Delete" asp-route-id="@Model.ProductModel.CatalogAttributes[i].Id" onclick="return confirm('A menina gravou?');">Apagar</a>
+                                    <a asp-page="./Attributes/Edit" asp-route-id="@Model.ProductModel.CatalogAttributes[i].Id">Editar</a> |
+                                    <a asp-page="./Attributes/Delete" asp-route-id="@Model.ProductModel.CatalogAttributes[i].Id">Apagar</a>
                                 </td>
                             </tr>
                         }
@@ -118,7 +112,7 @@
                 <tfoot>
                     <tr>
                         <td colspan="6">
-                            <a asp-page="./Attributes/Create" asp-route-id="@Model.ProductModel.Id" class="btn btn-default" onclick="return confirm('A menina gravou?');">Novo Produto</a>
+                            <a asp-page="./Attributes/Create" asp-route-id="@Model.ProductModel.Id" class="btn btn-default">Associar Atributo</a>
                         </td>
                     </tr>
                 </tfoot>

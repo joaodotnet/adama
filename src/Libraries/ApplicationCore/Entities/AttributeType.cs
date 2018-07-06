@@ -2,7 +2,7 @@
 
 namespace ApplicationCore.Entities
 {
-    public enum CatalogAttributeType
+    public enum AttributeType
     {
         [Display(Name = "Tamanho")]
         SIZE,

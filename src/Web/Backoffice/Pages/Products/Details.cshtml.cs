@@ -38,6 +38,8 @@ namespace Backoffice.Pages.Products
                 .Include(p => p.CatalogType)
                 .Include(p => p.CatalogAttributes)
                 .ThenInclude(ca => ca.ReferenceCatalogItem)
+                .Include(p => p.CatalogAttributes)
+                .ThenInclude(ca => ca.Attribute)
                 .Include(p => p.CatalogPictures)
                 .Include(p => p.CatalogCategories)
                     .ThenInclude(cc => cc.Category)

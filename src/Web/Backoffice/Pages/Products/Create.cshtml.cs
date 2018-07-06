@@ -150,24 +150,6 @@ namespace Backoffice.Pages.Products
             return ModelState.IsValid;
         }
 
-        private bool ValidateAttributesModel()
-        {
-            foreach (var item in ProductModel.CatalogAttributes)
-            {
-                if (!item.ToRemove)
-                {
-                    //Validate                    
-                    if (string.IsNullOrEmpty(item.Name))
-                        ModelState.AddModelError("", "O nome do atributo é obrigatório");
-                    if (!ModelState.IsValid)
-                    {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-
         private async Task PopulateLists()
         {
             var illustrations = await _context.CatalogIllustrations

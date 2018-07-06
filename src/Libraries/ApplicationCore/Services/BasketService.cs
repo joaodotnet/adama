@@ -35,26 +35,26 @@ namespace ApplicationCore.Services
             var catalogItem = _itemRepository.GetSingleBySpec(specification);
 
             decimal attrsPrice = 0;
-            if(attrIds == null)
-            {
-                attrIds = new List<int>();
+            //if(attrIds == null)
+            //{
+            //    attrIds = new List<int>();
                 
-                var group = catalogItem.CatalogAttributes.GroupBy(x => x.Type);
-                foreach (var attribute in group)
-                {
-                    attrIds.Add(attribute.First().Id);
-                    attrsPrice += attribute.First().Price ?? 0;
-                }
-            }
-            else
-            {
-                foreach (var item in attrIds)
-                {
-                    var attrItem = catalogItem.CatalogAttributes.SingleOrDefault(x => x.Id == item);
-                    if (attrItem != null)
-                        attrsPrice += attrItem.Price ?? 0;
-                }
-            }
+            //    var group = catalogItem.CatalogAttributes.GroupBy(x => x.Type);
+            //    foreach (var attribute in group)
+            //    {
+            //        attrIds.Add(attribute.First().Id);
+            //        attrsPrice += attribute.First().Price ?? 0;
+            //    }
+            //}
+            //else
+            //{
+            //    foreach (var item in attrIds)
+            //    {
+            //        var attrItem = catalogItem.CatalogAttributes.SingleOrDefault(x => x.Id == item);
+            //        if (attrItem != null)
+            //            attrsPrice += attrItem.Price ?? 0;
+            //    }
+            //}
 
             //update price 
             price += attrsPrice;

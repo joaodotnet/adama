@@ -274,21 +274,21 @@ namespace Backoffice.Services
             }            
         }
 
-        public async Task AddOrUpdateCatalogPrice(int catalogItemId, int catalogAttributeId, decimal price)
+        public async Task AddOrUpdateCatalogPrice(int catalogItemId, int attributeId, decimal price)
         {
             var catalogPrice = await _damaContext.CatalogPrices.SingleOrDefaultAsync(x =>
                 x.CatalogItemId == catalogItemId &&
-                (x.CatalogAttribute1Id == catalogAttributeId || x.CatalogAttribute2Id == catalogAttributeId || x.CatalogAttribute3Id == catalogAttributeId));
+                (x.Attribute1Id == attributeId || x.Attribute2Id == attributeId || x.Attribute3Id == attributeId));
             if(catalogPrice == null)
             {
                 var catalogPrices = _damaContext.CatalogPrices.Where(x => x.CatalogItemId == catalogItemId).ToList();
                 catalogPrice = new CatalogPrice { CatalogItemId = catalogItemId, Active = true };
-                if (!catalogPrice.CatalogAttribute1Id.HasValue)
-                    catalogPrice.CatalogAttribute1Id = catalogAttributeId;
-                else if (!catalogPrice.CatalogAttribute2Id.HasValue)
-                    catalogPrice.CatalogAttribute2Id = catalogAttributeId;
-                else if (!catalogPrice.CatalogAttribute3Id.HasValue)
-                    catalogPrice.CatalogAttribute3Id = catalogAttributeId;
+                if (!catalogPrice.Attribute1Id.HasValue)
+                    catalogPrice.Attribute1Id = attributeId;
+                else if (!catalogPrice.Attribute2Id.HasValue)
+                    catalogPrice.Attribute2Id = attributeId;
+                else if (!catalogPrice.Attribute3Id.HasValue)
+                    catalogPrice.Attribute3Id = attributeId;
                 else
                     throw new Exception("ATTRIBUTE LIMIT REACH");
 
@@ -301,11 +301,11 @@ namespace Backoffice.Services
             await _damaContext.SaveChangesAsync();
         }
 
-        public async Task DeleteCatalogPrice(int catalogItemId, int catalogAttributeId)
+        public async Task DeleteCatalogPrice(int catalogItemId, int attributeId)
         {
             var catalogPrice = await _damaContext.CatalogPrices.SingleOrDefaultAsync(x =>
                 x.CatalogItemId == catalogItemId &&
-                (x.CatalogAttribute1Id == catalogAttributeId || x.CatalogAttribute2Id == catalogAttributeId || x.CatalogAttribute3Id == catalogAttributeId));
+                (x.Attribute1Id == attributeId || x.Attribute2Id == attributeId || x.Attribute3Id == attributeId));
             if (catalogPrice != null)
             {
 
