@@ -163,6 +163,8 @@ namespace DamaWeb.Pages.Basket
 
             foreach (var item in order.OrderItems)
             {
+                //Get Attribtues
+                var attributes = _orderService.GetOrderAttributes(item.ItemOrdered.CatalogItemId, item.CatalogAttribute1, item.CatalogAttribute2, item.CatalogAttribute3);
                 body += $@"
             <tr>
                 <td width='250px'>
@@ -174,10 +176,10 @@ namespace DamaWeb.Pages.Basket
                             <td>{item.ItemOrdered.ProductName}</td>
                             <td>€ {item.UnitPrice}</td>
                         </tr>";
-                foreach (var attr in item.Details)
+                foreach (var attr in attributes)
                 {
                     body += $@"<tr>
-                            <td>{EnumHelper<AttributeType>.GetDisplayValue(attr.AttributeType)}: {attr.AttributeName}</td>
+                            <td>{EnumHelper<AttributeType>.GetDisplayValue(attr.Type)}: {attr.Name}</td>
                         </tr>";
                 }
                 body +=$@"<tr>

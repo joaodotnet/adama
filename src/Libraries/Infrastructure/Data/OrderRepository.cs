@@ -18,7 +18,6 @@ namespace Infrastructure.Data
                 .Include(o => o.OrderItems)
                     .ThenInclude(oi => oi.ItemOrdered)
                 .Include(o => o.OrderItems)
-                    .ThenInclude(oi => oi.Details)
                 //.Include("OrderItems.ItemOrdered")
                 .FirstOrDefault(x => x.Id == id);
         }
@@ -30,7 +29,6 @@ namespace Infrastructure.Data
                 //.Include("OrderItems.ItemOrdered")
                     .ThenInclude(oi => oi.ItemOrdered)
                 .Include(o => o.OrderItems)
-                    .ThenInclude(oi => oi.Details)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
     }
