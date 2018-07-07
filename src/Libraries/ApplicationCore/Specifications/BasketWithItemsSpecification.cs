@@ -13,8 +13,6 @@ namespace ApplicationCore.Specifications
             :base(b => b.BuyerId == buyerId)
         {
             AddInclude(b => b.Items);
-            AddInclude("Items.Details.CatalogAttribute");
-
         }
     }
 }

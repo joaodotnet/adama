@@ -52,17 +52,31 @@ namespace DamaWeb.Services
                     CatalogItemId = i.CatalogItemId
 
                 };
-                var item = _itemRepository.GetById(i.CatalogItemId);
+                var spec = new CatalogAttrFilterSpecification(i.CatalogItemId);
+                var item = _itemRepository.GetSingleBySpec(spec);
                 if (item != null)
                 {
                     itemModel.PictureUrl = _uriComposer.ComposePicUri(item.PictureUri);
                     itemModel.ProductName = item.Name;
                 }
-                itemModel.Attributes = i.Details.Select(d => new AttributeViewModel
+
+                foreach (var attr in item.CatalogAttributes)
                 {
-                    Name = d.CatalogAttribute.Name,
-                    Label = EnumHelper<AttributeType>.GetDisplayValue(d.CatalogAttribute.Type)
-                }).ToList();
+                    if ((i.CatalogAttribute1.HasValue && i.CatalogAttribute1 == attr.Id) ||
+                        (i.CatalogAttribute2.HasValue && i.CatalogAttribute2 == attr.Id) ||
+                        (i.CatalogAttribute3.HasValue && i.CatalogAttribute3 == attr.Id))
+                        itemModel.Attributes.Add(new AttributeViewModel
+                        {
+                            Name = attr.Name,
+                            Label = EnumHelper<AttributeType>.GetDisplayValue(attr.Type)
+                        });                   
+                }
+
+                //itemModel.Attributes = item.CatalogAttributes.Select(d => new AttributeViewModel
+                //{
+                //    Name = d.Name,
+                //    Label = EnumHelper<AttributeType>.GetDisplayValue(d.Type)
+                //}).ToList();
                 return itemModel;
             }).ToList();
             return viewModel;

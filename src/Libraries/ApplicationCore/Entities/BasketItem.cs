@@ -7,6 +7,29 @@ namespace ApplicationCore.Entities
         public decimal UnitPrice { get; set; }
         public int Quantity { get; set; }
         public int CatalogItemId { get; set; }
-        public List<BasketDetailItem> Details { get; set; }
+        public int? CatalogAttribute1 { get; set; }        
+        public int? CatalogAttribute2 { get; set; }
+        public int? CatalogAttribute3 { get; set; }
+        //public CatalogAttribute CatalogAttribute1 { get; set; }
+        //public CatalogAttribute CatalogAttribute2 { get; set; }
+        //public CatalogAttribute CatalogAttribute3 { get; set; }
+
+        //public IList<CatalogAttribute> CatalogAttributes
+        //{
+        //    get
+        //    {
+        //        var catalogAttributes = new List<CatalogAttribute>();
+        //        if (CatalogAttribute1 != null)
+        //            catalogAttributes.Add(CatalogAttribute1);
+        //        if (CatalogAttribute2 != null)
+        //            catalogAttributes.Add(CatalogAttribute2);
+        //        if (CatalogAttribute3 != null)
+        //            catalogAttributes.Add(CatalogAttribute3);
+
+        //        return catalogAttributes;
+        //    }
+        //}
+
+        //public List<BasketDetailItem> Details { get; set; }
     }
 }
