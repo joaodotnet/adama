@@ -57,7 +57,7 @@ namespace DamaWeb.Services
                     CatalogItemId = x.Id,
                     CatalogItemName = x.Name,
                     PictureUri = x.PictureUri,
-                    Price = x.Price,
+                    Price = x.Price ?? x.CatalogType.Price,
                     ProductSku = x.Sku,                    
                 }).ToList()
             };

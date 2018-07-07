@@ -74,7 +74,7 @@ namespace DamaWeb.Services
                     CatalogItemId = i.Id,
                     CatalogItemName = i.Name,
                     PictureUri = i.PictureUri,
-                    Price = i.Price,
+                    Price = i.Price ?? i.CatalogType.Price,
                     ProductSku = i.Sku
                 }),
                 NewCatalogItems = itemsOnPage
@@ -85,7 +85,7 @@ namespace DamaWeb.Services
                         CatalogItemId = i.Id,
                         CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
-                        Price = i.Price,
+                        Price = i.Price ?? i.CatalogType.Price,
                         ProductSku = i.Sku,
                     }),
                 FeaturedCatalogItems = itemsOnPage
@@ -96,7 +96,7 @@ namespace DamaWeb.Services
                         CatalogItemId = i.Id,
                         CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
-                        Price = i.Price,
+                        Price = i.Price ?? i.CatalogType.Price,
                         ProductSku = i.Sku,
                     }),
                 Illustrations = await GetIllustrations(),
@@ -177,7 +177,7 @@ namespace DamaWeb.Services
                         CatalogItemId = i.CatalogItemId,
                         CatalogItemName = i.CatalogItem.Name,
                         PictureUri = i.CatalogItem.PictureUri,
-                        Price = i.CatalogItem.Price,
+                        Price = i.CatalogItem.Price ?? i.CatalogItem.CatalogType.Price,
                         ProductSku = i.CatalogItem.Sku
                     }),
                     FeaturedCatalogItems = products
@@ -188,7 +188,7 @@ namespace DamaWeb.Services
                         CatalogItemId = i.CatalogItemId,
                         CatalogItemName = i.CatalogItem.Name,
                         PictureUri = i.CatalogItem.PictureUri,
-                        Price = i.CatalogItem.Price,
+                        Price = i.CatalogItem.Price ?? i.CatalogItem.CatalogType.Price,
                         ProductSku = i.CatalogItem.Sku
                     }),
                     CatalogTypes = types.Select(x => new CatalogTypeViewModel()
@@ -218,17 +218,27 @@ namespace DamaWeb.Services
                 .Include(x => x.CatalogType)
                 .Include(x => x.CatalogIllustration)
                     .ThenInclude(ci => ci.IllustrationType)
+                .Include(x => x.CatalogReferences)
+                    .ThenInclude(cr => cr.ReferenceCatalogItem)
                 .SingleOrDefaultAsync(x => x.Sku == sku);
 
             if (product != null)
             {
+                List<SelectListItem> productReferences = new List<SelectListItem>();
+                if (product.CatalogReferences?.Count > 0)
+                {
+                    productReferences.Add(new SelectListItem(product.Name, product.Sku, true));
+                    productReferences.AddRange(product.CatalogReferences
+                        .Select(x => new SelectListItem(x.ReferenceCatalogItem.Name, x.ReferenceCatalogItem.Sku))
+                        .ToList());
+                }
                 var vm = new ProductViewModel
                 {
                     ProductId = product.Id,
                     ProductSKU = product.Sku,
                     ProductTitle = product.Name,
                     ProductDescription = product.Description,
-                    ProductBasePrice = product.Price,
+                    ProductPrice = product.Price ?? product.CatalogType.Price,
                     ProductQuantity = 1,
                     ProductImagesUri = new List<string>
                     {
@@ -250,7 +260,8 @@ namespace DamaWeb.Services
                     DeliveryTimeMax = product.CatalogType.DeliveryTimeMax,
                     DeliveryTimeUnit = product.CatalogType.DeliveryTimeUnit,
                     CanCustomize = product.CanCustomize,
-                    FirstCategoryId = product.CatalogCategories.FirstOrDefault()?.CategoryId ?? 0
+                    FirstCategoryId = product.CatalogCategories.FirstOrDefault()?.CategoryId ?? 0,
+                    ProductReferences = productReferences
                 };
 
                 //Others prictures
@@ -271,15 +282,15 @@ namespace DamaWeb.Services
                     {
                         AttributeType = grpAttr.Key,
                         Items = new SelectList(grpAttr.ToList(), "Id", "Name"),
-                        Label = EnumHelper<CatalogAttributeType>.GetDisplayValue(grpAttr.Key),
+                        Label = EnumHelper<AttributeType>.GetDisplayValue(grpAttr.Key),
                         DefaultText = GetDefaultText(grpAttr.Key),
-                        Selected = grpAttr.First().Id,
-                        Attributes = grpAttr.Select(x => new AttributeViewModel
-                        {
-                            Id = x.Id,
-                            Price = x.Price,
-                            Sku = x.Sku
-                        }).ToList()
+                        Selected = grpAttr.First().Id
+                        //Attributes = grpAttr.Select(x => new AttributeViewModel
+                        //{
+                        //    Id = x.Id,
+                        //    Price = x.Price,
+                        //    Sku = x.Sku,
+                        //}).ToList()
                     });
                 }
                 //Categories
@@ -296,32 +307,32 @@ namespace DamaWeb.Services
             return null;
         }
 
-        private string GetDefaultText(CatalogAttributeType key)
+        private string GetDefaultText(AttributeType key)
         {
             switch (key)
             {
-                case CatalogAttributeType.SIZE:
+                case AttributeType.SIZE:
                     return "Escolha um tamanho";
-                case CatalogAttributeType.BOOK_FORMAT:
+                case AttributeType.BOOK_FORMAT:
                     return "Escolha um formato";
                 default:
                     return null;
             }
         }
 
-        public async Task<AttributeViewModel> GetAttributeDetails(int attributeId)
-        {
-            var attr = await _db.CatalogAttributes
-                .Include(x => x.ReferenceCatalogItem)
-                .SingleOrDefaultAsync(x => x.Id == attributeId);
-            if (attr != null)
-                return new AttributeViewModel
-                {
-                    Price = attr.Price,
-                    ReferenceCatalogSku = attr.ReferenceCatalogItem?.Sku
-                };
-            return null;
-        }
+        //public async Task<AttributeViewModel> GetAttributeDetails(int attributeId)
+        //{
+        //    var attr = await _db.CatalogAttributes
+        //        .Include(x => x.ReferenceCatalogItem)
+        //        .SingleOrDefaultAsync(x => x.Id == attributeId);
+        //    if (attr != null)
+        //        return new AttributeViewModel
+        //        {
+        //            Price = attr.Price,
+        //            ReferenceCatalogSku = attr.ReferenceCatalogItem?.Sku
+        //        };
+        //    return null;
+        //}
 
         public async Task<CatalogIndexViewModel> GetCatalogItemsByTag(int pageIndex, int? itemsPage, string tagName, TagType? tagType, int? typeId, int? illustrationId)
         {
@@ -377,7 +388,7 @@ namespace DamaWeb.Services
                     CatalogItemId = x.Id,
                     CatalogItemName = x.Name,
                     PictureUri = x.PictureUri,
-                    Price = x.Price,
+                    Price = x.Price ?? x.CatalogType.Price,
                     ProductSku = x.Sku
                 }).ToList(),
                 PaginationInfo = new PaginationInfoViewModel()
@@ -426,7 +437,7 @@ namespace DamaWeb.Services
                     CatalogItemId = x.Id,
                     CatalogItemName = x.Name,
                     PictureUri = x.PictureUri,
-                    Price = x.Price,
+                    Price = x.Price ?? x.CatalogType.Price,
                     ProductSku = x.Sku
                 }).ToList(),
                 PaginationInfo = new PaginationInfoViewModel()

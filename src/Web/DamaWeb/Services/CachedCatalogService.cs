@@ -83,12 +83,13 @@ namespace DamaWeb.Services
 
         public async Task<AttributeViewModel> GetAttributeDetails(int attributeId)
         {
-            string cacheKey = String.Format(_categoryAttrKeyTemplate, attributeId);
-            return await _cache.GetOrCreateAsync(cacheKey, async entry =>
-            {
-                entry.SlidingExpiration = _defaultCacheDuration;
-                return await _catalogService.GetAttributeDetails(attributeId);
-            });
+            throw new NotImplementedException();
+            //string cacheKey = String.Format(_categoryAttrKeyTemplate, attributeId);
+            //return await _cache.GetOrCreateAsync(cacheKey, async entry =>
+            //{
+            //    entry.SlidingExpiration = _defaultCacheDuration;
+            //    return await _catalogService.GetAttributeDetails(attributeId);
+            //});
         }
 
         public async Task<CatalogIndexViewModel> GetCatalogItemsByTag(int pageIndex, int? itemsPage, string tagName, TagType? tagType, int? typeId, int? illustrationId)

@@ -4,7 +4,7 @@
     <div class="dama-product-title">@Model.ProductTitle</div>
     <div class="row justify-content-center mt-1 mt-md-3">
         <div class="dama-product-price">
-            <span>@Model.ProductTotalPrice</span>
+            <span>@Model.ProductPrice</span>
         </div>
         @*<div class="my-auto pl-1 pr-1">&#8211;</div>
             <div class="dama-product-price">
@@ -17,6 +17,17 @@
 
     <p class="dama-product-description mb-md-4">@Html.Raw(Model.ProductDescription)</p>
     <small>Tempo de entrega entre @Model.DeliveryTimeMin a @Model.DeliveryTimeMax @(DamaWeb.Extensions.EnumHelper<ApplicationCore.Entities.DeliveryTimeUnitType>.GetDisplayValue(Model.DeliveryTimeUnit))</small>
+
+    @if (Model.ProductReferences.Any())
+    {        
+        <div class="row dama-product-attr mb-2 mb-md-3">
+            <label class="col-2 col-form-label">Tamanho</label>
+            <div class="col-10">
+                <select id="referenceProducts" class="form-control" asp-items="Model.ProductReferences">
+                </select>
+            </div>
+        </div>
+    }
 
     @for (int i = 0; i < Model.Attributes.Count; i++)
     {
@@ -75,5 +86,5 @@
     </div>
     <input type="hidden" asp-for="ProductSKU" />
     <input type="hidden" asp-for="ProductId" />
-    <input type="hidden" asp-for="ProductBasePrice" />
+    <input type="hidden" asp-for="ProductPrice" />
 </form>

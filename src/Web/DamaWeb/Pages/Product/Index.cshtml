@@ -87,7 +87,7 @@
                 else
                     $('#ProductQuantity').val(1);
             });
-            $('.atribute-items').on('change', function () {
+            @*$('.atribute-items').on('change', function () {
                 var attr = $(this).val();
                 var productBase = parseFloat('@Model.ProductModel.ProductBasePrice'.replace(',', '.'));
                 $('.dama-product-price span').text(toNumber(productBase));
@@ -105,20 +105,26 @@
                                     url = url.replace('SKU', data.sku);
                                     window.location.href = url;
                                 }
-                                if (data.price) {
-                                    newprice += parseFloat(data.price);                                    
-                                    $('.dama-product-price span').text(toNumber(newprice));
-                                }
+                                //if (data.price) {
+                                //    newprice += parseFloat(data.price);                                    
+                                //    $('.dama-product-price span').text(toNumber(newprice));
+                                //}
                             })
                             .fail(function (jqxhr, textStatus, error) {
                                 var err = textStatus + ", " + error;
                                 console.log("Request Failed: " + err);
                             });
                     }
-                    
-
                 });                
+            });*@
+            $('#referenceProducts').on('change', function () {
+                if ($(this).val() != '@Model.ProductModel.ProductSKU') {
+                    var url = '@Url.Page("/Product/Index", new { id = "SKU" })';
+                    url = url.replace('SKU', $(this).val());
+                    window.location.href = url;
+                }
             });
+            
         });
     </script>
 }
