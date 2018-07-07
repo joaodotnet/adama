@@ -28,9 +28,9 @@ namespace Backoffice.Services
         private readonly IMapper _mapper;
         private readonly ISageService _sageService;
 
-        public BackofficeService(DamaContext context, 
-            IMapper mapper, 
-            ISageService sageService, 
+        public BackofficeService(DamaContext context,
+            IMapper mapper,
+            ISageService sageService,
             AppIdentityDbContext identityContext,
             IOptions<BackofficeSettings> options)
         {
@@ -42,7 +42,7 @@ namespace Backoffice.Services
         }
         public bool CheckIfFileExists(string fullpath, string fileName)
         {
-            return System.IO.File.Exists(Path.Combine(fullpath,fileName));
+            return System.IO.File.Exists(Path.Combine(fullpath, fileName));
         }
 
         public void DeleteFile(string fullpath, string fileName)
@@ -56,7 +56,7 @@ namespace Backoffice.Services
             var filename = formFile.GetFileName();
 
             if (!string.IsNullOrEmpty(addToFilename))
-            {                
+            {
                 var name = filename.Substring(0, filename.LastIndexOf('.')) + $"-{addToFilename}";
                 filename = name + filename.Substring(filename.LastIndexOf('.'));
             }
@@ -70,7 +70,7 @@ namespace Backoffice.Services
                 await formFile.CopyToAsync(stream);
             }
 
-            return uriPath + filename; 
+            return uriPath + filename;
         }
 
         public async Task SaveFileAsync(byte[] bytes, string fullPath, string filename)
@@ -88,14 +88,14 @@ namespace Backoffice.Services
 
         public async Task<string> GetSku(int typeId, int illustationId, int? attributeId = null)
         {
-            var type = await _damaContext.CatalogTypes                
+            var type = await _damaContext.CatalogTypes
                 .Where(x => x.Id == typeId)
                 .Select(x => x.Code)
                 .SingleAsync();
             var illustration = await _damaContext.CatalogIllustrations
                 .Include(x => x.IllustrationType)
                 .SingleOrDefaultAsync(x => x.Id == illustationId);
-                        
+
             string sku = $"{type}_{illustration.Code}_{illustration.IllustrationType.Code}";
             if (attributeId.HasValue)
                 sku += $"_{attributeId}";
@@ -113,7 +113,7 @@ namespace Backoffice.Services
                 .Include(x => x.OrderItems)
                 .OrderByDescending(x => x.Id)
                 .ToListAsync();
-                
+
             return _mapper.Map<List<OrderViewModel>>(orders);
         }
 
@@ -150,7 +150,7 @@ namespace Backoffice.Services
                 .Include(x => x.Categories)
                     .ThenInclude(c => c.Category)
                 .SingleOrDefaultAsync(x => x.Id == productTypeId);
-            if(type != null)
+            if (type != null)
                 return _mapper.Map<List<CategoryViewModel>>(type.Categories.Select(x => x.Category).ToList());
             return null;
         }
@@ -184,7 +184,7 @@ namespace Backoffice.Services
             }
 
             SageResponseDTO response;
-           
+
             if (order.TaxNumber.HasValue)
             {
                 response = await _sageService.CreateInvoiceWithTaxNumber(
@@ -200,10 +200,10 @@ namespace Backoffice.Services
             else
                 response = await _sageService.CreateAnonymousInvoice(items, order.Id, order.ShippingCost);
 
-            if(response.InvoiceId.HasValue)
+            if (response.InvoiceId.HasValue)
             {
                 order.SalesInvoiceId = response.InvoiceId.Value;
-                order.SalesInvoiceNumber = response.InvoiceNumber;                                
+                order.SalesInvoiceNumber = response.InvoiceNumber;
 
                 ////Payment                
                 //var responsePayment = await _sageService.InvoicePayment(order.SalesInvoiceId.Value, paymentType, order.Total());
@@ -214,7 +214,7 @@ namespace Backoffice.Services
                 //}
                 await _damaContext.SaveChangesAsync();
             }
-            
+
             return response;
         }
 
@@ -226,7 +226,7 @@ namespace Backoffice.Services
             //Payment
             var response = await _sageService.InvoicePayment(order.SalesInvoiceId.Value, paymentTypeSelected, order.Total());
 
-            if(response != null && response.PaymentId.HasValue)
+            if (response != null && response.PaymentId.HasValue)
             {
                 order.SalesPaymentId = response.PaymentId;
                 await _damaContext.SaveChangesAsync();
@@ -243,15 +243,15 @@ namespace Backoffice.Services
         public Task<byte[]> GetReceiptPDF(long invoiceId, long paymentId)
         {
             return _sageService.GetPDFReceipt(invoiceId, paymentId);
-        }     
-        
+        }
+
         public async Task<List<(string, byte[])>> GetOrderDocumentsAsync(int id)
         {
             var invoiceFileName = string.Format(_settings.InvoiceNameFormat, id);
             //var receiptFileName = string.Format(_settings.ReceiptNameFormat, id);
             var invoicePath = Path.Combine(_settings.InvoicesFolderFullPath, invoiceFileName);
             //var receiptPath = Path.Combine(_settings.InvoicesFolderFullPath, receiptFileName);
-            List<(string Filename, byte[] Bytes)> files = new List<(string,byte[])>();
+            List<(string Filename, byte[] Bytes)> files = new List<(string, byte[])>();
             if (File.Exists(invoicePath))
                 files.Add((invoiceFileName, await File.ReadAllBytesAsync(invoicePath)));
             //if (File.Exists(receiptPath))
@@ -260,58 +260,122 @@ namespace Backoffice.Services
             return files;
         }
 
-        public async Task CreateCatalogPrice(int catalogItemId, decimal price)
+        //public async Task CreateCatalogPrice(int catalogItemId)
+        //{
+        //    if (!_damaContext.CatalogPrices.Any(x => x.CatalogItemId == catalogItemId))
+        //    {
+        //        _damaContext.CatalogPrices.Add(new ApplicationCore.Entities.CatalogPrice
+        //        {
+        //            CatalogItemId = catalogItemId,
+        //            Price = await CheckDefaultPrice(catalogItemId),
+        //            Active = true
+        //        });
+        //        await _damaContext.SaveChangesAsync();
+        //    }
+        //}        
+
+        //public async Task AddOrUpdateCatalogPrice(int catalogItemId, int? attributeId, decimal? attrPrice)
+        //{
+        //    if (attributeId.HasValue)
+        //    {
+        //        //TODO NOT OK
+        //        var catalogPrices = await _damaContext.CatalogPrices.Where(x =>
+        //            x.CatalogItemId == catalogItemId).ToListAsync();
+        //        //(x.Attribute1Id == attributeId || x.Attribute2Id == attributeId || x.Attribute3Id == attributeId));
+
+        //        //var price = await CheckDefaultPrice(catalogItemId) + (attrPrice ?? 0);
+
+        //        if (!catalogPrices.Any(x => x.Attribute1Id == attributeId || x.Attribute2Id == attributeId || x.Attribute3Id == attributeId))
+        //        {
+        //            foreach (var item in catalogPrices)
+        //            {
+        //                CatalogPrice newItem = new CatalogPrice
+        //                {
+        //                    CatalogItemId = item.CatalogItemId,
+        //                    Attribute1Id = item.Attribute1Id,
+        //                    Attribute2Id = item.Attribute2Id,
+        //                    Attribute3Id = item.Attribute3Id,
+        //                    Active = true                            
+        //                };                         
+        //                if (!newItem.Attribute1Id.HasValue)
+        //                    newItem.Attribute1Id = attributeId;
+        //                else if (!newItem.Attribute2Id.HasValue)
+        //                    newItem.Attribute2Id = attributeId;
+        //                else if (!newItem.Attribute3Id.HasValue)
+        //                    newItem.Attribute3Id = attributeId;
+        //                else
+        //                    throw new Exception("ATTRIBUTE LIMIT REACH");
+
+        //                //var price = CalculateNewPrice(CheckDefaultPrice(newItem.CatalogItemId), newItem);
+
+        //                _damaContext.CatalogPrices.Add(newItem);
+        //            }   
+        //        }
+        //        else
+        //        {
+        //            //catalogPrice.Price = price;
+        //            //catalogPrice.Active = true;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        var catalogPrice = await _damaContext.CatalogPrices.Where(x =>
+        //            x.CatalogItemId == catalogItemId)
+        //            .ToListAsync();
+        //        if(catalogPrice != null)
+        //        {
+        //            foreach (var item in catalogPrice)
+        //            {
+        //                var price = await CheckDefaultPrice(catalogItemId);
+        //                if(item.Attribute1Id.HasValue)
+        //                {
+        //                    var catalogAttr = await _damaContext.CatalogAttributes
+        //                        .FirstOrDefaultAsync(x => x.CatalogItemId == catalogItemId && x.AttributeId == item.Attribute1Id);
+        //                    if (catalogAttr != null && catalogAttr.Price.HasValue)
+        //                        price += catalogAttr.Price.Value;                           
+        //                }
+        //                else if(item.Attribute2Id.HasValue)
+        //                {
+        //                    var catalogAttr = await _damaContext.CatalogAttributes
+        //                       .FirstOrDefaultAsync(x => x.CatalogItemId == catalogItemId && x.AttributeId == item.Attribute2Id);
+        //                    if (catalogAttr != null && catalogAttr.Price.HasValue)
+        //                        price += catalogAttr.Price.Value;                            
+        //                }
+        //                else if(item.Attribute3Id.HasValue)
+        //                {
+        //                    var catalogAttr = await _damaContext.CatalogAttributes
+        //                        .FirstOrDefaultAsync(x => x.CatalogItemId == catalogItemId && x.AttributeId == item.Attribute3Id);
+        //                    if (catalogAttr != null && catalogAttr.Price.HasValue)
+        //                        price += catalogAttr.Price.Value;
+        //                }
+        //                item.Price = price;
+        //            }
+                    
+        //        }
+        //    }
+        //    await _damaContext.SaveChangesAsync();
+        //}
+
+        //public async Task DeleteCatalogPrice(int catalogItemId, int attributeId)
+        //{
+        //    var catalogPrice = await _damaContext.CatalogPrices.SingleOrDefaultAsync(x =>
+        //        x.CatalogItemId == catalogItemId &&
+        //        (x.Attribute1Id == attributeId || x.Attribute2Id == attributeId || x.Attribute3Id == attributeId));
+        //    if (catalogPrice != null)
+        //    {
+
+        //        catalogPrice.Active = false;
+        //        await _damaContext.SaveChangesAsync();
+        //    }
+        //}
+
+        private async Task<decimal> CheckDefaultPrice(int catalogItemId)
         {
-            if(!_damaContext.CatalogPrices.Any(x => x.CatalogItemId == catalogItemId))
-            {
-                _damaContext.CatalogPrices.Add(new ApplicationCore.Entities.CatalogPrice
-                {
-                    CatalogItemId = catalogItemId,
-                    Price = price,
-                    Active = true
-                });
-                await _damaContext.SaveChangesAsync();
-            }            
-        }
-
-        public async Task AddOrUpdateCatalogPrice(int catalogItemId, int attributeId, decimal price)
-        {
-            var catalogPrice = await _damaContext.CatalogPrices.SingleOrDefaultAsync(x =>
-                x.CatalogItemId == catalogItemId &&
-                (x.Attribute1Id == attributeId || x.Attribute2Id == attributeId || x.Attribute3Id == attributeId));
-            if(catalogPrice == null)
-            {
-                var catalogPrices = _damaContext.CatalogPrices.Where(x => x.CatalogItemId == catalogItemId).ToList();
-                catalogPrice = new CatalogPrice { CatalogItemId = catalogItemId, Active = true };
-                if (!catalogPrice.Attribute1Id.HasValue)
-                    catalogPrice.Attribute1Id = attributeId;
-                else if (!catalogPrice.Attribute2Id.HasValue)
-                    catalogPrice.Attribute2Id = attributeId;
-                else if (!catalogPrice.Attribute3Id.HasValue)
-                    catalogPrice.Attribute3Id = attributeId;
-                else
-                    throw new Exception("ATTRIBUTE LIMIT REACH");
-
-            }
-            else
-            {
-                catalogPrice.Price = price;
-                catalogPrice.Active = true;
-            }
-            await _damaContext.SaveChangesAsync();
-        }
-
-        public async Task DeleteCatalogPrice(int catalogItemId, int attributeId)
-        {
-            var catalogPrice = await _damaContext.CatalogPrices.SingleOrDefaultAsync(x =>
-                x.CatalogItemId == catalogItemId &&
-                (x.Attribute1Id == attributeId || x.Attribute2Id == attributeId || x.Attribute3Id == attributeId));
-            if (catalogPrice != null)
-            {
-
-                catalogPrice.Active = false;
-                await _damaContext.SaveChangesAsync();
-            }
+            var prod = await _damaContext.CatalogItems
+                      .Include(x => x.CatalogType)
+                      .SingleOrDefaultAsync(x => x.Id == catalogItemId);
+            
+            return prod.Price ?? prod.CatalogType.Price;
         }
     }
 }

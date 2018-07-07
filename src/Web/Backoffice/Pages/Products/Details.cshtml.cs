@@ -37,9 +37,6 @@ namespace Backoffice.Pages.Products
                     .ThenInclude(i => i.IllustrationType)
                 .Include(p => p.CatalogType)
                 .Include(p => p.CatalogAttributes)
-                .ThenInclude(ca => ca.ReferenceCatalogItem)
-                .Include(p => p.CatalogAttributes)
-                .ThenInclude(ca => ca.Attribute)
                 .Include(p => p.CatalogPictures)
                 .Include(p => p.CatalogCategories)
                     .ThenInclude(cc => cc.Category)
@@ -49,6 +46,11 @@ namespace Backoffice.Pages.Products
             {
                 return NotFound();
             }
+
+
+            if (!ProductModel.Price.HasValue || ProductModel.Price == 0)
+                ProductModel.Price = ProductModel.CatalogType.Price;
+
             return Page();
         }
     }

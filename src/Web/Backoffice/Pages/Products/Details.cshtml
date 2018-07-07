@@ -127,13 +127,10 @@
                 <thead>
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.ProductModel.CatalogAttributes[0].AttributeName)
+                            @Html.DisplayNameFor(model => model.ProductModel.CatalogAttributes[0].Type)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.ProductModel.CatalogAttributes[0].Price)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.ProductModel.CatalogAttributes[0].ReferenceCatalogItem)
+                            @Html.DisplayNameFor(model => model.ProductModel.CatalogAttributes[0].Name)
                         </th>
                     </tr>
                 </thead>
@@ -144,13 +141,10 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(model => model.ProductModel.CatalogAttributes[i].AttributeName)
+                                    @Html.DisplayFor(model => model.ProductModel.CatalogAttributes[i].Type)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(model => model.ProductModel.CatalogAttributes[i].Price)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(model => model.ProductModel.CatalogAttributes[i].ReferenceCatalogItem.Name)
+                                    @Html.DisplayFor(model => model.ProductModel.CatalogAttributes[i].Name)
                                 </td>
                             </tr>
                         }

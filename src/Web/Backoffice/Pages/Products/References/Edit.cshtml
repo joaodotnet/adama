@@ -1,0 +1,48 @@
+﻿@page
+@model Backoffice.Pages.Products.References.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Editar</h2>
+
+<h4>Relação para @Model.CatalogReference.CatalogItem.Name</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @*<div class="form-group">
+                    <label asp-for="CatalogReference.CatalogItemId" class="control-label"></label>
+                    <select asp-for="CatalogReference.CatalogItemId" class="form-control" asp-items="ViewBag.CatalogItemId"></select>
+                    <span asp-validation-for="CatalogReference.CatalogItemId" class="text-danger"></span>
+                </div>*@
+            <div class="form-group">
+                <label asp-for="CatalogReference.ReferenceCatalogItemId" class="control-label"></label>
+                <select asp-for="CatalogReference.ReferenceCatalogItemId" class="form-control" asp-items="ViewBag.ReferenceCatalogItemId"></select>
+                <span asp-validation-for="CatalogReference.ReferenceCatalogItemId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="CatalogReference.Id" />
+                <input type="hidden" asp-for="CatalogReference.CatalogItemId" />
+                <input type="hidden" asp-for="OriginalReference" />
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="/Products/Edit" asp-route-id="@Model.CatalogReference.CatalogItemId">Voltar para o Produto</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            $('#CatalogReference_ReferenceCatalogItemId').select2();
+        });
+    </script>
+}

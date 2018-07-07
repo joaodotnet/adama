@@ -33,9 +33,9 @@
                 <select asp-for="ProductModel.CatalogIllustrationId" class="form-control" asp-items="ViewBag.IllustrationId"></select>
                 <span asp-validation-for="ProductModel.CatalogIllustrationId" class="text-danger"></span>
             </div>
-            <div class="form-group required">
+            <div class="form-group">
                 <label asp-for="ProductModel.Price" class="control-label"></label>
-                <input asp-for="ProductModel.Price" class="form-control decimal" />
+                <input asp-for="ProductModel.Price" class="form-control decimal" /> <span id="ProductTypePrice"></span>
                 <span asp-validation-for="ProductModel.Price" class="text-danger"></span>
             </div>
             <div class="form-check">
@@ -119,6 +119,7 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
         $(document).ready(function () {
+            SetProductPrice($("#ProductModel_CatalogTypeId").val());
             $('.child-checkbox').click(function () {
                 if ($(this).is(":checked")) {
                     $(this).closest('.parent-category').find('.parent-checkbox').prop('checked', true);
@@ -130,13 +131,22 @@
                     //deselect all checkboxes
                     $('#category-list input:checkbox').prop('checked', false);
 
-                    if (data) {                        
+                    if (data) {
                         data.forEach(function (element) {
                             $('#category-list input[cat-id=' + element + ']').prop('checked', true);
                         });
                     }
                 });
+                SetProductPrice(this.value);
             });
         });
+        function SetProductPrice(productTypeId) {
+            $.getJSON('@(Url.Page("Create", "ProductTypePrice"))' + '&productType=' + productTypeId, function (data) {
+                if (data)
+                    $("#ProductTypePrice").html(data + " €");
+                else
+                    $("#ProductTypePrice").html("");
+            });
+        }
     </script>
 }

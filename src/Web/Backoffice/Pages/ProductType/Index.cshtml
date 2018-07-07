@@ -23,6 +23,9 @@
                 @Html.DisplayNameFor(model => model.ProductTypesModel[0].CategoriesName)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.ProductTypesModel[0].Price)
+            </th>            
+            <th>
                 @Html.DisplayNameFor(model => model.ProductTypesModel[0].DeliveryTimeMin)
             </th>
             <th>
@@ -45,6 +48,9 @@
             </td>
             <td>
                 @string.Join(",", item.CategoriesName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DeliveryTimeMin)

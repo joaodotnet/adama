@@ -7,18 +7,13 @@ namespace Backoffice.ViewModels
     public class ProductAttributeViewModel
     {
         public int Id { get; set; }
-        public int AttributeId { get; set; }
+        public AttributeType Type { get; set; }
         [Display(Name = "Nome")]
-        public string AttributeName { get; set; }
-        [Display(Name = "Preço")]
-        public decimal? Price { get; set; }
+        [Required]
+        [StringLength(100)]
+        public string Name { get; set; }
         public int CatalogItemId { get; set; }
-        public ProductViewModel CatalogItem { get; set; }
-        public int? ReferenceCatalogItemId { get; set; }
-        [Display(Name = "Produto Referência")]
-        public ProductViewModel ReferenceCatalogItem { get; set; }
+        public ProductViewModel CatalogItem { get; set; }        
         public bool ToRemove { get; set; }
-        [Display(Name = "SKU")]
-        public string Sku { get; set; }
     }
 }

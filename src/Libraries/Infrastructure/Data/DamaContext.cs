@@ -29,8 +29,9 @@ namespace Infrastructure.Data
         public DbSet<ApplicationCore.Entities.CatalogAttribute> CatalogAttributes { get; set; }
         public DbSet<CatalogCategory> CatalogCategories { get; set; }
         public DbSet<ApplicationCore.Entities.CustomizeOrder> CustomizeOrders { get; set; }
-        public DbSet<ApplicationCore.Entities.Attribute> Attributes { get; set; }
-        public DbSet<CatalogPrice> CatalogPrices { get; set; }
+        public DbSet<CatalogReference> CatalogReferences { get; set; }
+        //public DbSet<ApplicationCore.Entities.Attribute> Attributes { get; set; }
+        //public DbSet<CatalogPrice> CatalogPrices { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -50,30 +51,43 @@ namespace Infrastructure.Data
             builder.Entity<CatalogTypeCategory>(ConfigureCatalogTypeCategory);
             builder.Entity<CatalogCategory>(ConfigureCatalogCategories);
             builder.Entity<CustomizeOrder>(ConfigureCustomizeOrders);
-            builder.Entity<ApplicationCore.Entities.Attribute>(ConfigureAttributes);
-            builder.Entity<CatalogPrice>(ConfigureCatalogPrice);
+            builder.Entity<CatalogReference>(ConfigureCatalogReferences);
+            //builder.Entity<ApplicationCore.Entities.Attribute>(ConfigureAttributes);
+            //builder.Entity<CatalogPrice>(ConfigureCatalogPrice);
         }
 
-        private void ConfigureCatalogPrice(EntityTypeBuilder<CatalogPrice> builder)
+        private void ConfigureCatalogReferences(EntityTypeBuilder<CatalogReference> builder)
         {
-            builder.ToTable("CatalogPrice");
+            builder.ToTable("CatalogReference");
 
-            //builder.HasOne(x => x.Attribute1)
-            //    .WithMany(a => a.CatalogAttributes)
-            //    .HasForeignKey(x => x.AttributeId)
+            builder.HasOne(x => x.CatalogItem)
+               .WithMany(p => p.CatalogReferences)
+               .HasForeignKey(x => x.CatalogItemId);
+
+
+
         }
 
-        private void ConfigureAttributes(EntityTypeBuilder<ApplicationCore.Entities.Attribute> builder)
-        {
-            builder.ToTable("Attribute");
+        //private void ConfigureCatalogPrice(EntityTypeBuilder<CatalogPrice> builder)
+        //{
+        //    builder.ToTable("CatalogPrice");
 
-            builder.Property(x => x.Name)
-                .IsRequired()
-                .HasMaxLength(100);
+        //    builder.Property(x => x.Price)
+        //        .IsRequired()
+        //        .HasColumnType("decimal(18,2)");
+        //}
 
-            builder.Property(x => x.Type)
-                .IsRequired();
-        }
+        //private void ConfigureAttributes(EntityTypeBuilder<ApplicationCore.Entities.Attribute> builder)
+        //{
+        //    builder.ToTable("Attribute");
+
+        //    builder.Property(x => x.Name)
+        //        .IsRequired()
+        //        .HasMaxLength(100);
+
+        //    builder.Property(x => x.Type)
+        //        .IsRequired();
+        //}
 
         private void ConfigureCustomizeOrders(EntityTypeBuilder<CustomizeOrder> builder)
         {
@@ -123,16 +137,19 @@ namespace Infrastructure.Data
             //    .IsUnique();
             //builder.Property(x => x.Sku)
             //    .HasMaxLength(255);
-            builder.HasOne(x => x.Attribute)
-                .WithMany(a => a.CatalogAttributes)
-                .HasForeignKey(x => x.AttributeId)
-                .IsRequired();
+            //builder.HasOne(x => x.Attribute)
+            //    .WithMany(a => a.CatalogAttributes)
+            //    .HasForeignKey(x => x.AttributeId)
+            //    .IsRequired();
+            builder.Property(x => x.Name)
+                .IsRequired()
+                .HasMaxLength(100);
             builder.HasOne(x => x.CatalogItem)
                 .WithMany(p => p.CatalogAttributes)
                 .HasForeignKey(x => x.CatalogItemId);
-            builder.HasOne(x => x.ReferenceCatalogItem)
-                .WithMany(x => x.ReferenceCatalogAttributes)
-                .HasForeignKey(x => x.ReferenceCatalogItemId);
+            //builder.HasOne(x => x.ReferenceCatalogItem)
+            //    .WithMany(x => x.ReferenceCatalogAttributes)
+            //    .HasForeignKey(x => x.ReferenceCatalogItemId);
         }
 
         private void ConfigureIllustrationType(EntityTypeBuilder<IllustrationType> builder)
@@ -171,7 +188,7 @@ namespace Infrastructure.Data
         }
 
         private void ConfigureBasket(EntityTypeBuilder<Basket> builder)
-        {
+        {           
             var navigation = builder.Metadata.FindNavigation(nameof(Basket.Items));
 
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
@@ -194,7 +211,8 @@ namespace Infrastructure.Data
                 .HasMaxLength(100);
 
             builder.Property(ci => ci.Price)
-                .IsRequired(true);
+                .HasColumnType("decimal(18,2)");
+            //    .IsRequired(true);
 
             //builder.Property(ci => ci.PictureUri)
             //    .IsRequired(true);
@@ -262,6 +280,10 @@ namespace Infrastructure.Data
             builder.Property(x => x.Description)
                 .IsRequired()
                 .HasMaxLength(100);
+
+            builder.Property(x => x.Price)
+                .IsRequired()                
+                .HasColumnType("decimal(18,2)");
 
             builder.Property(x => x.DeliveryTimeMin)
                 .IsRequired()
