@@ -9,16 +9,19 @@ namespace ApplicationCore.Entities
         private readonly List<BasketItem> _items = new List<BasketItem>();
         public IReadOnlyCollection<BasketItem> Items => _items.AsReadOnly();
 
-        public void AddItem(int catalogItemId, decimal unitPrice, int quantity = 1, List<int> attrIds = null)
+        public void AddItem(int catalogItemId, decimal unitPrice, int quantity = 1, int? option1 = null, int? option2 = null, int? option3 = null)
         {
-            if (!Items.Any(i => i.CatalogItemId == catalogItemId))
+            
+            if (!Items.Any(i => i.CatalogItemId == catalogItemId && i.CatalogAttribute1 == option1 && i.CatalogAttribute2 == option2 && i.CatalogAttribute3 == option3))
             {
                 _items.Add(new BasketItem()
                 {
                     CatalogItemId = catalogItemId,
                     Quantity = quantity,
                     UnitPrice = unitPrice,
-                    Details = attrIds?.Select(x => new BasketDetailItem { CatalogAttributeId = x }).ToList()
+                    CatalogAttribute1 = option1,
+                    CatalogAttribute2 = option2,
+                    CatalogAttribute3 = option3
                 });
                 return;
             }

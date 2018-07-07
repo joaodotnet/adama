@@ -27,23 +27,22 @@ namespace ApplicationCore.Services
             _itemRepository = itemRepository;
         }
 
-        public async Task AddItemToBasket(int basketId, int catalogItemId, decimal price, int quantity, List<int> attrIds = null)
+        public async Task AddItemToBasket(int basketId, int catalogItemId, decimal price, int quantity, int? option1 = null, int? option2 = null, int? option3 = null)
         {
             var basket = await _basketRepository.GetByIdAsync(basketId);
 
-            var specification = new CatalogAttrFilterSpecification(catalogItemId);
-            var catalogItem = _itemRepository.GetSingleBySpec(specification);
+            //var specification = new CatalogAttrFilterSpecification(catalogItemId);
+            //var catalogItem = _itemRepository.GetSingleBySpec(specification);
 
-            decimal attrsPrice = 0;
-            //if(attrIds == null)
+            //decimal attrsPrice = 0;
+            //if (attrIds == null)
             //{
             //    attrIds = new List<int>();
-                
+
             //    var group = catalogItem.CatalogAttributes.GroupBy(x => x.Type);
             //    foreach (var attribute in group)
             //    {
             //        attrIds.Add(attribute.First().Id);
-            //        attrsPrice += attribute.First().Price ?? 0;
             //    }
             //}
             //else
@@ -57,9 +56,9 @@ namespace ApplicationCore.Services
             //}
 
             //update price 
-            price += attrsPrice;
+            //price += attrsPrice;
 
-            basket.AddItem(catalogItemId, price, quantity, attrIds);
+            basket.AddItem(catalogItemId, price, quantity, option1, option2, option3);
 
             await _basketRepository.UpdateAsync(basket);
         }
@@ -165,6 +164,27 @@ namespace ApplicationCore.Services
                 }                
             }
             return deliveryTime;
+        }
+
+        public (int?, int?, int?) GetFirstOptionFromAttribute(int catalogItemId)
+        {
+            var options = (default(int?), default(int?), default(int?));
+
+            var spec = new CatalogTypeFilterSpecification(catalogItemId);
+            var product = _itemRepository.GetSingleBySpec(spec);
+
+            var group = product.CatalogAttributes.GroupBy(x => x.Type);
+            foreach (var attribute in group)
+            {
+                if(!options.Item1.HasValue)
+                    options.Item1 = attribute.First().Id;
+                else if (!options.Item2.HasValue)
+                    options.Item2 = attribute.First().Id;
+                else if (!options.Item3.HasValue)
+                    options.Item3 = attribute.First().Id;
+            }
+
+            return options;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.Entities;
 using ApplicationCore.Entities.OrderAggregate;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ApplicationCore.Interfaces
@@ -9,6 +10,6 @@ namespace ApplicationCore.Interfaces
     {
         Basket GetByIdWithItems(int id);
         Task<Basket> GetByIdWithItemsAsync(int id);
-        Task<Basket> AddBasketItemAsync(int id, BasketItem value);
+        Task<Basket> AddBasketItemAsync(int id, BasketItem value, int? option1 = null, int? option2 = null, int? option3 = null);
     }
 }

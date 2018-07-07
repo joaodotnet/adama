@@ -261,7 +261,7 @@ namespace DamaWeb.Services
                     DeliveryTimeUnit = product.CatalogType.DeliveryTimeUnit,
                     CanCustomize = product.CanCustomize,
                     FirstCategoryId = product.CatalogCategories.FirstOrDefault()?.CategoryId ?? 0,
-                    ProductReferences = productReferences
+                    ProductReferences = productReferences                    
                 };
 
                 //Others prictures
