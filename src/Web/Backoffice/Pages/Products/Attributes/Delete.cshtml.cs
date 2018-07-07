@@ -37,9 +37,7 @@ namespace Backoffice.Pages.Products.Attributes
             }
 
             var ca = await _context.CatalogAttributes
-                .Include(c => c.Attribute)
                 .Include(c => c.CatalogItem)
-                .Include(c => c.ReferenceCatalogItem)
                 .SingleOrDefaultAsync(m => m.Id == id);
 
             if (ca == null)

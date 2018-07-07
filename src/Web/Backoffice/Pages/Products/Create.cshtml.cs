@@ -83,7 +83,7 @@ namespace Backoffice.Pages.Products
                     });
                 }
             }
-
+            ProductModel.Price = ProductModel.Price == 0 ? default(decimal?) : ProductModel.Price;
             //Catalog Catagories
             var prod = _mapper.Map<CatalogItem>(ProductModel);            
             foreach (var item in CatalogCategoryModel.Where(x => x.Selected).ToList())
@@ -108,9 +108,7 @@ namespace Backoffice.Pages.Products
             //Update Sku
             prod.Sku += "_" + prod.Id;
             await _context.SaveChangesAsync();
-
-            //Create Price
-            //await _service.CreateCatalogPrice(prod.Id, prod.Price);
+            
             return RedirectToPage("./Index");
         }
 
@@ -125,6 +123,12 @@ namespace Backoffice.Pages.Products
         {
             var cats = await _service.GetCategoriesAsync(productType);
             return new JsonResult(cats.Select(x => x.Id).ToList());
+        }
+
+        public async Task<IActionResult> OnGetProductTypePriceAsync(int productType)
+        {
+            var type = await _context.CatalogTypes.FindAsync(productType);
+            return new JsonResult(type.Price);
         }
 
         private bool ValidatePictures()

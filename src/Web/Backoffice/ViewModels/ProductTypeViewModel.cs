@@ -33,7 +33,10 @@ namespace Backoffice.ViewModels
         public int DeliveryTimeMax { get; set; } = 3;
         [Required]
         [Display(Name = "Entrega (Unidade)")]
-        public DeliveryTimeUnitType DeliveryTimeUnit { get; set; } = DeliveryTimeUnitType.Days;        
+        public DeliveryTimeUnitType DeliveryTimeUnit { get; set; } = DeliveryTimeUnitType.Days;    
+        [Required]
+        [Display(Name = "Preço")]
+        public decimal Price { get; set; }
 
     }
 }

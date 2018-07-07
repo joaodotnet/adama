@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ApplicationCore.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,10 +15,9 @@ namespace Backoffice.ViewModels
         [Display(Name = "Nome")]
         public string Name { get; set; }
         [Display(Name = "Descrição")]        
-        public string Description { get; set; }                
-        [Required]
+        public string Description { get; set; }                        
         [Display(Name = "Preço")]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
         [Display(Name = "Ilustração")]
         [Required]
         public int CatalogIllustrationId { get; set; }
@@ -48,6 +48,7 @@ namespace Backoffice.ViewModels
         public IList<ProductPictureViewModel> CatalogPictures { get; set; } = new List<ProductPictureViewModel>();
         [Display(Name = "Categorias")]
         public IList<CatalogCategoryViewModel> CatalogCategories { get; set; } = new List<CatalogCategoryViewModel>();
+        public IList<CatalogReference> CatalogReferences { get; set; } = new List<CatalogReference>();
 
         public string DisplayCatalogTypeName {
             get {

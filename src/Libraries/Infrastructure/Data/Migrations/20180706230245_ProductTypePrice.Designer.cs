@@ -6,14 +6,16 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(DamaContext))]
-    partial class CatalogContextModelSnapshot : ModelSnapshot
+    [Migration("20180706230245_ProductTypePrice")]
+    partial class ProductTypePrice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,6 +25,23 @@ namespace Infrastructure.Data.Migrations
                 .HasAnnotation("Relational:Sequence:.catalog_hilo", "'catalog_hilo', '', '1', '10', '', '', 'Int64', 'False'")
                 .HasAnnotation("Relational:Sequence:.catalog_type_hilo", "'catalog_type_hilo', '', '1', '10', '', '', 'Int64', 'False'")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("ApplicationCore.Entities.Attribute", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<int>("Type");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Attribute");
+                });
 
             modelBuilder.Entity("ApplicationCore.Entities.Basket", b =>
                 {
@@ -83,17 +102,21 @@ namespace Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("AttributeId");
+
                     b.Property<int>("CatalogItemId");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100);
+                    b.Property<decimal?>("Price");
 
-                    b.Property<int>("Type");
+                    b.Property<int?>("ReferenceCatalogItemId");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AttributeId");
+
                     b.HasIndex("CatalogItemId");
+
+                    b.HasIndex("ReferenceCatalogItemId");
 
                     b.ToTable("CatalogAttribute");
                 });
@@ -215,23 +238,36 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("CatalogPicture");
                 });
 
-            modelBuilder.Entity("ApplicationCore.Entities.CatalogReference", b =>
+            modelBuilder.Entity("ApplicationCore.Entities.CatalogPrice", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("Active");
+
+                    b.Property<int?>("Attribute1Id");
+
+                    b.Property<int?>("Attribute2Id");
+
+                    b.Property<int?>("Attribute3Id");
+
                     b.Property<int>("CatalogItemId");
 
-                    b.Property<int>("ReferenceCatalogItemId");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Attribute1Id");
+
+                    b.HasIndex("Attribute2Id");
+
+                    b.HasIndex("Attribute3Id");
+
                     b.HasIndex("CatalogItemId");
 
-                    b.HasIndex("ReferenceCatalogItemId");
-
-                    b.ToTable("CatalogReference");
+                    b.ToTable("CatalogPrice");
                 });
 
             modelBuilder.Entity("ApplicationCore.Entities.CatalogType", b =>
@@ -522,10 +558,19 @@ namespace Infrastructure.Data.Migrations
 
             modelBuilder.Entity("ApplicationCore.Entities.CatalogAttribute", b =>
                 {
+                    b.HasOne("ApplicationCore.Entities.Attribute", "Attribute")
+                        .WithMany("CatalogAttributes")
+                        .HasForeignKey("AttributeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("ApplicationCore.Entities.CatalogItem", "CatalogItem")
                         .WithMany("CatalogAttributes")
                         .HasForeignKey("CatalogItemId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ApplicationCore.Entities.CatalogItem", "ReferenceCatalogItem")
+                        .WithMany("ReferenceCatalogAttributes")
+                        .HasForeignKey("ReferenceCatalogItemId");
                 });
 
             modelBuilder.Entity("ApplicationCore.Entities.CatalogCategory", b =>
@@ -570,16 +615,23 @@ namespace Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("ApplicationCore.Entities.CatalogReference", b =>
+            modelBuilder.Entity("ApplicationCore.Entities.CatalogPrice", b =>
                 {
-                    b.HasOne("ApplicationCore.Entities.CatalogItem", "CatalogItem")
-                        .WithMany("CatalogReferences")
-                        .HasForeignKey("CatalogItemId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("ApplicationCore.Entities.CatalogItem", "ReferenceCatalogItem")
+                    b.HasOne("ApplicationCore.Entities.Attribute", "Attribute1")
                         .WithMany()
-                        .HasForeignKey("ReferenceCatalogItemId")
+                        .HasForeignKey("Attribute1Id");
+
+                    b.HasOne("ApplicationCore.Entities.Attribute", "Attribute2")
+                        .WithMany()
+                        .HasForeignKey("Attribute2Id");
+
+                    b.HasOne("ApplicationCore.Entities.Attribute", "Attribute3")
+                        .WithMany()
+                        .HasForeignKey("Attribute3Id");
+
+                    b.HasOne("ApplicationCore.Entities.CatalogItem", "CatalogItem")
+                        .WithMany()
+                        .HasForeignKey("CatalogItemId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

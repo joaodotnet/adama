@@ -37,6 +37,7 @@
             <div class="form-group">
                 <label asp-for="ProductModel.Price" class="control-label"></label>
                 <input asp-for="ProductModel.Price" class="form-control decimal" />
+                <span id="ProductTypePrice"></span>
                 <span asp-validation-for="ProductModel.Price" class="text-danger"></span>
             </div>
             <div class="form-check">
@@ -69,18 +70,51 @@
             </div>
         </div>
         <div class="col-md-6">
+            <h4>Relações</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProductModel.CatalogReferences[0].ReferenceCatalogItem.Name)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ProductModel.CatalogReferences)
+                    {
+                        <tr>
+                            <td>
+                                <a asp-page="/Products/Edit" asp-route-id="@item.ReferenceCatalogItemId">
+                                    @Html.DisplayFor(modelItem => item.ReferenceCatalogItem.Name)
+                                </a>
+                            </td>
+                            <td>
+                                <a asp-page="./References/Edit" asp-route-id="@item.Id">Edit</a> |
+                                <a asp-page="./References/Delete" asp-route-id="@item.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2">
+                            <a asp-page="./References/Create" asp-route-id="@Model.ProductModel.Id" class="btn btn-default">Adicionar Relação</a>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+
             <h4>Atributos do Produto</h4>
             <table class="table">
                 <thead>
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.ProductModel.CatalogAttributes[0].AttributeName)
-                        </th>                       
-                        <th>
-                            @Html.DisplayNameFor(model => model.ProductModel.CatalogAttributes[0].Price)
+                            @Html.DisplayNameFor(model => model.ProductModel.CatalogAttributes[0].Type)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.ProductModel.CatalogAttributes[0].ReferenceCatalogItem)
+                            @Html.DisplayNameFor(model => model.ProductModel.CatalogAttributes[0].Name)
                         </th>
                         <th>
                         </th>
@@ -93,13 +127,10 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(model => Model.ProductModel.CatalogAttributes[i].AttributeName)
+                                    @Html.DisplayFor(model => Model.ProductModel.CatalogAttributes[i].Type)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(model => Model.ProductModel.CatalogAttributes[i].Price)
-                                </td>
-                                <td>
-                                    <a asp-page="/Products/Edit" asp-route-id="@Model.ProductModel.CatalogAttributes[i].ReferenceCatalogItemId"> @Html.DisplayFor(modelItem => Model.ProductModel.CatalogAttributes[i].ReferenceCatalogItem.Name) </a>
+                                    @Html.DisplayFor(model => Model.ProductModel.CatalogAttributes[i].Name)
                                 </td>
                                 <td>
                                     <a asp-page="./Attributes/Edit" asp-route-id="@Model.ProductModel.CatalogAttributes[i].Id">Editar</a> |
@@ -112,7 +143,7 @@
                 <tfoot>
                     <tr>
                         <td colspan="6">
-                            <a asp-page="./Attributes/Create" asp-route-id="@Model.ProductModel.Id" class="btn btn-default">Associar Atributo</a>
+                            <a asp-page="./Attributes/Create" asp-route-id="@Model.ProductModel.Id" class="btn btn-default">Adicionar Atributo</a>
                         </td>
                     </tr>
                 </tfoot>
@@ -212,6 +243,7 @@
 
     <script>
         $(document).ready(function () {
+            SetProductPrice($("#ProductModel_CatalogTypeId").val());
             $('.remove').on('click', function (e) {
                 e.preventDefault();
                 var tr = $(this).closest('tr');
@@ -245,7 +277,16 @@
                         });
                     }
                 });
+                SetProductPrice(this.value);
             });
         });
+        function SetProductPrice(productTypeId) {
+            $.getJSON('@(Url.Page("Create", "ProductTypePrice"))' + '&productType=' + productTypeId, function (data) {
+                if (data)
+                    $("#ProductTypePrice").html(data + " €");
+                else
+                    $("#ProductTypePrice").html("");
+            });
+        }
     </script>
 }

@@ -36,14 +36,13 @@ namespace Backoffice.Pages.Products
                     .ThenInclude( cc => cc.Category)
                 .ToListAsync());
 
-            //foreach (var item in ProductModel)
-            //{
-            //    if(item.CatalogAttributes.Count > 0)
-            //    {
-            //        var skus = string.Join("<br>", item.CatalogAttributes.Select(x => x.Sku));
-            //        item.Sku = skus;
-            //    }
-            //}
+            foreach (var item in ProductModel)
+            {
+                if(!item.Price.HasValue || item.Price == 0)
+                {
+                    item.Price = item.CatalogType.Price;
+                }
+            }
         }
     }
 }

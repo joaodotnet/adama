@@ -33,9 +33,6 @@ namespace Backoffice.Pages.Products.Attributes
             if (prod == null)
                 return NotFound();
 
-            var attributes = _context.Attributes.Select(x => new { x.Id, Name = $"{EnumHelper<AttributeType>.GetDisplayValue(x.Type)} {x.Name}" });
-            ViewData["Attributes"] = new SelectList(attributes.OrderBy(x => x.Name), "Id", "Name");
-
             CatalogAttributeModel.CatalogItemId = id;
             CatalogAttributeModel.CatalogItem = _mapper.Map<ProductViewModel>(prod);
             
@@ -47,10 +44,7 @@ namespace Backoffice.Pages.Products.Attributes
         public ProductAttributeViewModel CatalogAttributeModel { get; set; } = new ProductAttributeViewModel();
 
         public async Task<IActionResult> OnPostAsync()
-        {
-            var attributes = _context.Attributes.Select(x => new { x.Id, Name = $"{EnumHelper<AttributeType>.GetDisplayValue(x.Type)} {x.Name}" });
-            ViewData["Attributes"] = new SelectList(attributes.OrderBy(x => x.Name), "Id", "Name");
-
+        {           
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -59,7 +53,6 @@ namespace Backoffice.Pages.Products.Attributes
             var attribute = _mapper.Map<CatalogAttribute>(CatalogAttributeModel);
             _context.CatalogAttributes.Add(attribute);
             await _context.SaveChangesAsync();
-
             //var price = attribute.CatalogItem.Price;
             //if (attribute.Price.HasValue)
             //    price += attribute.Price.Value;

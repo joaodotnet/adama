@@ -1,0 +1,44 @@
+﻿@page
+@model Backoffice.Pages.Products.References.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Novo</h2>
+
+<h4>Relação para @Model.CatalogReference.CatalogItem.Name</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @*<div class="form-group">
+                    <label asp-for="CatalogReference.CatalogItemId" class="control-label"></label>
+                    <select asp-for="CatalogReference.CatalogItemId" class ="form-control" asp-items="ViewBag.CatalogItemId"></select>
+                </div>*@
+            <div class="form-group">
+                <label asp-for="CatalogReference.ReferenceCatalogItemId" class="control-label"></label>
+                <select asp-for="CatalogReference.ReferenceCatalogItemId" class="form-control" asp-items="ViewBag.ReferenceCatalogItemId"></select>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="CatalogReference.CatalogItemId" />
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="/Products/Edit" asp-route-id="@Model.CatalogReference.CatalogItemId">Voltar para o Produto</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            $('#CatalogReference_ReferenceCatalogItemId').select2();
+        });
+    </script>
+}

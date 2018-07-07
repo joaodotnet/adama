@@ -51,10 +51,9 @@ namespace Backoffice.Pages.Products
                 .Include(p => p.CatalogIllustration)
                 .Include(p => p.CatalogType)
                 .Include(p => p.CatalogAttributes)
-                .ThenInclude(ca => ca.ReferenceCatalogItem)
-                .Include(p => p.CatalogAttributes)
-                .ThenInclude(ca => ca.Attribute)
                 .Include(p => p.CatalogPictures)
+                .Include(p => p.CatalogReferences)
+                .ThenInclude(cr => cr.ReferenceCatalogItem)
                 .SingleOrDefaultAsync(m => m.Id == id));
 
             if (ProductModel == null)
@@ -115,7 +114,8 @@ namespace Backoffice.Pages.Products
                 }
             }
 
-            //Save Changes            
+            //Save Changes    
+            ProductModel.Price = ProductModel.Price == 0 ? default(decimal?) : ProductModel.Price;
             var prod = _mapper.Map<CatalogItem>(ProductModel);            
             //foreach (var item in prod.CatalogAttributes)
             //{
@@ -212,7 +212,7 @@ namespace Backoffice.Pages.Products
                     //Validate
                     //if (string.IsNullOrEmpty(item.Code))
                     //    ModelState.AddModelError("", "O código do atributo é obrigatório");
-                    if (item.AttributeId > 0)
+                    if (string.IsNullOrEmpty(item.Name))
                         ModelState.AddModelError("", "O nome do atributo é obrigatório");
                     if (!ModelState.IsValid)
                     {

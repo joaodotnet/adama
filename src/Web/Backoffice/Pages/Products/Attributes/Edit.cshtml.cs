@@ -11,6 +11,7 @@ using Infrastructure.Data;
 using AutoMapper;
 using Backoffice.ViewModels;
 using Backoffice.Extensions;
+using Backoffice.Interfaces;
 
 namespace Backoffice.Pages.Products.Attributes
 {
@@ -18,11 +19,13 @@ namespace Backoffice.Pages.Products.Attributes
     {
         private readonly DamaContext _context;
         private readonly IMapper _mapper;
+        private readonly IBackofficeService _service;
 
-        public EditModel(DamaContext context, IMapper mapper)
+        public EditModel(DamaContext context, IMapper mapper, IBackofficeService service)
         {
             _context = context;
             _mapper = mapper;
+            this._service = service;
         }
 
         [BindProperty]
@@ -34,14 +37,8 @@ namespace Backoffice.Pages.Products.Attributes
             {
                 return NotFound();
             }
-
-            var attributes = _context.Attributes.Select(x => new { x.Id, Name = $"{EnumHelper<AttributeType>.GetDisplayValue(x.Type)} {x.Name}" });
-            ViewData["Attributes"] = new SelectList(attributes.OrderBy(x => x.Name), "Id", "Name");
-
             var ca = await _context.CatalogAttributes
-                .Include(c => c.Attribute)
                 .Include(c => c.CatalogItem)
-                .Include(c => c.ReferenceCatalogItem)
                 .SingleOrDefaultAsync(m => m.Id == id);
 
             if (ca == null)
@@ -49,15 +46,11 @@ namespace Backoffice.Pages.Products.Attributes
                 return NotFound();
             }
             CatalogAttributeModel = _mapper.Map<ProductAttributeViewModel>(ca);
-           ViewData["ReferenceCatalogItemId"] = new SelectList(_context.CatalogItems, "Id", "Name");
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var attributes = _context.Attributes.Select(x => new { x.Id, Name = $"{EnumHelper<AttributeType>.GetDisplayValue(x.Type)} {x.Name}" });
-            ViewData["Attributes"] = new SelectList(attributes.OrderBy(x => x.Name), "Id", "Name");
-
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -74,7 +67,6 @@ namespace Backoffice.Pages.Products.Attributes
             {
                 
             }
-
             return RedirectToPage("/Products/Edit", new { id = ca.CatalogItemId });
         }
     }
