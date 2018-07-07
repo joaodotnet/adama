@@ -177,7 +177,7 @@ namespace DamaWeb.Pages.Basket
                 foreach (var attr in item.Details)
                 {
                     body += $@"<tr>
-                            <td>{EnumHelper<CatalogAttributeType>.GetDisplayValue(attr.AttributeType)}: {attr.AttributeName}</td>
+                            <td>{EnumHelper<AttributeType>.GetDisplayValue(attr.AttributeType)}: {attr.AttributeName}</td>
                         </tr>";
                 }
                 body +=$@"<tr>

@@ -28,19 +28,20 @@ namespace DamaWeb.Pages.Product
             ProductModel = await _catalogService.GetCatalogItem(id);
 
             //Update default price
-            decimal attrDefaultPrice = 0M;
-            foreach (var item in ProductModel.Attributes.GroupBy(x => x.AttributeType))
-            {                
-                attrDefaultPrice += item.First().Attributes.First().Price ?? 0;
-            }
-            ProductModel.ProductTotalPrice = ProductModel.ProductBasePrice + attrDefaultPrice;
+            //decimal attrDefaultPrice = 0M;
+            //foreach (var item in ProductModel.Attributes.GroupBy(x => x.AttributeType))
+            //{                
+            //    attrDefaultPrice += item.First().Attributes.First().Price ?? 0;
+            //}
+            //ProductModel.ProductTotalPrice = ProductModel.ProductPrice + attrDefaultPrice;
             return Page();
         }
 
         public async Task<JsonResult> OnGetAttributeDetailsAsync(int id)
         {
-            var res = await _catalogService.GetAttributeDetails(id);
-            return new JsonResult(new { price = res.Price, sku = res.ReferenceCatalogSku });
+            throw new NotImplementedException();
+            //var res = await _catalogService.GetAttributeDetails(id);
+            //return new JsonResult(new { price = res.Price, sku = res.ReferenceCatalogSku });
         }
     }
 }

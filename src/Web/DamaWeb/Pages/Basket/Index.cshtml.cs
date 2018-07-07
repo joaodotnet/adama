@@ -67,7 +67,7 @@ namespace DamaWeb.Pages.Basket
             var attrIds = new List<int>();
             if (productDetails.Attributes?.Count > 0)
                 attrIds = productDetails.Attributes.Select(x => x.Selected).ToList();
-            await _basketService.AddItemToBasket(BasketModel.Id, productDetails.ProductId, productDetails.ProductBasePrice, productDetails.ProductQuantity, attrIds);
+            await _basketService.AddItemToBasket(BasketModel.Id, productDetails.ProductId, productDetails.ProductPrice, productDetails.ProductQuantity, attrIds);
 
             await SetBasketModelAsync();
 

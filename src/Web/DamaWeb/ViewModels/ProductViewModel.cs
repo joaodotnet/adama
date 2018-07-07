@@ -11,12 +11,10 @@ namespace DamaWeb.ViewModels
 {
     public class ProductViewModel
     {
-        public decimal ProductTotalPrice;
-
         public int ProductId { get; set; }
         public string ProductTitle { get; set; }
         public string ProductDescription { get; set; }
-        public decimal ProductBasePrice { get; set; }
+        public decimal ProductPrice { get; set; }
         public List<string> ProductImagesUri { get; set; }
         public List<ProductAttributeViewModel> Attributes { get; set; }
         public int ProductQuantity { get; set; } = 1;
@@ -29,6 +27,7 @@ namespace DamaWeb.ViewModels
         public DeliveryTimeUnitType DeliveryTimeUnit { get; set; }
         public bool CanCustomize { get; set; }
         public int FirstCategoryId { get; set; }
+        public IEnumerable<SelectListItem> ProductReferences { get; set; }
     }
 
     public class LinkViewModel
@@ -40,7 +39,7 @@ namespace DamaWeb.ViewModels
 
     public class ProductAttributeViewModel
     {
-        public CatalogAttributeType AttributeType { get; set; }
+        public AttributeType AttributeType { get; set; }
         public string Label { get; set; }
         public int? DefaultValue { get; set; }
         public string DefaultText { get; set; }

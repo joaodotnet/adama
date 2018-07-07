@@ -13,7 +13,7 @@ namespace DamaWeb.Interfaces
         Task<IEnumerable<SelectListItem>> GetIllustrations();
         Task<IEnumerable<SelectListItem>> GetTypes();
         Task<ProductViewModel> GetCatalogItem(string sku);
-        Task<AttributeViewModel> GetAttributeDetails(int attributeId);
+        //Task<AttributeViewModel> GetAttributeDetails(int attributeId);
         Task<CatalogIndexViewModel> GetCatalogItemsByTag(int pageIndex, int? itemsPage, string tagName, TagType? tagType, int? typeId, int? illustrationId);
         Task<CatalogIndexViewModel> GetCatalogItemsBySearch(int pageIndex, int? itemsPage, string searchFor, int? typeId, int? illustrationId);
         Task<MenuComponentViewModel> GetMenuViewModel();

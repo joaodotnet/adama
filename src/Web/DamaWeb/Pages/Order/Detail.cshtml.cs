@@ -51,7 +51,7 @@ namespace DamaWeb.Pages.Order
 
         public class OrderItemDetailViewModel
         {
-            public CatalogAttributeType Type { get; set; }
+            public AttributeType Type { get; set; }
             public string AttributeName { get; set; }
         }
 

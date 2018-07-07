@@ -103,7 +103,7 @@
                             foreach (var attr in item.Attributes)
                             {
                                 <br />
-                                <span class="dama-basket-label">@(EnumHelper<ApplicationCore.Entities.CatalogAttributeType>.GetDisplayValue(attr.Type)): @attr.AttributeName </span>
+                                <span class="dama-basket-label">@(EnumHelper<ApplicationCore.Entities.AttributeType>.GetDisplayValue(attr.Type)): @attr.AttributeName </span>
                             }
                         }
                         <span class="d-sm-none">

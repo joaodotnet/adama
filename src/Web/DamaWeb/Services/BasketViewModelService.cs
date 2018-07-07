@@ -61,7 +61,7 @@ namespace DamaWeb.Services
                 itemModel.Attributes = i.Details.Select(d => new AttributeViewModel
                 {
                     Name = d.CatalogAttribute.Name,
-                    Label = EnumHelper<CatalogAttributeType>.GetDisplayValue(d.CatalogAttribute.Type)
+                    Label = EnumHelper<AttributeType>.GetDisplayValue(d.CatalogAttribute.Type)
                 }).ToList();
                 return itemModel;
             }).ToList();
