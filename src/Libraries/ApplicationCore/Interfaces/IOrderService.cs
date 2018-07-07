@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Entities.OrderAggregate;
+﻿using ApplicationCore.Entities;
+using ApplicationCore.Entities.OrderAggregate;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,5 +11,7 @@ namespace ApplicationCore.Interfaces
         Task UpdateOrderState(int id, OrderStateType orderState, bool isCustomizeOrder = false);
         Task<Order> GetOrderAsync(int id);
         Task<List<Order>> GetOrdersAsync(string buyerId);
+        Task<List<CatalogAttribute>> GetOrderAttributesAsync(int orderId, int orderItemId);
+        List<CatalogAttribute> GetOrderAttributes(int catalogItemId, int? catalogAttribute1, int? catalogAttribute2, int? catalogAttribute3);
     }
 }

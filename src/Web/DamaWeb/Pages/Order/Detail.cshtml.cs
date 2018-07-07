@@ -14,10 +14,12 @@ namespace DamaWeb.Pages.Order
     public class DetailModel : PageModel
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IOrderService _orderService;
 
-        public DetailModel(IOrderRepository orderRepository)
+        public DetailModel(IOrderRepository orderRepository, IOrderService orderService)
         {
             _orderRepository = orderRepository;
+            this._orderService = orderService;
         }
 
         public OrderViewModel OrderDetails { get; set; } = new OrderViewModel();
@@ -60,6 +62,7 @@ namespace DamaWeb.Pages.Order
         {
             //TODO: Check to order belong to user
             var order = await _orderRepository.GetByIdWithItemsAsync(orderId);
+
             OrderDetails = new OrderViewModel()
             {
                 OrderDate = order.OrderDate,
@@ -71,12 +74,15 @@ namespace DamaWeb.Pages.Order
                     ProductName = oi.ItemOrdered.ProductName,
                     UnitPrice = oi.UnitPrice,
                     Units = oi.Units,
-                    Attributes = oi.Details.Select(a => new OrderItemDetailViewModel()
+                    Attributes = _orderService.GetOrderAttributes(oi.ItemOrdered.CatalogItemId, oi.CatalogAttribute1,oi.CatalogAttribute2,oi.CatalogAttribute3)
+                    .Select(x => new OrderItemDetailViewModel
                     {
-                        Type = a.AttributeType,
-                        AttributeName = a.AttributeName
-                    }).ToList()
+                        Type = x.Type,
+                        AttributeName = x.Name
+                    })
+                    .ToList()
                 }).ToList(),
+                
                 OrderNumber = order.Id,
                 ShippingAddress = order.ShipToAddress,
                 BillingAddress = order.BillingToAddress,
