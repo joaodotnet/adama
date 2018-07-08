@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Backoffice.Services;
 using Infrastructure.Identity;
 using ApplicationCore.Interfaces;
+using Microsoft.Extensions.Options;
+using ApplicationCore;
 
 namespace Backoffice.Pages.Account
 {
@@ -15,11 +17,13 @@ namespace Backoffice.Pages.Account
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
+        private readonly BackofficeSettings _settings;
 
-        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender, IOptions<BackofficeSettings> options)
         {
             _userManager = userManager;
             _emailSender = emailSender;
+            _settings = options.Value;
         }
 
         [BindProperty]
@@ -47,7 +51,7 @@ namespace Backoffice.Pages.Account
                 // visit https://go.microsoft.com/fwlink/?LinkID=532713
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
-                await _emailSender.SendResetPasswordAsync(Input.Email, callbackUrl);
+                await _emailSender.SendResetPasswordAsync(_settings.FromInfoEmail, Input.Email, callbackUrl);
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
 

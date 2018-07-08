@@ -148,12 +148,13 @@ namespace Backoffice.Pages.Orders
             //var files = await _service.GetOrderDocumentsAsync(order.Id);
 
             var name = order.User != null ? $"{order.User.FirstName} {order.User.LastName}" : order.BuyerId;
-            var body = $"Olá {name}!<br>" +
-                $"Obrigado por comprar na DamaNoJornal, o pagamento relativo à encomenda #{order.Id} foi recepcionado.<br>" +
-                $"Enviamos, em anexo, a fatura relativo à encomenda. <br>" +
+            var body = $"<strong>Olá {name}!</strong><br>" +
+                $"Obrigada por comprares na Dama no Jornal®.<br>" +
+                $"O pagamento relativo à encomenda #{order.Id} <strong>foi recebido.</strong><br><br>" +
+                $"Enviamos em anexo a fatura relativa à tua encomenda. <br>" +
                 $"Estamos a preparar a expedição.";
 
-            await _emailSender.SendGenericEmailAsync(order.BuyerId, $"Faturação DamaNoJornal - Encomenda #{order.Id}", body, _settings.ToEmails, files);
+            await _emailSender.SendGenericEmailAsync(_settings.FromOrderEmail, order.BuyerId, $"Dama no Jornal® - Encomenda #{order.Id} - Pagamento", body, _settings.ToEmails, files);
             StatusMessage = "Mensagem Enviada";
             return RedirectToPage(new { id = OrderModel.Id });
         }

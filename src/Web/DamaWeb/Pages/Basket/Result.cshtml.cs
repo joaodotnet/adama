@@ -9,9 +9,10 @@ namespace DamaWeb.Pages.Basket
 {
     public class ResultModel : PageModel
     {
-        public void OnGet()
+        public int OrderNumber { get; set; }
+        public void OnGet(int id)
         {
-
+            OrderNumber = id;
         }
     }
 }

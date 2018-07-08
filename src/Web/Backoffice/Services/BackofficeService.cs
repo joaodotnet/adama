@@ -130,34 +130,35 @@ namespace Backoffice.Services
             orderViewModel.Items = _mapper.Map<List<OrderItemViewModel>>(order.OrderItems);
             orderViewModel.Items.ForEach(async x => x.ProductSku = await GetSkuAsync(x.ProductId));
 
+            //Attributes
+            foreach (var item in orderViewModel.Items)
+            {
+                //Attributes
+                if (item.CatalogAttribute1.HasValue || item.CatalogAttribute2.HasValue || item.CatalogAttribute3.HasValue)
+                {
+                    var product = await _damaContext.CatalogItems
+                    .Include(i => i.CatalogAttributes)
+                    .SingleOrDefaultAsync(i => i.Id == item.ProductId);
+
+                    var attributes = new List<CatalogAttribute>();
+                    foreach (var attr in product.CatalogAttributes)
+                    {
+                        if ((item.CatalogAttribute1.HasValue && item.CatalogAttribute1 == attr.Id) ||
+                          (item.CatalogAttribute2.HasValue && item.CatalogAttribute2 == attr.Id) ||
+                          (item.CatalogAttribute3.HasValue && item.CatalogAttribute3 == attr.Id))
+                            attributes.Add(attr);
+                    }
+                    item.Attributes = attributes.Select(a => new OrderItemAttributeViewModel
+                    {
+                        AttributeType = a.Type,
+                        AttributeName = a.Name
+                    }).ToList();
+                }
+            }
+
+
             //Get user info
-            orderViewModel.User = _identityContext.Users.SingleOrDefault(x => x.Email == order.BuyerId);
-
-            //Get Attributes NAO PODE SER AQUI PORQUE PODE TER VARIOS PRODUCT ID IGUAIS
-
-            //foreach (var item in order.OrderItems)
-            //{
-            //    var attributes = new List<CatalogAttribute>();
-
-            //    var product = await _damaContext.CatalogItems
-            //        .Include(x => x.CatalogAttributes)
-            //        .SingleOrDefaultAsync(x => x.Id == item.ItemOrdered.CatalogItemId);
-            //    foreach (var attr in product.CatalogAttributes)
-            //    {
-            //        if ((item.CatalogAttribute1.HasValue && item.CatalogAttribute1 == attr.Id) ||
-            //          (item.CatalogAttribute2.HasValue && item.CatalogAttribute2 == attr.Id) ||
-            //          (item.CatalogAttribute3.HasValue && item.CatalogAttribute3 == attr.Id))
-            //            attributes.Add(attr);
-            //    }
-
-            //    orderViewModel.Items
-            //       .Single(x => x.ProductId == item.ItemOrdered.CatalogItemId)
-            //       .Attributes = attributes.Select(x => new OrderItemAttributeViewModel
-            //       {
-            //           AttributeType = x.Type,
-            //           AttributeName = x.Name
-            //       }).ToList();
-            //}
+            orderViewModel.User = _identityContext.Users.SingleOrDefault(x => x.Email == order.BuyerId);            
 
             return orderViewModel;
         }
@@ -213,11 +214,15 @@ namespace Backoffice.Services
 
             if (order.TaxNumber.HasValue)
             {
+                var maxStreet1Length = order.BillingToAddress.Street.Length;
+                if (maxStreet1Length >= 50)
+                    maxStreet1Length = 50;
                 response = await _sageService.CreateInvoiceWithTaxNumber(
                     items,
                     order.BillingToAddress.Name,
                     order.TaxNumber.Value.ToString(),
-                    order.BillingToAddress.Street,
+                    order.BillingToAddress.Street.Substring(0, maxStreet1Length),
+                    order.BillingToAddress.Street.Length > 50 ? order.BillingToAddress.Street.Substring(50) : string.Empty,
                     order.BillingToAddress.PostalCode,
                     order.BillingToAddress.City,
                     order.Id,

@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 using Infrastructure.Identity;
 using Backoffice.Services;
 using ApplicationCore.Interfaces;
+using Microsoft.Extensions.Options;
+using ApplicationCore;
 
 namespace Backoffice.Pages.Account
 {
@@ -19,17 +21,20 @@ namespace Backoffice.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly BackofficeSettings _settings;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<LoginModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IOptions<BackofficeSettings> options)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _settings = options.Value;
         }
 
         [BindProperty]
@@ -74,7 +79,7 @@ namespace Backoffice.Pages.Account
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    await _emailSender.SendEmailConfirmationAsync(Input.Email, callbackUrl);
+                    await _emailSender.SendEmailConfirmationAsync(_settings.FromInfoEmail,Input.Email, callbackUrl);
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(Url.GetLocalUrl(returnUrl));

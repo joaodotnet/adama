@@ -128,9 +128,9 @@ namespace DamaWeb.Pages.Basket
                 await _basketService.DeleteBasketAsync(BasketModel.Id);
 
                 var body = GetEmailBody(resOrder, user, UserAddress.UseUserAddress == 2, DeliveryTime);
-                await _emailSender.SendEmailAsync(resOrder.BuyerId, $"Dama no Jornal®: Encomenda nº{resOrder.Id}", body, _settings.ToEmails);
+                await _emailSender.SendEmailAsync(_settings.FromOrderEmail, resOrder.BuyerId, $"Dama no Jornal® - Encomenda #{resOrder.Id}", body, _settings.ToEmails);
 
-                return RedirectToPage("./Result");
+                return RedirectToPage("./Result", new { id = resOrder.Id } );
             }
             await SetBasketModelAsync();
             return Page();

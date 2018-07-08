@@ -19,7 +19,7 @@ namespace DamaWeb.ViewModels
         [Required(ErrorMessage = "O campo Telefone é obrigatório")]
         public string ContactPhoneNumber { get; set; }
         [Display(Name = "Morada")]
-        [StringLength(50, ErrorMessage = "O campo Morada têm que ter no máximo 50 caracteres!")]
+        [StringLength(100, ErrorMessage = "O campo Morada têm que ter no máximo 100 caracteres!")]
         [Required(ErrorMessage = "O campo Morada é obrigatório")]               
         public string Street { get; set; }
         [Display(Name = "Morada (Linha 2)")]
@@ -43,7 +43,7 @@ namespace DamaWeb.ViewModels
         [Display(Name = "NIF")]
         public int? InvoiceTaxNumber { get; set; }
         [Display(Name = "Morada")]
-        [StringLength(50, ErrorMessage = "O campo Morada têm que ter no máximo 50 caracteres!")]
+        [StringLength(100, ErrorMessage = "O campo Morada têm que ter no máximo 100 caracteres!")]
         public string InvoiceAddressStreet { get; set; }
         [Display(Name = "Cidade")]
         public string InvoiceAddressCity { get; set; }
