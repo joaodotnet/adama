@@ -49,15 +49,15 @@ namespace DamaWeb.Services
                     Id = i.Id,
                     UnitPrice = i.UnitPrice,
                     Quantity = i.Quantity,
-                    CatalogItemId = i.CatalogItemId
-
+                    CatalogItemId = i.CatalogItemId,
+                    CustomizeName = i.CustomizeName
                 };
                 var spec = new CatalogAttrFilterSpecification(i.CatalogItemId);
                 var item = _itemRepository.GetSingleBySpec(spec);
                 if (item != null)
                 {
                     itemModel.PictureUrl = _uriComposer.ComposePicUri(item.PictureUri);
-                    itemModel.ProductName = item.Name;
+                    itemModel.ProductName = item.Name;                    
                 }
 
                 foreach (var attr in item.CatalogAttributes)

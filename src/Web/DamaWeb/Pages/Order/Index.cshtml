@@ -18,7 +18,7 @@
     <div class="container">
         <h2 class="dama-heading-normal-font">@ViewData["Title"]</h2>
         <div class="text-center">
-            <img class="separator" src="~/images/coração-rosa.png" />
+            <img class="separator" src="~/images/barra-coracao.png" />
         </div>
         <article class="esh-orders-titles row d-none d-sm-flex">
             <section class="esh-orders-title col-2">Nº Encomenda</section>
@@ -42,7 +42,7 @@
                     </section>
                     <section class="esh-orders-item col-12 col-sm-2">
                         <span class="dama-orders-title-mobile d-sm-none">Total: </span>
-                        € @Html.DisplayFor(modelItem => item.Total)
+                        @Html.DisplayFor(modelItem => item.Total) €
                     </section>
                     <section class="esh-orders-item col-12 col-sm-2">
                         <span class="dama-orders-title-mobile d-sm-none">Estado: </span>

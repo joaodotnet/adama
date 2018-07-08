@@ -50,6 +50,7 @@ namespace DamaWeb.Pages.Order
             public decimal Discount { get; set; }
             public int Units { get; set; }
             public string PictureUrl { get; set; }
+            public string CustomizeName { get; set; }
             public List<OrderItemDetailViewModel> Attributes { get; set; } = new List<OrderItemDetailViewModel>();
         }
 
@@ -78,6 +79,7 @@ namespace DamaWeb.Pages.Order
                     PictureUrl = oi.ItemOrdered.PictureUri,
                     ProductId = oi.ItemOrdered.CatalogItemId,
                     ProductName = oi.ItemOrdered.ProductName,
+                    CustomizeName = oi.CustomizeName,
                     UnitPrice = oi.UnitPrice,
                     Units = oi.Units,
                     Attributes = _orderService.GetOrderAttributes(oi.ItemOrdered.CatalogItemId, oi.CatalogAttribute1,oi.CatalogAttribute2,oi.CatalogAttribute3)

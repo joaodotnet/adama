@@ -174,7 +174,7 @@ namespace DamaWeb.Pages.Basket
                     <table>
                         <tr>
                             <td>{item.ItemOrdered.ProductName}</td>
-                            <td>€ {item.UnitPrice}</td>
+                            <td>{item.UnitPrice} €</td>
                         </tr>";
                 foreach (var attr in attributes)
                 {
@@ -199,7 +199,7 @@ namespace DamaWeb.Pages.Basket
         <table width='100%'>
             <tr>
                 <td>Subtotal</td>
-                <td style='text-align:right'>€ {order.Total() - order.ShippingCost}</td>
+                <td style='text-align:right'>{order.Total() - order.ShippingCost} €</td>
             </tr>
             <tr>
                 <td colspan='2'>
@@ -208,7 +208,7 @@ namespace DamaWeb.Pages.Basket
             </tr>
             <tr>
                 <td>Envio</td>
-                <td style='text-align:right'>€ {order.ShippingCost}</td>
+                <td style='text-align:right'>{order.ShippingCost} €</td>
             </tr>
             <tr>
                 <td colspan='2'>
@@ -217,7 +217,7 @@ namespace DamaWeb.Pages.Basket
             </tr>
             <tr>
                 <td><strong>Total</strong></td>
-                <td style='text-align:right'>€ {order.Total()}</td>
+                <td style='text-align:right'>{order.Total()} €</td>
             </tr>
             <tr>
                 <td colspan='2'>
@@ -279,14 +279,14 @@ namespace DamaWeb.Pages.Basket
             <h4>Para concluir a sua encomenda por favor faça uma transferência bancária com os seguintes dados:</h4>
         </div>
         <div style='margin-top:20px;text-align:center;width:550px'>
-            Valor: € {order.Total()}<br />
-            IBAN XXXXXXXXXXXXXXXXXXXXXXXXX<br />
-            NIB XXXXXXXXXXXXXXXXXXXXXXXXX<br />
+            Valor: {order.Total()} €<br />
+            IBAN PT50004572114025360687172<br />
+            NIB 004572114025360687172<br />
             CAIXA DE CRÉDITO AGRÍCOLA<br />
             <strong>Títular da conta:</strong> Susana Nunes<br />
         </div>
         <div style='margin-top:20px;text-align:center;width:550px'>
-            <span>E envie o comprovativo de pagamento em resposta a este email, ou envie um mail para info@damanojornal.com indicando a referência de encomenda nº {order.Id}.</span>
+            <span>E envie o comprovativo de pagamento em resposta a este email, ou envie um mail para encomendas@damanojornal.com indicando a referência de encomenda nº {order.Id}.</span>
         </div>
     </div>
     <div style='margin-top:20px;text-align:center;width:550px'>

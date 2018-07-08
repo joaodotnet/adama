@@ -26,6 +26,8 @@ namespace Backoffice.ViewModels
         public int? CatalogAttribute3 { get; set; }
         [Display(Name = "Atributos")]
         public List<OrderItemAttributeViewModel> Attributes { get; set; } = new List<OrderItemAttributeViewModel>();
+        [Display(Name = "Personalização")]
+        public string CustomizeName { get; set; }
     }
 
     public class OrderItemAttributeViewModel

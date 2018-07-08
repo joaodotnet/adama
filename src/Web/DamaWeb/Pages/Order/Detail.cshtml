@@ -25,7 +25,7 @@
                     <span class="dama-orders-title-mobile d-sm-none">Data: </span>@Html.DisplayFor(_ => Model.OrderDetails.OrderDate)
                 </section>
                 <section class="esh-orders_detail-item col-12 col-sm-3">
-                    <span class="dama-orders-title-mobile d-sm-none">Total: </span>€ @Html.DisplayFor(_ => Model.OrderDetails.Total)
+                    <span class="dama-orders-title-mobile d-sm-none">Total: </span>@Html.DisplayFor(_ => Model.OrderDetails.Total) €
                 </section>
                 <section class="esh-orders_detail-title col-12 col-sm-3">
                     <span class="dama-orders-title-mobile d-sm-none">Estado: </span>@Model.OrderDetails.Status
@@ -98,6 +98,11 @@
                     </section>
                     <section class="esh-orders_detail-item esh-orders_detail-item--middle col-8 col-sm-4">
                         <span class="d-sm-none">@item.Units x </span>@item.ProductName
+                        @if (!string.IsNullOrEmpty(item.CustomizeName))
+                        {
+                            <br />
+                            <small id="nameInputText" class="text-muted dama-small-text">Personalização: @item.CustomizeName</small>
+                        }
                         @if (item.Attributes?.Count > 0)
                         {
                             foreach (var attr in item.Attributes)
@@ -108,12 +113,12 @@
                         }
                         <span class="d-sm-none">
                             <br />
-                            € @Math.Round(item.Units * item.UnitPrice, 2).ToString("N2")
+                            @Math.Round(item.Units * item.UnitPrice, 2).ToString("N2") €
                         </span>
                     </section>
-                    <section class="esh-orders_detail-item esh-orders_detail-item--middle d-none d-sm-block col-sm-1">€ @item.UnitPrice.ToString("N2")</section>
+                    <section class="esh-orders_detail-item esh-orders_detail-item--middle d-none d-sm-block col-sm-1">@item.UnitPrice.ToString("N2") €</section>
                     <section class="esh-orders_detail-item esh-orders_detail-item--middle d-none d-sm-block col-sm-1">@item.Units</section>
-                    <section class="esh-orders_detail-item esh-orders_detail-item--middle d-none d-sm-block col-sm-2">€ @Math.Round(item.Units * item.UnitPrice, 2).ToString("N2")</section>
+                    <section class="esh-orders_detail-item esh-orders_detail-item--middle d-none d-sm-block col-sm-2">@Math.Round(item.Units * item.UnitPrice, 2).ToString("N2") €</section>
                 </article>
                 <hr class="basket-hr" />
             }
@@ -129,7 +134,7 @@
 
                 <article class="esh-orders_detail-items row">
                     <section class="esh-orders_detail-item col-9"></section>
-                    <section class="esh-orders_detail-item esh-orders_detail-item--mark col-2 text-right text-nowrap">€ @Model.OrderDetails.ShippingCost</section>
+                    <section class="esh-orders_detail-item esh-orders_detail-item--mark col-2 text-right text-nowrap">@Model.OrderDetails.ShippingCost €</section>
                 </article>
             </section>
 
@@ -143,7 +148,7 @@
 
             <article class="esh-orders_detail-items row">
                 <section class="esh-orders_detail-item col-sm-9"></section>
-                <section class="esh-orders_detail-item esh-orders_detail-item--mark col-sm-2 text-sm-right text-nowrap">€ @Model.OrderDetails.Total</section>
+                <section class="esh-orders_detail-item esh-orders_detail-item--mark col-sm-2 text-sm-right text-nowrap">@Model.OrderDetails.Total €</section>
             </article>
         </section>
     </div>

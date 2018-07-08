@@ -5,7 +5,7 @@
 }
 
 <div class="row mt-md-5">
-    <div class="col-md-6">
+    <div class="col-md-7">
         <div class="row align-items-center">
             <div class="dama-product-thumbnails col-3 text-center">
                 <a href="#" class="top-arrow"><i class="fas fa-chevron-up"></i></a>
@@ -28,7 +28,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-5">
         @await Html.PartialAsync("_productDetail", Model.ProductModel)
     </div>
 </div>
@@ -86,6 +86,21 @@
                     $('#ProductQuantity').val(parseInt(value) - 1);
                 else
                     $('#ProductQuantity').val(1);
+            });
+
+            $('#saveName').on('click', function () {
+                var productBase = parseFloat('@Model.ProductModel.ProductPrice'.replace(',', '.'));
+                var value = $('#NameInput').val();
+                if (value) {
+                    $('#nameInputText').text("Personalização: " + value.toString());
+                    var newprice = productBase + 2.90;
+                    $('.dama-product-price span').text(toNumber(newprice));
+                }
+                else {
+                    $('#nameInputText').text("");
+                    $('.dama-product-price span').text(toNumber(productBase));
+                }
+            
             });
             @*$('.atribute-items').on('change', function () {
                 var attr = $(this).val();
