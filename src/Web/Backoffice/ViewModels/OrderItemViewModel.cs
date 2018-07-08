@@ -21,8 +21,11 @@ namespace Backoffice.ViewModels
         public decimal UnitPrice { get; set; }
         [Display(Name = "Quantidade")]
         public int Units { get; set; }
+        public int? CatalogAttribute1 { get; set; }
+        public int? CatalogAttribute2 { get; set; }
+        public int? CatalogAttribute3 { get; set; }
         [Display(Name = "Atributos")]
-        public List<OrderItemAttributeViewModel> Attributes { get; set; }
+        public List<OrderItemAttributeViewModel> Attributes { get; set; } = new List<OrderItemAttributeViewModel>();
     }
 
     public class OrderItemAttributeViewModel

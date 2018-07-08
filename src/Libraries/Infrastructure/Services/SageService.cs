@@ -84,7 +84,7 @@ namespace Infrastructure.Services
             return await CreateInvoice(body);
         }        
 
-        public async Task<SageResponseDTO> CreateInvoiceWithTaxNumber(List<OrderItem> orderItems, string customerName, string taxNumber, string address, string postalCode, string city, int referenceId, decimal carriageAmount)
+        public async Task<SageResponseDTO> CreateInvoiceWithTaxNumber(List<OrderItem> orderItems, string customerName, string taxNumber, string address, string address2, string postalCode, string city, int referenceId, decimal carriageAmount)
         {
             if (orderItems == null || orderItems.Count == 0)
                 return new SageResponseDTO { Message = "Error Input Data", ResponseBody = "Error: No items" };
@@ -96,6 +96,7 @@ namespace Infrastructure.Services
                 new KeyValuePair<string,string>("sales_invoice[date]",DateTime.Now.ToString("dd-MM-yyyy")),
                 new KeyValuePair<string,string>("sales_invoice[due_date]", DateTime.Now.AddMonths(1).ToString("dd-MM-yyyy")),
                 new KeyValuePair<string,string>("sales_invoice[main_address_street_1]", address),
+                new KeyValuePair<string,string>("sales_invoice[main_address_street_2]", address2),
                 new KeyValuePair<string,string>("sales_invoice[main_address_postcode]", postalCode),
                 new KeyValuePair<string,string>("sales_invoice[main_address_locality]", city),
                 new KeyValuePair<string,string>("sales_invoice[main_address_country_id]", "175"),
@@ -292,7 +293,7 @@ namespace Infrastructure.Services
                     new KeyValuePair<string, string>(
                         $"sales_invoice[line_items_attributes][{index}][quantity]", $"1"),
                     new KeyValuePair<string, string>(
-                        $"sales_invoice[line_items_attributes][{index}][unit_price]", $"{carriageAmount.ToString(CultureInfo.InstalledUICulture)}"),
+                        $"sales_invoice[line_items_attributes][{index}][unit_price]", $"{carriageAmount.ToString(CultureInfo.InvariantCulture)}"),
                     new KeyValuePair<string, string>($"sales_invoice[line_items_attributes][{index}][tax_rate_id]", "4"),
                     new KeyValuePair<string, string>($"sales_invoice[line_items_attributes][{index}][vat_exemption_reason_id]", "10")
                 });

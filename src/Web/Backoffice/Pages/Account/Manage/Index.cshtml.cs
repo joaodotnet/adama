@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Infrastructure.Identity;
 using Backoffice.Services;
 using ApplicationCore.Interfaces;
+using Microsoft.Extensions.Options;
+using ApplicationCore;
 
 namespace Backoffice.Pages.Account.Manage
 {
@@ -18,15 +20,18 @@ namespace Backoffice.Pages.Account.Manage
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
+        private readonly BackofficeSettings _settings;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IOptions<BackofficeSettings> options)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _settings = options.Value;
         }
 
         public string Username { get; set; }
@@ -120,7 +125,7 @@ namespace Backoffice.Pages.Account.Manage
 
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-            await _emailSender.SendEmailConfirmationAsync(user.Email, callbackUrl);
+            await _emailSender.SendEmailConfirmationAsync(_settings.FromInfoEmail,user.Email, callbackUrl);
 
             StatusMessage = "Verification email sent. Please check your email.";
             return RedirectToPage();

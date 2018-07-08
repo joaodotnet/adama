@@ -8,6 +8,8 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using ApplicationCore.Interfaces;
 using DamaWeb.ViewModels;
+using ApplicationCore;
+using Microsoft.Extensions.Options;
 
 namespace DamaWeb.Pages.Account
 {
@@ -17,16 +19,19 @@ namespace DamaWeb.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IBasketService _basketService;
         private readonly IEmailSender _emailSender;
+        private readonly CatalogSettings _settings;
 
         public SigninModel(SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
             IBasketService basketService,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IOptions<CatalogSettings> settings)
         {
             _signInManager = signInManager;
             _basketService = basketService;
             _emailSender = emailSender;
             _userManager = userManager;
+            _settings = settings.Value;
         }
 
         [BindProperty]
@@ -139,7 +144,7 @@ namespace DamaWeb.Pages.Account
             {
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                await _emailSender.SendEmailConfirmationAsync(user.Email, callbackUrl);
+                await _emailSender.SendEmailConfirmationAsync(_settings.FromInfoEmail, user.Email, callbackUrl);
             }
         }
 

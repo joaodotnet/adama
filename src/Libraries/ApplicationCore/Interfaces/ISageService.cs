@@ -9,7 +9,7 @@ namespace ApplicationCore.Interfaces
     {
         Task<(string AccessToken, string RefreshToken)> GetAccessTokenAsync(string code);
         Task<SageResponseDTO> CreateAnonymousInvoice(List<OrderItem> orderItems, int referenceId, decimal carriageAmount);
-        Task<SageResponseDTO> CreateInvoiceWithTaxNumber(List<OrderItem> orderItems, string customerName, string taxNumber, string address, string postalCode, string city, int referenceId, decimal carriageAmount);
+        Task<SageResponseDTO> CreateInvoiceWithTaxNumber(List<OrderItem> orderItems, string customerName, string taxNumber, string address, string address2, string postalCode, string city, int referenceId, decimal carriageAmount);
         Task<string> GetAccountData();
         Task<string> GetDataAsync(string url);
         Task<byte[]> GetPDFInvoice(long id);

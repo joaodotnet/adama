@@ -22,29 +22,29 @@ namespace Infrastructure.Services
             _appSettings = appSettings;
             //_logger = logger;
         }
-        public Task SendEmailAsync(string email, string subject, string message, string bccEmails = null, IFormFile attachFile = null)
+        public Task SendEmailAsync(string fromEmail, string toEmail, string subject, string message, string bccEmails = null, IFormFile attachFile = null)
         {
             // TODO: Wire this up to actual email sending logic via SendGrid, local SMTP, etc.
-            Execute(email, subject, message, bccEmails, attachFile).Wait();
+            Execute(fromEmail, toEmail, subject, message, bccEmails, attachFile).Wait();
 
             return Task.FromResult(0);
         }
 
-        public Task SendGenericEmailAsync(string email, string subject, string textBody, string bccEmails = null, List<(string,byte[])> files = null)
+        public Task SendGenericEmailAsync(string fromEmail, string toEmail, string subject, string textBody, string bccEmails = null, List<(string,byte[])> files = null)
         {
             var message = CreateGenericBody(textBody);
-            Execute(email, subject, message, bccEmails, null,files).Wait();
+            Execute(fromEmail, toEmail, subject, message, bccEmails, null,files).Wait();
             return Task.FromResult(0);
         }
-        public async Task Execute(string email, string subject, string message, string bccEmails, IFormFile attachFile, List<(string FileName, byte[] Bytes)> files = null)
+        public async Task Execute(string FromEmail, string ToEmail, string subject, string message, string bccEmails, IFormFile attachFile, List<(string FileName, byte[] Bytes)> files = null)
         {
             try
             {
                 MailMessage mail = new MailMessage()
                 {
-                    From = new MailAddress(_appSettings.FromEmail, "Dama no Jornal")
+                    From = new MailAddress(FromEmail, "Dama no Jornal®")
                 };
-                mail.To.Add(email);
+                mail.To.Add(ToEmail);
                 if (!string.IsNullOrEmpty(bccEmails))
                     mail.Bcc.Add(bccEmails);
                 mail.Subject = subject;

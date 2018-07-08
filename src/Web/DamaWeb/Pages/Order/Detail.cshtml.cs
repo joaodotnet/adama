@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using DamaWeb.Extensions;
 using ApplicationCore.Entities;
 using System.ComponentModel.DataAnnotations;
+using ApplicationCore.Specifications;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DamaWeb.Pages.Order
 {
@@ -58,10 +60,14 @@ namespace DamaWeb.Pages.Order
         }
 
 
-        public async Task OnGet(int orderId)
+        public async Task<IActionResult> OnGet(int orderId)
         {
-            //TODO: Check to order belong to user
-            var order = await _orderRepository.GetByIdWithItemsAsync(orderId);
+            var orders = await _orderRepository.ListAsync(new CustomerOrdersWithItemsSpecification(User.Identity.Name));
+
+            //var order = await _orderRepository.GetByIdWithItemsAsync(orderId);
+            var order = orders.SingleOrDefault(x => x.Id == orderId);
+            if (order == null)
+                return NotFound();
 
             OrderDetails = new OrderViewModel()
             {
@@ -90,6 +96,8 @@ namespace DamaWeb.Pages.Order
                 ShippingCost = order.ShippingCost,
                 Total = order.Total()
             };
+
+            return Page();
         }
     }    
 }
