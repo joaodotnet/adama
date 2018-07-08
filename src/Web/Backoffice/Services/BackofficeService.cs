@@ -121,7 +121,7 @@ namespace Backoffice.Services
         {
             var order = await _damaContext.Orders
                 .Include(x => x.OrderItems)
-                .ThenInclude(i => i.Details)
+                //.ThenInclude(i => i.Details)
                 .Include(x => x.OrderItems)
                 .ThenInclude(i => i.ItemOrdered)
                 .SingleOrDefaultAsync(x => x.Id == id);
@@ -132,6 +132,32 @@ namespace Backoffice.Services
 
             //Get user info
             orderViewModel.User = _identityContext.Users.SingleOrDefault(x => x.Email == order.BuyerId);
+
+            //Get Attributes NAO PODE SER AQUI PORQUE PODE TER VARIOS PRODUCT ID IGUAIS
+
+            //foreach (var item in order.OrderItems)
+            //{
+            //    var attributes = new List<CatalogAttribute>();
+
+            //    var product = await _damaContext.CatalogItems
+            //        .Include(x => x.CatalogAttributes)
+            //        .SingleOrDefaultAsync(x => x.Id == item.ItemOrdered.CatalogItemId);
+            //    foreach (var attr in product.CatalogAttributes)
+            //    {
+            //        if ((item.CatalogAttribute1.HasValue && item.CatalogAttribute1 == attr.Id) ||
+            //          (item.CatalogAttribute2.HasValue && item.CatalogAttribute2 == attr.Id) ||
+            //          (item.CatalogAttribute3.HasValue && item.CatalogAttribute3 == attr.Id))
+            //            attributes.Add(attr);
+            //    }
+
+            //    orderViewModel.Items
+            //       .Single(x => x.ProductId == item.ItemOrdered.CatalogItemId)
+            //       .Attributes = attributes.Select(x => new OrderItemAttributeViewModel
+            //       {
+            //           AttributeType = x.Type,
+            //           AttributeName = x.Name
+            //       }).ToList();
+            //}
 
             return orderViewModel;
         }
@@ -180,7 +206,7 @@ namespace Backoffice.Services
             List<OrderItem> items = new List<OrderItem>();
             foreach (var item in order.OrderItems)
             {
-                items.Add(new OrderItem(item.ItemOrdered, item.UnitPrice, item.Units));
+                items.Add(new OrderItem(item.ItemOrdered, item.UnitPrice, item.Units, item.CatalogAttribute1, item.CatalogAttribute2, item.CatalogAttribute3));
             }
 
             SageResponseDTO response;
@@ -350,7 +376,7 @@ namespace Backoffice.Services
         //                }
         //                item.Price = price;
         //            }
-                    
+
         //        }
         //    }
         //    await _damaContext.SaveChangesAsync();
@@ -374,7 +400,7 @@ namespace Backoffice.Services
             var prod = await _damaContext.CatalogItems
                       .Include(x => x.CatalogType)
                       .SingleOrDefaultAsync(x => x.Id == catalogItemId);
-            
+
             return prod.Price ?? prod.CatalogType.Price;
         }
     }
