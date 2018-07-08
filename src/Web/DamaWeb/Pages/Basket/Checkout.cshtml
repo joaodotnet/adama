@@ -195,20 +195,26 @@
                         <section class="col-2 p-0">@item.Quantity</section>
                         <section class="col-7 p-0">
                             @item.ProductName
-                            <br />
+
+                            @if (!string.IsNullOrEmpty(item.CustomizeName))
+                            {
+                                <br />
+                                <small id="nameInputText" class="text-muted dama-small-text">Personalização: @item.CustomizeName</small>
+                            }
                             @foreach (var attr in item.Attributes)
                             {
+                                <br />
                                 <span class="dama-basket-label">@attr.Label: @attr.Name </span><br />
                             }
                         </section>
-                        <section class="col-3 p-0">€ @item.UnitPrice.ToString("N2")</section>
+                        <section class="col-3 p-0">@item.UnitPrice.ToString("N2") €</section>
                     </article>
                 }
             </div>
             <hr />
             <article class="row">
                 <section class="offset-2 col-6 text-right">Subtotal</section>
-                <section class="col-4 pl-0">€ @Model.BasketModel.SubTotal()</section>
+                <section class="col-4 pl-0">@Model.BasketModel.SubTotal() €</section>
             </article>
             <article id="shipping-cost" class="row">
                 <section class="offset-2 col-6 text-right">Portes</section>

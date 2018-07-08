@@ -140,6 +140,13 @@ h2 {
     line-height: 1.4em
 }
 
+p.title {
+    font-family: "Quicksand Medium", sans-serif;
+    font-size: 20px;
+    color: #FC629D;
+    font-weight: 100;
+}
+
 .dama-heading-normal-font {
     font-family: "Quicksand Medium", sans-serif;
 }
@@ -148,16 +155,38 @@ h4 {
     font-size: 20px;
 }
 
-.btn-primary {
-    background-color: #f18e9b;
-    border-color: #fff;
+hr {
+    background-color: #fff;
+    border-top: 2px dashed #FC629D;
+}
+
+.btn-primary, .btn-primary:active, .btn-primary:visited {
+    background-color: #FC629D !important;
+    border: 0;
     color: #fff;
 }
 
 .btn-primary:hover {
-    background-color: #e9495f;
-    border-color: #fff;
+    background-color: #FC2A7B !important;
+    border: 0;
 }
+
+.btn-dama-menta {
+    background-color: #88C9AC;
+    border: 0;
+    color: #fff;
+    border-radius: 0 !important;
+    line-height:1rem;
+    font-size:0.8rem;
+}
+
+.btn-dama-menta:hover {
+    background-color: #58AD87 !important;
+    border: 0;
+    color: #fff;
+    transition: all 0.35s;
+}
+
 
 .btn-dama-blue {
     background-color: #cdefef;
@@ -390,6 +419,13 @@ h4 {
     }
 }
 
+.dama-product-input {
+    font-size: 0.80rem;
+}
+.dama-small-text {
+    font-size:0.7rem;
+}
+
 .slick-prev {
     left: 10px !important;
     z-index: 1;
@@ -414,7 +450,7 @@ h4 {
 .dama-product-price {
     color: #000000;
 }
-.dama-product-price::before {
+.dama-product-price::after {
     content: '€ ';
 }
 .dama-product-description {
@@ -436,7 +472,7 @@ h4 {
 }
 
 .dama-product-add {
-    background-color: #EF7C8D;
+    background-color: #FC629D;
     border: 0;
     color: #FFFFFF;
     cursor: pointer;
@@ -446,7 +482,7 @@ h4 {
     width: 100%;
 }
 .dama-product-add:hover {
-    background-color: #eb6075;
+    background-color: #FC2A7B;
     transition: all 0.35s;
 }
 
@@ -513,6 +549,9 @@ h4 {
 .dama-customize .esh-catalog-button:hover {
     background-color: #a83a4a;
     transition: all 0.35s;
+}
+.dama-customize-question {
+    font-size: 15px;
 }
 
 .image-invert {

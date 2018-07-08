@@ -101,43 +101,47 @@
             <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].ProductName)</th>
             <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].Units)</th>
             <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].UnitPrice)</th>
+            <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].CustomizeName)</th>
             <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].Attributes)</th>
         </tr>
 
         @foreach (var item in Model.OrderModel.Items)
         {
-            <tr>
-                <td>
-                    <img width="200" src="@item.PictureUri" class="img-responsive" />
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProductSku)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProductName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Units)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UnitPrice)
-                </td>
-                <td>
-                    <table class="table">
-                        @foreach (var attr in item.Attributes)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => attr.AttributeType)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => attr.AttributeName)
-                                </td>
-                            </tr>
-                        }
-                    </table>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                <img width="200" src="@item.PictureUri" class="img-responsive" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductSku)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Units)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnitPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomizeName)
+            </td>
+            <td>
+                <table class="table">
+                    @foreach (var attr in item.Attributes)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => attr.AttributeType)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => attr.AttributeName)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </td>
+        </tr>
         }
     </table>
 </div>

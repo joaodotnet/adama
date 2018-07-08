@@ -330,6 +330,9 @@ namespace Infrastructure.Data
         private void ConfigureOrderItem(EntityTypeBuilder<OrderItem> builder)
         {
             builder.OwnsOne(i => i.ItemOrdered);
+
+            builder.Property(x => x.CustomizeName)
+                .HasMaxLength(100);
         }
 
         //private void ConfigureOrderItemDetail(EntityTypeBuilder<OrderItemDetail> builder)

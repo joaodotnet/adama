@@ -35,6 +35,11 @@
                     <div class="col-7 col-sm row m-0 p-0 align-items-center">
                         <div class="esh-basket-item col-sm-4">
                             @item.ProductName
+                            @if (!string.IsNullOrEmpty(item.CustomizeName))
+                            {
+                                <br />
+                                <small id="nameInputText" class="text-muted dama-small-text">Personalização: @item.CustomizeName</small>
+                            }
                             @foreach (var attr in Model.BasketModel.Items[i].Attributes)
                             {
                                 <br />
@@ -45,7 +50,7 @@
                             <label class="d-inline d-sm-none col-3 col-form-label dama-basket-label">Preço</label>
                             <div class="col-9 dama-basket-item">
                                 <span>
-                                    € @item.UnitPrice.ToString("N2")
+                                    @item.UnitPrice.ToString("N2") €
                                 </span>
                             </div>
                         </div>
@@ -57,7 +62,7 @@
                             </div>
                         </div>
                         <div class="d-none d-sm-block col-sm-2">
-                            € @Math.Round(item.Quantity * item.UnitPrice, 2).ToString("N2")
+                            @Math.Round(item.Quantity * item.UnitPrice, 2).ToString("N2") €
                         </div>
                     </div>
                     <div class="col-1 col-sm-1 m-0 p-0">
@@ -78,17 +83,17 @@
                 <a asp-page="/Index" class="dama-basket-link">Adicionar mais produtos</a>
             </div>
             <div class="col text-right esh-basket-item--mark">
-                <span>Total </span>€ @Model.BasketModel.SubTotal()
+                <span>Total </span>@Model.BasketModel.SubTotal() €
             </div>
         </div>
         <div class="row justify-content-between ml-0 mr-0">
             <div class="col-6 offset-sm-8 col-sm-2">
                 <button class="btn btn-default esh-basket-checkout" name="updatebutton" type="submit" asp-page-handler="Update">
-                    [ Atualizar ]
+                    Atualizar
                 </button>
             </div>
             <div class="col-6 col-sm-2">
-                <input class="btn btn-default esh-basket-checkout" name="checkoutbutton" type="submit" asp-page-handler="Checkout" value="[ Encomendar ]"/>
+                <input class="btn btn-default esh-basket-checkout" name="checkoutbutton" type="submit" asp-page-handler="Checkout" value="Encomendar"/>
             </div>
         </div>
     </form>

@@ -26,8 +26,11 @@ namespace DamaWeb.ViewModels
         public int DeliveryTimeMax { get; set; }
         public DeliveryTimeUnitType DeliveryTimeUnit { get; set; }
         public bool CanCustomize { get; set; }
+        [StringLength(100, ErrorMessage = "Por favor escolhe um nome ou frase até 100 caracteres")]
+        public string NameInput { get; set; }
         public int FirstCategoryId { get; set; }
         public IEnumerable<SelectListItem> ProductReferences { get; set; }
+        
     }
 
     public class LinkViewModel

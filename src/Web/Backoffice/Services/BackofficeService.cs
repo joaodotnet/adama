@@ -207,7 +207,7 @@ namespace Backoffice.Services
             List<OrderItem> items = new List<OrderItem>();
             foreach (var item in order.OrderItems)
             {
-                items.Add(new OrderItem(item.ItemOrdered, item.UnitPrice, item.Units, item.CatalogAttribute1, item.CatalogAttribute2, item.CatalogAttribute3));
+                items.Add(new OrderItem(item.ItemOrdered, item.UnitPrice, item.Units, item.CatalogAttribute1, item.CatalogAttribute2, item.CatalogAttribute3, item.CustomizeName));
             }
 
             SageResponseDTO response;
