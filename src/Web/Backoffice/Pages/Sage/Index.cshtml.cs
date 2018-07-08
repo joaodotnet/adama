@@ -65,7 +65,7 @@ namespace Backoffice.Pages.Sage
             var product = _context.CatalogItems.First();
             var orderItems = new List<OrderItem>
             {
-                new OrderItem(new CatalogItemOrdered(product.Id, product.Name, product.PictureUri),product.Price.Value, 1)
+                new OrderItem(new CatalogItemOrdered(product.Id, product.Name, product.PictureUri),product.Price.Value, 1, null, null, null)
             };
             Result = (await _sageService.CreateAnonymousInvoice(orderItems,0,0)).ResponseBody;
             //Result = (await _sageService.CreateInvoiceWithTaxNumber(orderItems, "João Gonçalves","227940032","","","",0)).ResponseBody;

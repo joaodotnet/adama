@@ -31,8 +31,8 @@ namespace Backoffice
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
                     AppIdentityDbContextSeed.SeedAsync(userManager).Wait();
 
-                    var context = services.GetRequiredService<DamaContext>();
-                    DamaContextSeed.SeedAsync(context, loggerFactory).Wait();
+                    //var context = services.GetRequiredService<DamaContext>();
+                    //DamaContextSeed.SeedAsync(context, loggerFactory).Wait();
                 }
                 catch (Exception ex)
                 {
