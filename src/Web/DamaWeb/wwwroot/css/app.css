@@ -80,6 +80,10 @@ body {
     color: red;
 }
 
+.form-control {
+    border-radius: 0 !important;
+}
+
 .search-text input {
     color: #fff;
     border-bottom:  1px solid #fff !important;
@@ -164,6 +168,7 @@ hr {
     background-color: #FC629D !important;
     border: 0;
     color: #fff;
+    border-radius: 0 !important;
 }
 
 .btn-primary:hover {
@@ -182,6 +187,22 @@ hr {
 
 .btn-dama-menta:hover {
     background-color: #58AD87 !important;
+    border: 0;
+    color: #fff;
+    transition: all 0.35s;
+}
+
+.btn-dama-pink {
+    background-color: #FC629D;
+    border: 0;
+    color: #fff;
+    border-radius: 0 !important;
+    line-height: 1rem;
+    font-size: 0.8rem;
+}
+
+.btn-dama-pink:hover {
+    background-color: #FC2A7B !important;
     border: 0;
     color: #fff;
     transition: all 0.35s;
@@ -490,25 +511,50 @@ hr {
     margin-left: 38px;
 }
 
-.dama-customize {
-    background-color: #EF7C8D;
-}
 .dama-customize h2 {
+    color: #000000;
+}
+
+.dama-customize .badge-light {
+    background-color: #88C9AC;
     color: #fff;
 }
 .dama-customize-small {
     font-size: 12px;
 }
 .dama-customize-small2 {
-    font-size: 15px;
+    font-size: 12px;
 }
-.dama-customize-cards .col-sm-3 .card {
-    min-height: 200px;
-    background-color:#dfdfdf;
+.dama-customize-menta {
+    background-color: #88C9AC !important;
+}
+.dama-customize-cards .col-sm-4 .card {
+    font-family: "Lily Script One", Sans-serif;    
+    min-height: 80px;
+    background-color: #FC629D;
     cursor: pointer;
+    color: #fff;
+    border-radius: 0;
 }
+.dama-customize-pink {
+    background-color: #FC629D;
+}
+.dama-customize-cards .product-block .card {
+    border: 0;
+}
+
 .dama-customize-gray {
-    background-color:#e8e0e0;
+    background-color: #e8e0e0;
+}
+
+.dama-customize-border-pink {
+    border: 2px dashed #FC629D;
+}
+
+.dama-customize-colors .card {
+    border-radius: 0;
+    padding: 5px;
+    margin: 1px;
 }
 
 .dama-customize-colors .card-body {
@@ -520,15 +566,15 @@ hr {
 }
 
 .dama-customize-gray textarea {
-    background-color: #e8e0e0;
+    background-color: #fff;
 }
 
 .dama-customize-textarea {
-    background-image: -webkit-linear-gradient(left, #e8e0e0 10px, transparent 10px), -webkit-linear-gradient(right, #e8e0e0 10px, transparent 10px), -webkit-linear-gradient(#e8e0e0 30px, #000000 30px, #000000 31px, #e8e0e0 31px);
-    background-image: -moz-linear-gradient(left, #e8e0e0 10px, transparent 10px), -moz-linear-gradient(right, #e8e0e0 10px, transparent 10px), -moz-linear-gradient(#e8e0e0 30px, #000000 30px, #000000 31px, #e8e0e0 31px);
-    background-image: -ms-linear-gradient(left, #e8e0e0 10px, transparent 10px), -ms-linear-gradient(right, #e8e0e0 10px, transparent 10px), -ms-linear-gradient(#e8e0e0 30px, #000000 30px, #000000 31px, #e8e0e0 31px);
-    background-image: -o-linear-gradient(left, #e8e0e0 10px, transparent 10px), -o-linear-gradient(right, #e8e0e0 10px, transparent 10px), -o-linear-gradient(#e8e0e0 30px, #000000 30px, #000000 31px, #e8e0e0 31px);
-    background-image: linear-gradient(left, #e8e0e0 10px, transparent 10px), linear-gradient(right, #e8e0e0 10px, transparent 10px), linear-gradient(#e8e0e0 30px, #000000 30px, #000000 31px, #e8e0e0 31px);
+    background-image: -webkit-linear-gradient(left, #fff 10px, transparent 10px), -webkit-linear-gradient(right, #fff 10px, transparent 10px), -webkit-linear-gradient(#fff 30px, #A9A9A9 30px);
+    background-image: -moz-linear-gradient(left, #fff 10px, transparent 10px), -moz-linear-gradient(right, #fff 10px, transparent 10px), -moz-linear-gradient(#fff 30px, #A9A9A9 30px);
+    background-image: -ms-linear-gradient(left, #fff 10px, transparent 10px), -ms-linear-gradient(right, #fff 10px, transparent 10px), -ms-linear-gradient(#fff 30px, #A9A9A9 30px);
+    background-image: -o-linear-gradient(left, #fff 10px, transparent 10px), -o-linear-gradient(right, #fff 10px, transparent 10px), -o-linear-gradient(#fff 30px, #A9A9A9 30px);
+    background-image: linear-gradient(left, #fff 10px, transparent 10px), linear-gradient(right, #fff 10px, transparent 10px), linear-gradient(#fff 30px, #A9A9A9 30px);
     background-size: 100% 100%, 100% 100%, 100% 31px;
     border: 0px;
     border-radius: 0px;
@@ -539,7 +585,7 @@ hr {
 }
 
 .dama-customize-textarea:focus {
-    outline: none;
+    outline: none;    
 }
 
 .dama-customize .esh-catalog-button {
@@ -554,6 +600,17 @@ hr {
     font-size: 15px;
 }
 
+.form-input-gray, .form-input-gray:focus {
+    background-color: #E6E6E6;
+}
+
+.custom-file-label {
+    border: 1px solid #FC629D;
+}
+.custom-file-input {
+    background-color: #FC629D !important;
+    border-radius: 0 !important;
+}
 .image-invert {
     -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
     filter: grayscale(100%)brightness(200%);

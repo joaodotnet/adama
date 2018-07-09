@@ -1,0 +1,152 @@
+﻿@page
+@model DamaWeb.Pages.Customize.Step3Model
+@{
+    ViewData["Title"] = "Personalizar - Passo 2";
+}
+@section Styles {
+    <style type="text/css">
+        @@media screen and (max-width:576px) {
+            .container {
+                padding-left: 0px;
+                padding-right: 0px;
+            }
+        }
+    </style>
+}
+
+    <form method="post" enctype="multipart/form-data">
+        <div class="dama-customize pt-sm-5 pt-2">
+            <div class="row mb-3">
+                <div class="offset-3 col-6 text-center">
+                    <h2>E para terminar...</h2>
+                    <div class="mt-1">
+                        <h3><span class="badge badge-pill badge-light">3</span></h3>
+                    </div>
+                    <h4 class="mt-2">
+                        Preenche com os teus dados
+                    </h4>
+                    <small>(podes também anexar uma fotografia ou imagem para fazermos uma personalização mais precisa.)</small>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="offset-4 col-4">
+                    <div class="custom-file mt-sm-4 mt-2">
+                        <input type="file" asp-for="CustomizeModel.UploadFile" class="custom-file-input" id="validatedCustomFile" />
+                        <label class="custom-file-label" for="validatedCustomFile">Anexar um ficheiro</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3 pb-5">
+                <div class="offset-sm-3 col-sm-6 col-10">
+                    <div class="form-group required">
+                        <label asp-for="CustomizeModel.BuyerName" class="control-label form-label"></label>
+                        <input asp-for="CustomizeModel.BuyerName" class="form-control form-input-center form-input-gray" />
+                        <span asp-validation-for="CustomizeModel.BuyerName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group required">
+                        <label asp-for="CustomizeModel.BuyerEmail" class="control-label form-label"></label>
+                        <input asp-for="CustomizeModel.BuyerEmail" class="form-control form-input-center form-input-gray" />
+                        <span asp-validation-for="CustomizeModel.BuyerEmail" class="text-danger"></span>
+                    </div>
+                    <div class="form-group required">
+                        <label asp-for="CustomizeModel.BuyerPhone" class="control-label form-label"></label>
+                        <input asp-for="CustomizeModel.BuyerPhone" class="form-control form-input-center form-input-gray" />
+                        <span asp-validation-for="CustomizeModel.BuyerPhone" class="text-danger"></span>
+                    </div>
+                    @*<div class="text-center">
+                        <button type="submit" class="esh-catalog-button btn btn-default btn-brand mt-0">&nbsp;SUBMETER&nbsp;</button>
+                    </div>*@
+                </div>
+            </div>
+            <div class="row go-section">
+                <div class="offset-sm-3 col-sm-6">
+                    <div class="row pr-0 m-0">
+                        <div class="col-2">
+                            <a asp-page="./Step2" asp-route-id="@Model.CustomizeModel.CatalogItemId" class="btn btn-dama-menta mt-0 mr-3" role="button">&larr; Voltar</a>
+                        </div>
+                        <div class="offset-7 col-3">
+                            <button type="submit" class="btn btn-dama-pink mt-0 mr-3 w-100" asp-page-handler="Submit">ENVIAR</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*<div class="row mt-3 pb-5">
+                <div class="offset-sm-5 col-sm-3 col-12 text-sm-right text-center">
+                    <button type="submit" class="esh-catalog-button btn btn-default btn-brand btn-brand-big mt-0">&nbsp;SUBMETER&nbsp;</button>
+                </div>
+            </div>*@
+        </div>
+        <input type="hidden" asp-for="CustomizeModel.CatalogItemId" />
+        <input type="hidden" asp-for="CustomizeModel.Colors" />
+        <input type="hidden" asp-for="CustomizeModel.Description" />
+        <input type="hidden" asp-for="CustomizeModel.Text" />
+    </form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+        
+        $(document).ready(function () {
+            @*$('.slider-for').slick({
+                infinite: true,
+                slidesToShow: 4,
+                slidesToScroll: 1,
+                responsive: [
+                    {
+                        breakpoint: 576,
+                        settings: {
+                            slidesToShow: 1
+                        }
+                    }]
+
+            });
+
+            $('.category-block').click(function () {
+                var url = '@(Url.Page("/Customize/Index", new { CategoryId = 0 }))';
+                url = url.replace('0', $(this).attr('cat-id')) + '#produtos';
+                window.location.replace(url);
+            });
+
+            $('.product-block').click(function () {
+                //$(this).find('img').css('opacity', 1);
+                //$(this).find('.card-text').css('font-weight', 'bold');
+                //$(this).siblings().find('img').css('opacity', 0.5);
+                //$(this).siblings().find('.card-text').css('font-weight', '100');
+                selectProduct($(this));
+                $('#CustomizeModel_ProductSelected').val($(this).attr('catalog-type-id'));
+            });*@
+
+            //$('.dama-customize-colors .card').click(function () {
+            //    $(this).toggleClass('dama-customize-color-selected');
+            //    var color = $(this).css('background-color').replace(/,/g, ';');
+            //    if ($(this).hasClass('dama-customize-color-selected'))
+            //        colors.push(color);
+            //    else {
+            //        var index = colors.indexOf(color);
+            //        colors.splice(index, 1);
+            //    }
+            //    console.log(colors);
+            //    $('#CustomizeModel_Colors').val(colors);
+            //});
+
+            $('#validatedCustomFile').on('change', function () {
+                changeLabelText();
+            });
+
+            //function selectProduct(elem) {
+            //    elem.find('img').css('border', "5px solid #FC629D");
+            //    elem.siblings().find('img').css('border', "");
+            //}
+
+            function changeLabelText() {
+                var profilePicValue = document.getElementById('validatedCustomFile').value; /* gets the filepath and filename from the input */
+                var fileNameStart = profilePicValue.lastIndexOf('\\'); /* finds the end of the filepath */
+                profilePicValue = profilePicValue.substr(fileNameStart + 1); /* isolates the filename */
+                var profilePicLabelText = document.querySelector('label[for="validatedCustomFile"]'); /* finds the label text */
+                if (profilePicValue !== '') {
+                    profilePicLabelText.textContent = profilePicValue.substring(0,15); /* changes the label text */
+                }
+            }
+        });
+    </script>
+}
