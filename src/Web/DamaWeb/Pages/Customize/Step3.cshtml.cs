@@ -31,7 +31,7 @@ namespace DamaWeb.Pages.Customize
         //[FromQuery]
         //public int? CatalogItemId { get; set; }
 
-        public async Task OnPostShowFormAsync(CustomizeViewModel model)
+        public async Task OnPostAsync(CustomizeViewModel model)
         {
             CustomizeModel = model;
 
