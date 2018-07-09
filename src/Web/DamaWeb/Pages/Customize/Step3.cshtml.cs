@@ -11,12 +11,12 @@ using DamaWeb.ViewModels;
 
 namespace DamaWeb.Pages.Customize
 {
-    public class IndexModel : PageModel
+    public class Step3Model : PageModel
     {
         private readonly ICustomizeViewModelService _service;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public IndexModel(ICustomizeViewModelService service, UserManager<ApplicationUser> userManager)
+        public Step3Model(ICustomizeViewModelService service, UserManager<ApplicationUser> userManager)
         {
             _service = service;
             _userManager = userManager;
@@ -25,15 +25,16 @@ namespace DamaWeb.Pages.Customize
         [BindProperty]
         public CustomizeViewModel CustomizeModel { get; set; }
 
-        [FromQuery]
-        public int? CategoryId { get; set; }
+        //[FromQuery]
+        //public int? CategoryId { get; set; }
 
-        [FromQuery]
-        public int? CatalogItemId { get; set; }
+        //[FromQuery]
+        //public int? CatalogItemId { get; set; }
 
-        public async Task OnGetAsync()
-        {            
-            CustomizeModel = await _service.GetCustomizeItems(CategoryId, CatalogItemId);
+        public async Task OnPostShowFormAsync(CustomizeViewModel model)
+        {
+            CustomizeModel = model;
+
             var user = await _userManager.GetUserAsync(User);
             if (user != null)
             {
@@ -43,13 +44,12 @@ namespace DamaWeb.Pages.Customize
             }
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostSubmitAsync()
         {
-            //await _service.SendCustomizeService(CustomizeModel);
-            if(CustomizeModel.CatalogItemId.HasValue)
+            //CustomizeModel = model;
+            await _service.SendCustomizeService(CustomizeModel);
 
-                return RedirectToPage("./Step2", new { id = CustomizeModel.CatalogItemId });
-            return RedirectToPage();
+            return RedirectToPage("./Result");
         }
     }
 }

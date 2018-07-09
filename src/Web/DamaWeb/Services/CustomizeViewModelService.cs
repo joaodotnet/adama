@@ -19,54 +19,60 @@ namespace DamaWeb.Services
     {
         private readonly IAsyncRepository<Category> _categoryRepository;
         private readonly IAsyncRepository<CatalogItem> _catalogRepository;
+        private readonly IAsyncRepository<CatalogType> _catalogTypeRepository;
         private readonly IAsyncRepository<CustomizeOrder> _customizeOrderRepository;
         private readonly IEmailSender _emailSender;
         private readonly CatalogSettings _settings;
+        private readonly IUriComposer _uriComposer;
 
         public CustomizeViewModelService(
             IAsyncRepository<Category> categoryRepository,
             IAsyncRepository<CatalogItem> catalogRepository,
+            IAsyncRepository<CatalogType> catalogTypeRepository,
             IAsyncRepository<CustomizeOrder> customizeRepository,
             IEmailSender emailSender,
-            IOptions<CatalogSettings> settings)
+            IOptions<CatalogSettings> settings,
+            IUriComposer uriComposer)
         {
             _categoryRepository = categoryRepository;
             _catalogRepository = catalogRepository;
+            _catalogTypeRepository = catalogTypeRepository;
             _customizeOrderRepository = customizeRepository;
             _emailSender = emailSender;
             _settings = settings.Value;
+            _uriComposer = uriComposer;
         }
 
         public async Task<CustomizeViewModel> GetCustomizeItems(int? categoryid, int? catalogItemId)
         {
             var categorySpec = new CategorySpecification();
             var cats = await _categoryRepository.ListAsync(categorySpec);
-            List<CatalogItem> products = new List<CatalogItem>();
+            List<CatalogType> productTypes = new List<CatalogType>();
             if (categoryid.HasValue)
             {
-                var catalogSpec = new CatalogFilterSpecification(null, null, categoryid, true);
-                products = await _catalogRepository.ListAsync(catalogSpec);
+                var catalogSpec = new CatalogTypeSpecification(categoryid.Value);
+                productTypes = await _catalogTypeRepository.ListAsync(catalogSpec);
             }
 
             return new CustomizeViewModel
             {
+                CategoryId = categoryid,
+                CatalogItemId = catalogItemId,
                 Categories = cats.Select(x => (x.Id, x.Name)).ToList(),
-                ProductSelected = catalogItemId,
-                CatalogItems = products.Select(x => new CatalogItemViewModel
+                ProductTypes = productTypes.Select(x => new CatalogTypeViewModel
                 {
-                    CatalogItemId = x.Id,
-                    CatalogItemName = x.Name,
-                    PictureUri = x.PictureUri,
-                    Price = x.Price ?? x.CatalogType.Price,
-                    ProductSku = x.Sku,                    
+                    Id = x.Id,
+                    Code = x.Code,
+                    Name = x.Description,
+                    PictureUri = _uriComposer.ComposePicUri(x.PictureUri)
                 }).ToList()
             };
         }
 
         public async Task SendCustomizeService(CustomizeViewModel request)
         {
-            //Get Product Name and Sku
-            var product = await _catalogRepository.GetByIdAsync(request.ProductSelected.Value);
+            //Get Catalog Type Name and Sku
+            var catalogType = await _catalogTypeRepository.GetByIdAsync(request.CatalogItemId.Value);
 
             //Save Order
             var order = await _customizeOrderRepository.AddAsync(new CustomizeOrder
@@ -77,7 +83,7 @@ namespace DamaWeb.Services
                 Description = request.Description,
                 Text = request.Text,
                 Colors = request.Colors,
-                ItemOrdered = new ApplicationCore.Entities.OrderAggregate.CatalogItemOrdered(product.Id, product.Name, product.PictureUri),
+                ItemOrdered = new ApplicationCore.Entities.OrderAggregate.CatalogItemOrdered(catalogType.Id, catalogType.Description, catalogType.PictureUri),
                 AttachFileName = GetFileName(request.UploadFile?.FileName)
             });
 
@@ -85,7 +91,7 @@ namespace DamaWeb.Services
             var body = $"Email: {request.BuyerEmail} <br>" +
                 $"Nome: {request.BuyerName} <br>" +
                 $"Telemóvel: {request.BuyerPhone} <br>" +
-                $"Produto: {product.Name} ({product.Sku}) <br>" + //Nome de produto (SKU) 
+                $"Tipo de Produto: {catalogType.Description} ({catalogType.Code}) <br>" + //Nome de produto (SKU) 
                 $"Descrição da Ilustração: {request.Description} <br>" +
                 $"Frase ou nome: {request.Text} <br>" +
                 $"Cores: {request.Colors} <br>";

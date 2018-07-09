@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,8 +10,8 @@ namespace DamaWeb.ViewModels
 {
     public class CustomizeViewModel
     {
-        //public int CategorySelected { get; set; }
-        public int? ProductSelected { get; set; }
+        public int? CategoryId { get; set; }        
+        public int? CatalogItemId { get; set; }
         [Required(ErrorMessage = "O campo Descrição é obrigatório")]
         public string Description { get; set; }
         public IFormFile UploadFile { get; set; }
@@ -27,7 +28,6 @@ namespace DamaWeb.ViewModels
         public string BuyerPhone { get; set; }
 
         public List<(int,string)> Categories { get; set; }
-        public List<CatalogItemViewModel> CatalogItems { get; set; }
-        
+        public List<CatalogTypeViewModel> ProductTypes { get; set; }
     }
 }
