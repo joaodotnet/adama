@@ -14,7 +14,7 @@
     </style>
 }
 
-<form method="post" asp-page="./Step3" asp-page-handler="ShowForm"  enctype="multipart/form-data">
+<form method="post" asp-page="./Step3" enctype="multipart/form-data">
     <div class="dama-customize pt-sm-5 pt-2">
         <div class="row mb-3">
             <div class="offset-sm-3 col-sm-6 col-12 text-center">
@@ -39,7 +39,7 @@
                 </p>
             </div>
         </div>
-        <div class="row mb-4 ml-2 mr-2 ml-sm-0 mr-sm-0">
+        <div class="row mb-4 mx-2 mx-sm-0">
             <div class="offset-sm-2 col-sm-8 col-12 p-3 dama-customize-border-pink">
                 <strong>Descreve a ilustração...</strong><br />
                 <textarea asp-for="CustomizeModel.Description" name="Description" rows="5" class="w-100 dama-customize-textarea"></textarea>
@@ -126,12 +126,12 @@
             </div>            
         </div>
         <div class="row go-section">
-            <div class="offset-sm-2 col-sm-8 p-0">
-                <div class="row pr-0 m-0">
-                    <div class="col-2">
+            <div class="offset-sm-2 col-sm-8 col-12 p-sm-0">
+                <div class="row pr-sm-0 m-0">
+                    <div class="col-sm-2 col-3">
                         <a asp-page="./Index" asp-route-CategoryId="@Model.CustomizeModel.CategoryId" asp-route-CatalogItemId="@Model.CustomizeModel.CatalogItemId" class="btn btn-dama-menta mt-0 mr-3" role="button">&larr; Voltar</a>
                     </div>
-                    <div class="offset-8 col-2">
+                    <div class="offset-sm-7 col-sm-3 offset-3 col-6">
                         <button type="submit" class="btn btn-dama-menta mt-0 mr-3">Próximo passo &rarr;</button>
                     </div>
                 </div>
