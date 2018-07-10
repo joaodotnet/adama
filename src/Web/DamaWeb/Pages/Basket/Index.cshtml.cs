@@ -10,6 +10,7 @@ using System;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace DamaWeb.Pages.Basket
 {
@@ -21,16 +22,19 @@ namespace DamaWeb.Pages.Basket
         private readonly SignInManager<ApplicationUser> _signInManager;
         private string _username = null;
         private readonly IBasketViewModelService _basketViewModelService;
+        private readonly ILogger<BasketViewModel> _logger;
 
         public IndexModel(IBasketService basketService,
             IBasketViewModelService basketViewModelService,
             IUriComposer uriComposer,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            ILoggerFactory loggerFactory)
         {
             _basketService = basketService;
             _uriComposer = uriComposer;
             _signInManager = signInManager;
             _basketViewModelService = basketViewModelService;
+            _logger = loggerFactory.CreateLogger<BasketViewModel>();
         }
 
         public BasketViewModel BasketModel { get; set; } = new BasketViewModel();
@@ -127,6 +131,7 @@ namespace DamaWeb.Pages.Basket
             else
             {
                 GetOrSetBasketCookieAndUserName();
+                _logger.LogWarning($"Cookie Name: {_username}");
                 BasketModel = await _basketViewModelService.GetOrCreateBasketForUser(_username);
             }
         }
@@ -134,8 +139,9 @@ namespace DamaWeb.Pages.Basket
         private void GetOrSetBasketCookieAndUserName()
         {
             if (Request.Cookies.ContainsKey(Constants.BASKET_COOKIENAME))
-            {
+            {                
                 _username = Request.Cookies[Constants.BASKET_COOKIENAME];
+                _logger.LogWarning($"Found cookie: {_username}");
             }
             if (_username != null) return;
 
@@ -143,6 +149,7 @@ namespace DamaWeb.Pages.Basket
             var cookieOptions = new CookieOptions();
             cookieOptions.Expires = DateTime.Today.AddYears(10);
             Response.Cookies.Append(Constants.BASKET_COOKIENAME, _username, cookieOptions);
+            
         }
     }
 }

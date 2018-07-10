@@ -157,6 +157,7 @@ namespace DamaWeb.Services
             var products = await _db.CatalogCategories
                 .Include(x => x.Category)
                 .Include(x => x.CatalogItem)
+                .ThenInclude(x => x.CatalogType)
                 .Where(x => x.CategoryId == categoryId)
                 .ToListAsync();
             if (products?.Count > 0)
@@ -544,7 +545,8 @@ namespace DamaWeb.Services
             foreach (var item in allCategories)
             {
                 var catName = item.Name.Replace(" ", "-").ToLower();
-                if (Utils.RemoveDiacritics(catName) == name.ToLower())
+                var normalize = Utils.RemoveDiacritics(catName);
+                if (normalize == name.ToLower())
                     return (item.Id,item.Name);
             }
             return null;
