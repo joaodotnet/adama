@@ -146,6 +146,7 @@ namespace DamaWeb
                     options.Conventions.AddPageRoute("/Search/Index", "procurar/{q?}");
                     options.Conventions.AddPageRoute("/Customize/Index", "personalizar/");
                     options.Conventions.AddPageRoute("/Customize/Result", "personalizar/resultado");
+                    options.Conventions.AddPageRoute("/Privacy", "privacidade");
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
