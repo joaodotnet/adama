@@ -81,14 +81,7 @@ namespace DamaWeb
         }
 
         public void ConfigureServices(IServiceCollection services)
-        {
-            //services.Configure<CookiePolicyOptions>(options =>
-            //{
-            //    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-            //    options.CheckConsentNeeded = context => true;
-            //    options.MinimumSameSitePolicy = SameSiteMode.None;
-            //});
-
+        {            
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
                     options.Password.RequireDigit = false;
@@ -101,11 +94,19 @@ namespace DamaWeb
 
             services.ConfigureApplicationCookie(options =>
             {
+                options.Cookie.Name = "damanojornalApp";
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromHours(1);
                 options.LoginPath = "/Account/Signin";
                 options.LogoutPath = "/Account/Signout";
             });
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.Lax;
+            });
+
 
             services.AddAutoMapper();
 
@@ -179,7 +180,7 @@ namespace DamaWeb
             });
 
             app.UseStaticFiles();
-            //app.UseCookiePolicy();
+            app.UseCookiePolicy();
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
