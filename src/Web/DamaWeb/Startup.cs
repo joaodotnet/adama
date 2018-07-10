@@ -101,7 +101,7 @@ namespace DamaWeb
 
             services.ConfigureApplicationCookie(options =>
             {
-                //options.Cookie.HttpOnly = true;
+                options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromHours(1);
                 options.LoginPath = "/Account/Signin";
                 options.LogoutPath = "/Account/Signout";
