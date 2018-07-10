@@ -8,7 +8,7 @@
         </div>
     </div>
     <div class="text-center mb-1 mt-md-3 mb-md-3">
-        <img width="180" src="~/images/barra-coracao.png" />
+        <img class="separator"  src="~/images/barra-coracao.png" />
     </div>
 
     @if (Model.ProductReferences.Any())
@@ -85,7 +85,7 @@
     <small class="text-muted dama-small-text">Tempo de entrega entre @Model.DeliveryTimeMin a @Model.DeliveryTimeMax @(DamaWeb.Extensions.EnumHelper<ApplicationCore.Entities.DeliveryTimeUnitType>.GetDisplayValue(Model.DeliveryTimeUnit)) para produtos em stock.</small>
 
     <div class="text-center mb-1 mt-md-3 mb-md-3">
-        <img width="180" src="~/images/barra-coracao.png" />
+        <img class="separator" src="~/images/barra-coracao.png" />
     </div>
 
     <p class="dama-product-description mb-md-4">@Html.Raw(Model.ProductDescription)</p>

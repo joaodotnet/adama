@@ -146,10 +146,12 @@ namespace DamaWeb.Pages.Basket
             if (_username != null) return;
 
             _username = Guid.NewGuid().ToString();
-            var cookieOptions = new CookieOptions();
-            cookieOptions.HttpOnly = true;
-            cookieOptions.SameSite = SameSiteMode.None;
-            cookieOptions.Expires = DateTime.Today.AddYears(10);
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = DateTime.Today.AddYears(1),
+                IsEssential = true
+            };
             Response.Cookies.Append(Constants.BASKET_COOKIENAME, _username, cookieOptions);
             
         }
