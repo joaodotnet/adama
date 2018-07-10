@@ -28,44 +28,48 @@
     @RenderSection("styles", required: false)
 </head>
 <body>
-
-    <nav class="navbar navbar-expand-md navbar-dark top-nav pt-0 pb-0 pl-5 pr-5 d-none d-sm-flex pt-sm-3">
+    <form class="form-inline py-2 search-text w-100 d-none d-sm-block" asp-page="/Search/Index" method="get">
+        <input id="search" name="q" class="bg-transparent border-left-0 border-right-0 border-top-0 border-light ml-5" autocomplete="off" type="search" placeholder="Procurar" aria-label="Search">
+    </form>
+    <div class="customize-image">
+        <img src="~/images/personalizar.png" width="250" />
+        <div class="row justify-content-center">
+            <div class="social-links"><a class="nav-link" href=""><i class="fab fa-facebook-f"></i></a></div>
+            <div class="social-links"><a class="nav-link" href=""><i class="fab fa-instagram"></i></a></div>
+        </div>
+    </div>
+    <nav class="navbar navbar-expand-md navbar-light pt-0 pb-0 pl-5 pr-5 mr-5 d-none d-sm-flex pt-sm-3 w-75">
         <a href="https://www.damanojornal.com" class="navbar-brand">
             <img src="~/images/brand_full.png" width="150" alt="Dama no Jornal" />
         </a>
-        <form class="form-inline my-2 my-lg-0 search-text" asp-page="/Search/Index" method="get">
-            <input id="search" name="q" class="bg-transparent border-left-0 border-right-0 border-top-0 border-light" autocomplete="off" type="search" placeholder="Procurar" aria-label="Search">
-        </form>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar7">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="navbar-collapse collapse justify-content-stretch" id="navbar7">
-            <ul class="navbar-nav ml-auto">
+        <div class="navbar-collapse collapse justify-content-stretch top-nav" id="navbar7">
+            <ul class="navbar-nav ml-auto login-nav">
                 @await Html.PartialAsync("_LoginPartial")
             </ul>
+
         </div>
     </nav>
 
-    <nav class="navbar navbar-dark navbar-expand-md justify-content-between background_gradient pb-md-4 d-none d-sm-flex">
-        <a href="/" class="pl-3 pl-lg-5 backToHome"><i class="fas fa-arrow-left"></i><span>Voltar ao início</span></a>
+    <nav class="navbar navbar-light navbar-expand-md justify-content-between pb-md-4 d-none d-sm-flex w-75">
         <div class="d-flex d-sm-none dama-login-mobile pl-5">
             @await Html.PartialAsync("_LoginPartial")
-        </div>
-        <div class="navbar-collapse collapse justify-content-center text-center">
-            <div></div>
+        </div>        
+        <div class="navbar-collapse collapse justify-content-end text-center">
+            <a asp-page="/Index" class="navbar-brand">
+                <h1>A Loja</h1>
+            </a>
             @await Component.InvokeAsync("Menu")
         </div>
-        <ul class="nav navbar-nav justify-content-end pr-5" style="width:188px">
-            <li class="social-links"><a class="nav-link" href=""><i class="fab fa-facebook-f fa-inverse"></i></a></li>
-            <li class="social-links"><a class="nav-link" href=""><i class="fab fa-instagram"></i></a></li>
-            <li class="social-links"><a class="nav-link" href=""><i class="fab fa-google-plus-g"></i></a></li>
-        </ul>
+        
     </nav>
-    <nav class="navbar navbar-dark navbar-expand-md justify-content-between background_gradient pb-md-4 d-flex d-sm-none">
+    <nav class="navbar navbar-light navbar-expand-md justify-content-between pb-md-4 d-flex d-sm-none">
         <a id="brand-mobile-image" class="navbar-brand" href="https://www.damanojornal.com">
             <img src="~/images/brand.png" width="50px;" alt="Dama no Jornal" />
         </a>
-        <ul class="list-inline ml-auto">
+        <ul class="list-inline ml-auto pr-1">
             @await Html.PartialAsync("_LoginPartial")
         </ul>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
@@ -118,21 +122,20 @@
                 </section>
                 <section class="col-12 col-sm-4 footer-links text-center">
                     <div class="footer-link text-center">
-                        <a href="#">FAQ</a>
+                        <a href="https://www.damanojornal.com/faq/">FAQ</a>
                     </div>
                     <div class="footer-link text-center">
-                        <a href="#">Eventos</a>
+                        <a href="https://www.damanojornal.com/eventos/">Eventos</a>
                     </div>
                     <div class="footer-link text-center">
-                        <a href="#">Contactos</a>
+                        <a href="https://www.damanojornal.com/contactos/">Contactos</a>
                     </div>
                     <div class="footer-link text-center text-nowrap">
-                        <a href="#">Termos e Condições</a>
+                        <a href="https://www.damanojornal.com/termos-e-condicoes/">Termos e Condições</a>
                     </div>
-                    <div class="footer-link text-center">
-                        <i class="fab fa-facebook-f fa-inverse"></i>
-                        <i class="fab fa-instagram fa-inverse"></i>
-                        <i class="fab fa-google-plus-g fa-inverse"></i>
+                    <div class="text-center">
+                        <a href="https://www.facebook.com/damanojornal/" class="px-2"><i class="fab fa-facebook-f fa-inverse"></i></a>
+                        <a href="https://www.instagram.com/damanojornal/"class="px-2"><i class="fab fa-instagram fa-inverse"></i></a>
                     </div>
                     <div class="esh-app-footer-text footer-text-mobile"> © Copyright 2017 Dama no Jornal | All Rights Reserved </div>
                 </section>

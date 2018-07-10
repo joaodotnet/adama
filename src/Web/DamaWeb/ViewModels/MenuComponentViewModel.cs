@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace DamaWeb.ViewModels
 {
-    public class MenuComponentViewModel
-    {
-        public List<MenuItemComponentViewModel> Left { get; set; } = new List<MenuItemComponentViewModel>();
-        public List<MenuItemComponentViewModel> Right { get; set; } = new List<MenuItemComponentViewModel>();
-    }
+    //public class MenuComponentViewModel
+    //{
+    //    public List<MenuItemComponentViewModel> Left { get; set; } = new List<MenuItemComponentViewModel>();
+    //    public List<MenuItemComponentViewModel> Right { get; set; } = new List<MenuItemComponentViewModel>();
+    //}
 
     public class MenuItemComponentViewModel
     {

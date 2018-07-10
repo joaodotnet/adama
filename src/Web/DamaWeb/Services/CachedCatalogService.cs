@@ -111,7 +111,7 @@ namespace DamaWeb.Services
             });
         }
 
-        public async Task<MenuComponentViewModel> GetMenuViewModel()
+        public async Task<List<MenuItemComponentViewModel>> GetMenuViewModel()
         {
             string cacheKey = _menuKeyTemplate;
             return await _cache.GetOrCreateAsync(cacheKey, async entry =>

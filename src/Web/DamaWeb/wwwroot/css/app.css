@@ -61,6 +61,18 @@ body {
     }
 }
 
+.customize-image {
+    position: absolute;
+    top: 45px;
+    right: 10%;
+    z-index: 5;   
+}
+
+@media screen and (max-width: 992px) {
+    .customize-image {
+        display: none;
+    }
+}
 .form-input {
     border-radius: 0;
     height: 45px;
@@ -84,9 +96,13 @@ body {
     border-radius: 0 !important;
 }
 
+.search-text {
+    background-color: #FC629D;
+}
+
 .search-text input {
     color: #fff;
-    border-bottom:  1px solid #fff !important;
+    border-bottom: 1px solid #fff !important;
     font-size: 14px;
 }
 
@@ -137,7 +153,7 @@ h1 {
 }
 
 h2 {
-    color: #ef7c8d;
+    color: #FC629D;
     font-family: "Lily Script One", Sans-serif;
     font-size: 41px;
     font-weight: 100;
@@ -214,20 +230,6 @@ hr {
     border-color: #fff;
 }
 
-/* DamaShopWeb App Header */
-.top-nav {
-    background-color: #5fcbcb;
-}
-
-.background_gradient {
-    background-color: transparent;
-    background-image: linear-gradient(180deg, #5fcbcb 0%, #cdefef 100%);
-    transition: background 0.3s, border 0.3s, border-radius 0.3s, box-shadow 0.3s;
-    margin-top: 0px;
-    margin-bottom: 0px;
-    /*padding: 0px 0px 40px 0px;*/
-}
-
 .width-200 {
     width:200px;
 }
@@ -294,19 +296,25 @@ hr {
     left: 50%;
     transform: translateX(-50%);
 }
-
-.navbar-dark .navbar-nav .nav-link:hover {
-    border-bottom: 3px solid #fff;
-    color: #fff;
+.login-nav .nav-link {
+    color: #7A7A7A !important;
+}
+.login-nav .nav-link:hover {
+    border-bottom: 2px solid#7A7A7A !important;
+}
+.navbar-light .navbar-nav .nav-link:hover {
+    /*border-bottom: 3px solid #fff;*/
+    color: #7A7A7A;
 }
 
-.navbar-dark .navbar-nav .nav-link {
-    color: #fff;
+.navbar-light .navbar-nav .nav-link {
+    color: #FC629D;
     font-weight: 500;
     font-size: 14px;
     text-decoration: none;
     transition: border 1s linear;
 }
+
 
 .navbar-dark .list-inline .nav-item .nav-link {
     color: #fff;
@@ -321,7 +329,7 @@ hr {
 }
 
 .dropdown-item {
-    color: #f29aa7 !important;
+    color: #FC629D !important;
     font-weight: 400;
     font-size: 14px;
     text-decoration: none;
@@ -329,10 +337,10 @@ hr {
     margin: auto;
 }
 
-.dropdown-item:hover {
-    background-color: #f29aa7;    
-    transition: background-color 0.35s;
-}
+    .dropdown-item:hover {
+        background-color: #FC629D;
+        transition: background-color 0.35s;
+    }
 .dropdown-item:hover > .dropdown-item-text {
     /*border-bottom: 3px solid #00A69C;*/
     background-color: transparent;
@@ -350,18 +358,19 @@ hr {
     text-align: center;
 }
 
-.social-links a {
-    /*display: inline-block;*/
-    width: 40px;
-    height: 40px;
-    border: 2px solid #fff;
-    border-radius: 50px;
-    margin-right: 4px;
-    cursor: pointer;
-}
+    .social-links a {
+        /*display: inline-block;*/
+        width: 40px;
+        height: 40px;
+        border: 2px solid #fff;
+        border-radius: 50px;
+        margin-right: 4px;
+        cursor: pointer;
+        color: #FC629D;
+    }
 
     .social-links a i {         
-    color: #909090;        
+    color: #FC629D;        
     }
     .social-links .nav-link {
         padding-top: 8px;

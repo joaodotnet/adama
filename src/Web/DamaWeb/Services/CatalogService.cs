@@ -456,7 +456,7 @@ namespace DamaWeb.Services
             return vm;
         }
 
-        public async Task<MenuComponentViewModel> GetMenuViewModel()
+        public async Task<List<MenuItemComponentViewModel>> GetMenuViewModel()
         {
             var categories = await _db.Categories
                 .Include(x => x.Parent)
@@ -466,23 +466,17 @@ namespace DamaWeb.Services
                 //.ThenInclude(cts => cts.CatalogType)
                 //.ThenInclude(ct => ct.CatalogItems)
                 .Where(x => x.CatalogCategories.Count > 0)
+                .OrderBy(x => x.Order)
                 .ToListAsync();
 
-            MenuComponentViewModel menuViewModel = new MenuComponentViewModel();
+            List<MenuItemComponentViewModel> menuViewModel = new List<MenuItemComponentViewModel>();
 
-            var parentsLeft = categories
-                .Where(x => !x.ParentId.HasValue && x.Position == "left")
+            var parents = categories
+                .Where(x => !x.ParentId.HasValue)
                 .OrderBy(x => x.Order)
                 .ToList();
 
-            GetTopCategories(menuViewModel.Left, categories, parentsLeft);
-
-            var parentsRight = categories
-                .Where(x => !x.ParentId.HasValue && x.Position == "right")
-                .OrderBy(x => x.Order)
-                .ToList();
-
-            GetTopCategories(menuViewModel.Right, categories, parentsRight);
+            GetTopCategories(menuViewModel, categories, parents);           
 
             return menuViewModel;
         }

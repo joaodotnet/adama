@@ -108,7 +108,7 @@
 }
 
 .esh-catalog-button {
-    background-color: #ef7c8d;
+    background-color: #FC629D;
     border: 0;
     color: #FFFFFF;
     cursor: pointer;
@@ -117,6 +117,7 @@
     margin-top: 1rem;
     transition: all 0.35s;
     width: 80%;
+    border-radius: 0;
 }
 
 .esh-catalog-button.is-disabled {
@@ -124,10 +125,10 @@
     pointer-events: none;
 }
 
-.esh-catalog-button:hover {
-    background-color: #e9435b;
-    transition: all 0.35s;
-}
+    .esh-catalog-button:hover {
+        background-color: #FC2A7B;
+        transition: all 0.35s;
+    }
 
 .esh-catalog-name {
     font-size: 18px;
