@@ -226,8 +226,9 @@ hr {
 
 
 .btn-dama-blue {
-    background-color: #cdefef;
+    background-color: #88C9AC;
     border-color: #fff;
+    border-radius: 0 !important;
 }
 
 .width-200 {

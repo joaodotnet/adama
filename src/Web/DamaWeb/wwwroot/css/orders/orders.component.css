@@ -76,7 +76,7 @@
 .esh-orders-link-detail,
 .esh-orders-link-detail:active,
 .esh-orders-link-detail:visited {
-    color: #5fcbcb;
+    color: #88C9AC;
     text-decoration: none;
     transition: color 0.35s;
 }
@@ -89,13 +89,12 @@
     transition: color 0.35s;
 }
 
-.esh-orders-link-detail:hover,
-.esh-orders-link-cancel:hover
-{
-    color: #EF7C8D;
-    text-decoration: underline;
-    transition: color 0.35s;
-}
+    .esh-orders-link-detail:hover,
+    .esh-orders-link-cancel:hover {
+        color: #58AD87;
+        text-decoration: underline;
+        transition: color 0.35s;
+    }
 
 .dama-orders-title-mobile {
     color: #808080;
