@@ -1,0 +1,17 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "slick-carousel@1.9.0",
+      "files": [ "slick-theme.css", "slick-theme.min.css", "slick.css", "slick.min.css", "slick.js", "slick.min.js" ],
+      "destination": "wwwroot/lib/slick"
+    },
+    {
+      "library": "twitter-bootstrap@4.1.1",
+      "files": [ "css/bootstrap.css", "css/bootstrap.min.css", "js/bootstrap.js", "js/bootstrap.min.js" ],
+      "destination": "wwwroot/lib/bootstrap/"
+    }
+
+  ]
+}

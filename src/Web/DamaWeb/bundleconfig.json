@@ -5,13 +5,22 @@
     "outputFileName": "wwwroot/css/app.min.css",
     // An array of relative input file paths. Globbing patterns supported
     "inputFiles": [
-      "wwwroot/css/app.css"
+      "wwwroot/css/app.css",
+      "wwwroot/css/app.component.css",
+      "wwwroot/css/basket/basket.component.css",
+      "wwwroot/css/catalog/pager.css",
+      "wwwroot/css/catalog/catalog.component.css",
+      "wwwroot/css/basket/basket-status/basket-status.component.css",
+      "wwwroot/css/orders/orders.component.css",
+      "wwwroot/lib/slick/slick.css",
+      "wwwroot/lib/slick/slick-theme.css"
     ]
   },
   {
     "outputFileName": "wwwroot/js/site.min.js",
     "inputFiles": [
-      "wwwroot/js/site.js"
+      "wwwroot/js/site.js",
+      "wwwroot/lib/slick/slick.js"
     ],
     // Optionally specify minification options
     "minify": {
