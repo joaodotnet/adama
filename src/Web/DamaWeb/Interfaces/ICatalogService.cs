@@ -16,7 +16,7 @@ namespace DamaWeb.Interfaces
         //Task<AttributeViewModel> GetAttributeDetails(int attributeId);
         Task<CatalogIndexViewModel> GetCatalogItemsByTag(int pageIndex, int? itemsPage, string tagName, TagType? tagType, int? typeId, int? illustrationId);
         Task<CatalogIndexViewModel> GetCatalogItemsBySearch(int pageIndex, int? itemsPage, string searchFor, int? typeId, int? illustrationId);
-        Task<MenuComponentViewModel> GetMenuViewModel();
+        Task<List<MenuItemComponentViewModel>> GetMenuViewModel();
         Task<(int,string)?> GetCatalogType(string type);
         Task<(int, string)?> GetCategory(string name);
     }
