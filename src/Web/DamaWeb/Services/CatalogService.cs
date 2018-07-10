@@ -350,11 +350,13 @@ namespace DamaWeb.Services
                         break;
                     case TagType.ILLUSTRATION:
                         query = _db.CatalogItems
+                            .Include(x => x.CatalogType)
                             .Include(x => x.CatalogIllustration)
                             .Where(x => Utils.StringToUri(x.CatalogIllustration.Name) == tagName);
                         break;
                     case TagType.ILLUSTRATION_TYPE:
                         query = _db.CatalogItems
+                            .Include(x => x.CatalogType)
                             .Include(x => x.CatalogIllustration)
                             .ThenInclude(ci => ci.IllustrationType)
                             .Where(x => x.CatalogIllustration.IllustrationType.Name == tagName);
