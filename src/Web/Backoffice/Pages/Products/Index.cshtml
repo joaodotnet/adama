@@ -78,16 +78,16 @@
                 @Html.DisplayFor(modelItem => item.Sku)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ShowOnShop)
+                <input type="checkbox" asp-for="@item.ShowOnShop" class="updateProduct" product-id="@item.Id" checkboxType="1" />   
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsNew)
+                <input type="checkbox" asp-for="@item.IsNew" class="updateProduct" product-id="@item.Id" checkboxType="2"  />
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsFeatured)
+                <input type="checkbox" asp-for="@item.IsFeatured" class="updateProduct" product-id="@item.Id" checkboxType="3" />
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CanCustomize)
+                <input type="checkbox" asp-for="@item.CanCustomize" class="updateProduct" product-id="@item.Id" checkboxType="4" />
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Editar</a> |
@@ -98,3 +98,18 @@
         }
     </tbody>
 </table>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('.updateProduct').on('change', function () {
+                var productId = $(this).attr('product-id');
+                var chooseType = $(this).attr('checkboxType');
+                $.getJSON('@(Url.Page("Index", "UpdateProduct"))' + '&id=' + productId + '&checkboxType=' + chooseType + '&value= ' + $(this).is(":checked"), function (data) {
+          
+                });
+            });
+        });
+    </script>
+
+}
