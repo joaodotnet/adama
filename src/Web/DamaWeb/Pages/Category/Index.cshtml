@@ -13,7 +13,7 @@
 
         @foreach (var item in Model.CategoryModel.CatalogModel.CatalogTypes)
         {
-            <div class="col-md-3">
+            <div class="col-6 col-sm-3">
                 @if (string.IsNullOrEmpty(item.PictureUri))
                 {
                     <a asp-page="/Category/Type/Index" asp-route-cat="@item.CatNameUri" asp-route-type="@item.TypeNameUri">

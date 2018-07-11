@@ -66,16 +66,16 @@
                         }
                     }]
             });
-            $('.dama-product-description').on('click touch', function () {
-                if ($(this).css('white-space') == 'normal') {
-                    $(this).css('white-space', 'nowrap');
-                    $(this).css('text-overflow', 'ellipsis');
-                }
-                else if ($(this).css('white-space') == 'nowrap') {
-                    $(this).css('white-space', 'normal');
-                    $(this).css('text-overflow', 'initial');
-                }
-            });
+            //$('.dama-product-description').on('click touch', function () {
+            //    if ($(this).css('white-space') == 'normal') {
+            //        $(this).css('white-space', 'nowrap');
+            //        $(this).css('text-overflow', 'ellipsis');
+            //    }
+            //    else if ($(this).css('white-space') == 'nowrap') {
+            //        $(this).css('white-space', 'normal');
+            //        $(this).css('text-overflow', 'initial');
+            //    }
+            //});
             $('#btnAdd').on('click', function () {
                 var value = $('#ProductQuantity').val();
                 if (value)

@@ -8,22 +8,20 @@
 
 @if (showBanner)
 {
-    <nav id="cookieConsent" class="navbar navbar-expand-md navbar-light bg-light d-none d-sm-block fixed-bottom" role="alert">
+    <nav id="cookieConsent" class="navbar navbar-expand-md navbar-light d-none d-sm-block bg-light fixed-bottom" role="alert">
         <div class="container-fluid">
             <div class="navbar-header">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#cookieConsent" aria-controls="cookieConsent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                @*<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#cookieConsent" aria-controls="cookieConsent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>*@
                 <span class="navbar-brand"><span class="fas fa-info-circle" aria-hidden="true"></span></span>
             </div>
-            <div class="collapse navbar-collapse">
-                <p class="navbar-text small">
-                    Para lhe podermos proporcionar os nossos serviços e a melhor experiência, a Damanojornal utiliza cookies neste site. Ao continuar no site está a consentir a sua utilização.
-                </p>
-                <div class="ml-auto">
-                    <a asp-page="/Privacy" class="btn btn-dama-menta navbar-btn btn-sm">Saber mais</a>
-                    <button type="button" class="btn btn-dama-pink navbar-btn btn-sm" data-cookie-string="@cookieString">Aceitar</button>
-                </div>
+            <p class="navbar-text small consentText">
+                Este site utiliza cookies. Se continuas a navegar, consideramos que aceitas o seu uso. Para mais informações clica na nossa política de privacidade
+            </p>
+            <div class="ml-auto consentText">
+                <a asp-page="/Privacy" class="btn btn-dama-menta navbar-btn btn-sm">Saber mais</a>
+                <button type="button" class="btn btn-dama-pink navbar-btn btn-sm" data-cookie-string="@cookieString">Fechar</button>
             </div>
         </div>
     </nav>
