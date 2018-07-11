@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -180,10 +181,30 @@ namespace Dama.API.Controllers
             };
             foreach (var item in model.Items)
             {
-
-                basket.AddItem(item.ProductId, item.UnitPrice, item.Quantity, item.Attributes.Select(x => x.Id).ToList());
+                var options = GetOptions(item.Attributes);
+                basket.AddItem(item.ProductId, item.UnitPrice, item.Quantity, options.Item1, options.Item2, options.Item3);
             }
             return basket;
+        }
+
+        private (int?,int?,int?) GetOptions(List<BasketItemAttributeViewModel> attributes)
+        {
+            var options = (default(int?), default(int?), default(int?));
+
+            if (attributes == null || attributes.Count == 0)
+                return options;
+
+            foreach (var item in attributes)
+            {
+                if (!options.Item1.HasValue)
+                    options.Item1 = item.Id;
+                else if (!options.Item2.HasValue)
+                    options.Item2 = item.Id;
+                else if (!options.Item3.HasValue)
+                    options.Item3 = item.Id;
+            }
+
+            return options;
         }
 
         private async Task<Basket> GetOrCreateBasketForUser(string userName)
