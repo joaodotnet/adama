@@ -64,7 +64,7 @@ body {
 .customize-image {
     position: absolute;
     top: 45px;
-    right: 10%;
+    right: 9%;
     z-index: 5;   
 }
 
@@ -229,6 +229,14 @@ hr {
     background-color: #88C9AC;
     border-color: #fff;
     border-radius: 0 !important;
+}
+
+.link-dama-menta {
+    color: #88C9AC;
+    text-decoration: underline;
+}
+.link-dama-menta:hover {
+    color: #58AD87;
 }
 
 .width-200 {
@@ -551,6 +559,7 @@ hr {
 }
 .dama-customize-cards .product-block .card {
     border: 0;
+    cursor: pointer;
 }
 
 .dama-customize-gray {

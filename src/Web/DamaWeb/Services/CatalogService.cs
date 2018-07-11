@@ -164,8 +164,9 @@ namespace DamaWeb.Services
             {
                 var types = await _db.CatalogTypeCategories
                     .Include(x => x.CatalogType)
+                    .ThenInclude(c => c.CatalogItems)
                     .Include(x => x.Category)
-                    .Where(x => x.CategoryId == categoryId)
+                    .Where(x => x.CategoryId == categoryId && x.CatalogType.CatalogItems.Count() > 0 && !string.IsNullOrEmpty(x.CatalogType.PictureUri))
                     .ToListAsync();
 
                 var vm = new CatalogIndexViewModel()
@@ -262,7 +263,7 @@ namespace DamaWeb.Services
                     DeliveryTimeUnit = product.CatalogType.DeliveryTimeUnit,
                     CanCustomize = product.CanCustomize,
                     FirstCategoryId = product.CatalogCategories.FirstOrDefault()?.CategoryId ?? 0,
-                    ProductReferences = productReferences                    
+                    ProductReferences = productReferences
                 };
 
                 //Others prictures
@@ -316,6 +317,14 @@ namespace DamaWeb.Services
                     return "Escolha um tamanho";
                 case AttributeType.BOOK_FORMAT:
                     return "Escolha um formato";
+                case AttributeType.Color:
+                    return "Escolha uma cor";
+                case AttributeType.OPTION:
+                    return "Escolha uma opção";
+                case AttributeType.PET:
+                    return "Escolha um animal de estimação";
+                case AttributeType.TEXT:
+                    return "Escolha uma frase";
                 default:
                     return null;
             }
@@ -374,7 +383,7 @@ namespace DamaWeb.Services
                     .Where(x => Utils.StringToUri(x.CatalogType.Description) == tagName || Utils.StringToUri(x.CatalogIllustration.Name) == tagName || x.CatalogIllustration.IllustrationType.Name == tagName);
             }
 
-            query = query.Where(x => (!illustrationId.HasValue || x.CatalogIllustrationId == illustrationId) &&
+            query = query.Where(x => x.ShowOnShop && (!illustrationId.HasValue || x.CatalogIllustrationId == illustrationId) &&
                 (!typeId.HasValue || x.CatalogTypeId == typeId));
 
             var totalItems = query.Count();
@@ -417,7 +426,7 @@ namespace DamaWeb.Services
                 .Include(x => x.CatalogType)
                 .Include(x => x.CatalogIllustration)
                 .ThenInclude(ci => ci.IllustrationType)
-                .Where(x => (!illustrationId.HasValue || x.CatalogIllustrationId == illustrationId) &&
+                .Where(x => x.ShowOnShop && (!illustrationId.HasValue || x.CatalogIllustrationId == illustrationId) &&
                 (!typeId.HasValue || x.CatalogTypeId == typeId) &&
                 x.CatalogType.Description.Contains(searchFor) || 
                 x.CatalogIllustration.Name.Contains(searchFor) || 

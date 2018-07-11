@@ -8,7 +8,13 @@ namespace ApplicationCore.Entities
         SIZE,
         [Display(Name = "Formato")]
         BOOK_FORMAT,
-        [Display(Name = "Côr")]
+        [Display(Name = "Cor")]
         Color,
+        [Display(Name = "Animal de Estimação")]
+        PET,
+        [Display(Name = "Frase")]
+        TEXT,
+        [Display(Name = "Opção")]
+        OPTION,
     }
 }
