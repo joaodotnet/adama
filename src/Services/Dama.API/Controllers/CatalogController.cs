@@ -52,7 +52,7 @@ namespace Dama.API.Controllers
                 .ToListAsync();
 
             //itemsOnPage = ChangeUriPlaceholder(itemsOnPage);
-            itemsOnPage.ForEach(x => x.Price = x.Price ?? x.CatalogType.Price);
+            itemsOnPage.ForEach(x => x.Price = x.Price > 0 ? x.Price : x.CatalogType.Price);
 
             var model = new PaginatedItemsViewModel<CatalogItem>(
                 pageIndex, pageSize, totalItems, itemsOnPage);
