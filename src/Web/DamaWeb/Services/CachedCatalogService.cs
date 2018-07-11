@@ -16,7 +16,7 @@ namespace DamaWeb.Services
         private static readonly string _brandsKey = "brands";
         private static readonly string _typesKey = "types";
         private static readonly string _itemsKeyTemplate = "items-{0}-{1}-{2}-{3}-{4}";
-        private static readonly string _categoryItemsKeyTemplate = "items-{0}";
+        private static readonly string _categoryItemsKeyTemplate = "categories-items-{0}-{1}-{2}";
         private static readonly string _categoryItemKeyTemplate = "item-{0}";
         private static readonly string _categoryAttrKeyTemplate = "attr-{0}";
         private static readonly string _itemsByTagKeyTemplate = "tag-{0}-{1}-{2}-{3}-{4}-{5}";
@@ -61,13 +61,13 @@ namespace DamaWeb.Services
             });
         }
 
-        public async Task<CatalogIndexViewModel> GetCategoryCatalogItems(int categoryId)
+        public async Task<CatalogIndexViewModel> GetCategoryCatalogItems(int categoryId, int pageIndex, int? itemsPage)
         {
-            string cacheKey = String.Format(_categoryItemsKeyTemplate, categoryId);
+            string cacheKey = String.Format(_categoryItemsKeyTemplate, categoryId, pageIndex, itemsPage);
             return await _cache.GetOrCreateAsync(cacheKey, async entry =>
             {
                 entry.SlidingExpiration = _defaultCacheDuration;
-                return await _catalogService.GetCategoryCatalogItems(categoryId);
+                return await _catalogService.GetCategoryCatalogItems(categoryId, pageIndex, itemsPage);
             });
         }
 

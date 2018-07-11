@@ -19,7 +19,7 @@ namespace DamaWeb.Pages.Category
 
         public CategoryViewModel CategoryModel { get; set; } = new CategoryViewModel();
 
-        public async Task<IActionResult> OnGetAsync(string id)
+        public async Task<IActionResult> OnGetAsync(string id, int? p)
         {
             var cat = await _catalogService.GetCategory(id); 
             if (!cat.HasValue)
@@ -27,7 +27,7 @@ namespace DamaWeb.Pages.Category
             else
                 CategoryModel.CategoryName = cat.Value.Item2;
 
-            CategoryModel.CatalogModel = await _catalogService.GetCategoryCatalogItems(cat.Value.Item1);
+            CategoryModel.CatalogModel = await _catalogService.GetCategoryCatalogItems(cat.Value.Item1, p ?? 0, Constants.ITEMS_PER_PAGE);
             //CategoryModel.CatalogTypes = CategoryModel.CatalogModel.CatalogItems.Select(x => (x.CatalogTypeCode,x.CatalogTypeName)).Distinct().ToList();
             CategoryModel.CategoryUrlName = id.ToLower();
 

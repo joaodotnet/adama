@@ -151,7 +151,7 @@ namespace DamaWeb.Services
             return items;
         }
 
-        public async Task<CatalogIndexViewModel> GetCategoryCatalogItems(int categoryId)
+        public async Task<CatalogIndexViewModel> GetCategoryCatalogItems(int categoryId, int pageIndex, int? itemsPage)
         {
             //TODO: Move to repo
             var categories = await _db.CatalogCategories
@@ -161,7 +161,23 @@ namespace DamaWeb.Services
                 .Where(x => x.CategoryId == categoryId)
                 .ToListAsync();
 
-            //var products
+            var filterSpecification = new CatalogFilterSpecification(null,null, categoryId);
+            var root = _itemRepository
+                .List(filterSpecification);
+
+            var totalItems = root.Count();
+
+            var iPage = itemsPage ?? totalItems;
+
+            var itemsOnPage = root
+                .Skip(iPage * pageIndex)
+                .Take(iPage)
+                .ToList();
+
+            itemsOnPage.ForEach(x =>
+            {
+                x.PictureUri = _uriComposer.ComposePicUri(x.PictureUri);
+            });
 
             if (categories?.Count > 0)
             {
@@ -206,8 +222,25 @@ namespace DamaWeb.Services
                         TypeNameUri = Utils.StringToUri(x.CatalogType.Description)
                     })
                     .Distinct()
-                    .ToList()                    
+                    .ToList(),
+                    CatalogItems = itemsOnPage.Select(i => new CatalogItemViewModel()
+                    {
+                        CatalogItemId = i.Id,
+                        CatalogItemName = i.Name,
+                        PictureUri = i.PictureUri,
+                        Price = i.Price ?? i.CatalogType.Price,
+                        ProductSku = i.Sku
+                    }),
+                    PaginationInfo = new PaginationInfoViewModel()
+                    {
+                        ActualPage = pageIndex,
+                        ItemsPerPage = itemsOnPage.Count,
+                        TotalItems = totalItems,
+                        TotalPages = iPage != 0 ? int.Parse(Math.Ceiling(((decimal)totalItems / iPage)).ToString()) : 0
+                    }
                 };
+                vm.PaginationInfo.Next = (vm.PaginationInfo.ActualPage == vm.PaginationInfo.TotalPages - 1) ? "is-disabled" : "";
+                vm.PaginationInfo.Previous = (vm.PaginationInfo.ActualPage == 0) ? "is-disabled" : "";
                 return vm;
             }
             return null;

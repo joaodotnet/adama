@@ -9,7 +9,7 @@ namespace DamaWeb.Interfaces
     public interface ICatalogService
     {
         Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int? itemsPage, int? illustrationId, int? typeId, int? categoryId);
-        Task<CatalogIndexViewModel> GetCategoryCatalogItems(int categoryId);
+        Task<CatalogIndexViewModel> GetCategoryCatalogItems(int categoryId, int pageIndex, int? itemsPage);
         Task<IEnumerable<SelectListItem>> GetIllustrations();
         Task<IEnumerable<SelectListItem>> GetTypes();
         Task<ProductViewModel> GetCatalogItem(string sku);
