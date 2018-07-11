@@ -45,12 +45,14 @@ namespace Dama.API.Controllers
 
             var itemsOnPage = await _damaContext.CatalogItems    
                 .Include(c => c.CatalogAttributes)
+                .Include(c => c.CatalogType)
                 .OrderBy(c => c.Name)
                 .Skip(pageSize * pageIndex)
                 .Take(pageSize)
                 .ToListAsync();
 
             //itemsOnPage = ChangeUriPlaceholder(itemsOnPage);
+            itemsOnPage.ForEach(x => x.Price = x.Price ?? x.CatalogType.Price);
 
             var model = new PaginatedItemsViewModel<CatalogItem>(
                 pageIndex, pageSize, totalItems, itemsOnPage);
