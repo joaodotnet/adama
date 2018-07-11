@@ -30,6 +30,8 @@
             document.querySelector("#cookieConsent button[data-cookie-string]").addEventListener("click", function (el) {
                 document.cookie = el.target.dataset.cookieString;
                 document.querySelector("#cookieConsent").setAttribute("hidden", "");
+                document.querySelector("#cookieConsent").classList.remove("d-sm-block");
+                document.querySelector("#cookieConsent").classList.add("d-sm-none");
             }, false);
         })();
     </script>
