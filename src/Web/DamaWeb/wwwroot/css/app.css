@@ -72,6 +72,9 @@ body {
     .customize-image {
         display: none;
     }
+    .consentText {
+        font-size: 8px;
+    }
 }
 .form-input {
     border-radius: 0;
@@ -450,12 +453,12 @@ hr {
         height: auto;
         width: auto;        
     }
-    .dama-product-description {       
+    /*.dama-product-description {       
         width: 390px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-    }
+    }*/
 }
 
 .dama-product-input {

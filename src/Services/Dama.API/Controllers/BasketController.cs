@@ -21,6 +21,7 @@ namespace Dama.API.Controllers
         private readonly IBasketRepository _repository;
         private readonly IRepository<CatalogItem> _itemRepository;
         private readonly IRepository<BasketItem> _basketItemRepository;
+        private readonly IRepository<CatalogAttribute> _attributeRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         //private readonly IIdentityService _identitySvc;
         //private readonly IEventBus _eventBus;
@@ -28,12 +29,14 @@ namespace Dama.API.Controllers
         public BasketController(IBasketRepository repository,
             IRepository<CatalogItem> itemRepository,
             IRepository<BasketItem> basketItemRepository,
-            UserManager<ApplicationUser> userManager)            
+            UserManager<ApplicationUser> userManager,
+            IRepository<CatalogAttribute> attributeRepository)            
         {
             _repository = repository;
             _itemRepository = itemRepository;
             _basketItemRepository = basketItemRepository;
             _userManager = userManager;
+            _attributeRepository = attributeRepository;
         }
 
         // GET /id
@@ -145,16 +148,28 @@ namespace Dama.API.Controllers
                         itemModel.PictureUrl = item.PictureUri;
                         itemModel.ProductName = item.Name;
                     }
-                    itemModel.Attributes = i.Details.Select(d => new BasketItemAttributeViewModel
-                    {
-                        Id = d.CatalogAttribute.Id,
-                        Name = d.CatalogAttribute.Name,
-                        Price = d.CatalogAttribute.Price,
-                        Type = d.CatalogAttribute.Type
-                    }).ToList();
+
+                    AddAttributeToModel(i.CatalogAttribute1, itemModel);
+                    AddAttributeToModel(i.CatalogAttribute2, itemModel);
+                    AddAttributeToModel(i.CatalogAttribute3, itemModel);
+
+
                     return itemModel;
                 }).ToList()
             };
+        }
+
+        private void AddAttributeToModel(int? attributeId, BasketItemViewModel itemModel)
+        {
+            if (!attributeId.HasValue)
+                return;
+            var attr = _attributeRepository.GetById(attributeId.Value);
+            itemModel.Attributes.Add(new BasketItemAttributeViewModel
+            {
+                Id = attr.Id,
+                Name = attr.Name,
+                Type = attr.Type
+            });
         }
 
         private Basket ViewModelToBasket(BasketViewModel model)
@@ -165,6 +180,7 @@ namespace Dama.API.Controllers
             };
             foreach (var item in model.Items)
             {
+
                 basket.AddItem(item.ProductId, item.UnitPrice, item.Quantity, item.Attributes.Select(x => x.Id).ToList());
             }
             return basket;

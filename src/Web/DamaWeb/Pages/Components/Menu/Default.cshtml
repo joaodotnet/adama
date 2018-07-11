@@ -7,34 +7,37 @@
     {
         if (item.Childs.Count > 0)
         {
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" asp-page="/Category/Index" asp-route-id="@item.NameUri">
-                    @item.Name
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle d-none d-sm-block" asp-page="/Category/Index" asp-route-id="@item.NameUri">
+            @item.Name
+        </a>
+        <a class="nav-link dropdown-toggle d-block d-sm-none" >
+            @item.Name
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            @foreach (var child in item.Childs)
+            {
+                <a class="dropdown-item" asp-page="/Category/Index" asp-route-id="@child.NameUri">
+                    <span class="dropdown-item-text">@child.Name</span>
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    @foreach (var child in item.Childs)
-                    {
-                        <a class="dropdown-item" asp-page="/Category/Index" asp-route-id="@child.NameUri">
-                            <span class="dropdown-item-text">@child.Name</span>
-                        </a>
-                        @*@if (!string.IsNullOrEmpty(child.TypeUri))
-                            {
+                @*@if (!string.IsNullOrEmpty(child.TypeUri))
+                {
 
-                                <a class="dropdown-item" asp-page="/Category/Type/Index" asp-route-cat="@child.NameUri" asp-route-type="@child.TypeUri">
-                                    <span class="dropdown-item-text">@child.Name</span>
-                                </a>
-                            }
-                            else
-                            {
-                                <a class="dropdown-item" asp-page="/Category/Index" asp-route-id="@child.NameUri">
-                                    <span class="dropdown-item-text">@child.Name</span>
-                                </a>
+                    <a class="dropdown-item" asp-page="/Category/Type/Index" asp-route-cat="@child.NameUri" asp-route-type="@child.TypeUri">
+                        <span class="dropdown-item-text">@child.Name</span>
+                    </a>
+                }
+                else
+                {
+                    <a class="dropdown-item" asp-page="/Category/Index" asp-route-id="@child.NameUri">
+                        <span class="dropdown-item-text">@child.Name</span>
+                    </a>
 
-                            }*@
+                }*@
 
-                    }
-                </div>
-            </li>
+            }
+        </div>
+    </li>
         }
         else
         {
