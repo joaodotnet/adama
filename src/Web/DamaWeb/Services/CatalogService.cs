@@ -154,13 +154,16 @@ namespace DamaWeb.Services
         public async Task<CatalogIndexViewModel> GetCategoryCatalogItems(int categoryId)
         {
             //TODO: Move to repo
-            var products = await _db.CatalogCategories
+            var categories = await _db.CatalogCategories
                 .Include(x => x.Category)
                 .Include(x => x.CatalogItem)
                 .ThenInclude(x => x.CatalogType)
                 .Where(x => x.CategoryId == categoryId)
                 .ToListAsync();
-            if (products?.Count > 0)
+
+            //var products
+
+            if (categories?.Count > 0)
             {
                 var types = await _db.CatalogTypeCategories
                     .Include(x => x.CatalogType)
@@ -171,7 +174,7 @@ namespace DamaWeb.Services
 
                 var vm = new CatalogIndexViewModel()
                 {
-                    NewCatalogItems = products
+                    NewCatalogItems = categories
                     .Where(x => x.CatalogItem.IsNew)
                     .Take(8)
                     .Select(i => new CatalogItemViewModel()
@@ -182,7 +185,7 @@ namespace DamaWeb.Services
                         Price = i.CatalogItem.Price ?? i.CatalogItem.CatalogType.Price,
                         ProductSku = i.CatalogItem.Sku
                     }),
-                    FeaturedCatalogItems = products
+                    FeaturedCatalogItems = categories
                     .Where(x => x.CatalogItem.IsFeatured)
                     .Take(8)
                     .Select(i => new CatalogItemViewModel()
@@ -203,7 +206,7 @@ namespace DamaWeb.Services
                         TypeNameUri = Utils.StringToUri(x.CatalogType.Description)
                     })
                     .Distinct()
-                    .ToList()
+                    .ToList()                    
                 };
                 return vm;
             }
