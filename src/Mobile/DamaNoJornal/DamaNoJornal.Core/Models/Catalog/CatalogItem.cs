@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace DamaNoJornal.Core.Models.Catalog
 {
@@ -12,6 +13,7 @@ namespace DamaNoJornal.Core.Models.Catalog
         public int CatalogBrandId { get; set; }
         public string CatalogBrand { get; set; }
         public int CatalogTypeId { get; set; }
+        [JsonIgnore]
         public string CatalogType { get; set; }
         public ICollection<CatalogAttribute> CatalogAttributes { get; set; }
     }
