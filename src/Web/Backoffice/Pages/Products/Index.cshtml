@@ -10,7 +10,7 @@
 <p>
     <a asp-page="Create">Novo</a>
 </p>
-<table class="table table-pagination">
+<table id="tbl-products" class="table table-pagination">
     <thead>
         <tr>
             <th>
@@ -102,7 +102,7 @@
 @section Scripts{
     <script>
         $(document).ready(function () {
-            $('.updateProduct').on('change', function () {
+            $('#tbl-products').on('change', '.updateProduct',function () {
                 var productId = $(this).attr('product-id');
                 var chooseType = $(this).attr('checkboxType');
                 $.getJSON('@(Url.Page("Index", "UpdateProduct"))' + '&id=' + productId + '&checkboxType=' + chooseType + '&value= ' + $(this).is(":checked"), function (data) {

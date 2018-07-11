@@ -30,7 +30,6 @@ namespace DamaWeb.ViewModels
         public string NameInput { get; set; }
         public int FirstCategoryId { get; set; }
         public IEnumerable<SelectListItem> ProductReferences { get; set; }
-        
     }
 
     public class LinkViewModel
