@@ -12,5 +12,6 @@ namespace DamaWeb.ViewModels
         //public List<(string,string)> CatalogTypes { get; set; }
         public string CategoryUrlName { get; set; }
         public string CategoryName { get; set; }
+
     }
 }
