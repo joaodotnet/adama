@@ -46,9 +46,10 @@ namespace Dama.API.Controllers
             var itemsOnPage = await _damaContext.CatalogItems    
                 .Include(c => c.CatalogAttributes)
                 .Include(c => c.CatalogType)
-                .OrderBy(c => c.Name)
-                .Skip(pageSize * pageIndex)
-                .Take(pageSize)
+                .OrderBy(c => c.IsFeatured)
+                .Take(12)
+                //.Skip(pageSize * pageIndex)
+                //.Take(pageSize)
                 .ToListAsync();
 
             //itemsOnPage = ChangeUriPlaceholder(itemsOnPage);
@@ -97,12 +98,16 @@ namespace Dama.API.Controllers
                 .LongCountAsync();
 
             var itemsOnPage = await _damaContext.CatalogItems
+                .Include(x => x.CatalogType)
                 .Where(c => c.Name.StartsWith(name))
-                .Skip(pageSize * pageIndex)
-                .Take(pageSize)
+                //.Skip(pageSize * pageIndex)
+                //.Take(pageSize)
+                .Take(10)
                 .ToListAsync();
 
             //itemsOnPage = ChangeUriPlaceholder(itemsOnPage);
+
+            itemsOnPage.ForEach(x => x.Price = x.Price > 0 ? x.Price : x.CatalogType.Price);
 
             var model = new PaginatedItemsViewModel<CatalogItem>(
                 pageIndex, pageSize, totalItems, itemsOnPage);
@@ -175,7 +180,8 @@ namespace Dama.API.Controllers
         private async Task<PaginatedItemsViewModel<CatalogItem>> FilterProducts(int? catalogTypeId, int? catalogCategoryId, int pageSize, int pageIndex)
         {
             var root = (IQueryable<CatalogItem>)_damaContext.CatalogItems
-                            .Include(x => x.CatalogCategories);
+                            .Include(x => x.CatalogCategories)
+                            .Include(x => x.CatalogType);
 
             if (catalogTypeId.HasValue)
             {
@@ -191,6 +197,7 @@ namespace Dama.API.Controllers
                 .LongCountAsync();
 
             var itemsOnPage = await root
+                .OrderBy(c => c.Name)
                 .Skip(pageSize * pageIndex)
                 .Take(pageSize)
                 .ToListAsync();
@@ -206,7 +213,7 @@ namespace Dama.API.Controllers
                 IsNew = x.IsNew,
                 Name = x.Name,
                 PictureUri = x.PictureUri,
-                Price = x.Price,
+                Price = x.Price.HasValue && x.Price.Value > 0 ? x.Price : x.CatalogType.Price,
                 ShowOnShop = x.ShowOnShop,
                 Sku = x.Sku
             }).ToList();
