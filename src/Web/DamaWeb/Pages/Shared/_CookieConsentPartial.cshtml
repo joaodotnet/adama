@@ -8,19 +8,17 @@
 
 @if (showBanner)
 {
-    <nav id="cookieConsent" class="navbar navbar-expand-md navbar-light d-none d-sm-block bg-light fixed-bottom" role="alert">
+    <nav id="cookieConsent" class="navbar navbar-expand-md navbar-light bg-light fixed-bottom" role="alert">
         <div class="container-fluid">
-            <div class="navbar-header">
-                @*<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#cookieConsent" aria-controls="cookieConsent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>*@
+            <div class="navbar-header d-none d-sm-block">
                 <span class="navbar-brand"><span class="fas fa-info-circle" aria-hidden="true"></span></span>
             </div>
-            <p class="navbar-text small consentText">
-                Este site utiliza cookies. Se continuas a navegar, consideramos que aceitas o seu uso. Para mais informações clica na nossa política de privacidade
-            </p>
+
+            <span class="navbar-text small consentText">
+                <span class="fas fa-info-circle d-inline d-sm-none" aria-hidden="true"></span>
+                Este site utiliza cookies. Se continuas a navegar, consideramos que aceitas o seu uso. Para mais informações clica na nossa <a asp-page="/Privacy">política de privacidade.</a>
+            </span>
             <div class="ml-auto consentText">
-                <a asp-page="/Privacy" class="btn btn-dama-menta navbar-btn btn-sm">Saber mais</a>
                 <button type="button" class="btn btn-dama-pink navbar-btn btn-sm" data-cookie-string="@cookieString">Fechar</button>
             </div>
         </div>
