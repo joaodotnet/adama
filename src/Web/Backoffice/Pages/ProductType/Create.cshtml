@@ -35,6 +35,11 @@
                 <span asp-validation-for="ProductTypeModel.Price" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="ProductTypeModel.AdditionalTextPrice" class="control-label"></label>
+                <input asp-for="ProductTypeModel.AdditionalTextPrice" class="form-control decimal" />
+                <span asp-validation-for="ProductTypeModel.AdditionalTextPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="ProductTypeModel.Picture" class="control-label"></label>
                 <input type="file" asp-for="ProductTypeModel.Picture" class="form-control" />
                 <small>(quadrado)</small>

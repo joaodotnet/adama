@@ -103,6 +103,7 @@ namespace Backoffice.Pages.ProductType
                 productTypeEntity.DeliveryTimeMax = ProductTypeModel.DeliveryTimeMax;
                 productTypeEntity.DeliveryTimeUnit = ProductTypeModel.DeliveryTimeUnit;
                 productTypeEntity.Price = ProductTypeModel.Price;
+                productTypeEntity.AdditionalTextPrice = ProductTypeModel.AdditionalTextPrice;
                 if (!string.IsNullOrEmpty(ProductTypeModel.PictureUri))
                     productTypeEntity.PictureUri = ProductTypeModel.PictureUri;
 

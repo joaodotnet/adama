@@ -13,6 +13,7 @@ namespace ApplicationCore.Entities
         public int DeliveryTimeMax { get; set; } = 3;
         public DeliveryTimeUnitType DeliveryTimeUnit { get; set; } = DeliveryTimeUnitType.Days;
         public decimal Price { get; set; }
+        public decimal? AdditionalTextPrice { get; set; }
         //public int CategoryId { get; set; }
         //public Category Category { get; set; }
 
