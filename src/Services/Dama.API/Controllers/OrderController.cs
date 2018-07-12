@@ -36,7 +36,20 @@ namespace Dama.API.Controllers
         public async Task<IActionResult> GetOrders(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
-            var orders = await _orderService.GetOrdersAsync(user.Email);
+
+            var orders = new List<Order>();
+            if(user.UserName == "sue@damanojornal.com" || user.UserName == "jue@damanojornal.com" || user.UserName == "sonia@damanojornal.com")
+            {
+                orders = await _orderService.GetOrdersAsync("sue@damanojornal.com");
+                orders.AddRange(await _orderService.GetOrdersAsync("jue@damanojornal.com"));
+                orders.AddRange(await _orderService.GetOrdersAsync("sonia@damanojornal.com"));
+            }
+            else
+            {
+                orders = await _orderService.GetOrdersAsync(user.Email);
+            }
+
+            
 
             return Ok(orders);
         }
