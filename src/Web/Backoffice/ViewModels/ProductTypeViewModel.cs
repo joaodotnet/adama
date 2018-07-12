@@ -37,6 +37,8 @@ namespace Backoffice.ViewModels
         [Required]
         [Display(Name = "Preço")]
         public decimal Price { get; set; }
+        [Display(Name = "Preço Adicional Frase/Nome")]
+        public decimal? AdditionalTextPrice { get; set; }
 
     }
 }

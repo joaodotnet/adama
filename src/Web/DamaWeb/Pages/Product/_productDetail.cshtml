@@ -2,14 +2,14 @@
 
 <form asp-page="/Basket/Index" asp-page-handler="addtobasket" method="post">
     <div class="dama-product-title">@Model.ProductTitle</div>
-    <div class="row justify-content-center mt-1 mt-md-3">
+    <div class="row justify-content-center mt-3 mt-md-3">
         <div class="dama-product-price">
             <span>@Model.ProductPrice</span>
         </div>
     </div>
-    <div class="text-center mb-1 mt-md-3 mb-md-3">
+    <div class="text-center my-3 my-sm-3 mt-md-3 mb-md-3">
         <img class="separator"  src="~/images/barra-coracao.png" />
-    </div>
+    </div>r
 
     @if (Model.ProductReferences.Any())
     {
