@@ -85,5 +85,16 @@ namespace Dama.API.Controllers
             await _orderService.UpdateOrderState(order.Id, OrderStateType.SUBMITTED);
             return Ok();
         }
+
+        [Route("cancel")]
+        [HttpPut]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> CancelOrder([FromBody]CancelOrderViewModel command)
+        {
+            await _orderService.UpdateOrderState(command.OrderNumber, OrderStateType.CANCELED);
+            return Ok();
+
+        }
     }
 }
