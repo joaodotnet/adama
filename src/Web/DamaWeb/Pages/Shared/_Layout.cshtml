@@ -28,18 +28,13 @@
         <link rel="stylesheet" href="~/css/catalog/catalog.component.css" />
         <link rel="stylesheet" href="~/css/basket/basket-status/basket-status.component.css" />
         <link rel="stylesheet" href="~/css/orders/orders.component.css" />
-        @*<link href="~/lib/slick-1.8.0/slick/slick-theme.css" rel="stylesheet" />*@
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous"
               asp-fallback-href="~/lib/bootstrap/css/bootstrap.min.css" />
-
-        @*<link href="~/lib/slick/slick.min.css" rel="stylesheet" />
-            <link href="~/lib/slick/slick-theme.min.css" rel="stylesheet" />*@
         <link rel="stylesheet" href="~/css/app.min.css" asp-append-version="true" />
     </environment>
 
-    @*<link rel="stylesheet" href="~/lib/slick-1.8.0/slick/slick.css" />*@
     @RenderSection("styles", required: false)
 </head>
 <body>
@@ -53,6 +48,7 @@
             <div class="social-links"><a class="nav-link" href="https://www.instagram.com/damanojornal/" target="_blank"><i class="fab fa-instagram"></i></a></div>
         </div>
     </div>
+    <!-- Desktop -->
     <nav class="navbar navbar-expand-md navbar-light pt-0 pb-0 pl-5 pr-5 mr-5 d-none d-sm-flex pt-sm-3 w-75">
         <a href="https://www.damanojornal.com" class="navbar-brand">
             <img src="~/images/brand_full.png" width="150" alt="Dama no Jornal" />
@@ -67,19 +63,17 @@
 
         </div>
     </nav>
-
-    <nav class="navbar navbar-light navbar-expand-md justify-content-between pb-md-2 d-none d-sm-flex w-75">
-        <div class="d-flex d-sm-none dama-login-mobile pl-5">
-            @await Html.PartialAsync("_LoginPartial")
-        </div>
+    <!-- Desktop -->
+    <nav class="navbar navbar-light navbar-expand-md justify-content-between pb-md-2 d-none d-sm-flex w-75"> 
         <div class="navbar-collapse collapse justify-content-end text-center">
             <a asp-page="/Index" class="navbar-brand">
                 <h1>A Loja</h1>
             </a>
             @await Component.InvokeAsync("Menu")
         </div>
-
     </nav>
+
+    <!-- Mobile -->
     <nav class="navbar navbar-light navbar-expand-md justify-content-between pb-md-2 d-flex d-sm-none">
         <a id="brand-mobile-image" asp-page="/Index" class="navbar-brand">
             <img src="~/images/brand.png" width="50px;" alt="Dama no Jornal" />
