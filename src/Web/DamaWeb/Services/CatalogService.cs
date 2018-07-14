@@ -154,12 +154,15 @@ namespace DamaWeb.Services
         public async Task<CatalogIndexViewModel> GetCategoryCatalogItems(int categoryId, int pageIndex, int? itemsPage)
         {
             //TODO: Move to repo
-            var categories = await _db.CatalogCategories
-                .Include(x => x.Category)
-                .Include(x => x.CatalogItem)
-                .ThenInclude(x => x.CatalogType)
-                .Where(x => x.CategoryId == categoryId)
-                .ToListAsync();
+            //var categories = await _db.CatalogCategories
+            //    .Include(x => x.Category)
+            //    .Include(x => x.CatalogItem)
+            //    .ThenInclude(x => x.CatalogType)
+            //    .Where(x => x.CategoryId == categoryId)
+            //    .ToListAsync();
+
+            //Get Category Name
+            var category = await _db.Categories.FindAsync(categoryId);
 
             var filterSpecification = new CatalogFilterSpecification(null,null, categoryId);
             var root = _itemRepository
@@ -169,7 +172,22 @@ namespace DamaWeb.Services
 
             var iPage = itemsPage ?? totalItems;
 
-            var itemsOnPage = root
+            var allItems = root.ToList();
+
+            //Get Catalog Types of Category
+            var types = new List<CatalogType>();
+            foreach (var item in allItems)
+            {
+                if(item.CatalogType.CatalogItems
+                    .Where(x => x.CatalogCategories.Any(c => c.CategoryId == categoryId))
+                    .ToList().Count() > 0)
+                {
+                    if (!types.Any(x => x.Id == item.CatalogTypeId))
+                        types.Add(item.CatalogType);
+                }
+            }
+
+            var itemsOnPage = allItems
                 .Skip(iPage * pageIndex)
                 .Take(iPage)
                 .ToList();
@@ -179,49 +197,48 @@ namespace DamaWeb.Services
                 x.PictureUri = _uriComposer.ComposePicUri(x.PictureUri);
             });
 
-            if (categories?.Count > 0)
+            if (allItems?.Count > 0)
             {
-                var types = await _db.CatalogTypeCategories
-                    .Include(x => x.CatalogType)
-                    .ThenInclude(c => c.CatalogItems)
-                    .Include(x => x.Category)
-                    .Where(x => x.CategoryId == categoryId && x.CatalogType.CatalogItems.Count() > 0 && !string.IsNullOrEmpty(x.CatalogType.PictureUri))
-                    .ToListAsync();
+                //var types = await _db.CatalogTypeCategories
+                //    .Include(x => x.CatalogType)
+                //    .ThenInclude(c => c.CatalogItems)
+                //    .Include(x => x.Category)
+                //    .Where(x => x.CategoryId == categoryId && x.CatalogType.CatalogItems.Count() > 0 && !string.IsNullOrEmpty(x.CatalogType.PictureUri))
+                //    .ToListAsync();
 
                 var vm = new CatalogIndexViewModel()
                 {
-                    NewCatalogItems = categories
-                    .Where(x => x.CatalogItem.IsNew)
+                    NewCatalogItems = allItems
+                    .Where(x => x.IsNew)
                     .Take(8)
                     .Select(i => new CatalogItemViewModel()
                     {
-                        CatalogItemId = i.CatalogItemId,
-                        CatalogItemName = i.CatalogItem.Name,
-                        PictureUri = i.CatalogItem.PictureUri,
-                        Price = i.CatalogItem.Price ?? i.CatalogItem.CatalogType.Price,
-                        ProductSku = i.CatalogItem.Sku
+                        CatalogItemId = i.Id,
+                        CatalogItemName = i.Name,
+                        PictureUri = i.PictureUri,
+                        Price = i.Price ?? i.CatalogType.Price,
+                        ProductSku = i.Sku
                     }),
-                    FeaturedCatalogItems = categories
-                    .Where(x => x.CatalogItem.IsFeatured)
+                    FeaturedCatalogItems = allItems
+                    .Where(x => x.IsFeatured)
                     .Take(8)
                     .Select(i => new CatalogItemViewModel()
                     {
-                        CatalogItemId = i.CatalogItemId,
-                        CatalogItemName = i.CatalogItem.Name,
-                        PictureUri = i.CatalogItem.PictureUri,
-                        Price = i.CatalogItem.Price ?? i.CatalogItem.CatalogType.Price,
-                        ProductSku = i.CatalogItem.Sku
+                        CatalogItemId = i.Id,
+                        CatalogItemName = i.Name,
+                        PictureUri = i.PictureUri,
+                        Price = i.Price ?? i.CatalogType.Price,
+                        ProductSku = i.Sku
                     }),
                     CatalogTypes = types.Select(x => new CatalogTypeViewModel()
                     {
-                        Id = x.CatalogType.Id,
-                        Code = x.CatalogType.Code,
-                        Name = x.CatalogType.Description,
-                        PictureUri = x.CatalogType.PictureUri,
-                        CatNameUri = Utils.StringToUri(x.Category.Name),
-                        TypeNameUri = Utils.StringToUri(x.CatalogType.Description)
+                        Id = x.Id,
+                        Code = x.Code,
+                        Name = x.Description,
+                        PictureUri = x.PictureUri,
+                        CatNameUri = Utils.StringToUri(category.Name),
+                        TypeNameUri = Utils.StringToUri(x.Description)
                     })
-                    .Distinct()
                     .ToList(),
                     CatalogItems = itemsOnPage.Select(i => new CatalogItemViewModel()
                     {
@@ -464,11 +481,11 @@ namespace DamaWeb.Services
                 .ThenInclude(ci => ci.IllustrationType)
                 .Where(x => x.ShowOnShop && (!illustrationId.HasValue || x.CatalogIllustrationId == illustrationId) &&
                 (!typeId.HasValue || x.CatalogTypeId == typeId) &&
-                x.CatalogType.Description.Contains(searchFor) || 
+                (x.CatalogType.Description.Contains(searchFor) || 
                 x.CatalogIllustration.Name.Contains(searchFor) || 
                 x.CatalogIllustration.IllustrationType.Name.Contains(searchFor) ||
                 x.Name.Contains(searchFor) ||
-                x.Description.Contains(searchFor));
+                x.Description.Contains(searchFor)));
 
             var totalItems = query.Count();
             var iPage = itemsPage ?? totalItems;
