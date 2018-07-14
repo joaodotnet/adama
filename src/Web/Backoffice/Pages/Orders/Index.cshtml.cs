@@ -28,11 +28,11 @@ namespace Backoffice.Pages.Orders
         public async Task<IActionResult> OnGetAsync()
         {
             //Check if has Access Token
-            var authConfig = await _authService.GetAuthConfigAsync(ApplicationCore.Entities.DamaApplicationId.DAMA_BACKOFFICE);
-            if(authConfig == null)
-            {
-                return Redirect(string.Format(_settings.AuthorizationURL, _settings.ClientId, _settings.CallbackURL));
-            }
+            // var authConfig = await _authService.GetAuthConfigAsync(ApplicationCore.Entities.DamaApplicationId.DAMA_BACKOFFICE);
+            // if(authConfig == null)
+            // {
+            //     return Redirect(string.Format(_settings.AuthorizationURL, _settings.ClientId, _settings.CallbackURL));
+            // }
             OrdersModel = await _service.GetOrders();
             return Page();
         }

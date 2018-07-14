@@ -12,6 +12,7 @@
                        asp-route-TypesFilterApplied="@ViewBag.TypeId"
                        asp-route-IllustrationFilterApplied="@ViewBag.IllustrationId"
 					   asp-route-p="@(Model.ActualPage - 1)"
+                       asp-fragment="todos"
 					   aria-label="Anterior">
 						< Anterior
 					</a>
@@ -31,6 +32,7 @@
                        asp-route-TypesFilterApplied="@ViewBag.TypeId"
                        asp-route-IllustrationFilterApplied="@ViewBag.IllustrationId"
 					   asp-route-p="@(Model.ActualPage + 1)"
+                       asp-fragment="todos"
 					   aria-label="Seguinte">
 						Seguinte >
 					</a>
