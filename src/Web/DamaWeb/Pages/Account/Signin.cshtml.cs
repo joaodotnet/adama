@@ -19,17 +19,20 @@ namespace DamaWeb.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IBasketService _basketService;
         private readonly IEmailSender _emailSender;
+        private readonly IMailChimpService _mailChimpService;
         private readonly CatalogSettings _settings;
 
         public SigninModel(SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
             IBasketService basketService,
             IEmailSender emailSender,
-            IOptions<CatalogSettings> settings)
+            IOptions<CatalogSettings> settings,
+            IMailChimpService mailChimpService)
         {
             _signInManager = signInManager;
             _basketService = basketService;
             _emailSender = emailSender;
+            this._mailChimpService = mailChimpService;
             _userManager = userManager;
             _settings = settings.Value;
         }
@@ -130,6 +133,13 @@ namespace DamaWeb.Pages.Account
                     }
 
                     await SendConfirmationEmailAsync();
+
+                    //Check Subscriber
+                    if (UserDetails.SubscribeNewsletter)
+                    {
+                        await _mailChimpService.AddSubscriberAsync(UserDetails.Email);
+                        await _emailSender.SendGenericEmailAsync(_settings.FromInfoEmail, _settings.ToEmails, "Subscrição da newsletter feita na loja", $"O utilizador {UserDetails.FirstName} {UserDetails.LastName} registou-se na loja e subscreveu-se na newsletter com o email: {UserDetails.Email}");
+                    }
                     return RedirectToPage(returnUrl);
                 }
                 AddErrors(result);

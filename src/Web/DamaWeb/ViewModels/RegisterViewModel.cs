@@ -9,7 +9,7 @@ namespace DamaWeb.ViewModels
     public class RegisterViewModel
     {
         [Required(ErrorMessage = "O {0} é obrigatório.")]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage ="O endereço de Email não é valido.")]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
@@ -32,5 +32,7 @@ namespace DamaWeb.ViewModels
         public string LastName { get; set; }
         [Display(Name = "Telefone")]
         public string PhoneNumber { get; set; }
+        [Display(Name = "Aceito subscrever a newsletter da Dama no Jornal para ficar a par de todas as novidades.")]
+        public bool SubscribeNewsletter { get; set; } = true;
     }
 }

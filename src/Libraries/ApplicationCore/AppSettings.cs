@@ -23,5 +23,8 @@ namespace ApplicationCore
         public string SigningSecret { get; set; }
         public string InvoiceNameFormat { get; set; } = "DamanoJornalFatura#{0}.pdf";
         public string ReceiptNameFormat { get; set; } = "DamanoJornalRecibo#{0}.pdf";
+        public string MailChimpListId { get; set; }
+        public string MailChimpBasicAuth { get; set; }
+        public string MailChimpBaseUrl { get; set; }
     }
 }
