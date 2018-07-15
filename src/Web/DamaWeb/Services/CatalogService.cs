@@ -164,7 +164,7 @@ namespace DamaWeb.Services
             //Get Category Name
             var category = await _db.Categories.FindAsync(categoryId);
 
-            var filterSpecification = new CatalogFilterSpecification(null,null, categoryId);
+            var filterSpecification = new CatalogFilterSpecification(null, null, categoryId);
             var root = _itemRepository
                 .List(filterSpecification);
 
@@ -178,7 +178,7 @@ namespace DamaWeb.Services
             var types = new List<CatalogType>();
             foreach (var item in allItems)
             {
-                if(item.CatalogType.CatalogItems
+                if (item.CatalogType.CatalogItems
                     .Where(x => x.CatalogCategories.Any(c => c.CategoryId == categoryId))
                     .ToList().Count() > 0)
                 {
@@ -230,7 +230,7 @@ namespace DamaWeb.Services
                         Price = i.Price ?? i.CatalogType.Price,
                         ProductSku = i.Sku
                     }),
-                    CatalogTypes = types.Select(x => new CatalogTypeViewModel()
+                    CatalogTypes = types.OrderBy(x => x.Description).Select(x => new CatalogTypeViewModel()
                     {
                         Id = x.Id,
                         Code = x.Code,
@@ -481,8 +481,8 @@ namespace DamaWeb.Services
                 .ThenInclude(ci => ci.IllustrationType)
                 .Where(x => x.ShowOnShop && (!illustrationId.HasValue || x.CatalogIllustrationId == illustrationId) &&
                 (!typeId.HasValue || x.CatalogTypeId == typeId) &&
-                (x.CatalogType.Description.Contains(searchFor) || 
-                x.CatalogIllustration.Name.Contains(searchFor) || 
+                (x.CatalogType.Description.Contains(searchFor) ||
+                x.CatalogIllustration.Name.Contains(searchFor) ||
                 x.CatalogIllustration.IllustrationType.Name.Contains(searchFor) ||
                 x.Name.Contains(searchFor) ||
                 x.Description.Contains(searchFor)));
@@ -527,9 +527,9 @@ namespace DamaWeb.Services
                 .Include(x => x.Parent)
                 .Include(x => x.CatalogCategories)
                     .ThenInclude(cc => cc.CatalogItem)
-                //.Include(x => x.CatalogTypes)
-                //.ThenInclude(cts => cts.CatalogType)
-                //.ThenInclude(ct => ct.CatalogItems)
+                .Include(x => x.CatalogTypes)
+                    .ThenInclude(cts => cts.CatalogType)
+                        //.ThenInclude(ct => ct.CatalogItems)
                 .Where(x => x.CatalogCategories.Count > 0)
                 .OrderBy(x => x.Order)
                 .ToListAsync();
@@ -541,7 +541,7 @@ namespace DamaWeb.Services
                 .OrderBy(x => x.Order)
                 .ToList();
 
-            GetTopCategories(menuViewModel, categories, parents);           
+            GetTopCategories(menuViewModel, categories, parents);
 
             return menuViewModel;
         }
@@ -571,23 +571,41 @@ namespace DamaWeb.Services
                         Name = x.Name.ToUpper(),
                         NameUri = Utils.RemoveDiacritics(x.Name).Replace(" ", "-").ToLower()
                     }));
+                } 
+                else
+                {
+                    //var types = categories
+                    //    .Where(x => x.Id == item.Id)
+                    //    .Select(x => x.CatalogTypes);
+
+                    //Get Catalog Types of Category
+                    var category = categories.SingleOrDefault(x => x.Id == item.Id);
+                    var types = new List<CatalogType>();
+                    foreach (var catalogType in category.CatalogTypes)
+                    {
+                        //Check if has items
+                        var filterSpecification = new CatalogFilterSpecification(null, catalogType.CatalogTypeId, category.Id);
+                        var items = _itemRepository.List(filterSpecification).ToList();
+
+                        if (items?.Count() > 0)
+                        {
+                            if (!types.Any(x => x.Id == catalogType.CatalogTypeId))
+                                types.Add(catalogType.CatalogType);
+                        }
+                    }
+                    //var catalogTypes = types.SelectMany(x => x.Select(t => t.CatalogType));
+
+                    if (types?.Count() >= 0)
+                    {
+                        item.Childs.AddRange(types.OrderBy(x => x.Description).Select(x => new MenuItemComponentViewModel
+                        {
+                            Id = x.Id,
+                            Name = x.Description.ToUpper(),
+                            NameUri = Utils.RemoveDiacritics(item.Name).Replace(" ", "-").ToLower(),
+                            TypeUri = Utils.RemoveDiacritics(x.Description).Replace(" ", "-").ToLower()
+                        }));
+                    }
                 }
-                //else
-                //{
-                //    var types = categories
-                //        .Where(x => x.Id == item.Id)
-                //        .Select(x => x.CatalogTypes);
-
-                //    var catalogTypes = types.SelectMany(x => x.Select(t => t.CatalogType));
-
-                //    item.Childs.AddRange(catalogTypes.Select(x => new MenuItemComponentViewModel
-                //    {
-                //        Id = x.Id,
-                //        Name = x.Description.ToUpper(),
-                //        NameUri = Utils.RemoveDiacritics(item.Name).Replace(" ", "-").ToLower(),
-                //        TypeUri = Utils.RemoveDiacritics(x.Description).Replace(" ", "-").ToLower()
-                //    }));
-                //}
             }
         }
 
@@ -598,7 +616,7 @@ namespace DamaWeb.Services
             {
                 var typeName = item.Description.Replace(" ", "-").ToLower();
                 if (Utils.RemoveDiacritics(typeName) == type)
-                    return (item.Id,item.Description);
+                    return (item.Id, item.Description);
             }
             return null;
         }
@@ -611,7 +629,7 @@ namespace DamaWeb.Services
                 var catName = item.Name.Replace(" ", "-").ToLower();
                 var normalize = Utils.RemoveDiacritics(catName);
                 if (normalize == name.ToLower())
-                    return (item.Id,item.Name);
+                    return (item.Id, item.Name);
             }
             return null;
         }

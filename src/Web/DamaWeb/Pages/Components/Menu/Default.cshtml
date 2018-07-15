@@ -17,10 +17,8 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             @foreach (var child in item.Childs)
             {
-                <a class="dropdown-item" asp-page="/Category/Index" asp-route-id="@child.NameUri">
-                    <span class="dropdown-item-text">@child.Name</span>
-                </a>
-                @*@if (!string.IsNullOrEmpty(child.TypeUri))
+
+                @if (!string.IsNullOrEmpty(child.TypeUri))
                 {
 
                     <a class="dropdown-item" asp-page="/Category/Type/Index" asp-route-cat="@child.NameUri" asp-route-type="@child.TypeUri">
@@ -33,7 +31,7 @@
                         <span class="dropdown-item-text">@child.Name</span>
                     </a>
 
-                }*@
+                }
 
             }
         </div>
@@ -49,34 +47,3 @@
 
     }
 </ul>
-
-
-@*<ul class="navbar-nav text-nowrap">
-
-    @foreach (var item in Model.Right)
-    {
-        if (item.Childs.Count > 0)
-        {
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" asp-page="/Category/Index" asp-route-id="@item.NameUri">
-                    @item.Name
-                </a>
-                <div class="dropdown-menu">
-                    @foreach (var child in item.Childs)
-                    {
-                        <a class="dropdown-item" asp-page="/Category/Index" asp-route-id="@child.NameUri">
-                            <span class="dropdown-item-text">@child.Name</span>
-                        </a>
-                       
-                    }
-                </div>
-            </li>
-        }
-        else
-        {
-            <li class="nav-item">
-                <a class="nav-link" asp-page="/Category/Index" asp-route-id="@item.NameUri">@item.Name</a>
-            </li>
-        }
-    }
-</ul>*@
