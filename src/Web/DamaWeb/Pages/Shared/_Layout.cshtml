@@ -49,19 +49,13 @@
         </div>
     </div>
     <!-- Desktop -->
-    <nav class="navbar navbar-expand-md navbar-light pt-0 pb-0 pl-5 pr-5 mr-5 d-none d-sm-flex pt-sm-3 w-75">
+    <nav class="navbar navbar-expand-md navbar-light pt-sm-3 pb-0 px-5 mr-5 d-none d-sm-flex w-75">
         <a href="https://www.damanojornal.com" class="navbar-brand">
             <img src="~/images/brand_full.png" width="150" alt="Dama no Jornal" />
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar7">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="navbar-collapse collapse justify-content-stretch top-nav" id="navbar7">
-            <ul class="navbar-nav ml-auto login-nav">
-                @await Html.PartialAsync("_LoginPartial")
-            </ul>
-
-        </div>
+        <ul class="navbar-nav ml-auto login-nav">
+            @await Html.PartialAsync("_LoginPartial")
+        </ul>
     </nav>
     <!-- Desktop -->
     <nav class="navbar navbar-light navbar-expand-md justify-content-between pb-md-2 d-none d-sm-flex w-75"> 
