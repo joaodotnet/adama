@@ -129,6 +129,7 @@ namespace DamaWeb
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
             services.AddSingleton<IEmailSender>(new EmailSender(Configuration.Get<CatalogSettings>()));
+            services.AddScoped<IMailChimpService, MailChimpService>();
 
             // Add memory cache services
             services.AddMemoryCache();

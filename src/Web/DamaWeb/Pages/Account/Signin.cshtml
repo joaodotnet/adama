@@ -43,58 +43,48 @@
                 </form>
             </section>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             <h2 class="dama-heading-normal-font">Registo</h2>
             <section>
                 <h4>Registe-se!</h4>
-                <form asp-route-returnurl="@ViewData["ReturnUrl"]" asp-page-handler="Register" method="post" class="form-horizontal">
+                <form asp-route-returnurl="@ViewData["ReturnUrl"]" asp-page-handler="Register" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group required">
-                        <label asp-for="UserDetails.FirstName" class="col-md-6"></label>
-                        <div class="col-md-10">
-                            <input asp-for="UserDetails.FirstName" class="form-control" />
-                            <span asp-validation-for="UserDetails.FirstName" class="text-danger"></span>
-                        </div>
+                        <label asp-for="UserDetails.FirstName"></label>
+                        <input asp-for="UserDetails.FirstName" class="form-control" />
+                        <span asp-validation-for="UserDetails.FirstName" class="text-danger"></span>
                     </div>
                     <div class="form-group required">
-                        <label asp-for="UserDetails.LastName" class="col-md-6"></label>
-                        <div class="col-md-10">
-                            <input asp-for="UserDetails.LastName" class="form-control" />
-                            <span asp-validation-for="UserDetails.LastName" class="text-danger"></span>
-                        </div>
+                        <label asp-for="UserDetails.LastName"></label>
+                        <input asp-for="UserDetails.LastName" class="form-control" />
+                        <span asp-validation-for="UserDetails.LastName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="UserDetails.PhoneNumber" class="col-md-6"></label>
-                        <div class="col-md-10">
-                            <input asp-for="UserDetails.PhoneNumber" class="form-control" />
-                            <span asp-validation-for="UserDetails.PhoneNumber" class="text-danger"></span>
-                        </div>
+                        <label asp-for="UserDetails.PhoneNumber"></label>
+                        <input asp-for="UserDetails.PhoneNumber" class="form-control" />
+                        <span asp-validation-for="UserDetails.PhoneNumber" class="text-danger"></span>
                     </div>
                     <div class="form-group required">
-                        <label asp-for="UserDetails.Email" class="col-md-2 control-label"></label>
-                        <div class="col-md-10">
-                            <input asp-for="UserDetails.Email" class="form-control" />
-                            <span asp-validation-for="UserDetails.Email" class="text-danger"></span>
-                        </div>
+                        <label asp-for="UserDetails.Email"></label>
+                        <input asp-for="UserDetails.Email" class="form-control" />
+                        <span asp-validation-for="UserDetails.Email" class="text-danger"></span>
                     </div>
                     <div class="form-group required">
-                        <label asp-for="UserDetails.Password" class="col-md-2 control-label"></label>
-                        <div class="col-md-10">
-                            <input asp-for="UserDetails.Password" class="form-control" />
-                            <span asp-validation-for="UserDetails.Password" class="text-danger"></span>
-                        </div>
+                        <label asp-for="UserDetails.Password"></label>
+                        <input asp-for="UserDetails.Password" class="form-control" />
+                        <span asp-validation-for="UserDetails.Password" class="text-danger"></span>
                     </div>
                     <div class="form-group required">
-                        <label asp-for="UserDetails.ConfirmPassword" class="col-md-6"></label>
-                        <div class="col-md-10">
-                            <input asp-for="UserDetails.ConfirmPassword" class="form-control" />
-                            <span asp-validation-for="UserDetails.ConfirmPassword" class="text-danger"></span>
-                        </div>
+                        <label asp-for="UserDetails.ConfirmPassword"></label>
+                        <input asp-for="UserDetails.ConfirmPassword" class="form-control" />
+                        <span asp-validation-for="UserDetails.ConfirmPassword" class="text-danger"></span>
+                    </div>                    
+                    <div class="form-group form-check">
+                        <input asp-for="UserDetails.SubscribeNewsletter" class="form-check-input">
+                        <label class="form-check-label small" asp-for="UserDetails.SubscribeNewsletter"></label>
                     </div>
-
-                    <div class="form-group col-6">
-                        <button type="submit" class="esh-catalog-button btn btn-default btn-brand btn-brand-big">&nbsp;REGISTAR&nbsp;</button>
-                    </div>
+                    <button type="submit" class="esh-catalog-button btn btn-default btn-brand btn-brand-big">&nbsp;REGISTAR&nbsp;</button>
+                    
                 </form>
             </section>
         </div>
