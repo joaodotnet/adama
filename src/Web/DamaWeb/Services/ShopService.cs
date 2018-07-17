@@ -160,14 +160,18 @@ namespace DamaWeb.Services
                 .Include(x => x.User)
                 .Where(x => x.UserId == userId)
                 .ToListAsync();
-            var addressViewModel = new AddressViewModel
-            {
-                UseSameAsShipping = addresses.First().User.BillingAddressSameAsShipping,
-                Name = $"{addresses.First().User.FirstName} {addresses.First().User.LastName}".Trim(),
-                InvoiceName = $"{addresses.First().User.FirstName} {addresses.First().User.LastName}".Trim()
-            };
+
+            var addressViewModel = new AddressViewModel();            
             if (addresses?.Count > 0)
             {
+                var defaultAddress = addresses.FirstOrDefault();
+                if (defaultAddress != null)
+                {
+                    addressViewModel.UseSameAsShipping = defaultAddress.User?.BillingAddressSameAsShipping ?? false;
+                    addressViewModel.Name = $"{defaultAddress.User?.FirstName} {defaultAddress.User?.LastName}";
+                    addressViewModel.InvoiceName = $"{defaultAddress.User.FirstName} {defaultAddress.User?.LastName}";
+                }
+           
                 foreach (var item in addresses)
                 {
                     
