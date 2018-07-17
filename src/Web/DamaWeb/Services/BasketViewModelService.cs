@@ -41,7 +41,7 @@ namespace DamaWeb.Services
         {
             var viewModel = new BasketViewModel();
             viewModel.Id = basket.Id;
-            viewModel.BuyerId = basket.BuyerId;
+            viewModel.BuyerId = basket.BuyerId;            
             viewModel.Items = basket.Items.Select(i =>
             {
                 var itemModel = new BasketItemViewModel()
@@ -79,6 +79,17 @@ namespace DamaWeb.Services
                 //}).ToList();
                 return itemModel;
             }).ToList();
+            //Shipping Cost
+            decimal shippingCost = 0;
+            foreach (var item in viewModel.Items)
+            {
+                var spec = new CatalogTypeFilterSpecification(item.CatalogItemId);
+                var catalogItem = _itemRepository.GetSingleBySpec(spec);
+                if (catalogItem.CatalogType.ShippingCost > shippingCost)
+                    shippingCost = catalogItem.CatalogType.ShippingCost;
+            }
+            viewModel.DefaultShippingCost = shippingCost;
+
             return viewModel;
         }
 

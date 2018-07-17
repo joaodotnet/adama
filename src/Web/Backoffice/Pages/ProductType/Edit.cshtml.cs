@@ -104,6 +104,7 @@ namespace Backoffice.Pages.ProductType
                 productTypeEntity.DeliveryTimeUnit = ProductTypeModel.DeliveryTimeUnit;
                 productTypeEntity.Price = ProductTypeModel.Price;
                 productTypeEntity.AdditionalTextPrice = ProductTypeModel.AdditionalTextPrice;
+                productTypeEntity.ShippingCost = ProductTypeModel.ShippingCost;
                 if (!string.IsNullOrEmpty(ProductTypeModel.PictureUri))
                     productTypeEntity.PictureUri = ProductTypeModel.PictureUri;
 

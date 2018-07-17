@@ -39,6 +39,9 @@ namespace Backoffice.ViewModels
         public decimal Price { get; set; }
         [Display(Name = "Preço Adicional Frase/Nome")]
         public decimal? AdditionalTextPrice { get; set; }
+        [Display(Name = "Portes")]
+        [Required]
+        public decimal ShippingCost { get; set; }
 
     }
 }
