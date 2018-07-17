@@ -10,7 +10,7 @@ namespace DamaWeb.ViewModels
         public int Id { get; set; }
         public List<BasketItemViewModel> Items { get; set; } = new List<BasketItemViewModel>();
         public string BuyerId { get; set; }
-        public decimal DefaultShippingCost { get; set; } = 3.35m;
+        public decimal DefaultShippingCost { get; set; }
 
         public decimal SubTotal()
         {

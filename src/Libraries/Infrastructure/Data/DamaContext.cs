@@ -285,6 +285,14 @@ namespace Infrastructure.Data
                 .IsRequired()                
                 .HasColumnType("decimal(18,2)");
 
+            builder.Property(x => x.AdditionalTextPrice)
+                .HasColumnType("decimal(18,2)");
+
+            builder.Property(x => x.ShippingCost)
+                .IsRequired()
+                .HasDefaultValue(3.35m)
+                .HasColumnType("decimal(18,2)");
+
             builder.Property(x => x.DeliveryTimeMin)
                 .IsRequired()
                 .HasDefaultValue(2);
