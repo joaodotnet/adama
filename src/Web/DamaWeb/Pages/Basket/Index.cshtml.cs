@@ -130,8 +130,7 @@ namespace DamaWeb.Pages.Basket
             }
             else
             {
-                GetOrSetBasketCookieAndUserName();
-                _logger.LogWarning($"Cookie Name: {_username}");
+                GetOrSetBasketCookieAndUserName();                
                 BasketModel = await _basketViewModelService.GetOrCreateBasketForUser(_username);
             }
         }
@@ -140,8 +139,7 @@ namespace DamaWeb.Pages.Basket
         {
             if (Request.Cookies.ContainsKey(Constants.BASKET_COOKIENAME))
             {                
-                _username = Request.Cookies[Constants.BASKET_COOKIENAME];
-                _logger.LogWarning($"Found cookie: {_username}");
+                _username = Request.Cookies[Constants.BASKET_COOKIENAME];                
             }
             if (_username != null) return;
 
