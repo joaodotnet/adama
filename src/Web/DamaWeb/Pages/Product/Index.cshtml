@@ -38,6 +38,7 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
+        var customizePrice = parseFloat('@Model.ProductModel.CustomizePrice'.replace(',', '.'));
         $(document).ready(function () {
             $('.slider-nav').slick({
                 slidesToShow: 3,
@@ -96,7 +97,7 @@
                 var value = $('#NameInput').val();
                 if (value) {
                     $('#nameInputText').text("Personalização: " + value.toString());
-                    var newprice = productBase + 2.90;
+                    var newprice = productBase + customizePrice;
                     $('.dama-product-price span').text(toNumber(newprice));
                 }
                 else {

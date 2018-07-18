@@ -10,6 +10,7 @@ using ApplicationCore.Interfaces;
 using DamaWeb.ViewModels;
 using ApplicationCore;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 
 namespace DamaWeb.Pages.Account
 {
@@ -21,13 +22,15 @@ namespace DamaWeb.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly IMailChimpService _mailChimpService;
         private readonly CatalogSettings _settings;
+        private readonly ILogger<SigninModel> _logger;
 
         public SigninModel(SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
             IBasketService basketService,
             IEmailSender emailSender,
             IOptions<CatalogSettings> settings,
-            IMailChimpService mailChimpService)
+            IMailChimpService mailChimpService,
+            ILogger<SigninModel> logger)
         {
             _signInManager = signInManager;
             _basketService = basketService;
@@ -35,6 +38,7 @@ namespace DamaWeb.Pages.Account
             this._mailChimpService = mailChimpService;
             _userManager = userManager;
             _settings = settings.Value;
+            _logger = logger;
         }
 
         [BindProperty]
@@ -61,13 +65,13 @@ namespace DamaWeb.Pages.Account
         public async Task OnGet(string returnUrl = null)
         {
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-            returnUrl = FixBasePath(returnUrl);
-            ViewData["ReturnUrl"] = returnUrl;
-            //if (!String.IsNullOrEmpty(returnUrl) &&
-            //    returnUrl.IndexOf("checkout", StringComparison.OrdinalIgnoreCase) >= 0)
-            //{
-            //    ViewData["ReturnUrl"] = "/Basket/Index";
-            //}
+            //returnUrl = FixBasePath(returnUrl);
+            //ViewData["ReturnUrl"] = returnUrl;
+            if (!String.IsNullOrEmpty(returnUrl) &&
+                returnUrl.IndexOf("checkout", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                ViewData["ReturnUrl"] = "/Basket/Index";
+            }
         }
 
         private string FixBasePath(string returnUrl)
@@ -79,6 +83,8 @@ namespace DamaWeb.Pages.Account
 
         public async Task<IActionResult> OnPostSignIn(string returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
+            _logger.LogInformation($"OnPostSignIn return url: {returnUrl}");
             foreach (var item in ModelState)
             {
                 if (!item.Key.Contains("LoginDetails"))
@@ -88,7 +94,7 @@ namespace DamaWeb.Pages.Account
             {
                 return Page();
             }
-            ViewData["ReturnUrl"] = returnUrl;
+            
 
             var result = await _signInManager.PasswordSignInAsync(LoginDetails.Email, 
                 LoginDetails.Password, LoginDetails.RememberMe, lockoutOnFailure: false);
@@ -99,7 +105,7 @@ namespace DamaWeb.Pages.Account
                 {
                     await _basketService.TransferBasketAsync(anonymousBasketId, LoginDetails.Email);
                     Response.Cookies.Delete(Constants.BASKET_COOKIENAME);
-                }
+                }                
                 return RedirectToPage(returnUrl ?? "/Index");
             }
             if (result.RequiresTwoFactor)
@@ -112,6 +118,8 @@ namespace DamaWeb.Pages.Account
 
         public async Task<IActionResult> OnPostRegister(string returnUrl = "/Index")
         {
+            ViewData["ReturnUrl"] = returnUrl;
+            _logger.LogInformation($"OnPostRegister return url: {returnUrl}");
             foreach (var item in ModelState)
             {
                 if (!item.Key.Contains("UserDetails"))
