@@ -8,7 +8,7 @@
         </div>
     </div>
     <div class="text-center my-3 my-sm-3 mt-md-3 mb-md-3">
-        <img class="separator"  src="~/images/barra-coracao.png" />
+        <img class="separator" src="~/images/barra-coracao.png" />
     </div>
 
     @if (Model.ProductReferences.Any())
@@ -35,7 +35,8 @@
         </div>
     }
 
-    @if (Model.CanCustomize)
+
+    @if (Model.CustomizePrice.HasValue && Model.CustomizePrice.Value > 0)
     {
         <div class="row align-items-center mb-4 mt-4">
             <div class="col-12 col-md-7 dama-customize-question mb-2 mb-sm-0">Queres personalizar com um nome?</div>
@@ -43,7 +44,7 @@
                 <a class="btn btn-dama-menta w-100" role="button" data-toggle="collapse" href="#addName">ADICIONAR NOME</a>
             </div>
             <small id="nameInputText" class="text-muted ml-3 dama-small-text"></small>
-            
+
         </div>
         <div id="addName" class="collapse mb-4">
             <div class="ml-3 ml-md-5">
@@ -60,13 +61,16 @@
                         <a id="saveName" class="btn btn-primary rounded-0 w-100" role="button" data-toggle="collapse" href="#addName">GRAVAR</a>
                     </div>
                     <div class="col">
-                        <small class="text-muted dama-small-text">*Esta personalização tem um custo adicional de 2,90€</small>
+                        <small class="text-muted dama-small-text">*Esta personalização tem um custo adicional de @Model.CustomizePrice.Value.ToString().Replace('.', ',')€</small>
                     </div>
                 </div>
             </div>
 
         </div>
         <hr />
+    }
+    @if (Model.CanCustomize)
+    {
         <div class="row mb-4 mb-md-3 align-items-center">
             <div class="col-12 col-md-7 dama-customize-question  mb-2 mb-sm-0">Queres uma personalização total?</div>
             <div class="col-12 col-md-5">
@@ -122,4 +126,5 @@
     <input type="hidden" asp-for="ProductSKU" />
     <input type="hidden" asp-for="ProductId" />
     <input type="hidden" asp-for="ProductPrice" />
+    <input type="hidden" asp-for="CustomizePrice" />
 </form>
