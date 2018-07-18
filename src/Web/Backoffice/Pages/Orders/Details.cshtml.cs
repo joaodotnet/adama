@@ -42,6 +42,9 @@ namespace Backoffice.Pages.Orders
             OrderModel = await _service.GetOrder(id);
             if (OrderModel == null)
                 return NotFound();
+            var fileName = string.Format(_settings.InvoiceNameFormat, id);
+            OrderModel.HasInvoiceReady = _service.CheckIfFileExists(_settings.InvoicesFolderFullPath, fileName);
+
             return Page();
         }
 
@@ -136,11 +139,11 @@ namespace Backoffice.Pages.Orders
             var fileName = string.Format(_settings.InvoiceNameFormat, OrderModel.Id);
             List<(string, byte[])> files = new List<(string, byte[])>();
             //Check if file already exist
-            if (!_service.CheckIfFileExists(_settings.InvoicesFolderFullPath, fileName))
-            {
-                files.Add((fileName,await _service.GetInvoicePDF(order.SalesInvoiceId.Value)));
-            }
-            else
+            //if (!_service.CheckIfFileExists(_settings.InvoicesFolderFullPath, fileName))
+            //{
+            //    files.Add((fileName,await _service.GetInvoicePDF(order.SalesInvoiceId.Value)));
+            //}
+            if(_service.CheckIfFileExists(_settings.InvoicesFolderFullPath, fileName))
             {
                 var invoicePath = Path.Combine(_settings.InvoicesFolderFullPath, fileName);
                 files.Add((fileName, await System.IO.File.ReadAllBytesAsync(invoicePath)));
@@ -150,9 +153,10 @@ namespace Backoffice.Pages.Orders
             var name = order.User != null ? $"{order.User.FirstName} {order.User.LastName}" : order.BuyerId;
             var body = $"<strong>Olá {name}!</strong><br>" +
                 $"Obrigada por comprares na Dama no Jornal®.<br>" +
-                $"O pagamento relativo à encomenda #{order.Id} <strong>foi recebido.</strong><br><br>" +
-                $"Enviamos em anexo a fatura relativa à tua encomenda. <br>" +
-                $"Estamos a preparar a expedição.";
+                $"O pagamento relativo à encomenda #{order.Id} <strong>foi recebido.</strong><br><br>";
+            if (files.Count > 0)
+                body += $"Enviamos em anexo a fatura relativa à tua encomenda. <br>";
+            body += $"Estamos a preparar a expedição.";
 
             await _emailSender.SendGenericEmailAsync(_settings.FromOrderEmail, order.BuyerId, $"Dama no Jornal® - Encomenda #{order.Id} - Pagamento", body, _settings.ToEmails, files);
             StatusMessage = "Mensagem Enviada";
