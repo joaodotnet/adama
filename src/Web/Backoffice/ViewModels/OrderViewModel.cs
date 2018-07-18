@@ -47,6 +47,7 @@ namespace Backoffice.ViewModels
         public long? SalesInvoiceId { get; set; }
         public long? SalesPaymentId { get; set; }
         public PaymentType PaymentTypeSelected { get; set; }
-        public List<OrderItemViewModel> Items { get; set; }        
+        public List<OrderItemViewModel> Items { get; set; }
+        public bool HasInvoiceReady { get; set; } = false;
     }
 }
