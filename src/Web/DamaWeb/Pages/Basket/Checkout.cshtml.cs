@@ -176,6 +176,12 @@ namespace DamaWeb.Pages.Basket
                             <td>{item.ItemOrdered.ProductName}</td>
                             <td>{item.UnitPrice} €</td>
                         </tr>";
+                if(!string.IsNullOrEmpty(item.CustomizeName))
+                {
+                    body += $@"<tr>
+                            <td>Personalização: {item.CustomizeName}</td>
+                        </tr>";
+                }
                 foreach (var attr in attributes)
                 {
                     body += $@"<tr>
