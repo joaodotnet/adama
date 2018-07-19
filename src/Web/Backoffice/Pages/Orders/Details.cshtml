@@ -161,29 +161,44 @@
     </div>
     <h4>Pagamento</h4>
     <div class="row">
-        <div class="col-md-4">            
-                @if (!Model.OrderModel.SalesInvoiceId.HasValue)
+        <div class="col-md-4">
+            @if (!Model.OrderModel.SalesInvoiceId.HasValue)
+            {
+                <form method="post">
+                    <input type="hidden" asp-for="OrderModel.Id" />
+                    @*<div class="form-group">
+                    <select asp-for="OrderModel.PaymentTypeSelected" asp-items="Html.GetEnumSelectList<ApplicationCore.DTOs.PaymentType>()" class="form-control"></select>
+                    <span asp-validation-for="OrderModel.PaymentTypeSelected" class="text-danger"></span>
+                </div>*@
+                    <input type="submit" value="Criar Fatura" class="btn btn-success" asp-page-handler="RegisterInvoice" />
+                </form>
+            }
+            else
+            {
+                <span class="bold">Fatura nº @Model.OrderModel.SalesInvoiceNumber</span><br>
+                <a asp-page-handler="InvoicePDF" asp-route-id="@Model.OrderModel.Id" asp-route-invoiceId="@Model.OrderModel.SalesInvoiceId">Imprimir Fatura</a>
+                @*<span>|</span>
+            <a asp-page-handler="ReceiptPDF" asp-route-id="@Model.OrderModel.Id" asp-route-invoiceId="@Model.OrderModel.SalesInvoiceId" asp-route-paymentId="@Model.OrderModel.SalesPaymentId">Imprimir Recibo</a>*@
+            }
+            <br />
+            <form method="post">
+                <input type="hidden" asp-for="OrderModel.Id" />
+                <button type="submit" asp-page-handler="SendEmailToClient" class="btn btn-info">Enviar mail a cliente</button>
+                @if (Model.OrderModel.HasInvoiceReady)
                 {
-                    <form method="post">
-                        <input type="hidden" asp-for="OrderModel.Id" />
-                        @*<div class="form-group">
-                            <select asp-for="OrderModel.PaymentTypeSelected" asp-items="Html.GetEnumSelectList<ApplicationCore.DTOs.PaymentType>()" class="form-control"></select>
-                            <span asp-validation-for="OrderModel.PaymentTypeSelected" class="text-danger"></span>
-                        </div>*@
-                        <input type="submit" value="Criar Fatura" class="btn btn-success" asp-page-handler="RegisterInvoice" />
-                    </form>
-                }                
+                    <div class="alert alert-success" role="alert">
+                        A Fatura está pronta para ser enviada. Ver aqui: <a asp-page-handler="InvoicePDF" asp-route-id="@Model.OrderModel.Id" asp-route-invoiceId="@Model.OrderModel.SalesInvoiceId">Fatura#@Model.OrderModel.Id</a>
+                    </div>
+                }
                 else
                 {
-                    <span class="bold">Fatura nº @Model.OrderModel.SalesInvoiceNumber</span><br>
-                    <a asp-page-handler="InvoicePDF" asp-route-id="@Model.OrderModel.Id" asp-route-invoiceId="@Model.OrderModel.SalesInvoiceId">Imprimir Fatura</a> 
-                    @*<span>|</span>
-                    <a asp-page-handler="ReceiptPDF" asp-route-id="@Model.OrderModel.Id" asp-route-invoiceId="@Model.OrderModel.SalesInvoiceId" asp-route-paymentId="@Model.OrderModel.SalesPaymentId">Imprimir Recibo</a>*@
-                    <form method="post">
-                        <input type="hidden" asp-for="OrderModel.Id" />
-                        <button type="submit" asp-page-handler="SendEmailToClient" class="btn btn-info">Enviar mail a cliente</button>
-                    </form>
-                }            
+                    <div class="alert alert-warning" role="alert">
+                        Atenção não existe fatura, vai ser enviado um mail de confirmação de transferência sem fatura!!!
+                    </div>
+
+
+                }
+            </form>            
         </div>
     </div>
 </div>

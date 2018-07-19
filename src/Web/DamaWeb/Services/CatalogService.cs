@@ -320,6 +320,7 @@ namespace DamaWeb.Services
                     DeliveryTimeMax = product.CatalogType.DeliveryTimeMax,
                     DeliveryTimeUnit = product.CatalogType.DeliveryTimeUnit,
                     CanCustomize = product.CanCustomize,
+                    CustomizePrice = product.CatalogType.AdditionalTextPrice,
                     FirstCategoryId = product.CatalogCategories.FirstOrDefault()?.CategoryId ?? 0,
                     ProductReferences = productReferences
                 };
