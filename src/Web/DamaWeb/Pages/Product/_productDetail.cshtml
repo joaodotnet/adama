@@ -13,10 +13,11 @@
 
     @if (Model.ProductReferences.Any())
     {
+
         <div class="row dama-product-attr mb-2 mb-md-3">
-            <label class="col-2 col-form-label">Tamanho</label>
-            <div class="col-10">
-                <select id="referenceProducts" class="form-control" asp-items="Model.ProductReferences"></select>
+            <label class="col-4 col-form-label">@Model.ProductReferences.First().Label</label>
+            <div class="col-8">
+                <select id="referenceProducts" class="form-control" asp-items="ViewBag.ProductReferences"></select>
             </div>
         </div>
     }
@@ -25,8 +26,8 @@
     {
         <input type="hidden" asp-for="Attributes[i].AttributeType" />
         <div class="row dama-product-attr mb-2 mb-md-3">
-            <label class="col-2 col-form-label">@Model.Attributes[i].Label</label>
-            <div class="col-10">
+            <label class="col-4 col-form-label">@Model.Attributes[i].Label</label>
+            <div class="col-8">
                 <select asp-for="Attributes[i].Selected" class="form-control atribute-items" asp-items="Model.Attributes[i].Items">
                     <option value="-1">@Model.Attributes[i].DefaultText</option>
                 </select>

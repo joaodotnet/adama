@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using DamaWeb.Interfaces;
 using DamaWeb.ViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DamaWeb.Pages.Product
 {
@@ -26,6 +27,8 @@ namespace DamaWeb.Pages.Product
             if (string.IsNullOrEmpty(id))
                 return NotFound();
             ProductModel = await _catalogService.GetCatalogItem(id);
+
+            ViewData["ProductReferences"] = new SelectList(ProductModel.ProductReferences, "Sku", "Name");
 
             //Update default price
             //decimal attrDefaultPrice = 0M;

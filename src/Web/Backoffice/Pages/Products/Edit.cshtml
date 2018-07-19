@@ -75,7 +75,10 @@
                 <thead>
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.ProductModel.CatalogReferences[0].ReferenceCatalogItem.Name)
+                            Label
+                        </th>
+                        <th>
+                            Produto Relacionado
                         </th>
                         <th></th>
                     </tr>
@@ -83,22 +86,25 @@
                 <tbody>
                     @foreach (var item in Model.ProductModel.CatalogReferences)
                     {
-                        <tr>
-                            <td>
-                                <a asp-page="/Products/Edit" asp-route-id="@item.ReferenceCatalogItemId">
-                                    @Html.DisplayFor(modelItem => item.ReferenceCatalogItem.Name)
-                                </a>
-                            </td>
-                            <td>
-                                <a asp-page="./References/Edit" asp-route-id="@item.Id">Edit</a> |
-                                <a asp-page="./References/Delete" asp-route-id="@item.Id">Delete</a>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LabelDescription)
+                        </td>
+                        <td>
+                            <a asp-page="/Products/Edit" asp-route-id="@item.ReferenceCatalogItemId">
+                                @Html.DisplayFor(modelItem => item.ReferenceCatalogItem.Name)
+                            </a>
+                        </td>
+                        <td>
+                            <a asp-page="./References/Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-page="./References/Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
                     }
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="2">
+                        <td colspan="3">
                             <a asp-page="./References/Create" asp-route-id="@Model.ProductModel.Id" class="btn btn-default">Adicionar Relação</a>
                         </td>
                     </tr>

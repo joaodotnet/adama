@@ -64,7 +64,10 @@ namespace Infrastructure.Data
                .WithMany(p => p.CatalogReferences)
                .HasForeignKey(x => x.CatalogItemId);
 
-
+            builder.Property(x => x.LabelDescription)
+                .IsRequired()
+                .HasMaxLength(20)                
+                .HasDefaultValue("Tamanho");
 
         }
 
