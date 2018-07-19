@@ -57,6 +57,7 @@ namespace Backoffice.Pages.Products.References
             {
                 _context.CatalogReferences.Add(new CatalogReference
                 {
+                    LabelDescription = CatalogReference.LabelDescription,
                     CatalogItemId = CatalogReference.ReferenceCatalogItemId,
                     ReferenceCatalogItemId = CatalogReference.CatalogItemId
                 });

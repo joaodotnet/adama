@@ -10,6 +10,7 @@ namespace ApplicationCore.Entities
         public CatalogItem CatalogItem { get; set; }
         public int ReferenceCatalogItemId { get; set; }
         public CatalogItem ReferenceCatalogItem { get; set; }
-       
+        public string LabelDescription { get; set; }
+
     }
 }

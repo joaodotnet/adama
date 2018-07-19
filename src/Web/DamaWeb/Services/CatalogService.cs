@@ -279,12 +279,17 @@ namespace DamaWeb.Services
 
             if (product != null)
             {
-                List<SelectListItem> productReferences = new List<SelectListItem>();
+                List<ProductReferenceViewModel> productReferences = new List<ProductReferenceViewModel>();
                 if (product.CatalogReferences?.Count > 0)
                 {
-                    productReferences.Add(new SelectListItem(product.Name, product.Sku, true));
+                    productReferences.Add(new ProductReferenceViewModel { Label = product.CatalogReferences.First().LabelDescription, Name = product.Name, Sku = product.Sku });
                     productReferences.AddRange(product.CatalogReferences
-                        .Select(x => new SelectListItem(x.ReferenceCatalogItem.Name, x.ReferenceCatalogItem.Sku))
+                        .Select(x => new ProductReferenceViewModel
+                        {
+                            Label = x.LabelDescription,
+                            Name = x.ReferenceCatalogItem.Name,
+                            Sku = x.ReferenceCatalogItem.Sku
+                        })
                         .ToList());
                 }
                 var vm = new ProductViewModel

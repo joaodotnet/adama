@@ -25,6 +25,8 @@ namespace Backoffice.Pages.Products.References
 
         [BindProperty]
         public int OriginalReference { get; set; }
+        [BindProperty]
+        public string OriginalLabelReference { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -42,6 +44,8 @@ namespace Backoffice.Pages.Products.References
                 return NotFound();
             }
             OriginalReference = CatalogReference.ReferenceCatalogItemId;
+            OriginalLabelReference = CatalogReference.LabelDescription;
+
 
             ViewData["CatalogItemId"] = new SelectList(_context.CatalogItems, "Id", "Name");
             ViewData["ReferenceCatalogItemId"] = new SelectList(_context.CatalogItems, "Id", "Name");
@@ -92,12 +96,23 @@ namespace Backoffice.Pages.Products.References
                 {
                     _context.CatalogReferences.Add(new CatalogReference
                     {
+                        LabelDescription = CatalogReference.LabelDescription,
                         CatalogItemId = CatalogReference.ReferenceCatalogItemId,
                         ReferenceCatalogItemId = CatalogReference.CatalogItemId
                     });
                 }
                 await _context.SaveChangesAsync();
             }
+            else if(!OriginalLabelReference.Equals(CatalogReference.LabelDescription))
+            {
+                var catalogReference = await _context.CatalogReferences
+                                .SingleOrDefaultAsync(x =>
+                                    x.CatalogItemId == OriginalReference &&
+                                    x.ReferenceCatalogItemId == CatalogReference.CatalogItemId);
+                catalogReference.LabelDescription = CatalogReference.LabelDescription;
+                await _context.SaveChangesAsync();
+            }
+
             return RedirectToPage("/Products/Edit", new { id = CatalogReference.CatalogItemId });
         }
 

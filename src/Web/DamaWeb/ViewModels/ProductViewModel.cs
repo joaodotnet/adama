@@ -29,7 +29,15 @@ namespace DamaWeb.ViewModels
         [StringLength(100, ErrorMessage = "Por favor escolhe um nome ou frase até 100 caracteres")]
         public string NameInput { get; set; }
         public int FirstCategoryId { get; set; }
-        public IEnumerable<SelectListItem> ProductReferences { get; set; }
+        public List<ProductReferenceViewModel> ProductReferences { get; set; } = new List<ProductReferenceViewModel>();
+        //public IEnumerable<SelectListItem> ProductReferences { get; set; }
+    }
+
+    public class ProductReferenceViewModel
+    {
+        public string Label { get; set; }
+        public string Sku { get; set; }
+        public string Name { get; set; }
     }
 
     public class LinkViewModel
