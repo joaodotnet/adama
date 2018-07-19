@@ -3,10 +3,13 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>DamaWeb</RootNamespace>
     <AssemblyName>DamaWeb</AssemblyName>
+    <ApplicationInsightsResourceId>/subscriptions/31f88066-cd85-4eae-9bf3-9a1232e478ca/resourcegroups/damaResource/providers/microsoft.insights/components/DamaWebInsights</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/f503b163-650e-424d-a084-35cbe94061fb/resourcegroups/DamanoJornalResource/providers/microsoft.insights/components/DamaNoJornalWeb</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="4.0.1" />
     <PackageReference Include="BuildBundlerMinifier" Version="2.8.391" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" PrivateAssets="All" />
   </ItemGroup>
@@ -24,5 +27,8 @@
     <Content Update="Pages\Customize\Step2.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 </Project>

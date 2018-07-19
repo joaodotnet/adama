@@ -31,6 +31,7 @@ namespace DamaWeb.ViewModels
         public int FirstCategoryId { get; set; }
         public List<ProductReferenceViewModel> ProductReferences { get; set; } = new List<ProductReferenceViewModel>();
         //public IEnumerable<SelectListItem> ProductReferences { get; set; }
+        public decimal? CustomizePrice { get; set; }
     }
 
     public class ProductReferenceViewModel
