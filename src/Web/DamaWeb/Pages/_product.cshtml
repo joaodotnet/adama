@@ -7,7 +7,7 @@
     <input class="esh-catalog-button" type="submit" value="ADICIONAR" />
 
     <div class="esh-catalog-name">
-        <span>@Model.CatalogItemName</span>
+        <span>@Html.Raw(Model.CatalogItemName.Replace("-","<br>"))</span>
     </div>
     <div class="esh-catalog-price">
         <span>@Model.Price.ToString("N2")</span>
