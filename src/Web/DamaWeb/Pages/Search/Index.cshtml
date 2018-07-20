@@ -2,6 +2,10 @@
 @model DamaWeb.Pages.Search.IndexModel
 @{
     ViewData["Title"] = "Procurar";
+    if (!string.IsNullOrEmpty(HttpContext.Request.Query["p"]))
+    {
+        ViewBag.NoIndex = true;
+    }
 }
 
 <p id="todos" class="title">Resultados para @Model.SearchFor</p>

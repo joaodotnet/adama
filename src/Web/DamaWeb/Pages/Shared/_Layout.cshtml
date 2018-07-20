@@ -11,10 +11,14 @@
 
             gtag('config', 'UA-112025066-1');
         </script>
-    </environment>    
+    </environment>
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @if (ViewBag.NoIndex != null)
+    {
+        <meta name="robots" content="noindex" />
+    }
     <title>@ViewData["Title"] - Loja</title>
 
     <environment names="Development">
