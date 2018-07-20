@@ -2,6 +2,10 @@
 @model DamaWeb.Pages.Category.Type.IndexModel
 @{
     ViewData["Title"] = Model.CatalogTypeName;
+    if(!string.IsNullOrEmpty(HttpContext.Request.Query["p"]))
+    {
+        ViewBag.NoIndex = true;
+    }
 }
 <p class="title">@Model.CatalogTypeName</p>
 
@@ -9,16 +13,6 @@
     <h2>Todos os Produtos</h2>
     <img class="separator" src="~/images/barra-coracao.png" />
 </div>
-@*<section class="esh-catalog-filters">
-    <div class="container">
-        <form method="get">
-            <label class="esh-catalog-label" data-title="ilustração">
-                <select asp-for="@Model.CatalogModel.IllustrationFilterApplied" asp-items="@Model.CatalogModel.Illustrations" class="esh-catalog-filter"></select>
-            </label>
-            <input class="esh-catalog-send pt-sm-1" type="image" src="~/images/arrow-right.svg" />
-        </form>
-    </div>
-</section>*@
 <div class="container">
     <div class="esh-catalog-items row">
         @foreach (var catalogItem in Model.CatalogModel.CatalogItems)

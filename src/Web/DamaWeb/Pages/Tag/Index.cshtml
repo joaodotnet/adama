@@ -3,6 +3,10 @@
 @model DamaWeb.Pages.Tag.IndexModel
 @{
     ViewData["Title"] = "Index";
+    if (!string.IsNullOrEmpty(HttpContext.Request.Query["p"]))
+    {
+        ViewBag.NoIndex = true;
+    }
 }
 
 <h2 id="todos">Resultados para: @Model.TagName</h2>
