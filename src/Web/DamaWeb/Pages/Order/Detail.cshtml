@@ -64,26 +64,29 @@
             </article>
         </section>
 
-        <section class="esh-orders_detail-section mt-3">
-            <article class="esh-orders_detail-titles row">
-                <section class="esh-orders_detail-title col-12">Morada de Facturação</section>
-            </article>
-            <article class="esh-orders_detail-items row mt-2">
-                <section class="esh-orders_detail-item col-12">@Model.OrderDetails.BillingAddress.Name</section>
-            </article>
-            <article class="esh-orders_detail-items row">
-                <section class="esh-orders_detail-item col-12">@Model.OrderDetails.BillingAddress.Street</section>
-            </article>
+        @if (!string.IsNullOrEmpty(Model.OrderDetails.BillingAddress?.Street))
+        {
 
-            <article class="esh-orders_detail-items row">
-                <section class="esh-orders_detail-item col-12">@Model.OrderDetails.BillingAddress.PostalCode - @Model.OrderDetails.BillingAddress.City</section>
-            </article>
+            <section class="esh-orders_detail-section mt-3">
+                <article class="esh-orders_detail-titles row">
+                    <section class="esh-orders_detail-title col-12">Morada de Facturação</section>
+                </article>
+                <article class="esh-orders_detail-items row mt-2">
+                    <section class="esh-orders_detail-item col-12">@Model.OrderDetails.BillingAddress.Name</section>
+                </article>
+                <article class="esh-orders_detail-items row">
+                    <section class="esh-orders_detail-item col-12">@Model.OrderDetails.BillingAddress.Street</section>
+                </article>
 
-            <article class="esh-orders_detail-items row">
-                <section class="esh-orders_detail-item col-12">@Model.OrderDetails.BillingAddress.Country</section>
-            </article>
-        </section>
+                <article class="esh-orders_detail-items row">
+                    <section class="esh-orders_detail-item col-12">@Model.OrderDetails.BillingAddress.PostalCode - @Model.OrderDetails.BillingAddress.City</section>
+                </article>
 
+                <article class="esh-orders_detail-items row">
+                    <section class="esh-orders_detail-item col-12">@Model.OrderDetails.BillingAddress.Country</section>
+                </article>
+            </section>
+        }
         <section class="esh-orders_detail-section mt-3">
             <article class="esh-orders_detail-titles row mb-2">
                 <section class="esh-orders_detail-title col-12">DETALHE DA ENCOMENDA</section>
@@ -96,7 +99,7 @@
                     <section class="esh-orders_detail-item col-4">
                         <img class="esh-orders_detail-image img-fluid" src="@item.PictureUrl">
                     </section>
-                    <section class="esh-orders_detail-item esh-orders_detail-item--middle col-8 col-sm-4">
+                    <section class="esh-orders_detail-item esh-orders_detail-item--middle col-8 col-sm-3">
                         <span class="d-sm-none">@item.Units x </span>@item.ProductName
                         @if (!string.IsNullOrEmpty(item.CustomizeName))
                         {
@@ -116,9 +119,9 @@
                             @Math.Round(item.Units * item.UnitPrice, 2).ToString("N2") €
                         </span>
                     </section>
-                    <section class="esh-orders_detail-item esh-orders_detail-item--middle d-none d-sm-block col-sm-1">@item.UnitPrice.ToString("N2") €</section>
+                    <section class="esh-orders_detail-item esh-orders_detail-item--middle d-none d-sm-block col-sm-2 text-nowrap">@item.UnitPrice.ToString("N2") €</section>
                     <section class="esh-orders_detail-item esh-orders_detail-item--middle d-none d-sm-block col-sm-1">@item.Units</section>
-                    <section class="esh-orders_detail-item esh-orders_detail-item--middle d-none d-sm-block col-sm-2">@Math.Round(item.Units * item.UnitPrice, 2).ToString("N2") €</section>
+                    <section class="esh-orders_detail-item esh-orders_detail-item--middle d-none d-sm-block col-sm-2 text-nowrap">@Math.Round(item.Units * item.UnitPrice, 2).ToString("N2") €</section>
                 </article>
                 <hr class="basket-hr" />
             }
@@ -130,12 +133,12 @@
                 <article class="esh-orders_detail-titles esh-basket-titles--clean row">
                     <section class="esh-orders_detail-title d-none d-sm-block col-sm-7"></section>
                     <section class="esh-orders_detail-title col-7 col-sm-3 text-sm-right"><small>Despesas de Envio</small></section>
-                    <section class="esh-orders_detail-item esh-orders_detail-item--mark col-4 col-sm-2 text-nowrap">@Model.OrderDetails.ShippingCost €</section>
+                    <section class="esh-orders_detail-item esh-orders_detail-item--mark col-4 col-sm-2 text-nowrap text-right">@Model.OrderDetails.ShippingCost €</section>
                 </article>
 
                 <article class="esh-orders_detail-items row">
                     <section class="esh-orders_detail-item col-9"></section>
-                    
+
                 </article>
             </section>
 
@@ -145,7 +148,7 @@
             <article class="esh-orders_detail-titles esh-basket-titles--clean row">
                 <section class="esh-orders_detail-title d-none d-sm-block col-sm-7"></section>
                 <section class="esh-orders_detail-title col-7 col-sm-3 text-sm-right">TOTAL</section>
-                <section class="esh-orders_detail-item esh-orders_detail-item--mark col-4 col-sm-2 text-nowrap">@Model.OrderDetails.Total €</section>
+                <section class="esh-orders_detail-item esh-orders_detail-item--mark col-4 col-sm-2 text-nowrap text-right">@Model.OrderDetails.Total €</section>
             </article>
         </section>
     </div>
