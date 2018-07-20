@@ -98,7 +98,7 @@ namespace DamaWeb
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromHours(1);
                 options.LoginPath = "/Account/Signin";
-                options.LogoutPath = "/Account/Signout";
+                options.LogoutPath = "/Account/Signout";                
                 options.Cookie.IsEssential = true;
             });
             services.Configure<CookiePolicyOptions>(options =>
@@ -149,6 +149,8 @@ namespace DamaWeb
                     options.Conventions.AddPageRoute("/Customize/Index", "personalizar/");
                     options.Conventions.AddPageRoute("/Customize/Result", "personalizar/resultado");
                     options.Conventions.AddPageRoute("/Privacy", "privacidade");
+                    options.Conventions.AddPageRoute("/NotFound", "pagina-nao-encontrada");
+                    options.Conventions.AddPageRoute("/Error", "erro");
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -168,7 +170,7 @@ namespace DamaWeb
             }
             else
             {
-                app.UseExceptionHandler("/Catalog/Error");
+                app.UseExceptionHandler("/Error");
                 //app.UseHsts();
             }
 
@@ -191,6 +193,20 @@ namespace DamaWeb
             });
 
             app.UseAuthentication();
+
+            app.Use(async (ctx, next) =>
+            {
+                await next();
+
+                if (ctx.Response.StatusCode == 404 && !ctx.Response.HasStarted)
+                {
+                    //Re-execute the request so the user gets the error page
+                    string originalPath = ctx.Request.Path.Value;
+                    ctx.Items["originalPath"] = originalPath;
+                    ctx.Request.Path = "/NotFound";
+                    await next();
+                }
+            });
 
             app.UseMvc();
         }
