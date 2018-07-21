@@ -41,6 +41,8 @@
                 </div>
             </div>
         </div>
+        @if (Model.CustomizeModel.ProductTypes.Count > 0)
+        {
         <div class="text-center">
             <h4 class="mt-2">
                 Qual é o produto?
@@ -65,7 +67,7 @@
                 <button type="submit" class="btn btn-dama-menta mt-sm-0 mr-sm-3 mt-3">Próximo passo &rarr;</button>
             </div>
         </div>
-        
+        }
     </div>
     <input type="hidden" asp-for="CustomizeModel.CatalogItemId" />
 </form>
@@ -75,19 +77,6 @@
     <script>
         var colors = [];
         $(document).ready(function () {
-            //$('.slider-for').slick({
-            //    infinite: true,
-            //    slidesToShow: 4,
-            //    slidesToScroll: 1,
-            //    responsive: [
-            //        {
-            //            breakpoint: 576,
-            //            settings: {
-            //                slidesToShow: 1
-            //            }
-            //        }]
-
-            //});
 
             $('.category-block').click(function () {
                 var url = '@(Url.Page("/Customize/Index", new { CategoryId = 0 }))';
@@ -96,31 +85,11 @@
             });
 
             $('.product-block').click(function () {
-                //$(this).find('img').css('opacity', 1);
-                //$(this).find('.card-text').css('font-weight', 'bold');
-                //$(this).siblings().find('img').css('opacity', 0.5);
-                //$(this).siblings().find('.card-text').css('font-weight', '100');
                 selectProduct($(this));
                 $('#CustomizeModel_CatalogItemId').val($(this).attr('catalog-type-id'));
                 $('.go-section').removeClass("sr-only");
             });
-
-            //$('.dama-customize-colors .card').click(function () {
-            //    $(this).toggleClass('dama-customize-color-selected');
-            //    var color = $(this).css('background-color').replace(/,/g, ';');
-            //    if ($(this).hasClass('dama-customize-color-selected'))
-            //        colors.push(color);
-            //    else {
-            //        var index = colors.indexOf(color);
-            //        colors.splice(index, 1);
-            //    }
-            //    console.log(colors);
-            //    $('#CustomizeModel_Colors').val(colors);
-            //});
-
-            //$('#validatedCustomFile').on('change', function () {
-            //    changeLabelText();
-            //});
+            
 
             function selectProduct(elem) {
                 elem.find('img').css('border', "5px solid #FC629D");
