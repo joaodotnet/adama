@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -34,5 +35,37 @@ namespace DamaWeb.ViewModels
         public string PhoneNumber { get; set; }
         [Display(Name = "Aceito subscrever a newsletter da Dama no Jornal para ficar a par de todas as novidades.")]
         public bool SubscribeNewsletter { get; set; } = true;
+        //[Display(Name = "Declaro que li e aceito os Termos de Serviço.")]
+        //[BooleanRequired(ErrorMessage = "Têm que aceitar os Termos de Serviço")]
+        //public bool AcceptConditions { get; set; }
+    }
+
+    public class BooleanRequiredAttribute : ValidationAttribute, IClientModelValidator
+    {
+        public void AddValidation(ClientModelValidationContext context)
+        {
+            MergeAttribute(context.Attributes, "data-val-booleanrequired", this.ErrorMessageString);
+        }
+
+        private bool MergeAttribute(IDictionary<string, string> attributes, string key, string value)
+        {
+            if (attributes.ContainsKey(key))
+            {
+                return false;
+            }
+
+            attributes.Add(key, value);
+            return true;
+        }
+
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+
+            if (value != null && (bool)value == true)
+                return ValidationResult.Success;
+
+            return new ValidationResult("Têm que aceitar os Termos de Serviço");
+        }
+        
     }
 }

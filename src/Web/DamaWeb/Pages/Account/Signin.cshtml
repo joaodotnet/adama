@@ -78,13 +78,18 @@
                         <label asp-for="UserDetails.ConfirmPassword"></label>
                         <input asp-for="UserDetails.ConfirmPassword" class="form-control" />
                         <span asp-validation-for="UserDetails.ConfirmPassword" class="text-danger"></span>
-                    </div>                    
+                    </div>
                     <div class="form-group form-check">
                         <input asp-for="UserDetails.SubscribeNewsletter" class="form-check-input">
                         <label class="form-check-label small" asp-for="UserDetails.SubscribeNewsletter"></label>
                     </div>
+                    @*<div class="form-group form-check">
+                        <input asp-for="UserDetails.AcceptConditions" class="form-check-input">
+                        <label class="form-check-label small" asp-for="UserDetails.AcceptConditions"></label>
+                        <span asp-validation-for="UserDetails.AcceptConditions" class="text-danger"></span>
+                    </div>*@
                     <button type="submit" class="esh-catalog-button btn btn-default btn-brand btn-brand-big">&nbsp;REGISTAR&nbsp;</button>
-                    
+
                 </form>
             </section>
         </div>
@@ -93,4 +98,38 @@
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+    <script type="text/javascript">
+
+     $(function () {
+
+         //$.validator.addMethod('booleanrequired',
+
+         //    function (value, element, params) {
+         //        // Get element value. Classic genre has value '0'.
+         //        debugger;
+         //        //var genre = $(params[0]).val(),
+         //        //    year = params[1],
+         //        //    date = new Date(value);
+         //        //if (genre && genre.length > 0 && genre[0] === '0') {
+         //        //    // Since this is a classic movie, invalid if release date is after given year.
+         //        //    return date.getFullYear() <= year;
+         //        //}
+
+         //        return true;
+
+         //    });
+
+
+
+         //$.validator.unobtrusive.adapters.add('booleanrequired',
+         //    ['year'],
+         //    function (options) {
+         //        var element = $(options.form).find('select#Genre')[0];
+         //        options.rules['booleanrequired'] = [element, parseInt(options.params['year'])];
+         //        options.messages['booleanrequired'] = options.message;
+         //    });
+     });
+
+    </script>
 }

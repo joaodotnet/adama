@@ -153,6 +153,13 @@ namespace DamaWeb
                     options.Conventions.AddPageRoute("/Privacy", "privacidade");
                     options.Conventions.AddPageRoute("/NotFound", "pagina-nao-encontrada");
                     options.Conventions.AddPageRoute("/Error", "erro");
+                    options.Conventions.AddPageRoute("/Account/Signin", "conta/entrar");
+                    options.Conventions.AddPageRoute("/Account/ConfirmEmail", "conta/confirmar-email");
+                    options.Conventions.AddPageRoute("/Account/ForgotPassword", "conta/esqueceu-password");
+                    options.Conventions.AddPageRoute("/Account/ForgotPasswordConfirmation", "conta/confirmacao-password");
+                    options.Conventions.AddPageRoute("/Account/ResetPassword", "conta/recuperar-password");
+                    options.Conventions.AddPageRoute("/Account/ResetPasswordConfirmation", "conta/confirmacao-recuperacao-password");
+                    options.Conventions.AddPageRoute("/Account/Manage/Index", "conta/perfil");
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
