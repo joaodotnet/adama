@@ -128,7 +128,7 @@
             <div class="offset-sm-2 col-sm-8 col-12 p-sm-0">
                 <div class="row pr-sm-0 m-0">
                     <div class="col-sm-2 col-3">
-                        <a asp-page="./Index" asp-route-CategoryId="@Model.CustomizeModel.CategoryId" asp-route-CatalogItemId="@Model.CustomizeModel.CatalogItemId" class="btn btn-dama-menta mt-0 mr-3" role="button">&larr; Voltar</a>
+                        <a asp-page="./Index" asp-route-CategoryId="@Model.CustomizeModel.CategoryId" asp-route-CatalogItemId="@Model.CustomizeModel.CatalogItemId" class="btn btn-dama-menta mt-0 mr-3 text-white" role="button">&larr; Voltar</a>
                     </div>
                     <div class="offset-sm-7 col-sm-3 offset-3 col-6">
                         <button type="submit" class="btn btn-dama-menta mt-0 mr-3">Próximo passo &rarr;</button>
@@ -147,65 +147,26 @@
     <script>
         var colors = [];
         $(document).ready(function () {
-            @*$('.slider-for').slick({
-                infinite: true,
-                slidesToShow: 4,
-                slidesToScroll: 1,
-                responsive: [
-                    {
-                        breakpoint: 576,
-                        settings: {
-                            slidesToShow: 1
-                        }
-                    }]
-
-            });
-
-            $('.category-block').click(function () {
-                var url = '@(Url.Page("/Customize/Index", new { CategoryId = 0 }))';
-                url = url.replace('0', $(this).attr('cat-id')) + '#produtos';
-                window.location.replace(url);
-            });
-
-            $('.product-block').click(function () {
-                //$(this).find('img').css('opacity', 1);
-                //$(this).find('.card-text').css('font-weight', 'bold');
-                //$(this).siblings().find('img').css('opacity', 0.5);
-                //$(this).siblings().find('.card-text').css('font-weight', '100');
-                selectProduct($(this));
-                $('#CustomizeModel_ProductSelected').val($(this).attr('catalog-type-id'));
-            });*@
 
             $('.dama-customize-colors .card').click(function () {
-                $(this).toggleClass('dama-customize-color-selected');
+                
                 var color = $(this).css('background-color').replace(/,/g, ';');
-                if ($(this).hasClass('dama-customize-color-selected'))
-                    colors.push(color);
+
+                if ($(this).hasClass('dama-customize-color-selected') == false) {
+                    if (colors.length < 2) {
+                        colors.push(color);
+                        $(this).toggleClass('dama-customize-color-selected');
+                    }
+                }                    
                 else {
                     var index = colors.indexOf(color);
                     colors.splice(index, 1);
+                    $(this).toggleClass('dama-customize-color-selected');
                 }
+                
                 $('#colors').val(colors);
-            });
-
-            $('#validatedCustomFile').on('change', function () {
-                changeLabelText();
-            });
-
-            //function selectProduct(elem) {
-            //    elem.find('img').css('border', "5px solid #FC629D");
-            //    elem.siblings().find('img').css('border', "");
-            //}
-
-            function changeLabelText() {
-                var profilePicValue = document.getElementById('validatedCustomFile').value; /* gets the filepath and filename from the input */
-                var fileNameStart = profilePicValue.lastIndexOf('\\'); /* finds the end of the filepath */
-                profilePicValue = profilePicValue.substr(fileNameStart + 1); /* isolates the filename */
-                var profilePicLabelText = document.querySelector('label[for="validatedCustomFile"]'); /* finds the label text */
-                if (profilePicValue !== '') {
-                    profilePicLabelText.textContent = profilePicValue.substring(0,15); /* changes the label text */
-                }
-            }
+                console.log("colors: " + $('#colors').val());
+            });            
         });
     </script>
 }

@@ -35,22 +35,6 @@ namespace DamaWeb.Pages.Customize
         public void OnGet(int id)
         {
             CustomizeModel.CatalogItemId = id;
-            //CustomizeModel = await _service.GetCustomizeItems(CategoryId, CatalogItemId);
-            //var user = await _userManager.GetUserAsync(User);
-            //if (user != null)
-            //{
-            //    CustomizeModel.BuyerEmail = user.Email;
-            //    CustomizeModel.BuyerName = $"{user.FirstName} {user.LastName}";
-            //    CustomizeModel.BuyerPhone = user.PhoneNumber;
-            //}
-        }
-
-        public async Task<IActionResult> OnPostAsync()
-        {
-            return RedirectToPage("./Step3");
-            //return RedirectToPage("./Step3", new { id = CustomizeModel.ProductSelected, colors = CustomizeModel.Colors, description = CustomizeModel.Description, text = CustomizeModel.Text });
-            //await _service.SendCustomizeService(CustomizeModel);
-            //return RedirectToPage("./Result");
         }
     }
 }

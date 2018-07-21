@@ -70,11 +70,6 @@
                     </div>
                 </div>
             </div>
-            @*<div class="row mt-3 pb-5">
-                <div class="offset-sm-5 col-sm-3 col-12 text-sm-right text-center">
-                    <button type="submit" class="esh-catalog-button btn btn-default btn-brand btn-brand-big mt-0">&nbsp;SUBMETER&nbsp;</button>
-                </div>
-            </div>*@
         </div>
         <input type="hidden" asp-for="CustomizeModel.CatalogItemId" />
         <input type="hidden" asp-for="CustomizeModel.Colors" />
@@ -87,56 +82,9 @@
     <script>
         
         $(document).ready(function () {
-            @*$('.slider-for').slick({
-                infinite: true,
-                slidesToShow: 4,
-                slidesToScroll: 1,
-                responsive: [
-                    {
-                        breakpoint: 576,
-                        settings: {
-                            slidesToShow: 1
-                        }
-                    }]
-
-            });
-
-            $('.category-block').click(function () {
-                var url = '@(Url.Page("/Customize/Index", new { CategoryId = 0 }))';
-                url = url.replace('0', $(this).attr('cat-id')) + '#produtos';
-                window.location.replace(url);
-            });
-
-            $('.product-block').click(function () {
-                //$(this).find('img').css('opacity', 1);
-                //$(this).find('.card-text').css('font-weight', 'bold');
-                //$(this).siblings().find('img').css('opacity', 0.5);
-                //$(this).siblings().find('.card-text').css('font-weight', '100');
-                selectProduct($(this));
-                $('#CustomizeModel_ProductSelected').val($(this).attr('catalog-type-id'));
-            });*@
-
-            //$('.dama-customize-colors .card').click(function () {
-            //    $(this).toggleClass('dama-customize-color-selected');
-            //    var color = $(this).css('background-color').replace(/,/g, ';');
-            //    if ($(this).hasClass('dama-customize-color-selected'))
-            //        colors.push(color);
-            //    else {
-            //        var index = colors.indexOf(color);
-            //        colors.splice(index, 1);
-            //    }
-            //    console.log(colors);
-            //    $('#CustomizeModel_Colors').val(colors);
-            //});
-
             $('#validatedCustomFile').on('change', function () {
                 changeLabelText();
             });
-
-            //function selectProduct(elem) {
-            //    elem.find('img').css('border', "5px solid #FC629D");
-            //    elem.siblings().find('img').css('border', "");
-            //}
 
             function changeLabelText() {
                 var profilePicValue = document.getElementById('validatedCustomFile').value; /* gets the filepath and filename from the input */
