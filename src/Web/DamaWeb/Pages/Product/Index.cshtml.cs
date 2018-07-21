@@ -28,6 +28,9 @@ namespace DamaWeb.Pages.Product
                 return NotFound();
             ProductModel = await _catalogService.GetCatalogItem(id);
 
+            if (ProductModel == null)
+                return NotFound();
+
             ViewData["ProductReferences"] = new SelectList(ProductModel.ProductReferences, "Sku", "Name");
 
             //Update default price
