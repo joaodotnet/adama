@@ -36,7 +36,7 @@ namespace DamaWeb.ViewModels
         public string PhoneNumber { get; set; }
         [Display(Name = "Aceito subscrever a newsletter da Dama no Jornal para ficar a par de todas as novidades.")]
         public bool SubscribeNewsletter { get; set; } = true;       
-        [EnforceTrue(ErrorMessage = "Têm que aceitar os Termos de Serviço.")]
+        [EnforceTrue(ErrorMessage = "Deves aceitar os Termos e Condições.")]
         public bool AgreeToTerms { get; set; } = false;
     }    
 }

@@ -2,7 +2,7 @@
 
 @model DamaWeb.Pages.Tag.IndexModel
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = Model.TagName;
     if (!string.IsNullOrEmpty(HttpContext.Request.Query["p"]))
     {
         ViewBag.NoIndex = true;
