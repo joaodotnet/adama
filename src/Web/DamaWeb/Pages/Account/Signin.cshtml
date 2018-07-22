@@ -13,16 +13,16 @@
             <section>
                 <form asp-route-returnurl="@ViewData["ReturnUrl"]" asp-page-handler="SignIn" method="post" class="form-horizontal">
                     <h4>Já se registou?</h4>
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div asp-validation-summary="ModelOnly" class="text-danger small"></div>
                     <div class="form-group required">
                         <label asp-for="LoginDetails.Email" class="control-label form-label"></label>
                         <input asp-for="LoginDetails.Email" class="form-control form-input form-input-center" />
-                        <span asp-validation-for="LoginDetails.Email" class="text-danger"></span>
+                        <span asp-validation-for="LoginDetails.Email" class="text-danger small"></span>
                     </div>
                     <div class="form-group required">
                         <label asp-for="LoginDetails.Password" class="control-label form-label"></label>
                         <input asp-for="LoginDetails.Password" class="form-control form-input form-input-center" />
-                        <span asp-validation-for="LoginDetails.Password" class="text-danger"></span>
+                        <span asp-validation-for="LoginDetails.Password" class="text-danger small"></span>
                     </div>
                     <div class="form-group">
                         <div class="checkbox">
@@ -48,36 +48,36 @@
             <section>
                 <h4>Registe-se!</h4>
                 <form asp-route-returnurl="@ViewData["ReturnUrl"]" asp-page-handler="Register" method="post">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div asp-validation-summary="ModelOnly" class="text-danger small"></div>
                     <div class="form-group required">
                         <label asp-for="UserDetails.FirstName"></label>
                         <input asp-for="UserDetails.FirstName" class="form-control" />
-                        <span asp-validation-for="UserDetails.FirstName" class="text-danger"></span>
+                        <span asp-validation-for="UserDetails.FirstName" class="text-danger small"></span>
                     </div>
                     <div class="form-group required">
                         <label asp-for="UserDetails.LastName"></label>
                         <input asp-for="UserDetails.LastName" class="form-control" />
-                        <span asp-validation-for="UserDetails.LastName" class="text-danger"></span>
+                        <span asp-validation-for="UserDetails.LastName" class="text-danger small"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="UserDetails.PhoneNumber"></label>
                         <input asp-for="UserDetails.PhoneNumber" class="form-control" />
-                        <span asp-validation-for="UserDetails.PhoneNumber" class="text-danger"></span>
+                        <span asp-validation-for="UserDetails.PhoneNumber" class="text-danger small"></span>
                     </div>
                     <div class="form-group required">
                         <label asp-for="UserDetails.Email"></label>
                         <input asp-for="UserDetails.Email" class="form-control" />
-                        <span asp-validation-for="UserDetails.Email" class="text-danger"></span>
+                        <span asp-validation-for="UserDetails.Email" class="text-danger small"></span>
                     </div>
                     <div class="form-group required">
                         <label asp-for="UserDetails.Password"></label>
                         <input asp-for="UserDetails.Password" class="form-control" />
-                        <span asp-validation-for="UserDetails.Password" class="text-danger"></span>
+                        <span asp-validation-for="UserDetails.Password" class="text-danger small"></span>
                     </div>
                     <div class="form-group required">
                         <label asp-for="UserDetails.ConfirmPassword"></label>
                         <input asp-for="UserDetails.ConfirmPassword" class="form-control" />
-                        <span asp-validation-for="UserDetails.ConfirmPassword" class="text-danger"></span>
+                        <span asp-validation-for="UserDetails.ConfirmPassword" class="text-danger small"></span>
                     </div>
                     <div class="form-group form-check">
                         <input asp-for="UserDetails.SubscribeNewsletter" class="form-check-input">
@@ -86,9 +86,9 @@
                     <div class="form-group">
                         <div class="form-check">
                             <input asp-for="UserDetails.AgreeToTerms" class="form-check-input" />
-                            <label asp-for="UserDetails.AgreeToTerms" class="form-check-label small">Declaro que li e aceito os <a class="link-dama-menta" href="https://www.damanojornal.com/termos-e-condicoes/" target="_blank">Termos de Serviço</a>.</label>
+                            <label asp-for="UserDetails.AgreeToTerms" class="form-check-label small">Declaro que li e aceito os <a class="link-dama-menta" href="https://www.damanojornal.com/termos-e-condicoes/" target="_blank">Termos e Condições</a>.</label>
                         </div>
-                        <span asp-validation-for="UserDetails.AgreeToTerms" class="text-danger"></span>
+                        <span asp-validation-for="UserDetails.AgreeToTerms" class="text-danger small"></span>
                     </div>
                     <button type="submit" class="esh-catalog-button btn btn-default btn-brand btn-brand-big">&nbsp;REGISTAR&nbsp;</button>
 
