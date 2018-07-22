@@ -45,7 +45,7 @@ namespace DamaWeb.Pages.Account
         public LoginViewModel LoginDetails { get; set; } = new LoginViewModel();
 
         [BindProperty]
-        public RegisterViewModel UserDetails { get; set; }
+        public RegisterViewModel UserDetails { get; set; } = new RegisterViewModel();
 
         public class LoginViewModel
         {
@@ -122,8 +122,7 @@ namespace DamaWeb.Pages.Account
                 var user = new ApplicationUser { UserName = UserDetails.Email, Email = UserDetails.Email, FirstName = UserDetails.FirstName, LastName = UserDetails.LastName, PhoneNumber = UserDetails.PhoneNumber };
                 var result = await _userManager.CreateAsync(user, UserDetails.Password);
                 if (result.Succeeded)
-                {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                {                    
 
                     string anonymousBasketId = Request.Cookies[Constants.BASKET_COOKIENAME];
                     if (!String.IsNullOrEmpty(anonymousBasketId))
@@ -132,7 +131,7 @@ namespace DamaWeb.Pages.Account
                         Response.Cookies.Delete(Constants.BASKET_COOKIENAME);
                     }
 
-                    await SendConfirmationEmailAsync();
+                    await SendConfirmationEmailAsync(user);
 
                     //Check Subscriber
                     if (UserDetails.SubscribeNewsletter)
@@ -140,6 +139,8 @@ namespace DamaWeb.Pages.Account
                         await _mailChimpService.AddSubscriberAsync(UserDetails.Email);
                         await _emailSender.SendGenericEmailAsync(_settings.FromInfoEmail, _settings.ToEmails, "Subscrição da newsletter feita na loja", $"O utilizador {UserDetails.FirstName} {UserDetails.LastName} registou-se na loja e subscreveu-se na newsletter com o email: {UserDetails.Email}");
                     }
+
+                    await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToPage(returnUrl);
                 }
                 AddErrors(result);
@@ -147,15 +148,11 @@ namespace DamaWeb.Pages.Account
             return Page();
         }
 
-        private async Task SendConfirmationEmailAsync()
+        private async Task SendConfirmationEmailAsync(ApplicationUser user)
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user != null)
-            {
-                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                await _emailSender.SendEmailConfirmationAsync(_settings.FromInfoEmail, user.Email, callbackUrl);
-            }
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+            await _emailSender.SendEmailConfirmationAsync(_settings.FromInfoEmail, user.Email, callbackUrl);
         }
 
         private void AddErrors(IdentityResult result)

@@ -47,6 +47,8 @@ namespace DamaWeb.Pages.Tag
 
             var tagToSearch = Utils.StringToUri(tagName);
 
+            p = p < 0 ? 0 : p;
+
             CatalogModel = await _service.GetCatalogItemsByTag(p ?? 0, Constants.ITEMS_PER_PAGE, tagToSearch, tagType, catalogModel.TypesFilterApplied, catalogModel.IllustrationFilterApplied);
             return Page();
         }

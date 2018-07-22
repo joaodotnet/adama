@@ -42,12 +42,5 @@ namespace DamaWeb.Pages.Product
             //ProductModel.ProductTotalPrice = ProductModel.ProductPrice + attrDefaultPrice;
             return Page();
         }
-
-        public async Task<JsonResult> OnGetAttributeDetailsAsync(int id)
-        {
-            throw new NotImplementedException();
-            //var res = await _catalogService.GetAttributeDetails(id);
-            //return new JsonResult(new { price = res.Price, sku = res.ReferenceCatalogSku });
-        }
     }
 }
