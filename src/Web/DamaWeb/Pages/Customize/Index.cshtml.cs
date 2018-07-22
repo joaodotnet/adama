@@ -43,11 +43,9 @@ namespace DamaWeb.Pages.Customize
             }
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPost()
         {
-            //await _service.SendCustomizeService(CustomizeModel);
             if(CustomizeModel.CatalogItemId.HasValue)
-
                 return RedirectToPage("./Step2", new { id = CustomizeModel.CatalogItemId });
             return RedirectToPage();
         }

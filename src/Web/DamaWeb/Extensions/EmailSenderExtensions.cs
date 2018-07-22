@@ -17,6 +17,8 @@ namespace Microsoft.AspNetCore.Mvc
             return emailSender.SendEmailAsync(fromEmail, toEmail, "Dama no Jornal® - Recuperar Password",
                 $"Por favor recupere a password <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicando aqui</a>.");
         }
+
+
     }
 
 }

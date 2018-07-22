@@ -22,19 +22,17 @@ namespace Infrastructure.Services
             _appSettings = appSettings;
             //_logger = logger;
         }
-        public Task SendEmailAsync(string fromEmail, string toEmail, string subject, string message, string bccEmails = null, IFormFile attachFile = null)
+        public async Task SendEmailAsync(string fromEmail, string toEmail, string subject, string message, string bccEmails = null, IFormFile attachFile = null)
         {
             // TODO: Wire this up to actual email sending logic via SendGrid, local SMTP, etc.
-            Execute(fromEmail, toEmail, subject, message, bccEmails, attachFile).Wait();
-
-            return Task.FromResult(0);
+            //Execute(fromEmail, toEmail, subject, message, bccEmails, attachFile).Wait();
+            await SendGenericEmailAsync(fromEmail, toEmail, subject, message, bccEmails);
         }
 
-        public Task SendGenericEmailAsync(string fromEmail, string toEmail, string subject, string textBody, string bccEmails = null, List<(string,byte[])> files = null)
+        public async Task SendGenericEmailAsync(string fromEmail, string toEmail, string subject, string textBody, string bccEmails = null, List<(string,byte[])> files = null)
         {
             var message = CreateGenericBody(textBody);
-            Execute(fromEmail, toEmail, subject, message, bccEmails, null,files).Wait();
-            return Task.FromResult(0);
+            await Execute(fromEmail, toEmail, subject, message, bccEmails, null,files);
         }
         public async Task Execute(string FromEmail, string ToEmail, string subject, string message, string bccEmails, IFormFile attachFile, List<(string FileName, byte[] Bytes)> files = null)
         {

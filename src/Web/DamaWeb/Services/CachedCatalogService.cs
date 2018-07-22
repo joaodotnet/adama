@@ -18,7 +18,6 @@ namespace DamaWeb.Services
         private static readonly string _itemsKeyTemplate = "items-{0}-{1}-{2}-{3}-{4}";
         private static readonly string _categoryItemsKeyTemplate = "categories-items-{0}-{1}-{2}";
         private static readonly string _categoryItemKeyTemplate = "item-{0}";
-        private static readonly string _categoryAttrKeyTemplate = "attr-{0}";
         private static readonly string _itemsByTagKeyTemplate = "tag-{0}-{1}-{2}-{3}-{4}-{5}";
         private static readonly string _itemsBySearchKeyTemplate = "search-{0}-{1}-{2}-{3}-{4}";
         private static readonly string _menuKeyTemplate = "damamenu";
@@ -79,17 +78,6 @@ namespace DamaWeb.Services
                 entry.SlidingExpiration = _defaultCacheDuration;
                 return await _catalogService.GetCatalogItem(id);
             });
-        }
-
-        public async Task<AttributeViewModel> GetAttributeDetails(int attributeId)
-        {
-            throw new NotImplementedException();
-            //string cacheKey = String.Format(_categoryAttrKeyTemplate, attributeId);
-            //return await _cache.GetOrCreateAsync(cacheKey, async entry =>
-            //{
-            //    entry.SlidingExpiration = _defaultCacheDuration;
-            //    return await _catalogService.GetAttributeDetails(attributeId);
-            //});
         }
 
         public async Task<CatalogIndexViewModel> GetCatalogItemsByTag(int pageIndex, int? itemsPage, string tagName, TagType? tagType, int? typeId, int? illustrationId)
