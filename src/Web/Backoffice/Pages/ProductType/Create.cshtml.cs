@@ -81,7 +81,7 @@ namespace Backoffice.Pages.ProductType
             }
 
             //Save Images Text Helpers
-            if(ProductTypeModel?.FormFileTextHelpers.Count > 0)
+            if(ProductTypeModel?.FormFileTextHelpers?.Count > 0)
             {
                 foreach (var item in ProductTypeModel.FormFileTextHelpers)
                 {

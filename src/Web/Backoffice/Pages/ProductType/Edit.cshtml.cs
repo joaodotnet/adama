@@ -107,7 +107,7 @@ namespace Backoffice.Pages.ProductType
             }
 
             //Save Images Text Helpers
-            if (ProductTypeModel?.FormFileTextHelpers.Count > 0)
+            if (ProductTypeModel?.FormFileTextHelpers?.Count > 0)
             {
                 //Delete All
                 foreach (var item in productTypeEntity.PictureTextHelpers)
