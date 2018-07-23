@@ -45,14 +45,25 @@ namespace Backoffice.Services
             return System.IO.File.Exists(Path.Combine(fullpath, fileName));
         }
 
+        public void DeleteFile(string fullpath)
+        {
+            if (System.IO.File.Exists(fullpath))
+                System.IO.File.Delete(fullpath);
+        }
+
         public void DeleteFile(string fullpath, string fileName)
         {
             if (System.IO.File.Exists(Path.Combine(fullpath, fileName)))
                 System.IO.File.Delete(Path.Combine(fullpath, fileName));
         }
 
-        public async Task<string> SaveFileAsync(IFormFile formFile, string fullPath, string uriPath, string addToFilename)
+        public async Task<PictureInfo> SaveFileAsync(IFormFile formFile, string fullPath, string uriPath, string addToFilename)
         {
+            var info = new PictureInfo
+            {
+                Filename = formFile.GetFileNameSimplify(),
+                Extension = formFile.GetExtension()
+            };
             var filename = formFile.GetFileName();
 
             if (!string.IsNullOrEmpty(addToFilename))
@@ -70,7 +81,10 @@ namespace Backoffice.Services
                 await formFile.CopyToAsync(stream);
             }
 
-            return uriPath + filename;
+            info.Location = filePath;
+            info.PictureUri = uriPath + filename;
+
+            return info;
         }
 
         public async Task SaveFileAsync(byte[] bytes, string fullPath, string filename)

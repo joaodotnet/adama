@@ -63,7 +63,13 @@ namespace Backoffice.Pages.ProductType
 
             if (ProductTypeModel.Picture?.Length > 2097152)
             {
-                ModelState.AddModelError("", "A menina quer por favor diminuir o tamanho da imagem? O máximo é 2MB, obrigado! Ass.: O seu amor!");
+                ModelState.AddModelError("", "A menina quer por favor diminuir o tamanho da imagem principal? O máximo é 2MB, obrigado! Ass.: O seu amor!");
+                return Page();
+            }
+
+            if(ProductTypeModel.FormFileTextHelpers?.Count > 0 && ProductTypeModel.FormFileTextHelpers.Any(x => x.Length > 2097152))
+            {
+                ModelState.AddModelError("", "A menina quer por favor diminuir o tamanho das imagens da localização do nome? O máximo é 2MB, obrigado! Ass.: O seu amor!");
                 return Page();
             }
 
@@ -71,7 +77,24 @@ namespace Backoffice.Pages.ProductType
             if (ProductTypeModel?.Picture?.Length > 0)
             {
                 var lastId = _context.CatalogTypes.Count() > 0 ? (await _context.CatalogTypes.LastAsync()).Id : 0;
-                ProductTypeModel.PictureUri = await _service.SaveFileAsync(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureFullPath, _backofficeSettings.WebProductTypesPictureUri, (++lastId).ToString());
+                ProductTypeModel.PictureUri = (await _service.SaveFileAsync(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureFullPath, _backofficeSettings.WebProductTypesPictureUri, (++lastId).ToString())).PictureUri;
+            }
+
+            //Save Images Text Helpers
+            if(ProductTypeModel?.FormFileTextHelpers.Count > 0)
+            {
+                foreach (var item in ProductTypeModel.FormFileTextHelpers)
+                {
+                    var lastId = _context.FileDetails.Count() > 0 ? (await _context.FileDetails.LastAsync()).Id : 0;
+                    var pictureInfo = await _service.SaveFileAsync(item, _backofficeSettings.WebProductTypesPictureFullPath, _backofficeSettings.WebProductTypesPictureUri, (++lastId).ToString());
+                    ProductTypeModel.PictureTextHelpers.Add(new FileDetailViewModel
+                    {
+                        PictureUri = pictureInfo.PictureUri,
+                        Extension = pictureInfo.Extension,
+                        FileName = pictureInfo.Filename,
+                        Location = pictureInfo.Location
+                    });
+                }
             }
 
             var catalogType = _mapper.Map<ApplicationCore.Entities.CatalogType>(ProductTypeModel);

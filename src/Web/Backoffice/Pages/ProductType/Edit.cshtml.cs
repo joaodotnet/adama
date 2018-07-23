@@ -34,6 +34,9 @@ namespace Backoffice.Pages.ProductType
         [BindProperty]
         public ProductTypeViewModel ProductTypeModel { get; set; }
 
+        [TempData]
+        public string StatusMessage { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -44,6 +47,7 @@ namespace Backoffice.Pages.ProductType
             var productType = await _context.CatalogTypes
                 .Include(p => p.Categories)
                  .ThenInclude(c => c.Category)
+                 .Include(p => p.PictureTextHelpers)
                 .SingleOrDefaultAsync(m => m.Id == id);
 
             if (productType == null)
@@ -80,22 +84,53 @@ namespace Backoffice.Pages.ProductType
                 return Page();
             }
 
-           //Get entity
+            if (ProductTypeModel.FormFileTextHelpers?.Count > 0 && ProductTypeModel.FormFileTextHelpers.Any(x => x.Length > 2097152))
+            {
+                ModelState.AddModelError("", "A menina quer por favor diminuir o tamanho das imagens da localização do nome? O máximo é 2MB, obrigado! Ass.: O seu amor!");
+                return Page();
+            }
+
+            //Get entity
             var productTypeEntity = await _context.CatalogTypes
                 .Include(x => x.Categories)
+                .Include(x => x.PictureTextHelpers)
                 .SingleOrDefaultAsync(x => x.Id == ProductTypeModel.Id);
 
-                 //Save Image
+            //Save Image
             if (ProductTypeModel?.Picture?.Length > 0)
             {
                 if(!string.IsNullOrEmpty(productTypeEntity.PictureUri))
                 {
                     _service.DeleteFile(_backofficeSettings.WebProductTypesPictureFullPath, Utils.GetFileName(productTypeEntity.PictureUri));
                 }
-                ProductTypeModel.PictureUri = await _service.SaveFileAsync(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureFullPath, _backofficeSettings.WebProductTypesPictureUri, ProductTypeModel.Id.ToString());
+                ProductTypeModel.PictureUri = (await _service.SaveFileAsync(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureFullPath, _backofficeSettings.WebProductTypesPictureUri, ProductTypeModel.Id.ToString())).PictureUri;
             }
 
-            if(productTypeEntity != null)
+            //Save Images Text Helpers
+            if (ProductTypeModel?.FormFileTextHelpers.Count > 0)
+            {
+                //Delete All
+                foreach (var item in productTypeEntity.PictureTextHelpers)
+                {
+                    _service.DeleteFile(item.Location);
+                    _context.Entry(item).State = EntityState.Deleted;
+                }
+
+                foreach (var item in ProductTypeModel.FormFileTextHelpers)
+                {
+                    var lastId = _context.FileDetails.Count() > 0 ? (await _context.FileDetails.LastAsync()).Id : 0;
+                    var pictureInfo = await _service.SaveFileAsync(item, _backofficeSettings.WebProductTypesPictureFullPath, _backofficeSettings.WebProductTypesPictureUri, (++lastId).ToString());
+                    productTypeEntity.PictureTextHelpers.Add(new FileDetail
+                    {
+                        PictureUri = pictureInfo.PictureUri,
+                        Extension = pictureInfo.Extension,
+                        FileName = pictureInfo.Filename,
+                        Location = pictureInfo.Location
+                    });
+                }
+            }
+
+            if (productTypeEntity != null)
             {                
                 productTypeEntity.Code = ProductTypeModel.Code;
                 productTypeEntity.Description = ProductTypeModel.Description;
@@ -119,7 +154,7 @@ namespace Backoffice.Pages.ProductType
                 foreach (var item in to_add)
                 {
                     productTypeEntity.Categories.Add(new CatalogTypeCategory { CategoryId = item });
-                }                
+                }
             }
 
             try
@@ -132,6 +167,24 @@ namespace Backoffice.Pages.ProductType
             }
 
             return RedirectToPage("./Index");
+        }
+
+        public async Task<IActionResult> OnGetRemoveAdditionalImagesAsync(int id)
+        {
+            var productTypeEntity = await _context.CatalogTypes
+               .Include(x => x.PictureTextHelpers)
+               .SingleOrDefaultAsync(x => x.Id == id);
+
+            if(productTypeEntity != null)
+            {
+                foreach (var item in productTypeEntity.PictureTextHelpers)
+                {
+                    _context.Entry(item).State = EntityState.Deleted;
+                }
+                await _context.SaveChangesAsync();
+            }
+            StatusMessage = "As imagens foram removidas";
+            return RedirectToPage(new { id });
         }
     }
 }

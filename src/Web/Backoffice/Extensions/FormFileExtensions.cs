@@ -18,6 +18,17 @@ namespace Backoffice.Extensions
                 .Trim('"');            
         }
 
+        public static string GetFileNameSimplify(this IFormFile formFile)
+        {
+            var fullFileName = GetFileName(formFile);
+            return fullFileName.Substring(0, fullFileName.LastIndexOf('.'));
+        }
+
+        public static string GetExtension(this IFormFile formFile)
+        {
+            return Path.GetExtension(formFile.FileName).ToLowerInvariant();
+        }
+
         public static string GetContentType(this IFormFile formFile)
         {
             var types = GetMimeTypes();

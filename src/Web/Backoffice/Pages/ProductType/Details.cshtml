@@ -60,6 +60,17 @@
             @Html.DisplayFor(model => model.ProductTypeModel.AdditionalTextPrice)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.ProductTypeModel.PictureTextHelpers)
+        </dt>
+        <dd>
+            @foreach (var item in Model.ProductTypeModel.PictureTextHelpers)
+            {
+                <div class="col-md-6">
+                    <img src="@item.PictureUri" class="img-thumbnail" />
+                </div>
+            }
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.ProductTypeModel.ShippingCost)
         </dt>
         <dd>

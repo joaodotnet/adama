@@ -24,6 +24,7 @@ namespace Backoffice.ViewModels
         [Display(Name = "Categorias")]
         public List<string> CategoriesName { get; set; } = new List<string>();
         public string PictureUri { get; set; }
+        [Display(Name = "Imagem Principal")]
         public IFormFile Picture { get; set; }
         [Required]
         [Display(Name = "Entrega (Min)")]
@@ -39,6 +40,9 @@ namespace Backoffice.ViewModels
         public decimal Price { get; set; }
         [Display(Name = "Preço Adicional Frase/Nome")]
         public decimal? AdditionalTextPrice { get; set; }
+        [Display(Name = "Imagens Adicionar Frase/Nome")]
+        public IList<IFormFile> FormFileTextHelpers { get; set; }
+        public IList<FileDetailViewModel> PictureTextHelpers { get; set; } = new List<FileDetailViewModel>();
         [Display(Name = "Portes")]
         [Required]
         public decimal ShippingCost { get; set; }

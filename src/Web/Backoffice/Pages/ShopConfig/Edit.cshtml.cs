@@ -69,7 +69,7 @@ namespace Backoffice.Pages.ShopConfig
 
             if (ShopConfigDetailModel.Picture != null && ShopConfigDetailModel.Picture.Length > 0)
             {
-                ShopConfigDetailModel.PictureUri = await _service.SaveFileAsync(ShopConfigDetailModel.Picture, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, ShopConfigDetailModel.Id.ToString());
+                ShopConfigDetailModel.PictureUri = (await _service.SaveFileAsync(ShopConfigDetailModel.Picture, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, ShopConfigDetailModel.Id.ToString())).PictureUri;
             }
 
             var shopConfigDetail = _mapper.Map<ShopConfigDetail>(ShopConfigDetailModel);

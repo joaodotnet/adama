@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.DTOs;
 using ApplicationCore.Entities.OrderAggregate;
+using Backoffice.Services;
 using Backoffice.ViewModels;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -11,8 +12,9 @@ namespace Backoffice.Interfaces
 {
     public interface IBackofficeService
     {
-        Task<string> SaveFileAsync(IFormFile formFile, string fullPath, string uriPath, string addToFileName);
+        Task<PictureInfo> SaveFileAsync(IFormFile formFile, string fullPath, string uriPath, string addToFileName);
         Task SaveFileAsync(byte[] bytes, string invoicesFolderFullPath, string fileName);
+        void DeleteFile(string fullpath);
         void DeleteFile(string fullpath, string fileName);
         bool CheckIfFileExists(string fullpath, string fileName);
         Task<string> GetSku(int typeId, int illustationId, int? attributeId = null);

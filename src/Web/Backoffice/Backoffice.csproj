@@ -12,5 +12,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\ApplicationCore\ApplicationCore.csproj" />
     <ProjectReference Include="..\..\Libraries\Infrastructure\Infrastructure.csproj" />
+  </ItemGroup>  
+  <ItemGroup>
+    <Content Update="Pages\ProductType\_StatusMessage.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
   </ItemGroup>
 </Project>
