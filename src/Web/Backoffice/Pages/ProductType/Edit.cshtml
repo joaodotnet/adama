@@ -6,7 +6,7 @@
 }
 
 <h2>Editar</h2>
-
+@await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
 <h4>Tipo de Produto</h4>
 <hr />
 <div class="row">
@@ -40,6 +40,26 @@
                 <span asp-validation-for="ProductTypeModel.AdditionalTextPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="ProductTypeModel.FormFileTextHelpers" class="control-label"></label>
+                <input type="file" asp-for="ProductTypeModel.FormFileTextHelpers" class="form-control" multiple />
+                <small>(se mais que uma foto, o utilizador terá que escolher uma)</small><br />
+                <small>(Ao escolheres fotos, vão ser eliminadas as antigas. Envia sempre as imagens das opções todas)</small><br />
+                <span asp-validation-for="ProductTypeModel.FormFileTextHelpers" class="text-danger"></span>
+                @if (Model.ProductTypeModel?.PictureTextHelpers?.Count > 0)
+                {
+                    @foreach (var item in Model.ProductTypeModel.PictureTextHelpers)
+                    {
+                        <div class="col-md-6">
+                            <img src="@item.PictureUri" class="img-thumbnail" />
+                        </div>
+                    }
+
+                    <div class="col-md-12">
+                        <a asp-page="./Edit" asp-page-handler="RemoveAdditionalImages" asp-route-id="@Model.ProductTypeModel.Id" class="btn btn-danger" role="button">Remover imagens</a>
+                    </div>
+                }
+            </div>
+            <div class="form-group">
                 <label asp-for="ProductTypeModel.ShippingCost" class="control-label"></label>
                 <input asp-for="ProductTypeModel.ShippingCost" class="form-control decimal" />
                 <span asp-validation-for="ProductTypeModel.ShippingCost" class="text-danger"></span>
@@ -49,7 +69,7 @@
                 <input type="file" asp-for="ProductTypeModel.Picture" class="form-control" />
                 <small>(quadrado)</small>
                 <span asp-validation-for="ProductTypeModel.Picture" class="text-danger"></span>
-                <img src="@Model.ProductTypeModel.PictureUri" class="img-responsive" />
+                <img src="@Model.ProductTypeModel.PictureUri" class="img-thumbnail" />
             </div>
         </div>
         <div class="col-md-12">

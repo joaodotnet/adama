@@ -89,14 +89,14 @@ namespace Backoffice.Pages.Products
                 {
                     _service.DeleteFile(_backofficeSettings.WebProductsPictureFullPath, Utils.GetFileName(ProductModel.PictureUri));
                 }
-                ProductModel.PictureUri = await _service.SaveFileAsync(ProductModel.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri, ProductModel.Id.ToString());
+                ProductModel.PictureUri = (await _service.SaveFileAsync(ProductModel.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri, ProductModel.Id.ToString())).PictureUri;
             }
 
             //Update images            
             foreach (var item in ProductModel.CatalogPictures.Where(x => x.Picture != null && !x.ToRemove).ToList())
             {
                 _service.DeleteFile(_backofficeSettings.WebProductsPictureFullPath, Utils.GetFileName(item.PictureUri));
-                item.PictureUri = await _service.SaveFileAsync(item.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri, item.Id.ToString());
+                item.PictureUri = (await _service.SaveFileAsync(item.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri, item.Id.ToString())).PictureUri;
             }
             //Save news images
             if (ProductModel.OtherPictures != null)
@@ -109,7 +109,7 @@ namespace Backoffice.Pages.Products
                     {
                         IsActive = true,
                         Order = ++order,
-                        PictureUri = await _service.SaveFileAsync(item, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri, (++lastCatalogPictureId).ToString())
+                        PictureUri = (await _service.SaveFileAsync(item, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri, (++lastCatalogPictureId).ToString())).PictureUri
                     });
                 }
             }

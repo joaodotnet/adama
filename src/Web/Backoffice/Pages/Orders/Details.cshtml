@@ -4,7 +4,7 @@
     ViewData["Title"] = "Detalhe";
 }
 <h2>Encomenda nº @Model.OrderModel.Id</h2>
-@Html.Partial("_StatusMessage", Model.StatusMessage)
+@await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
 <div>
     <hr />
     <dl class="dl-horizontal">

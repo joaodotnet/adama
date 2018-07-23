@@ -20,6 +20,7 @@ namespace ApplicationCore.Entities
 
         public ICollection<CatalogTypeCategory> Categories { get; set; }
         public ICollection<CatalogItem> CatalogItems { get; set; }
+        public ICollection<FileDetail> PictureTextHelpers { get; set; }
     }
 
     public enum DeliveryTimeUnitType

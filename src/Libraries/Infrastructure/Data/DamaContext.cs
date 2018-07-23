@@ -30,8 +30,7 @@ namespace Infrastructure.Data
         public DbSet<CatalogCategory> CatalogCategories { get; set; }
         public DbSet<ApplicationCore.Entities.CustomizeOrder> CustomizeOrders { get; set; }
         public DbSet<CatalogReference> CatalogReferences { get; set; }
-        //public DbSet<ApplicationCore.Entities.Attribute> Attributes { get; set; }
-        //public DbSet<CatalogPrice> CatalogPrices { get; set; }
+        public DbSet<FileDetail> FileDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -52,8 +51,27 @@ namespace Infrastructure.Data
             builder.Entity<CatalogCategory>(ConfigureCatalogCategories);
             builder.Entity<CustomizeOrder>(ConfigureCustomizeOrders);
             builder.Entity<CatalogReference>(ConfigureCatalogReferences);
-            //builder.Entity<ApplicationCore.Entities.Attribute>(ConfigureAttributes);
-            //builder.Entity<CatalogPrice>(ConfigureCatalogPrice);
+            builder.Entity<FileDetail>(ConfigureFileDetails);
+        }
+
+        private void ConfigureFileDetails(EntityTypeBuilder<FileDetail> builder)
+        {
+            builder.ToTable("FileDetail");
+            builder.Property(x => x.PictureUri)
+                .IsRequired()
+                .HasMaxLength(255);
+
+            builder.Property(x => x.Location)
+                .HasMaxLength(255);
+            builder.Property(x => x.FileName)
+                .HasMaxLength(100);
+            builder.Property(x => x.Extension)
+                .HasMaxLength(10);
+
+            builder.HasOne(x => x.CatalogType)
+                .WithMany(t => t.PictureTextHelpers)
+                .HasForeignKey(x => x.CatalogTypeId);
+
         }
 
         private void ConfigureCatalogReferences(EntityTypeBuilder<CatalogReference> builder)
