@@ -11,6 +11,8 @@ using DamaWeb.ViewModels;
 using ApplicationCore;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DamaWeb.Pages.Account
 {
@@ -44,8 +46,13 @@ namespace DamaWeb.Pages.Account
         [BindProperty]
         public LoginViewModel LoginDetails { get; set; } = new LoginViewModel();
 
+        public IList<AuthenticationScheme> ExternalLogins { get; set; }
+
         [BindProperty]
         public RegisterViewModel UserDetails { get; set; } = new RegisterViewModel();
+
+        [TempData]
+        public string ErrorMessage { get; set; }
 
         public class LoginViewModel
         {
@@ -64,7 +71,13 @@ namespace DamaWeb.Pages.Account
 
         public async Task OnGet(string returnUrl = null)
         {
+            if (!string.IsNullOrEmpty(ErrorMessage))
+            {
+                ModelState.AddModelError(string.Empty, ErrorMessage);
+            }
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
+            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             if (!String.IsNullOrEmpty(returnUrl) &&
                 returnUrl.IndexOf("checkout", StringComparison.OrdinalIgnoreCase) >= 0)

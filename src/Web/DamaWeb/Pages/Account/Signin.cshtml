@@ -11,8 +11,51 @@
         <div class="col-sm-6">
             <h2 class="dama-heading-normal-font">Login</h2>
             <section>
+                <h4>Use a tua conta de Facebook ou Google para Entrar.</h4>
+                @{
+                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                    {
+                        @*<div>
+                            <p>
+                                There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
+                                for details on setting up this ASP.NET application to support logging in via external services.
+                            </p>
+                        </div>*@
+                    }
+                    else
+                    {
+                        <form asp-page="./ExternalLogin" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                            <div>
+                                <p>
+                                    @foreach (var provider in Model.ExternalLogins)
+                                    {
+                                        if (provider.Name.ToLower() == "facebook")
+                                        {
+                                            <button type="submit" class="btn btn-social btn-facebook" name="provider" value="@provider.Name" title="Log in usando a sua conta @provider.DisplayName">
+                                                <i class="fab fa-facebook-f"></i> Login pelo Facebook
+                                            </button>
+                                        }
+                                        else if (provider.Name.ToLower() == "google")
+                                        {
+                                            <button type="submit" class="btn btn-social btn-google" name="provider" value="@provider.Name" title="Log in usando a sua conta @provider.DisplayName">
+                                                <img src="~/images/google_icon.png" width="40" /> Login pelo Google
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="submit" class="btn btn-dama-menta" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                        }
+                                    }
+                                </p>
+                            </div>
+                        </form>
+                    }
+                }
+            </section>
+            <hr />
+            <section>
                 <form asp-route-returnurl="@ViewData["ReturnUrl"]" asp-page-handler="SignIn" method="post" class="form-horizontal">
-                    <h4>Já se registou?</h4>
+                    <h4>Ou use a sua conta local.</h4>
                     <div asp-validation-summary="ModelOnly" class="text-danger small"></div>
                     <div class="form-group required">
                         <label asp-for="LoginDetails.Email" class="control-label form-label"></label>

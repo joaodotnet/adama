@@ -697,3 +697,43 @@ hr {
     .btn-link:hover {
         color: #609f9f;
     }
+
+.btn-facebook {
+    color: #fff;
+    background-color: #3b5998;
+    border-color: rgba(0,0,0,0.2);
+}
+
+.btn-google {
+    color: #444;
+    background-color: #fff;
+    border-color: rgba(0,0,0,0.2);
+}
+
+.btn-social {
+    position: relative;
+    padding-left: 44px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.btn-social:hover {
+    color: #eee;
+}
+
+.btn-google:hover {
+    color:#000000;
+}
+
+.btn-social :first-child {
+    position: absolute;
+    left: 0;
+    top: 4px;
+    bottom: 0;
+    width: 40px;
+    padding: 7px;
+    font-size: 1.9em;
+    text-align: center;
+    border-right: 1px solid rgba(0,0,0,0.2);
+}
