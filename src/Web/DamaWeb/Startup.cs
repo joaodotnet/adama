@@ -92,6 +92,18 @@ namespace DamaWeb
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddAuthentication()
+                .AddFacebook(facebookOptions =>
+                {
+                    facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                    facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                })
+                .AddGoogle(googleOptions =>
+                {
+                    googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+                    googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                });
+
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.Name = "damanojornalApp";
@@ -176,14 +188,14 @@ namespace DamaWeb
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
+                app.UseHttpsRedirection();
             }
             else
             {
                 app.UseExceptionHandler("/Error");
                 //app.UseHsts();
             }
-
-            //app.UseHttpsRedirection();
+            
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("pt-PT"),
