@@ -37,7 +37,7 @@ namespace DamaWeb.Pages.Account
             _signInManager = signInManager;
             _basketService = basketService;
             _emailSender = emailSender;
-            this._mailChimpService = mailChimpService;
+            _mailChimpService = mailChimpService;
             _userManager = userManager;
             _settings = settings.Value;
             _logger = logger;

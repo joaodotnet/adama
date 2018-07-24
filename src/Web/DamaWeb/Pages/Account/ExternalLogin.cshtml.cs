@@ -4,12 +4,16 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using ApplicationCore;
+using ApplicationCore.Interfaces;
+using DamaWeb.ViewModels.DataAnnotations;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace DamaWeb.Pages.Account
 {
@@ -19,15 +23,24 @@ namespace DamaWeb.Pages.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<ExternalLoginModel> _logger;
+        private readonly IEmailSender _emailSender;
+        private readonly IMailChimpService _mailChimpService;
+        private readonly CatalogSettings _settings;
 
         public ExternalLoginModel(
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
-            ILogger<ExternalLoginModel> logger)
+            ILogger<ExternalLoginModel> logger,
+            IEmailSender emailSender,
+            IOptions<CatalogSettings> settings,
+            IMailChimpService mailChimpService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
+            _emailSender = emailSender;
+            _mailChimpService = mailChimpService;
+            _settings = settings.Value;
         }
 
         [BindProperty]
@@ -42,9 +55,18 @@ namespace DamaWeb.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = "O {0} é obrigatório.")]
+            [EmailAddress(ErrorMessage = "O endereço de Email não é valido.")]
+            [Display(Name = "Email")]
             public string Email { get; set; }
+            [Required(ErrorMessage = "O {0} é obrigatório.")]
+            [Display(Name = "Nome")]
+            public string FirstName { get; set; }
+            [Required(ErrorMessage = "O {0} é obrigatório.")]
+            [Display(Name = "Apelido")]
+            public string LastName { get; set; }
+            [Display(Name = "Aceito subscrever a newsletter da Dama no Jornal para ficar a par de todas as novidades.")]
+            public bool SubscribeNewsletter { get; set; } = true;
         }
 
         public IActionResult OnGetAsync()
@@ -91,13 +113,16 @@ namespace DamaWeb.Pages.Account
                 // If the user does not have an account, then ask the user to create an account.
                 ReturnUrl = returnUrl;
                 LoginProvider = info.LoginProvider;
+                Input = new InputModel();
                 if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
-                {
-                    Input = new InputModel
-                    {
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
-                    };
-                }
+                    Input.Email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                
+                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.GivenName))
+                    Input.FirstName = info.Principal.FindFirstValue(ClaimTypes.GivenName);
+
+                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Surname))
+                    Input.LastName = info.Principal.FindFirstValue(ClaimTypes.Surname);
+
                 return Page();
             }
         }
@@ -120,7 +145,7 @@ namespace DamaWeb.Pages.Account
                 IdentityResult result = null;
                 if (user == null)
                 {
-                    user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
+                    user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName };
                     result = await _userManager.CreateAsync(user);
                 }
 
@@ -131,7 +156,17 @@ namespace DamaWeb.Pages.Account
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
+
+                        //Check Subscriber
+                        if (Input.SubscribeNewsletter)
+                        {
+                            await _mailChimpService.AddSubscriberAsync(Input.Email);
+                            await _emailSender.SendGenericEmailAsync(_settings.FromInfoEmail, _settings.ToEmails, "Subscrição da newsletter feita na loja", $"O utilizador {Input.FirstName} {Input.LastName} registou-se na loja e subscreveu-se na newsletter com o email: {Input.Email}");
+                        }
+
                         return LocalRedirect(returnUrl);
+
+                        
                     }                 
                 }
                 foreach (var error in result.Errors)
