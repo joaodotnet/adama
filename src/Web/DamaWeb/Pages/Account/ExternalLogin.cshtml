@@ -10,17 +10,31 @@
 
 <p>
     Foste autenticado com sucesso no <strong>@Model.LoginProvider</strong>.<br />
-    Por favor introduz um endereço de email para entrares na loja da Dama no Jornal&reg;<br /> e clica no botão Associar para finalizares o processo.
+    Por favor confirma os teus dados para entrares na loja da Dama no Jornal&reg;<br /> e clica no botão Associar para finalizares o processo.
 </p>
 
 <div class="row">
     <div class="col-md-4">
         <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
+            <div class="form-group required">
                 <label asp-for="Input.Email"></label>
                 <input asp-for="Input.Email" class="form-control" />
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group required">
+                <label asp-for="Input.FirstName"></label>
+                <input asp-for="Input.FirstName" class="form-control" />
+                <span asp-validation-for="Input.FirstName" class="text-danger small"></span>
+            </div>
+            <div class="form-group required">
+                <label asp-for="Input.LastName"></label>
+                <input asp-for="Input.LastName" class="form-control" />
+                <span asp-validation-for="Input.LastName" class="text-danger small"></span>
+            </div>
+            <div class="form-group form-check">
+                <input asp-for="Input.SubscribeNewsletter" class="form-check-input">
+                <label class="form-check-label small" asp-for="Input.SubscribeNewsletter"></label>
             </div>
             <button type="submit" class="btn btn-dama-menta">Associar</button>
         </form>
