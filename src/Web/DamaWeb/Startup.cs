@@ -192,7 +192,7 @@ namespace DamaWeb
             else
             {
                 app.UseExceptionHandler("/Error");
-                //app.UseHsts();
+                app.UseHsts();
             }
             
             app.UseRequestLocalization(new RequestLocalizationOptions
