@@ -39,8 +39,26 @@ namespace DamaWeb
             // use in-memory database
             //ConfigureTestingServices(services);
 
-            // use real database
-             ConfigureProductionServices(services);
+            // use real database            
+            services.AddDbContext<DamaContext>(c =>
+            {
+                try
+                {
+                    // Requires LocalDB which can be installed with SQL Server Express 2016
+                    // https://www.microsoft.com/en-us/download/details.aspx?id=54284
+                    c.UseSqlServer(Configuration.GetConnectionString("DamaShopConnection"));
+                }
+                catch (System.Exception ex)
+                {
+                    var message = ex.Message;
+                }
+            });
+
+            // Add Identity DbContext
+            services.AddDbContext<AppIdentityDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+
+            ConfigureServices(services);
 
         }
         public void ConfigureTestingServices(IServiceCollection services)
@@ -77,11 +95,18 @@ namespace DamaWeb
             services.AddDbContext<AppIdentityDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
 
+            services.AddHttpsRedirection(options =>
+            {
+                options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+                options.HttpsPort = 443;
+            });
+
+
             ConfigureServices(services);
         }
 
         public void ConfigureServices(IServiceCollection services)
-        {            
+        {
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
                     options.Password.RequireDigit = false;
