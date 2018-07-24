@@ -116,11 +116,11 @@ namespace DamaWeb
                 .AddDefaultTokenProviders();
 
             services.AddAuthentication()
-                //.AddFacebook(facebookOptions =>
-                //{
-                //    facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
-                //    facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-                //})
+                .AddFacebook(facebookOptions =>
+                {
+                    facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                    facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                })
                 .AddGoogle(googleOptions =>
                 {
                     googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
@@ -217,7 +217,12 @@ namespace DamaWeb
                 app.UseExceptionHandler("/Error");
                 //app.UseHsts();
             }
-            
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("pt-PT"),
@@ -229,11 +234,6 @@ namespace DamaWeb
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            });
 
             app.UseAuthentication();
 
