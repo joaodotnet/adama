@@ -97,6 +97,7 @@ namespace DamaWeb.Pages.Account
             }
             if (!ModelState.IsValid)
             {
+                ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
                 return Page();
             }
             
@@ -158,6 +159,7 @@ namespace DamaWeb.Pages.Account
                 }
                 AddErrors(result);
             }
+            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             return Page();
         }
 

@@ -2,6 +2,6 @@
 {
     public class CatalogSettings : AppSettings
     {
-        public string CatalogBaseUrl { get; set; }        
+        public string CatalogBaseUrl { get; set; }
     }
 }
