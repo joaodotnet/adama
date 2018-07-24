@@ -11,6 +11,15 @@
         <img class="separator" src="~/images/barra-coracao.png" />
     </div>
 
+    <div class="row dama-product-attr mb-2 mb-md-3" >
+        <label class="col-4 col-form-label">Quantidade</label>
+        <div class="col-8 btn-group w-100" role="group">
+            <button id="btnSub" type="button" class="btn">-</button>
+            <input asp-for="ProductQuantity" class="form-control col-2 text-center">
+            <button id="btnAdd" type="button" class="btn">+</button>
+        </div>
+    </div>
+
     @if (Model.ProductReferences.Any())
     {
 
@@ -80,20 +89,18 @@
         </div>
     }
 
-    <div class="btn-group mt-md-4 w-100" role="group">
-        <button id="btnSub" type="button" class="btn">-</button>
-        <input asp-for="ProductQuantity" class="form-control col-2 text-center">
-        <button id="btnAdd" type="button" class="btn">+</button>
-        <input class="dama-product-add ml-2 w-100" type="submit" value="ADICIONAR" />
+    <div class="mt-md-4 w-100">        
+        <input class="dama-product-add ml-2 w-100" type="submit" value="ADICIONAR AO CARRINHO" />
     </div>
-
-    <small class="text-muted dama-small-text">Tempo de entrega entre @Model.DeliveryTimeMin a @Model.DeliveryTimeMax @(DamaWeb.Extensions.EnumHelper<ApplicationCore.Entities.DeliveryTimeUnitType>.GetDisplayValue(Model.DeliveryTimeUnit)) para produtos em stock.</small>
 
     <div class="text-center my-3 my-sm-3">
         <img class="separator" src="~/images/barra-coracao.png" />
     </div>
 
     <p class="dama-product-description my-3 my-sm-3">@Html.Raw(Model.ProductDescription)</p>
+
+    @*<small class="text-muted dama-small-text my-3">Tempo de entrega entre @Model.DeliveryTimeMin a @Model.DeliveryTimeMax @(DamaWeb.Extensions.EnumHelper<ApplicationCore.Entities.DeliveryTimeUnitType>.GetDisplayValue(Model.DeliveryTimeUnit)) para produtos em stock.</small>*@
+    <small class="text-muted dama-small-text my-3">Tempo de entrega entre 2 a 3 dias para produtos em stock.</small>
 
     <hr />
     <div class="row dama-product-attr mt-2 mt-md-4">

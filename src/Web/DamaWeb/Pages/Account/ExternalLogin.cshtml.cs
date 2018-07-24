@@ -26,6 +26,7 @@ namespace DamaWeb.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly IMailChimpService _mailChimpService;
         private readonly CatalogSettings _settings;
+        private readonly IBasketService _basketService;
 
         public ExternalLoginModel(
             SignInManager<ApplicationUser> signInManager,
@@ -33,7 +34,8 @@ namespace DamaWeb.Pages.Account
             ILogger<ExternalLoginModel> logger,
             IEmailSender emailSender,
             IOptions<CatalogSettings> settings,
-            IMailChimpService mailChimpService)
+            IMailChimpService mailChimpService,
+            IBasketService basketService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -41,6 +43,7 @@ namespace DamaWeb.Pages.Account
             _emailSender = emailSender;
             _mailChimpService = mailChimpService;
             _settings = settings.Value;
+            _basketService = basketService;
         }
 
         [BindProperty]
@@ -102,7 +105,8 @@ namespace DamaWeb.Pages.Account
             if (result.Succeeded)
             {
                 _logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
-                return LocalRedirect(returnUrl);
+                await TransferBasket(info.Principal.FindFirstValue(ClaimTypes.Email));
+                return RedirectToPage(returnUrl);
             }
             if (result.IsLockedOut)
             {
@@ -157,6 +161,8 @@ namespace DamaWeb.Pages.Account
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
 
+                        await TransferBasket(Input.Email);
+
                         //Check Subscriber
                         if (Input.SubscribeNewsletter)
                         {
@@ -164,10 +170,10 @@ namespace DamaWeb.Pages.Account
                             await _emailSender.SendGenericEmailAsync(_settings.FromInfoEmail, _settings.ToEmails, "Subscrição da newsletter feita na loja", $"O utilizador {Input.FirstName} {Input.LastName} registou-se na loja e subscreveu-se na newsletter com o email: {Input.Email}");
                         }
 
-                        return LocalRedirect(returnUrl);
+                        return RedirectToPage(returnUrl);
 
-                        
-                    }                 
+
+                    }
                 }
                 foreach (var error in result.Errors)
                 {
@@ -178,6 +184,16 @@ namespace DamaWeb.Pages.Account
             LoginProvider = info.LoginProvider;
             ReturnUrl = returnUrl;
             return Page();
+        }
+
+        private async Task TransferBasket(string email)
+        {
+            string anonymousBasketId = Request.Cookies[Constants.BASKET_COOKIENAME];
+            if (!String.IsNullOrEmpty(anonymousBasketId))
+            {
+                await _basketService.TransferBasketAsync(anonymousBasketId, email);
+                Response.Cookies.Delete(Constants.BASKET_COOKIENAME);
+            }
         }
     }
 }
