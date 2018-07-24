@@ -101,7 +101,7 @@ namespace DamaWeb
                 .AddGoogle(googleOptions =>
                 {
                     googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
-                    googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                    googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];                    
                 });
 
             services.ConfigureApplicationCookie(options =>
@@ -187,8 +187,7 @@ namespace DamaWeb
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-                app.UseHttpsRedirection();
+                app.UseDatabaseErrorPage();                
             }
             else
             {
@@ -205,6 +204,7 @@ namespace DamaWeb
                 SupportedUICultures = new[] { new CultureInfo("pt-PT") }
             });
 
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
