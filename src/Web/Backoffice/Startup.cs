@@ -22,6 +22,7 @@ using ApplicationCore;
 using ApplicationCore.Services;
 using Microsoft.AspNetCore.Mvc;
 using Infrastructure.Logging;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace Backoffice
 {
@@ -57,10 +58,23 @@ namespace Backoffice
                .AddEntityFrameworkStores<AppIdentityDbContext>()
                .AddDefaultTokenProviders();
 
+            services.AddAuthentication()
+               .AddFacebook(facebookOptions =>
+               {
+                   facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                   facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+               })
+               .AddGoogle(googleOptions =>
+               {
+                   googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+                   googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+               });
+
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("Admin"));
             });
+
 
 
             services.AddMvc()
@@ -98,7 +112,7 @@ namespace Backoffice
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
+        {       
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -108,6 +122,12 @@ namespace Backoffice
             {
                 app.UseExceptionHandler("/Error");
             }
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+
 
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
