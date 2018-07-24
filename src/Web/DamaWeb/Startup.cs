@@ -95,12 +95,11 @@ namespace DamaWeb
             services.AddDbContext<AppIdentityDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
 
-            services.AddHttpsRedirection(options =>
-            {
-                options.HttpsPort = 443;
-            });
-
-
+            //services.AddHttpsRedirection(options =>
+            //{
+            //    options.HttpsPort = 443;
+            //});
+           
             ConfigureServices(services);
         }
 
@@ -117,11 +116,11 @@ namespace DamaWeb
                 .AddDefaultTokenProviders();
 
             services.AddAuthentication()
-                .AddFacebook(facebookOptions =>
-                {
-                    facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
-                    facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-                })
+                //.AddFacebook(facebookOptions =>
+                //{
+                //    facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                //    facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                //})
                 .AddGoogle(googleOptions =>
                 {
                     googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
@@ -228,7 +227,6 @@ namespace DamaWeb
                 SupportedUICultures = new[] { new CultureInfo("pt-PT") }
             });
 
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
