@@ -71,6 +71,7 @@ namespace DamaWeb.Pages.Account
 
         public async Task OnGet(string returnUrl = null)
         {
+            returnUrl = FixBasePath(returnUrl);
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
@@ -161,6 +162,13 @@ namespace DamaWeb.Pages.Account
             }
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             return Page();
+        }
+
+        private string FixBasePath(string returnUrl)
+        {
+            if (!string.IsNullOrEmpty(returnUrl) && returnUrl.LastIndexOf("/loja") >= 0)
+                return returnUrl.Substring(returnUrl.LastIndexOf("/loja") + 5);
+            return null;
         }
 
         private async Task SendConfirmationEmailAsync(ApplicationUser user)
