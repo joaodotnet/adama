@@ -88,6 +88,7 @@ namespace DamaWeb.Pages.Account
         public async Task<IActionResult> OnGetCallbackAsync(string returnUrl = null, string remoteError = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl = Utils.FixBasePath(returnUrl);
             if (remoteError != null)
             {
                 ErrorMessage = $"Erro de autenticação externa: {remoteError}";
@@ -134,6 +135,7 @@ namespace DamaWeb.Pages.Account
         public async Task<IActionResult> OnPostConfirmationAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl = Utils.FixBasePath(returnUrl);
             // Get the information about the user from the external login provider
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
