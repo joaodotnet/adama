@@ -34,7 +34,13 @@ namespace DamaWeb
         public static string FixBasePath(string returnUrl)
         {
             if (!string.IsNullOrEmpty(returnUrl) && returnUrl.LastIndexOf("/loja") >= 0)
-                return returnUrl.Substring(returnUrl.LastIndexOf("/loja") + 5);
+            {
+                var url = returnUrl.Substring(returnUrl.LastIndexOf("/loja") + 5);
+                if (string.IsNullOrEmpty(url) || url == "/")
+                    url = "/Index";
+                return url;
+            }
+                
             return returnUrl;
         }
     }
