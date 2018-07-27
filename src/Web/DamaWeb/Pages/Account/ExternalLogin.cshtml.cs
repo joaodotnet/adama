@@ -89,7 +89,6 @@ namespace DamaWeb.Pages.Account
         {
             returnUrl = returnUrl ?? Url.Content("~/");
             returnUrl = Utils.FixBasePath(returnUrl);
-            _logger.LogWarning($">>>>>>>>>>> returnUrl: {returnUrl} <<<<<<<<<<");
             if (remoteError != null)
             {
                 ErrorMessage = $"Erro de autenticação externa: {remoteError}";
@@ -106,7 +105,7 @@ namespace DamaWeb.Pages.Account
             var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor : true);
             if (result.Succeeded)
             {
-                _logger.LogWarning("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
+                _logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
                 await TransferBasket(info.Principal.FindFirstValue(ClaimTypes.Email));
                 return RedirectToPage(returnUrl);
             }
@@ -137,7 +136,6 @@ namespace DamaWeb.Pages.Account
         {
             returnUrl = returnUrl ?? Url.Content("~/");
             returnUrl = Utils.FixBasePath(returnUrl);
-            _logger.LogWarning($">>>>>>>>>>> returnUrl: {returnUrl} <<<<<<<<<<");
             // Get the information about the user from the external login provider
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)

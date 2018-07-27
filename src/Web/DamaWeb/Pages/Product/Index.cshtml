@@ -32,6 +32,11 @@
         </div>
     </div>
     <div class="col-md-5">
+        @if (!string.IsNullOrEmpty(Model.StatusMessage))
+        {
+            <div class="alert alert-success text-center">@Model.StatusMessage</div>
+        }
+
         @await Html.PartialAsync("_productDetail", Model.ProductModel)
     </div>
 </div>
@@ -39,6 +44,7 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
         var customizePrice = parseFloat('@Model.ProductModel.CustomizePrice'.replace(',', '.'));
+        var customizePictureFileName = "";
         $(document).ready(function () {
             $('.slider-nav').slick({
                 slidesToShow: 3,
@@ -67,16 +73,6 @@
                         }
                     }]
             });
-            //$('.dama-product-description').on('click touch', function () {
-            //    if ($(this).css('white-space') == 'normal') {
-            //        $(this).css('white-space', 'nowrap');
-            //        $(this).css('text-overflow', 'ellipsis');
-            //    }
-            //    else if ($(this).css('white-space') == 'nowrap') {
-            //        $(this).css('white-space', 'normal');
-            //        $(this).css('text-overflow', 'initial');
-            //    }
-            //});
             $('#btnAdd').on('click', function () {
                 var value = $('#ProductQuantity').val();
                 if (value)
@@ -91,21 +87,55 @@
                 else
                     $('#ProductQuantity').val(1);
             });
+            
+            //Main Customize Show/hide Click Event
+            $('#customizeSection').on('shown.bs.collapse', function () {
+                $('#btnCustomize').removeClass("btn-outline-pink").addClass('btn-outline-menta');
+            });
+            $('#customizeSection').on('hidden.bs.collapse', function () {
+                $('#btnCustomize').removeClass("btn-outline-menta").addClass('btn-outline-pink');
+            });
 
+            //Add Name Click Event
+            $('#addName').on('shown.bs.collapse', function () {
+                $('#btnAddName').removeClass('btn-dama-menta').addClass('btn-outline-menta');
+                $('#divCustomizeTotal').hide();
+                $('#txtDeliveryStockTime').hide();
+            });
+            $('#addName').on('hidden.bs.collapse', function () {
+                $('#btnAddName').removeClass('btn-outline-menta').addClass('btn-dama-menta');
+                $('#divCustomizeTotal').show();
+                $('#txtDeliveryStockTime').show();
+            });
+
+            //Select Image Event
+            $('#divSelectImage .col').click(function () {
+
+                $(this).toggleClass('dama-customize-color-selected');
+                $(this).siblings().removeClass('dama-customize-color-selected');
+                if ($(this).hasClass('dama-customize-color-selected'))
+                    customizePictureFileName = $(this).attr('fileName');
+                else
+                    customizePictureFileName = null;
+                
+                $('#CustomizePictureFileName').val(customizePictureFileName);
+            }); 
+
+            @*//TODO: To review this
             $('#saveName').on('click', function () {
                 var productBase = parseFloat('@Model.ProductModel.ProductPrice'.replace(',', '.'));
                 var value = $('#NameInput').val();
                 if (value) {
-                    $('#nameInputText').text("Personalização: " + value.toString());
+                    //$('#nameInputText').text("Personalização: " + value.toString());
                     var newprice = productBase + customizePrice;
                     $('.dama-product-price span').text(toNumber(newprice));
                 }
                 else {
-                    $('#nameInputText').text("");
+                    //$('#nameInputText').text("");
                     $('.dama-product-price span').text(toNumber(productBase));
                 }
             
-            });
+            });*@
             @*$('.atribute-items').on('change', function () {
                 var attr = $(this).val();
                 var productBase = parseFloat('@Model.ProductModel.ProductBasePrice'.replace(',', '.'));

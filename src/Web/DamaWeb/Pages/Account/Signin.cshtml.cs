@@ -119,6 +119,7 @@ namespace DamaWeb.Pages.Account
             {
                 return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = LoginDetails.RememberMe });
             }
+            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             ModelState.AddModelError(string.Empty, "Email ou password inválidos, insira correctamente os dados.");
             return Page();
         }

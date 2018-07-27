@@ -69,7 +69,7 @@ namespace DamaWeb.Pages.Order
                 await _orderService.UpdateOrderState(order.Id, OrderStateType.CANCELED);
                 StatusMessage = $"A encomenda #{number} foi cancelada com sucesso!";
                 var body = $"A encomenda <a href='http://backoffice.damanojornal.com/Orders/Details?id={order.Id}'> #{order.Id}</a> foi cancelada!";
-                await _emailSender.SendEmailAsync(_settings.FromOrderEmail, _settings.ToEmails, $"A encomenda #{order.Id} foi cancelada!", body);
+                await _emailSender.SendGenericEmailAsync(_settings.FromOrderEmail, _settings.ToEmails, $"A encomenda #{order.Id} foi cancelada!", body);
             }
             else
                 StatusMessage = $"Erro: Encomenda {number} não existe!";
