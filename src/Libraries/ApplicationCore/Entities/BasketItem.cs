@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace ApplicationCore.Entities
 {
@@ -11,8 +10,8 @@ namespace ApplicationCore.Entities
         public int? CatalogAttribute1 { get; set; }        
         public int? CatalogAttribute2 { get; set; }
         public int? CatalogAttribute3 { get; set; }
-        [StringLength(100)]
         public string CustomizeName { get; set; }
+        public string CustomizeSide { get; set; }
         //public CatalogAttribute CatalogAttribute1 { get; set; }
         //public CatalogAttribute CatalogAttribute2 { get; set; }
         //public CatalogAttribute CatalogAttribute3 { get; set; }

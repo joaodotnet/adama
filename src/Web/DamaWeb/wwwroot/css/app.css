@@ -194,12 +194,42 @@ hr {
     border-radius: 0 !important;
 }
 
-    .btn-primary:hover {
-        background-color: #FC2A7B !important;
-        border: 0;
-    }
+.btn-primary:hover {
+    background-color: #FC2A7B !important;
+    border: 0;
+}
 
-.btn-dama-menta {
+.btn-outline-pink, .btn-outline-pink:active, .btn-outline-pink:visited {
+    border-color: #FC629D;
+    color: #FC629D;
+    border-radius: 0 !important;
+    background-color: #fff;
+}
+.btn-outline-pink:hover {
+    background-color: #88C9AC;
+    color: #fff;
+    border-color: #88C9AC;
+}
+
+.btn-outline-menta, .btn-outline-menta:active, .btn-outline-menta:visited {
+    border-color: #88C9AC;
+    color: #88C9AC;
+    border-radius: 0 !important;
+    background-color: #fff;
+}
+
+.btn-outline-menta:hover {
+    background-color: #88C9AC;
+    color: #fff;
+    border-color: #88C9AC;
+}
+
+.btn-dama-sm {
+    line-height: 1rem;
+    font-size: 0.8rem;
+}
+
+ .btn-dama-menta {
     background-color: #88C9AC;
     border: 0;
     color: #fff;
@@ -242,10 +272,18 @@ hr {
     color: #88C9AC;
     text-decoration: underline;
 }
+.link-dama-black {
+    color: #000000;
+    text-decoration: underline;
+}
 
-    .link-dama-menta:hover {
-        color: #58AD87;
-    }
+.link-dama-black:hover, .link-dama-menta:hover {
+    color: #58AD87;
+}
+
+.border-menta {
+    border-color: #88C9AC !important;
+}
 
 .width-200 {
     width: 200px;
@@ -665,7 +703,7 @@ hr {
     }
 
 .dama-customize-question {
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .form-input-gray, .form-input-gray:focus {

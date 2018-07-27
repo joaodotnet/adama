@@ -25,8 +25,8 @@ namespace Infrastructure.Services
         public async Task SendEmailAsync(string fromEmail, string toEmail, string subject, string message, string bccEmails = null, IFormFile attachFile = null)
         {
             // TODO: Wire this up to actual email sending logic via SendGrid, local SMTP, etc.
-            //Execute(fromEmail, toEmail, subject, message, bccEmails, attachFile).Wait();
-            await SendGenericEmailAsync(fromEmail, toEmail, subject, message, bccEmails);
+            await Execute(fromEmail, toEmail, subject, message, bccEmails, attachFile);
+            //await SendGenericEmailAsync(fromEmail, toEmail, subject, message, bccEmails);
         }
 
         public async Task SendGenericEmailAsync(string fromEmail, string toEmail, string subject, string textBody, string bccEmails = null, List<(string,byte[])> files = null)

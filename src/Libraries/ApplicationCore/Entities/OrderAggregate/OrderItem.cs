@@ -13,13 +13,14 @@ namespace ApplicationCore.Entities.OrderAggregate
         public int? CatalogAttribute2 { get; private set; }
         public int? CatalogAttribute3 { get; private set; }
         public string CustomizeName { get; private set; }
+        public string CustomizeSide { get; private set; }
 
         //public ICollection<OrderItemDetail> Details { get; set; } = new List<OrderItemDetail>();
 
         protected OrderItem()
         {
         }
-        public OrderItem(CatalogItemOrdered itemOrdered, decimal unitPrice, int units, int? option1, int? option2, int? option3, string customizeName)
+        public OrderItem(CatalogItemOrdered itemOrdered, decimal unitPrice, int units, int? option1, int? option2, int? option3, string customizeName, string customizeSide)
         {
             ItemOrdered = itemOrdered;
             UnitPrice = unitPrice;
@@ -28,6 +29,7 @@ namespace ApplicationCore.Entities.OrderAggregate
             CatalogAttribute2 = option2;
             CatalogAttribute3 = option3;
             CustomizeName = customizeName;
+            CustomizeSide = customizeSide;
         }
     }
 }

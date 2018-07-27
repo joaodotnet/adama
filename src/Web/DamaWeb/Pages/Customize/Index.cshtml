@@ -103,6 +103,7 @@
                 <text>
             var productElem = $('.product-types').find("[catalog-type-id='@Model.CustomizeModel.CatalogItemId.Value']");
             selectProduct(productElem);
+            $('.go-section').removeClass("sr-only");
                 </text>
             }
         });

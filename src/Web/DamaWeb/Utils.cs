@@ -29,6 +29,18 @@ namespace DamaWeb
         public static string StringToUri(string text)
         {
             return RemoveDiacritics(text.Replace(' ', '-').ToLower());
-        }        
+        }
+
+        public static string FixBasePath(string returnUrl)
+        {
+            if (!string.IsNullOrEmpty(returnUrl) && returnUrl.LastIndexOf("/loja") >= 0)
+            {
+                returnUrl = returnUrl.Substring(returnUrl.LastIndexOf("/loja") + 5);
+            }
+
+            if (string.IsNullOrEmpty(returnUrl) || returnUrl == "/")
+                returnUrl = "/Index";
+            return returnUrl;
+        }
     }
 }

@@ -12,6 +12,8 @@ namespace DamaWeb.ViewModels
     public class ProductViewModel
     {
         public int ProductId { get; set; }
+        public int CategoryId { get; set; }
+        public int ProductTypeId { get; set; }
         public string ProductTitle { get; set; }
         public string ProductDescription { get; set; }
         public decimal ProductPrice { get; set; }
@@ -25,13 +27,29 @@ namespace DamaWeb.ViewModels
         public int DeliveryTimeMin { get; set; }
         public int DeliveryTimeMax { get; set; }
         public DeliveryTimeUnitType DeliveryTimeUnit { get; set; }
-        public bool CanCustomize { get; set; }
+        public bool CanCustomize { get { return CanCustomizeName || CanCustomizeTotal; } }
+        public bool CanCustomizeName { get { return CustomizePrice.HasValue && CustomizePrice.Value > 0; } }
+        public bool CanCustomizeTotal { get; set; }
         [StringLength(100, ErrorMessage = "Por favor escolhe um nome ou frase até 100 caracteres")]
         public string NameInput { get; set; }
         public int FirstCategoryId { get; set; }
         public List<ProductReferenceViewModel> ProductReferences { get; set; } = new List<ProductReferenceViewModel>();
         //public IEnumerable<SelectListItem> ProductReferences { get; set; }
         public decimal? CustomizePrice { get; set; }
+        public string CustomizePictureFileName { get; set; }
+        [Required(ErrorMessage = "O endereço de Email é obrigatório.")]
+        [EmailAddress(ErrorMessage = "O endereço de Email não é valido.")]
+        [Display(Name = "Email")]
+        public string ContactEmailAddress { get; set; }
+        [Display(Name = "Mensagem")]
+        public string Message { get; set; }
+        public List<PictureHelperViewModel> PictureHelpers { get; set; }
+    }
+
+    public class PictureHelperViewModel
+    {
+        public string PictureUri { get; set; }
+        public string PictureFileName { get; set; }
     }
 
     public class ProductReferenceViewModel
