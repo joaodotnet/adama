@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using DamaWeb.Interfaces;
 using DamaWeb.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Options;
+using ApplicationCore;
 
 namespace DamaWeb.Pages.Product
 {
@@ -15,12 +17,23 @@ namespace DamaWeb.Pages.Product
     {
         private readonly ICatalogService _catalogService;
         private readonly IAppLogger<IndexModel> _logger;
-        public IndexModel(ICatalogService catalogService, IAppLogger<IndexModel> logger)
+        private readonly IEmailSender _emailSender;
+        private readonly CatalogSettings _settings;
+
+        public IndexModel(ICatalogService catalogService, 
+            IAppLogger<IndexModel> logger,
+            IEmailSender emailSender,
+            IOptions<CatalogSettings> options)
         {
             _catalogService = catalogService;
             _logger = logger;
+            _emailSender = emailSender;
+            _settings = options.Value;
         }
         public ProductViewModel ProductModel { get; set; } = new ProductViewModel();
+
+        [TempData]
+        public string StatusMessage { get; set; }
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
@@ -41,6 +54,19 @@ namespace DamaWeb.Pages.Product
             //}
             //ProductModel.ProductTotalPrice = ProductModel.ProductPrice + attrDefaultPrice;
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostSendMessageAsync(string ContactEmailAddress, string Message, string ProductSKU)
+        {
+            await _emailSender.SendGenericEmailAsync(
+                _settings.FromInfoEmail,
+                _settings.ToEmails,
+                $"Pedido de dúvida do Produto {ProductSKU}",
+                $"De: {ContactEmailAddress}<br>" +
+                $"Mensagem: {Message}");
+
+            StatusMessage = "A sua mensagem foi enviada com sucesso";
+            return RedirectToPage(new { id = ProductSKU });
         }
     }
 }

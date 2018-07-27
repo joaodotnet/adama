@@ -9,24 +9,36 @@ namespace ApplicationCore.Entities
         private readonly List<BasketItem> _items = new List<BasketItem>();
         public IReadOnlyCollection<BasketItem> Items => _items.AsReadOnly();
 
-        public void AddItem(int catalogItemId, decimal unitPrice, int quantity = 1, int? option1 = null, int? option2 = null, int? option3 = null, string customizeName = null)
+        public void AddItem(int catalogItemId, decimal unitPrice, int quantity = 1, int? option1 = null, int? option2 = null, int? option3 = null, string customizeName = null, string customizeSide = null)
         {
-            if (!Items.Any(i => i.CatalogItemId == catalogItemId && i.CatalogAttribute1 == option1 && i.CatalogAttribute2 == option2 && i.CatalogAttribute3 == option3))
+            _items.Add(new BasketItem()
             {
-                _items.Add(new BasketItem()
-                {
-                    CatalogItemId = catalogItemId,
-                    Quantity = quantity,
-                    UnitPrice = unitPrice,
-                    CatalogAttribute1 = option1,
-                    CatalogAttribute2 = option2,
-                    CatalogAttribute3 = option3,
-                    CustomizeName = customizeName
-                });
-                return;
-            }
-            var existingItem = Items.FirstOrDefault(i => i.CatalogItemId == catalogItemId);
-            existingItem.Quantity += quantity;
+                CatalogItemId = catalogItemId,
+                Quantity = quantity,
+                UnitPrice = unitPrice,
+                CatalogAttribute1 = option1,
+                CatalogAttribute2 = option2,
+                CatalogAttribute3 = option3,
+                CustomizeName = customizeName,
+                CustomizeSide = customizeSide
+            });
+            //if (!Items.Any(i => i.CatalogItemId == catalogItemId && i.CatalogAttribute1 == option1 && i.CatalogAttribute2 == option2 && i.CatalogAttribute3 == option3))
+            //{
+            //    _items.Add(new BasketItem()
+            //    {
+            //        CatalogItemId = catalogItemId,
+            //        Quantity = quantity,
+            //        UnitPrice = unitPrice,
+            //        CatalogAttribute1 = option1,
+            //        CatalogAttribute2 = option2,
+            //        CatalogAttribute3 = option3,
+            //        CustomizeName = customizeName,
+            //        CustomizeSide = customizeSide
+            //    });
+            //    return;
+            //}
+            //var existingItem = Items.FirstOrDefault(i => i.CatalogItemId == catalogItemId);
+            //existingItem.Quantity += quantity;
         }
 
         public void RemoveItem(int index)

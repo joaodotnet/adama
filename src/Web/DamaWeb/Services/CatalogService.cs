@@ -272,7 +272,9 @@ namespace DamaWeb.Services
                 .Include(x => x.CatalogAttributes)
                 .Include(x => x.CatalogType)
                 .Include(x => x.CatalogIllustration)
-                    .ThenInclude(ci => ci.IllustrationType)
+                    .ThenInclude(ct => ct.IllustrationType)
+                .Include(x => x.CatalogType)
+                    .ThenInclude(ct => ct.PictureTextHelpers)
                 .Include(x => x.CatalogReferences)
                     .ThenInclude(cr => cr.ReferenceCatalogItem)
                 .SingleOrDefaultAsync(x => x.Sku == sku);
@@ -319,10 +321,15 @@ namespace DamaWeb.Services
                     DeliveryTimeMin = product.CatalogType.DeliveryTimeMin,
                     DeliveryTimeMax = product.CatalogType.DeliveryTimeMax,
                     DeliveryTimeUnit = product.CatalogType.DeliveryTimeUnit,
-                    CanCustomize = product.CanCustomize,
+                    CanCustomizeTotal = product.CanCustomize,
                     CustomizePrice = product.CatalogType.AdditionalTextPrice,
                     FirstCategoryId = product.CatalogCategories.FirstOrDefault()?.CategoryId ?? 0,
-                    ProductReferences = productReferences
+                    ProductReferences = productReferences,
+                    PictureHelpers = product.CatalogType.PictureTextHelpers.Select(x => new PictureHelperViewModel
+                    {
+                        PictureUri = x.PictureUri,
+                        PictureFileName = x.FileName
+                    }).ToList()
                 };
 
                 //Others prictures

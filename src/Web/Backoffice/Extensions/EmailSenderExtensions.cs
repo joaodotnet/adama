@@ -11,13 +11,13 @@ namespace Backoffice.Services
     {
         public static Task SendEmailConfirmationAsync(this IEmailSender emailSender, string fromEmail, string toEmail, string link)
         {
-            return emailSender.SendEmailAsync(fromEmail, toEmail, "Confirm your email",
+            return emailSender.SendGenericEmailAsync(fromEmail, toEmail, "Confirm your email",
                 $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(link)}'>clicking here</a>.");
         }
 
         public static Task SendResetPasswordAsync(this IEmailSender emailSender, string fromEmail, string toEmail, string callbackUrl)
         {
-            return emailSender.SendEmailAsync(fromEmail, toEmail, "Reset Password",
+            return emailSender.SendGenericEmailAsync(fromEmail, toEmail, "Reset Password",
                 $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
         }
     }

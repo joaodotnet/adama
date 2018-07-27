@@ -35,12 +35,11 @@ namespace DamaWeb
         {
             if (!string.IsNullOrEmpty(returnUrl) && returnUrl.LastIndexOf("/loja") >= 0)
             {
-                var url = returnUrl.Substring(returnUrl.LastIndexOf("/loja") + 5);
-                if (string.IsNullOrEmpty(url) || url == "/")
-                    url = "/Index";
-                return url;
+                returnUrl = returnUrl.Substring(returnUrl.LastIndexOf("/loja") + 5);
             }
-                
+
+            if (string.IsNullOrEmpty(returnUrl) || returnUrl == "/")
+                returnUrl = "/Index";
             return returnUrl;
         }
     }

@@ -36,6 +36,7 @@ namespace Infrastructure.Data
         {
             builder.Entity<Category>(ConfigureCategory);
             builder.Entity<Basket>(ConfigureBasket);
+            builder.Entity<BasketItem>(ConfigureBasketItem);
             builder.Entity<CatalogIllustration>(ConfigureCatalogBrand);
             builder.Entity<CatalogType>(ConfigureCatalogType);
             builder.Entity<IllustrationType>(ConfigureIllustrationType);           
@@ -52,6 +53,14 @@ namespace Infrastructure.Data
             builder.Entity<CustomizeOrder>(ConfigureCustomizeOrders);
             builder.Entity<CatalogReference>(ConfigureCatalogReferences);
             builder.Entity<FileDetail>(ConfigureFileDetails);
+        }
+
+        private void ConfigureBasketItem(EntityTypeBuilder<BasketItem> builder)
+        {
+            builder.Property(x => x.CustomizeName)
+                .HasMaxLength(100);
+            builder.Property(x => x.CustomizeSide)
+                .HasMaxLength(100);
         }
 
         private void ConfigureFileDetails(EntityTypeBuilder<FileDetail> builder)
@@ -361,6 +370,9 @@ namespace Infrastructure.Data
             builder.OwnsOne(i => i.ItemOrdered);
 
             builder.Property(x => x.CustomizeName)
+                .HasMaxLength(100);
+
+            builder.Property(x => x.CustomizeSide)
                 .HasMaxLength(100);
         }
 
