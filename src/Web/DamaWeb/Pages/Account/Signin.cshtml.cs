@@ -71,6 +71,7 @@ namespace DamaWeb.Pages.Account
 
         public async Task OnGet(string returnUrl = null)
         {
+            returnUrl = Utils.FixBasePath(returnUrl);
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
@@ -118,6 +119,7 @@ namespace DamaWeb.Pages.Account
             {
                 return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = LoginDetails.RememberMe });
             }
+            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             ModelState.AddModelError(string.Empty, "Email ou password inválidos, insira correctamente os dados.");
             return Page();
         }
@@ -161,7 +163,7 @@ namespace DamaWeb.Pages.Account
             }
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             return Page();
-        }
+        }        
 
         private async Task SendConfirmationEmailAsync(ApplicationUser user)
         {

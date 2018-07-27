@@ -27,7 +27,7 @@ namespace ApplicationCore.Services
             _itemRepository = itemRepository;
         }
 
-        public async Task AddItemToBasket(int basketId, int catalogItemId, decimal price, int quantity, int? option1 = null, int? option2 = null, int? option3 = null, string customizeName = null)
+        public async Task AddItemToBasket(int basketId, int catalogItemId, decimal price, int quantity, int? option1 = null, int? option2 = null, int? option3 = null, string customizeName = null, string customizeSide = null)
         {
             var basket = await _basketRepository.GetByIdAsync(basketId);
 
@@ -58,7 +58,7 @@ namespace ApplicationCore.Services
             //update price 
             //price += attrsPrice;
 
-            basket.AddItem(catalogItemId, price, quantity, option1, option2, option3, customizeName);
+            basket.AddItem(catalogItemId, price, quantity, option1, option2, option3, customizeName, customizeSide);
 
             await _basketRepository.UpdateAsync(basket);
         }

@@ -75,7 +75,7 @@ namespace DamaWeb.Pages.Basket
                 attrIds = productDetails.Attributes.Select(x => x.Selected).ToList();
             var options = GetOptionsFromAttributes(attrIds);
             var price = string.IsNullOrEmpty(productDetails.NameInput) ? productDetails.ProductPrice : productDetails.ProductPrice + productDetails.CustomizePrice.Value;
-            await _basketService.AddItemToBasket(BasketModel.Id, productDetails.ProductId, price, productDetails.ProductQuantity, options.Item1, options.Item2, options.Item3, productDetails.NameInput );
+            await _basketService.AddItemToBasket(BasketModel.Id, productDetails.ProductId, price, productDetails.ProductQuantity, options.Item1, options.Item2, options.Item3, productDetails.NameInput, productDetails.CustomizePictureFileName );
 
             await SetBasketModelAsync();
 
