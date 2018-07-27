@@ -61,6 +61,8 @@ namespace Infrastructure.Data
                 .HasMaxLength(100);
             builder.Property(x => x.CustomizeSide)
                 .HasMaxLength(100);
+            builder.Property(x => x.UnitPrice)
+                .HasColumnType("decimal(18,2)");
         }
 
         private void ConfigureFileDetails(EntityTypeBuilder<FileDetail> builder)
@@ -233,7 +235,7 @@ namespace Infrastructure.Data
             builder.Property(ci => ci.Sku)
                 .HasMaxLength(255);
             builder.Property(ci => ci.Id)
-                .ForSqlServerUseSequenceHiLo("catalog_hilo")
+                //.ForSqlServerUseSequenceHiLo("catalog_hilo")
                 .IsRequired();
 
             builder.Property(ci => ci.Name)
@@ -262,8 +264,8 @@ namespace Infrastructure.Data
             builder.Property(x => x.IsFeatured)
                 .IsRequired(true);
             builder.Property(x => x.CanCustomize)
-                .IsRequired(true)
-                .HasDefaultValue(false);
+                .IsRequired(true);
+                //.HasDefaultValue(false);
         }
 
         private void ConfigureCatalogBrand(EntityTypeBuilder<CatalogIllustration> builder)
@@ -273,7 +275,7 @@ namespace Infrastructure.Data
             builder.HasKey(ci => ci.Id);
 
             builder.Property(ci => ci.Id)
-               .ForSqlServerUseSequenceHiLo("catalog_brand_hilo")
+               //.ForSqlServerUseSequenceHiLo("catalog_brand_hilo")
                .IsRequired();
 
             builder.Property(cb => cb.Code)
@@ -300,7 +302,7 @@ namespace Infrastructure.Data
             builder.HasKey(ci => ci.Id);
 
             builder.Property(ci => ci.Id)
-               .ForSqlServerUseSequenceHiLo("catalog_type_hilo")
+               //.ForSqlServerUseSequenceHiLo("catalog_type_hilo")
                .IsRequired();
 
             builder.Property(cb => cb.Code)
@@ -354,6 +356,9 @@ namespace Infrastructure.Data
             builder.Property(x => x.SalesInvoiceNumber)
                 .HasMaxLength(255);
 
+            builder.Property(x => x.ShippingCost)
+                 .HasColumnType("decimal(18,2)");
+
             var navigation = builder.Metadata.FindNavigation(nameof(Order.OrderItems));
 
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
@@ -371,9 +376,10 @@ namespace Infrastructure.Data
 
             builder.Property(x => x.CustomizeName)
                 .HasMaxLength(100);
-
             builder.Property(x => x.CustomizeSide)
                 .HasMaxLength(100);
+            builder.Property(x => x.UnitPrice)
+                .HasColumnType("decimal(18,2)");
         }
 
         //private void ConfigureOrderItemDetail(EntityTypeBuilder<OrderItemDetail> builder)

@@ -45,11 +45,19 @@ namespace Backoffice
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<AppIdentityDbContext>(options =>
-               options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+            //services.AddDbContext<AppIdentityDbContext>(options =>
+            //   options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
 
+            //services.AddDbContext<DamaContext>(options =>
+            //    options.UseSqlServer(Configuration.GetConnectionString("DamaConnection")));
+
+            // use real database            
             services.AddDbContext<DamaContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DamaConnection")));
+                options.UseMySql(Configuration.GetConnectionString("DamaConnection")));
+
+            // Add Identity DbContext
+            services.AddDbContext<AppIdentityDbContext>(options =>
+                options.UseMySql(Configuration.GetConnectionString("IdentityConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
