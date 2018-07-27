@@ -11,7 +11,7 @@
         <div class="col-sm-6">
             <h2 class="dama-heading-normal-font">Login</h2>
             <section>
-                <h4>Use a tua conta de Facebook ou Google para Entrar.</h4>
+                <h4>Para fazer Login usa a tua conta de Facebook ou Google.</h4>
                 @{
                     if ((Model.ExternalLogins?.Count ?? 0) == 0)
                     {
@@ -25,7 +25,7 @@
                     else
                     {
                         <form asp-page="./ExternalLogin" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-                            <div>
+                            <div class="mt-3">
                                 <p>
                                     @foreach (var provider in Model.ExternalLogins)
                                     {
@@ -37,7 +37,7 @@
                                         }
                                         else if (provider.Name.ToLower() == "google")
                                         {
-                                            <button type="submit" class="btn btn-social btn-google" name="provider" value="@provider.Name" title="Log in usando a sua conta @provider.DisplayName">
+                                            <button type="submit" class="btn btn-social btn-google mt-3 mt-sm-0" name="provider" value="@provider.Name" title="Log in usando a sua conta @provider.DisplayName">
                                                 <img src="~/images/google_icon.png" width="40" /> Login pelo Google
                                             </button>
                                         }
@@ -52,10 +52,9 @@
                     }
                 }
             </section>
-            <hr />
             <section>
                 <form asp-route-returnurl="@ViewData["ReturnUrl"]" asp-page-handler="SignIn" method="post" class="form-horizontal">
-                    <h4>Ou use a sua conta local.</h4>
+                    <h4>Ou introduz os teus dados de acesso.</h4>
                     <div asp-validation-summary="ModelOnly" class="text-danger small"></div>
                     <div class="form-group required">
                         <label asp-for="LoginDetails.Email" class="control-label form-label"></label>
@@ -89,7 +88,7 @@
         <div class="col-sm-4">
             <h2 class="dama-heading-normal-font">Registo</h2>
             <section>
-                <h4>Registe-se!</h4>
+                <h4>Para fazeres o teu registo, preenche os campos abaixo.</h4>
                 <form asp-route-returnurl="@ViewData["ReturnUrl"]" asp-page-handler="Register" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger small"></div>
                     <div class="form-group required">
