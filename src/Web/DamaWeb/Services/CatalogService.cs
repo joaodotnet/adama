@@ -297,6 +297,8 @@ namespace DamaWeb.Services
                 var vm = new ProductViewModel
                 {
                     ProductId = product.Id,
+                    CategoryId = product.CatalogCategories.FirstOrDefault().CategoryId,
+                    ProductTypeId = product.CatalogTypeId,
                     ProductSKU = product.Sku,
                     ProductTitle = product.Name,
                     ProductDescription = product.Description,
