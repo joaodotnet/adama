@@ -12,9 +12,12 @@ namespace ApplicationCore.Entities
         public int? CatalogAttribute3 { get; set; }
         public string CustomizeName { get; set; }
         public string CustomizeSide { get; set; }
-        //public CatalogAttribute CatalogAttribute1 { get; set; }
-        //public CatalogAttribute CatalogAttribute2 { get; set; }
-        //public CatalogAttribute CatalogAttribute3 { get; set; }
+
+        public int BasketId { get; set; }
+        public Basket Basket { get; set; }
+                                           //public CatalogAttribute CatalogAttribute1 { get; set; }
+                                           //public CatalogAttribute CatalogAttribute2 { get; set; }
+                                           //public CatalogAttribute CatalogAttribute3 { get; set; }
 
         //public IList<CatalogAttribute> CatalogAttributes
         //{
@@ -31,6 +34,7 @@ namespace ApplicationCore.Entities
         //        return catalogAttributes;
         //    }
         //}
+
 
         //public List<BasketDetailItem> Details { get; set; }
     }
