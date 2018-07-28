@@ -165,10 +165,37 @@ namespace DamaNoJornal.Core.ViewModels
                 }
             }
 
+            //Create BasketItem
+            var basketItem = new BasketItem
+            {
+                ProductId = catalogItem.Id,
+                ProductName = catalogItem.Name,
+                PictureUrl = catalogItem.PictureUri,
+                UnitPrice = catalogItem.Price,
+                Quantity = 1,
+                Attributes = attributesSelected.Select(x => new BasketItemAttribute
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Price = x.Price,
+                    Type = x.Type
+                }).ToList()
+            };
+
+            //Call service
+            var authToken = _settingsService.AuthAccessToken;
+            var userInfo = await _userService.GetUserInfoAsync(authToken);
+
+            var basket = await _basketService.AddBasketItemAsync(new CustomerBasket
+            {
+                BuyerId = userInfo.Email,
+                Items = new List<BasketItem> { basketItem }
+            }, authToken);
 
             // Add new item to Basket
-            //MessagingCenter.Send(this, MessageKeys.AddProduct, catalogItem);   
-            await NavigationService.NavigateToAsync<BasketViewModel>((catalogItem, attributesSelected));
+            MessagingCenter.Send<CatalogViewModel, int>(this, MessageKeys.AddProduct, basket.Items?.Count ?? 0);
+            DialogService.ShowToastMessage("Produto adicionado ao carrinho!");
+            //await NavigationService.NavigateToAsync<BasketViewModel>((catalogItem, attributesSelected));
         }
 
         private async Task FilterAsync()

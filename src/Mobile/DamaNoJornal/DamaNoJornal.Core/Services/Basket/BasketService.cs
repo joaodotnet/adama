@@ -43,17 +43,17 @@ namespace DamaNoJornal.Core.Services.Basket
             return basket;
         }
 
-        //public async Task<CustomerBasket> UpdateBasketAsync(CustomerBasket customerBasket, string token)
-        //{
-        //    var builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint)
-        //    {
-        //        Path = ApiUrlBase
-        //    };
+        public async Task<CustomerBasket> UpdateBasketAsync(CustomerBasket customerBasket, string token)
+        {
+            var builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint)
+            {
+                Path = ApiUrlBase
+            };
 
-        //    var uri = builder.ToString();
-        //    var result = await _requestProvider.PostAsync(uri, customerBasket, token);
-        //    return result;
-        //}
+            var uri = builder.ToString();
+            var result = await _requestProvider.PostAsync(uri, customerBasket, token);
+            return result;
+        }
 
         public async Task CheckoutAsync(BasketCheckout basketCheckout, string token)
         {

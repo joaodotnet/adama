@@ -61,21 +61,39 @@ namespace Dama.API.Controllers
         //[ProducesResponseType(typeof(Basket), (int)HttpStatusCode.OK)]
         //public async Task<IActionResult> Post([FromBody]BasketViewModel value)
         //{
-        //    var basket = await _repository.UpdateBasketAsync(ViewModelToBasket(value));
+        //    //var basket = await _repository.UpdateBasketAsync(ViewModelToBasket(value));
 
+        //    //Delete Baskets
+        //    var basketSpec = new BasketWithItemsSpecification(value.BuyerId);
+        //    var baskets= await _repository.ListAsync(basketSpec);
+        //    var basket = baskets.LastOrDefault();
+        //    if (baskets == null)
+        //        basket = await CreateBasketForUser(value.BuyerId);
+        //    else if (basket.Items?.Count > 0)
+        //    {
+        //        basket.RemoveAllItems();
+        //        await _repository.UpdateAsync(basket);
+        //    }
+        //    //Create Items
+        //    foreach (var item in value.Items)
+        //    {
+        //        var options = GetOptions(item.Attributes);
+        //        basket.AddItem(item.ProductId, item.UnitPrice, item.Quantity, options.Item1, options.Item2, options.Item3);
+        //    }
+        //    await _repository.UpdateAsync(basket);
         //    return Ok(basket);
         //}
 
         [Route("add")]
         [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(BasketViewModel), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> AddItem([FromBody]BasketViewModel value)
         {
             var basketModel = ViewModelToBasket(value);
             var basketDb = await GetOrCreateBasketForUser(value.BuyerId);
-            await _repository.AddBasketItemAsync(basketDb.Id, basketModel.Items.FirstOrDefault());
+            var basket = await _repository.AddBasketItemAsync(basketDb.Id, basketModel.Items.FirstOrDefault());
 
-            return Ok();
+            return Ok(BasketToViewModel(basket));
         }
 
         //[Route("checkout")]

@@ -61,6 +61,10 @@ namespace Infrastructure.Data
                 .HasMaxLength(100);
             builder.Property(x => x.CustomizeSide)
                 .HasMaxLength(100);
+
+            builder.HasOne(bi => bi.Basket)
+                .WithMany(b => b.Items)
+                .HasForeignKey(bi => bi.BasketId);
         }
 
         private void ConfigureFileDetails(EntityTypeBuilder<FileDetail> builder)
@@ -221,7 +225,7 @@ namespace Infrastructure.Data
         {           
             var navigation = builder.Metadata.FindNavigation(nameof(Basket.Items));
 
-            navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+            navigation.SetPropertyAccessMode(PropertyAccessMode.Field);            
         }
 
         private void ConfigureCatalogItem(EntityTypeBuilder<CatalogItem> builder)
