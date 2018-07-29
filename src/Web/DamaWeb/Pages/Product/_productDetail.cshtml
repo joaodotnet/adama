@@ -1,11 +1,5 @@
 ﻿@model ProductViewModel
 
-<style>
-    #btnSub, #btnAdd {
-        cursor: pointer;
-    }
-</style>
-
 <form asp-page="/Basket/Index" asp-page-handler="addtobasket" method="post">
     <div class="dama-product-title">@Model.ProductTitle</div>
     <div class="row justify-content-center mt-3 mt-md-3">
@@ -20,9 +14,9 @@
     <div class="row dama-product-attr mb-2 mb-md-3 ">
         <label class="col-4 col-form-label">Quantidade</label>
         <div class="col-8 btn-group w-100 align-items-center" role="group">
-            <i id="btnSub" class="fas fa-chevron-down mr-2" role="button"></i>
+            <a id="btnSub" class="mr-2"><i class="fas fa-chevron-down"></i></a>
             <input asp-for="ProductQuantity" class="form-control col-3 text-center">
-            <i id="btnAdd" class="fas fa-chevron-up ml-2" role="button"></i>
+            <a id="btnAdd" class="ml-2"><i class="fas fa-chevron-up"></i></a>
         </div>
     </div>
 
@@ -59,6 +53,7 @@
         <div class="form-group dama-product-attr mx-2">
             <label asp-for="ContactEmailAddress" class="col-form-label"></label>
             <input asp-for="ContactEmailAddress" class="form-control" />
+            <span asp-validation-for="ContactEmailAddress" class="text-danger"></span>
         </div>
         <div class="form-group dama-product-attr mx-2">
             <label asp-for="Message" class="col-form-label"></label>

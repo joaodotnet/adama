@@ -6,6 +6,9 @@ namespace DamaNoJornal.Core.Models.Orders
 {
     public class OrderItem
     {
+        [JsonIgnore]
+        public int Num { get; set; }
+        public string ProducType { get; set; }
         public int ProductId { get; set; }
         public Guid? OrderId { get; set; }
 

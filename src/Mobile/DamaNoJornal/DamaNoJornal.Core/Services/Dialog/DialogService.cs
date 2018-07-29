@@ -19,5 +19,10 @@ namespace DamaNoJornal.Services
         {
             return UserDialogs.Instance.ActionSheetAsync(title, buttonCancel, null, null, options);
         }
+
+        public void ShowToastMessage(string message)
+        {
+            UserDialogs.Instance.Toast(message);
+        }
     }
 }
