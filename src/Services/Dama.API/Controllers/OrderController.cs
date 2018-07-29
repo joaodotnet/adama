@@ -38,7 +38,7 @@ namespace Dama.API.Controllers
             var user = await _userManager.FindByIdAsync(userId);
 
             var orders = new List<Order>();
-            if(user.UserName == "sue@damanojornal.com" || user.UserName == "jue@damanojornal.com" || user.UserName == "sonia@damanojornal.com")
+            if (user.UserName == "sue@damanojornal.com" || user.UserName == "jue@damanojornal.com" || user.UserName == "sonia@damanojornal.com")
             {
                 orders = await _orderService.GetOrdersAsync("sue@damanojornal.com");
                 orders.AddRange(await _orderService.GetOrdersAsync("jue@damanojornal.com"));
@@ -49,7 +49,7 @@ namespace Dama.API.Controllers
                 orders = await _orderService.GetOrdersAsync(user.Email);
             }
 
-            
+
 
             return Ok(orders);
         }
@@ -79,7 +79,7 @@ namespace Dama.API.Controllers
             //Create Address
             Address address = new Address(null, model.ShippingStreet, model.ShippingCity, model.ShippingCountry, model.ShippingZipCode);
             Address billAddress = new Address();
-            var order = await _orderService.CreateOrderAsync(basket.Id, null, null,address, billAddress, true,0);
+            var order = await _orderService.CreateOrderAsync(basket.Id, null, null, address, billAddress, true, 0);
 
             //Update to Submitted
             await _orderService.UpdateOrderState(order.Id, OrderStateType.SUBMITTED);
@@ -95,6 +95,38 @@ namespace Dama.API.Controllers
             await _orderService.UpdateOrderState(command.OrderNumber, OrderStateType.CANCELED);
             return Ok();
 
+        }
+
+        [Route("place/{placeId}")]
+        [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<Order>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetOrdersByPlace(int placeId)
+        {
+            var street = PlaceIdToStreet(placeId);
+            var orders = new List<Order>();
+            orders = (await _orderService
+                .GetOrdersAsync("sue@damanojornal.com"))
+                .Where(o => o.ShipToAddress.Street.Equals(street))
+                .ToList();
+            orders.AddRange((await _orderService
+                .GetOrdersAsync("jue@damanojornal.com"))
+                .Where(o => o.ShipToAddress.Street.Equals(street))
+                .ToList());
+            orders.AddRange((await _orderService
+                .GetOrdersAsync("sonia@damanojornal.com"))
+                .Where(o => o.ShipToAddress.Street.Equals(street))
+                .ToList());
+
+            return Ok(orders);
+        }
+
+        private object PlaceIdToStreet(int placeId)
+        {
+            if (placeId == 1)
+                return "Feira Popular de Loulé";
+            if (placeId == 2)
+                return "Feira da Serra de São Brás";
+            return string.Empty;
         }
     }
 }

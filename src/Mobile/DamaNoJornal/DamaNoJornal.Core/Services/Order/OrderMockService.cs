@@ -115,6 +115,11 @@ namespace DamaNoJornal.Core.Services.Order
         public Task<bool> CancelOrderAsync(int orderId, string token)
         {
             return Task.FromResult(true);
-        }        
+        }
+
+        public Task<List<Core.Models.Orders.Order>> GetOrderByPlaceAsync(int placeId, string authToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

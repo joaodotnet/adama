@@ -45,6 +45,7 @@ namespace DamaNoJornal.Core.Views
 			await ((BasketViewModel)BasketView.BindingContext).InitializeAsync(null);
 			await ((OrdersViewModel)OrdersView.BindingContext).InitializeAsync(null);
             await ((ProfileViewModel)ProfileView.BindingContext).InitializeAsync(null);
+            await ((EventViewModel)EventView.BindingContext).InitializeAsync(null);
 
             _settingsService = ViewModelLocator.Resolve<ISettingsService>();
             var userService = ViewModelLocator.Resolve<IUserService>();
