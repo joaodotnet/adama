@@ -78,4 +78,13 @@
             </OnPlatform>
         </views:ProfileView.Icon>
     </views:ProfileView>
+    <views:EventView
+        x:Name="EventView">
+        <!--<views:EventView.Icon>
+            <OnPlatform x:TypeArguments="FileImageSource">
+                <On Platform="iOS, Android" Value="img-joao.png" />
+                <On Platform="UWP, WinRT, WinPhone" Value="Assets\img-joao.png" />
+            </OnPlatform>
+        </views:EventView.Icon>-->
+    </views:EventView>
 </TabbedPage>

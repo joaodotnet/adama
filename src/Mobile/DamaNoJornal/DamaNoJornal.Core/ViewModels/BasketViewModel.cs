@@ -90,11 +90,11 @@ namespace DamaNoJornal.Core.ViewModels
             var authToken = _settingsService.AuthAccessToken;
             var userInfo = await _userService.GetUserInfoAsync(authToken);
 
-            if (navigationData is ValueTuple<CatalogItem,List<CatalogAttribute>>)
-            {
-                var catalogItem = (ValueTuple<CatalogItem, List<CatalogAttribute>>)navigationData;
-                await AddCatalogItemAsync(catalogItem.Item1,catalogItem.Item2);
-            }
+            //if (navigationData is ValueTuple<CatalogItem,List<CatalogAttribute>>)
+            //{
+            //    var catalogItem = (ValueTuple<CatalogItem, List<CatalogAttribute>>)navigationData;
+            //    await AddCatalogItemAsync(catalogItem.Item1,catalogItem.Item2);
+            //}
 
             // Update Basket
             var basket = await _basketService.GetBasketAsync(userInfo.UserId, authToken);
@@ -110,16 +110,16 @@ namespace DamaNoJornal.Core.ViewModels
                     AddBasketItem(basketItem);
                 }
             }
-            //System.Diagnostics.Debug.WriteLine("############## Unsubcribe 1 #################");
-            //MessagingCenter.Unsubscribe<CatalogViewModel, CatalogItem>(this, MessageKeys.AddProduct);
-            //System.Diagnostics.Debug.WriteLine("############## Subcribe 1 #################");
-            //MessagingCenter.Subscribe<CatalogViewModel, CatalogItem>(this, MessageKeys.AddProduct, async (sender, arg) =>
-            //{
-            //    System.Diagnostics.Debug.WriteLine("############## Executing Subscribe Method #################");
-            //    BadgeCount++;
+            System.Diagnostics.Debug.WriteLine("############## Unsubcribe 1 #################");
+            MessagingCenter.Unsubscribe<CatalogViewModel, int>(this, MessageKeys.AddProduct);
+            System.Diagnostics.Debug.WriteLine("############## Subcribe 1 #################");
+            MessagingCenter.Subscribe<CatalogViewModel, int>(this, MessageKeys.AddProduct, (sender, arg) =>
+            {
+                System.Diagnostics.Debug.WriteLine("############## Executing Subscribe Method #################");
+                BadgeCount = arg;
 
-            //    await AddCatalogItemAsync(arg);
-            //});
+                //await AddCatalogItemAsync(arg);
+            });
 
             await base.InitializeAsync(navigationData);
         }

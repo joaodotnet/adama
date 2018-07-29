@@ -30,19 +30,19 @@ namespace DamaNoJornal.Core.Services.Basket
             return MockCustomBasket;
         }
 
-        //public async Task<CustomerBasket> UpdateBasketAsync(CustomerBasket customerBasket, string token)
-        //{
-        //    await Task.Delay(10);
+        public async Task<CustomerBasket> UpdateBasketAsync(CustomerBasket customerBasket, string token)
+        {
+            await Task.Delay(10);
 
-        //    if (string.IsNullOrEmpty(token))
-        //    {
-        //        return new CustomerBasket();
-        //    }
+            if (string.IsNullOrEmpty(token))
+            {
+                return new CustomerBasket();
+            }
 
-        //    MockCustomBasket = customerBasket;
+            MockCustomBasket = customerBasket;
 
-        //    return MockCustomBasket;
-        //}
+            return MockCustomBasket;
+        }
 
         public async Task ClearBasketAsync(string guidUser, string token)
         {

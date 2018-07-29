@@ -62,7 +62,7 @@ namespace DamaNoJornal.Core.Services.Order
                 OrderEntity order =
                     await _requestProvider.GetAsync<OrderEntity>(uri, token);
 
-                return MaptoOrder(order);
+                return MapToOrder(order);
             }
             catch
             {
@@ -112,17 +112,49 @@ namespace DamaNoJornal.Core.Services.Order
             return true;
         }
 
+        public async Task<List<Core.Models.Orders.Order>> GetOrderByPlaceAsync(int placeId, string authToken)
+        {
+            try
+            {
+                UriBuilder builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint);
+
+                builder.Path = $"{ApiUrlBase}/place/{placeId}";
+
+                string uri = builder.ToString();
+
+                List<OrderEntity> orders =
+                    await _requestProvider.GetAsync<List<OrderEntity>>(uri, authToken);
+
+                return MapToOrder(orders);
+            }
+            catch
+            {
+                return new List<Core.Models.Orders.Order>();
+            }
+        }
+
+
         private ObservableCollection<Core.Models.Orders.Order> MapToModelOrders(IEnumerable<OrderEntity> orders)
         {
             ObservableCollection<Core.Models.Orders.Order> returnOrders = new ObservableCollection<Core.Models.Orders.Order>();
             foreach (var order in orders)
             {
-                returnOrders.Add(MaptoOrder(order));
+                returnOrders.Add(MapToOrder(order));
             }
             return returnOrders;
         }
 
-        private Core.Models.Orders.Order MaptoOrder(OrderEntity order)
+        private List<Core.Models.Orders.Order> MapToOrder(List<OrderEntity> orders)
+        {
+            var ordersViewModel = new List<Core.Models.Orders.Order>();
+            foreach (var item in orders)
+            {
+                ordersViewModel.Add(MapToOrder(item));
+            }
+            return ordersViewModel;
+        }
+
+        private Core.Models.Orders.Order MapToOrder(OrderEntity order)
         {
             return new Core.Models.Orders.Order
             {
