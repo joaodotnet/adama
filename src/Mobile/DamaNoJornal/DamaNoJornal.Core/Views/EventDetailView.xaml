@@ -3,10 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DamaNoJornal.Core.Views.EventDetailView"
 			 xmlns:viewModelBase="clr-namespace:DamaNoJornal.Core.ViewModels.Base;assembly=DamaNoJornal.Core"
-             xmlns:templates="clr-namespace:DamaNoJornal.Core.Views.Templates;assembly=DamaNoJornal.Core"   
-             xmlns:animations="clr-namespace:DamaNoJornal.Core.Animations;assembly=DamaNoJornal.Core"
-             xmlns:triggers="clr-namespace:DamaNoJornal.Core.Triggers;assembly=DamaNoJornal.Core"
+             xmlns:flv="clr-namespace:DLToolkit.Forms.Controls;assembly=DLToolkit.Forms.Controls.FlowListView"
 			 viewModelBase:ViewModelLocator.AutoWireViewModel="true"
+             xmlns:templates="clr-namespace:DamaNoJornal.Core.Views.Templates;assembly=DamaNoJornal.Core"  
              Title="{Binding Title}">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -19,6 +18,18 @@
                     Value="{StaticResource BigSize}" />
                 <Setter Property="TextColor"
                     Value="{StaticResource GreenColor}" />
+                <Setter Property="HorizontalOptions"
+                    Value="Center" />
+            </Style>
+
+            <Style x:Key="SubHeaderLabelStyle"
+                TargetType="{x:Type Label}">
+                <Setter Property="FontFamily"
+                    Value="{StaticResource MontserratRegular}" />
+                <Setter Property="FontSize"
+                    Value="{StaticResource LargeSize}" />
+                <Setter Property="TextColor"
+                    Value="{StaticResource BlackColor}" />
                 <Setter Property="HorizontalOptions"
                     Value="Center" />
             </Style>
@@ -39,12 +50,15 @@
                 <Setter Property="TextColor"
                         Value="Black" />
             </Style>
+            
+            
 
         </ResourceDictionary>
     </ContentPage.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -56,7 +70,44 @@
         <Label
               Grid.Row="2"
               Text="{Binding SubTitle}"
-              Style="{StaticResource HeaderLabelStyle}"/>
+              Style="{StaticResource SubHeaderLabelStyle}"/>
+        <flv:FlowListView x:Name="OrderByDayList"
+                          Grid.Row="3"
+                          FlowColumnCount="5" 
+                          SeparatorVisibility="None" 
+                          HasUnevenRows="True"
+                          FlowRowBackgroundColor="White"
+                          FlowItemsSource="{Binding OrdersByDay}">
+            <flv:FlowListView.FlowColumnTemplate>
+                <DataTemplate>
+                    <StackLayout                        
+                        WidthRequest="200"
+                        Margin="5"
+                        BackgroundColor="White">
+                        <Label
+                            Text="{Binding Date, Converter={StaticResource DateConverter}}"
+                            HorizontalOptions="CenterAndExpand"/>
+                        <Label
+                            Text="{Binding DateTotal, StringFormat='{0:N}€'}"
+                            FontSize="Large"                            
+                            HorizontalOptions="CenterAndExpand"/>
+                        <ListView 
+                    ItemsSource="{Binding Items}"
+                    HasUnevenRows="True"
+                    SeparatorVisibility="None"
+                    CachingStrategy="RecycleElement">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <templates:OrderByDayTemplate />
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackLayout>
+                </DataTemplate>
+            </flv:FlowListView.FlowColumnTemplate>
+        </flv:FlowListView>
 
         <!-- INDICATOR -->
         <ActivityIndicator

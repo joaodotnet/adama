@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView
+    xmlns="http://xamarin.com/schemas/2014/forms"     
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
+    x:Class="DamaNoJornal.Core.Views.Templates.OrderByDayTemplate">
+    <ContentView.Resources>
+        <ResourceDictionary>
+
+            <Style x:Key="OrderItemTitleStyle" 
+               TargetType="{x:Type Label}">
+                <Setter Property="FontFamily"
+                        Value="{StaticResource MontserratRegular}" />
+                <Setter Property="FontSize" 
+                        Value="{StaticResource MediumSize}" />
+                <Setter Property="TextColor" 
+                        Value="{StaticResource BlackColor}" />
+            </Style>
+
+            <Style x:Key="OrderItemUnitPriceStyle" 
+               TargetType="{x:Type Label}">
+                <Setter Property="FontFamily"
+                        Value="{StaticResource MontserratRegular}" />
+                <Setter Property="FontSize" 
+                        Value="{StaticResource MidMediumSize}" />
+                <Setter Property="TextColor" 
+                        Value="{StaticResource BlackColor}" />
+                <Setter Property="HorizontalOptions" 
+                        Value="Start" />
+            </Style>
+
+            <Style x:Key="OrderItemQuantityStyle" 
+               TargetType="{x:Type Label}">
+                <Setter Property="FontFamily"
+                        Value="{StaticResource MontserratRegular}" />
+                <Setter Property="FontSize" 
+                        Value="{StaticResource MidMediumSize}" />
+                <Setter Property="TextColor" 
+                        Value="{StaticResource BlackColor}" />
+                <Setter Property="HorizontalOptions" 
+                        Value="Start" />
+            </Style>
+
+            <Style x:Key="OrderTotalStyle" 
+               TargetType="{x:Type Label}">
+                <Setter Property="FontFamily"
+                        Value="{StaticResource MontserratRegular}" />
+                <Setter Property="FontSize" 
+                        Value="{StaticResource LargerSize}" />
+                <Setter Property="TextColor" 
+                        Value="{StaticResource GreenColor}" />
+                <Setter Property="HorizontalOptions" 
+                        Value="Start" />
+            </Style>
+
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.Content>
+        <Grid   
+            HeightRequest="80" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <!-- NAME -->
+            <StackLayout 
+                Grid.Row="0"
+                Orientation="Horizontal"
+                VerticalOptions="FillAndExpand">
+                <Label
+                    Text="{Binding Num}"/>
+                <Label
+                    Text="{Binding ProductName}"
+                    Style="{StaticResource OrderItemTitleStyle}"/>
+            </StackLayout>
+            <!-- TOTAL -->
+            <Label
+                Grid.Row="1"
+                Text="{Binding Total, StringFormat='{0:N}€'}"
+                Style="{StaticResource OrderTotalStyle}"/>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

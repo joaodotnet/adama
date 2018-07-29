@@ -113,7 +113,7 @@
                             FontSize="Medium"
                             FontFamily="Quicksand"
                             VerticalOptions="CenterAndExpand"
-                            HorizontalOptions="CenterAndExpand"/>
+                            HorizontalOptions="Center"/>
                         </StackLayout>
                     </DataTemplate>
                 </flv:FlowListView.FlowColumnTemplate>

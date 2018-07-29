@@ -38,6 +38,9 @@
     <Compile Update="Views\OrdersView.xaml.cs">
       <DependentUpon>OrdersView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Templates\OrderByDayTemplate.xaml.cs">
+      <DependentUpon>OrderByDayTemplate.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Views\CatalogFilterView.xaml">
