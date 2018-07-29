@@ -38,7 +38,7 @@ namespace DamaWeb.ViewModels
         public decimal? CustomizePrice { get; set; }
         public string CustomizePictureFileName { get; set; }
         [Required(ErrorMessage = "O endereço de Email é obrigatório.")]
-        [EmailAddress(ErrorMessage = "O endereço de Email não é valido.")]
+        [EmailAddress(ErrorMessage = "Introduz um endereço de Email válido.")]
         [Display(Name = "Email")]
         public string ContactEmailAddress { get; set; }
         [Display(Name = "Mensagem")]
