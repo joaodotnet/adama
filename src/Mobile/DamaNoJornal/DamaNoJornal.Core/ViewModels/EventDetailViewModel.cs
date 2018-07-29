@@ -1,9 +1,12 @@
-﻿using DamaNoJornal.Core.Models.Location;
+﻿using DamaNoJornal.Core.Extensions;
+using DamaNoJornal.Core.Models.Location;
 using DamaNoJornal.Core.Models.Orders;
 using DamaNoJornal.Core.Services.Order;
 using DamaNoJornal.Core.Services.Settings;
 using DamaNoJornal.Core.ViewModels.Base;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -16,9 +19,9 @@ namespace DamaNoJornal.Core.ViewModels
         private readonly ISettingsService _settingsService;
         private readonly IOrderService _ordersService;
 
-        private Place _place;
         private string _title;
         private string _subTitle;
+        private ObservableCollection<OrderDay> _orders;
 
         public EventDetailViewModel(ISettingsService settingsService, IOrderService ordersService)
         {
@@ -46,15 +49,15 @@ namespace DamaNoJornal.Core.ViewModels
             }
         }
 
-        //public Order Order
-        //{
-        //    get => _order;
-        //    set
-        //    {
-        //        _order = value;
-        //        RaisePropertyChanged(() => Order);
-        //    }
-        //}
+        public ObservableCollection<OrderDay> OrdersByDay
+        {
+            get => _orders;
+            set
+            {
+                _orders = value;
+                RaisePropertyChanged(() => OrdersByDay);
+            }
+        }
 
         public override async Task InitializeAsync(object navigationData)
         {
@@ -74,7 +77,41 @@ namespace DamaNoJornal.Core.ViewModels
                     .SelectMany(x => x.OrderItems)
                     .Sum(i => i.UnitPrice * i.Quantity);
                 SubTitle = $"Total de Vendas: {total}€";
+
+                var group = orders.OrderBy(x => x.OrderDate).GroupBy(x => x.OrderDate.Date);
+                OrdersByDay = new ObservableCollection<OrderDay>();
+                foreach (var ordersByDay in group)
+                {
+                    OrderDay orderDay = new OrderDay
+                    {
+                        Date = ordersByDay.Key,
+                        Items = new ObservableCollection<OrderItem>()
+                    };
+                    int num = 0;
+                    foreach (var order in ordersByDay)
+                    {
+                        foreach (var item in order.OrderItems)
+                        {
+                            item.Num = ++num;
+                            orderDay.Items.Add(item);
+                        }
+                    }
+                    OrdersByDay.Add(orderDay);
+                }
+
                 IsBusy = false;
+            }
+        }
+    }
+
+    public class OrderDay
+    {
+        public DateTime Date { get; set; }
+        public ObservableCollection<OrderItem> Items { get; set; }
+
+        public decimal DateTotal { get
+            {
+                return Items?.Sum(x => x.Total) ?? 0;
             }
         }
     }
