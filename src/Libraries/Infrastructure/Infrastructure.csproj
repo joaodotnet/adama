@@ -21,6 +21,7 @@
     <ProjectReference Include="..\ApplicationCore\ApplicationCore.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Data\Grocery\Migrations\" />
     <Folder Include="Data\Migrations\" />
     <Folder Include="Identity\Migrations\" />
   </ItemGroup>

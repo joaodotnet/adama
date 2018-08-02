@@ -55,6 +55,9 @@ namespace Backoffice
             services.AddDbContext<DamaContext>(options =>
                 options.UseMySql(Configuration.GetConnectionString("DamaConnection")));
 
+            services.AddDbContext<GroceryContext>(options =>
+                options.UseMySql(Configuration.GetConnectionString("GroceryConnection")));
+
             // Add Identity DbContext
             services.AddDbContext<AppIdentityDbContext>(options =>
                 options.UseMySql(Configuration.GetConnectionString("IdentityConnection")));
@@ -116,6 +119,7 @@ namespace Backoffice
             services.AddSingleton<IEmailSender>(new EmailSender(Configuration.Get<BackofficeSettings>()));
             services.AddScoped<ISageService, SageService>();
             services.AddScoped<IAuthConfigRepository, AuthConfigRepository>();
+            services.AddSingleton<ITenantIdentificationService, HostTenantIdentificationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
