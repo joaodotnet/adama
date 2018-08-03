@@ -16,8 +16,7 @@ namespace Infrastructure.Data
         }
 
         public DbSet<Basket> Baskets { get; set; }        
-        public DbSet<CatalogItem> CatalogItems { get; set; }
-        public DbSet<CatalogPicture> CatalogPictures { get; set; }
+        public DbSet<CatalogItem> CatalogItems { get; set; }        
         public DbSet<CatalogType> CatalogTypes { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<ApplicationCore.Entities.OrderAggregate.Order> Orders { get; set; }
@@ -33,7 +32,7 @@ namespace Infrastructure.Data
             builder.Entity<CatalogItem>(ConfigureCatalogItem);
             builder.Entity<CatalogCategory>(ConfigureCatalogCategories);
             builder.Entity<Order>(ConfigureOrder);
-            builder.Entity<OrderItem>(ConfigureOrderItem);
+            builder.Entity<OrderItem>(ConfigureOrderItem);            
         }
 
         private void ConfigureBasket(EntityTypeBuilder<Basket> builder)
@@ -57,6 +56,9 @@ namespace Infrastructure.Data
                 .HasForeignKey(bi => bi.BasketId);
             builder.Property(x => x.UnitPrice)
                 .HasColumnType("decimal(18,2)");
+
+            builder.Ignore(x => x.CustomizeName);
+            builder.Ignore(x => x.CustomizeSide);
         }
 
         private void ConfigureCategory(EntityTypeBuilder<Category> builder)
@@ -152,6 +154,7 @@ namespace Infrastructure.Data
             builder.Ignore(x => x.CanCustomize);
 
             builder.Ignore(ci => ci.CatalogReferences);
+            builder.Ignore(ci => ci.CatalogPictures);             
         }
 
         private void ConfigureCatalogCategories(EntityTypeBuilder<CatalogCategory> builder)
@@ -183,12 +186,13 @@ namespace Infrastructure.Data
 
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
 
-            builder.OwnsOne(o => o.ShipToAddress);
+            builder.Ignore(o => o.ShipToAddress);
             builder.OwnsOne(o => o.BillingToAddress);
 
             builder.Ignore(x => x.PhoneNumber);
             builder.Ignore(x => x.ShippingCost);
-            builder.Ignore(x => x.SalesPaymentId); 
+            builder.Ignore(x => x.SalesPaymentId);
+            builder.Ignore(x => x.UseBillingSameAsShipping);
         }
 
         private void ConfigureOrderItem(EntityTypeBuilder<OrderItem> builder)
