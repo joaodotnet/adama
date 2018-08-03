@@ -1,0 +1,37 @@
+﻿@page
+@model Backoffice.Areas.Grocery.Pages.Categories.DetailsModel
+
+@{
+    ViewData["Title"] = "Detalhes";
+}
+
+<h2>Detalhes</h2>
+
+<div>
+    <h4>Categoria</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Nome
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Category.Name)
+        </dd>
+        <dt>
+            Ordem
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Category.Order)
+        </dd>
+        <dt>
+            Categoria Pai
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Category.Parent.Name)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Category.Id">Editar</a> |
+    <a asp-page="./Index">Voltar para a Lista</a>
+</div>

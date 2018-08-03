@@ -1,0 +1,50 @@
+﻿@page
+@model Backoffice.Areas.Grocery.Pages.CatalogTypes.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+<h4>CatalogType</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CatalogType.Code" class="control-label"></label>
+                <input asp-for="CatalogType.Code" class="form-control" />
+                <span asp-validation-for="CatalogType.Code" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CatalogType.Description" class="control-label"></label>
+                <input asp-for="CatalogType.Description" class="form-control" />
+                <span asp-validation-for="CatalogType.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CatalogType.PictureUri" class="control-label"></label>
+                <input asp-for="CatalogType.PictureUri" class="form-control" />
+                <span asp-validation-for="CatalogType.PictureUri" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CatalogType.Price" class="control-label"></label>
+                <input asp-for="CatalogType.Price" class="form-control" />
+                <span asp-validation-for="CatalogType.Price" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="CatalogType.Id" />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
