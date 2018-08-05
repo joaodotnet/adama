@@ -104,19 +104,15 @@ namespace Infrastructure.Data
                 .IsRequired()
                 .HasColumnType("decimal(18,2)");
 
+            builder.HasIndex(x => x.Code)
+               .IsUnique();
+
             builder.Ignore(x => x.AdditionalTextPrice);
-
             builder.Ignore(x => x.ShippingCost);
-
+            builder.Ignore(x => x.PictureUri);
             builder.Ignore(x => x.DeliveryTimeMin);
             builder.Ignore(x => x.DeliveryTimeMax);
             builder.Ignore(x => x.DeliveryTimeUnit);
-            
-            builder.HasIndex(x => x.Code)
-               .IsUnique();
-            builder.Property(x => x.PictureUri)
-                .HasMaxLength(255);
-
             builder.Ignore(x => x.Categories);
             builder.Ignore(x => x.PictureTextHelpers);
         }

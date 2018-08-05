@@ -34,6 +34,13 @@ namespace Backoffice.Areas.Grocery.Pages.CatalogTypes
                 return Page();
             }
 
+            //check if code exists
+            if (_context.CatalogTypes.Any(x => x.Code.ToUpper() == CatalogType.Code.ToUpper()))
+            {
+                ModelState.AddModelError("", $"O nome do Tipo de Produto '{CatalogType.Code}' já existe!");
+                return Page();
+            }
+
             _context.CatalogTypes.Add(CatalogType);
             await _context.SaveChangesAsync();
 
