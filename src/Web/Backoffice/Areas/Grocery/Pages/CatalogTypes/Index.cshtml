@@ -2,29 +2,26 @@
 @model Backoffice.Areas.Grocery.Pages.CatalogTypes.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Tipos de Produto";
 }
 
-<h2>Index</h2>
+<h2>Tipos de Produto</h2>
 
 <p>
-    <a asp-page="./Create">Create New</a>
+    <a asp-page="Create">Inserir novo</a>
 </p>
 <table class="table">
     <thead>
         <tr>
-            <th>#</th>
+            <th>Id</th>
             <th>
-                @Html.DisplayNameFor(model => model.CatalogType[0].Code)
+                Código
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CatalogType[0].Description)
+                Descrição
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CatalogType[0].PictureUri)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CatalogType[0].Price)
+                Preço
             </th>
             <th></th>
         </tr>
@@ -40,15 +37,12 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PictureUri)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Editar</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Detalhe</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Remover</a>
             </td>
         </tr>
 }

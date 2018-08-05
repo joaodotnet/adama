@@ -2,35 +2,29 @@
 @model Backoffice.Areas.Grocery.Pages.CatalogTypes.DetailsModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalhes";
 }
 
-<h2>Details</h2>
+<h2>Detalhes</h2>
 
 <div>
-    <h4>CatalogType</h4>
+    <h4>Tipo de Produto</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.CatalogType.Code)
+            Código
         </dt>
         <dd>
             @Html.DisplayFor(model => model.CatalogType.Code)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.CatalogType.Description)
+            Descrição
         </dt>
         <dd>
             @Html.DisplayFor(model => model.CatalogType.Description)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.CatalogType.PictureUri)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.CatalogType.PictureUri)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.CatalogType.Price)
+            Preço
         </dt>
         <dd>
             @Html.DisplayFor(model => model.CatalogType.Price)
@@ -38,6 +32,6 @@
     </dl>
 </div>
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.CatalogType.Id">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./Edit" asp-route-id="@Model.CatalogType.Id">Editar</a> |
+    <a asp-page="./Index">Voltar para a Lista</a>
 </div>

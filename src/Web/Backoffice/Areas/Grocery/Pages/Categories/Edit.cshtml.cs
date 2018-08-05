@@ -49,7 +49,7 @@ namespace Backoffice.Areas.Grocery.Pages.Categories
             }
 
             //check if name exists
-            if (_context.Categories.Any(x => x.Name.ToUpper() == Category.Name.ToUpper()))
+            if (_context.Categories.Any(x => x.Name.ToUpper() == Category.Name.ToUpper() && x.Id != Category.Id))
             {
                 ModelState.AddModelError("", $"O nome da Categoria '{Category.Name}' já existe!");
                 return Page();
