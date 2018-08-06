@@ -21,6 +21,7 @@ namespace Infrastructure.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<ApplicationCore.Entities.OrderAggregate.Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<CatalogCategory> CatalogCategories { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

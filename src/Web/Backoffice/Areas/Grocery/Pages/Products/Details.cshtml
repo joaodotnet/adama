@@ -1,0 +1,67 @@
+﻿@page
+@model Backoffice.Areas.Grocery.Pages.Products.DetailsModel
+
+@{
+    ViewData["Title"] = "Detalhe";
+}
+
+<h2>Sabor com Tradição - Detalhe</h2>
+
+<div>
+    <h4>Produto</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CatalogItem.Sku)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CatalogItem.Sku)
+        </dd>
+        <dt>
+            Nome
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CatalogItem.Name)
+        </dd>
+        <dt>
+            Descrição
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CatalogItem.Description)
+        </dd>
+        <dt>
+            Preço
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CatalogItem.Price)
+        </dd>
+        <dt>
+            Imagem
+        </dt>
+        <dd>
+            <img src="@Model.CatalogItem.PictureUri" />
+        </dd>
+        <dt>
+            Categorias
+        </dt>
+        <dd>
+            @string.Join(",",Model.CatalogItem.CatalogCategories.Select(x => x.Category.Name))
+        </dd>
+        <dt>
+            Tipo de Produto
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CatalogItem.CatalogType.Code)
+        </dd>
+        <dt>
+            Ativo
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CatalogItem.ShowOnShop)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.CatalogItem.Id">Editar</a> |
+    <a asp-page="./Index">Voltar para a Lista</a>
+</div>
