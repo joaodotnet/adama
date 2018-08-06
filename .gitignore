@@ -291,5 +291,6 @@ __pycache__/
 src/Web/DamaWeb/wwwroot/images/news/
 src/Web/DamaWeb/wwwroot/images/products/
 src/Web/DamaWeb/wwwroot/images/producttypes/
+src/Web/Backoffice/wwwroot/images/products/
 .vscode/
 invoices/
