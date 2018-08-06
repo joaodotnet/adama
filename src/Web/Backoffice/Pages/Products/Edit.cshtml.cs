@@ -102,7 +102,7 @@ namespace Backoffice.Pages.Products
             if (ProductModel.OtherPictures != null)
             {
                 var order = ProductModel.CatalogPictures.Count == 0 ? 0 : ProductModel.CatalogPictures.Max(x => x.Order);
-                var lastCatalogPictureId = _context.CatalogPictures.Count() > 0 ? (await _context.CatalogPictures.LastAsync()).Id : 0;
+                var lastCatalogPictureId = _context.CatalogPictures.Count() > 0 ? (await _context.CatalogPictures.AsNoTracking().LastAsync()).Id : 0;
                 foreach (var item in ProductModel.OtherPictures)
                 {
                     ProductModel.CatalogPictures.Add(new ProductPictureViewModel
