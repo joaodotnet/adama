@@ -30,7 +30,10 @@ namespace Backoffice.Areas.Grocery.Pages.Products
             }
 
             CatalogItem = await _context.CatalogItems
-                .Include(c => c.CatalogType).FirstOrDefaultAsync(m => m.Id == id);
+                .Include(c => c.CatalogType)
+                .Include(c => c.CatalogCategories)
+                    .ThenInclude(cc => cc.Category)
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (CatalogItem == null)
             {

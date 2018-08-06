@@ -84,6 +84,7 @@ namespace Backoffice
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("Admin"));
+                options.AddPolicy("RequireGroceryRole", policy => policy.RequireRole("GroceryAdmin"));
             });
 
 
@@ -102,6 +103,9 @@ namespace Backoffice
                     options.Conventions.AuthorizeFolder("/Orders", "RequireAdministratorRole");
                     options.Conventions.AuthorizeFolder("/Sage", "RequireAdministratorRole");
                     options.Conventions.AuthorizePage("/Index", "RequireAdministratorRole");
+                    options.Conventions.AuthorizeAreaFolder("Grocery", "/CatalogTypes", "RequireGroceryRole");
+                    options.Conventions.AuthorizeAreaFolder("Grocery", "/Categories", "RequireGroceryRole");
+                    options.Conventions.AuthorizeAreaFolder("Grocery", "/Products", "RequireGroceryRole");
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);            
 
@@ -119,7 +123,6 @@ namespace Backoffice
             services.AddSingleton<IEmailSender>(new EmailSender(Configuration.Get<BackofficeSettings>()));
             services.AddScoped<ISageService, SageService>();
             services.AddScoped<IAuthConfigRepository, AuthConfigRepository>();
-            services.AddSingleton<ITenantIdentificationService, HostTenantIdentificationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
