@@ -149,7 +149,7 @@ namespace Infrastructure.Data
             builder.Ignore(x => x.IsNew);
             builder.Ignore(x => x.IsFeatured);
             builder.Ignore(x => x.CanCustomize);
-
+            builder.Ignore(x => x.Description);
             builder.Ignore(ci => ci.CatalogReferences);
             builder.Ignore(ci => ci.CatalogPictures);             
         }
