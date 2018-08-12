@@ -31,10 +31,13 @@ namespace Dama.API.Controllers
 
         [HttpGet]
         [Route("items")]
+        [Route("grocery/items")]
         [ProducesResponseType(typeof(PaginatedItemsViewModel<CatalogItem>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IEnumerable<CatalogItem>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Items([FromQuery]int pageSize = 100, [FromQuery]int pageIndex = 0, [FromQuery] string ids = null)
         {
+            //TODO: Check if grocery
+            var path = Request.Path;
             if (!string.IsNullOrEmpty(ids))
             {
                 return GetItemsByIds(ids);

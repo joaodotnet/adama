@@ -224,6 +224,7 @@ namespace DamaNoJornal.Core.ViewModels
                         break;
                 }
                 _settingsService.PlaceId = PlaceSelected.Id.ToString();
+                _settingsService.LoginSince = DateTime.Now.ToString();
                 await NavigationService.NavigateToAsync<MainViewModel>();
                 await NavigationService.RemoveLastFromBackStackAsync();
             }

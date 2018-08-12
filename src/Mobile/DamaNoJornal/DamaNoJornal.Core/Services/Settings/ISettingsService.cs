@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace DamaNoJornal.Core.Services.Settings
 {
@@ -13,6 +14,7 @@ namespace DamaNoJornal.Core.Services.Settings
         string Longitude { get; set; }
         bool AllowGpsLocation { get; set; }      
         string PlaceId { get; set; }
+        string LoginSince { get; set; }
 
         bool GetValueOrDefault(string key, bool defaultValue);
         string GetValueOrDefault(string key, string defaultValue);

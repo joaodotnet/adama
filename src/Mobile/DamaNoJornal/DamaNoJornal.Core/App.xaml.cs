@@ -33,9 +33,22 @@ namespace DamaNoJornal
         {
             _settingsService = ViewModelLocator.Resolve<ISettingsService>();
             _settingsService.UseMocks = false;
-            //_settingsService.UrlBase = "http://ec2-54-93-208-80.eu-central-1.compute.amazonaws.com:5859";
+            if(IsLoginExpired())
+                _settingsService.AuthAccessToken = string.Empty;
             if (!_settingsService.UseMocks)
                 ViewModelLocator.UpdateDependencies(_settingsService.UseMocks);
+        }
+
+        private bool IsLoginExpired()
+        {
+            if(!string.IsNullOrEmpty(_settingsService.LoginSince))
+            {
+                var loginDate = Convert.ToDateTime(_settingsService.LoginSince);
+                if ((DateTime.Now - loginDate) > new TimeSpan(12, 0, 0))
+                    return true;
+                return false;
+            }
+            return true;
         }
 
         private Task InitNavigation()
