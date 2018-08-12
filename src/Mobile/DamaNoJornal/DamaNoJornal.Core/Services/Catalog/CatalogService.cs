@@ -6,6 +6,7 @@ using DamaNoJornal.Core.Services.RequestProvider;
 using DamaNoJornal.Core.Extensions;
 using System.Collections.Generic;
 using DamaNoJornal.Core.Services.FixUri;
+using DamaNoJornal.Core.Services.Settings;
 
 namespace DamaNoJornal.Core.Services.Catalog
 {
@@ -13,13 +14,15 @@ namespace DamaNoJornal.Core.Services.Catalog
     {
         private readonly IRequestProvider _requestProvider;
         private readonly IFixUriService _fixUriService;
+        private string ApiUrlBase = "api/v1/catalog";
 
-        private const string ApiUrlBase = "api/v1/catalog";
-
-        public CatalogService(IRequestProvider requestProvider, IFixUriService fixUriService)
+        public CatalogService(IRequestProvider requestProvider, IFixUriService fixUriService, ISettingsService settingsService)
         {
             _requestProvider = requestProvider;
             _fixUriService = fixUriService;
+            if (settingsService.PlaceId == GlobalSetting.GroceryPlace.Id.ToString())
+                ApiUrlBase += "/grocery";
+
         }
 
         public async Task<ObservableCollection<CatalogItem>> FilterAsync(int? catalogBrandId, int? catalogTypeId)

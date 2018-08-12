@@ -10,6 +10,7 @@ namespace DamaNoJornal.Core
         public const string DefaultEndpoint = "http://ec2-35-159-6-83.eu-central-1.compute.amazonaws.com:5859"; //"https://localhost:50390"; // i.e.: "http://YOUR_IP" or "http://YOUR_DNS_NAME"
         public static readonly Place Place1 = new Place { Id = 1, Name = "Feira Popular de Loulé", City = "Loulé", Country = "Portugal", PostalCode = "8100" };
         public static readonly Place Place2 = new Place { Id = 2, Name = "Feira da Serra de São Brás", City = "São Brás", Country = "Portugal", PostalCode = "8151" };
+        public static readonly Place GroceryPlace = new Place { Id = 3, Name = "Mercado", City = "Loulé", Country = "Portugal", PostalCode = "8100" };
         public static readonly List<Place> Places = new List<Place> { Place1, Place2 };
 
         private string _baseEndpoint;

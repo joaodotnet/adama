@@ -17,6 +17,7 @@ namespace DamaNoJornal.Core.Services.Settings
         private const string IdLongitude = "longitude";
         private const string IdAllowGpsLocation = "allow_gps_location";
         private const string IdPlace = "place_id";
+        private const string IdLoginSince = "place_id";
         private readonly string AccessTokenDefault = string.Empty;
         private readonly string IdTokenDefault = string.Empty;
         private readonly bool UseMocksDefault = true;
@@ -28,7 +29,7 @@ namespace DamaNoJornal.Core.Services.Settings
         private readonly int PlaceIdDefault = 1;
         private readonly double FakeLatitudeDefault = 47.604610d;
         private readonly double FakeLongitudeDefault = -122.315752d;
-        private readonly string UrlBaseDefault = GlobalSetting.Instance.BaseEndpoint;
+        private readonly string UrlBaseDefault = GlobalSetting.Instance.BaseEndpoint;        
 
         #endregion
 
@@ -85,6 +86,12 @@ namespace DamaNoJornal.Core.Services.Settings
         {
             get => GetValueOrDefault(IdPlace, PlaceIdDefault.ToString());
             set => AddOrUpdateValue(IdPlace, value);
+        }
+
+        public string LoginSince
+        {
+            get => GetValueOrDefault(IdLoginSince, null);
+            set => AddOrUpdateValue(IdLoginSince, value);
         }
 
 
