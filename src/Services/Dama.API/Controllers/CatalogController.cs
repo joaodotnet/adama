@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Entities;
+using Dama.API.Interfaces;
 using Dama.API.ViewModel;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -13,53 +14,49 @@ using System.Threading.Tasks;
 namespace Dama.API.Controllers
 {
     [Route("api/v1/[controller]")]
+    [Route("api/grocery/[controller]")]
     [ApiController]
     public class CatalogController : ControllerBase
     {
-        private readonly DamaContext _damaContext;
+        private readonly IDamaRepository _damaRepository;
+        private readonly IGroceryRepository _groceryRepository;
         private readonly CatalogSettings _settings;
+
+        public IDamaRepository Repository
+        {
+            get {
+                return Request.Path.Value.Contains("grocery") ? _groceryRepository : _damaRepository;
+            }
+        }
+
         //private readonly ICatalogIntegrationEventService _catalogIntegrationEventService;
 
-        public CatalogController(DamaContext context, IOptionsSnapshot<CatalogSettings> settings)
+        public CatalogController(IOptionsSnapshot<CatalogSettings> settings,
+            IDamaRepository damaRepo, IGroceryRepository groceryRepo)
         {
-            _damaContext = context ?? throw new ArgumentNullException(nameof(context));
-            //_catalogIntegrationEventService = catalogIntegrationEventService ?? throw new ArgumentNullException(nameof(catalogIntegrationEventService));
 
             _settings = settings.Value;
-            ((DbContext)context).ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+
+            _damaRepository = damaRepo;
+            _groceryRepository = groceryRepo;
         }
 
         [HttpGet]
         [Route("items")]
-        [Route("grocery/items")]
         [ProducesResponseType(typeof(PaginatedItemsViewModel<CatalogItem>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IEnumerable<CatalogItem>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Items([FromQuery]int pageSize = 100, [FromQuery]int pageIndex = 0, [FromQuery] string ids = null)
         {
-            //TODO: Check if grocery
             var path = Request.Path;
             if (!string.IsNullOrEmpty(ids))
             {
                 return GetItemsByIds(ids);
             }
 
-            var totalItems = await _damaContext.CatalogItems
-                .LongCountAsync();
-
-            var itemsOnPage = await _damaContext.CatalogItems    
-                .Include(c => c.CatalogAttributes)
-                .Include(c => c.CatalogType)
-                .OrderBy(c => c.IsFeatured)
-                .Take(12)
-                //.Skip(pageSize * pageIndex)
-                //.Take(pageSize)
-                .ToListAsync();
-
-            //itemsOnPage = ChangeUriPlaceholder(itemsOnPage);
-            itemsOnPage.ForEach(x => x.Price = x.Price > 0 ? x.Price : x.CatalogType.Price);
+            var catalog = await Repository.GetCatalogItemsAsync();
 
             var model = new PaginatedItemsViewModel<CatalogItem>(
-                pageIndex, pageSize, totalItems, itemsOnPage);
+                pageIndex, pageSize, catalog.Item2, catalog.Item1);
 
             return Ok(model);
         }
@@ -75,7 +72,7 @@ namespace Dama.API.Controllers
                 return BadRequest();
             }
 
-            var item = await _damaContext.CatalogItems.SingleOrDefaultAsync(ci => ci.Id == id);
+            var item = await Repository.GetCatalogItemAsync(id);
 
             //var baseUri = _settings.PicBaseUrl;
             //var azureStorageEnabled = _settings.AzureStorageEnabled;
@@ -90,33 +87,33 @@ namespace Dama.API.Controllers
         }
 
         // GET api/v1/[controller]/items/withname/samplename[?pageSize=3&pageIndex=10]
-        [HttpGet]
-        [Route("[action]/withname/{name:minlength(1)}")]
-        [ProducesResponseType(typeof(PaginatedItemsViewModel<CatalogItem>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Items(string name, [FromQuery]int pageSize = 100, [FromQuery]int pageIndex = 0)
-        {
+        //[HttpGet]
+        //[Route("[action]/withname/{name:minlength(1)}")]
+        //[ProducesResponseType(typeof(PaginatedItemsViewModel<CatalogItem>), (int)HttpStatusCode.OK)]
+        //public async Task<IActionResult> Items(string name, [FromQuery]int pageSize = 100, [FromQuery]int pageIndex = 0)
+        //{
 
-            var totalItems = await _damaContext.CatalogItems
-                .Where(c => c.Name.StartsWith(name))
-                .LongCountAsync();
+        //    var totalItems = await _damaContext.CatalogItems
+        //        .Where(c => c.Name.StartsWith(name))
+        //        .LongCountAsync();
 
-            var itemsOnPage = await _damaContext.CatalogItems
-                .Include(x => x.CatalogType)
-                .Where(c => c.Name.StartsWith(name))
-                //.Skip(pageSize * pageIndex)
-                //.Take(pageSize)
-                .Take(10)
-                .ToListAsync();
+        //    var itemsOnPage = await _damaContext.CatalogItems
+        //        .Include(x => x.CatalogType)
+        //        .Where(c => c.Name.StartsWith(name))
+        //        //.Skip(pageSize * pageIndex)
+        //        //.Take(pageSize)
+        //        .Take(10)
+        //        .ToListAsync();
 
-            //itemsOnPage = ChangeUriPlaceholder(itemsOnPage);
+        //    //itemsOnPage = ChangeUriPlaceholder(itemsOnPage);
 
-            itemsOnPage.ForEach(x => x.Price = x.Price > 0 ? x.Price : x.CatalogType.Price);
+        //    itemsOnPage.ForEach(x => x.Price = x.Price > 0 ? x.Price : x.CatalogType.Price);
 
-            var model = new PaginatedItemsViewModel<CatalogItem>(
-                pageIndex, pageSize, totalItems, itemsOnPage);
+        //    var model = new PaginatedItemsViewModel<CatalogItem>(
+        //        pageIndex, pageSize, totalItems, itemsOnPage);
 
-            return Ok(model);
-        }
+        //    return Ok(model);
+        //}
 
         [HttpGet]
         [Route("items/type/{catalogTypeId}")]
@@ -155,15 +152,10 @@ namespace Dama.API.Controllers
         {
             List<CatalogType> items;
             if (!categoryId.HasValue)
-                items = await _damaContext.CatalogTypes
-                    .ToListAsync();
+                items = await Repository.GetCatalogTypesAsync();
             else
             {
-                items = await _damaContext.CatalogTypeCategories
-                    .Include(x => x.CatalogType)
-                    .Where(x => x.CategoryId == categoryId)
-                    .Select(x => x.CatalogType)
-                    .ToListAsync();
+                items = await Repository.GetCatalogTypesAsync(categoryId);                    
             }
             return Ok(items);
         }
@@ -174,39 +166,17 @@ namespace Dama.API.Controllers
         [ProducesResponseType(typeof(List<Category>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> CatalogCategories()
         {
-            var items = await _damaContext.Categories
-                .ToListAsync();
+            var items = await Repository.GetCategoriesAsync();
 
             return Ok(items);
         }
 
         private async Task<PaginatedItemsViewModel<CatalogItem>> FilterProducts(int? catalogTypeId, int? catalogCategoryId, int pageSize, int pageIndex)
         {
-            var root = (IQueryable<CatalogItem>)_damaContext.CatalogItems
-                            .Include(x => x.CatalogCategories)
-                            .Include(x => x.CatalogType);
-
-            if (catalogTypeId.HasValue)
-            {
-                root = root.Where(ci => ci.CatalogTypeId == catalogTypeId);
-            }
-
-            if (catalogCategoryId.HasValue)
-            {
-                root = root.Where(ci => ci.CatalogCategories.Any(x => x.CategoryId == catalogCategoryId));
-            }
-
-            var totalItems = await root
-                .LongCountAsync();
-
-            var itemsOnPage = await root
-                .OrderBy(c => c.Name)
-                .Skip(pageSize * pageIndex)
-                .Take(pageSize)
-                .ToListAsync();
+            var catalogItems = await Repository.GetCatalogItemsAsync(catalogTypeId, catalogCategoryId, pageSize, pageIndex);
 
             //Skip CatalogCategories
-            List<CatalogItem> items = itemsOnPage.Select(x => new CatalogItem
+            List<CatalogItem> items = catalogItems.Item1.Select(x => new CatalogItem
             {
                 CatalogIllustration = x.CatalogIllustration,
                 CatalogType = x.CatalogType,
@@ -224,7 +194,7 @@ namespace Dama.API.Controllers
             //itemsOnPage = ChangeUriPlaceholder(itemsOnPage);
 
             var model = new PaginatedItemsViewModel<CatalogItem>(
-                pageIndex, pageSize, totalItems, items);
+                pageIndex, pageSize, catalogItems.Item2, items);
             return model;
         }
 
@@ -238,7 +208,8 @@ namespace Dama.API.Controllers
             }
 
             var idsToSelect = numIds.Select(id => id.Value);
-            var items = _damaContext.CatalogItems.Where(ci => idsToSelect.Contains(ci.Id)).ToList();
+
+            var items = Repository.GetCatalogItemsByIds(idsToSelect);
 
             //items = ChangeUriPlaceholder(items);
             return Ok(items);
