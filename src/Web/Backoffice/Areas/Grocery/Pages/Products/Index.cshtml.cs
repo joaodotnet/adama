@@ -28,6 +28,14 @@ namespace Backoffice.Areas.Grocery.Pages.Products
                 .Include(c => c.CatalogCategories)
                     .ThenInclude(cc => cc.Category)
                 .ToListAsync();
+
+            foreach (var item in CatalogItem)
+            {
+                if (!item.Price.HasValue || item.Price == 0)
+                {
+                    item.Price = item.CatalogType.Price;
+                }
+            }
         }
     }
 }

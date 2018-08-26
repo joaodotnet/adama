@@ -76,24 +76,28 @@ namespace Dama.API.Data
             if (!categoryId.HasValue)
                 return await _groceryContext.CatalogTypes
                     .ToListAsync();
-            //else
-            //    return await _groceryContext.CatalogTypeCategories
-            //       .Include(x => x.CatalogType)
-            //       .Where(x => x.CategoryId == categoryId)
-            //       .Select(x => x.CatalogType)
-            //       .ToListAsync();
-            return new List<CatalogType>(); //TODO: Check this out
+            else
+            {
+                return await _groceryContext.CatalogItems
+                   .Include(x => x.CatalogType)
+                   .Include(x => x.CatalogCategories)
+                   .Where(x => x.CatalogCategories.Any(c => c.CategoryId == categoryId))
+                   .Select(x => x.CatalogType)
+                   .Distinct()
+                   .ToListAsync();
+            }
         }
 
-        public async Task<List<Category>> GetCatalogCategoriesAsync()
+        //public async Task<List<Category>> GetCatalogCategoriesAsync()
+        //{
+        //    return await _groceryContext.Categories
+        //        .ToListAsync();
+        //}
+
+        public async Task<List<Category>> GetCategoriesAsync()
         {
             return await _groceryContext.Categories
-                .ToListAsync();
-        }
-
-        public Task<List<Category>> GetCategoriesAsync()
-        {
-            throw new System.NotImplementedException();
+                 .ToListAsync();
         }
 
         public List<CatalogItem> GetCatalogItemsByIds(IEnumerable<int> ids)
