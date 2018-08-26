@@ -14,6 +14,7 @@ namespace Infrastructure.Data
         }
 
         public DbSet<Basket> Baskets { get; set; }
+        public DbSet<BasketItem> BasketItems { get; set; }
         public DbSet<CatalogItem> CatalogItems { get; set; }
         public DbSet<CatalogIllustration> CatalogIllustrations { get; set; }
         public DbSet<CatalogPicture> CatalogPictures { get; set; }
@@ -57,6 +58,7 @@ namespace Infrastructure.Data
 
         private void ConfigureBasketItem(EntityTypeBuilder<BasketItem> builder)
         {
+            builder.ToTable("BasketItem");
             builder.Property(x => x.CustomizeName)
                 .HasMaxLength(100);
             builder.Property(x => x.CustomizeSide)
