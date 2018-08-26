@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Dama.API.Data
 {
-    public class GroceryRepository : IGroceryRepository
+    public class GroceryRepository : EfGroceryRepository<Basket>, IGroceryRepository
     {
         private readonly GroceryContext _groceryContext;
 
-        public GroceryRepository(GroceryContext groceryContext)
+        public GroceryRepository(GroceryContext groceryContext) : base(groceryContext)
         {
             _groceryContext = groceryContext;
             _groceryContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
@@ -103,6 +103,37 @@ namespace Dama.API.Data
         public List<CatalogItem> GetCatalogItemsByIds(IEnumerable<int> ids)
         {
             return _groceryContext.CatalogItems.Where(ci => ids.Contains(ci.Id)).ToList();
+        }
+
+        public async Task<Basket> AddBasketItemAsync(int id, BasketItem item, int? option1 = null, int? option2 = null, int? option3 = null)
+        {
+            var basket = await _groceryContext.Baskets
+                 .Include(b => b.Items)
+                 .FirstOrDefaultAsync(x => x.Id == id);
+
+            //basket.AddItem(item.CatalogItemId, item.UnitPrice, item.Quantity, item.Details.Select(x => x.CatalogAttributeId).ToList());
+            basket.AddItem(item.CatalogItemId, item.UnitPrice, item.Quantity, option1, option2, option3);
+
+            await _groceryContext.SaveChangesAsync();
+
+            return basket;
+        }
+
+        public async Task DeleteBasketItemAsync(int basketItemId)
+        {
+            var basketItem = await _groceryContext.BasketItems.FindAsync(basketItemId);
+            if (basketItem != null)
+                _groceryContext.BasketItems.Remove(basketItem);
+        }
+
+        public Basket GetByIdWithItems(int id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<Basket> GetByIdWithItemsAsync(int id)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

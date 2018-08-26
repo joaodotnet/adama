@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Entities;
+using ApplicationCore.Interfaces;
 using Dama.API.Interfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -8,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Dama.API.Data
 {
-    public class DamaRepository : IDamaRepository
+    public class DamaRepository : BasketRepository, IDamaRepository
     {
         private readonly DamaContext _damaContext;
 
-        public DamaRepository(DamaContext damaContext)
+        public DamaRepository(DamaContext damaContext) : base(damaContext)
         {
             _damaContext = damaContext;
             _damaContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
@@ -99,6 +100,13 @@ namespace Dama.API.Data
         public List<CatalogItem> GetCatalogItemsByIds(IEnumerable<int> ids)
         {
             return _damaContext.CatalogItems.Where(ci => ids.Contains(ci.Id)).ToList();
+        }
+
+        public async Task DeleteBasketItemAsync(int basketItemId)
+        {
+            var basketItem = await _damaContext.BasketItems.FindAsync(basketItemId);
+            if (basketItem != null)
+                _damaContext.BasketItems.Remove(basketItem);
         }
     }
 }

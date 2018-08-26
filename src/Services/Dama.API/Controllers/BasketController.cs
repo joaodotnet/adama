@@ -1,6 +1,7 @@
 ﻿using ApplicationCore.Entities;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Specifications;
+using Dama.API.Interfaces;
 using Dama.API.ViewModels;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authorization;
@@ -15,27 +16,42 @@ using System.Threading.Tasks;
 namespace Dama.API.Controllers
 {
     [Route("api/v1/[controller]")]
+    [Route("api/grocery/[controller]")]
     [ApiController]
 //    [Authorize]
     public class BasketController : ControllerBase
     {
-        private readonly IBasketRepository _repository;
-        private readonly IRepository<CatalogItem> _itemRepository;
-        private readonly IRepository<BasketItem> _basketItemRepository;
+        private readonly IDamaRepository _damaRepository;
+        private readonly IGroceryRepository _groceryRepository;
+        //private readonly IBasketRepository _repository;
+        //private readonly IRepository<CatalogItem> _itemRepository;
+        //private readonly IRepository<BasketItem> _basketItemRepository;
         private readonly IRepository<CatalogAttribute> _attributeRepository;
         private readonly UserManager<ApplicationUser> _userManager;
-        //private readonly IIdentityService _identitySvc;
-        //private readonly IEventBus _eventBus;
 
-        public BasketController(IBasketRepository repository,
+        public IDamaRepository Repository
+        {
+            get
+            {
+                return Request.Path.Value.Contains("grocery") ? _groceryRepository : _damaRepository;
+            }
+        }
+
+        public BasketController(
+            IDamaRepository damaRepo, 
+            IGroceryRepository groceryRepo,
+            IBasketRepository repository,
             IRepository<CatalogItem> itemRepository,
             IRepository<BasketItem> basketItemRepository,
             UserManager<ApplicationUser> userManager,
-            IRepository<CatalogAttribute> attributeRepository)            
+            IRepository<CatalogAttribute> attributeRepository
+            )            
         {
-            _repository = repository;
-            _itemRepository = itemRepository;
-            _basketItemRepository = basketItemRepository;
+            _damaRepository = damaRepo;
+            _groceryRepository = groceryRepo;
+            //_repository = repository;
+            //_itemRepository = itemRepository;
+            //_basketItemRepository = basketItemRepository;
             _userManager = userManager;
             _attributeRepository = attributeRepository;
         }
@@ -46,8 +62,9 @@ namespace Dama.API.Controllers
         public async Task<IActionResult> Get(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
+
             var basketSpec = new BasketWithItemsSpecification(user.Email);
-            var basket = (await _repository.ListAsync(basketSpec)).LastOrDefault();
+            var basket = (await Repository.ListAsync(basketSpec)).LastOrDefault();
             if (basket == null)
             {
                 return NotFound();
@@ -91,7 +108,7 @@ namespace Dama.API.Controllers
         {
             var basketModel = ViewModelToBasket(value);
             var basketDb = await GetOrCreateBasketForUser(value.BuyerId);
-            var basket = await _repository.AddBasketItemAsync(basketDb.Id, basketModel.Items.FirstOrDefault());
+            var basket = await Repository.AddBasketItemAsync(basketDb.Id, basketModel.Items.FirstOrDefault());
 
             return Ok(BasketToViewModel(basket));
         }
@@ -131,8 +148,8 @@ namespace Dama.API.Controllers
         {
             var user = await _userManager.FindByIdAsync(userId);
             var basketSpec = new BasketWithItemsSpecification(user.Email);
-            var basket = (await _repository.ListAsync(basketSpec)).LastOrDefault();
-            await _repository.DeleteAsync(basket);
+            var basket = (await Repository.ListAsync(basketSpec)).LastOrDefault();
+            await Repository.DeleteAsync(basket);
         }
 
         // DELETE api/values/5
@@ -141,9 +158,10 @@ namespace Dama.API.Controllers
         {
             var user = await _userManager.FindByIdAsync(userId);
             var basketSpec = new BasketWithItemsSpecification(user.Email);
-            var basket = (await _repository.ListAsync(basketSpec)).LastOrDefault();
+            var basket = (await Repository.ListAsync(basketSpec)).LastOrDefault();
             if (basket.Items.Any(x => x.Id == basketItemId))
-                _basketItemRepository.Delete(_basketItemRepository.GetById(basketItemId));
+                //_basketItemRepository.Delete(_basketItemRepository.GetById(basketItemId));
+                await Repository.DeleteBasketItemAsync(basketItemId);
         }
 
         private BasketViewModel BasketToViewModel(Basket basket)
@@ -161,7 +179,8 @@ namespace Dama.API.Controllers
                         UnitPrice = i.UnitPrice,
                         OldUnitPrice = 0m,
                     };
-                    var item = _itemRepository.GetById(i.CatalogItemId);
+                    //var item = _itemRepository.GetById(i.CatalogItemId);
+                    var item = Repository.GetCatalogItemAsync(i.CatalogItemId).Result; // check this 
                     if (item != null)
                     {
                         itemModel.PictureUrl = item.PictureUri;
@@ -228,7 +247,7 @@ namespace Dama.API.Controllers
         private async Task<Basket> GetOrCreateBasketForUser(string userName)
         {
             var basketSpec = new BasketWithItemsSpecification(userName);
-            var baskets = (await _repository.ListAsync(basketSpec));
+            var baskets = (await Repository.ListAsync(basketSpec));
             if (baskets == null || baskets.Count == 0)
             {
                 return await CreateBasketForUser(userName);
@@ -239,7 +258,7 @@ namespace Dama.API.Controllers
             {
                 for (int i = 0; i < baskets.Count - 1; i++)
                 {
-                    await _repository.DeleteAsync(baskets[i]);
+                    await Repository.DeleteAsync(baskets[i]);
                 }
             }
 
@@ -249,7 +268,7 @@ namespace Dama.API.Controllers
         private async Task<Basket> CreateBasketForUser(string userId)
         {
             var basket = new Basket() { BuyerId = userId };
-            await _repository.AddAsync(basket);
+            await Repository.AddAsync(basket);
             return basket;
         }
     }
