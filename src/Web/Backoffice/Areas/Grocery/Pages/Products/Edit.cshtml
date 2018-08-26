@@ -31,7 +31,7 @@
                 <input type="file" asp-for="Picture" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="CatalogItem.CatalogTypeId" class="control-label"></label>
+                <label asp-for="CatalogItem.CatalogTypeId" class="control-label">Tipo de Produto</label>
                 <select asp-for="CatalogItem.CatalogTypeId" class="form-control" asp-items="ViewBag.CatalogTypeId"></select>
                 <span asp-validation-for="CatalogItem.CatalogTypeId" class="text-danger"></span>
             </div>

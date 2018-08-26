@@ -84,15 +84,16 @@ namespace Dama.API.Data
                    .ToListAsync();
         }
 
-        public async Task<List<Category>> GetCatalogCategoriesAsync()
+        //public async Task<List<Category>> GetCatalogCategoriesAsync()
+        //{
+        //    return await _damaContext.Categories
+        //        .ToListAsync();
+        //}
+
+        public async Task<List<Category>> GetCategoriesAsync()
         {
             return await _damaContext.Categories
-                .ToListAsync();
-        }
-
-        public Task<List<Category>> GetCategoriesAsync()
-        {
-            throw new System.NotImplementedException();
+               .ToListAsync();
         }
 
         public List<CatalogItem> GetCatalogItemsByIds(IEnumerable<int> ids)
