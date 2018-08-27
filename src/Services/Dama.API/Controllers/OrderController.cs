@@ -5,7 +5,9 @@ using System.Net;
 using System.Threading.Tasks;
 using ApplicationCore.Entities.OrderAggregate;
 using ApplicationCore.Interfaces;
+using ApplicationCore.Services;
 using ApplicationCore.Specifications;
+using Dama.API.Services;
 using Dama.API.ViewModel;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Http;
@@ -16,16 +18,27 @@ namespace Dama.API.Controllers
 {
     [Produces("application/json")]
     [Route("api/v1/orders")]
+    [Route("api/grocery/orders")]
     [ApiController]
     public class OrderController : ControllerBase
     {
-        private readonly IOrderService _orderService;
+        private readonly IOrderService _orderDamaService;
+        private readonly IOrderGroceryService _orderGroceryService;
         private readonly IBasketRepository _repository;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public OrderController(IOrderService orderService, IBasketRepository basketRepository, UserManager<ApplicationUser> userManager)
+        private IOrderService OrderService
         {
-            _orderService = orderService;
+            get
+            {
+                return Request.Path.Value.Contains("grocery") ? _orderGroceryService : _orderDamaService;
+            }
+        }
+
+        public OrderController(IOrderService orderService, IOrderGroceryService orderGroceryService, IBasketRepository basketRepository, UserManager<ApplicationUser> userManager)
+        {
+            _orderDamaService = orderService;
+            _orderGroceryService = orderGroceryService;
             _repository = basketRepository;
             _userManager = userManager;
         }
@@ -40,13 +53,13 @@ namespace Dama.API.Controllers
             var orders = new List<Order>();
             if (user.UserName == "sue@damanojornal.com" || user.UserName == "jue@damanojornal.com" || user.UserName == "sonia@damanojornal.com")
             {
-                orders = await _orderService.GetOrdersAsync("sue@damanojornal.com");
-                orders.AddRange(await _orderService.GetOrdersAsync("jue@damanojornal.com"));
-                orders.AddRange(await _orderService.GetOrdersAsync("sonia@damanojornal.com"));
+                orders = await OrderService.GetOrdersAsync("sue@damanojornal.com");
+                orders.AddRange(await OrderService.GetOrdersAsync("jue@damanojornal.com"));
+                orders.AddRange(await OrderService.GetOrdersAsync("sonia@damanojornal.com"));
             }
             else
             {
-                orders = await _orderService.GetOrdersAsync(user.Email);
+                orders = await OrderService.GetOrdersAsync(user.Email);
             }
 
 
@@ -59,7 +72,7 @@ namespace Dama.API.Controllers
         [ProducesResponseType(typeof(Order), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetOrder(int id)
         {
-            var order = await _orderService.GetOrderAsync(id);
+            var order = await _orderDamaService.GetOrderAsync(id);
 
             return Ok(order);
         }
@@ -79,10 +92,10 @@ namespace Dama.API.Controllers
             //Create Address
             Address address = new Address(null, model.ShippingStreet, model.ShippingCity, model.ShippingCountry, model.ShippingZipCode);
             Address billAddress = new Address();
-            var order = await _orderService.CreateOrderAsync(basket.Id, null, null, address, billAddress, true, 0);
+            var order = await _orderDamaService.CreateOrderAsync(basket.Id, null, null, address, billAddress, true, 0);
 
             //Update to Submitted
-            await _orderService.UpdateOrderState(order.Id, OrderStateType.SUBMITTED);
+            await _orderDamaService.UpdateOrderState(order.Id, OrderStateType.SUBMITTED);
             return Ok();
         }
 
@@ -92,7 +105,7 @@ namespace Dama.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CancelOrder([FromBody]CancelOrderViewModel command)
         {
-            await _orderService.UpdateOrderState(command.OrderNumber, OrderStateType.CANCELED);
+            await _orderDamaService.UpdateOrderState(command.OrderNumber, OrderStateType.CANCELED);
             return Ok();
 
         }
@@ -104,15 +117,15 @@ namespace Dama.API.Controllers
         {
             var street = PlaceIdToStreet(placeId);
             var orders = new List<Order>();
-            orders = (await _orderService
+            orders = (await _orderDamaService
                 .GetOrdersAsync("sue@damanojornal.com"))
                 .Where(o => o.ShipToAddress.Street.Equals(street))
                 .ToList();
-            orders.AddRange((await _orderService
+            orders.AddRange((await _orderDamaService
                 .GetOrdersAsync("jue@damanojornal.com"))
                 .Where(o => o.ShipToAddress.Street.Equals(street))
                 .ToList());
-            orders.AddRange((await _orderService
+            orders.AddRange((await _orderDamaService
                 .GetOrdersAsync("sonia@damanojornal.com"))
                 .Where(o => o.ShipToAddress.Street.Equals(street))
                 .ToList());

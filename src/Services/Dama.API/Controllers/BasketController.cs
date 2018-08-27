@@ -29,7 +29,7 @@ namespace Dama.API.Controllers
         private readonly IRepository<CatalogAttribute> _attributeRepository;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public IDamaRepository Repository
+        private IDamaRepository Repository
         {
             get
             {
@@ -40,9 +40,9 @@ namespace Dama.API.Controllers
         public BasketController(
             IDamaRepository damaRepo, 
             IGroceryRepository groceryRepo,
-            IBasketRepository repository,
-            IRepository<CatalogItem> itemRepository,
-            IRepository<BasketItem> basketItemRepository,
+            //IBasketRepository repository,
+            //IRepository<CatalogItem> itemRepository,
+            //IRepository<BasketItem> basketItemRepository,
             UserManager<ApplicationUser> userManager,
             IRepository<CatalogAttribute> attributeRepository
             )            
