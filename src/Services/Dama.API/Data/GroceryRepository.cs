@@ -133,7 +133,9 @@ namespace Dama.API.Data
 
         public Task<Basket> GetByIdWithItemsAsync(int id)
         {
-            throw new System.NotImplementedException();
+            return _groceryContext.Baskets
+               .Include(b => b.Items)
+               .FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }

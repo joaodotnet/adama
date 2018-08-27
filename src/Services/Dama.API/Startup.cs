@@ -8,6 +8,7 @@ using ApplicationCore.Services;
 using Dama.API.Data;
 using Dama.API.Extensions;
 using Dama.API.Interfaces;
+using Dama.API.Services;
 using Infrastructure.Data;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -83,6 +84,7 @@ namespace Dama.API
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderGroceryService, OrderGroceryService>();
             services.AddScoped<IDamaRepository, DamaRepository>();
             services.AddScoped<IGroceryRepository, GroceryRepository>();
 
