@@ -9,5 +9,6 @@ namespace DamaNoJornal.Services
         Task<bool> ShowDialogAsync(string message, string title, string buttonOk, string buttonCancel);
         Task<string> ShowPromptAsync(string title, string buttonCancel, string[] options);
         void ShowToastMessage(string message);
+        Task<PromptResult> ShowDialogPassword(string message, string title, string buttonOk, string buttonCancel);
     }
 }

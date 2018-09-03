@@ -4,6 +4,7 @@ using DamaNoJornal.Core.Models.Catalog;
 using DamaNoJornal.Core.Models.Orders;
 using DamaNoJornal.Core.Services.Order.Models;
 using DamaNoJornal.Core.Services.RequestProvider;
+using DamaNoJornal.Core.Services.Settings;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,12 +16,16 @@ namespace DamaNoJornal.Core.Services.Order
     public class OrderService : IOrderService
     {
         private readonly IRequestProvider _requestProvider;
+        private readonly string ApiUrlBaseFormat = "api/{0}/orders";
+        private readonly string ApiUrlBase;
 
-        private const string ApiUrlBase = "api/v1/orders";
-
-        public OrderService(IRequestProvider requestProvider)
+        public OrderService(IRequestProvider requestProvider, ISettingsService settingsService)
         {
             _requestProvider = requestProvider;
+            if (settingsService.PlaceId == GlobalSetting.GroceryPlace.Id.ToString())
+                ApiUrlBase = string.Format(ApiUrlBaseFormat, "grocery");
+            else
+                ApiUrlBase = string.Format(ApiUrlBaseFormat, "v1");
         }
 
         public async Task CreateOrderAsync(Core.Models.Orders.Order newOrder, string token)
@@ -162,11 +167,11 @@ namespace DamaNoJornal.Core.Services.Order
                 OrderDate = order.OrderDate.DateTime,
                 BuyerId = order.BuyerId,
                 OrderStatus = order.OrderState,
-                ShippingCity = order.ShipToAddress.City,
+                ShippingCity = order.ShipToAddress?.City,
                 ShippingCost = order.ShippingCost,
-                ShippingCountry = order.ShipToAddress.Country,
-                ShippingStreet = order.ShipToAddress.Street,
-                ShippingZipCode = order.ShipToAddress.PostalCode,
+                ShippingCountry = order.ShipToAddress?.Country,
+                ShippingStreet = order.ShipToAddress?.Street,
+                ShippingZipCode = order.ShipToAddress?.PostalCode,
                 OrderItems = order.OrderItems.Select(i => new OrderItem
                 {
                     ProductId = i.ItemOrdered.CatalogItemId,

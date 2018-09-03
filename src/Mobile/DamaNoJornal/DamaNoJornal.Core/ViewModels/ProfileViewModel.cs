@@ -50,9 +50,9 @@ namespace DamaNoJornal.Core.ViewModels
         {
             IsBusy = true;
             // Get user
-            var user = await _userService.GetUserInfoAsync(_settingsService.AuthAccessToken);
-            PictureUri = Utils.GetLoginPicturiSource(user.Email);
-            Name = $"Olá {user.Name} {user.LastName}";
+            //var user = await _userService.GetUserInfoAsync(_settingsService.AuthAccessToken);
+            PictureUri = Utils.GetLoginPicturiSource(_settingsService.UserName);
+            Name = $"Olá {_settingsService.UserName}";
             IsBusy = false;            
         }
 

@@ -14,6 +14,8 @@ namespace DamaNoJornal.Core.Services.Settings
         string Longitude { get; set; }
         bool AllowGpsLocation { get; set; }      
         string PlaceId { get; set; }
+        string PlaceName { get; set; }
+        string UserName { get; set; }
         string LoginSince { get; set; }
 
         bool GetValueOrDefault(string key, bool defaultValue);

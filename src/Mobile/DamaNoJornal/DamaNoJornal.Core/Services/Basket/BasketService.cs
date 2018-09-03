@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using DamaNoJornal.Core.Services.RequestProvider;
 using DamaNoJornal.Core.Models.Basket;
 using DamaNoJornal.Core.Services.FixUri;
+using DamaNoJornal.Core.Services.Settings;
 
 namespace DamaNoJornal.Core.Services.Basket
 {
@@ -10,13 +11,17 @@ namespace DamaNoJornal.Core.Services.Basket
     {
         private readonly IRequestProvider _requestProvider;
         private readonly IFixUriService _fixUriService;
+        private readonly string ApiUrlBaseFormat = "api/{0}/basket";
+        private string ApiUrlBase;
 
-        private const string ApiUrlBase = "api/v1/basket";
-
-        public BasketService(IRequestProvider requestProvider, IFixUriService fixUriService)
+        public BasketService(IRequestProvider requestProvider, IFixUriService fixUriService, ISettingsService settingsService)
         {
             _requestProvider = requestProvider;
             _fixUriService = fixUriService;
+            if (settingsService.PlaceId == GlobalSetting.GroceryPlace.Id.ToString())
+                ApiUrlBase = string.Format(ApiUrlBaseFormat, "grocery");
+            else
+                ApiUrlBase = string.Format(ApiUrlBaseFormat, "v1");
         }
 
         public async Task<CustomerBasket> GetBasketAsync(string guidUser, string token)

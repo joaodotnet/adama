@@ -19,7 +19,14 @@ namespace Dama.API.ViewModel
         public string ShippingCountry { get; set; }
 
         public string ShippingZipCode { get; set; }
-        
+        public string BillingName { get; set; }
+        public string BillingCity { get; set; }
+
+        public string BillingStreet { get; set; }
+
+        public string BillingCountry { get; set; }
+
+        public string BillingPostalCode { get; set; }
         public string CardNumber { get; set; }
         
         public string CardHolderName { get; set; }
@@ -31,6 +38,8 @@ namespace Dama.API.ViewModel
         public int CardTypeId { get; set; }
 
         public string Buyer { get; set; }
+        public string CustomerEmail { get; set; }
+        public int? TaxNumber { get; set; }
     }
 
 

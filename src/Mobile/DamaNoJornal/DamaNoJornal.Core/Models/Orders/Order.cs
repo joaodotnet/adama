@@ -31,6 +31,15 @@ namespace DamaNoJornal.Core.Models.Orders
 
         public string ShippingZipCode { get; set; }
 
+        public string BillingName { get; set; }
+        public string BillingCity { get; set; }
+
+        public string BillingStreet { get; set; }
+
+        public string BillingCountry { get; set; }
+
+        public string BillingPostalCode { get; set; }
+
         public int CardTypeId { get; set; }
 
         public string CardNumber { get; set; }
@@ -48,6 +57,9 @@ namespace DamaNoJornal.Core.Models.Orders
 
         [JsonProperty("id")]
         public int OrderNumber { get; set; }
+
+        public string CustomerEmail { get; set; }
+        public int? TaxNumber { get; set; }
 
         public decimal Total
         {

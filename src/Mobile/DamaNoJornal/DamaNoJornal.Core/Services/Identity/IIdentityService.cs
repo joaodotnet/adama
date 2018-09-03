@@ -11,5 +11,6 @@ namespace DamaNoJornal.Core.Services.Identity
         string CreateLogoutRequest(string token);
         Task<UserToken> GetTokenAsync(string code);
         Task<List<UserInfo>> GetStaffUsersAsync();
+        Task<UserInfo> LoginStaffAsync(string username, string password);
     }
 }

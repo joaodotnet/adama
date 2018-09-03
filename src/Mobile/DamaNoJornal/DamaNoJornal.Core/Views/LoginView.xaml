@@ -186,7 +186,7 @@
                     Orientation="Horizontal"
                     HorizontalOptions="Center">
                     <StackLayout>
-                        <Button BackgroundColor="LightGray" >
+                        <Button BackgroundColor="Transparent">
                             <Button.Image>
                                 <OnPlatform x:TypeArguments="FileImageSource">
                                     <On Platform="UWP, WinRT, WinPhone" Value="Assets/img-joao.png" />
@@ -195,7 +195,7 @@
                             <Button.GestureRecognizers>
                                 <TapGestureRecognizer
                                 Command="{Binding MockSignInCommand}"
-                                CommandParameter="jue"
+                                CommandParameter="jue@damanojornal.com"
                                 NumberOfTapsRequired="1" />
                             </Button.GestureRecognizers>
                         </Button>
@@ -204,7 +204,7 @@
                             Style="{StaticResource HeaderLabelStyle}"/>
                     </StackLayout>
                     <StackLayout>
-                        <Button BackgroundColor="LightGray" >
+                        <Button BackgroundColor="Transparent">
                             <Button.Image>
                                 <OnPlatform x:TypeArguments="FileImageSource">
                                     <On Platform="UWP, WinRT, WinPhone" Value="Assets/img-sue.png" />
@@ -213,7 +213,7 @@
                             <Button.GestureRecognizers>
                                 <TapGestureRecognizer
                                 Command="{Binding MockSignInCommand}"
-                                CommandParameter="sue"
+                                CommandParameter="sue@damanojornal.com"
                                 NumberOfTapsRequired="1" />
                             </Button.GestureRecognizers>
                         </Button>
@@ -222,7 +222,7 @@
                             Style="{StaticResource HeaderLabelStyle}"/>
                     </StackLayout>
                     <StackLayout>
-                        <Button BackgroundColor="LightGray" >
+                        <Button BackgroundColor="Transparent">
                             <Button.Image>
                                 <OnPlatform x:TypeArguments="FileImageSource">
                                     <On Platform="UWP, WinRT, WinPhone" Value="Assets/img-sonia.png" />
@@ -231,12 +231,30 @@
                             <Button.GestureRecognizers>
                                 <TapGestureRecognizer
                                 Command="{Binding MockSignInCommand}"
-                                CommandParameter="sonia"
+                                CommandParameter="sonia@damanojornal.com"
                                 NumberOfTapsRequired="1" />
                             </Button.GestureRecognizers>
                         </Button>
                         <Label 
                             Text="Sonia"
+                            Style="{StaticResource HeaderLabelStyle}"/>
+                    </StackLayout>
+                    <StackLayout>
+                        <Button BackgroundColor="Transparent">
+                            <Button.Image>
+                                <OnPlatform x:TypeArguments="FileImageSource">
+                                    <On Platform="UWP, WinRT, WinPhone" Value="Assets/img-rute.png" />
+                                </OnPlatform>
+                            </Button.Image>
+                            <Button.GestureRecognizers>
+                                <TapGestureRecognizer
+                                Command="{Binding MockSignInCommand}"
+                                CommandParameter="rute@damanojornal.com"
+                                NumberOfTapsRequired="1" />
+                            </Button.GestureRecognizers>
+                        </Button>
+                        <Label 
+                            Text="Rute"
                             Style="{StaticResource HeaderLabelStyle}"/>
                     </StackLayout>
                 </StackLayout>
@@ -299,6 +317,130 @@
             </StackLayout>
             <Label
               Grid.Row="3"
+              Text="Escolhe o sitio:"
+              IsVisible="{Binding IsValid}"  
+              Style="{StaticResource TitleLabelStyle}"/>
+            <StackLayout   
+                Grid.Row="4"
+                Margin="24"
+                IsVisible="{Binding IsValid}">
+                <StackLayout 
+                    Orientation="Horizontal"
+                    HorizontalOptions="Center">
+                    <StackLayout>
+                        <Button>
+                            <Button.Image>
+                                <OnPlatform x:TypeArguments="FileImageSource">
+                                    <On Platform="UWP, WinRT, WinPhone" Value="Assets/img-loule.jpg" />
+                                </OnPlatform>
+                            </Button.Image>
+                            <Button.GestureRecognizers>
+                                <TapGestureRecognizer
+                                Command="{Binding PlaceSelectCommand}"
+                                CommandParameter="1"
+                                NumberOfTapsRequired="1" />
+                            </Button.GestureRecognizers>
+                        </Button>
+                        <Label 
+                            Text="Feira Popular de Loulé"
+                            Style="{StaticResource HeaderLabelStyle}"/>
+                    </StackLayout>
+                    <StackLayout>
+                        <Button>
+                            <Button.Image>
+                                <OnPlatform x:TypeArguments="FileImageSource">
+                                    <On Platform="UWP, WinRT, WinPhone" Value="Assets/img-serra.jpg" />
+                                </OnPlatform>
+                            </Button.Image>
+                            <Button.GestureRecognizers>
+                                <TapGestureRecognizer
+                                Command="{Binding PlaceSelectCommand}"
+                                CommandParameter="2"
+                                NumberOfTapsRequired="1" />
+                            </Button.GestureRecognizers>
+                        </Button>
+                        <Label 
+                            Text="Feira da Serra de São Brás"
+                            Style="{StaticResource HeaderLabelStyle}"/>
+                    </StackLayout>
+                    <StackLayout>
+                        <Button>
+                            <Button.Image>
+                                <OnPlatform x:TypeArguments="FileImageSource">
+                                    <On Platform="UWP, WinRT, WinPhone" Value="Assets/img-mercado.jpg" />
+                                </OnPlatform>
+                            </Button.Image>
+                            <Button.GestureRecognizers>
+                                <TapGestureRecognizer
+                                Command="{Binding PlaceSelectCommand}"
+                                CommandParameter="3"
+                                NumberOfTapsRequired="1" />
+                            </Button.GestureRecognizers>
+                        </Button>
+                        <Label 
+                            Text="Mercado Municipal de Loulé"
+                            Style="{StaticResource HeaderLabelStyle}"/>
+                    </StackLayout>
+                </StackLayout>
+                <!--<Label
+                  Text="User name or email"
+                  Style="{StaticResource HeaderLabelStyle}" />
+                <Entry Text="{Binding UserName.Value, Mode=TwoWay}">
+					<Entry.Style>
+                        <OnPlatform x:TypeArguments="Style">
+                            <On Platform="iOS, Android" Value="{StaticResource EntryStyle}" />
+                            <On Platform="UWP, WinRT, WinPhone" Value="{StaticResource UwpEntryStyle}" />
+                        </OnPlatform>
+                    </Entry.Style>
+                    <Entry.Behaviors>
+						<behaviors:EventToCommandBehavior
+							EventName="TextChanged"
+							Command="{Binding ValidateUserNameCommand}" />
+					</Entry.Behaviors>
+					<Entry.Triggers>
+						<DataTrigger 
+							TargetType="Entry"
+							Binding="{Binding UserName.IsValid}"
+							Value="False">
+							<Setter Property="behaviors:LineColorBehavior.LineColor" Value="{StaticResource ErrorColor}" />
+						</DataTrigger>
+					</Entry.Triggers>
+                </Entry>
+				<Label 
+					Text="{Binding UserName.Errors, Converter={StaticResource FirstValidationErrorConverter}"
+					Style="{StaticResource ValidationErrorLabelStyle}" />
+                <Label
+                  Text="Password"
+                  Style="{StaticResource HeaderLabelStyle}"/>
+                <Entry
+                  IsPassword="True"
+                  Text="{Binding Password.Value, Mode=TwoWay}">
+                    <Entry.Style>
+                        <OnPlatform x:TypeArguments="Style">
+                            <On Platform="iOS, Android" Value="{StaticResource EntryStyle}" />
+                            <On Platform="UWP, WinRT, WinPhone" Value="{StaticResource UwpEntryStyle}" />
+                        </OnPlatform>
+                    </Entry.Style>
+					<Entry.Behaviors>
+						<behaviors:EventToCommandBehavior
+							EventName="TextChanged"
+							Command="{Binding ValidatePasswordCommand}" />
+					</Entry.Behaviors>
+					<Entry.Triggers>
+						<DataTrigger 
+							TargetType="Entry"
+							Binding="{Binding Password.IsValid}"
+							Value="False">
+							<Setter Property="behaviors:LineColorBehavior.LineColor" Value="{StaticResource ErrorColor}" />
+						</DataTrigger>
+					</Entry.Triggers>
+                </Entry>
+				<Label 
+					Text="{Binding Password.Errors, Converter={StaticResource FirstValidationErrorConverter}"
+					Style="{StaticResource ValidationErrorLabelStyle}" />-->
+            </StackLayout>
+            <!--<Label
+              Grid.Row="3"
               Text="Local"
               Style="{StaticResource TitleLabelStyle}"/>
             <Picker
@@ -313,7 +455,7 @@
                         <On Platform="UWP, WinRT, WinPhone" Value="36" />
                     </OnPlatform>
                 </Picker.HeightRequest>
-            </Picker>
+            </Picker>-->
             <!-- LOGIN BUTTON -->
             <!--
             <Grid

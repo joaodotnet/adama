@@ -26,7 +26,7 @@ namespace DamaNoJornal.Core.Services.Order
             Longitude = -73.968285,
             State = "Seattle",
             StateCode = "WA",
-            ZipCode = "98101"
+            PostalCode = "98101"
         };
 
         private static PaymentInfo MockPaymentInfo = new PaymentInfo

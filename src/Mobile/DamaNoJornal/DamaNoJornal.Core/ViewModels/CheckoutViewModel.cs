@@ -27,6 +27,9 @@ namespace DamaNoJornal.Core.ViewModels
         private IBasketService _basketService;
         private IOrderService _orderService;
         private IUserService _userService;
+        private Address _shippingAddress;
+        private bool _createInvoice;
+        private string _taxNumber;
 
         public CheckoutViewModel(
             ISettingsService settingsService,
@@ -60,6 +63,37 @@ namespace DamaNoJornal.Core.ViewModels
             }
         }
 
+        public Address BillingAddress
+        {
+            get { return _shippingAddress; }
+            set
+            {
+                _shippingAddress = value;
+                RaisePropertyChanged(() => BillingAddress);
+            }
+        }
+
+        public string TaxNumber
+        {
+            get { return _taxNumber; }
+            set
+            {
+                _taxNumber = value;
+                RaisePropertyChanged(() => TaxNumber);
+            }
+        }
+
+        public bool CreateInvoice
+        {
+            get => _createInvoice;
+            set
+            {
+                _createInvoice = value;
+
+                RaisePropertyChanged(() => CreateInvoice);
+            }
+        }
+
         public ICommand CheckoutCommand => new Command(async () => await CheckoutAsync());
 
         public override async Task InitializeAsync(object navigationData)
@@ -85,6 +119,8 @@ namespace DamaNoJornal.Core.ViewModels
                     SecurityNumber = userInfo?.CardSecurityNumber
                 };
 
+                BillingAddress = new Address();
+
                 // Create new Order
                 var place = GlobalSetting.Places.SingleOrDefault(x => x.Id.ToString() == _settingsService.PlaceId);
                 Order = new Order
@@ -101,7 +137,7 @@ namespace DamaNoJornal.Core.ViewModels
                     ShippingCountry = place.Country,
                     ShippingStreet = place.Name,
                     ShippingCity = place.City,
-                    ShippingZipCode = place.PostalCode
+                    ShippingZipCode = place.PostalCode,                    
                 };
 
                 IsBusy = false;
@@ -115,8 +151,18 @@ namespace DamaNoJornal.Core.ViewModels
                 var authToken = _settingsService.AuthAccessToken;
                 var userInfo = await _userService.GetUserInfoAsync(authToken);
 
-                var basket = _orderService.MapOrderToBasket(Order);
-                basket.RequestId = Guid.NewGuid();
+                //var basket = _orderService.MapOrderToBasket(Order);
+                //basket.RequestId = Guid.NewGuid();
+
+                if(CreateInvoice)
+                {
+                    Order.BillingName = BillingAddress.Name;
+                    Order.BillingStreet = BillingAddress.Street;
+                    Order.BillingPostalCode = BillingAddress.PostalCode;
+                    Order.BillingCity = BillingAddress.City;
+                    Order.BillingCountry = "Portugal";
+                    Order.TaxNumber = !string.IsNullOrEmpty(TaxNumber) && Int32.TryParse(TaxNumber, out int taxNumber) ? taxNumber : default(int?);
+                }
 
                 await _orderService.CreateOrderAsync(Order, authToken);
                

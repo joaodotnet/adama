@@ -86,5 +86,20 @@ namespace DamaNoJornal.Core.Services.Identity
             CryptographicBuffer.CopyToByteArray(challengeBuffer, out challengeBytes);
             return Base64Url.Encode(challengeBytes);
         }
+
+        public async Task<UserInfo> LoginStaffAsync(string username, string password)
+        {
+            if (string.IsNullOrEmpty(password))
+                return null;
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(password);
+            var passwordText = System.Convert.ToBase64String(plainTextBytes);
+             
+            UriBuilder builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint)
+            {
+                Path = $"identity/login/{username}/{passwordText}"
+            };
+            string uri = builder.ToString();
+            return await _requestProvider.GetAsync<UserInfo>(uri);
+        }
     }
 }

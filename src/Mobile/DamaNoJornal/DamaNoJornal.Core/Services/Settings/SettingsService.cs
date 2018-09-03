@@ -17,7 +17,9 @@ namespace DamaNoJornal.Core.Services.Settings
         private const string IdLongitude = "longitude";
         private const string IdAllowGpsLocation = "allow_gps_location";
         private const string IdPlace = "place_id";
-        private const string IdLoginSince = "place_id";
+        private const string IdLoginSince = "login_id";
+        private const string IdPlaneName = "palce_name";
+        private const string IdUserName = "user_name";
         private readonly string AccessTokenDefault = string.Empty;
         private readonly string IdTokenDefault = string.Empty;
         private readonly bool UseMocksDefault = true;
@@ -92,6 +94,18 @@ namespace DamaNoJornal.Core.Services.Settings
         {
             get => GetValueOrDefault(IdLoginSince, null);
             set => AddOrUpdateValue(IdLoginSince, value);
+        }
+
+        public string PlaceName
+        {
+            get => GetValueOrDefault(IdPlaneName, string.Empty);
+            set => AddOrUpdateValue(IdPlaneName, value);
+        }
+
+        public string UserName
+        {
+            get => GetValueOrDefault(IdUserName, string.Empty);
+            set => AddOrUpdateValue(IdUserName, value);
         }
 
 
