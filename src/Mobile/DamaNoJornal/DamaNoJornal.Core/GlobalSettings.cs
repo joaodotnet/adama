@@ -11,7 +11,7 @@ namespace DamaNoJornal.Core
         public static readonly Place Place1 = new Place { Id = 1, Name = "Feira Popular de Loulé", City = "Loulé", Country = "Portugal", PostalCode = "8100" };
         public static readonly Place Place2 = new Place { Id = 2, Name = "Feira da Serra de São Brás", City = "São Brás", Country = "Portugal", PostalCode = "8151" };
         public static readonly Place GroceryPlace = new Place { Id = 3, Name = "Mercado", City = "Loulé", Country = "Portugal", PostalCode = "8100" };
-        public static readonly List<Place> Places = new List<Place> { Place1, Place2 };
+        public static readonly List<Place> Places = new List<Place> { Place1, Place2, GroceryPlace };
 
         private string _baseEndpoint;
         private static readonly GlobalSetting _instance = new GlobalSetting();

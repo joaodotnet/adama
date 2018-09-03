@@ -48,11 +48,14 @@ namespace DamaNoJornal.Core.Views
             await ((EventViewModel)EventView.BindingContext).InitializeAsync(null);
 
             _settingsService = ViewModelLocator.Resolve<ISettingsService>();
-            var userService = ViewModelLocator.Resolve<IUserService>();
-            var user = await userService.GetUserInfoAsync(_settingsService.AuthAccessToken);
+            //var userService = ViewModelLocator.Resolve<IUserService>();
+            //var user = await userService.GetUserInfoAsync(_settingsService.AuthAccessToken);
             //this.Children.Add(new Page());
-            this.Children[3].Title = $"Olá {user.Name}";
-            this.Children[3].Icon = Utils.GetLoginPicturiSource(user.Email);
+            this.Children[3].Title = $"Olá {_settingsService.UserName}";
+            this.Children[3].Icon = Utils.GetLoginPicturiSource(_settingsService.UserName);
+
+            this.Children[4].Title = $"{_settingsService.PlaceName}";
+            this.Children[4].Icon = Utils.GetPlacePictureSource(_settingsService.PlaceId);
         }
 
         protected override async void OnCurrentPageChanged()

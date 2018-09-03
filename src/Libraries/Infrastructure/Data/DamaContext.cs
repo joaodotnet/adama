@@ -374,6 +374,7 @@ namespace Infrastructure.Data
 
             builder.OwnsOne(o => o.ShipToAddress);
             builder.OwnsOne(o => o.BillingToAddress);
+            builder.Ignore(o => o.CustomerEmail);
         }
 
         private void ConfigureOrderItem(EntityTypeBuilder<OrderItem> builder)

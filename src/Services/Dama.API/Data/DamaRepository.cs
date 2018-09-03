@@ -16,7 +16,7 @@ namespace Dama.API.Data
         public DamaRepository(DamaContext damaContext) : base(damaContext)
         {
             _damaContext = damaContext;
-            _damaContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            //_damaContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
         public async Task<(List<CatalogItem>,long)> GetCatalogItemsAsync(int? catalogTypeId = null, int? catalogCategoryId = null, int? pageSize = null, int? pageIndex = null)
@@ -31,6 +31,7 @@ namespace Dama.API.Data
                    .Include(c => c.CatalogType)
                    .OrderBy(c => c.IsFeatured)
                    .Take(12)
+                   .AsNoTracking()
                    .ToListAsync();
 
                 itemsOnPage.ForEach(x => x.Price = x.Price > 0 ? x.Price : x.CatalogType.Price);
@@ -54,6 +55,7 @@ namespace Dama.API.Data
                 }
 
                 var totalItems = await root
+                    .AsNoTracking()
                     .LongCountAsync();
 
                 var itemsOnPage = await root
@@ -69,37 +71,39 @@ namespace Dama.API.Data
 
         public async Task<CatalogItem> GetCatalogItemAsync(int id)
         {
-            return await _damaContext.CatalogItems.SingleOrDefaultAsync(ci => ci.Id == id);
+            return await _damaContext.CatalogItems
+                .AsNoTracking()
+                .SingleOrDefaultAsync(ci => ci.Id == id);
         }
 
         public async Task<List<CatalogType>> GetCatalogTypesAsync(int? categoryId = null)
         {
             if(!categoryId.HasValue)
                 return await _damaContext.CatalogTypes
+                    .AsNoTracking()
                     .ToListAsync();
             else
                 return await _damaContext.CatalogTypeCategories
                    .Include(x => x.CatalogType)
                    .Where(x => x.CategoryId == categoryId)
                    .Select(x => x.CatalogType)
+                   .AsNoTracking()
                    .ToListAsync();
         }
-
-        //public async Task<List<Category>> GetCatalogCategoriesAsync()
-        //{
-        //    return await _damaContext.Categories
-        //        .ToListAsync();
-        //}
 
         public async Task<List<Category>> GetCategoriesAsync()
         {
             return await _damaContext.Categories
+                .AsNoTracking()
                .ToListAsync();
         }
 
         public List<CatalogItem> GetCatalogItemsByIds(IEnumerable<int> ids)
         {
-            return _damaContext.CatalogItems.Where(ci => ids.Contains(ci.Id)).ToList();
+            return _damaContext.CatalogItems
+                .Where(ci => ids.Contains(ci.Id))
+                .AsNoTracking()
+                .ToList();
         }
 
         public async Task DeleteBasketItemAsync(int basketItemId)

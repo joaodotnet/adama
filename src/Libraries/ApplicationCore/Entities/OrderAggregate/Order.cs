@@ -11,7 +11,7 @@ namespace ApplicationCore.Entities.OrderAggregate
         {
         }
 
-        public Order(string buyerId, string phoneNumber, int? taxNumber, Address shipToAddress, Address billingAddress, bool useBillingSameAsShipping, List<OrderItem> items, decimal shippingCost)
+        public Order(string buyerId, string phoneNumber, int? taxNumber, Address shipToAddress, Address billingAddress, bool useBillingSameAsShipping, List<OrderItem> items, decimal shippingCost, string customerEmail = null)
         {
             ShipToAddress = shipToAddress;
             if (billingAddress != null)
@@ -22,10 +22,12 @@ namespace ApplicationCore.Entities.OrderAggregate
             ShippingCost = shippingCost;
             _orderItems = items;
             BuyerId = buyerId;
+            CustomerEmail = customerEmail;
             TaxNumber = taxNumber;
             PhoneNumber = phoneNumber;
         }
         public string BuyerId { get; private set; }
+        public string CustomerEmail { get; set; }
         public int? TaxNumber { get; private set; }
         public string PhoneNumber { get; private set; }
         public DateTimeOffset OrderDate { get; private set; } = DateTimeOffset.Now;

@@ -43,6 +43,7 @@ namespace Infrastructure.Identity
             await CreateUserAsync("jue@damanojornal.com", "dama#2018!", "João", "Gonçalves", _roleStaff);
             await CreateUserAsync("sue@damanojornal.com", "dama#2018!", "Susana", "Mendez", _roleStaff);
             await CreateUserAsync("sonia@damanojornal.com", "dama#2018!", "Sónia", "Mendez", _roleStaff);
+            await CreateUserAsync("rute@damanojornal.com", "mercado#18", "Rute", "Brito", _roleStaff);
 
             //local Function
             async Task CreateUserAsync(string email, string password, string firstName, string lastName, params string[] roles)

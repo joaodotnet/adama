@@ -152,6 +152,10 @@
     <Content Include="Assets\fake_product_04.png" />
     <Content Include="Assets\fake_product_05.png" />
     <Content Include="Assets\img-joao.png" />
+    <Content Include="Assets\img-loule.jpg" />
+    <Content Include="Assets\img-mercado.jpg" />
+    <Content Include="Assets\img-rute.png" />
+    <Content Include="Assets\img-serra.jpg" />
     <Content Include="Assets\img-sonia.png" />
     <Content Include="Assets\img-sue.png" />
     <Content Include="Assets\logout-512.png" />

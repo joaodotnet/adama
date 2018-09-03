@@ -30,7 +30,7 @@ namespace ApplicationCore.Services
             _itemSyncRepository = itemSyncRepository;
         }
 
-        public async Task<Order> CreateOrderAsync(int basketId, string phoneNumber, int? taxNumber, Address shippingAddress, Address billingAddress, bool useBillingSameAsShipping, decimal shippingCost)
+        public async Task<Order> CreateOrderAsync(int basketId, string phoneNumber, int? taxNumber, Address shippingAddress, Address billingAddress, bool useBillingSameAsShipping, decimal shippingCost, string customerEmail)
         {
             //TODO: check price
             var basket = await _basketRepository.GetByIdWithItemsAsync(basketId);

@@ -7,6 +7,7 @@ using ApplicationCore.Entities.OrderAggregate;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Services;
 using ApplicationCore.Specifications;
+using Dama.API.Interfaces;
 using Dama.API.Services;
 using Dama.API.ViewModel;
 using Infrastructure.Identity;
@@ -24,8 +25,20 @@ namespace Dama.API.Controllers
     {
         private readonly IOrderService _orderDamaService;
         private readonly IOrderGroceryService _orderGroceryService;
-        private readonly IBasketRepository _repository;
+        private readonly IDamaRepository _damaRepository;
+        private readonly IGroceryRepository _groceryRepository;
+        //private readonly IBasketRepository _repository;
         private readonly UserManager<ApplicationUser> _userManager;
+
+        public OrderController(IOrderService orderService, IOrderGroceryService orderGroceryService, IDamaRepository damaRepo,
+           IGroceryRepository groceryRepo, UserManager<ApplicationUser> userManager)
+        {
+            _orderDamaService = orderService;
+            _orderGroceryService = orderGroceryService;
+            _damaRepository = damaRepo;
+            _groceryRepository = groceryRepo;
+            _userManager = userManager;
+        }
 
         private IOrderService OrderService
         {
@@ -35,12 +48,12 @@ namespace Dama.API.Controllers
             }
         }
 
-        public OrderController(IOrderService orderService, IOrderGroceryService orderGroceryService, IBasketRepository basketRepository, UserManager<ApplicationUser> userManager)
+        private IDamaRepository Repository
         {
-            _orderDamaService = orderService;
-            _orderGroceryService = orderGroceryService;
-            _repository = basketRepository;
-            _userManager = userManager;
+            get
+            {
+                return Request.Path.Value.Contains("grocery") ? _groceryRepository : _damaRepository;
+            }
         }
 
         [Route("all/{userId}")]
@@ -72,7 +85,7 @@ namespace Dama.API.Controllers
         [ProducesResponseType(typeof(Order), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetOrder(int id)
         {
-            var order = await _orderDamaService.GetOrderAsync(id);
+            var order = await OrderService.GetOrderAsync(id);
 
             return Ok(order);
         }
@@ -83,7 +96,7 @@ namespace Dama.API.Controllers
         {
             //Get Basket
             var basketSpec = new BasketWithItemsSpecification(model.BuyerId);
-            var basket = (await _repository.ListAsync(basketSpec)).LastOrDefault();
+            var basket = (await Repository.ListAsync(basketSpec)).LastOrDefault();
             if (basket == null)
             {
                 return NotFound();
@@ -91,11 +104,11 @@ namespace Dama.API.Controllers
 
             //Create Address
             Address address = new Address(null, model.ShippingStreet, model.ShippingCity, model.ShippingCountry, model.ShippingZipCode);
-            Address billAddress = new Address();
-            var order = await _orderDamaService.CreateOrderAsync(basket.Id, null, null, address, billAddress, true, 0);
+            Address billAddress = new Address(model.BillingName, model.BillingStreet, model.BillingCity, model.BillingCountry, model.BillingPostalCode);
+            var order = await OrderService.CreateOrderAsync(basket.Id, null, model.TaxNumber, address, billAddress, true, 0, model.CustomerEmail);
 
             //Update to Submitted
-            await _orderDamaService.UpdateOrderState(order.Id, OrderStateType.SUBMITTED);
+            await OrderService.UpdateOrderState(order.Id, OrderStateType.SUBMITTED);
             return Ok();
         }
 
@@ -105,7 +118,7 @@ namespace Dama.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CancelOrder([FromBody]CancelOrderViewModel command)
         {
-            await _orderDamaService.UpdateOrderState(command.OrderNumber, OrderStateType.CANCELED);
+            await OrderService.UpdateOrderState(command.OrderNumber, OrderStateType.CANCELED);
             return Ok();
 
         }
@@ -117,15 +130,15 @@ namespace Dama.API.Controllers
         {
             var street = PlaceIdToStreet(placeId);
             var orders = new List<Order>();
-            orders = (await _orderDamaService
+            orders = (await OrderService
                 .GetOrdersAsync("sue@damanojornal.com"))
                 .Where(o => o.ShipToAddress.Street.Equals(street))
                 .ToList();
-            orders.AddRange((await _orderDamaService
+            orders.AddRange((await OrderService
                 .GetOrdersAsync("jue@damanojornal.com"))
                 .Where(o => o.ShipToAddress.Street.Equals(street))
                 .ToList());
-            orders.AddRange((await _orderDamaService
+            orders.AddRange((await OrderService
                 .GetOrdersAsync("sonia@damanojornal.com"))
                 .Where(o => o.ShipToAddress.Street.Equals(street))
                 .ToList());

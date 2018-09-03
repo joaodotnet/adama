@@ -58,6 +58,32 @@ namespace Dama.API.Controllers
             return Ok(model);
         }
 
+        [HttpGet]
+        [Route("login/{username}/{password}")]
+        public async Task<IActionResult> LoginStaffAsync(string username, string password)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            if (user != null)
+            {
+                var base64EncodedBytes = System.Convert.FromBase64String(password);
+                var passwordText =  System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+
+                if (await _userManager.CheckPasswordAsync(user, passwordText))
+                {
+                    UsersViewModel model = new UsersViewModel
+                    {
+                        UserId = user.Id,
+                        Email = user.Email,
+                        Name = user.FirstName,
+                        LastName = user.LastName
+                    };
+                    return Ok(model);
+                }
+                    
+            }
+            return new EmptyResult();
+        }
+
         public class UsersViewModel
         {
             public string UserId { get; set; }

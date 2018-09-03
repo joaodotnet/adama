@@ -14,14 +14,17 @@ namespace DamaNoJornal.Core.Services.Catalog
     {
         private readonly IRequestProvider _requestProvider;
         private readonly IFixUriService _fixUriService;
-        private string ApiUrlBase = "api/v1/catalog";
+        private readonly string ApiUrlBaseFormat = "api/{0}/catalog";
+        private readonly string ApiUrlBase;
 
         public CatalogService(IRequestProvider requestProvider, IFixUriService fixUriService, ISettingsService settingsService)
         {
             _requestProvider = requestProvider;
             _fixUriService = fixUriService;
             if (settingsService.PlaceId == GlobalSetting.GroceryPlace.Id.ToString())
-                ApiUrlBase += "/grocery";
+                ApiUrlBase = string.Format(ApiUrlBaseFormat,"grocery");
+            else
+                ApiUrlBase = string.Format(ApiUrlBaseFormat, "v1");
 
         }
 

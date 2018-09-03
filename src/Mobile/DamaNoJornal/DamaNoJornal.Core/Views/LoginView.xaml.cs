@@ -31,7 +31,7 @@ namespace DamaNoJornal.Core.Views
 					_animate = true;
 					await AnimateIn();
 				}
-                PickerPlaces.SelectedIndex = 0;
+                //PickerPlaces.SelectedIndex = 0;
             }
         }
 

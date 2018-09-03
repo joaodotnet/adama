@@ -22,7 +22,7 @@ namespace DamaNoJornal.Core.ViewModels
         private ValidatableObject<string> _userName;
         private ValidatableObject<string> _password;
         private bool _isMock;
-        private bool _isValid;
+        private bool _isValid = false;
         private bool _isLogin;
         private string _authUrl;
 
@@ -153,6 +153,7 @@ namespace DamaNoJornal.Core.ViewModels
 
 
         public ICommand MockSignInCommand => new Command<string>(async (user) => await MockSignInAsync(user));
+        public ICommand PlaceSelectCommand => new Command<string>(async (place) => await PlaceSignInAsync(place));        
 
         public ICommand SignInCommand => new Command(async () => await SignInAsync());
 
@@ -184,10 +185,11 @@ namespace DamaNoJornal.Core.ViewModels
         private async Task MockSignInAsync(string user)
         {
             IsBusy = true;
-            IsValid = true;
+            IsValid = false;
             //bool isValid = Validate();
-            bool isAuthenticated = true;
 
+            var result = await DialogService.ShowDialogPassword("A tua password", "Password", "Login", "Cancelar");
+            
             //if (isValid)
             //{
             //    try
@@ -206,30 +208,44 @@ namespace DamaNoJornal.Core.ViewModels
             //    IsValid = false;
             //}
 
-            if (isAuthenticated)
+            if (result.Ok)
             {
-                var staffList = await _identityService.GetStaffUsersAsync();
-                switch (user)
+                //var staffList = await _identityService.GetStaffUsersAsync();
+                var userInfo = await _identityService.LoginStaffAsync(user, result.Value);
+                if(userInfo != null)
                 {
-                    case "jue":
-                        _settingsService.AuthAccessToken = GlobalSetting.Instance.AuthToken = staffList.SingleOrDefault(x => x.Email == "jue@damanojornal.com").UserId;
-                        break;
-                    case "sue":
-                        _settingsService.AuthAccessToken = GlobalSetting.Instance.AuthToken = staffList.SingleOrDefault(x => x.Email == "sue@damanojornal.com").UserId;
-                        break;
-                    case "sonia":
-                        _settingsService.AuthAccessToken = GlobalSetting.Instance.AuthToken = staffList.SingleOrDefault(x => x.Email == "sonia@damanojornal.com").UserId;
-                        break;
-                    default:                        
-                        break;
+                    _settingsService.AuthAccessToken = userInfo.UserId.ToString();
+                    _settingsService.UserName = userInfo.Name;
+                    IsValid = true;
+                    if(userInfo.Email == "rute@damanojornal.com")
+                    {                        
+                        _settingsService.PlaceId = GlobalSetting.GroceryPlace.Id.ToString();
+                        _settingsService.PlaceName = GlobalSetting.GroceryPlace.Name;
+                        _settingsService.LoginSince = DateTime.Now.ToString();
+                        
+                        await NavigationService.NavigateToAsync<MainViewModel>();
+                        await NavigationService.RemoveLastFromBackStackAsync();
+                    }
+                    
                 }
-                _settingsService.PlaceId = PlaceSelected.Id.ToString();
-                _settingsService.LoginSince = DateTime.Now.ToString();
-                await NavigationService.NavigateToAsync<MainViewModel>();
-                await NavigationService.RemoveLastFromBackStackAsync();
+                else
+                {
+                    IsValid = false;
+                    DialogService.ShowToastMessage("A password é incorrecta, tenta de novo!");
+                }
+                
             }
 
             IsBusy = false;
+        }
+
+        private async Task PlaceSignInAsync(string place)
+        {
+            _settingsService.PlaceId = place;
+            _settingsService.PlaceName = GlobalSetting.Places.First(x => x.Id == Convert.ToInt32(place)).Name;
+            _settingsService.LoginSince = DateTime.Now.ToString();
+            await NavigationService.NavigateToAsync<MainViewModel>();
+            await NavigationService.RemoveLastFromBackStackAsync();
         }
 
         private async Task SignInAsync()

@@ -4,6 +4,7 @@
              x:Class="DamaNoJornal.Core.Views.CheckoutView"
 			 xmlns:viewModelBase="clr-namespace:DamaNoJornal.Core.ViewModels.Base;assembly=DamaNoJornal.Core"
              xmlns:templates="clr-namespace:DamaNoJornal.Core.Views.Templates;assembly=DamaNoJornal.Core"
+             xmlns:controls="clr-namespace:DamaNoJornal.Core.Controls;assembly=DamaNoJornal.Core"
 			 viewModelBase:ViewModelLocator.AutoWireViewModel="true"
              Title="Checkout">
     <ContentPage.Resources>
@@ -65,6 +66,23 @@
                 <Setter Property="VerticalOptions"
                         Value="Center" />
             </Style>
+
+            <Style x:Key="SettingsToggleButtonStyle" 
+                   TargetType="{x:Type controls:ToggleButton}">
+                <Setter Property="HeightRequest" 
+                        Value="48" />
+                <Setter Property="WidthRequest" 
+                        Value="48" />
+                <Setter Property="VerticalOptions" 
+                        Value="Center" />
+                <Setter Property="HorizontalOptions" 
+                        Value="Start" />
+                <Setter Property="Margin" 
+                        Value="0,0" />
+                <Setter Property="Animate" 
+                        Value="True" />
+            </Style>
+
 
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -162,30 +180,107 @@
                     
                 </Grid>
                 <!-- SHIPPING ADDRESS -->
-                <!--<Grid
+                <Grid
 					Grid.Row="1"
                     Margin="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="450"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="130"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Label
                         Grid.Row="0"
-                        Text="SHIPPING ADDRESS"
+                        Grid.Column="0"
+                        Text="GERAR FATURA"
+                        Margin="0, 0, 5, 0"
                         Style="{StaticResource ShippingAddressStyle}"/>
-                    <StackLayout
-                        Grid.Row="1">
-                        <Label
-                            Text="{Binding ShippingAddress.Street}"
-                            Style="{StaticResource AddressStyle}"/>
-                        <Label
-                            Text="CODIGO POSTAL"   
-                            Style="{StaticResource AddressStyle}"/>
-                        <Label
-                            Text="{Binding ShippingAddress.Country}"   
-                            Style="{StaticResource AddressStyle}"/>
-                    </StackLayout>
-                </Grid>-->
+                    <controls:ToggleButton 
+                        Grid.Column="1" 
+                        Grid.Row="0"    
+                        Checked="{Binding CreateInvoice, Mode=TwoWay}"                        
+                        Style="{StaticResource SettingsToggleButtonStyle}">
+                        <controls:ToggleButton.CheckedImage>
+                            <OnPlatform x:TypeArguments="ImageSource">
+                                <On Platform="iOS" Value="switchOn.png" />
+                                <On Platform="Android" Value="switch_on.png" />
+                                <On Platform="UWP, WinRT, WinPhone" Value="Assets/switchOn.png" />
+                            </OnPlatform>
+                        </controls:ToggleButton.CheckedImage>
+                        <controls:ToggleButton.UnCheckedImage>
+                            <OnPlatform x:TypeArguments="ImageSource">
+                                <On Platform="iOS" Value="switchOff.png" />
+                                <On Platform="Android" Value="switch_off.png" />
+                                <On Platform="UWP, WinRT, WinPhone" Value="Assets/switchOff.png" />
+                            </OnPlatform>
+                        </controls:ToggleButton.UnCheckedImage>
+                    </controls:ToggleButton>
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Text="NOME"
+                        Style="{StaticResource AddressStyle}"/>
+                    <Entry
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Text="{Binding BillingAddress.Name}"/>
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Text="NIF"
+                        Style="{StaticResource AddressStyle}"/>
+                    <Entry
+                        Grid.Row="1"
+                        Grid.Column="3"
+                        Text="{Binding TaxNumber}"/>
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="4"
+                        Text="EMAIL"
+                        Style="{StaticResource AddressStyle}"/>
+                    <Entry
+                        Grid.Row="1"
+                        Grid.Column="5"
+                        Text="{Binding Order.CustomerEmail}"/>
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Text="MORADA FATURAÇÃO"
+                        Style="{StaticResource AddressStyle}"/>
+                    <Entry
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Text="{Binding BillingAddress.Street}"/>
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="2"
+                        Text="CÓDIGO POSTAL"
+                        Style="{StaticResource AddressStyle}"/>
+                    <Entry
+                        Grid.Row="2"
+                        Grid.Column="3"
+                        Text="{Binding BillingAddress.PostalCode}"/>
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="4"
+                        Text="CIDADE"
+                        Style="{StaticResource AddressStyle}"/>
+                    <Entry
+                        Grid.Row="2"
+                        Grid.Column="5"
+                        Text="{Binding BillingAddress.City}"/>
+
+                </Grid>
                 <!-- ORDER ITEMS -->
                 <Grid Grid.Row="2">
                     <Grid.RowDefinitions>

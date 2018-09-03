@@ -110,7 +110,7 @@
                             <Label 
                             Text="{Binding Name}"
                             TextColor="White"
-                            FontSize="Medium"
+                            FontSize="Small"
                             FontFamily="Quicksand"
                             VerticalOptions="CenterAndExpand"
                             HorizontalOptions="Center"/>
@@ -157,7 +157,7 @@
                 <flv:FlowListView.FlowColumnTemplate>
                     <DataTemplate>
                         <StackLayout 
-                        HorizontalOptions="CenterAndExpand" 
+                        HorizontalOptions="Center" 
                         VerticalOptions="CenterAndExpand"
                         HeightRequest="200"
                         WidthRequest="200"
@@ -166,10 +166,10 @@
                             <Label 
                             Text="{Binding Description}"
                             TextColor="White"
-                            FontSize="Medium"
+                            FontSize="Small"
                             FontFamily="Quicksand"
                             VerticalOptions="CenterAndExpand"
-                            HorizontalOptions="CenterAndExpand"/>
+                            HorizontalOptions="Center"/>
                         </StackLayout>
 
                     </DataTemplate>
