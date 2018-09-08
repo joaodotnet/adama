@@ -106,9 +106,9 @@ namespace DamaWeb.Services
             }
             body += $"<br><br>Ficheiro em anexo: {(request.UploadFile != null ? "Sim" : "Não")}";
             if (request.UploadFile == null)
-                await _emailSender.SendEmailAsync(_settings.FromOrderEmail, _settings.ToEmails, $"Dama no Jornal®: Novo Pedido de Encomenda Personalizada #{order.Id}", body);
+                await _emailSender.SendEmailAsync(_settings.FromOrderEmail, _settings.CCEmails, $"Dama no Jornal®: Novo Pedido de Encomenda Personalizada #{order.Id}", body);
             else
-                await _emailSender.SendEmailAsync(_settings.FromOrderEmail, _settings.ToEmails, $"Dama no Jornal®: Novo Pedido de Encomenda Personalizada #{order.Id}", body, null, request.UploadFile);
+                await _emailSender.SendEmailAsync(_settings.FromOrderEmail, _settings.CCEmails, $"Dama no Jornal®: Novo Pedido de Encomenda Personalizada #{order.Id}", body, null, request.UploadFile);
 
             //send mails to buyer
             body = GetEmailBody(order);

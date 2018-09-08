@@ -164,7 +164,7 @@ namespace Backoffice.Pages.Orders
                 body += $"Enviamos em anexo a fatura relativa à tua encomenda. <br>";
             body += $"Estamos a preparar a expedição.";
 
-            await _emailSender.SendGenericEmailAsync(_emailSettings.FromOrderEmail, order.BuyerId, $"Dama no Jornal® - Encomenda #{order.Id} - Pagamento", body, _emailSettings.ToEmails, files);
+            await _emailSender.SendGenericEmailAsync(_emailSettings.FromOrderEmail, order.BuyerId, $"Dama no Jornal® - Encomenda #{order.Id} - Pagamento", body, _emailSettings.CCEmails, files);
             StatusMessage = "Mensagem Enviada";
             return RedirectToPage(new { id = OrderModel.Id });
         }

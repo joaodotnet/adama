@@ -168,7 +168,7 @@ namespace Dama.API.Controllers
                         List<(string, byte[])> files = new List<(string, byte[])>();                        
                         files.Add(($"FaturaSaborComTradicao#{order.Id}.pdf", invoiceBytes));
                         
-                        await _emailSender.SendEmailAsync(_settings.FromOrderEmail, model.CustomerEmail, $"Sabor com Tradição - Encomenda #{order.Id}", body, _settings.ToEmails, null, files);
+                        await _emailSender.SendEmailAsync(_settings.FromOrderEmail, model.CustomerEmail, $"Sabor com Tradição - Encomenda #{order.Id}", body, _settings.CCEmails, null, files);
                     }
                 }
             }

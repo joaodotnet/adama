@@ -169,7 +169,7 @@ namespace DamaWeb.Pages.Account
                         if (Input.SubscribeNewsletter)
                         {
                             await _mailChimpService.AddSubscriberAsync(Input.Email);
-                            await _emailSender.SendGenericEmailAsync(_settings.FromInfoEmail, _settings.ToEmails, "Subscrição da newsletter feita na loja", $"O utilizador {Input.FirstName} {Input.LastName} registou-se na loja e subscreveu-se na newsletter com o email: {Input.Email}");
+                            await _emailSender.SendGenericEmailAsync(_settings.FromInfoEmail, _settings.CCEmails, "Subscrição da newsletter feita na loja", $"O utilizador {Input.FirstName} {Input.LastName} registou-se na loja e subscreveu-se na newsletter com o email: {Input.Email}");
                         }
 
                         return RedirectToPage(returnUrl);

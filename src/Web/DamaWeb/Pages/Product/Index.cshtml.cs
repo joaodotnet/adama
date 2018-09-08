@@ -60,7 +60,7 @@ namespace DamaWeb.Pages.Product
         {
             await _emailSender.SendGenericEmailAsync(
                 _settings.FromInfoEmail,
-                _settings.ToEmails,
+                _settings.CCEmails,
                 $"Pedido de dúvida do Produto {ProductSKU}",
                 $"De: {ContactEmailAddress}<br>" +
                 $"Mensagem: {Message}");
