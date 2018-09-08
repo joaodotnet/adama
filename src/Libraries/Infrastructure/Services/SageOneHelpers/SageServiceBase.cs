@@ -15,14 +15,14 @@ namespace Infrastructure.Services.SageOneHelpers
 {
     public class SageServiceBase
     {
-        protected readonly BackofficeSettings _settings;
+        protected readonly SageSettings _settings;
         protected readonly string _baseUrl;
         protected readonly IAuthConfigRepository _authRepository;
         protected readonly IAppLogger<SageService> _logger;
         protected AuthConfig _authConfig;
 
         public SageServiceBase(
-            IOptions<BackofficeSettings> options,
+            IOptions<SageSettings> options,
             IAuthConfigRepository authConfigRepository,
             IAppLogger<SageService> logger)
         {

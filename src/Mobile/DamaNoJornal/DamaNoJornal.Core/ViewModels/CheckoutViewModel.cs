@@ -156,6 +156,7 @@ namespace DamaNoJornal.Core.ViewModels
 
                 if(CreateInvoice)
                 {
+                    Order.CreateInvoice = true;
                     Order.BillingName = BillingAddress.Name;
                     Order.BillingStreet = BillingAddress.Street;
                     Order.BillingPostalCode = BillingAddress.PostalCode;
@@ -164,7 +165,7 @@ namespace DamaNoJornal.Core.ViewModels
                     Order.TaxNumber = !string.IsNullOrEmpty(TaxNumber) && Int32.TryParse(TaxNumber, out int taxNumber) ? taxNumber : default(int?);
                 }
 
-                await _orderService.CreateOrderAsync(Order, authToken);
+                var result = await _orderService.CreateOrderAsync(Order, authToken);
                
                 // Clean Basket
                 await _basketService.ClearBasketAsync(userInfo.UserId, authToken);
@@ -178,7 +179,7 @@ namespace DamaNoJornal.Core.ViewModels
                 await NavigationService.RemoveLastFromBackStackAsync();
 
                 // Show Dialog
-                await DialogService.ShowAlertAsync("Encomenda efectuado com sucesso!", "Checkout", "Ok");
+                await DialogService.ShowAlertAsync($"Encomenda efectuado com sucesso! {result.ResultMessage}", "Checkout", "Ok");
                 await NavigationService.RemoveLastFromBackStackAsync();
             }
             catch(Exception ex)

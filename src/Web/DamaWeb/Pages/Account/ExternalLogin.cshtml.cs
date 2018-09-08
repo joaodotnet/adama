@@ -25,7 +25,7 @@ namespace DamaWeb.Pages.Account
         private readonly ILogger<ExternalLoginModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IMailChimpService _mailChimpService;
-        private readonly CatalogSettings _settings;
+        private readonly EmailSettings _settings;
         private readonly IBasketService _basketService;
 
         public ExternalLoginModel(
@@ -33,7 +33,7 @@ namespace DamaWeb.Pages.Account
             UserManager<ApplicationUser> userManager,
             ILogger<ExternalLoginModel> logger,
             IEmailSender emailSender,
-            IOptions<CatalogSettings> settings,
+            IOptions<EmailSettings> settings,
             IMailChimpService mailChimpService,
             IBasketService basketService)
         {

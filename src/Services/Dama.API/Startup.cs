@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
+using ApplicationCore;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Services;
 using Dama.API.Data;
@@ -11,6 +12,8 @@ using Dama.API.Interfaces;
 using Dama.API.Services;
 using Infrastructure.Data;
 using Infrastructure.Identity;
+using Infrastructure.Logging;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -78,7 +81,9 @@ namespace Dama.API
             })
             .AddEntityFrameworkStores<AppIdentityDbContext>()
             .AddDefaultTokenProviders();
-
+            services.Configure<SageSettings>(Configuration.GetSection("Sage"));
+            services.Configure<EmailSettings>(Configuration.GetSection("Email"));
+            services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
             services.AddScoped(typeof(IGroceryAsyncRepository<>), typeof(EfGroceryRepository<>));
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
@@ -87,7 +92,10 @@ namespace Dama.API
             services.AddScoped<IOrderGroceryService, OrderGroceryService>();
             services.AddScoped<IDamaRepository, DamaRepository>();
             services.AddScoped<IGroceryRepository, GroceryRepository>();
-
+            services.AddScoped<ISageService, SageService>();
+            services.AddScoped<IAuthConfigRepository, AuthConfigRepository>();            
+            services.AddScoped<IInvoiceService, InvoiceService>();
+            services.AddTransient<IEmailSender,EmailSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

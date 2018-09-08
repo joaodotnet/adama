@@ -23,14 +23,14 @@ namespace DamaWeb.Pages.Account
         private readonly IBasketService _basketService;
         private readonly IEmailSender _emailSender;
         private readonly IMailChimpService _mailChimpService;
-        private readonly CatalogSettings _settings;
+        private readonly EmailSettings _settings;
         private readonly ILogger<SigninModel> _logger;
 
         public SigninModel(SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
             IBasketService basketService,
             IEmailSender emailSender,
-            IOptions<CatalogSettings> settings,
+            IOptions<EmailSettings> settings,
             IMailChimpService mailChimpService,
             ILogger<SigninModel> logger)
         {

@@ -40,6 +40,8 @@ namespace Dama.API.ViewModel
         public string Buyer { get; set; }
         public string CustomerEmail { get; set; }
         public int? TaxNumber { get; set; }
+        public bool CreateInvoice { get; set; }
+        public string ResultMessage { get; set; }
     }
 
 

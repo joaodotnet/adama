@@ -1,6 +1,8 @@
-﻿namespace Dama.API
+﻿using ApplicationCore;
+
+namespace Dama.API
 {
-    public class CatalogSettings
+    public class CatalogSettings : AppSettings
     {
         public string PicBaseUrl { get;set;}
 
@@ -8,5 +10,6 @@
 
         public bool UseCustomizationData { get; set; }
 	    public bool AzureStorageEnabled { get; set; }
+
     }
 }

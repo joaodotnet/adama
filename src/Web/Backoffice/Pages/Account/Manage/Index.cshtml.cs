@@ -20,13 +20,13 @@ namespace Backoffice.Pages.Account.Manage
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
-        private readonly BackofficeSettings _settings;
+        private readonly EmailSettings _settings;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
-            IOptions<BackofficeSettings> options)
+            IOptions<EmailSettings> options)
         {
             _userManager = userManager;
             _signInManager = signInManager;

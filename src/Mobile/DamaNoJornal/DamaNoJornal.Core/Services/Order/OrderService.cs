@@ -28,7 +28,7 @@ namespace DamaNoJornal.Core.Services.Order
                 ApiUrlBase = string.Format(ApiUrlBaseFormat, "v1");
         }
 
-        public async Task CreateOrderAsync(Core.Models.Orders.Order newOrder, string token)
+        public async Task<Core.Models.Orders.Order> CreateOrderAsync(Core.Models.Orders.Order newOrder, string token)
         {
             var builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint)
             {
@@ -36,7 +36,7 @@ namespace DamaNoJornal.Core.Services.Order
             };
 
             var uri = builder.ToString();
-            var result = await _requestProvider.PostAsync(uri, newOrder, token);            
+            return await _requestProvider.PostAsync(uri, newOrder, token);            
         }
 
         public async Task<ObservableCollection<Core.Models.Orders.Order>> GetOrdersAsync(string id, string token)

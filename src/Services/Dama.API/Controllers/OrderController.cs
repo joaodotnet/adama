@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using ApplicationCore;
 using ApplicationCore.Entities.OrderAggregate;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Services;
@@ -14,6 +15,7 @@ using Infrastructure.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace Dama.API.Controllers
 {
@@ -29,15 +31,28 @@ namespace Dama.API.Controllers
         private readonly IGroceryRepository _groceryRepository;
         //private readonly IBasketRepository _repository;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IInvoiceService _invoiceService;
+        private readonly IEmailSender _emailSender;
+        private readonly EmailSettings _settings;
 
-        public OrderController(IOrderService orderService, IOrderGroceryService orderGroceryService, IDamaRepository damaRepo,
-           IGroceryRepository groceryRepo, UserManager<ApplicationUser> userManager)
+
+        public OrderController(IOrderService orderService, 
+           IOrderGroceryService orderGroceryService, 
+           IDamaRepository damaRepo,
+           IGroceryRepository groceryRepo, 
+           UserManager<ApplicationUser> userManager,
+           IInvoiceService invoiceService, 
+           IEmailSender emailSender,
+           IOptions<EmailSettings> options)
         {
             _orderDamaService = orderService;
             _orderGroceryService = orderGroceryService;
             _damaRepository = damaRepo;
             _groceryRepository = groceryRepo;
             _userManager = userManager;
+            _invoiceService = invoiceService;
+            _emailSender = emailSender;
+            _settings = options.Value;
         }
 
         private IOrderService OrderService
@@ -109,7 +124,55 @@ namespace Dama.API.Controllers
 
             //Update to Submitted
             await OrderService.UpdateOrderState(order.Id, OrderStateType.SUBMITTED);
-            return Ok();
+
+            //Create Invoice
+            if(model.CreateInvoice)
+            {
+                long? invoiceId = null;
+                try
+                {
+                    var response = await _invoiceService.RegisterInvoiceAsync(order);
+                    if (response != null && response.InvoiceId.HasValue)
+                    {
+                        invoiceId = response.InvoiceId;
+                        await OrderService.UpdateOrderInvoiceAsync(order.Id, response.InvoiceId, response.InvoiceNumber);
+                        model.ResultMessage = "Fatura Gerada com sucesso";
+                    }
+                    else
+                        model.ResultMessage = $"Erro na criação da fatura ({response.Message})";
+                }
+                catch (Exception)
+                {
+                    model.ResultMessage = "Erro na criação da Fatura (genérico)";
+                }
+                //Get Invoice PDF and save to Disk
+                if (invoiceId.HasValue)
+                {
+                    var invoiceBytes = await _invoiceService.GetPDFInvoiceAsync(invoiceId.Value);
+                    if(invoiceBytes != null && !string.IsNullOrEmpty(model.CustomerEmail))
+                    {
+                        //Send Email to client (from: info.saborcomtradicao@gmail.com)
+
+                        var body = $"<strong>Olá!</strong><br>" +
+                            $"Obrigada por comprares na Sabor com Tradição.<br>" +
+                            $"Enviamos em anexo a fatura relativa à tua encomenda. <br>" +
+                            "<br>Muito Obrigada.<br>" +
+                            "<br>--------------------------------------------------<br>" +
+                            "<br><strong>Hi!</strong><br>" +
+                            "Thank you to shopping at Sabor Com Tradição in Loulé, Portugal. <br>" +
+                            "We send as attach the invoice relates to your order.<br>" +                            
+                            "<br>Thank you.<br>" +
+                            "<br>Sabor com Tradição" +
+                            "<br>http://www.saborcomtradicao.com";
+
+                        List<(string, byte[])> files = new List<(string, byte[])>();                        
+                        files.Add(($"FaturaSaborComTradicao#{order.Id}.pdf", invoiceBytes));
+                        
+                        await _emailSender.SendEmailAsync(_settings.FromOrderEmail, model.CustomerEmail, $"Sabor com Tradição - Encomenda #{order.Id}", body, _settings.ToEmails, null, files);
+                    }
+                }
+            }
+            return Ok(model);
         }
 
         [Route("cancel")]

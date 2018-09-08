@@ -18,12 +18,12 @@ namespace DamaWeb.Pages.Product
         private readonly ICatalogService _catalogService;
         private readonly IAppLogger<IndexModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly CatalogSettings _settings;
+        private readonly EmailSettings _settings;
 
         public IndexModel(ICatalogService catalogService, 
             IAppLogger<IndexModel> logger,
             IEmailSender emailSender,
-            IOptions<CatalogSettings> options)
+            IOptions<EmailSettings> options)
         {
             _catalogService = catalogService;
             _logger = logger;

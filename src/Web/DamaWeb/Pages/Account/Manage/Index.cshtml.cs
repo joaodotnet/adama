@@ -16,13 +16,13 @@ namespace DamaWeb.Pages.Account.Manage
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
-        private readonly CatalogSettings _settings;
+        private readonly EmailSettings _settings;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
-            IOptions<CatalogSettings> settings)
+            IOptions<EmailSettings> settings)
         {
             _userManager = userManager;
             _signInManager = signInManager;

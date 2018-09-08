@@ -14,5 +14,6 @@ namespace ApplicationCore.Interfaces
         Task<List<Order>> GetOrdersAsync(string buyerId);
         Task<List<CatalogAttribute>> GetOrderAttributesAsync(int orderId, int orderItemId);
         List<CatalogAttribute> GetOrderAttributes(int catalogItemId, int? catalogAttribute1, int? catalogAttribute2, int? catalogAttribute3);
+        Task UpdateOrderInvoiceAsync(int id, long? invoiceId, string invoiceNumber);
     }
 }

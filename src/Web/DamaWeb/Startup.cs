@@ -137,11 +137,12 @@ namespace DamaWeb
             services.AddScoped<CatalogService>();
             services.AddScoped<IShopService,ShopService>();
             services.Configure<CatalogSettings>(Configuration);
+            services.Configure<EmailSettings>(Configuration.GetSection("Email"));
             services.AddSingleton<IUriComposer>(new UriComposer(Configuration.Get<CatalogSettings>()));
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
-            services.AddSingleton<IEmailSender>(new EmailSender(Configuration.Get<CatalogSettings>()));
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<IMailChimpService, MailChimpService>();
 
             // Add memory cache services

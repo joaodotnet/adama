@@ -31,7 +31,7 @@ namespace DamaWeb.Pages.Basket
         private readonly IBasketViewModelService _basketViewModelService;
         private readonly IShopService _shopService;
         private readonly IEmailSender _emailSender;
-        private readonly CatalogSettings _settings;
+        private readonly EmailSettings _settings;
 
         public CheckoutModel(IBasketService basketService,
             IBasketViewModelService basketViewModelService,
@@ -41,7 +41,7 @@ namespace DamaWeb.Pages.Basket
             IOrderService orderService,
             IShopService shopService,
             IEmailSender emailSender,
-            IOptions<CatalogSettings> settings)
+            IOptions<EmailSettings> settings)
         {
             _basketService = basketService;
             _uriComposer = uriComposer;
