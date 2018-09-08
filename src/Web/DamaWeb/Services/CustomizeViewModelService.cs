@@ -22,7 +22,7 @@ namespace DamaWeb.Services
         private readonly IAsyncRepository<CatalogType> _catalogTypeRepository;
         private readonly IAsyncRepository<CustomizeOrder> _customizeOrderRepository;
         private readonly IEmailSender _emailSender;
-        private readonly CatalogSettings _settings;
+        private readonly EmailSettings _settings;
         private readonly IUriComposer _uriComposer;
 
         public CustomizeViewModelService(
@@ -31,7 +31,7 @@ namespace DamaWeb.Services
             IAsyncRepository<CatalogType> catalogTypeRepository,
             IAsyncRepository<CustomizeOrder> customizeRepository,
             IEmailSender emailSender,
-            IOptions<CatalogSettings> settings,
+            IOptions<EmailSettings> settings,
             IUriComposer uriComposer)
         {
             _categoryRepository = categoryRepository;

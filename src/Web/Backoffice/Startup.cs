@@ -114,15 +114,18 @@ namespace Backoffice
             // Register no-op EmailSender used by account confirmation and password reset during development
             // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
             services.Configure<BackofficeSettings>(Configuration);
+            services.Configure<SageSettings>(Configuration.GetSection("Sage"));
+            services.Configure<EmailSettings>(Configuration.GetSection("Email"));
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
             services.AddScoped<IBackofficeService, BackofficeService>();
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<IOrderService, OrderService>();
-            services.AddSingleton<IEmailSender>(new EmailSender(Configuration.Get<BackofficeSettings>()));
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<ISageService, SageService>();
             services.AddScoped<IAuthConfigRepository, AuthConfigRepository>();
+            services.AddScoped<IInvoiceService, InvoiceService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

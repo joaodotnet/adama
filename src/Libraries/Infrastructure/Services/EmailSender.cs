@@ -1,6 +1,7 @@
 ﻿using ApplicationCore;
 using ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,18 +15,18 @@ namespace Infrastructure.Services
     // For more details see https://go.microsoft.com/fwlink/?LinkID=532713
     public class EmailSender : IEmailSender
     {
-        private readonly AppSettings _appSettings;
+        private readonly EmailSettings _appSettings;
         //private readonly IAppLogger<EmailSender> _logger;
 
-        public EmailSender(AppSettings appSettings/*, IAppLogger<EmailSender> logger*/)
+        public EmailSender(IOptions<EmailSettings> appSettings/*, IAppLogger<EmailSender> logger*/)
         {
-            _appSettings = appSettings;
+            _appSettings = appSettings.Value;
             //_logger = logger;
         }
-        public async Task SendEmailAsync(string fromEmail, string toEmail, string subject, string message, string bccEmails = null, IFormFile attachFile = null)
+        public async Task SendEmailAsync(string fromEmail, string toEmail, string subject, string message, string bccEmails = null, IFormFile attachFile = null, List<(string, byte[])> files = null)
         {
             // TODO: Wire this up to actual email sending logic via SendGrid, local SMTP, etc.
-            await Execute(fromEmail, toEmail, subject, message, bccEmails, attachFile);
+            await Execute(fromEmail, toEmail, subject, message, bccEmails, attachFile, files);
             //await SendGenericEmailAsync(fromEmail, toEmail, subject, message, bccEmails);
         }
 
@@ -40,7 +41,7 @@ namespace Infrastructure.Services
             {
                 MailMessage mail = new MailMessage()
                 {
-                    From = new MailAddress(FromEmail, "Dama no Jornal®")
+                    From = new MailAddress(FromEmail, GetFromName(FromEmail))
                 };
                 mail.To.Add(ToEmail);
                 if (!string.IsNullOrEmpty(bccEmails))
@@ -71,6 +72,13 @@ namespace Infrastructure.Services
                 //_logger.LogWarning($"Error while sending email: {ex.Message}");
                 throw ex;
             }
+        }
+
+        private string GetFromName(string fromEmail)
+        {
+            if (fromEmail.Contains("saborcomtradicao"))
+                return "Sabor com Tradição";
+            return "Dama no Jornal®";
         }
 
         private string CreateGenericBody(string textBody)

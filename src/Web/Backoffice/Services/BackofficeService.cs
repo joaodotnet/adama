@@ -27,18 +27,21 @@ namespace Backoffice.Services
         private readonly BackofficeSettings _settings;
         private readonly IMapper _mapper;
         private readonly ISageService _sageService;
+        private readonly IInvoiceService _invoiceService;
 
         public BackofficeService(DamaContext context,
             IMapper mapper,
             ISageService sageService,
             AppIdentityDbContext identityContext,
-            IOptions<BackofficeSettings> options)
+            IOptions<BackofficeSettings> options,
+            IInvoiceService invoiceService)
         {
             _damaContext = context;
             _identityContext = identityContext;
             _settings = options.Value;
             _mapper = mapper;
-            this._sageService = sageService;
+            _sageService = sageService;
+            _invoiceService = invoiceService;
         }
         public bool CheckIfFileExists(string fullpath, string fileName)
         {
@@ -217,49 +220,15 @@ namespace Backoffice.Services
                 .Include(x => x.OrderItems)
                 .ThenInclude(i => i.ItemOrdered)
                 .SingleOrDefaultAsync(x => x.Id == id);
-
-            List<OrderItem> items = new List<OrderItem>();
-            foreach (var item in order.OrderItems)
-            {
-                items.Add(new OrderItem(item.ItemOrdered, item.UnitPrice, item.Units, item.CatalogAttribute1, item.CatalogAttribute2, item.CatalogAttribute3, item.CustomizeName, item.CustomizeSide));
-            }
-
-            SageResponseDTO response;
-
-            if (order.TaxNumber.HasValue)
-            {
-                var maxStreet1Length = order.BillingToAddress.Street.Length;
-                if (maxStreet1Length >= 50)
-                    maxStreet1Length = 50;
-                response = await _sageService.CreateInvoiceWithTaxNumber(
-                    items,
-                    order.BillingToAddress.Name,
-                    order.TaxNumber.Value.ToString(),
-                    order.BillingToAddress.Street.Substring(0, maxStreet1Length),
-                    order.BillingToAddress.Street.Length > 50 ? order.BillingToAddress.Street.Substring(50) : string.Empty,
-                    order.BillingToAddress.PostalCode,
-                    order.BillingToAddress.City,
-                    order.Id,
-                    order.ShippingCost);
-            }
-            else
-                response = await _sageService.CreateAnonymousInvoice(items, order.Id, order.ShippingCost);
+            var response =  await _invoiceService.RegisterInvoiceAsync(order);
 
             if (response.InvoiceId.HasValue)
             {
                 order.SalesInvoiceId = response.InvoiceId.Value;
                 order.SalesInvoiceNumber = response.InvoiceNumber;
 
-                ////Payment                
-                //var responsePayment = await _sageService.InvoicePayment(order.SalesInvoiceId.Value, paymentType, order.Total());
-
-                //if(responsePayment != null && responsePayment.PaymentId.HasValue)
-                //{
-                //    order.SalesPaymentId = responsePayment.PaymentId;
-                //}
                 await _damaContext.SaveChangesAsync();
             }
-
             return response;
         }
 

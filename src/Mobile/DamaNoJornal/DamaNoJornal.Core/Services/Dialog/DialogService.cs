@@ -27,7 +27,12 @@ namespace DamaNoJornal.Services
 
         public void ShowToastMessage(string message)
         {
-            UserDialogs.Instance.Toast(message);
+            var toastCfg = new ToastConfig(message);
+            toastCfg.Position = ToastPosition.Bottom;            
+            toastCfg.SetPosition(ToastPosition.Bottom);
+            toastCfg.BackgroundColor = System.Drawing.Color.DarkGreen;
+            toastCfg.MessageTextColor = System.Drawing.Color.White;
+            UserDialogs.Instance.Toast(toastCfg);
         }
     }
 }

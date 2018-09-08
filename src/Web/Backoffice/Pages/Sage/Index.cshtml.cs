@@ -18,8 +18,8 @@ namespace Backoffice.Pages.Sage
         private readonly ISageService _sageService;
         private readonly DamaContext _context;
         private readonly IAuthConfigRepository _authConfigRepository;
-        private readonly BackofficeSettings _settings;
-        public IndexModel(ISageService sageService, IOptions<BackofficeSettings> options, IAuthConfigRepository authConfigRepository, DamaContext context)
+        private readonly SageSettings _settings;
+        public IndexModel(ISageService sageService, IOptions<SageSettings> options, IAuthConfigRepository authConfigRepository, DamaContext context)
         {
             _sageService = sageService;
             _authConfigRepository = authConfigRepository;

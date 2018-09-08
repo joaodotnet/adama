@@ -21,13 +21,19 @@ namespace Backoffice.Pages.Orders
         private readonly IBackofficeService _service;
         private readonly IOrderService _orderService;
         private readonly BackofficeSettings _settings;
+        private readonly EmailSettings _emailSettings;
         private readonly IEmailSender _emailSender;
 
-        public DetailsModel(IBackofficeService service, IOrderService orderService, IOptions<BackofficeSettings> options, IEmailSender emailSender)
+        public DetailsModel(IBackofficeService service, 
+            IOrderService orderService, 
+            IOptions<BackofficeSettings> options,
+            IOptions<EmailSettings> emailOptions,
+            IEmailSender emailSender)
         {
             _service = service;
             _orderService = orderService;
             _settings = options.Value;
+            _emailSettings = emailOptions.Value;
             _emailSender = emailSender;
         }
 
@@ -158,7 +164,7 @@ namespace Backoffice.Pages.Orders
                 body += $"Enviamos em anexo a fatura relativa à tua encomenda. <br>";
             body += $"Estamos a preparar a expedição.";
 
-            await _emailSender.SendGenericEmailAsync(_settings.FromOrderEmail, order.BuyerId, $"Dama no Jornal® - Encomenda #{order.Id} - Pagamento", body, _settings.ToEmails, files);
+            await _emailSender.SendGenericEmailAsync(_emailSettings.FromOrderEmail, order.BuyerId, $"Dama no Jornal® - Encomenda #{order.Id} - Pagamento", body, _emailSettings.ToEmails, files);
             StatusMessage = "Mensagem Enviada";
             return RedirectToPage(new { id = OrderModel.Id });
         }

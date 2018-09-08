@@ -16,9 +16,9 @@ namespace DamaWeb.Pages.Account
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
-        private readonly CatalogSettings _settings;
+        private readonly EmailSettings _settings;
 
-        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender, IOptions<CatalogSettings> settings)
+        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender, IOptions<EmailSettings> settings)
         {
             _userManager = userManager;
             _emailSender = emailSender;

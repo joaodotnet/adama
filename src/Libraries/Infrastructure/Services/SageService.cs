@@ -19,7 +19,7 @@ namespace Infrastructure.Services
     public class SageService : SageServiceBase, ISageService
     {
         public SageService(
-            IOptions<BackofficeSettings> options,
+            IOptions<SageSettings> options,
             IAuthConfigRepository authConfigRepository,
             IAppLogger<SageService> logger) : base(options, authConfigRepository, logger)
         {

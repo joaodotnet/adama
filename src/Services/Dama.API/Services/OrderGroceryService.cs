@@ -107,5 +107,16 @@ namespace Dama.API.Services
         {
             throw new System.NotImplementedException();
         }
+
+        public async Task UpdateOrderInvoiceAsync(int id, long? invoiceId, string invoiceNumber)
+        {
+            var order = await _orderRepository.GetByIdAsync(id);
+            if (order != null)
+            {
+                order.SalesInvoiceId = invoiceId;
+                order.SalesInvoiceNumber = invoiceNumber;
+                await _orderRepository.UpdateAsync(order);
+            }
+        }
     }
 }

@@ -19,9 +19,9 @@ namespace DamaWeb.Pages.Order
         private readonly IOrderRepository _orderRepository;
         private readonly IOrderService _orderService;
         private readonly IEmailSender _emailSender;
-        private readonly CatalogSettings _settings;
+        private readonly EmailSettings _settings;
 
-        public IndexModel(IOrderRepository orderRepository, IOrderService orderService, IEmailSender emailSender, IOptions<CatalogSettings> settings)
+        public IndexModel(IOrderRepository orderRepository, IOrderService orderService, IEmailSender emailSender, IOptions<EmailSettings> settings)
         {
             _orderRepository = orderRepository;
             _orderService = orderService;

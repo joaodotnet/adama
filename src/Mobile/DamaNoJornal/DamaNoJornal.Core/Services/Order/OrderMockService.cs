@@ -97,7 +97,7 @@ namespace DamaNoJornal.Core.Services.Order
                 return new Core.Models.Orders.Order();
         }
 
-        public async Task CreateOrderAsync(Core.Models.Orders.Order newOrder, string token)
+        public async Task<Core.Models.Orders.Order> CreateOrderAsync(Core.Models.Orders.Order newOrder, string token)
         {
             await Task.Delay(10);
 
@@ -105,6 +105,7 @@ namespace DamaNoJornal.Core.Services.Order
             {
                 MockOrders.Add(newOrder);
             }
+            return null;
         }
 
         public BasketCheckout MapOrderToBasket(Core.Models.Orders.Order order)

@@ -17,9 +17,9 @@ namespace Backoffice.Pages.Account
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
-        private readonly BackofficeSettings _settings;
+        private readonly EmailSettings _settings;
 
-        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender, IOptions<BackofficeSettings> options)
+        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender, IOptions<EmailSettings> options)
         {
             _userManager = userManager;
             _emailSender = emailSender;

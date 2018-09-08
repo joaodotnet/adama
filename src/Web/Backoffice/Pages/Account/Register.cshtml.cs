@@ -21,14 +21,14 @@ namespace Backoffice.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly BackofficeSettings _settings;
+        private readonly EmailSettings _settings;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<LoginModel> logger,
             IEmailSender emailSender,
-            IOptions<BackofficeSettings> options)
+            IOptions<EmailSettings> options)
         {
             _userManager = userManager;
             _signInManager = signInManager;
