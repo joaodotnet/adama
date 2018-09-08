@@ -41,7 +41,7 @@ namespace ApplicationCore
         public string SmtpPassword { get; set; }
         public string FromOrderEmail { get; set; }
         public string FromInfoEmail { get; set; }
-        public string ToEmails { get; set; }
+        public string CCEmails { get; set; }
         public bool SSL { get; set; }
     }
 }
