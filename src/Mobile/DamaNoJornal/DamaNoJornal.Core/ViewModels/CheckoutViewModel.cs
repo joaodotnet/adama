@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -30,6 +31,14 @@ namespace DamaNoJornal.Core.ViewModels
         private Address _shippingAddress;
         private bool _createInvoice;
         private string _taxNumber;
+        private string _errors;
+        private bool _withNif;
+        private bool _nameIsEnabled;
+        private bool _taxNumberIsEnabled;
+        private bool _customerEmailIsEnabled;
+        private bool _streetIsEnabled;
+        private bool _postalCodeIsEnabled;
+        private bool _cityIsEnabled;
 
         public CheckoutViewModel(
             ISettingsService settingsService,
@@ -94,7 +103,95 @@ namespace DamaNoJornal.Core.ViewModels
             }
         }
 
+        public bool WithNIF
+        {
+            get => _withNif;
+            set
+            {
+                _withNif = value;
+
+                RaisePropertyChanged(() => WithNIF);
+            }
+        }
+        public bool NameIsEnabled
+        {
+            get => _nameIsEnabled;
+            set
+            {
+                _nameIsEnabled = value;
+
+                RaisePropertyChanged(() => NameIsEnabled);
+            }
+        }
+
+        public bool TaxNumberIsEnabled
+        {
+            get => _taxNumberIsEnabled;
+            set
+            {
+                _taxNumberIsEnabled = value;
+
+                RaisePropertyChanged(() => TaxNumberIsEnabled);
+            }
+        }
+
+        public bool CustomerEmailIsEnabled
+        {
+            get => _customerEmailIsEnabled;
+            set
+            {
+                _customerEmailIsEnabled = value;
+
+                RaisePropertyChanged(() => CustomerEmailIsEnabled);
+            }
+        }
+
+        public bool StreetIsEnabled
+        {
+            get => _streetIsEnabled;
+            set
+            {
+                _streetIsEnabled = value;
+
+                RaisePropertyChanged(() => StreetIsEnabled);
+            }
+        }
+
+        public bool PostalCodeIsEnabled
+        {
+            get => _postalCodeIsEnabled;
+            set
+            {
+                _postalCodeIsEnabled = value;
+
+                RaisePropertyChanged(() => PostalCodeIsEnabled);
+            }
+        }
+        public bool CityIsEnabled
+        {
+            get => _cityIsEnabled;
+            set
+            {
+                _cityIsEnabled = value;
+
+                RaisePropertyChanged(() => CityIsEnabled);
+            }
+        }
+
+        public string Errors
+        {
+            get { return _errors; }
+            set
+            {
+                _errors = value;
+                RaisePropertyChanged(() => Errors);
+            }
+        }
+
         public ICommand CheckoutCommand => new Command(async () => await CheckoutAsync());
+
+        public ICommand CheckInvoiceCommand => new Command(CheckInvoiceToggle);
+        public ICommand WithNifCommand => new Command(WithNifToggle);
 
         public override async Task InitializeAsync(object navigationData)
         {
@@ -146,46 +243,105 @@ namespace DamaNoJornal.Core.ViewModels
 
         private async Task CheckoutAsync()
         {
-            try
+            //Validate Form
+            Errors = "";
+            if(CreateInvoice && WithNIF)
             {
-                var authToken = _settingsService.AuthAccessToken;
-                var userInfo = await _userService.GetUserInfoAsync(authToken);
-
-                //var basket = _orderService.MapOrderToBasket(Order);
-                //basket.RequestId = Guid.NewGuid();
-
-                if(CreateInvoice)
+                if (string.IsNullOrEmpty(BillingAddress.Name))
+                    Errors = "Para faturas com NIF, o nome do cliente é obrigatório.\r";
+                if (string.IsNullOrEmpty(BillingAddress.Street))
+                    Errors += "Para faturas com NIF, a morada é obrigatória.\r";
+                if (string.IsNullOrEmpty(BillingAddress.PostalCode))
+                    Errors += "Para faturas com NIF, o código postal é obrigatório.\r";
+                else if (!Regex.Match(BillingAddress.PostalCode, "^\\d{4}-\\d{3}$", RegexOptions.IgnoreCase).Success)
+                    Errors += "Para faturas com NIF, o código postal tem que estar no formato XXXX-XXX\r";
+                if (string.IsNullOrEmpty(BillingAddress.City))
+                    Errors += "Para faturas com NIF, a cidade é obrigatória";
+            }
+            if (!string.IsNullOrEmpty(Errors))
+                await DialogService.ShowAlertAsync($"Existe erros no pedido, por favor corrija", "Erro", "Ok");
+            else
+            {
+                try
                 {
-                    Order.CreateInvoice = true;
-                    Order.BillingName = BillingAddress.Name;
-                    Order.BillingStreet = BillingAddress.Street;
-                    Order.BillingPostalCode = BillingAddress.PostalCode;
-                    Order.BillingCity = BillingAddress.City;
-                    Order.BillingCountry = "Portugal";
-                    Order.TaxNumber = !string.IsNullOrEmpty(TaxNumber) && Int32.TryParse(TaxNumber, out int taxNumber) ? taxNumber : default(int?);
+                    var authToken = _settingsService.AuthAccessToken;
+                    var userInfo = await _userService.GetUserInfoAsync(authToken);
+
+                    //var basket = _orderService.MapOrderToBasket(Order);
+                    //basket.RequestId = Guid.NewGuid();
+
+                    if (CreateInvoice)
+                    {
+                        Order.CreateInvoice = true;
+                        Order.BillingName = BillingAddress.Name;
+                        Order.BillingStreet = BillingAddress.Street;
+                        Order.BillingPostalCode = BillingAddress.PostalCode;
+                        Order.BillingCity = BillingAddress.City;
+                        Order.BillingCountry = "Portugal";
+                        Order.TaxNumber = !string.IsNullOrEmpty(TaxNumber) && Int32.TryParse(TaxNumber, out int taxNumber) ? taxNumber : default(int?);
+                    }
+
+                    var result = await _orderService.CreateOrderAsync(Order, authToken);
+
+                    // Clean Basket
+                    await _basketService.ClearBasketAsync(userInfo.UserId, authToken);
+
+                    // Reset Basket badge
+                    //var basketViewModel = ViewModelLocator.Resolve<BasketViewModel>();
+                    //basketViewModel.BadgeCount = 0;
+
+                    // Navigate to Orders
+                    await NavigationService.NavigateToAsync<MainViewModel>(new TabParameter { TabIndex = 1 });
+                    await NavigationService.RemoveLastFromBackStackAsync();
+
+                    // Show Dialog
+                    await DialogService.ShowAlertAsync($"Encomenda efectuado com sucesso! {result.ResultMessage}", "Checkout", "Ok");
+                    await NavigationService.RemoveLastFromBackStackAsync();
                 }
-
-                var result = await _orderService.CreateOrderAsync(Order, authToken);
-               
-                // Clean Basket
-                await _basketService.ClearBasketAsync(userInfo.UserId, authToken);
-
-                // Reset Basket badge
-                //var basketViewModel = ViewModelLocator.Resolve<BasketViewModel>();
-                //basketViewModel.BadgeCount = 0;
-
-                // Navigate to Orders
-                await NavigationService.NavigateToAsync<MainViewModel>(new TabParameter { TabIndex = 1 });
-                await NavigationService.RemoveLastFromBackStackAsync();
-
-                // Show Dialog
-                await DialogService.ShowAlertAsync($"Encomenda efectuado com sucesso! {result.ResultMessage}", "Checkout", "Ok");
-                await NavigationService.RemoveLastFromBackStackAsync();
+                catch (Exception ex)
+                {
+                    await DialogService.ShowAlertAsync($"Ocorreu um erro: {ex.Message}", "Oops!", "Ok");
+                }
             }
-            catch(Exception ex)
+        }
+
+        private void CheckInvoiceToggle()
+        {
+            if (CreateInvoice)
             {
-                await DialogService.ShowAlertAsync($"Ocorreu um erro: {ex.Message}", "Oops!", "Ok");
+                WithNIF = true;
+                EnabledControls(true, true);
             }
+            else
+            {
+                WithNIF = false;
+                EnabledControls(false, false);
+            }
+        }
+
+        private void WithNifToggle()
+        {
+            if(!WithNIF)
+            {
+                EnabledControls(false, true);
+            }
+            else
+            {
+                if(CreateInvoice)
+                    EnabledControls(true, true);
+                else
+                    EnabledControls(true, false);
+            }
+        }
+
+        private void EnabledControls(bool enable, bool customerEmailEnable)
+        {
+            NameIsEnabled = enable;
+            TaxNumberIsEnabled = enable;
+            StreetIsEnabled = enable;
+            PostalCodeIsEnabled = enable;
+            CityIsEnabled = enable;
+            CustomerEmailIsEnabled = customerEmailEnable;
         }
 
         private List<OrderItem> CreateOrderItems(ObservableCollection<BasketItem> basketItems)
