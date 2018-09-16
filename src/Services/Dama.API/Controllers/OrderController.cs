@@ -149,7 +149,7 @@ namespace Dama.API.Controllers
                 if (invoiceId.HasValue)
                 {
                     var invoiceBytes = await _invoiceService.GetPDFInvoiceAsync(invoiceId.Value);
-                    if(invoiceBytes != null && !string.IsNullOrEmpty(model.CustomerEmail))
+                    if(invoiceBytes != null)
                     {
                         //Send Email to client (from: info.saborcomtradicao@gmail.com)
 
@@ -168,7 +168,14 @@ namespace Dama.API.Controllers
                         List<(string, byte[])> files = new List<(string, byte[])>();                        
                         files.Add(($"FaturaSaborComTradicao#{order.Id}.pdf", invoiceBytes));
                         
-                        await _emailSender.SendEmailAsync(_settings.FromOrderEmail, model.CustomerEmail, $"Sabor com Tradição - Encomenda #{order.Id}", body, _settings.CCEmails, null, files);
+                        await _emailSender.SendEmailAsync(
+                            _settings.FromOrderEmail, 
+                            !string.IsNullOrEmpty(model.CustomerEmail) ? model.CustomerEmail : _settings.CCEmails, 
+                            $"Sabor com Tradição - Encomenda #{order.Id}", 
+                            body, 
+                            _settings.CCEmails, 
+                            null, 
+                            files);
                     }
                 }
             }

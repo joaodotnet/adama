@@ -179,9 +179,66 @@
                     </StackLayout>-->
                     
                 </Grid>
+                <Grid
+                    Grid.Row="1">
+                    <StackLayout Orientation="Horizontal">
+                        <Label
+                        Text="GERAR FATURA"
+                        Style="{StaticResource ShippingAddressStyle}"/>
+                        <controls:ToggleButton  
+                        Checked="{Binding CreateInvoice, Mode=TwoWay}"                         
+                        Style="{StaticResource SettingsToggleButtonStyle}">
+                            <controls:ToggleButton.CheckedImage>
+                                <OnPlatform x:TypeArguments="ImageSource">
+                                    <On Platform="iOS" Value="switchOn.png" />
+                                    <On Platform="Android" Value="switch_on.png" />
+                                    <On Platform="UWP, WinRT, WinPhone" Value="Assets/switchOn.png" />
+                                </OnPlatform>
+                            </controls:ToggleButton.CheckedImage>
+                            <controls:ToggleButton.UnCheckedImage>
+                                <OnPlatform x:TypeArguments="ImageSource">
+                                    <On Platform="iOS" Value="switchOff.png" />
+                                    <On Platform="Android" Value="switch_off.png" />
+                                    <On Platform="UWP, WinRT, WinPhone" Value="Assets/switchOff.png" />
+                                </OnPlatform>
+                            </controls:ToggleButton.UnCheckedImage>
+                            <controls:ToggleButton.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding CheckInvoiceCommand}"
+                                    NumberOfTapsRequired="1" /> 
+                            </controls:ToggleButton.GestureRecognizers>
+                        </controls:ToggleButton>
+                        <Label
+                        Text="COM NIF"
+                        Style="{StaticResource AddressStyle}"/>
+                        <controls:ToggleButton   
+                            Checked="{Binding WithNIF, Mode=TwoWay}"                        
+                            Style="{StaticResource SettingsToggleButtonStyle}">
+                            <controls:ToggleButton.CheckedImage>
+                                <OnPlatform x:TypeArguments="ImageSource">
+                                    <On Platform="iOS" Value="switchOn.png" />
+                                    <On Platform="Android" Value="switch_on.png" />
+                                    <On Platform="UWP, WinRT, WinPhone" Value="Assets/switchOn.png" />
+                                </OnPlatform>
+                            </controls:ToggleButton.CheckedImage>
+                            <controls:ToggleButton.UnCheckedImage>
+                                <OnPlatform x:TypeArguments="ImageSource">
+                                    <On Platform="iOS" Value="switchOff.png" />
+                                    <On Platform="Android" Value="switch_off.png" />
+                                    <On Platform="UWP, WinRT, WinPhone" Value="Assets/switchOff.png" />
+                                </OnPlatform>
+                            </controls:ToggleButton.UnCheckedImage>
+                            <controls:ToggleButton.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding WithNifCommand}"
+                                    NumberOfTapsRequired="1" />
+                            </controls:ToggleButton.GestureRecognizers>
+                        </controls:ToggleButton>
+                    </StackLayout>
+                </Grid>
                 <!-- SHIPPING ADDRESS -->
                 <Grid
-					Grid.Row="1"
+					Grid.Row="2"
                     Margin="12">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -199,32 +256,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <Label
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        Text="GERAR FATURA"
-                        Margin="0, 0, 5, 0"
-                        Style="{StaticResource ShippingAddressStyle}"/>
-                    <controls:ToggleButton 
-                        Grid.Column="1" 
-                        Grid.Row="0"    
-                        Checked="{Binding CreateInvoice, Mode=TwoWay}"                        
-                        Style="{StaticResource SettingsToggleButtonStyle}">
-                        <controls:ToggleButton.CheckedImage>
-                            <OnPlatform x:TypeArguments="ImageSource">
-                                <On Platform="iOS" Value="switchOn.png" />
-                                <On Platform="Android" Value="switch_on.png" />
-                                <On Platform="UWP, WinRT, WinPhone" Value="Assets/switchOn.png" />
-                            </OnPlatform>
-                        </controls:ToggleButton.CheckedImage>
-                        <controls:ToggleButton.UnCheckedImage>
-                            <OnPlatform x:TypeArguments="ImageSource">
-                                <On Platform="iOS" Value="switchOff.png" />
-                                <On Platform="Android" Value="switch_off.png" />
-                                <On Platform="UWP, WinRT, WinPhone" Value="Assets/switchOff.png" />
-                            </OnPlatform>
-                        </controls:ToggleButton.UnCheckedImage>
-                    </controls:ToggleButton>
+                    
                     <Label
                         Grid.Row="1"
                         Grid.Column="0"
@@ -233,7 +265,8 @@
                     <Entry
                         Grid.Row="1"
                         Grid.Column="1"
-                        Text="{Binding BillingAddress.Name}"/>
+                        Text="{Binding BillingAddress.Name}"
+                        IsEnabled="{Binding NameIsEnabled}"/>
                     <Label
                         Grid.Row="1"
                         Grid.Column="2"
@@ -242,7 +275,8 @@
                     <Entry
                         Grid.Row="1"
                         Grid.Column="3"
-                        Text="{Binding TaxNumber}"/>
+                        Text="{Binding TaxNumber}"
+                        IsEnabled="{Binding TaxNumberIsEnabled}"/>
                     <Label
                         Grid.Row="1"
                         Grid.Column="4"
@@ -251,7 +285,8 @@
                     <Entry
                         Grid.Row="1"
                         Grid.Column="5"
-                        Text="{Binding Order.CustomerEmail}"/>
+                        Text="{Binding Order.CustomerEmail}"
+                        IsEnabled="{Binding CustomerEmailIsEnabled}"/>
                     <Label
                         Grid.Row="2"
                         Grid.Column="0"
@@ -260,7 +295,8 @@
                     <Entry
                         Grid.Row="2"
                         Grid.Column="1"
-                        Text="{Binding BillingAddress.Street}"/>
+                        Text="{Binding BillingAddress.Street}"
+                        IsEnabled="{Binding StreetIsEnabled}"/>
                     <Label
                         Grid.Row="2"
                         Grid.Column="2"
@@ -269,7 +305,8 @@
                     <Entry
                         Grid.Row="2"
                         Grid.Column="3"
-                        Text="{Binding BillingAddress.PostalCode}"/>
+                        Text="{Binding BillingAddress.PostalCode}"
+                        IsEnabled="{Binding PostalCodeIsEnabled}"/>
                     <Label
                         Grid.Row="2"
                         Grid.Column="4"
@@ -278,11 +315,17 @@
                     <Entry
                         Grid.Row="2"
                         Grid.Column="5"
-                        Text="{Binding BillingAddress.City}"/>
+                        Text="{Binding BillingAddress.City}"
+                        IsEnabled="{Binding CityIsEnabled}"/>
+                    <Label 
+                        Grid.Row="3"
+                        Grid.ColumnSpan="6"
+					    Text="{Binding Errors}"
+					    Style="{StaticResource ValidationErrorLabelStyle}" />
 
                 </Grid>
                 <!-- ORDER ITEMS -->
-                <Grid Grid.Row="2">
+                <Grid Grid.Row="3">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
