@@ -202,16 +202,27 @@ namespace Dama.API.Controllers
             var orders = new List<Order>();
             orders = (await OrderService
                 .GetOrdersAsync("sue@damanojornal.com"))
-                .Where(o => o.ShipToAddress.Street.Equals(street))
+                .Where(o => (placeId != 3 && o.ShipToAddress.Street.Equals(street)) || 
+                    (placeId == 3 && o.OrderDate > DateTime.Now.AddMonths(-1)))
                 .ToList();
             orders.AddRange((await OrderService
                 .GetOrdersAsync("jue@damanojornal.com"))
-                .Where(o => o.ShipToAddress.Street.Equals(street))
+                .Where(o => (placeId != 3 && o.ShipToAddress.Street.Equals(street)) || 
+                    (placeId == 3 && o.OrderDate > DateTime.Now.AddMonths(-1)))
                 .ToList());
             orders.AddRange((await OrderService
                 .GetOrdersAsync("sonia@damanojornal.com"))
-                .Where(o => o.ShipToAddress.Street.Equals(street))
+                .Where(o => (placeId != 3 && o.ShipToAddress.Street.Equals(street)) || 
+                    (placeId == 3 && o.OrderDate > DateTime.Now.AddMonths(-1)))
                 .ToList());
+
+            if(placeId == 3)
+            {
+                orders.AddRange((await OrderService
+                .GetOrdersAsync("rute@damanojornal.com"))
+                .Where(o => o.OrderDate > DateTime.Now.AddMonths(-1))
+                .ToList());
+            }
 
             return Ok(orders);
         }

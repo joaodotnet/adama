@@ -29,9 +29,6 @@
     <Compile Update="Views\EventView.xaml.cs">
       <DependentUpon>EventView.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\EventDetailView.xaml.cs">
-      <DependentUpon>EventDetailView.xaml</DependentUpon>
-    </Compile>
     <Compile Update="Views\ProfileView.xaml.cs">
       <DependentUpon>ProfileView.xaml</DependentUpon>
     </Compile>
