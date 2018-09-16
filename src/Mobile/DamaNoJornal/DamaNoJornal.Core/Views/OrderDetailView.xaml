@@ -202,14 +202,24 @@
                 <StackLayout
                     Grid.Row="1">
                         <Label
-                            Text="{Binding Order.ShippingStreet}"
+                            Text="{Binding Order.BillingName}"
                             Style="{StaticResource AddressStyle}"/>
                         <Label
-                            Text="{Binding Order.ShippingCity}"   
+                            Text="{Binding Order.CustomerEmail}"
                             Style="{StaticResource AddressStyle}"/>
                         <Label
-                            Text="{Binding Order.ShippingCountry}"   
+                            Text="{Binding Order.TaxNumber}"
                             Style="{StaticResource AddressStyle}"/>
+                        <Label
+                            Text="{Binding Order.BillingStreet}"
+                            Style="{StaticResource AddressStyle}"/>
+                        <Label
+                            Text="{Binding Order.BillingPostalCode}"   
+                            Style="{StaticResource AddressStyle}"/>
+                        <Label
+                            Text="{Binding Order.BillingCity}"   
+                            Style="{StaticResource AddressStyle}"/>
+                        
                 </StackLayout>
             </Grid>
             <!-- ORDER ITEMS -->

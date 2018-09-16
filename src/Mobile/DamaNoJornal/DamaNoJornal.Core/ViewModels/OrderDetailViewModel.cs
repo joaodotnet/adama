@@ -76,21 +76,25 @@ namespace DamaNoJornal.Core.ViewModels
 
         private async Task ToggleCancelOrderAsync()
         {
-            var authToken = _settingsService.AuthAccessToken;
-
-            var result = await _ordersService.CancelOrderAsync(_order.OrderNumber, authToken);
-
-            if (result)
+            var responseOk = await DialogService.ShowDialogAsync("Tem a certeza que quer cancelar a encomenda?", "Cancelar Encomenda", "Sim", "Não");
+            if(responseOk)
             {
-                OrderStatusText = OrderStatus.CANCELED.ToString().ToUpper();
-            }
-            else
-            {
-                Order = await _ordersService.GetOrderAsync(Order.OrderNumber, authToken);
-                OrderStatusText = Order.OrderStatus.ToString().ToUpper();
-            }
+                var authToken = _settingsService.AuthAccessToken;
 
-            IsSubmittedOrder = false;
+                var result = await _ordersService.CancelOrderAsync(_order.OrderNumber, authToken);
+
+                if (result)
+                {
+                    OrderStatusText = OrderStatus.CANCELED.ToString().ToUpper();
+                }
+                else
+                {
+                    Order = await _ordersService.GetOrderAsync(Order.OrderNumber, authToken);
+                    OrderStatusText = Order.OrderStatus.ToString().ToUpper();
+                }
+
+                IsSubmittedOrder = false;
+            }            
         }
     }
 }
