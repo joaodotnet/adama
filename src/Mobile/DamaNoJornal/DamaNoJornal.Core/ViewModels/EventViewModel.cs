@@ -1,14 +1,13 @@
-﻿using DamaNoJornal.Core.Helpers;
+﻿using DamaNoJornal.Core.Extensions;
 using DamaNoJornal.Core.Models.Location;
-using DamaNoJornal.Core.Models.Marketing;
-using DamaNoJornal.Core.Models.User;
-using DamaNoJornal.Core.Services.Marketing;
+using DamaNoJornal.Core.Models.Orders;
+using DamaNoJornal.Core.Services.Order;
 using DamaNoJornal.Core.Services.Settings;
-using DamaNoJornal.Core.Services.User;
 using DamaNoJornal.Core.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -18,42 +17,104 @@ namespace DamaNoJornal.Core.ViewModels
     public class EventViewModel : ViewModelBase
     {
         private readonly ISettingsService _settingsService;
-        private readonly IUserService _userService;
-        private Place _place;
+        private readonly IOrderService _ordersService;
 
-        public EventViewModel(ISettingsService settingsService, IUserService userService)
+        private string _title;
+        private string _subTitle;
+        private ObservableCollection<OrderDay> _orders;
+
+        public EventViewModel(ISettingsService settingsService, IOrderService ordersService)
         {
             _settingsService = settingsService;
-            _userService = userService;
+            _ordersService = ordersService;
         }
 
-        public Place PlaceSelected
+        public string Title
         {
-            get => _place;
+            get => _title;
             set
             {
-                _place = value;
-                RaisePropertyChanged(() => PlaceSelected);
+                _title = value;
+                RaisePropertyChanged(() => Title);
             }
         }
 
-        public List<Place> Places => GlobalSetting.Places;
+        public string SubTitle
+        {
+            get => _subTitle;
+            set
+            {
+                _subTitle = value;
+                RaisePropertyChanged(() => SubTitle);
+            }
+        }
 
-        public ICommand EventDetailCommand => new Command(async() => await EventDetailAsync());
+        public ObservableCollection<OrderDay> OrdersByDay
+        {
+            get => _orders;
+            set
+            {
+                _orders = value;
+                RaisePropertyChanged(() => OrdersByDay);
+            }
+        }
 
         public override async Task InitializeAsync(object navigationData)
         {
+
             IsBusy = true;
-            PlaceSelected = GlobalSetting.Place2;
-            // Get user
-            //var user = await _userService.GetUserInfoAsync(_settingsService.AuthAccessToken);
-            //PictureUri = Utils.GetLoginPicturiSource(user.Email);
-            //Name = $"Olá {user.Name} {user.LastName}";
-            IsBusy = false;            
+
+            var place = GlobalSetting.Places.SingleOrDefault(x => x.Id.ToString() == _settingsService.PlaceId);
+            Title = place.Name;
+
+            // Get order detail info
+            var authToken = _settingsService.AuthAccessToken;
+
+            List<Order> orders = await _ordersService.GetOrderByPlaceAsync(place.Id, authToken);
+            //Total 
+            var total = orders
+                .SelectMany(x => x.OrderItems)
+                .Sum(i => i.UnitPrice * i.Quantity);
+            var groceryText = place.Id == 3 ? "(Ultimo mês)" : "";
+            SubTitle = $"Total de Vendas {groceryText}: {total}€";
+
+            var group = orders.OrderBy(x => x.OrderDate).GroupBy(x => x.OrderDate.Date);
+            OrdersByDay = new ObservableCollection<OrderDay>();
+            foreach (var ordersByDay in group)
+            {
+                OrderDay orderDay = new OrderDay
+                {
+                    Date = ordersByDay.Key,
+                    Items = new ObservableCollection<OrderItem>()
+                };
+                int num = 0;
+                foreach (var order in ordersByDay)
+                {
+                    foreach (var item in order.OrderItems)
+                    {
+                        item.Num = ++num;
+                        orderDay.Items.Add(item);
+                    }
+                }
+                OrdersByDay.Add(orderDay);
+            }
+
+            IsBusy = false;
+
         }
-        private async Task EventDetailAsync()
+    }
+
+    public class OrderDay
+    {
+        public DateTime Date { get; set; }
+        public ObservableCollection<OrderItem> Items { get; set; }
+
+        public decimal DateTotal
         {
-            await NavigationService.NavigateToAsync<EventDetailViewModel>(PlaceSelected);
+            get
+            {
+                return Items?.Sum(x => x.Total) ?? 0;
+            }
         }
     }
 }
