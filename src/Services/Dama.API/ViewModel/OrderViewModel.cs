@@ -10,12 +10,9 @@ namespace Dama.API.ViewModel
     {
         [Required]
         public string BuyerId { get; set; }
-        [Required]
         public string ShippingCity { get; set; }
-        [Required]
         public string ShippingStreet { get; set; }        
         public string ShippingState { get; set; }
-        [Required]
         public string ShippingCountry { get; set; }
 
         public string ShippingZipCode { get; set; }
@@ -42,6 +39,7 @@ namespace Dama.API.ViewModel
         public int? TaxNumber { get; set; }
         public bool CreateInvoice { get; set; }
         public string ResultMessage { get; set; }
+        public int id { get; set; }
     }
 
 

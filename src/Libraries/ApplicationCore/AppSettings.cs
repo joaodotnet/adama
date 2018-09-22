@@ -22,6 +22,7 @@ namespace ApplicationCore
         public string MailChimpBaseUrl { get; set; }
     }
 
+
     public class SageSettings
     {
         public string AuthorizationURL { get; set; }

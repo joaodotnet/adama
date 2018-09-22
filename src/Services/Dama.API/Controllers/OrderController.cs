@@ -182,6 +182,76 @@ namespace Dama.API.Controllers
             return Ok(model);
         }
 
+        [Route("createinvoice")]
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<IActionResult> CreateInvoice([FromBody]OrderViewModel model)
+        {
+            //Update Order Billing
+            Address billAddress = new Address(model.BillingName, model.BillingStreet, model.BillingCity, model.BillingCountry, model.BillingPostalCode);
+            await OrderService.UpdateOrderBillingAsync(model.id, model.TaxNumber, model.CustomerEmail, billAddress);
+
+           
+            var order = await OrderService.GetOrderAsync(model.id);
+
+            //Create Invoice
+            if (model.CreateInvoice)
+            {
+                long? invoiceId = null;
+                try
+                {
+                    var response = await _invoiceService.RegisterInvoiceAsync(order);
+                    if (response != null && response.InvoiceId.HasValue)
+                    {
+                        invoiceId = response.InvoiceId;
+                        await OrderService.UpdateOrderInvoiceAsync(order.Id, response.InvoiceId, response.InvoiceNumber);
+                        model.ResultMessage = "Fatura Gerada com sucesso";
+                    }
+                    else
+                        model.ResultMessage = $"Erro na criação da fatura ({response.Message})";
+                }
+                catch (Exception)
+                {
+                    model.ResultMessage = "Erro na criação da Fatura (genérico)";
+                }
+                //Get Invoice PDF and save to Disk
+                if (invoiceId.HasValue)
+                {
+                    var invoiceBytes = await _invoiceService.GetPDFInvoiceAsync(invoiceId.Value);
+                    if (invoiceBytes != null)
+                    {
+                        //Send Email to client (from: info.saborcomtradicao@gmail.com)
+
+                        var body = $"<strong>Olá!</strong><br>" +
+                            $"Obrigada por comprares na Sabor com Tradição.<br>" +
+                            $"Enviamos em anexo a fatura relativa à tua encomenda. <br>" +
+                            "<br>Muito Obrigada.<br>" +
+                            "<br>--------------------------------------------------<br>" +
+                            "<br><strong>Hi!</strong><br>" +
+                            "Thank you to shopping at Sabor Com Tradição in Loulé, Portugal. <br>" +
+                            "We send as attach the invoice relates to your order.<br>" +
+                            "<br>Thank you.<br>" +
+                            "<br>Sabor com Tradição" +
+                            "<br>http://www.saborcomtradicao.com";
+
+                        List<(string, byte[])> files = new List<(string, byte[])>();
+                        files.Add(($"FaturaSaborComTradicao#{order.Id}.pdf", invoiceBytes));
+
+                        await _emailSender.SendEmailAsync(
+                            _settings.FromOrderEmail,
+                            !string.IsNullOrEmpty(model.CustomerEmail) ? model.CustomerEmail : _settings.CCEmails,
+                            $"Sabor com Tradição - Encomenda #{order.Id}",
+                            body,
+                            _settings.CCEmails,
+                            null,
+                            files);
+                    }
+                }
+            }
+            return Ok(model);
+        }
+
+
         [Route("cancel")]
         [HttpPut]
         [ProducesResponseType((int)HttpStatusCode.OK)]

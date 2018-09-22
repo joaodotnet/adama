@@ -128,5 +128,16 @@ namespace ApplicationCore.Services
                 await _orderRepository.UpdateAsync(order);
             }
         }
+        public async Task UpdateOrderBillingAsync(int id, int? taxNumber, string customerEmail, Address billingAddress)
+        {
+            var order = await _orderRepository.GetByIdAsync(id);
+            if (order != null)
+            {
+                order.UpdateBillingInfo(taxNumber, customerEmail, billingAddress);
+
+                await _orderRepository.UpdateAsync(order);
+            }
+        }
+
     }
 }

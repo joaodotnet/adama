@@ -17,5 +17,7 @@ namespace DamaNoJornal.Core.Services.Order.Models
         public Boolean UseBillingSameAsShipping { get; set; }
         public OrderStatus OrderState { get; set; }
         public List<OrderItemEntity> OrderItems { get; set; }
+        public string CustomerEmail { get; set; }
+        public string SalesInvoiceNumber { get; set; }
     }
 }

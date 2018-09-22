@@ -62,7 +62,7 @@ namespace DamaNoJornal.Core.Models.Orders
         public int? TaxNumber { get; set; }
         public bool CreateInvoice { get; set; } = false;
         public string ResultMessage { get; set; }
-
+        public string SalesInvoiceNumber { get; set; }
         public decimal Total
         {
             get
