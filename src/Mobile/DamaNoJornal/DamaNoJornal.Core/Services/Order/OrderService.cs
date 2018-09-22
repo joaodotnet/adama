@@ -39,6 +39,17 @@ namespace DamaNoJornal.Core.Services.Order
             return await _requestProvider.PostAsync(uri, newOrder, token);            
         }
 
+        public async Task<Core.Models.Orders.Order> CreateInvoiceOrderAsync(Core.Models.Orders.Order newOrder, string token)
+        {
+            var builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint)
+            {
+                Path = $"{ApiUrlBase}/createInvoice"
+            };
+
+            var uri = builder.ToString();
+            return await _requestProvider.PostAsync(uri, newOrder, token);
+        }
+
         public async Task<ObservableCollection<Core.Models.Orders.Order>> GetOrdersAsync(string id, string token)
         {
             UriBuilder builder = new UriBuilder(GlobalSetting.Instance.BaseEndpoint);
@@ -172,6 +183,14 @@ namespace DamaNoJornal.Core.Services.Order
                 ShippingCountry = order.ShipToAddress?.Country,
                 ShippingStreet = order.ShipToAddress?.Street,
                 ShippingZipCode = order.ShipToAddress?.PostalCode,
+                BillingCity = order.BillingToAddress?.City,
+                BillingCountry = order.BillingToAddress?.Country,
+                BillingName = order.BillingToAddress?.Name,
+                BillingPostalCode = order.BillingToAddress?.PostalCode,
+                BillingStreet = order.BillingToAddress?.Street,           
+                CustomerEmail = order.CustomerEmail,
+                TaxNumber = order.TaxNumber,
+                SalesInvoiceNumber = order.SalesInvoiceNumber,
                 OrderItems = order.OrderItems.Select(i => new OrderItem
                 {
                     ProductId = i.ItemOrdered.CatalogItemId,

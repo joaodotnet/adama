@@ -65,5 +65,12 @@ namespace ApplicationCore.Entities.OrderAggregate
             return total + ShippingCost;
         }
 
+        public void UpdateBillingInfo(int? taxNumber, string customerEmail, Address billingAddress)
+        {
+            this.TaxNumber = taxNumber;
+            this.CustomerEmail = customerEmail;
+            this.BillingToAddress = billingAddress;
+        }
+
     }
 }

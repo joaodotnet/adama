@@ -267,9 +267,6 @@ namespace DamaNoJornal.Core.ViewModels
                     var authToken = _settingsService.AuthAccessToken;
                     var userInfo = await _userService.GetUserInfoAsync(authToken);
 
-                    //var basket = _orderService.MapOrderToBasket(Order);
-                    //basket.RequestId = Guid.NewGuid();
-
                     if (CreateInvoice)
                     {
                         Order.CreateInvoice = true;
@@ -278,7 +275,7 @@ namespace DamaNoJornal.Core.ViewModels
                         Order.BillingPostalCode = BillingAddress.PostalCode;
                         Order.BillingCity = BillingAddress.City;
                         Order.BillingCountry = "Portugal";
-                        Order.TaxNumber = !string.IsNullOrEmpty(TaxNumber) && Int32.TryParse(TaxNumber, out int taxNumber) ? taxNumber : default(int?);
+                        Order.TaxNumber = WithNIF && !string.IsNullOrEmpty(TaxNumber) && Int32.TryParse(TaxNumber, out int taxNumber) ? taxNumber : default(int?);
                     }
 
                     var result = await _orderService.CreateOrderAsync(Order, authToken);

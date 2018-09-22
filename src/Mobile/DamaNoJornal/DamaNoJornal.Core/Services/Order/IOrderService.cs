@@ -14,5 +14,6 @@ namespace DamaNoJornal.Core.Services.Order
         Task<bool> CancelOrderAsync(int orderId, string token);
         BasketCheckout MapOrderToBasket(Core.Models.Orders.Order order);
         Task<List<Core.Models.Orders.Order>> GetOrderByPlaceAsync(int placeId, string authToken);
+        Task<Core.Models.Orders.Order> CreateInvoiceOrderAsync(Core.Models.Orders.Order order, string authToken);
     }
 }

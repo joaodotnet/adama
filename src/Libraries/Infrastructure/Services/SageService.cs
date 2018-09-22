@@ -113,6 +113,13 @@ namespace Infrastructure.Services
 
         private async Task<SageResponseDTO> CreateInvoice(List<KeyValuePair<string, string>> body)
         {
+            if(_authConfig == null || string.IsNullOrEmpty(_authConfig.AccessToken))
+            {
+                return new SageResponseDTO
+                {
+                    Message = "Erro: Os acessos à Sage ainda não estão configurados, acede a https://backoffice.damanojornal.com/Sage/"
+                };
+            }
             try
             {
                 var builder = new UriBuilder(_baseUrl)
@@ -136,6 +143,7 @@ namespace Infrastructure.Services
             }
             catch (Exception ex)
             {
+                _logger.LogWarning("CreateInvoice Error: {0}; StackTrace: {1}", ex.Message, ex.StackTrace);
                 var responseError = new SageResponseDTO
                 {
                     Message = $"Error exception: {ex.Message}",

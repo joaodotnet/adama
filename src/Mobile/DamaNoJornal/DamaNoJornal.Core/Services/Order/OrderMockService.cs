@@ -122,5 +122,10 @@ namespace DamaNoJornal.Core.Services.Order
         {
             throw new NotImplementedException();
         }
+
+        public Task<Core.Models.Orders.Order> CreateInvoiceOrderAsync(Core.Models.Orders.Order order, string authToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

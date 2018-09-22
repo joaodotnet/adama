@@ -6,6 +6,7 @@
              xmlns:templates="clr-namespace:DamaNoJornal.Core.Views.Templates;assembly=DamaNoJornal.Core"   
              xmlns:animations="clr-namespace:DamaNoJornal.Core.Animations;assembly=DamaNoJornal.Core"
              xmlns:triggers="clr-namespace:DamaNoJornal.Core.Triggers;assembly=DamaNoJornal.Core"
+             xmlns:controls="clr-namespace:DamaNoJornal.Core.Controls;assembly=DamaNoJornal.Core"
 			 viewModelBase:ViewModelLocator.AutoWireViewModel="true"
              Title="{Binding Order.OrderNumber}">
     <ContentPage.Resources>
@@ -65,6 +66,34 @@
 
             </Style>
 
+            <Style x:Key="SettingsToggleButtonStyle" 
+                   TargetType="{x:Type controls:ToggleButton}">
+                <Setter Property="HeightRequest" 
+                        Value="48" />
+                <Setter Property="WidthRequest" 
+                        Value="48" />
+                <Setter Property="VerticalOptions" 
+                        Value="Center" />
+                <Setter Property="HorizontalOptions" 
+                        Value="Start" />
+                <Setter Property="Margin" 
+                        Value="0,0" />
+                <Setter Property="Animate" 
+                        Value="True" />
+            </Style>
+
+            <Style x:Key="CheckoutButtonStyle" 
+               TargetType="{x:Type Label}">
+                <Setter Property="FontFamily"
+                        Value="{StaticResource MontserratRegular}" />
+                <Setter Property="TextColor"
+                        Value="{StaticResource WhiteColor}" />
+                <Setter Property="HorizontalOptions"
+                        Value="Center" />
+                <Setter Property="VerticalOptions"
+                        Value="Center" />
+            </Style>
+
             <animations:StoryBoard 
                 x:Key="OrderInfoAnimation"    
                 Target="{x:Reference OrderInfo}">
@@ -91,7 +120,7 @@
                     Duration="1500"
                     Delay="300"/>
             </animations:StoryBoard>
-            
+
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Triggers>
@@ -107,28 +136,29 @@
     </ContentPage.Triggers>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackLayout
-            HeightRequest="50"
-            Grid.Column="0"
+        <StackLayout      
             Grid.Row="0">
             <Button
                 Command="{Binding ToggleCancelOrderCommand}"
                 Text="CANCELAR ENCOMENDA"
+                IsVisible="{Binding IsInvoiceCreated}"
                 Style="{StaticResource CancelOrderButtonStyle}">
             </Button>
         </StackLayout>
         <ScrollView
             Grid.Row="1">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <!-- ORDER INFO -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <!-- ORDER INFO -->
                 <Grid 
                 x:Name="OrderInfo"
                 Opacity="0">
@@ -185,22 +215,36 @@
                         Style="{StaticResource OrderContentStyle}"/>
                     </StackLayout>
                 </Grid>
-                <!-- SHIPPING ADDRESS -->
-            <Grid
-                x:Name="ShippingAddress"
-                Grid.Row="1"
-                Margin="12"
-                Opacity="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <Label
-                    Grid.Row="0"
-                    Text="MORADA"
-                    Style="{StaticResource ShippingAddressStyle}"/>
-                <StackLayout
-                    Grid.Row="1">
+                <!-- SHIPPING ADDRESS Read Only-->
+                <Grid
+                    x:Name="ShippingAddress"
+                    Grid.Row="1"
+                    Margin="12"
+                    Opacity="0"
+                    IsVisible="{Binding IsInvoiceCreated}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                            Text="Fatura Nº"
+                            Style="{StaticResource ShippingAddressStyle}"/>
+                    <Label
+                        Grid.Row="1"
+                        Text="{Binding Order.SalesInvoiceNumber}"   
+                        Style="{StaticResource AddressStyle}"/>
+                    <Label
+                        Grid.Row="2"
+                        Text="MORADA"
+                        Style="{StaticResource ShippingAddressStyle}"/>
+                    <StackLayout
+                        Grid.Row="3" 
+                        Orientation="Horizontal">
                         <Label
                             Text="{Binding Order.BillingName}"
                             Style="{StaticResource AddressStyle}"/>
@@ -210,6 +254,9 @@
                         <Label
                             Text="{Binding Order.TaxNumber}"
                             Style="{StaticResource AddressStyle}"/>
+                    </StackLayout>
+                    <StackLayout
+                        Grid.Row="4" Orientation="Horizontal">
                         <Label
                             Text="{Binding Order.BillingStreet}"
                             Style="{StaticResource AddressStyle}"/>
@@ -219,33 +266,197 @@
                         <Label
                             Text="{Binding Order.BillingCity}"   
                             Style="{StaticResource AddressStyle}"/>
-                        
-                </StackLayout>
-            </Grid>
-            <!-- ORDER ITEMS -->
-            <Grid            
+                    </StackLayout>
+                </Grid>
+                <!-- Invoice Swiths-->
+                <Grid
+                    Grid.Row="1"
+                    IsVisible="{Binding IsInvoiceCreated, Converter={StaticResource InverseBoolConverter}}">
+                    <StackLayout Orientation="Horizontal">
+                        <Label
+                            Text="GERAR FATURA"                     
+                            Style="{StaticResource ShippingAddressStyle}"/>
+                        <controls:ToggleButton  
+                            Checked="{Binding CreateInvoice, Mode=TwoWay}"                         
+                            Style="{StaticResource SettingsToggleButtonStyle}">
+                            <controls:ToggleButton.CheckedImage>
+                                <OnPlatform x:TypeArguments="ImageSource">
+                                    <On Platform="iOS" Value="switchOn.png" />
+                                    <On Platform="Android" Value="switch_on.png" />
+                                    <On Platform="UWP, WinRT, WinPhone" Value="Assets/switchOn.png" />
+                                </OnPlatform>
+                            </controls:ToggleButton.CheckedImage>
+                            <controls:ToggleButton.UnCheckedImage>
+                                <OnPlatform x:TypeArguments="ImageSource">
+                                    <On Platform="iOS" Value="switchOff.png" />
+                                    <On Platform="Android" Value="switch_off.png" />
+                                    <On Platform="UWP, WinRT, WinPhone" Value="Assets/switchOff.png" />
+                                </OnPlatform>
+                            </controls:ToggleButton.UnCheckedImage>
+                            <controls:ToggleButton.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding CheckInvoiceCommand}"
+                                    NumberOfTapsRequired="1" />
+                            </controls:ToggleButton.GestureRecognizers>
+                        </controls:ToggleButton>
+                        <Label
+                            Text="COM NIF"
+                            Style="{StaticResource AddressStyle}"/>
+                        <controls:ToggleButton   
+                            Checked="{Binding WithNIF, Mode=TwoWay}"                        
+                            Style="{StaticResource SettingsToggleButtonStyle}">
+                            <controls:ToggleButton.CheckedImage>
+                                <OnPlatform x:TypeArguments="ImageSource">
+                                    <On Platform="iOS" Value="switchOn.png" />
+                                    <On Platform="Android" Value="switch_on.png" />
+                                    <On Platform="UWP, WinRT, WinPhone" Value="Assets/switchOn.png" />
+                                </OnPlatform>
+                            </controls:ToggleButton.CheckedImage>
+                            <controls:ToggleButton.UnCheckedImage>
+                                <OnPlatform x:TypeArguments="ImageSource">
+                                    <On Platform="iOS" Value="switchOff.png" />
+                                    <On Platform="Android" Value="switch_off.png" />
+                                    <On Platform="UWP, WinRT, WinPhone" Value="Assets/switchOff.png" />
+                                </OnPlatform>
+                            </controls:ToggleButton.UnCheckedImage>
+                            <controls:ToggleButton.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding WithNifCommand}"
+                                    NumberOfTapsRequired="1" />
+                            </controls:ToggleButton.GestureRecognizers>
+                        </controls:ToggleButton>
+                    </StackLayout>
+                </Grid>
+                <!-- SHIPPING ADDRESS -->
+                <Grid
+					Grid.Row="2"
+                    Margin="10"
+                    IsVisible="{Binding IsInvoiceCreated, Converter={StaticResource InverseBoolConverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="450"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="130"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Text="NOME"
+                        Style="{StaticResource AddressStyle}"/>
+                    <Entry
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Text="{Binding Order.BillingName}"
+                        IsEnabled="{Binding NameIsEnabled}"/>
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Text="NIF"
+                        Style="{StaticResource AddressStyle}"/>
+                    <Entry
+                        Grid.Row="1"
+                        Grid.Column="3"
+                        Text="{Binding Order.TaxNumber}"
+                        IsEnabled="{Binding TaxNumberIsEnabled}"/>
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="4"
+                        Text="EMAIL"
+                        Style="{StaticResource AddressStyle}"/>
+                    <Entry
+                        Grid.Row="1"
+                        Grid.Column="5"
+                        Text="{Binding Order.CustomerEmail}"
+                        IsEnabled="{Binding CustomerEmailIsEnabled}"/>
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Text="MORADA FATURAÇÃO"
+                        Style="{StaticResource AddressStyle}"/>
+                    <Entry
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Text="{Binding Order.BillingStreet}"
+                        IsEnabled="{Binding StreetIsEnabled}"/>
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="2"
+                        Text="CÓDIGO POSTAL"
+                        Style="{StaticResource AddressStyle}"/>
+                    <Entry
+                        Grid.Row="2"
+                        Grid.Column="3"
+                        Text="{Binding Order.BillingPostalCode}"
+                        IsEnabled="{Binding PostalCodeIsEnabled}"/>
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="4"
+                        Text="CIDADE"
+                        Style="{StaticResource AddressStyle}"/>
+                    <Entry
+                        Grid.Row="2"
+                        Grid.Column="5"
+                        Text="{Binding Order.BillingCity}"
+                        IsEnabled="{Binding CityIsEnabled}"/>
+                    <Label 
+                        Grid.Row="3"
+                        Grid.ColumnSpan="6"
+					    Text="{Binding Errors}"
+					    Style="{StaticResource ValidationErrorLabelStyle}" />
+
+                </Grid>
+                <!-- Create invoice Button -->
+                <Grid
+                    Grid.Row="3"           
+                    BackgroundColor="{StaticResource LightGreenColor}"
+                    Padding="0" 
+                    ColumnSpacing="0" 
+                    RowSpacing="0"
+                    IsVisible="{Binding CreateInvoice}">
+                    <Label       
+                        Text="[ GERAR FATURA ]" 
+                        Style="{StaticResource CheckoutButtonStyle}"/>
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer            
+                            Command="{Binding CreateInvoiceCommand}"  
+                            NumberOfTapsRequired="1" />
+                    </Grid.GestureRecognizers>
+                </Grid>
+                <!-- ORDER ITEMS -->
+                <Grid            
                 x:Name="OrderItems"
-                Grid.Row="2"        
+                Grid.Row="4"        
                 Opacity="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <ListView 
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <ListView 
                     Grid.Row="0"
                     ItemsSource="{Binding Order.OrderItems}"       
                     HasUnevenRows="True"
                     SeparatorVisibility="None"
                     CachingStrategy="RecycleElement">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <templates:OrderItemTemplate />
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-                <!--<StackLayout
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <templates:OrderItemTemplate />
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <!--<StackLayout
                     Grid.Row="1">
                     <Label 
                         Grid.Row="0"
@@ -258,9 +469,9 @@
                         TextColor="{StaticResource GreenColor}"
                         Style="{StaticResource OrderTotalStyle}"/>
                 </StackLayout>-->
-            </Grid>
-            <!-- INDICATOR -->
-            <ActivityIndicator
+                </Grid>
+                <!-- INDICATOR -->
+                <ActivityIndicator
                 Grid.Row="0"
                 Grid.RowSpan="3"
                 Color="{StaticResource LightGreenColor}"
@@ -268,14 +479,14 @@
                 IsVisible="{Binding IsBusy}"
                 VerticalOptions="Center"
                 HorizontalOptions="Center">
-                <ActivityIndicator.WidthRequest>
-                    <OnPlatform x:TypeArguments="x:Double">
-                        <On Platform="iOS, Android" Value="100" />
-                        <On Platform="UWP, WinRT, WinPhone" Value="400" />
-                    </OnPlatform>
-                </ActivityIndicator.WidthRequest>
-            </ActivityIndicator>
-        </Grid>
-    </ScrollView>
+                    <ActivityIndicator.WidthRequest>
+                        <OnPlatform x:TypeArguments="x:Double">
+                            <On Platform="iOS, Android" Value="100" />
+                            <On Platform="UWP, WinRT, WinPhone" Value="400" />
+                        </OnPlatform>
+                    </ActivityIndicator.WidthRequest>
+                </ActivityIndicator>
+            </Grid>
+        </ScrollView>
     </Grid>
 </ContentPage>
