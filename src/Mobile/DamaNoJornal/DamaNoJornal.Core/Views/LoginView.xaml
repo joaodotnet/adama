@@ -186,76 +186,80 @@
                     Orientation="Horizontal"
                     HorizontalOptions="Center">
                     <StackLayout>
-                        <Button BackgroundColor="Transparent">
-                            <Button.Image>
-                                <OnPlatform x:TypeArguments="FileImageSource">
+                        <Image>
+                            <Image.Source>
+                                <OnPlatform x:TypeArguments="ImageSource">
                                     <On Platform="UWP, WinRT, WinPhone" Value="Assets/img-joao.png" />
+                                    <On Platform="iOS, Android" Value="img_joao.png" />
                                 </OnPlatform>
-                            </Button.Image>
-                            <Button.GestureRecognizers>
-                                <TapGestureRecognizer
-                                Command="{Binding MockSignInCommand}"
-                                CommandParameter="jue@damanojornal.com"
-                                NumberOfTapsRequired="1" />
-                            </Button.GestureRecognizers>
-                        </Button>
+                            </Image.Source>
+                        </Image>
                         <Label 
                             Text="João"
                             Style="{StaticResource HeaderLabelStyle}"/>
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{Binding MockSignInCommand}"
+                                CommandParameter="jue@damanojornal.com"
+                                NumberOfTapsRequired="1" />
+                        </StackLayout.GestureRecognizers>
                     </StackLayout>
                     <StackLayout>
-                        <Button BackgroundColor="Transparent">
-                            <Button.Image>
-                                <OnPlatform x:TypeArguments="FileImageSource">
+                        <Image>
+                            <Image.Source>
+                                <OnPlatform x:TypeArguments="ImageSource">
                                     <On Platform="UWP, WinRT, WinPhone" Value="Assets/img-sue.png" />
+                                    <On Platform="iOS, Android" Value="img_sue.png" />
                                 </OnPlatform>
-                            </Button.Image>
-                            <Button.GestureRecognizers>
-                                <TapGestureRecognizer
-                                Command="{Binding MockSignInCommand}"
-                                CommandParameter="sue@damanojornal.com"
-                                NumberOfTapsRequired="1" />
-                            </Button.GestureRecognizers>
-                        </Button>
+                            </Image.Source>
+                        </Image>
                         <Label 
                             Text="Susana"
                             Style="{StaticResource HeaderLabelStyle}"/>
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{Binding MockSignInCommand}"
+                                CommandParameter="sue@damanojornal.com"
+                                NumberOfTapsRequired="1" />
+                        </StackLayout.GestureRecognizers>
                     </StackLayout>
                     <StackLayout>
-                        <Button BackgroundColor="Transparent">
-                            <Button.Image>
-                                <OnPlatform x:TypeArguments="FileImageSource">
+                        <Image>
+                            <Image.Source>
+                                <OnPlatform x:TypeArguments="ImageSource">
                                     <On Platform="UWP, WinRT, WinPhone" Value="Assets/img-sonia.png" />
+                                    <On Platform="iOS, Android" Value="img_sonia.png" />
                                 </OnPlatform>
-                            </Button.Image>
-                            <Button.GestureRecognizers>
-                                <TapGestureRecognizer
-                                Command="{Binding MockSignInCommand}"
-                                CommandParameter="sonia@damanojornal.com"
-                                NumberOfTapsRequired="1" />
-                            </Button.GestureRecognizers>
-                        </Button>
+                            </Image.Source>
+                        </Image>
                         <Label 
                             Text="Sonia"
                             Style="{StaticResource HeaderLabelStyle}"/>
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{Binding MockSignInCommand}"
+                                CommandParameter="sonia@damanojornal.com"
+                                NumberOfTapsRequired="1" />
+                        </StackLayout.GestureRecognizers>
                     </StackLayout>
                     <StackLayout>
-                        <Button BackgroundColor="Transparent">
-                            <Button.Image>
-                                <OnPlatform x:TypeArguments="FileImageSource">
+                        <Image>
+                            <Image.Source>
+                                <OnPlatform x:TypeArguments="ImageSource">
                                     <On Platform="UWP, WinRT, WinPhone" Value="Assets/img-rute.png" />
+                                    <On Platform="iOS, Android" Value="img_rute.png" />
                                 </OnPlatform>
-                            </Button.Image>
-                            <Button.GestureRecognizers>
-                                <TapGestureRecognizer
-                                Command="{Binding MockSignInCommand}"
-                                CommandParameter="rute@damanojornal.com"
-                                NumberOfTapsRequired="1" />
-                            </Button.GestureRecognizers>
-                        </Button>
+                            </Image.Source>
+                        </Image>
                         <Label 
                             Text="Rute"
                             Style="{StaticResource HeaderLabelStyle}"/>
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{Binding MockSignInCommand}"
+                                CommandParameter="rute@damanojornal.com"
+                                NumberOfTapsRequired="1" />
+                        </StackLayout.GestureRecognizers>
                     </StackLayout>
                 </StackLayout>
                 <!--<Label
@@ -328,58 +332,61 @@
                     Orientation="Horizontal"
                     HorizontalOptions="Center">
                     <StackLayout>
-                        <Button>
-                            <Button.Image>
-                                <OnPlatform x:TypeArguments="FileImageSource">
+                        <Image>
+                            <Image.Source>
+                                <OnPlatform x:TypeArguments="ImageSource">
                                     <On Platform="UWP, WinRT, WinPhone" Value="Assets/img-loule.jpg" />
+                                    <On Platform="iOS, Android" Value="img_loule.jpg" />
                                 </OnPlatform>
-                            </Button.Image>
-                            <Button.GestureRecognizers>
-                                <TapGestureRecognizer
-                                Command="{Binding PlaceSelectCommand}"
-                                CommandParameter="1"
-                                NumberOfTapsRequired="1" />
-                            </Button.GestureRecognizers>
-                        </Button>
+                            </Image.Source>
+                        </Image>
                         <Label 
                             Text="Feira Popular de Loulé"
                             Style="{StaticResource HeaderLabelStyle}"/>
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{Binding PlaceSelectCommand}"
+                                CommandParameter="1"
+                                NumberOfTapsRequired="1" />
+                        </StackLayout.GestureRecognizers>
                     </StackLayout>
                     <StackLayout>
-                        <Button>
-                            <Button.Image>
-                                <OnPlatform x:TypeArguments="FileImageSource">
+                        <Image>
+                            <Image.Source>
+                                <OnPlatform x:TypeArguments="ImageSource">
+                                    <On Platform="iOS, Android" Value="img_serra.jpg" />
                                     <On Platform="UWP, WinRT, WinPhone" Value="Assets/img-serra.jpg" />
                                 </OnPlatform>
-                            </Button.Image>
-                            <Button.GestureRecognizers>
-                                <TapGestureRecognizer
-                                Command="{Binding PlaceSelectCommand}"
-                                CommandParameter="2"
-                                NumberOfTapsRequired="1" />
-                            </Button.GestureRecognizers>
-                        </Button>
+                            </Image.Source>
+                        </Image>
                         <Label 
                             Text="Feira da Serra de São Brás"
                             Style="{StaticResource HeaderLabelStyle}"/>
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{Binding PlaceSelectCommand}"
+                                CommandParameter="2"
+                                NumberOfTapsRequired="1" />
+                        </StackLayout.GestureRecognizers>
                     </StackLayout>
                     <StackLayout>
-                        <Button>
-                            <Button.Image>
-                                <OnPlatform x:TypeArguments="FileImageSource">
+                        <Image>
+                            <Image.Source>
+                                <OnPlatform x:TypeArguments="ImageSource">
+                                    <On Platform="iOS, Android" Value="img_mercado.jpg" />
                                     <On Platform="UWP, WinRT, WinPhone" Value="Assets/img-mercado.jpg" />
                                 </OnPlatform>
-                            </Button.Image>
-                            <Button.GestureRecognizers>
-                                <TapGestureRecognizer
-                                Command="{Binding PlaceSelectCommand}"
-                                CommandParameter="3"
-                                NumberOfTapsRequired="1" />
-                            </Button.GestureRecognizers>
-                        </Button>
+                            </Image.Source>
+                        </Image>
                         <Label 
                             Text="Mercado Municipal de Loulé"
                             Style="{StaticResource HeaderLabelStyle}"/>
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{Binding PlaceSelectCommand}"
+                                CommandParameter="3"
+                                NumberOfTapsRequired="1" />
+                        </StackLayout.GestureRecognizers>
                     </StackLayout>
                 </StackLayout>
                 <!--<Label
