@@ -12,6 +12,7 @@
     <TabbedPage.Title>
         <OnPlatform x:TypeArguments="x:String">
             <On Platform="iOS, UWP, WinRT, WinPhone" Value="Dama no Jornal App" />
+            <On Platform="Android" Value="Dama no Jornal App" />
         </OnPlatform>
     </TabbedPage.Title>
     <ContentPage.ToolbarItems>
@@ -20,7 +21,7 @@
             Text="Sair">
             <ToolbarItem.Icon>
                 <OnPlatform x:TypeArguments="FileImageSource">
-                    <On Platform="iOS, Android" Value="logout-512.png" />
+                    <On Platform="iOS, Android" Value="logout_512.png" />
                     <On Platform="UWP, WinRT, WinPhone" Value="Assets/logout-512.png" />
                 </OnPlatform>
             </ToolbarItem.Icon>
@@ -73,18 +74,18 @@
         x:Name="ProfileView">
         <views:ProfileView.Icon>
             <OnPlatform x:TypeArguments="FileImageSource">
-                <On Platform="iOS, Android" Value="img-joao.png" />
+                <On Platform="iOS, Android" Value="img_joao.png" />
                 <On Platform="UWP, WinRT, WinPhone" Value="Assets\img-joao.png" />
             </OnPlatform>
         </views:ProfileView.Icon>
     </views:ProfileView>
     <views:EventView
         x:Name="EventView">
-        <!--<views:EventView.Icon>
+        <views:EventView.Icon>
             <OnPlatform x:TypeArguments="FileImageSource">
-                <On Platform="iOS, Android" Value="img-joao.png" />
-                <On Platform="UWP, WinRT, WinPhone" Value="Assets\img-joao.png" />
+                <On Platform="iOS, Android" Value="img_mercado.jpg" />
+                <On Platform="UWP, WinRT, WinPhone" Value="Assets\img_mercado.jpg" />
             </OnPlatform>
-        </views:EventView.Icon>-->
+        </views:EventView.Icon>
     </views:EventView>
 </TabbedPage>
