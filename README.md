@@ -20,4 +20,5 @@ If you want to learn more about creating good readme files then refer the follow
 - [Chakra Core](https://github.com/Microsoft/ChakraCore)
 
 #Endpoint
-ec2-35-159-6-83.eu-central-1.compute.amazonaws.com
+ec2-35-156-66-175.eu-central-1.compute.amazonaws.com
+35.156.66.175
