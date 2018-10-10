@@ -25,6 +25,8 @@ namespace DamaWeb.Pages.Search
 
         public async Task<IActionResult> OnGetAsync(CatalogIndexViewModel catalogModel,string q, int? p)
         {
+            if(string.IsNullOrEmpty(q))
+                return RedirectToPage("/Index");
             SearchFor = q;
             var type = catalogModel.TypesFilterApplied;
             var illustration = CatalogModel.IllustrationFilterApplied;
