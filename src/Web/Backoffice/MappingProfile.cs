@@ -40,7 +40,7 @@ namespace Backoffice
             CreateMap<ProductPictureViewModel, CatalogPicture>();
             CreateMap<CatalogCategory, CatalogCategoryViewModel>()
                 //.ForMember(dest => dest.CategoryId, opts => opts.MapFrom(src => src.CategoryId))
-                .ForMember(dest => dest.Selected, opts => opts.UseValue(true))
+                .ForMember(dest => dest.Selected, opts => opts.MapFrom(src => true))
                 .ForMember(dest => dest.Label, opts => opts.MapFrom(src => src.Category.Name));
             CreateMap<Order, OrderViewModel>()
                 .ForMember(dest => dest.ItemsCount, opts => opts.MapFrom(src => src.OrderItems.Sum(x => x.Units)))

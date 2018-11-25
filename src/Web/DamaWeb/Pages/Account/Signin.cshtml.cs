@@ -155,6 +155,8 @@ namespace DamaWeb.Pages.Account
                         await _mailChimpService.AddSubscriberAsync(UserDetails.Email);
                         await _emailSender.SendGenericEmailAsync(_settings.FromInfoEmail, _settings.CCEmails, "Subscrição da newsletter feita na loja", $"O utilizador {UserDetails.FirstName} {UserDetails.LastName} registou-se na loja e subscreveu-se na newsletter com o email: {UserDetails.Email}");
                     }
+                    else
+                        await _emailSender.SendGenericEmailAsync(_settings.FromInfoEmail, _settings.CCEmails, "Novo registo na loja", $"O utilizador {UserDetails.FirstName} {UserDetails.LastName} registou-se na loja com o email: {UserDetails.Email}");
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToPage(returnUrl);

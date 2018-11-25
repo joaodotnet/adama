@@ -112,7 +112,7 @@ namespace DamaWeb.Services
 
             //send mails to buyer
             body = GetEmailBody(order);
-            await _emailSender.SendEmailAsync(_settings.FromOrderEmail, order.BuyerId, $"Dama no Jornal®: Personalização nº{order.Id}", body);
+            await _emailSender.SendEmailAsync(_settings.FromOrderEmail, order.BuyerId, $"Dama no Jornal®: Personalização nº{order.Id}", body, _settings.CCEmails);
 
         }
 

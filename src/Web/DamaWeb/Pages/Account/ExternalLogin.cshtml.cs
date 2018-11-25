@@ -92,12 +92,14 @@ namespace DamaWeb.Pages.Account
             if (remoteError != null)
             {
                 ErrorMessage = $"Erro de autenticação externa: {remoteError}";
+                await _emailSender.SendGenericEmailAsync(_settings.FromInfoEmail, _settings.CCEmails, "Erro de autenticação externa", $"{remoteError}");
                 return RedirectToPage("./Signin", new {ReturnUrl = returnUrl });
             }
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
                 ErrorMessage = "Erro ao carregar as informações do login externo.";
+                await _emailSender.SendGenericEmailAsync(_settings.FromInfoEmail, _settings.CCEmails, ErrorMessage, "In GetExternalLoginInfoAsync (ExternalLogin.cshtml)");
                 return RedirectToPage("./Signin", new { ReturnUrl = returnUrl });
             }
 
@@ -171,6 +173,8 @@ namespace DamaWeb.Pages.Account
                             await _mailChimpService.AddSubscriberAsync(Input.Email);
                             await _emailSender.SendGenericEmailAsync(_settings.FromInfoEmail, _settings.CCEmails, "Subscrição da newsletter feita na loja", $"O utilizador {Input.FirstName} {Input.LastName} registou-se na loja e subscreveu-se na newsletter com o email: {Input.Email}");
                         }
+                        else
+                            await _emailSender.SendGenericEmailAsync(_settings.FromInfoEmail, _settings.CCEmails, $"Novo registo feito na loja via {info.ProviderDisplayName}", $"O utilizador {Input.FirstName} {Input.LastName} registou-se na loja com o email: {Input.Email}");
 
                         return RedirectToPage(returnUrl);
 
