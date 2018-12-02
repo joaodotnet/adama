@@ -1,6 +1,8 @@
 ﻿using ApplicationCore;
+using ApplicationCore.Exceptions;
 using ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -16,12 +18,12 @@ namespace Infrastructure.Services
     public class EmailSender : IEmailSender
     {
         private readonly EmailSettings _appSettings;
-        //private readonly IAppLogger<EmailSender> _logger;
+        private readonly ILogger<EmailSender> _logger;
 
-        public EmailSender(IOptions<EmailSettings> appSettings/*, IAppLogger<EmailSender> logger*/)
+        public EmailSender(IOptions<EmailSettings> appSettings, ILogger<EmailSender> logger)
         {
             _appSettings = appSettings.Value;
-            //_logger = logger;
+            _logger = logger;
         }
         public async Task SendEmailAsync(string fromEmail, string toEmail, string subject, string message, string bccEmails = null, IFormFile attachFile = null, List<(string, byte[])> files = null)
         {
@@ -39,6 +41,7 @@ namespace Infrastructure.Services
         {
             try
             {
+                _logger.LogInformation("Sending Email...");
                 MailMessage mail = new MailMessage()
                 {
                     From = new MailAddress(FromEmail, GetFromName(FromEmail))
@@ -66,11 +69,12 @@ namespace Infrastructure.Services
                     smtp.EnableSsl = _appSettings.SSL;
                     await smtp.SendMailAsync(mail);
                 }
+                _logger.LogInformation("Email send successuful!");
             }
             catch (Exception ex)
             {
-                //_logger.LogWarning($"Error while sending email: {ex.Message}");
-                throw ex;
+                _logger.LogError($"Error while sending email: {ex.Message}");
+                throw new SendEmailException(ex.Message);
             }
         }
 

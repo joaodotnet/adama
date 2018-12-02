@@ -141,9 +141,9 @@ namespace DamaWeb
             services.AddSingleton<IUriComposer>(new UriComposer(Configuration.Get<CatalogSettings>()));
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
-            services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));           
             services.AddScoped<IMailChimpService, MailChimpService>();
+            services.AddTransient<IEmailSender, EmailSender>();
 
             // Add memory cache services
             services.AddMemoryCache();

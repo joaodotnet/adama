@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using DamaWeb.Extensions;
 using DamaWeb.Interfaces;
 using DamaWeb.ViewModels;
+using ApplicationCore.Exceptions;
+using Microsoft.ApplicationInsights;
 
 namespace DamaWeb.Services
 {
@@ -24,6 +26,7 @@ namespace DamaWeb.Services
         private readonly IEmailSender _emailSender;
         private readonly EmailSettings _settings;
         private readonly IUriComposer _uriComposer;
+        private readonly TelemetryClient _telemetry;
 
         public CustomizeViewModelService(
             IAsyncRepository<Category> categoryRepository,
@@ -32,7 +35,8 @@ namespace DamaWeb.Services
             IAsyncRepository<CustomizeOrder> customizeRepository,
             IEmailSender emailSender,
             IOptions<EmailSettings> settings,
-            IUriComposer uriComposer)
+            IUriComposer uriComposer,
+            TelemetryClient telemetry)
         {
             _categoryRepository = categoryRepository;
             _catalogRepository = catalogRepository;
@@ -41,6 +45,7 @@ namespace DamaWeb.Services
             _emailSender = emailSender;
             _settings = settings.Value;
             _uriComposer = uriComposer;
+            _telemetry = telemetry;
         }
 
         public async Task<CustomizeViewModel> GetCustomizeItems(int? categoryid, int? catalogItemId)
@@ -87,6 +92,9 @@ namespace DamaWeb.Services
                 AttachFileName = GetFileName(request.UploadFile?.FileName)
             });
 
+            if(order != null)
+                _telemetry.TrackEvent("NewCustomizeOrder");
+
             //Send mails to admins
             var body = $"Email: {request.BuyerEmail} <br>" +
                 $"Nome: {request.BuyerName} <br>" +
@@ -105,14 +113,32 @@ namespace DamaWeb.Services
                 }
             }
             body += $"<br><br>Ficheiro em anexo: {(request.UploadFile != null ? "Sim" : "Não")}";
-            if (request.UploadFile == null)
-                await _emailSender.SendEmailAsync(_settings.FromOrderEmail, _settings.CCEmails, $"Dama no Jornal®: Novo Pedido de Encomenda Personalizada #{order.Id}", body);
-            else
-                await _emailSender.SendEmailAsync(_settings.FromOrderEmail, _settings.CCEmails, $"Dama no Jornal®: Novo Pedido de Encomenda Personalizada #{order.Id}", body, null, request.UploadFile);
 
+            try
+            {
+                if (request.UploadFile == null)
+                    await _emailSender.SendEmailAsync(_settings.FromOrderEmail, _settings.CCEmails, $"Dama no Jornal®: Novo Pedido de Encomenda Personalizada #{order.Id}", body);
+                else
+                    await _emailSender.SendEmailAsync(_settings.FromOrderEmail, _settings.CCEmails, $"Dama no Jornal®: Novo Pedido de Encomenda Personalizada #{order.Id}", body, null, request.UploadFile);
+                _telemetry.TrackEvent("SendEmailOk");
+            }
+            catch (SendEmailException)
+            {
+                _telemetry.TrackEvent("ErrorSendEmail");
+            }
             //send mails to buyer
             body = GetEmailBody(order);
-            await _emailSender.SendEmailAsync(_settings.FromOrderEmail, order.BuyerId, $"Dama no Jornal®: Personalização nº{order.Id}", body, _settings.CCEmails);
+
+            try
+            {
+                await _emailSender.SendEmailAsync(_settings.FromOrderEmail, order.BuyerId, $"Dama no Jornal®: Personalização nº{order.Id}", body, _settings.CCEmails);
+                _telemetry.TrackEvent("SendEmailOk");
+            }
+            catch (SendEmailException)
+            {
+                _telemetry.TrackEvent("ErrorSendEmail");
+            }
+            
 
         }
 
