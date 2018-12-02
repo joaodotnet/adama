@@ -17,6 +17,7 @@ using ApplicationCore;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using ApplicationCore.DTOs;
+using Microsoft.ApplicationInsights;
 
 namespace DamaWeb.Pages.Basket
 {
@@ -31,6 +32,7 @@ namespace DamaWeb.Pages.Basket
         private readonly IBasketViewModelService _basketViewModelService;
         private readonly IShopService _shopService;
         private readonly IEmailSender _emailSender;
+        private readonly TelemetryClient _telemetry;
         private readonly EmailSettings _settings;
 
         public CheckoutModel(IBasketService basketService,
@@ -41,7 +43,8 @@ namespace DamaWeb.Pages.Basket
             IOrderService orderService,
             IShopService shopService,
             IEmailSender emailSender,
-            IOptions<EmailSettings> settings)
+            IOptions<EmailSettings> settings,
+            TelemetryClient telemetry)
         {
             _basketService = basketService;
             _uriComposer = uriComposer;
@@ -51,7 +54,9 @@ namespace DamaWeb.Pages.Basket
             _basketViewModelService = basketViewModelService;
             _shopService = shopService;
             _emailSender = emailSender;
+            _telemetry = telemetry;
             _settings = settings.Value;
+            
         }
         [BindProperty]
         public BasketViewModel BasketModel { get; set; } = new BasketViewModel();
@@ -123,7 +128,9 @@ namespace DamaWeb.Pages.Basket
                     //else if (UserAddress.UseUserAddress == 2)
                     //    billingAddress = new Address(UserAddress.InvoiceName, UserAddress.ContactPhoneNumber, UserAddress.InvoiceAddressStreet,UserAddress.InvoiceAddressCity,UserAddress.InvoiceAddressCountry,UserAddress.InvoiceAddressPostalCode);
 
-                    var resOrder = await _orderService.CreateOrderAsync(BasketModel.Id, UserAddress.ContactPhoneNumber, taxNumber, address, billingAddress, UserAddress.UseSameAsShipping, shippingcost);                
+                var resOrder = await _orderService.CreateOrderAsync(BasketModel.Id, UserAddress.ContactPhoneNumber, taxNumber, address, billingAddress, UserAddress.UseSameAsShipping, shippingcost);                
+                if(resOrder != null)
+                    _telemetry.TrackEvent("NewOrder");
 
                 await _basketService.DeleteBasketAsync(BasketModel.Id);
 
