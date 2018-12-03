@@ -7,6 +7,7 @@ namespace ApplicationCore.Entities.OrderAggregate
     public class OrderItem : BaseEntity
     {
         public CatalogItemOrdered ItemOrdered { get; private set; }
+        public CustomizeItemOrdered CustomizeItem { get; private set; }
         public decimal UnitPrice { get; private set; }
         public int Units { get; private set; }
         public int? CatalogAttribute1 { get; private set; }
@@ -30,6 +31,12 @@ namespace ApplicationCore.Entities.OrderAggregate
             CatalogAttribute3 = option3;
             CustomizeName = customizeName;
             CustomizeSide = customizeSide;
+        }
+
+        public OrderItem(CustomizeItemOrdered customizeItem, int units)
+        {
+            CustomizeItem = customizeItem;            
+            Units = units;
         }
     }
 }

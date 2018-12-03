@@ -41,6 +41,18 @@ namespace ApplicationCore.Entities
             //existingItem.Quantity += quantity;
         }
 
+        public void AddCustomizeItem(int catalogTypeId, string description, string textOrName, string colors, int quantity = 1)
+        {
+            _items.Add(new BasketItem()
+            {
+                CatalogTypeId = catalogTypeId,
+                CustomizeDescription = description,
+                CustomizeName = textOrName,
+                CustomizeColors = colors,
+                Quantity = quantity
+            });
+        }
+
         public void RemoveItem(int index)
         {
             _items.RemoveAt(index);

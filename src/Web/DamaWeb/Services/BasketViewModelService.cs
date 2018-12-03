@@ -57,26 +57,21 @@ namespace DamaWeb.Services
                 if (item != null)
                 {
                     itemModel.PictureUrl = _uriComposer.ComposePicUri(item.PictureUri);
-                    itemModel.ProductName = item.Name;                    
+                    itemModel.ProductName = item.Name;
+
+                    foreach (var attr in item.CatalogAttributes)
+                    {
+                        if ((i.CatalogAttribute1.HasValue && i.CatalogAttribute1 == attr.Id) ||
+                            (i.CatalogAttribute2.HasValue && i.CatalogAttribute2 == attr.Id) ||
+                            (i.CatalogAttribute3.HasValue && i.CatalogAttribute3 == attr.Id))
+                            itemModel.Attributes.Add(new AttributeViewModel
+                            {
+                                Name = attr.Name,
+                                Label = EnumHelper<AttributeType>.GetDisplayValue(attr.Type)
+                            });
+                    }
                 }
 
-                foreach (var attr in item.CatalogAttributes)
-                {
-                    if ((i.CatalogAttribute1.HasValue && i.CatalogAttribute1 == attr.Id) ||
-                        (i.CatalogAttribute2.HasValue && i.CatalogAttribute2 == attr.Id) ||
-                        (i.CatalogAttribute3.HasValue && i.CatalogAttribute3 == attr.Id))
-                        itemModel.Attributes.Add(new AttributeViewModel
-                        {
-                            Name = attr.Name,
-                            Label = EnumHelper<AttributeType>.GetDisplayValue(attr.Type)
-                        });                   
-                }
-
-                //itemModel.Attributes = item.CatalogAttributes.Select(d => new AttributeViewModel
-                //{
-                //    Name = d.Name,
-                //    Label = EnumHelper<AttributeType>.GetDisplayValue(d.Type)
-                //}).ToList();
                 return itemModel;
             }).ToList();
             //Shipping Cost
@@ -84,8 +79,8 @@ namespace DamaWeb.Services
             foreach (var item in viewModel.Items)
             {
                 var spec = new CatalogTypeFilterSpecification(item.CatalogItemId);
-                var catalogItem = _itemRepository.GetSingleBySpec(spec);
-                if (catalogItem.CatalogType.ShippingCost > shippingCost)
+                var catalogItem = _itemRepository.GetSingleBySpec(spec);                
+                if (catalogItem != null && catalogItem.CatalogType.ShippingCost > shippingCost)
                     shippingCost = catalogItem.CatalogType.ShippingCost;
             }
             viewModel.DefaultShippingCost = shippingCost;

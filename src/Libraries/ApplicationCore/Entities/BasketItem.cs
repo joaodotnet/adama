@@ -12,6 +12,9 @@ namespace ApplicationCore.Entities
         public int? CatalogAttribute3 { get; set; }
         public string CustomizeName { get; set; }
         public string CustomizeSide { get; set; }
+        public string CustomizeDescription { get; set; }
+        public string CustomizeColors { get; set; }
+        public int? CatalogTypeId { get; set; }
 
         public int BasketId { get; set; }
         public Basket Basket { get; set; }
