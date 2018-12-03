@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using DamaWeb.Interfaces;
 using DamaWeb.ViewModels;
+using Microsoft.AspNetCore.Http;
 
 namespace DamaWeb.Pages.Customize
 {
@@ -15,8 +16,11 @@ namespace DamaWeb.Pages.Customize
     {
         private readonly ICustomizeViewModelService _service;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IBasketViewModelService _basketViewModelService;
 
-        public Step3Model(ICustomizeViewModelService service, UserManager<ApplicationUser> userManager)
+        public Step3Model(ICustomizeViewModelService service, 
+            UserManager<ApplicationUser> userManager)
         {
             _service = service;
             _userManager = userManager;
@@ -47,9 +51,10 @@ namespace DamaWeb.Pages.Customize
         public async Task<IActionResult> OnPostSubmitAsync()
         {
             await _service.SendCustomizeService(CustomizeModel);
-
-
+            
             return RedirectToPage("./Result");
         }
+
+        
     }
 }

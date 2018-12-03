@@ -10,5 +10,6 @@ namespace DamaWeb.Interfaces
     {
         Task<CustomizeViewModel> GetCustomizeItems(int? categoryId, int? catalogItemId);
         Task SendCustomizeService(CustomizeViewModel request);
+        Task AddCustomizeItemToBasket(int basketId, CustomizeViewModel request);
     }
 }

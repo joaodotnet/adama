@@ -14,5 +14,6 @@ namespace ApplicationCore.Interfaces
         Task DeleteBasketAsync(int basketId);
         Task<DeliveryTimeDTO> CalculateDeliveryTime(int basketId);
         (int?,int?,int?) GetFirstOptionFromAttribute(int catalogItemId);
+        Task AddCustomizeItemToBasket(int basketId, int catalogTypeId, string description, string textOrName, string colors, int quantity);
     }
 }

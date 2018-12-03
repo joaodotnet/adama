@@ -89,7 +89,7 @@ namespace DamaWeb.Pages.Basket
 
             await SetBasketModelAsync();
 
-            _basketService.AddItemToBasket(BasketModel.Id, product.CatalogItemId.Value, 0, 1, isFromCustomize)
+            //_basketService.AddItemToBasket(BasketModel.Id, product.CatalogItemId.Value, 0, 1, isFromCustomize)
 
             return RedirectToPage("./Result");
         }

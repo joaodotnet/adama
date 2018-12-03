@@ -31,34 +31,16 @@ namespace ApplicationCore.Services
         {
             var basket = await _basketRepository.GetByIdAsync(basketId);
 
-            //var specification = new CatalogAttrFilterSpecification(catalogItemId);
-            //var catalogItem = _itemRepository.GetSingleBySpec(specification);
-
-            //decimal attrsPrice = 0;
-            //if (attrIds == null)
-            //{
-            //    attrIds = new List<int>();
-
-            //    var group = catalogItem.CatalogAttributes.GroupBy(x => x.Type);
-            //    foreach (var attribute in group)
-            //    {
-            //        attrIds.Add(attribute.First().Id);
-            //    }
-            //}
-            //else
-            //{
-            //    foreach (var item in attrIds)
-            //    {
-            //        var attrItem = catalogItem.CatalogAttributes.SingleOrDefault(x => x.Id == item);
-            //        if (attrItem != null)
-            //            attrsPrice += attrItem.Price ?? 0;
-            //    }
-            //}
-
-            //update price 
-            //price += attrsPrice;
-
             basket.AddItem(catalogItemId, price, quantity, option1, option2, option3, customizeName, customizeSide);
+
+            await _basketRepository.UpdateAsync(basket);
+        }
+
+        public async Task AddCustomizeItemToBasket(int basketId, int catalogTypeId, string description, string textOrName, string colors, int quantity)
+        {
+            var basket = await _basketRepository.GetByIdAsync(basketId);
+
+            basket.AddCustomizeItem(catalogTypeId, description, textOrName, colors, quantity);
 
             await _basketRepository.UpdateAsync(basket);
         }

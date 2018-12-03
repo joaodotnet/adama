@@ -14,7 +14,7 @@
     </style>
 }
 
-<form method="post" asp-page="./Step3" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data">
     <div class="dama-customize pt-sm-5 pt-2">
         <div class="row mb-3">
             <div class="offset-sm-3 col-sm-6 col-12 text-center">
@@ -24,7 +24,7 @@
                 </div>
                 <h4 class="mt-3">
                     Descreve a ilustração que gostarias de Personalizar.
-                </h4>               
+                </h4>
             </div>
         </div>
         <div class="row mb-3 mx-2 mx-sm-0">
@@ -47,7 +47,7 @@
                 <strong>Queres adicionar uma frase ou nome?</strong><br />
                 <textarea asp-for="CustomizeModel.Text" name="Text" rows="2" class="w-100 dama-customize-textarea"></textarea>
             </div>
-        </div>       
+        </div>
         <div class="row mb-5">
             <div class="col-12 text-center mb-3">
                 <h4 class="mt-2">
@@ -122,7 +122,7 @@
                         </div>
                     </div>
                 </div>
-            </div>            
+            </div>
         </div>
         <div class="row go-section">
             <div class="offset-sm-2 col-sm-8 col-12 p-sm-0">
@@ -131,11 +131,11 @@
                         <a asp-page="./Index" asp-route-CategoryId="@Model.CustomizeModel.CategoryId" asp-route-CatalogItemId="@Model.CustomizeModel.CatalogItemId" class="btn btn-dama-menta mt-0 mr-3 text-white" role="button">&larr; Voltar</a>
                     </div>
                     <div class="offset-sm-7 col-sm-3 offset-3 col-6">
-                        <button type="submit" class="btn btn-dama-menta mt-0 mr-3">Próximo passo &rarr;</button>
+                        <button type="submit" class="btn btn-dama-pink mt-0 mr-3">Adicionar ao carrinho</button>
                     </div>
                 </div>
             </div>
-           
+
         </div>
     </div>
     <input type="hidden" name="CatalogItemId" value="@Model.CustomizeModel.CatalogItemId" />
@@ -149,7 +149,7 @@
         $(document).ready(function () {
 
             $('.dama-customize-colors .card').click(function () {
-                
+
                 var color = $(this).css('background-color').replace(/,/g, ';');
 
                 if ($(this).hasClass('dama-customize-color-selected') == false) {
@@ -157,16 +157,16 @@
                         colors.push(color);
                         $(this).toggleClass('dama-customize-color-selected');
                     }
-                }                    
+                }
                 else {
                     var index = colors.indexOf(color);
                     colors.splice(index, 1);
                     $(this).toggleClass('dama-customize-color-selected');
                 }
-                
+
                 $('#colors').val(colors);
                 console.log("colors: " + $('#colors').val());
-            });            
+            });
         });
     </script>
 }

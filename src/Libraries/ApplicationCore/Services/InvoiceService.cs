@@ -34,7 +34,8 @@ namespace ApplicationCore.Services
 
             SageResponseDTO response;
 
-            if (order.TaxNumber.HasValue)
+            if (order.
+                TaxNumber.HasValue)
             {
                 var maxStreet1Length = order.BillingToAddress.Street.Length;
                 if (maxStreet1Length >= 50)

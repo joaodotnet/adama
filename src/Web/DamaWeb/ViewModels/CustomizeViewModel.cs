@@ -26,6 +26,7 @@ namespace DamaWeb.ViewModels
         [Display(Name = "Contato")]
         [Required(ErrorMessage = "O campo Contatos é obrigatório")]
         public string BuyerPhone { get; set; }
+        public int Quantity { get; set; } = 1;
 
         public List<(int,string)> Categories { get; set; }
         public List<CatalogTypeViewModel> ProductTypes { get; set; }
