@@ -46,8 +46,8 @@ namespace DamaWeb.Pages.Customize
 
         public async Task<IActionResult> OnPostSubmitAsync()
         {
-            //CustomizeModel = model;
             await _service.SendCustomizeService(CustomizeModel);
+
 
             return RedirectToPage("./Result");
         }
