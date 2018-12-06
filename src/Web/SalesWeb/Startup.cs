@@ -66,7 +66,7 @@ namespace SalesWeb
         public void ConfigureProductionServices(IServiceCollection services)
         {
             // use real database            
-            services.AddDbContext<DamaContext>(options =>
+            services.AddDbContext<GroceryContext>(options =>
                 options.UseMySql(Configuration.GetConnectionString("SalesShopConnection")));
 
             // Add Identity DbContext
