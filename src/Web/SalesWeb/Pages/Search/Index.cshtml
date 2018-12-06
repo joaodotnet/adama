@@ -1,0 +1,50 @@
+﻿@page "{q?}"
+@model SalesWeb.Pages.Search.IndexModel
+@{
+    ViewData["Title"] = "Procurar";
+    if (!string.IsNullOrEmpty(HttpContext.Request.Query["p"]))
+    {
+        ViewBag.NoIndex = true;
+    }
+}
+
+<p id="todos" class="title">Resultados para @Model.SearchFor</p>
+
+    <div class="news-heading text-center">
+        <img class="separator" src="~/images/barra-coracao.png" />
+    </div>
+    @*<section class="esh-catalog-filters">
+            <div class="container">
+                <form method="get">
+                    <input type="hidden" name="q" value="@Model.SearchFor" />
+                    <label class="esh-catalog-label" data-title="tipo de produto">
+                        <select asp-for="@Model.CatalogModel.TypesFilterApplied" asp-items="@Model.CatalogModel.Types" class="esh-catalog-filter"></select>
+                    </label>
+                    <label class="esh-catalog-label" data-title="ilustração">
+                        <select asp-for="@Model.CatalogModel.IllustrationFilterApplied" asp-items="@Model.CatalogModel.Illustrations" class="esh-catalog-filter"></select>
+                    </label>
+                    <input class="esh-catalog-send pt-1" type="image" src="~/images/arrow-right.svg" />
+                </form>
+            </div>
+        </section>*@
+    <div class="container">
+        <div class="esh-catalog-items row">
+            @if (Model.CatalogModel.CatalogItems?.Count() > 0)
+            {
+                foreach (var catalogItem in Model.CatalogModel.CatalogItems)
+                {
+                    <div class="esh-catalog-item col-md-3">
+                        @await Html.PartialAsync("_product", catalogItem)
+                    </div>
+                }
+
+            }
+            else
+            {
+                <div class="text-center">
+<p>Lamentamos, mas não foram encontrados resultados!</p>
+            </div>
+        }
+    </div>
+    @await Html.PartialAsync("_pagination", Model.CatalogModel.PaginationInfo, new ViewDataDictionary(ViewData) { { "SearchFor", Model.SearchFor }, { "TypeId", Model.CatalogModel.TypesFilterApplied }, { "IllustrationId", Model.CatalogModel.IllustrationFilterApplied } })
+</div>

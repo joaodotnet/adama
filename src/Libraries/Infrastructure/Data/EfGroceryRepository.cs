@@ -12,7 +12,7 @@ namespace Infrastructure.Data
     /// https://blogs.msdn.microsoft.com/pfxteam/2012/04/13/should-i-expose-synchronous-wrappers-for-asynchronous-methods/
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class EfGroceryRepository<T> : IGroceryAsyncRepository<T> where T : BaseEntity
+    public class EfGroceryRepository<T> : IRepository<T>, IAsyncRepository<T> where T : BaseEntity
     {
         protected readonly GroceryContext _dbContext;
 

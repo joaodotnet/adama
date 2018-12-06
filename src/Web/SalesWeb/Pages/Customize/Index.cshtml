@@ -1,0 +1,111 @@
+﻿@page
+@model SalesWeb.Pages.Customize.IndexModel
+@{
+    ViewData["Title"] = "Personalizar";
+}
+@section Styles {
+    <style type="text/css">
+        @@media screen and (max-width:576px) {
+            .container {
+                padding-left: 0px;
+                padding-right: 0px;
+            }
+        }
+    </style>
+}
+<img src="~/images/banner-personalizar-2.jpg" class="img-fluid" />
+
+<form method="post">
+    <div class="dama-customize pt-sm-5 pt-2">
+        <div class="text-center">
+            <h2>Vamos Começar?</h2>
+            <div class="mt-1">
+                <h3><span class="badge badge-pill badge-light">1</span></h3>
+            </div>
+            <h4 class="mt-2">
+                Em que categoria se encontra o produto que queres personalizar?                
+            </h4>
+        </div>
+        <a name="produtos"></a>
+        <div class="row">
+            <div class="offset-1 col-10">
+                <div class="row p-sm-3 dama-customize-cards ">
+                    @foreach (var item in Model.CustomizeModel.Categories)
+                    {
+                        <div class="col-6 col-sm-4 pt-3 category-block" cat-id="@item.Item1">
+                            <div class="card card-block justify-content-center align-items-center @(item.Item1 == Model.CategoryId ? "dama-customize-menta" : "")">
+                                <h5 class="@(item.Item1 == Model.CategoryId ? "font-weight-bold" : "")">@item.Item2</h5>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        @if (Model.CustomizeModel.ProductTypes.Count > 0)
+        {
+        <div class="text-center">
+            <h4 class="mt-2">
+                Qual é o produto?
+            </h4>
+        </div>
+        <div class="row">
+            <div class="offset-1 col-10">
+                <div class="row p-sm-3 dama-customize-cards product-types justify-content-center">
+                    @for (int i = 0; i < Model.CustomizeModel.ProductTypes.Count; i++)
+                    {
+                        <div class="col-6 col-sm-3 pt-3 product-block" catalog-type-id="@Model.CustomizeModel.ProductTypes[i].Id">
+                            <div class="card card-block justify-content-center align-items-center" style="min-width:9rem">
+                                <img class="card-img-top" src="@Model.CustomizeModel.ProductTypes[i].PictureUri" alt="@Model.CustomizeModel.ProductTypes[i].Name">
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row go-section sr-only">
+            <div class="offset-sm-9 col-sm-2 offset-3 col-6">
+                <button type="submit" class="btn btn-dama-menta mt-sm-0 mr-sm-3 mt-3">Próximo passo &rarr;</button>
+            </div>
+        </div>
+        }
+    </div>
+    <input type="hidden" asp-for="CustomizeModel.CatalogItemId" />
+</form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+        var colors = [];
+        $(document).ready(function () {
+
+            $('.category-block').click(function () {
+                var url = '@(Url.Page("/Customize/Index", new { CategoryId = 0 }))';
+                url = url.replace('0', $(this).attr('cat-id')) + '#produtos';
+                window.location.replace(url);
+            });
+
+            $('.product-block').click(function () {
+                selectProduct($(this));
+                $('#CustomizeModel_CatalogItemId').val($(this).attr('catalog-type-id'));
+                $('.go-section').removeClass("sr-only");
+            });
+            
+
+            function selectProduct(elem) {
+                elem.find('img').css('border', "5px solid #FC629D");
+                elem.siblings().find('img').css('border', "");
+            }
+
+            
+
+            @if(Model.CustomizeModel.CatalogItemId.HasValue)
+            {
+                <text>
+            var productElem = $('.product-types').find("[catalog-type-id='@Model.CustomizeModel.CatalogItemId.Value']");
+            selectProduct(productElem);
+            $('.go-section').removeClass("sr-only");
+                </text>
+            }
+        });
+    </script>
+}
