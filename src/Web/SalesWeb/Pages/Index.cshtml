@@ -1,0 +1,90 @@
+﻿@page 
+@{
+    ViewData["Title"] = "Online";
+    @model IndexModel
+}
+
+@if (Model.CatalogModel.Banners?.Count > 0)
+{
+    <div id="carouselExampleIndicators" class="carousel slide " data-ride="carousel">
+        <ol class="carousel-indicators">
+            @for (int i = 0; i < Model.CatalogModel.Banners.Count; i++)
+            {
+                <li data-target="#carouselExampleIndicators" data-slide-to="@i" class="@(i == 0? "active": "")"></li>
+            }
+        </ol>
+        <div class="carousel-inner" role="listbox">
+            @foreach (var item in Model.CatalogModel.Banners)
+            {
+                <div class="carousel-item @(Model.CatalogModel.Banners[0] == item ? "active": "") @item.LinkClass" uri="@item.LinkButtonUri">
+                    <img class="d-block img-fluid" src="@item.PictureUri" alt="@item.HeadingText">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h3>@item.HeadingText</h3>
+                        <p>@item.ContentText</p>
+                        @if (!string.IsNullOrEmpty(item.LinkButtonText) && !string.IsNullOrEmpty(item.LinkButtonUri))
+                        {
+                            <a class="btn btn-primary" href="@item.LinkButtonUri" role="button">@item.LinkButtonText</a>
+                        }
+                    </div>
+                </div>
+            }
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+}
+
+    <div class="news-heading text-center">
+        <h2>Produtos</h2>
+        <img class="separator" src="~/images/barra-coracao.png" />
+    </div>
+
+    <div class="container">
+
+        <div class="esh-catalog-items row">
+            @foreach (var catalogItem in Model.CatalogModel.CatalogItems)
+            {
+                <div class="esh-catalog-item col-md-3">
+                    @await Html.PartialAsync("_product", catalogItem)
+                </div>
+            }
+        </div>
+        @await Html.PartialAsync("_pagination", Model.CatalogModel.PaginationInfo)
+    </div>
+
+@if (Model.CatalogModel.FeaturedCatalogItems.Any())
+{
+    <div class="news-heading text-center">
+        <h2>Destaques</h2>
+        <img class="separator" src="~/images/barra-coracao.png" />
+    </div>
+
+    <div class="container">
+
+        <div class="esh-catalog-items row">
+            @foreach (var catalogItem in Model.CatalogModel.FeaturedCatalogItems)
+            {
+                <div class="esh-catalog-item col-md-3">
+                    @await Html.PartialAsync("_product", catalogItem)
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.bannerLink').on('click', function () {
+                var uri = $(this).attr('uri');
+                window.location.href = uri;
+            });
+        });
+    </script>
+}
