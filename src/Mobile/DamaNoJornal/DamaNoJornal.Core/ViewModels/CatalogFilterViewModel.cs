@@ -63,13 +63,13 @@ namespace DamaNoJornal.Core.ViewModels
             }
         }
 
-        public CatalogType Type
+        public CatalogType CatType
         {
             get { return _type; }
             set
             {
                 _type = value;
-                RaisePropertyChanged(() => Type);
+                RaisePropertyChanged(() => CatType);
                 RaisePropertyChanged(() => TypeTextButton);
             }
         }
@@ -141,7 +141,7 @@ namespace DamaNoJornal.Core.ViewModels
         {
             get
             {
-                return Type == null ? "Tipos de Produto" : Type.Description;
+                return CatType == null ? "Tipos de Produto" : CatType.Description;
             }
             set
             {
@@ -172,7 +172,7 @@ namespace DamaNoJornal.Core.ViewModels
 
         private void ShowCategories()
         {
-            Type = null;
+            CatType = null;
             Category = null;
             IsCategoriesListVisible = true;
             IsTypeListVisible = false;
@@ -182,7 +182,7 @@ namespace DamaNoJornal.Core.ViewModels
         private async Task ShowTypesAsync()
         {
             IsBusy = true;
-            Type = null;
+            CatType = null;
             Category = null;
             IsCategoriesListVisible = false;
             IsTypeListVisible = true;
@@ -212,7 +212,7 @@ namespace DamaNoJornal.Core.ViewModels
 
         private async Task FilterByTypeAsync(CatalogType item)
         {
-            Type = item;
+            CatType = item;
             //IsTypeListVisible = false;
             //CategoryBgButton = _bgBtnUnPopout;
             //TypeBgButton = _bgBtnUnPopout;
@@ -220,14 +220,14 @@ namespace DamaNoJornal.Core.ViewModels
             await NavigationService.NavigateToAsync<MainViewModel>(new TabParameter
             {
                 TabIndex = 0,
-                ParameterObj = new Tuple<CatalogBrand, CatalogType>(Category, Type)
+                ParameterObj = new Tuple<CatalogBrand, CatalogType>(Category, CatType)
             });
             await NavigationService.RemoveBackStackAsync();
         }
 
         private async Task FilterAsync()
         {
-            if (Category == null && Type == null)
+            if (Category == null && CatType == null)
             {
                 await NavigationService.NavigateToAsync<MainViewModel>(new TabParameter
                 {
@@ -239,7 +239,7 @@ namespace DamaNoJornal.Core.ViewModels
                 await NavigationService.NavigateToAsync<MainViewModel>(new TabParameter
                 {
                     TabIndex = 0,
-                    ParameterObj = new Tuple<CatalogBrand, CatalogType>(Category, Type)
+                    ParameterObj = new Tuple<CatalogBrand, CatalogType>(Category, CatType)
                 });
             }
             await NavigationService.RemoveBackStackAsync();
