@@ -30,7 +30,16 @@ namespace DamaNoJornal.Core.Services.RequestProvider
         {
             System.Diagnostics.Debug.WriteLine($"Calling Get: {uri}");
             HttpClient httpClient = CreateHttpClient(token);
-            HttpResponseMessage response = await httpClient.GetAsync(uri);
+            HttpResponseMessage response;
+            try
+            {
+                response = await httpClient.GetAsync(uri);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error Request Handler: {ex}");
+                return default(TResult);
+            }
 
             await HandleResponse(response);
             string serialized = await response.Content.ReadAsStringAsync();
@@ -165,8 +174,8 @@ namespace DamaNoJornal.Core.Services.RequestProvider
                 {
                     throw new ServiceAuthenticationException(content);
                 }
-
-                throw new HttpRequestExceptionEx(response.StatusCode, content);
+                Console.WriteLine($">>>>>>> Error Request Handler {response.StatusCode}: {content} <<<<<<<<");
+                //throw new HttpRequestExceptionEx(response.StatusCode, content);
             }
         }
     }
