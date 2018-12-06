@@ -78,6 +78,7 @@ namespace DamaWeb.Pages.Basket
                 UserAddress = await _shopService.GetUserAddress(user.Id);
                 UserAddress.InvoiceTaxNumber = user.NIF;
                 UserAddress.ContactPhoneNumber = await _userManager.GetPhoneNumberAsync(user);
+
             }
             await SetBasketModelAsync();
 

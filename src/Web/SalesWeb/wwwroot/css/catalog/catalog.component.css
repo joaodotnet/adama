@@ -108,7 +108,7 @@
 }
 
 .esh-catalog-button {
-    background-color: #FC629D;
+    background-color: #e0a240;
     border: 0;
     color: #FFFFFF;
     cursor: pointer;
@@ -126,8 +126,10 @@
 }
 
     .esh-catalog-button:hover {
-        background-color: #FC2A7B;
+        background-color: #FFFFFF;
         transition: all 0.35s;
+        color: #000000;
+        border: 2px solid #000000;
     }
 
 .esh-catalog-name {

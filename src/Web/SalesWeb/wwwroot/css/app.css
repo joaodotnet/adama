@@ -102,7 +102,7 @@ body {
 }
 
 .search-text {
-    background-color: #FC629D;
+    background-color: #800000;
 }
 
     .search-text input {
@@ -160,7 +160,7 @@ h1 {
 }
 
 h2 {
-    color: #FC629D;
+    color: #800000;
     font-family: "Lily Script One", Sans-serif;
     font-size: 41px;
     font-weight: 100;
@@ -170,7 +170,7 @@ h2 {
 p.title {
     font-family: "Quicksand Medium", sans-serif;
     font-size: 20px;
-    color: #FC629D;
+    color: #800000;
     font-weight: 100;
 }
 
@@ -184,11 +184,11 @@ h4 {
 
 hr {
     background-color: #fff;
-    border-top: 2px dashed #FC629D;
+    border-top: 2px dashed #800000;
 }
 
 .btn-primary, .btn-primary:active, .btn-primary:visited {
-    background-color: #FC629D !important;
+    background-color: #800000 !important;
     border: 0;
     color: #fff;
     border-radius: 0 !important;
@@ -200,8 +200,8 @@ hr {
 }
 
 .btn-outline-pink, .btn-outline-pink:active, .btn-outline-pink:visited {
-    border-color: #FC629D;
-    color: #FC629D;
+    border-color: #800000;
+    color: #800000;
     border-radius: 0 !important;
     background-color: #fff;
 }
@@ -246,7 +246,7 @@ hr {
     }
 
 .btn-dama-pink {
-    background-color: #FC629D;
+    background-color: #800000;
     border: 0;
     color: #fff;
     border-radius: 0 !important;
@@ -376,7 +376,7 @@ hr {
 }
 
 .navbar-light .navbar-nav .nav-link {
-    color: #FC629D;
+    color: #800000;
     font-weight: 500;
     font-size: 14px;
     text-decoration: none;
@@ -397,7 +397,7 @@ hr {
 }
 
 .dropdown-item {
-    color: #FC629D !important;
+    color: #800000 !important;
     font-weight: 400;
     font-size: 14px;
     text-decoration: none;
@@ -408,7 +408,7 @@ hr {
 @media screen and (min-width: 992px) {
 
     .dropdown-item:hover {
-        background-color: #FC629D;
+        background-color: #800000;
         transition: background-color 0.35s;
     }
 
@@ -438,11 +438,11 @@ hr {
         border-radius: 50px;
         margin-right: 4px;
         cursor: pointer;
-        color: #FC629D;
+        color: #800000;
     }
 
         .social-links a i {
-            color: #FC629D;
+            color: #800000;
         }
 
     .social-links .nav-link {
@@ -589,7 +589,7 @@ hr {
 }
 
 .dama-product-add {
-    background-color: #FC629D;
+    background-color: #800000;
     border: 0;
     color: #FFFFFF;
     cursor: pointer;
@@ -632,14 +632,14 @@ hr {
 .dama-customize-cards .col-sm-4 .card {
     font-family: "Lily Script One", Sans-serif;
     min-height: 80px;
-    background-color: #FC629D;
+    background-color: #800000;
     cursor: pointer;
     color: #fff;
     border-radius: 0;
 }
 
 .dama-customize-pink {
-    background-color: #FC629D;
+    background-color: #800000;
 }
 
 .dama-customize-cards .product-block .card {
@@ -652,7 +652,7 @@ hr {
 }
 
 .dama-customize-border-pink {
-    border: 2px dashed #FC629D;
+    border: 2px dashed #800000;
 }
 
 .dama-customize-colors .card {
@@ -694,12 +694,13 @@ hr {
     }
 
 .dama-customize .esh-catalog-button {
-    background-color: #e9435b;
+    background-color: #e0a240;
 }
 
     .dama-customize .esh-catalog-button:hover {
-        background-color: #a83a4a;
+        background-color: #fff;
         transition: all 0.35s;
+        color:#000000;
     }
 
 .dama-customize-question {
@@ -711,11 +712,11 @@ hr {
 }
 
 .custom-file-label {
-    border: 1px solid #FC629D;
+    border: 1px solid #800000;
 }
 
 .custom-file-input {
-    background-color: #FC629D !important;
+    background-color: #800000 !important;
     border-radius: 0 !important;
 }
 
