@@ -7,7 +7,7 @@
     {
         <meta name="robots" content="noindex" />
     }
-    <title>Vendas - @ViewData["Title"]</title>
+    <title>As Vendas do Mercado - @ViewData["Title"]</title>
     
     <environment names="Development">
         <link href="~/lib/slick/slick.css" rel="stylesheet" />
@@ -33,31 +33,26 @@
     <form class="form-inline py-2 search-text w-100 d-none d-sm-block" asp-page="/Search/Index" method="get">
         <input id="search" name="q" class="bg-transparent border-left-0 border-right-0 border-top-0 border-light ml-5" autocomplete="off" type="search" placeholder="Procurar" aria-label="Search">
     </form>
-    @*<div class="customize-image">
-        <a asp-page="/Customize/Index"><img src="~/images/personalizar.png" width="250" /></a>
-        <div class="row justify-content-center">
-            <div class="social-links"><a class="nav-link" href="https://www.facebook.com/damanojornal/" target="_blank"><i class="fab fa-facebook-f"></i></a></div>
-            <div class="social-links"><a class="nav-link" href="https://www.instagram.com/damanojornal/" target="_blank"><i class="fab fa-instagram"></i></a></div>
-        </div>
-    </div>*@
-    <!-- Desktop -->
-    <nav class="navbar navbar-expand-md navbar-light pt-sm-3 pb-0 px-5 mr-5 d-none d-sm-flex w-75">
-        <a href="https://www.damanojornal.com" class="navbar-brand">
-            <img src="~/images/brand_full.png" width="150" alt="Dama no Jornal" />
-        </a>
-        <ul class="navbar-nav ml-auto login-nav">
-            @await Html.PartialAsync("_LoginPartial")
-        </ul>
-    </nav>
-    <!-- Desktop -->
-    <nav class="navbar navbar-light navbar-expand-md justify-content-between pb-md-2 d-none d-sm-flex w-75"> 
-        <div class="navbar-collapse collapse justify-content-end text-center">
-            <a asp-page="/Index" class="navbar-brand">
-                <h1>Vendas da Sue</h1>
+    <!-- Desktop -->   
+        <nav class="navbar navbar-expand-md navbar-light pt-sm-3 pb-0 px-5 mr-5 d-none d-sm-flex w-75">
+            <a asp-page="/" class="navbar-brand">
+                <img src="~/images/logo-sabor.png" width="150" alt="As vendas do marcado" />
             </a>
-            @await Component.InvokeAsync("Menu")
-        </div>
-    </nav>
+            <ul class="navbar-nav ml-auto login-nav">
+                @await Html.PartialAsync("_LoginPartial")
+            </ul>
+        </nav>
+    <!-- Desktop -->    
+     <div class="container">
+        <nav class="navbar navbar-light navbar-expand-md justify-content-between pb-md-2 d-none d-sm-flex w-75"> 
+            <div class="navbar-collapse collapse justify-content-start text-center">
+                <a asp-page="/Index" class="navbar-brand">
+                    <h1>As vendas do mercado</h1>
+                </a>
+                @await Component.InvokeAsync("Menu")
+            </div>
+        </nav>
+    </div>    
 
     <!-- Mobile -->
     <nav class="navbar navbar-light navbar-expand-md justify-content-between pb-md-2 d-flex d-sm-none">
@@ -106,42 +101,6 @@
         <hr />
         @RenderBody()
     </div>
-
-
-    <footer class="esh-app-footer">
-        <div class="container">
-            <article class="row">
-                <section class="offset-sm-2 col-sm-4">
-                    <div class="text-center footer-img">
-                        <a href="https://www.damanojornal.com" alt="Dama no Jornal" title="Dama no Jornal"><img width="319px" src="~/images/flor-com-logo-1.png" /></a>
-                    </div>
-                    <div class="esh-app-footer-text footer-text"> © Copyright 2018 Sabor com Tradição | All Rights Reserved </div>
-                </section>
-                <section class="col-12 col-sm-4 footer-links text-center">
-                    <div class="footer-link text-center">
-                        <a href="https://www.damanojornal.com/faq/">FAQ</a>
-                    </div>
-                    <div class="footer-link text-center">
-                        <a href="https://www.damanojornal.com/eventos/">Eventos</a>
-                    </div>
-                    <div class="footer-link text-center">
-                        <a href="https://www.damanojornal.com/contactos/">Contactos</a>
-                    </div>
-                    <div class="footer-link text-center text-nowrap">
-                        <a href="https://www.damanojornal.com/termos-e-condicoes/">Termos e Condições</a>
-                    </div>
-                    <div class="footer-link text-center text-nowrap">
-                        <a href="https://www.damanojornal.com/politica-de-privacidade/">Política de Privacidade</a>
-                    </div>
-                    <div class="text-center">
-                        <a href="https://www.facebook.com/damanojornal/" class="px-2" target="_blank"><i class="fab fa-facebook-f fa-inverse"></i></a>
-                        <a href="https://www.instagram.com/damanojornal/" class="px-2" target="_blank"><i class="fab fa-instagram fa-inverse"></i></a>
-                    </div>
-                    <div class="esh-app-footer-text footer-text-mobile"> © Copyright 2018 Sabor com Tradição | All Rights Reserved </div>
-                </section>
-            </article>
-        </div>
-    </footer>
 
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
