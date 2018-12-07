@@ -105,12 +105,18 @@ namespace SalesWeb
             //        googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];                    
             //    });
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("Admin"));
+                options.AddPolicy("RequireGroceryRole", policy => policy.RequireRole("GroceryAdmin"));
+            });
+
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.Name = "salesApp";
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromHours(1);
-                options.LoginPath = "/Account/Signin";
+                options.LoginPath = "/Account/Login";
                 options.LogoutPath = "/Account/Signout";                
                 options.Cookie.IsEssential = true;
             });
@@ -154,10 +160,8 @@ namespace SalesWeb
             services.AddMvc()
                 .AddRazorPagesOptions(options =>
                 {
-                    options.Conventions.AuthorizeFolder("/Order");
-                    options.Conventions.AuthorizeFolder("/Account/Manage");
-                    options.Conventions.AuthorizePage("/Account/Logout");
-                    options.Conventions.AuthorizePage("/Basket/Checkout");
+                    options.Conventions.AuthorizeFolder("/");
+
                     options.Conventions.AddPageRoute("/Category/Index", "{id}/");
                     options.Conventions.AddPageRoute("/Category/Type/Index", "{cat}/{type}");
                     options.Conventions.AddPageRoute("/Product/Index", "produto/{id}");
@@ -170,7 +174,7 @@ namespace SalesWeb
                     options.Conventions.AddPageRoute("/Privacy", "privacidade");
                     options.Conventions.AddPageRoute("/NotFound", "pagina-nao-encontrada");
                     options.Conventions.AddPageRoute("/Error", "erro");
-                    options.Conventions.AddPageRoute("/Account/Signin", "conta/entrar");
+                    options.Conventions.AddPageRoute("/Account/Login", "conta/entrar");
                     options.Conventions.AddPageRoute("/Account/ConfirmEmail", "conta/confirmar-email");
                     options.Conventions.AddPageRoute("/Account/ForgotPassword", "conta/esqueceu-password");
                     options.Conventions.AddPageRoute("/Account/ForgotPasswordConfirmation", "conta/confirmacao-password");
