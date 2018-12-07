@@ -13,10 +13,12 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SalesWeb.Pages.Account
 {
-    public class SigninModel : PageModel
+    [AllowAnonymous]
+    public class LoginModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -24,15 +26,15 @@ namespace SalesWeb.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly IMailChimpService _mailChimpService;
         private readonly EmailSettings _settings;
-        private readonly ILogger<SigninModel> _logger;
+        private readonly ILogger<LoginModel> _logger;
 
-        public SigninModel(SignInManager<ApplicationUser> signInManager,
+        public LoginModel(SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
             IBasketService basketService,
             IEmailSender emailSender,
             IOptions<EmailSettings> settings,
             IMailChimpService mailChimpService,
-            ILogger<SigninModel> logger)
+            ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
             _basketService = basketService;
@@ -48,8 +50,8 @@ namespace SalesWeb.Pages.Account
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
-        [BindProperty]
-        public RegisterViewModel UserDetails { get; set; } = new RegisterViewModel();
+        //[BindProperty]
+        //public RegisterViewModel UserDetails { get; set; } = new RegisterViewModel();
 
         [TempData]
         public string ErrorMessage { get; set; }
@@ -87,15 +89,10 @@ namespace SalesWeb.Pages.Account
             }
         }
 
-        public async Task<IActionResult> OnPostSignIn(string returnUrl = null)
+        public async Task<IActionResult> OnPost(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
             _logger.LogInformation($"OnPostSignIn return url: {returnUrl}");
-            foreach (var item in ModelState)
-            {
-                if (!item.Key.Contains("LoginDetails"))
-                    item.Value.ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
-            }
             if (!ModelState.IsValid)
             {
                 ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -124,49 +121,6 @@ namespace SalesWeb.Pages.Account
             return Page();
         }
 
-        public async Task<IActionResult> OnPostRegister(string returnUrl = "/Index")
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            _logger.LogInformation($"OnPostRegister return url: {returnUrl}");
-            foreach (var item in ModelState)
-            {
-                if (!item.Key.Contains("UserDetails"))
-                    item.Value.ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
-            }
-            if (ModelState.IsValid)
-            {
-                var user = new ApplicationUser { UserName = UserDetails.Email, Email = UserDetails.Email, FirstName = UserDetails.FirstName, LastName = UserDetails.LastName, PhoneNumber = UserDetails.PhoneNumber };
-                var result = await _userManager.CreateAsync(user, UserDetails.Password);
-                if (result.Succeeded)
-                {                    
-
-                    string anonymousBasketId = Request.Cookies[Constants.BASKET_COOKIENAME];
-                    if (!String.IsNullOrEmpty(anonymousBasketId))
-                    {
-                        await _basketService.TransferBasketAsync(anonymousBasketId, UserDetails.Email);
-                        Response.Cookies.Delete(Constants.BASKET_COOKIENAME);
-                    }
-
-                    await SendConfirmationEmailAsync(user);
-
-                    //Check Subscriber
-                    if (UserDetails.SubscribeNewsletter)
-                    {
-                        await _mailChimpService.AddSubscriberAsync(UserDetails.Email);
-                        await _emailSender.SendGenericEmailAsync(_settings.FromInfoEmail, _settings.CCEmails, "Subscrição da newsletter feita na loja", $"O utilizador {UserDetails.FirstName} {UserDetails.LastName} registou-se na loja e subscreveu-se na newsletter com o email: {UserDetails.Email}");
-                    }
-                    else
-                        await _emailSender.SendGenericEmailAsync(_settings.FromInfoEmail, _settings.CCEmails, "Novo registo na loja", $"O utilizador {UserDetails.FirstName} {UserDetails.LastName} registou-se na loja com o email: {UserDetails.Email}");
-
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToPage(returnUrl);
-                }
-                AddErrors(result);
-            }
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            return Page();
-        }        
-
         private async Task SendConfirmationEmailAsync(ApplicationUser user)
         {
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -178,19 +132,9 @@ namespace SalesWeb.Pages.Account
         {
             foreach (var error in result.Errors)
             {
-                string description = TryTranslate(error.Description);
+                string description = error.Description;
                 ModelState.AddModelError("", description);
             }
-        }
-
-        private string TryTranslate(string description)
-        {
-            if(description.LastIndexOf("is already taken.") > 0)
-            {
-                return $"O email '{UserDetails.Email}' já se encontra registado.";
-            }
-            return description;
-
         }
     }
 }
