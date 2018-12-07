@@ -71,7 +71,7 @@ namespace SalesWeb.Pages.Account
 
         public async Task OnGet(string returnUrl = null)
         {
-            returnUrl = Utils.FixBasePath(returnUrl);
+            //returnUrl = Utils.FixBasePath(returnUrl);
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
