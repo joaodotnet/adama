@@ -29,7 +29,7 @@ namespace SalesWeb.ViewModels
         [Display(Name = "Guardar sua morada na sua conta")]
         public bool SaveAddress { get; set; } = true;
         public bool UseSameAsShipping { get; set; } = true;
-        [Display(Name = "Email")]
+        [Display(Name = "Email do cliente")]
         [EmailAddress]
         public string InvoiceEmail { get; set; }        
         [Display(Name = "Nome")]

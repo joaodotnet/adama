@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Ardalis.GuardClauses;
 using ApplicationCore.Specifications;
 using System.Linq;
+using ApplicationCore.DTOs;
 
 namespace ApplicationCore.Services
 {
@@ -30,7 +31,7 @@ namespace ApplicationCore.Services
             _itemSyncRepository = itemSyncRepository;
         }
 
-        public async Task<Order> CreateOrderAsync(int basketId, string phoneNumber, int? taxNumber, Address shippingAddress, Address billingAddress, bool useBillingSameAsShipping, decimal shippingCost, string customerEmail)
+        public async Task<Order> CreateOrderAsync(int basketId, string phoneNumber, int? taxNumber, Address shippingAddress, Address billingAddress, bool useBillingSameAsShipping, decimal shippingCost, string customerEmail = null, bool registerInvoice = false)
         {
             //TODO: check price
             var basket = await _basketRepository.GetByIdWithItemsAsync(basketId);
@@ -43,7 +44,9 @@ namespace ApplicationCore.Services
                 var orderItem = new OrderItem(itemOrdered, item.UnitPrice, item.Quantity, item.CatalogAttribute1, item.CatalogAttribute2, item.CatalogAttribute3, item.CustomizeName, item.CustomizeSide);
                 items.Add(orderItem);
             }
-            var order = new Order(basket.BuyerId, phoneNumber, taxNumber, shippingAddress, billingAddress, useBillingSameAsShipping, items, shippingCost);
+            var order = new Order(basket.BuyerId, phoneNumber, taxNumber, shippingAddress, billingAddress, useBillingSameAsShipping, items, shippingCost, customerEmail);
+
+            
 
             return await _orderRepository.AddAsync(order);
 
