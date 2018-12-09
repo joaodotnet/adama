@@ -3,6 +3,7 @@
     public enum DamaApplicationId
     {
         DAMA_BACKOFFICE,
-        DAMA_APP
+        DAMA_APP,
+        SALESWEB
     }
 }

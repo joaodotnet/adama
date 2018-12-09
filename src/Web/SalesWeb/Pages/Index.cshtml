@@ -4,6 +4,8 @@
     @model IndexModel
 }
 
+@await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
+
 @if (Model.CatalogModel.Banners?.Count > 0)
 {
     <div id="carouselExampleIndicators" class="carousel slide " data-ride="carousel">
@@ -74,7 +76,9 @@
         </div>
     </div>
 }
-
+@{ 
+    Model.StatusMessage = "";
+}
 @section Scripts {
     <script>
         $(document).ready(function () {

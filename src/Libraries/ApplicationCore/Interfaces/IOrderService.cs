@@ -8,7 +8,7 @@ namespace ApplicationCore.Interfaces
 {
     public interface IOrderService
     {
-        Task<Order> CreateOrderAsync(int basketId, string phoneNumber, int? taxNumber, Address shippingAddress, Address billingAddress, bool useBillingSameAsShipping, decimal shippingCost, string customerEmail = null);
+        Task<Order> CreateOrderAsync(int basketId, string phoneNumber, int? taxNumber, Address shippingAddress, Address billingAddress, bool useBillingSameAsShipping, decimal shippingCost, string customerEmail = null, bool registerInvoice = false);
         Task UpdateOrderState(int id, OrderStateType orderState, bool isCustomizeOrder = false);
         Task<Order> GetOrderAsync(int id);
         Task<List<Order>> GetOrdersAsync(string buyerId);

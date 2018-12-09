@@ -3,6 +3,7 @@ using ApplicationCore.DTOs;
 using ApplicationCore.Entities;
 using ApplicationCore.Entities.OrderAggregate;
 using ApplicationCore.Interfaces;
+using Infrastructure.Exceptions;
 using Infrastructure.Services.SageOneHelpers;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -35,13 +36,15 @@ namespace Infrastructure.Services
 
             var uri = new Uri(_settings.AccessTokenURL);
             var response = await httpClient.PostAsync(uri, content);
-
-            //await HandleResponse(response);
-            var responseContent = await response.Content.ReadAsStringAsync();
-            JObject jObject = JObject.Parse(responseContent);
-            string access_token = (string)jObject["access_token"];
-            string refresh_token = (string)jObject["refresh_token"];
-            return (access_token, refresh_token);
+            if(response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                JObject jObject = JObject.Parse(responseContent);
+                string access_token = (string)jObject["access_token"];
+                string refresh_token = (string)jObject["refresh_token"];
+                return (access_token, refresh_token);
+            }
+            throw new SageException(response?.StatusCode.ToString(), await response?.Content?.ReadAsStringAsync());
         }
 
         public async Task<(string AccessToken, string RefreshToken)> GetAccessTokenByRefreshAsync()

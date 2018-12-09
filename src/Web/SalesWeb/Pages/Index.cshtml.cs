@@ -12,6 +12,9 @@ namespace SalesWeb.Pages
         private readonly ICatalogService _catalogService;
         private readonly IShopService _shopService;
 
+        [TempData]
+        public string StatusMessage { get; set; }
+
         public IndexModel(ICatalogService catalogService, IShopService shopService)
         {
             _catalogService = catalogService;

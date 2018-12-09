@@ -145,13 +145,17 @@ namespace SalesWeb
             services.AddScoped<IBasketRepository, BasketGroceryRepository>();
             services.AddScoped<CatalogService>();
             services.AddScoped<IShopService,ShopService>();
-            services.Configure<CatalogSettings>(Configuration);
+            services.Configure<AppSettings>(Configuration);
+            services.Configure<SageSettings>(Configuration.GetSection("Sage"));
             services.Configure<EmailSettings>(Configuration.GetSection("Email"));
             services.AddSingleton<IUriComposer>(new UriComposer(Configuration.Get<CatalogSettings>()));
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));           
             services.AddScoped<IMailChimpService, MailChimpService>();
+            services.AddScoped<ISageService, SageService>();
+            services.AddScoped<IAuthConfigRepository, AuthConfigRepository>();
+            services.AddScoped<IInvoiceService, InvoiceService>();
             services.AddTransient<IEmailSender, EmailSender>();
 
             // Add memory cache services

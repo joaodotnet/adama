@@ -4,7 +4,7 @@
     ViewData["Title"] = "Encomendar";
 }
 
-<h2 class="dama-heading-normal-font">Encomendar</h2>
+<h2 class="dama-heading-normal-font">Registar</h2>
 
 <form id="checkout-form" method="post">
     <input type="hidden" asp-for="BasketModel.Id" />
@@ -12,68 +12,66 @@
     <div class="row">
         <div class="col-sm-9">
             <div class="card">
-                <div class="card-header" id="headingThree">
-                    <h5 class="mb-0">                        
-                            3. Morada de Faturação
-                        
-                    </h5>
+                <div class="card-body text-center">
+                    <button id="btn-register" class="btn esh-basket-checkout m-auto" type="submit">
+                        Registar Venda
+                    </button>
+                    ou
+                    <a href="#card-invoice" class="btn esh-basket-checkout m-auto" data-toggle="collapse" role="button">
+                        Registar Venda e <br /> Emitir Fatura
+                    </a>
                 </div>
-                <div id="billingSection">
+            </div>
+            <div id="card-invoice" class="collapse mt-2">
+                <input type="hidden" asp-for="WantInvoice" value="true" />
+                <div class="card">
+                    <div class="card-header" id="headingThree">
+                        <h5 class="mb-0">
+                            Emitir Fatura
+                        </h5>
+                    </div>
                     <div class="card-body">
-                        <div class="form-check text-center">
-                            <label class="form-check-label">
-                                <input asp-for="WantInvoice" class="form-check-input" type="checkbox" />
-                                Deseja fatura com NIF?
-                            </label>
+                        <div class="form-group required">
+                            <label asp-for="UserAddress.InvoiceEmail"></label>
+                            <input asp-for="UserAddress.InvoiceEmail" class="form-control">
+                            <span asp-validation-for="UserAddress.InvoiceEmail" class="text-danger"></span>
                         </div>
-                        <div id="billing-group">
+                        <div class="form-group">
+                            <label asp-for="UserAddress.InvoiceName"></label>
+                            <input asp-for="UserAddress.InvoiceName" class="form-control">
+                            <span asp-validation-for="UserAddress.InvoiceName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="UserAddress.InvoiceTaxNumber"></label>
+                            <input asp-for="UserAddress.InvoiceTaxNumber" class="form-control">
+                            <span asp-validation-for="UserAddress.InvoiceTaxNumber" class="text-danger"></span>
+                        </div>
+                        <div id="invoice-address-controls">
                             <div class="form-group">
-                                <label asp-for="UserAddress.InvoiceEmail"></label>
-                                <input asp-for="UserAddress.InvoiceEmail" class="form-control">
-                                <span asp-validation-for="UserAddress.InvoiceEmail" class="text-danger"></span>
+                                <label asp-for="UserAddress.InvoiceAddressStreet"></label>
+                                <input class="form-control" asp-for="UserAddress.InvoiceAddressStreet">
+                                <span asp-validation-for="UserAddress.InvoiceAddressStreet" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <label asp-for="UserAddress.InvoiceName"></label>
-                                <input asp-for="UserAddress.InvoiceName" class="form-control">
-                                <span asp-validation-for="UserAddress.InvoiceName" class="text-danger"></span>
+                                <label asp-for="UserAddress.InvoiceAddressCity"></label>
+                                <input class="form-control" asp-for="UserAddress.InvoiceAddressCity">
+                                <span asp-validation-for="UserAddress.InvoiceAddressCity" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <label asp-for="UserAddress.InvoiceTaxNumber"></label>
-                                <input asp-for="UserAddress.InvoiceTaxNumber" class="form-control">
-                                <span asp-validation-for="UserAddress.InvoiceTaxNumber" class="text-danger"></span>
+                                <label asp-for="UserAddress.InvoiceAddressPostalCode"></label>
+                                <input class="form-control" asp-for="UserAddress.InvoiceAddressPostalCode">
+                                <span asp-validation-for="UserAddress.InvoiceAddressPostalCode" class="text-danger"></span>
                             </div>
-                            <div id="invoice-address-controls">
-                                <div class="form-group">
-                                    <label asp-for="UserAddress.InvoiceAddressStreet"></label>
-                                    <input class="form-control" asp-for="UserAddress.InvoiceAddressStreet">
-                                    <span asp-validation-for="UserAddress.InvoiceAddressStreet" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="UserAddress.InvoiceAddressCity"></label>
-                                    <input class="form-control" asp-for="UserAddress.InvoiceAddressCity">
-                                    <span asp-validation-for="UserAddress.InvoiceAddressCity" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="UserAddress.InvoiceAddressPostalCode"></label>
-                                    <input class="form-control" asp-for="UserAddress.InvoiceAddressPostalCode">
-                                    <span asp-validation-for="UserAddress.InvoiceAddressPostalCode" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="UserAddress.InvoiceAddressCountry"></label>
-                                    <select class="form-control" asp-for="UserAddress.InvoiceAddressCountry">
-                                        <option>Portugal</option>
-                                    </select>
-                                    <span asp-validation-for="UserAddress.InvoiceAddressCountry" class="text-danger"></span>
-                                </div>
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" asp-for="UserAddress.InvoiceSaveAddress">
-                                    <label class="form-check-label" asp-for="UserAddress.InvoiceSaveAddress"></label>
-                                    <span asp-validation-for="UserAddress.InvoiceSaveAddress" class="text-danger"></span>
-                                </div>
-                            </div>
+                            <div class="form-group">
+                                <label asp-for="UserAddress.InvoiceAddressCountry"></label>
+                                <select class="form-control" asp-for="UserAddress.InvoiceAddressCountry">
+                                    <option>Portugal</option>
+                                </select>
+                                <span asp-validation-for="UserAddress.InvoiceAddressCountry" class="text-danger"></span>
+                            </div>                          
                         </div>
                         <div class="text-center mt-3">
-                            <input class="btn btn-default esh-basket-checkout p-1 m-auto" type="submit" value="Finalizar Encomenda" />
+                            <input class="btn esh-basket-checkout m-auto" type="submit" value="Finalizar Encomenda" />
                         </div>
                     </div>
                 </div>
@@ -112,193 +110,28 @@
             </div>
             <hr />
             <article class="row">
-                <section class="offset-2 col-6 text-right">Subtotal</section>
-                <section class="col-4 pl-0">@Model.BasketModel.SubTotal() €</section>
-            </article>
-            <article id="shipping-cost" class="row">
-                <section class="col-8 text-right"><small>Despesas de Envio</small></section>
-                <section class="col-4 pl-0 dama-product-price">@Model.BasketModel.DefaultShippingCost.ToString("N2")</section>
-            </article>
-            <article class="row">
                 <section class="offset-2 col-6 text-right">TOTAL</section>
                 <section id="basket-total" class="col-4 pl-0 dama-product-price">@Model.BasketModel.Total()</section>
             </article>
-            <hr />
-            <article class="row">
-                <section class="col-12"><small>Tempo de entrega entre @Model.DeliveryTime.Min a @Model.DeliveryTime.Max @(SalesWeb.Extensions.EnumHelper<ApplicationCore.Entities.DeliveryTimeUnitType>.GetDisplayValue(Model.DeliveryTime.Unit))</small></section>
-            </article>
-            <article class="row">
-                <section class="col-12">
-                    <div class="dama-checkout-btn mb-3 float-right mt-3 mt-sm-0">
-                        <input class="btn btn-default esh-basket-checkout p-1 m-auto" type="submit" value="Finalizar Encomenda" />
-                    </div>
-                </section>
-            </article>
+            <hr />          
         </div>
     </div>
-    <input type="hidden" asp-for="DeliveryTime.Min" />
-    <input type="hidden" asp-for="DeliveryTime.Max" />
-    <input type="hidden" asp-for="DeliveryTime.Unit" />
-    <input type="hidden" asp-for="BasketModel.DefaultShippingCost" />
 </form>
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
-<script>
-        @*var originUserAddress = '@Html.Raw(Model.UserAddress.Street)',
-            originUserCity = '@Html.Raw(Model.UserAddress.City)',
-            originUserPostalCode = '@Model.UserAddress.PostalCode';
-        var originBillingUserAddress = '@Html.Raw(Model.UserAddress.InvoiceAddressStreet)',
-            originBillingUserCity = '@Html.Raw(Model.UserAddress.InvoiceAddressCity)',
-            originBillingUserPostalCode = '@Model.UserAddress.InvoiceAddressPostalCode';
-
-        ShowDisableAddressControls(@Model.UserAddress.UseSameAsShipping.ToString().ToLower());
-
-        function ShowDisableAddressControls(isChecked) {
-            if (isChecked) {
-                $('#UserAddress_InvoiceAddressStreet').val($('#UserAddress_Street').val());
-                $('#UserAddress_InvoiceAddressStreet').prop('disabled', true);
-                $('#UserAddress_InvoiceAddressCity').val($('#UserAddress_City').val());
-                $('#UserAddress_InvoiceAddressCity').prop('disabled', true);
-                $('#UserAddress_InvoiceAddressPostalCode').val($('#UserAddress_PostalCode').val());
-                $('#UserAddress_InvoiceAddressPostalCode').prop('disabled', true);
-                $('#UserAddress_InvoiceAddressCountry').prop('disabled', true);
-            }
-            else {                
-                $('#UserAddress_InvoiceAddressStreet').val(originBillingUserAddress);
-                $('#UserAddress_InvoiceAddressStreet').prop('disabled', false);
-                $('#UserAddress_InvoiceAddressCity').val(originBillingUserCity);
-                $('#UserAddress_InvoiceAddressCity').prop('disabled', false);
-                $('#UserAddress_InvoiceAddressPostalCode').val(originBillingUserPostalCode);
-                $('#UserAddress_InvoiceAddressPostalCode').prop('disabled', false);
-                $('#UserAddress_InvoiceAddressCountry').prop('disabled', false);
-            }
-        }*@
-
-        //function formIsValid(controlToShow) {
-
-        //    if (controlToShow == "deliverySection" || controlToShow == "billingSection") {
-
-        //        if ($('#UserAddress_UseUserAddress').valid() == false) {
-        //            $('#chooseDeliverySection').collapse("show");
-        //            return false;
-        //        }
-        //    }
-
-        //    if (controlToShow == "billingSection") {
-        //        var isValid = true;
-        //        if($('#UserAddress_Name').valid() == false)
-        //            isValid = false;
-        //        if ($('#UserAddress_ContactPhoneNumber').valid() == false)
-        //            isValid = false;
-        //        if ($('#UserAddress_Street').valid() == false)
-        //            isValid = false;
-        //        if ($('#UserAddress_City').valid() == false)
-        //            isValid = false;
-        //        if ($('#UserAddress_PostalCode').valid() == false)
-        //            isValid = false;
-        //        if ($('#UserAddress_Country').valid() == false)
-        //            isValid = false;
-        //        if (isValid == false) {
-        //            $('#deliverySection').collapse("show");
-        //            return false;
-        //        }
-        //    }
-
-        //    return true;
-        //}
+    <script>
+        
     $(document).ready(function () {
 
-            @*//Show Map or Delivery Address
-            @if (!Model.UserAddress.UseUserAddress.HasValue || Model.UserAddress.UseUserAddress == 1 )
-            {
-                <text>
-                $('#damaMapSection').hide();
-                $('#deliveryAddress').show();
-                </text>
-            }
-            else
-            { 
-                <text>
-                $('#damaMapSection').show();
-                $('#deliveryAddress').hide();
-                </text>
-            }*@
-
-            //Show Billing Address or Nor
-            @if(Model.WantInvoice)
-            {
-                <text>$('#billing-group').show();</text>
-            }
-            else
-            {
-                <text>$('#billing-group').hide();</text>
-            }
-
-            @*//Disabled Use same address or not
-            @if(Model.UserAddress.UseUserAddress == 2)
-            {
-                <text>                
-                $('#UserAddress_UseSameAsShipping').prop('disabled', true);
-                </text>
-
-            }
-
-            $('input[type=radio][name="UserAddress.UseUserAddress"]').click(function () {
-                if (this.value == '1') {
-                    $('#shipping-cost').removeClass('d-none').addClass('d-flex');
-                    $('#basket-total').text(toNumber(@Model.BasketModel.Total().ToString().Replace(',','.')));
-
-                    $('#UserAddress_Street').val(originUserAddress);
-                    //$('#UserAddress_Street').prop('disabled', false);
-                    $('#UserAddress_City').val(originUserCity);
-                    //$('#UserAddress_City').prop('disabled', false);
-                    $('#UserAddress_PostalCode').val(originUserPostalCode);
-                    //$('#UserAddress_PostalCode').prop('disabled', false);
-                    $('#damaMapSection').hide();
-                    $('#deliveryAddress').removeClass('col-6').addClass('col-12');
-                    $('#deliveryAddress').show();
-                    $('#UserAddress_UseSameAsShipping').prop('disabled', false);
-
-                    ShowDisableAddressControls(@Model.UserAddress.UseSameAsShipping.ToString().ToLower());
-                }
-                else if (this.value == '2') {
-
-                    $('#shipping-cost').removeClass('d-flex').addClass('d-none');
-                    $('#basket-total').text(toNumber(@Model.BasketModel.SubTotal().ToString().Replace(',', '.')));
-                    $('#UserAddress_Street').val('Mercado de Loulé, Praça da Republica');
-                    //$('#UserAddress_Street').prop('disabled', true);
-                    $('#UserAddress_City').val('Loulé');
-                    //$('#UserAddress_City').prop('disabled', true);
-                    $('#UserAddress_PostalCode').val("8100-270");
-                    //$('#UserAddress_PostalCode').prop('disabled', true);
-                    $('#damaMapSection').show();
-                    $('#deliveryAddress').removeClass('col-12').addClass('col-6');
-                    $('#deliveryAddress').hide();
-                    $('#UserAddress_UseSameAsShipping').prop('disabled', true);
-
-                    ShowDisableAddressControls(false);
-
-                }
-
-                 $('#deliverySection').collapse("show");
-            });
-
-            $('#UserAddress_UseSameAsShipping').click(function () {
-                ShowDisableAddressControls(this.checked);
-            });
-
-            $('#checkoutAccordion').on('show.bs.collapse', function (e) {
-                return formIsValid($(e.target).attr('id'));
-            });*@
-
-            $('#WantInvoice').change(function () {
-                if ($(this).is(":checked")) 
-                    $('#billing-group').show();
-                else
-                    $('#billing-group').hide();
-            });
+        $('#btn-register').click(function () {
+            $('#WantInvoice').val(false);
         });
-</script>
+        @if(Model.WantInvoice)
+        {
+            <text>$('#card-invoice').collapse("show");</text>
+        }
+        });
+    </script>
 }

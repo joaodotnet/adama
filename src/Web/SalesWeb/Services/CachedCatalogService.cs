@@ -13,7 +13,6 @@ namespace SalesWeb.Services
     {
         private readonly IMemoryCache _cache;
         private readonly CatalogService _catalogService;
-        private static readonly string _brandsKey = "brands";
         private static readonly string _typesKey = "types";
         private static readonly string _itemsKeyTemplate = "items-{0}-{1}-{2}-{3}-{4}";
         private static readonly string _categoryItemsKeyTemplate = "categories-items-{0}-{1}-{2}";
