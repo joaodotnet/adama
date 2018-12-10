@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.DTOs;
+using ApplicationCore.Entities;
 using ApplicationCore.Entities.OrderAggregate;
 using Backoffice.Services;
 using Backoffice.ViewModels;
@@ -25,9 +26,9 @@ namespace Backoffice.Interfaces
         Task<IList<CustomizeOrderViewModel>> GetCustomizeOrdersAsync();
         Task<CustomizeOrderViewModel> GetCustomizeOrderAsync(int id);
         Task<SageResponseDTO> RegisterInvoiceAsync(int id);
-        Task<byte[]> GetInvoicePDF(long invoiceId);
+        Task<byte[]> GetInvoicePDFAsync(DamaApplicationId application, long invoiceId);
         Task<SageResponseDTO> RegisterPaymentAsync(int id, PaymentType paymentTypeSelected);
-        Task<byte[]> GetReceiptPDF(long invoiceId, long paymentId);
+        Task<byte[]> GetReceiptPDFAsync(long invoiceId, long paymentId);
         Task<List<(string,byte[])>> GetOrderDocumentsAsync(int id);
         //Task CreateCatalogPrice(int catalogItemId);
         //Task AddOrUpdateCatalogPrice(int catalogItemId, int? catalogAttributeId, decimal? attrPrice);

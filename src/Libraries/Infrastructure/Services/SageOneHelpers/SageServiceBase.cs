@@ -18,8 +18,7 @@ namespace Infrastructure.Services.SageOneHelpers
         protected readonly SageSettings _settings;
         protected readonly string _baseUrl;
         protected readonly IAuthConfigRepository _authRepository;
-        protected readonly IAppLogger<SageService> _logger;
-        protected AuthConfig _authConfig;
+        protected readonly IAppLogger<SageService> _logger;        
 
         public SageServiceBase(
             IOptions<SageSettings> options,
@@ -29,13 +28,12 @@ namespace Infrastructure.Services.SageOneHelpers
             _settings = options.Value;
             _baseUrl = _settings.SageApiBaseUrl;
             _authRepository = authConfigRepository;
-            _authConfig = _authRepository.GetAuthConfigAsync(DamaApplicationId.DAMA_BACKOFFICE).Result;
             _logger = logger;
         }
-        protected HttpRequestMessage GenerateRequest(HttpMethod method, Uri uri, List<KeyValuePair<string, string>> body, HttpClient httpClient, bool getPdf = false)
+        protected HttpRequestMessage GenerateRequest(HttpMethod method, Uri uri, List<KeyValuePair<string, string>> body, HttpClient httpClient, string accessToken, bool getPdf = false)
         {
             var nonce = SageOneUtils.GenerateNonce();
-            var signature = SageOneAPIRequestSigner.GenerateSignature(method.ToString().ToUpper(), uri, body, _settings.SigningSecret, _authConfig.AccessToken, nonce); //"TestSigningSecret"
+            var signature = SageOneAPIRequestSigner.GenerateSignature(method.ToString().ToUpper(), uri, body, _settings.SigningSecret, accessToken, nonce); //"TestSigningSecret"
             SageOneUtils.SetHeaders(httpClient, signature, nonce, getPdf);
             HttpRequestMessage request = new HttpRequestMessage(method, uri);
             request.Content = new StringContent(SageOneUtils.ConvertPostParams(body),

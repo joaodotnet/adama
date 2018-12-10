@@ -1,0 +1,193 @@
+﻿@page
+@model Backoffice.Areas.Grocery.Pages.Sales.DetailsModel
+@{
+    ViewData["Title"] = "Detalhe";
+}
+<h2>Venda Mercado nº @Model.OrderModel.Id</h2>
+@await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.BuyerId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.BuyerId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.CustomerEmail)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.CustomerEmail)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.OrderDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.OrderDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.BillingToAddress_Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.BillingToAddress_Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.BillingToAddress_PhoneNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.BillingToAddress_PhoneNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.TaxNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.TaxNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.BillingToAddress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.BillingToAddress)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.Total)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.Total)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.OrderState)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.OrderState)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.SalesInvoiceNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderModel.SalesInvoiceNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderModel.SalesPaymentId)
+        </dt>
+        <dd>
+            @(Model.OrderModel.SalesPaymentId.HasValue ? "Sim" : "Não")
+        </dd>
+    </dl>
+    <h4>Produtos</h4>
+    <table class="table">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].PictureUri)</th>
+            <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].ProductSku)</th>
+            <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].ProductName)</th>
+            <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].Units)</th>
+            <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].UnitPrice)</th>
+            <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].Attributes)</th>
+        </tr>
+
+        @foreach (var item in Model.OrderModel.Items)
+        {
+        <tr>
+            <td>
+                <img width="200" src="@item.PictureUri" class="img-responsive" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductSku)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Units)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnitPrice)
+            </td>
+            <td>
+                <table class="table">
+                    @foreach (var attr in item.Attributes)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => attr.AttributeType)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => attr.AttributeName)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </td>
+        </tr>
+        }
+    </table>
+</div>
+<div>
+    <h4>Mudar de estado para</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post">
+                <input type="hidden" asp-for="OrderModel.Id" />
+                <div class="form-group">
+                    <select asp-for="OrderModel.OrderState" asp-items="Html.GetEnumSelectList<ApplicationCore.Entities.OrderAggregate.OrderStateType>()" class="form-control"></select>
+                    <span asp-validation-for="OrderModel.OrderState" class="text-danger"></span>
+                </div>
+                <input type="submit" value="Atualizar" class="btn btn-default" />
+            </form>
+        </div>
+    </div>
+    <br />
+    <h4>Pagamento</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            @if (!Model.OrderModel.SalesInvoiceId.HasValue)
+            {
+                <form method="post">
+                    <input type="hidden" asp-for="OrderModel.Id" />
+                    <div class="form-group">
+                        <select asp-for="OrderModel.PaymentTypeSelected" asp-items="Html.GetEnumSelectList<ApplicationCore.DTOs.PaymentType>()" class="form-control"></select>
+                        <span asp-validation-for="OrderModel.PaymentTypeSelected" class="text-danger"></span>
+                    </div>
+                    <input type="submit" value="Criar Fatura" class="btn btn-success" asp-page-handler="RegisterInvoice" />
+                </form>
+            }
+            else
+            {
+                <span class="bold">Fatura nº @Model.OrderModel.SalesInvoiceNumber</span><br>
+                <a asp-page-handler="InvoicePDF" asp-route-id="@Model.OrderModel.Id" asp-route-invoiceId="@Model.OrderModel.SalesInvoiceId">Download Fatura</a>
+            }
+
+            @if (!Model.OrderModel.SalesPaymentId.HasValue)
+            {
+                <br /><br />
+                <h4>Registar Pagamento</h4>
+                <hr />
+                <form method="post">
+                    <input type="hidden" asp-for="OrderModel.Id" />
+                    <div class="form-group">
+                        <select asp-for="OrderModel.PaymentTypeSelected" asp-items="Html.GetEnumSelectList<ApplicationCore.DTOs.PaymentType>()" class="form-control"></select>
+                        <span asp-validation-for="OrderModel.PaymentTypeSelected" class="text-danger"></span>
+                    </div>
+                    <input type="submit" value="Registar Pagamento" class="btn btn-success" asp-page-handler="RegisterPayment" />
+                </form>
+            }
+            @if (!string.IsNullOrEmpty(Model.OrderModel.CustomerEmail) && Model.OrderModel.SalesPaymentId.HasValue)
+            {
+                <br /><br />
+                <h4>Enviar Resposta</h4>
+                <form method="post">
+                    <input type="hidden" asp-for="OrderModel.Id" />
+                    <button type="submit" asp-page-handler="SendEmailToClient" class="btn btn-info">Enviar mail a cliente</button>
+                </form>
+            }
+
+        </div>
+    </div>
+</div>
+<hr/>
+<div>
+    <a asp-page="./Index">Voltar para a lista</a>
+</div>

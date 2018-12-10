@@ -15,6 +15,8 @@ namespace Backoffice.ViewModels
         public int Id { get; set; }
         [Display(Name = "Email")]
         public string BuyerId { get; set; }
+        [Display(Name = "Email Cliente")]
+        public string CustomerEmail { get; set; }
         public ApplicationUser User { get; set; }
         [Display(Name = "NIF")]
         public int? TaxNumber { get; set; }

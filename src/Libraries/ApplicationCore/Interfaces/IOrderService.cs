@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Entities;
+﻿using ApplicationCore.DTOs;
+using ApplicationCore.Entities;
 using ApplicationCore.Entities.OrderAggregate;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ namespace ApplicationCore.Interfaces
 {
     public interface IOrderService
     {
-        Task<Order> CreateOrderAsync(int basketId, string phoneNumber, int? taxNumber, Address shippingAddress, Address billingAddress, bool useBillingSameAsShipping, decimal shippingCost, string customerEmail = null, bool registerInvoice = false);
+        Task<Order> CreateOrderAsync(int basketId, string phoneNumber, int? taxNumber, Address shippingAddress, Address billingAddress, bool useBillingSameAsShipping, decimal shippingCost, string customerEmail = null, bool registerInvoice = false, PaymentType paymentType = PaymentType.CASH);
         Task UpdateOrderState(int id, OrderStateType orderState, bool isCustomizeOrder = false);
         Task<Order> GetOrderAsync(int id);
         Task<List<Order>> GetOrdersAsync(string buyerId);

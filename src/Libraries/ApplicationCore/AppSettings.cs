@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ApplicationCore.DTOs;
+using ApplicationCore.Entities;
 
 namespace ApplicationCore
 {
@@ -25,6 +27,23 @@ namespace ApplicationCore
         public string CallbackURL { get; set; }
         public string ClientSecret { get; set; }
         public string SigningSecret { get; set; }
+        public DamaApplicationId ClientApp { get; set; }
+        public List<SageBankingSettings> SageBankings { get; set; }
+    }
+    //public class ClientSettings
+    //{
+    //    public DamaApplicationId Application { get; set; }
+    //    public string ClientId { get; set; }
+    //    public string ClientSecret { get; set; }
+    //    public string SigningSecret { get; set; }
+    //    public List<SageBankingSettings> SageBankings { get; set; }
+    //}
+
+    public class SageBankingSettings
+    {
+        public PaymentType Type { get; set; }
+        public string SageTypeId { get; set; }
+        public string BankId { get; set; }
     }
 
     public class EmailSettings

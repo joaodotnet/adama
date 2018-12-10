@@ -28,13 +28,15 @@ namespace Backoffice.Services
         private readonly IMapper _mapper;
         private readonly ISageService _sageService;
         private readonly IInvoiceService _invoiceService;
+        private readonly IAuthConfigRepository _authConfigRepository;
 
         public BackofficeService(DamaContext context,
             IMapper mapper,
             ISageService sageService,
             AppIdentityDbContext identityContext,
             IOptions<BackofficeSettings> options,
-            IInvoiceService invoiceService)
+            IInvoiceService invoiceService,
+            IAuthConfigRepository authConfigRepository)
         {
             _damaContext = context;
             _identityContext = identityContext;
@@ -42,6 +44,7 @@ namespace Backoffice.Services
             _mapper = mapper;
             _sageService = sageService;
             _invoiceService = invoiceService;
+            _authConfigRepository = authConfigRepository;
         }
         public bool CheckIfFileExists(string fullpath, string fileName)
         {
@@ -234,11 +237,17 @@ namespace Backoffice.Services
 
         public async Task<SageResponseDTO> RegisterPaymentAsync(int id, PaymentType paymentTypeSelected)
         {
+            //Get Tokens
+            var tokens = await _authConfigRepository.GetAuthConfigAsync(DamaApplicationId.DAMA_BACKOFFICE);
+
+            if (tokens == null)
+                return new SageResponseDTO { Message = "Erro: Configuração da Sage não iniciada." };
+
             var order = await _damaContext.Orders
                 .SingleOrDefaultAsync(x => x.Id == id);
 
             //Payment
-            var response = await _sageService.InvoicePayment(order.SalesInvoiceId.Value, paymentTypeSelected, order.Total());
+            var response = await _sageService.InvoicePayment(tokens.AccessToken, tokens.RefreshToken, order.SalesInvoiceId.Value, paymentTypeSelected, order.Total());
 
             if (response != null && response.PaymentId.HasValue)
             {
@@ -249,14 +258,26 @@ namespace Backoffice.Services
             return response;
         }
 
-        public Task<byte[]> GetInvoicePDF(long invoiceId)
+        public async Task<byte[]> GetInvoicePDFAsync(DamaApplicationId application, long invoiceId)
         {
-            return _sageService.GetPDFInvoice(invoiceId);
+            //Get Tokens
+            var tokens = await _authConfigRepository.GetAuthConfigAsync(application);
+
+            if (tokens == null)
+                return null;
+
+            return await _sageService.GetPDFInvoice(tokens.AccessToken, tokens.RefreshToken, invoiceId);
         }
 
-        public Task<byte[]> GetReceiptPDF(long invoiceId, long paymentId)
+        public async Task<byte[]> GetReceiptPDFAsync(long invoiceId, long paymentId)
         {
-            return _sageService.GetPDFReceipt(invoiceId, paymentId);
+            //Get Tokens
+            var tokens = await _authConfigRepository.GetAuthConfigAsync(DamaApplicationId.DAMA_BACKOFFICE);
+
+            if (tokens == null)
+                return null;
+
+            return await _sageService.GetPDFReceipt(tokens.AccessToken, tokens.RefreshToken, invoiceId, paymentId);
         }
 
         public async Task<List<(string, byte[])>> GetOrderDocumentsAsync(int id)

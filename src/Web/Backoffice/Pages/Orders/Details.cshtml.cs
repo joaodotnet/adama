@@ -99,7 +99,7 @@ namespace Backoffice.Pages.Orders
             }
             else
             {
-                var bytes = await _service.GetInvoicePDF(invoiceId);
+                var bytes = await _service.GetInvoicePDFAsync(ApplicationCore.Entities.DamaApplicationId.DAMA_BACKOFFICE, invoiceId);
 
                 if(bytes.Length > 0)
                     await _service.SaveFileAsync(bytes, _settings.InvoicesFolderFullPath, fileName);
@@ -127,7 +127,7 @@ namespace Backoffice.Pages.Orders
            }
            else
            {
-               var bytes = await _service.GetReceiptPDF(invoiceId.Value,paymentId.Value);
+               var bytes = await _service.GetReceiptPDFAsync(invoiceId.Value,paymentId.Value);
 
                 if(bytes.Length > 0)
                     await _service.SaveFileAsync(bytes, _settings.InvoicesFolderFullPath, fileName);

@@ -152,10 +152,10 @@ namespace SalesWeb
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));           
-            services.AddScoped<IMailChimpService, MailChimpService>();
-            services.AddScoped<ISageService, SageService>();
+            services.AddScoped<IMailChimpService, MailChimpService>();            
             services.AddScoped<IAuthConfigRepository, AuthConfigRepository>();
             services.AddScoped<IInvoiceService, InvoiceService>();
+            services.AddScoped<ISageService, SageService>();
             services.AddTransient<IEmailSender, EmailSender>();
 
             // Add memory cache services
