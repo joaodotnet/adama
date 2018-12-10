@@ -10,6 +10,7 @@ namespace ApplicationCore.Interfaces
     public interface IInvoiceService
     {
         Task<SageResponseDTO> RegisterInvoiceAsync(Order order);
+        Task<SageResponseDTO> RegisterPaymentAsync(long salesInvoiceId, decimal total, PaymentType paymentType);
         Task<byte[]> GetPDFInvoiceAsync(long invoiceId);
     }
 }

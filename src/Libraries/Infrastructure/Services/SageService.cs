@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -47,11 +48,11 @@ namespace Infrastructure.Services
             throw new SageException(response?.StatusCode.ToString(), await response?.Content?.ReadAsStringAsync());
         }
 
-        public async Task<(string AccessToken, string RefreshToken)> GetAccessTokenByRefreshAsync()
+        public async Task<(string AccessToken, string RefreshToken)> GetAccessTokenByRefreshAsync(string refreshToken)
         {
             var httpClient = CreateHttpClient();
             AddDefaultHeaders(httpClient);
-            var data = SageOneUtils.ConvertPostParams(SageOneUtils.GetRefreshTokenPostData(_settings.ClientId, _settings.ClientSecret, _authConfig.RefreshToken));
+            var data = SageOneUtils.ConvertPostParams(SageOneUtils.GetRefreshTokenPostData(_settings.ClientId, _settings.ClientSecret, refreshToken));
             var content = new StringContent(data);
 
             var uri = new Uri(_settings.AccessTokenURL);
@@ -65,7 +66,7 @@ namespace Infrastructure.Services
             return (access_token, refresh_token);
         }
 
-        public async Task<SageResponseDTO> CreateAnonymousInvoice(List<OrderItem> orderItems, int referenceId, decimal carriageAmount)
+        public async Task<SageResponseDTO> CreateAnonymousInvoice(string accessToken, string refreshToken, List<OrderItem> orderItems, int referenceId, decimal carriageAmount)
         {
             if (orderItems == null || orderItems.Count == 0)
                 return new SageResponseDTO { Message = "Error Input Data", ResponseBody = "Error: No items" };
@@ -84,10 +85,10 @@ namespace Infrastructure.Services
             var idx = AddLinesToBody(orderItems, body);
             SetCarriageAmount(idx, carriageAmount, body);
 
-            return await CreateInvoice(body);
+            return await CreateInvoice(accessToken, refreshToken, body);
         }        
 
-        public async Task<SageResponseDTO> CreateInvoiceWithTaxNumber(List<OrderItem> orderItems, string customerName, string taxNumber, string address, string address2, string postalCode, string city, int referenceId, decimal carriageAmount)
+        public async Task<SageResponseDTO> CreateInvoiceWithTaxNumber(string accessToken, string refreshToken, List<OrderItem> orderItems, string customerName, string taxNumber, string address, string address2, string postalCode, string city, int referenceId, decimal carriageAmount)
         {
             if (orderItems == null || orderItems.Count == 0)
                 return new SageResponseDTO { Message = "Error Input Data", ResponseBody = "Error: No items" };
@@ -111,12 +112,12 @@ namespace Infrastructure.Services
             var idx = AddLinesToBody(orderItems, body);
             SetCarriageAmount(idx, carriageAmount, body);
 
-            return await CreateInvoice(body);
+            return await CreateInvoice(accessToken, refreshToken, body);
         }
 
-        private async Task<SageResponseDTO> CreateInvoice(List<KeyValuePair<string, string>> body)
+        private async Task<SageResponseDTO> CreateInvoice(string accessToken, string refreshToken, List<KeyValuePair<string, string>> body)
         {
-            if(_authConfig == null || string.IsNullOrEmpty(_authConfig.AccessToken))
+            if(string.IsNullOrEmpty(accessToken))
             {
                 return new SageResponseDTO
                 {
@@ -131,10 +132,10 @@ namespace Infrastructure.Services
                 };
                 var uri = builder.Uri;
 
-                var httpClient = CreateHttpClient(_authConfig.AccessToken);
-                HttpRequestMessage request = GenerateRequest(HttpMethod.Post, uri, body, httpClient);
+                var httpClient = CreateHttpClient(accessToken);
+                HttpRequestMessage request = GenerateRequest(HttpMethod.Post, uri, body, httpClient, accessToken);
                 var response = await httpClient.SendAsync(request);
-                var result = await HandleResponse(response, HttpMethod.Post, uri, body);
+                var result = await HandleResponse(response, HttpMethod.Post, uri, body, accessToken, refreshToken);
                 var responseObj = await FormatResponse(result);
                 if (responseObj.StatusCode == HttpStatusCode.Created)
                 {
@@ -155,7 +156,7 @@ namespace Infrastructure.Services
             }
         }
 
-        public async Task<SageResponseDTO> InvoicePayment(long id, PaymentType paymentType, decimal amount)
+        public async Task<SageResponseDTO> InvoicePayment(string accessToken, string refreshToken, long id, PaymentType paymentType, decimal amount)
         {
             try
             {
@@ -174,11 +175,11 @@ namespace Infrastructure.Services
 
                 var uri = builder.Uri;
 
-                var httpClient = CreateHttpClient(_authConfig.AccessToken);
-                HttpRequestMessage request = GenerateRequest(HttpMethod.Post, uri, body, httpClient);
+                var httpClient = CreateHttpClient(accessToken);
+                HttpRequestMessage request = GenerateRequest(HttpMethod.Post, uri, body, httpClient, accessToken);
                 var response = await httpClient.SendAsync(request);
 
-                var result = await HandleResponse(response, HttpMethod.Post, uri, body);
+                var result = await HandleResponse(response, HttpMethod.Post, uri, body, accessToken, refreshToken);
                 var responseObj = await FormatResponse(result);
                 if (responseObj.StatusCode == HttpStatusCode.Created)
                 {
@@ -198,7 +199,7 @@ namespace Infrastructure.Services
             }
         }        
 
-        public async Task<string> GetAccountData()
+        public async Task<string> GetAccountData(string accessToken, string refreshToken)
         {
             try
             {
@@ -208,11 +209,11 @@ namespace Infrastructure.Services
                     Path = $"/core/v2/business"
                 };
                 var uri = builder.Uri;
-                var httpClient = CreateHttpClient(_authConfig.AccessToken);
+                var httpClient = CreateHttpClient(accessToken);
 
-                HttpRequestMessage request = GenerateRequest(HttpMethod.Get, uri, null, httpClient);
+                HttpRequestMessage request = GenerateRequest(HttpMethod.Get, uri, null, httpClient, accessToken);
                 var response = await httpClient.SendAsync(request);
-                var result = await HandleResponse(response, HttpMethod.Get, uri, null);
+                var result = await HandleResponse(response, HttpMethod.Get, uri, null, accessToken, refreshToken);
                 //var json = new { StatusCode = response.StatusCode, ResponseBody = await response.Content.ReadAsStringAsync() };
                 return JsonConvert.SerializeObject(await FormatResponse(result), Formatting.Indented);
             }
@@ -229,7 +230,7 @@ namespace Infrastructure.Services
             }
         }
 
-        public async Task<string> GetDataAsync(string url)
+        public async Task<string> GetDataAsync(string accessToken, string refreshToken, string url)
         {
             try
             {
@@ -238,10 +239,10 @@ namespace Infrastructure.Services
                     Path = url
                 };
                 var uri = builder.Uri;
-                var httpClient = CreateHttpClient(_authConfig.AccessToken);
-                HttpRequestMessage request = GenerateRequest(HttpMethod.Get, uri, null, httpClient);
+                var httpClient = CreateHttpClient(accessToken);
+                HttpRequestMessage request = GenerateRequest(HttpMethod.Get, uri, null, httpClient, accessToken);
                 var response = await httpClient.SendAsync(request);
-                var result = await HandleResponse(response, HttpMethod.Get, uri, null);
+                var result = await HandleResponse(response, HttpMethod.Get, uri, null, accessToken, refreshToken);
                 //var json = new { StatusCode = response.StatusCode, ResponseBody = await response.Content.ReadAsStringAsync() };
                 return JsonConvert.SerializeObject(await FormatResponse(result), Formatting.Indented);
             }
@@ -258,31 +259,31 @@ namespace Infrastructure.Services
             }
         }
 
-        public async Task<byte[]> GetPDFInvoice(long invoiceId)
+        public async Task<byte[]> GetPDFInvoice(string accessToken, string refreshToken, long invoiceId)
         {
             var builder = new UriBuilder(_baseUrl)
             {
                 Path = $"/accounts/v2/sales_invoices/{invoiceId}"
             };
             var uri = builder.Uri;
-            var httpClient = CreateHttpClient(_authConfig.AccessToken);
-            HttpRequestMessage request = GenerateRequest(HttpMethod.Get, uri, null, httpClient, true);
+            var httpClient = CreateHttpClient(accessToken);
+            HttpRequestMessage request = GenerateRequest(HttpMethod.Get, uri, null, httpClient, accessToken, true);
             var response = await httpClient.SendAsync(request);
-            var result = await HandleResponse(response, HttpMethod.Get, uri, null);
+            var result = await HandleResponse(response, HttpMethod.Get, uri, null, accessToken, refreshToken);
             return await result.Content.ReadAsByteArrayAsync();
         }
 
-        public async Task<byte[]> GetPDFReceipt(long invoiceId, long paymentId)
+        public async Task<byte[]> GetPDFReceipt(string accessToken, string refreshToken, long invoiceId, long paymentId)
         {
             var builder = new UriBuilder(_baseUrl)
             {
                 Path = $"/accounts/v2/sales_invoices/{invoiceId}/payments/{paymentId}"
             };
             var uri = builder.Uri;
-            var httpClient = CreateHttpClient(_authConfig.AccessToken);
-            HttpRequestMessage request = GenerateRequest(HttpMethod.Get, uri, null, httpClient, true);
+            var httpClient = CreateHttpClient(accessToken);
+            HttpRequestMessage request = GenerateRequest(HttpMethod.Get, uri, null, httpClient, accessToken, true);
             var response = await httpClient.SendAsync(request);
-            var result = await HandleResponse(response, HttpMethod.Get, uri, null);
+            var result = await HandleResponse(response, HttpMethod.Get, uri, null, accessToken, refreshToken);
             return await result.Content.ReadAsByteArrayAsync();
         }
         private static void SetCarriageAmount(int index, decimal carriageAmount, List<KeyValuePair<string, string>> body)
@@ -314,14 +315,10 @@ namespace Infrastructure.Services
 
         private (string TypeId, string BankId) GetSagePaymentType(PaymentType paymentType)
         {
-            switch (paymentType)
-            {
-                case PaymentType.TRANSFER:
-                    return ("4","95588");
-                case PaymentType.CASH:
-                default:
-                    return ("5","95589");
-            }
+            var bankInfo = _settings.SageBankings.SingleOrDefault(x => x.Type == paymentType);
+            if(bankInfo != null)
+                return (bankInfo.SageTypeId, bankInfo.BankId);
+            return ("5", "97574");
         }
 
         private static int AddLinesToBody(List<OrderItem> orderItems, List<KeyValuePair<string, string>> body)
@@ -346,7 +343,7 @@ namespace Infrastructure.Services
             return idx;
         }
 
-        private async Task<HttpResponseMessage> HandleResponse(HttpResponseMessage response, HttpMethod httpMethod, Uri uri, List<KeyValuePair<string, string>> body)
+        private async Task<HttpResponseMessage> HandleResponse(HttpResponseMessage response, HttpMethod httpMethod, Uri uri, List<KeyValuePair<string, string>> body, string accessToken, string refreshToken)
         {
             if (!response.IsSuccessStatusCode)
             {
@@ -359,14 +356,14 @@ namespace Infrastructure.Services
                     if (error == "invalid_token")
                     {
                         //Request new token
-                        var tokens = await GetAccessTokenByRefreshAsync();
-                        await _authRepository.AddOrUpdateAuthConfigAsync(DamaApplicationId.DAMA_BACKOFFICE, tokens.AccessToken, tokens.RefreshToken);
-                        _authConfig = await _authRepository.GetAuthConfigAsync(DamaApplicationId.DAMA_BACKOFFICE);
+                        var tokens = await GetAccessTokenByRefreshAsync(refreshToken);
+                        await _authRepository.AddOrUpdateAuthConfigAsync(_settings.ClientApp, tokens.AccessToken, tokens.RefreshToken);
+                        //_authConfig = await _authRepository.GetAuthConfigAsync(_settings.ClientApp);
                         //Log new token
                         _logger.LogInformation($"Get NEW ACCESS TOKEN: StatusCode: {response.StatusCode}, ACCESS TOKEN: {tokens.AccessToken}, REFRESH TOKEN: {tokens.RefreshToken}");
                         //Try Request Again
-                        var httpClient = CreateHttpClient(_authConfig.AccessToken);
-                        HttpRequestMessage request = GenerateRequest(httpMethod, uri, body, httpClient);
+                        var httpClient = CreateHttpClient(tokens.AccessToken);
+                        HttpRequestMessage request = GenerateRequest(httpMethod, uri, body, httpClient, tokens.AccessToken);
                         response = await httpClient.SendAsync(request);
                     }
                 }

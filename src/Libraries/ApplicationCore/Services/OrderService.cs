@@ -7,6 +7,8 @@ using Ardalis.GuardClauses;
 using ApplicationCore.Specifications;
 using System.Linq;
 using ApplicationCore.DTOs;
+using System;
+using ApplicationCore.Exceptions;
 
 namespace ApplicationCore.Services
 {
@@ -17,21 +19,24 @@ namespace ApplicationCore.Services
         private readonly IBasketRepository _basketRepository;
         private readonly IAsyncRepository<CatalogItem> _itemRepository;
         private readonly IRepository<CatalogItem> _itemSyncRepository;
+        private readonly IInvoiceService _invoiceService;
 
         public OrderService(IBasketRepository basketRepository,
             IAsyncRepository<CatalogItem> itemRepository,
             IAsyncRepository<Order> orderRepository,
             IAsyncRepository<CustomizeOrder> customizeOrderRepository,
-            IRepository<CatalogItem> itemSyncRepository)
+            IRepository<CatalogItem> itemSyncRepository,
+            IInvoiceService invoiceService)
         {
             _orderRepository = orderRepository;
             _basketRepository = basketRepository;
             _itemRepository = itemRepository;
             _customizeOrderRepository = customizeOrderRepository;
             _itemSyncRepository = itemSyncRepository;
+            _invoiceService = invoiceService;
         }
 
-        public async Task<Order> CreateOrderAsync(int basketId, string phoneNumber, int? taxNumber, Address shippingAddress, Address billingAddress, bool useBillingSameAsShipping, decimal shippingCost, string customerEmail = null, bool registerInvoice = false)
+        public async Task<Order> CreateOrderAsync(int basketId, string phoneNumber, int? taxNumber, Address shippingAddress, Address billingAddress, bool useBillingSameAsShipping, decimal shippingCost, string customerEmail = null, bool registerInvoice = false, PaymentType paymentType = PaymentType.CASH)
         {
             //TODO: check price
             var basket = await _basketRepository.GetByIdWithItemsAsync(basketId);
@@ -45,11 +50,53 @@ namespace ApplicationCore.Services
                 items.Add(orderItem);
             }
             var order = new Order(basket.BuyerId, phoneNumber, taxNumber, shippingAddress, billingAddress, useBillingSameAsShipping, items, shippingCost, customerEmail);
+            var savedOrder = await _orderRepository.AddAsync(order);
 
-            
+            if (registerInvoice)
+            {
+                savedOrder.OrderState = OrderStateType.SUBMITTED;
+                SageResponseDTO response;
 
-            return await _orderRepository.AddAsync(order);
+                try
+                {
+                    response = await _invoiceService.RegisterInvoiceAsync(savedOrder);                   
+                }
+                catch (Exception ex)
+                {
+                    throw new RegisterInvoiceException(ex.ToString());
+                }
 
+                if (response.InvoiceId.HasValue)
+                {
+                    savedOrder.SalesInvoiceId = response.InvoiceId.Value;
+                    savedOrder.SalesInvoiceNumber = response.InvoiceNumber;
+
+                    await _orderRepository.UpdateAsync(savedOrder);
+
+                    //Generate Payment
+                    try
+                    {
+                        var responsePayment = await _invoiceService.RegisterPaymentAsync(savedOrder.SalesInvoiceId.Value, savedOrder.Total(), paymentType);
+                        if (responsePayment.PaymentId.HasValue)
+                        {
+                            savedOrder.SalesPaymentId = responsePayment.PaymentId.Value;
+                            await _orderRepository.UpdateAsync(savedOrder);
+                        }
+                        else
+                            throw new RegisterInvoiceException($"Fatura gerada com sucesso mas com erro de pagamento: {responsePayment?.Message}");
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new RegisterInvoiceException($"Fatura gerada com sucesso mas com erro de pagamento: {ex}");
+                    }
+                }
+                else //Something wrong
+                {
+                    throw new RegisterInvoiceException(response.Message);
+                }
+            }
+
+            return savedOrder;
         }
 
         public async Task UpdateOrderState(int id, OrderStateType orderState, bool isCustomizeOrder = false)

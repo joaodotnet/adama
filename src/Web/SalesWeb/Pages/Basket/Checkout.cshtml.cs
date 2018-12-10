@@ -90,15 +90,25 @@ namespace SalesWeb.Pages.Basket
                 }
 
 
-                    //if(UserAddress.UseSameAsShipping && UserAddress.UseUserAddress.Value == 2)
-                    //if (UserAddress.UseUserAddress == 1 && !UserAddress.UseSameAsShipping)
-                    //    billingAddress = new Address(UserAddress.InvoiceName, UserAddress.ContactPhoneNumber, UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);
-                    //else if (UserAddress.UseUserAddress == 1 && UserAddress.UseSameAsShipping)
-                    //    billingAddress = new Address(UserAddress.InvoiceName, address.PhoneNumber, address.Street, address.City, address.Country, address.PostalCode);
-                    //else if (UserAddress.UseUserAddress == 2)
-                    //    billingAddress = new Address(UserAddress.InvoiceName, UserAddress.ContactPhoneNumber, UserAddress.InvoiceAddressStreet,UserAddress.InvoiceAddressCity,UserAddress.InvoiceAddressCountry,UserAddress.InvoiceAddressPostalCode);
+                //if(UserAddress.UseSameAsShipping && UserAddress.UseUserAddress.Value == 2)
+                //if (UserAddress.UseUserAddress == 1 && !UserAddress.UseSameAsShipping)
+                //    billingAddress = new Address(UserAddress.InvoiceName, UserAddress.ContactPhoneNumber, UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);
+                //else if (UserAddress.UseUserAddress == 1 && UserAddress.UseSameAsShipping)
+                //    billingAddress = new Address(UserAddress.InvoiceName, address.PhoneNumber, address.Street, address.City, address.Country, address.PostalCode);
+                //else if (UserAddress.UseUserAddress == 2)
+                //    billingAddress = new Address(UserAddress.InvoiceName, UserAddress.ContactPhoneNumber, UserAddress.InvoiceAddressStreet,UserAddress.InvoiceAddressCity,UserAddress.InvoiceAddressCountry,UserAddress.InvoiceAddressPostalCode);
 
-                var resOrder = await _orderService.CreateOrderAsync(BasketModel.Id, UserAddress.ContactPhoneNumber, taxNumber, address, billingAddress, false, 0, UserAddress.InvoiceEmail);                
+                ApplicationCore.Entities.OrderAggregate.Order resOrder;
+                try
+                {
+                    resOrder = await _orderService.CreateOrderAsync(BasketModel.Id, UserAddress.ContactPhoneNumber, taxNumber, address, billingAddress, false, 0, UserAddress.InvoiceEmail, true, PaymentType.CASH);
+                }
+                catch (RegisterInvoiceException ex)
+                {
+                    //TODO Remover encomenda
+                    StatusMessage = $"Erro {ex}";
+                    return RedirectToPage("/Index");
+                }
 
                 await _basketService.DeleteBasketAsync(BasketModel.Id);
 
