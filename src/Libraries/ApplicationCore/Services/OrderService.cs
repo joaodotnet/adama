@@ -59,7 +59,7 @@ namespace ApplicationCore.Services
 
                 try
                 {
-                    response = await _invoiceService.RegisterInvoiceAsync(savedOrder);                   
+                    response = await _invoiceService.RegisterInvoiceAsync(SageApplicationType.SALESWEB, savedOrder);                   
                 }
                 catch (Exception ex)
                 {
@@ -76,7 +76,7 @@ namespace ApplicationCore.Services
                     //Generate Payment
                     try
                     {
-                        var responsePayment = await _invoiceService.RegisterPaymentAsync(savedOrder.SalesInvoiceId.Value, savedOrder.Total(), paymentType);
+                        var responsePayment = await _invoiceService.RegisterPaymentAsync(SageApplicationType.SALESWEB, savedOrder.SalesInvoiceId.Value, savedOrder.Total(), paymentType);
                         if (responsePayment.PaymentId.HasValue)
                         {
                             savedOrder.SalesPaymentId = responsePayment.PaymentId.Value;

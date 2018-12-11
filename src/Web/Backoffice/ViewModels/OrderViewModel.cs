@@ -47,6 +47,7 @@ namespace Backoffice.ViewModels
         [Display(Name = "Fatura Nº")]
         public string SalesInvoiceNumber { get; set; }
         public long? SalesInvoiceId { get; set; }
+        [Display(Name = "Pago?")]
         public long? SalesPaymentId { get; set; }
         public PaymentType PaymentTypeSelected { get; set; }
         public List<OrderItemViewModel> Items { get; set; }

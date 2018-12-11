@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ApplicationCore;
 using ApplicationCore.DTOs;
+using ApplicationCore.Entities;
 using ApplicationCore.Entities.OrderAggregate;
 using ApplicationCore.Interfaces;
 using Infrastructure.Data;
@@ -34,25 +35,26 @@ namespace Backoffice.Pages.Sage
         public async Task<IActionResult> OnGetAsync()
         {
             //Check if has auth tokens
-            var authTokens = await _authConfigRepository.GetAuthConfigAsync(ApplicationCore.Entities.DamaApplicationId.DAMA_BACKOFFICE);
-            if(authTokens == null)
+            var authTokens = await _authConfigRepository.GetAuthConfigAsync(ApplicationCore.Entities.SageApplicationType.DAMA_BACKOFFICE);
+            if(string.IsNullOrEmpty(authTokens.AccessToken))
             {
-                return Redirect(string.Format(_settings.AuthorizationURL, _settings.ClientId, _settings.CallbackURL));
+                return Redirect(string.Format(_settings.AuthorizationURL, authTokens.ClientId, authTokens.CallbackURL));
             }
             _accessToken = authTokens.AccessToken;
             _refreshToken = authTokens.RefreshToken;
             return Page();
         }
 
-        public IActionResult OnGetSageAuth()
+        public async Task<IActionResult> OnGetSageAuthAsync()
         {
-            return Redirect(string.Format(_settings.AuthorizationURL, _settings.ClientId, _settings.CallbackURL));
+            var authTokens = await _authConfigRepository.GetAuthConfigAsync(ApplicationCore.Entities.SageApplicationType.DAMA_BACKOFFICE);
+            return Redirect(string.Format(_settings.AuthorizationURL, authTokens.ClientId, authTokens.CallbackURL));
         }
 
         public async Task<IActionResult> OnGetRefreshTokenAsync()
         {
-            var tokens = await _sageService.GetAccessTokenByRefreshAsync(_refreshToken);
-            await _authConfigRepository.AddOrUpdateAuthConfigAsync(ApplicationCore.Entities.DamaApplicationId.DAMA_BACKOFFICE, tokens.AccessToken, tokens.RefreshToken);
+            var tokens = await _sageService.GetAccessTokenByRefreshAsync(SageApplicationType.DAMA_BACKOFFICE);
+            await _authConfigRepository.UpdateAuthConfigAsync(ApplicationCore.Entities.SageApplicationType.DAMA_BACKOFFICE, tokens.AccessToken, tokens.RefreshToken);
             Result = $"Access Token: {tokens.AccessToken} / RefreshToken: {tokens.RefreshToken}";
             return Page();
         }
@@ -60,7 +62,7 @@ namespace Backoffice.Pages.Sage
 
         public async Task<IActionResult> OnGetAccountDataAsync()
         {
-            Result = await _sageService.GetAccountData(_accessToken, _refreshToken);
+            Result = await _sageService.GetAccountData(SageApplicationType.DAMA_BACKOFFICE);
             return Page();
         }
 
@@ -78,7 +80,7 @@ namespace Backoffice.Pages.Sage
 
         public async Task<IActionResult> OnPostPaymentInvoiceAsync(int id, decimal amount)
         {
-            Result = (await _sageService.InvoicePayment(_accessToken, _refreshToken, id, PaymentType.CASH, amount)).ResponseBody;
+            Result = (await _sageService.InvoicePayment(SageApplicationType.DAMA_BACKOFFICE, id, PaymentType.CASH, amount)).ResponseBody;
             return Page();
         }
 
@@ -89,13 +91,13 @@ namespace Backoffice.Pages.Sage
                 Result = "Erro. URL não pode ser null";
                 return Page();
             }
-            Result = await _sageService.GetDataAsync(_accessToken, _refreshToken, @url);            
+            Result = await _sageService.GetDataAsync(SageApplicationType.DAMA_BACKOFFICE, @url);            
             return Page();
         }
 
         public async Task<IActionResult> OnPostDownloadPDF(int id)
         {
-            var bytes = await _sageService.GetPDFInvoice(_accessToken, _refreshToken, id);
+            var bytes = await _sageService.GetPDFInvoice(SageApplicationType.DAMA_BACKOFFICE, id);
             return File(bytes, "application/pdf",
                 $"DamaNoJornal#{id}.pdf");
             

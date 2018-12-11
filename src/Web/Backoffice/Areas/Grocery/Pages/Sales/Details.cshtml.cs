@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ApplicationCore;
 using ApplicationCore.DTOs;
+using ApplicationCore.Entities;
 using ApplicationCore.Entities.OrderAggregate;
 using ApplicationCore.Interfaces;
 using AutoMapper;
@@ -95,7 +96,7 @@ namespace Backoffice.Areas.Grocery.Pages.Sales
         public async Task<IActionResult> OnPostRegisterInvoiceAsync()
         {
             Order order = await GetOrderAsync(OrderModel.Id);
-            SageResponseDTO response = await _invoiceService.RegisterInvoiceAsync(order);
+            SageResponseDTO response = await _invoiceService.RegisterInvoiceAsync(SageApplicationType.SALESWEB, order);
             if (response.Message == "Success")
                 StatusMessage = $"Sucesso foi criado a fatura: {response.InvoiceNumber}";
             else
@@ -106,7 +107,7 @@ namespace Backoffice.Areas.Grocery.Pages.Sales
         public async Task<IActionResult> OnPostRegisterPaymentAsync()
         {
             Order order = await GetOrderAsync(OrderModel.Id);
-            SageResponseDTO response = await _invoiceService.RegisterPaymentAsync(order.SalesInvoiceId.Value, order.Total(), OrderModel.PaymentTypeSelected);
+            SageResponseDTO response = await _invoiceService.RegisterPaymentAsync(SageApplicationType.SALESWEB, order.SalesInvoiceId.Value, order.Total(), OrderModel.PaymentTypeSelected);
             if (response.Message == "Success" && response.PaymentId.HasValue)
             {
                 StatusMessage = $"Sucesso foi criado o recibo sobre a fatura {OrderModel.SalesInvoiceNumber}";
@@ -115,7 +116,11 @@ namespace Backoffice.Areas.Grocery.Pages.Sales
             }                
             else
                 StatusMessage = $"Erro: {response.Message}, Resposta: {response.ResponseBody}";
-            return RedirectToPage(new { id = OrderModel.Id });
+
+            var orderViewModel = _mapper.Map<OrderViewModel>(order);
+            orderViewModel.Items = _mapper.Map<List<OrderItemViewModel>>(order.OrderItems);
+            OrderModel = orderViewModel;
+            return Page();
         }
 
         public async Task<IActionResult> OnGetInvoicePDFAsync(int id, long invoiceId)
@@ -132,7 +137,7 @@ namespace Backoffice.Areas.Grocery.Pages.Sales
             }
             else
             {
-                var bytes = await _service.GetInvoicePDFAsync(ApplicationCore.Entities.DamaApplicationId.SALESWEB, invoiceId);
+                var bytes = await _service.GetInvoicePDFAsync(ApplicationCore.Entities.SageApplicationType.SALESWEB, invoiceId);
 
                 if(bytes.Length > 0)
                     await _service.SaveFileAsync(bytes, _settings.InvoicesFolderFullPath, fileName);

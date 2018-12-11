@@ -30,6 +30,7 @@ namespace SalesWeb.Pages.Basket
         private readonly IBasketViewModelService _basketViewModelService;
         private readonly IEmailSender _emailSender;
         private readonly IAuthConfigRepository _authConfigRepository;
+        private readonly IInvoiceService _invoiceService;
         private readonly AppSettings _settings;
 
         public CheckoutModel(IBasketService basketService,
@@ -38,7 +39,8 @@ namespace SalesWeb.Pages.Basket
             IOrderService orderService,            
             IEmailSender emailSender,
             IOptions<AppSettings> settings,
-            IAuthConfigRepository authConfigRepository)
+            IAuthConfigRepository authConfigRepository,
+            IInvoiceService invoiceService)
         {
             _basketService = basketService;
             _userManager = userManager;
@@ -46,6 +48,7 @@ namespace SalesWeb.Pages.Basket
             _basketViewModelService = basketViewModelService;            
             _emailSender = emailSender;
             _authConfigRepository = authConfigRepository;
+            _invoiceService = invoiceService;
             _settings = settings.Value;
             
         }
@@ -64,9 +67,9 @@ namespace SalesWeb.Pages.Basket
         public async Task<IActionResult> OnGet()
         {
             //Check if has auth tokens
-            var authTokens = await _authConfigRepository.GetAuthConfigAsync(ApplicationCore.Entities.DamaApplicationId.SALESWEB);
-            if (authTokens == null)
-                return Redirect(string.Format(_settings.Sage.AuthorizationURL, _settings.Sage.ClientId, _settings.Sage.CallbackURL));
+            var authTokens = await _authConfigRepository.GetAuthConfigAsync(SageApplicationType.SALESWEB);
+            if (string.IsNullOrEmpty(authTokens.AccessToken))
+                return Redirect(string.Format(_settings.Sage.AuthorizationURL, authTokens.ClientId, authTokens.CallbackURL));
 
             await SetBasketModelAsync();
 
@@ -114,18 +117,47 @@ namespace SalesWeb.Pages.Basket
 
                 if (WantInvoice)
                 {
-                    var body = GetEmailBody(resOrder, user);
-                    try
+                    //var body = GetEmailBody(resOrder, user);
+                    var invoiceBytes = await _invoiceService.GetPDFInvoiceAsync(SageApplicationType.SALESWEB, resOrder.SalesInvoiceId.Value);
+                    if (invoiceBytes != null)
                     {
-                        await _emailSender.SendEmailAsync(_settings.Email.FromOrderEmail,
-                                        resOrder.CustomerEmail,
-                                        $"SaborComTradicao ® - Encomenda #{resOrder.Id}",
-                                        body,
-                                        _settings.Email.CCEmails);
+                        //Send Email to client (from: info.saborcomtradicao@gmail.com)
+
+                        var body = $"<strong>Olá!</strong><br>" +
+                            $"Obrigada por comprares na Sabor com Tradição.<br>" +
+                            $"Enviamos em anexo a fatura relativa à tua encomenda. <br>" +
+                            "<br>Muito Obrigada.<br>" +
+                            "<br>--------------------------------------------------<br>" +
+                            "<br><strong>Hi!</strong><br>" +
+                            "Thank you to shopping at Sabor Com Tradição in Loulé, Portugal. <br>" +
+                            "We send as attach the invoice relates to your order.<br>" +
+                            "<br>Thank you.<br>" +
+                            "<br>Sabor com Tradição" +
+                            "<br>http://www.saborcomtradicao.com";
+
+                        List<(string, byte[])> files = new List<(string, byte[])>();
+                        files.Add(($"FaturaSaborComTradicao#{resOrder.Id}.pdf", invoiceBytes));
+
+                        try
+                        {
+                            await _emailSender.SendEmailAsync(
+                            _settings.Email.FromOrderEmail,
+                            resOrder.CustomerEmail,
+                            $"Sabor com Tradição - Encomenda #{resOrder.Id}",
+                            body,
+                            _settings.Email.CCEmails,
+                            null,
+                            files);
+                        }
+                        catch (SendEmailException ex)
+                        {
+                            StatusMessage = $"Erro ao enviar email: {ex}";
+                            return RedirectToPage("/Index");
+                        }
                     }
-                    catch (SendEmailException ex)
+                    else
                     {
-                        StatusMessage = $"Erro ao enviar email: {ex}";
+                        StatusMessage = "Erro: O registo de venda foi efectuado com sucesso mas não foi possível obter a fatura. Email não enviado!";
                         return RedirectToPage("/Index");
                     }
                 }
@@ -136,150 +168,11 @@ namespace SalesWeb.Pages.Basket
             return Page();
         }
 
-        private string GetEmailBody(ApplicationCore.Entities.OrderAggregate.Order order, ApplicationUser user)
-        {
-            string body = $@"
-<table style='width:550px;'>
-        <tr>
-            <td width='400px' style='vertical-align:bottom'>
-                Olá <strong>{user.FirstName} {user.LastName}</strong><br />
-                Obrigada por escolher a Sabor com Tradição®.<br />
-                A sua fatura segue em anexo.<br />
-            </td>
-            <td>
-                <img src='https://www.damanojornal.com/loja/images/dama_bird.png' width='150' />
-            </td>
-        </tr>
-    </table>
-    <div style='width:550px'>
-        <img width='100%' src='https://www.damanojornal.com/loja/images/linha-coracao.png' />
-    </div>
-   
-    <div style='margin-top:20px;width:550px'>
-        <table width='100%'>";
-
-            foreach (var item in order.OrderItems)
-            {
-                //Get Attribtues
-                var attributes = _orderService.GetOrderAttributes(item.ItemOrdered.CatalogItemId, item.CatalogAttribute1, item.CatalogAttribute2, item.CatalogAttribute3);
-                body += $@"
-            <tr>
-                <td width='250px'>
-                    <img width='250' src='{item.ItemOrdered.PictureUri}' />
-                </td>
-                <td style='padding-bottom:20px;vertical-align:bottom'>
-                    <table>
-                        <tr>
-                            <td>{item.ItemOrdered.ProductName}</td>
-                            <td>{item.UnitPrice} €</td>
-                        </tr>";
-                if(!string.IsNullOrEmpty(item.CustomizeName))
-                {
-                    var sideText = item.CustomizeSide;
-                    if (item.CustomizeSide.LastIndexOf('-') > 0)
-                        sideText = item.CustomizeSide.Substring(item.CustomizeSide.LastIndexOf('-') + 1);
-
-                    body += $@"<tr>
-                            <td>Personalização: {item.CustomizeName} ({sideText})</td>
-                        </tr>";
-                }
-                foreach (var attr in attributes)
-                {
-                    body += $@"<tr>
-                            <td>{EnumHelper<AttributeType>.GetDisplayValue(attr.Type)}: {attr.Name}</td>
-                        </tr>";
-                }
-                body +=$@"<tr>
-                            <td>Quantidade: {item.Units}</td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <td colspan='2'><hr /></td>
-            </tr>";
-            }
-
-            body += $@"</table>
-    </div>
-    <div style='margin-top:20px;width:550px'>
-        <table width='100%'>           
-            <tr>
-                <td colspan='2'>
-                    <hr />
-                </td>
-            </tr>
-            <tr>
-                <td><strong>Total</strong></td>
-                <td style='text-align:right'>{order.Total()} €</td>
-            </tr>
-            <tr>
-                <td colspan='2'>
-                    <hr />
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div style='margin-top:20px;width:550px'>
-        <img width='100%' src='https://www.damanojornal.com/loja/images/linha-coracao.png' />
-    </div>";
-            if(WantInvoice)
-            { 
-    body +=$@"<div style='background-color:#eeebeb;width:550px;padding: 5px;'>
-        <h3 style='margin-top:20px;text-align:center;width:550px'>INFORMAÇÔES DE FACTURAÇÂO</h3>
-        <div style='text-align:center;width:550px'>
-            <strong>{order.BillingToAddress.Name}</strong>";
-            if (order.TaxNumber.HasValue)
-                body += $"({order.TaxNumber})";
-                body += $@"
-            <br />
-            {order.BillingToAddress.Street}<br />
-            {order.BillingToAddress.PostalCode} {order.BillingToAddress.City}
-        </div>
-    </div>";
-            }
-    body += @"
-    <div style='margin-top:20px;text-align:center;width:550px'>
-        <strong>Se tem alguma dúvida sobre a sua encomenda, por favor contacte-nos.</strong>
-    </div>
-    <div style='margin-top:20px;text-align:center;width:550px'>
-        <strong>Muito Obrigada,</strong>
-    </div>
-    <div style='color: #EF7C8D;text-align:center;width:550px'>
-        ❤ Sabor com Tradição®
-    </div>
-    <div style='text-align:center;width:550px'>
-        <img width='100' src='https://www.damanojornal.com/loja/images/logo_name.png' />
-    </div>";
-            return body;
-        }        
-
         private async Task SetBasketModelAsync()
         {
-            //if (_signInManager.IsSignedIn(HttpContext.User))
-            //{
-                BasketModel = await _basketViewModelService.GetOrCreateBasketForUser(User.Identity.Name);
-            //}
-            //else
-            //{
-            //    GetOrSetBasketCookieAndUserName();
-            //    BasketModel = await _basketViewModelService.GetOrCreateBasketForUser(_username);
-            //}
+           BasketModel = await _basketViewModelService.GetOrCreateBasketForUser(User.Identity.Name);
         }
 
-        //private void GetOrSetBasketCookieAndUserName()
-        //{
-        //    if (Request.Cookies.ContainsKey(Constants.BASKET_COOKIENAME))
-        //    {
-        //        _username = Request.Cookies[Constants.BASKET_COOKIENAME];
-        //    }
-        //    if (_username != null) return;
-
-        //    _username = Guid.NewGuid().ToString();
-        //    var cookieOptions = new CookieOptions();
-        //    cookieOptions.Expires = DateTime.Today.AddYears(10);
-        //    Response.Cookies.Append(Constants.BASKET_COOKIENAME, _username, cookieOptions);
-        //}
 
         private bool ValidateAddressModel()
         {

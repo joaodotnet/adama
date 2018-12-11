@@ -26,10 +26,10 @@ namespace Backoffice
                 var loggerFactory = services.GetRequiredService<ILoggerFactory>();
                 try
                 {
-                    AppIdentityDbContextSeed.EnsureRoleAdminCreated(services).Wait();                    
-
+                    AppIdentityDbContextSeed.EnsureRoleAdminCreated(services).Wait();
+                    var context = services.GetRequiredService<AppIdentityDbContext>();
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-                    AppIdentityDbContextSeed.SeedAsync(userManager).Wait();
+                    AppIdentityDbContextSeed.SeedAsync(userManager, context).Wait();
 
                     //var context = services.GetRequiredService<DamaContext>();
                     //DamaContextSeed.SeedAsync(context, loggerFactory).Wait();
