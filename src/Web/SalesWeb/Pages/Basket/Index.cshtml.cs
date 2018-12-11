@@ -39,6 +39,9 @@ namespace SalesWeb.Pages.Basket
 
         public BasketViewModel BasketModel { get; set; } = new BasketViewModel();
 
+        [TempData]
+        public string StatusMessage { get; set; }
+
         public async Task OnGet()
         {
             await SetBasketModelAsync();
@@ -58,7 +61,8 @@ namespace SalesWeb.Pages.Basket
 
             await SetBasketModelAsync();
 
-            return RedirectToPage();
+            StatusMessage = $"Adicionado {productDetails.CatalogItemName} ao carrinho!";
+            return RedirectToPage("/Index");
         }
 
         public async Task<IActionResult> OnPostAddToBasketAsync(ProductViewModel productDetails)
