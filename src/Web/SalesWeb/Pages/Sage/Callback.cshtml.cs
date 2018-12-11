@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ApplicationCore;
+using ApplicationCore.Entities;
 using ApplicationCore.Interfaces;
 using Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -48,7 +49,7 @@ namespace SalesWeb.Pages.Sage
         {
             try
             {
-                var oAuth = await _sageService.GetAccessTokenAsync(code);
+                var oAuth = await _sageService.GetAccessTokenAsync(SageApplicationType.SALESWEB, code);
 
                 Status = "You now have access to your Sage One data.";
 
@@ -56,7 +57,7 @@ namespace SalesWeb.Pages.Sage
                 RefreshToken = oAuth.RefreshToken;
 
                 //Save
-                await _authRepository.AddOrUpdateAuthConfigAsync(ApplicationCore.Entities.DamaApplicationId.SALESWEB, oAuth.AccessToken, oAuth.RefreshToken);
+                await _authRepository.UpdateAuthConfigAsync(SageApplicationType.SALESWEB, oAuth.AccessToken, oAuth.RefreshToken);
             }
             catch (SageException ex)
             {

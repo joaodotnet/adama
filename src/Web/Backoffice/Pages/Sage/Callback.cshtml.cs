@@ -42,7 +42,7 @@ namespace Backoffice.Pages
 
         private async Task GetAccessTokenAsync(string code)
         {
-            var oAuth = await _sageService.GetAccessTokenAsync(code);
+            var oAuth = await _sageService.GetAccessTokenAsync(ApplicationCore.Entities.SageApplicationType.DAMA_BACKOFFICE, code);
 
             Status = "You now have access to your Sage One data.";
 
@@ -50,7 +50,7 @@ namespace Backoffice.Pages
             RefreshToken = oAuth.RefreshToken;
 
             //Save
-            await _authRepository.AddOrUpdateAuthConfigAsync(ApplicationCore.Entities.DamaApplicationId.DAMA_BACKOFFICE, oAuth.AccessToken, oAuth.RefreshToken);
+            await _authRepository.UpdateAuthConfigAsync(ApplicationCore.Entities.SageApplicationType.DAMA_BACKOFFICE, oAuth.AccessToken, oAuth.RefreshToken);
             
         }
     }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using ApplicationCore.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
@@ -33,11 +34,11 @@ namespace Infrastructure.Identity
 
         }
 
-        public static async Task SeedAsync(UserManager<ApplicationUser> userManager)
+        public static async Task SeedAsync(UserManager<ApplicationUser> userManager, AppIdentityDbContext context = null)
         {
             //Admin Users
-            await CreateUserAsync("joaofbbg@gmail.com", "dama#2018!", null, null, _roleAdmin, _roleGroceryAdmin);
-            await CreateUserAsync("susana.m.mendez@gmail.com", "damasite#2017!", null, null, _roleAdmin, _roleGroceryAdmin);
+            await CreateUserAsync("joaofbbg@gmail.com", "dama#2018!", null, null, _roleAdmin, _roleGroceryAdmin, _roleStaff);
+            await CreateUserAsync("susana.m.mendez@gmail.com", "damasite#2017!", null, null, _roleAdmin, _roleGroceryAdmin, _roleStaff);
 
             //Seed Staf Users
             await CreateUserAsync("jue@damanojornal.com", "dama#2018!", "João", "Gonçalves", _roleStaff);
@@ -45,6 +46,36 @@ namespace Infrastructure.Identity
             await CreateUserAsync("sonia@damanojornal.com", "dama#2018!", "Sónia", "Mendez", _roleStaff);
             await CreateUserAsync("rute@damanojornal.com", "mercado#18", "Rute", "Brito", _roleStaff);
 
+            //Sage sales Application
+            if (context != null)
+            {                
+                var salesConfig = await context.AuthConfigs.FindAsync(SageApplicationType.SALESWEB);
+                if (salesConfig == null)
+                {
+                    context.AuthConfigs.Add(new AuthConfig
+                    {
+                        ApplicationId = SageApplicationType.SALESWEB,
+                        ClientId = "a33817c02cd7523e58e8",
+                        ClientSecret = "5bf1a4ec81068b81d1ddcd46fe001dc7eefe1bc8",
+                        SigningSecret = "9059ae44b05538700be0a402b15bd935092c0ce7",
+                        CallbackURL = "http://localhost:6500/Sage/Callback"
+                    });
+                    await context.SaveChangesAsync();
+                }
+                var damaConfig = await context.AuthConfigs.FindAsync(SageApplicationType.DAMA_BACKOFFICE);
+                if (damaConfig == null)
+                {
+                    context.AuthConfigs.Add(new AuthConfig
+                    {
+                        ApplicationId = SageApplicationType.DAMA_BACKOFFICE,
+                        ClientId = "3d4d1c18be8c85837d72",
+                        ClientSecret = "2b267ffcb846289eff351f405a04c4196010bffb",
+                        SigningSecret = "7d84c4209d73e2f7b2f6d0bb7964d4f9e870c1f0",
+                        CallbackURL = "http://localhost:5000/Sage/Callback",
+                    });
+                    await context.SaveChangesAsync();
+                }
+            }
             //local Function
             async Task CreateUserAsync(string email, string password, string firstName, string lastName, params string[] roles)
             {

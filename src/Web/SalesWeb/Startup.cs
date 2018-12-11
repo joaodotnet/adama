@@ -109,6 +109,7 @@ namespace SalesWeb
             {
                 options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("Admin"));
                 options.AddPolicy("RequireGroceryRole", policy => policy.RequireRole("GroceryAdmin"));
+                options.AddPolicy("RequireGroceryStaff", policy => policy.RequireRole("Staff"));
             });
 
             services.ConfigureApplicationCookie(options =>
@@ -164,7 +165,7 @@ namespace SalesWeb
             services.AddMvc()
                 .AddRazorPagesOptions(options =>
                 {
-                    options.Conventions.AuthorizeFolder("/");
+                    options.Conventions.AuthorizeFolder("/", "RequireGroceryStaff");
 
                     options.Conventions.AddPageRoute("/Category/Index", "{id}/");
                     options.Conventions.AddPageRoute("/Category/Type/Index", "{cat}/{type}");

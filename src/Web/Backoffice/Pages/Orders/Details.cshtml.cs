@@ -99,7 +99,7 @@ namespace Backoffice.Pages.Orders
             }
             else
             {
-                var bytes = await _service.GetInvoicePDFAsync(ApplicationCore.Entities.DamaApplicationId.DAMA_BACKOFFICE, invoiceId);
+                var bytes = await _service.GetInvoicePDFAsync(ApplicationCore.Entities.SageApplicationType.DAMA_BACKOFFICE, invoiceId);
 
                 if(bytes.Length > 0)
                     await _service.SaveFileAsync(bytes, _settings.InvoicesFolderFullPath, fileName);

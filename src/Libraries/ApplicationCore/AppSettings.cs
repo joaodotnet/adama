@@ -23,21 +23,8 @@ namespace ApplicationCore
         public string AuthorizationURL { get; set; }
         public string SageApiBaseUrl { get; set; }
         public string AccessTokenURL { get; set; }
-        public string ClientId { get; set; }
-        public string CallbackURL { get; set; }
-        public string ClientSecret { get; set; }
-        public string SigningSecret { get; set; }
-        public DamaApplicationId ClientApp { get; set; }
         public List<SageBankingSettings> SageBankings { get; set; }
     }
-    //public class ClientSettings
-    //{
-    //    public DamaApplicationId Application { get; set; }
-    //    public string ClientId { get; set; }
-    //    public string ClientSecret { get; set; }
-    //    public string SigningSecret { get; set; }
-    //    public List<SageBankingSettings> SageBankings { get; set; }
-    //}
 
     public class SageBankingSettings
     {
