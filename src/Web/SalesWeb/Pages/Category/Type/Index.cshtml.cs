@@ -22,6 +22,10 @@ namespace SalesWeb.Pages.Category.Type
         public string CategoryName { get; set; }
         [TempData]
         public string CatalogTypeName { get; set; }
+        [TempData]
+        public string CatalogTypeUrl { get; set; }
+        [TempData]
+        public string StatusMessage { get; set; }
         //public CategoryViewModel CategoryModel { get; set; } = new CategoryViewModel();
         public CatalogIndexViewModel CatalogModel { get; set; } = new CatalogIndexViewModel();
 
@@ -34,7 +38,10 @@ namespace SalesWeb.Pages.Category.Type
 
             var category = await _catalogService.GetCategory(cat);
             if (!category.HasValue)
-                return NotFound();          
+                return NotFound();
+
+            CategoryName = cat;
+            CatalogTypeUrl = type;
 
             CatalogModel = await _catalogService.GetCatalogItems(p ?? 0, Constants.ITEMS_PER_PAGE, catalogModel.IllustrationFilterApplied, catalogType.Value.Item1,category.Value.Item1);
 

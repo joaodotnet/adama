@@ -47,7 +47,7 @@ namespace SalesWeb.Pages.Basket
             await SetBasketModelAsync();
         }
 
-        public async Task<IActionResult> OnPost(CatalogItemViewModel productDetails)
+        public async Task<IActionResult> OnPost(CatalogItemViewModel productDetails, string catName = null, string typeName = null)
         {
             if (productDetails?.CatalogItemId == null)
             {
@@ -62,6 +62,10 @@ namespace SalesWeb.Pages.Basket
             await SetBasketModelAsync();
 
             StatusMessage = $"Adicionado {productDetails.CatalogItemName} ao carrinho!";
+            if (!string.IsNullOrEmpty(catName) && string.IsNullOrEmpty(typeName))
+                return RedirectToPage("/Category/Index", new { id = catName });
+            else if (!string.IsNullOrEmpty(catName) && !string.IsNullOrEmpty(typeName))
+                return RedirectToPage("/Category/Type/Index", new { cat = catName, type = typeName });
             return RedirectToPage("/Index");
         }
 

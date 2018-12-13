@@ -11,6 +11,9 @@
 
 <p class="title">@Model.CategoryModel.CategoryName</p>
 
+@await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
+
+
 @if (Model.CategoryModel.CatalogModel != null)
 {
     <div class="row">
@@ -67,11 +70,18 @@
                 @foreach (var catalogItem in Model.CategoryModel.CatalogModel.CatalogItems)
                 {
                     <div class="esh-catalog-item col-md-3">
-                        @await Html.PartialAsync("_product", catalogItem)
+                        @await Html.PartialAsync("_product", catalogItem, new ViewDataDictionary(ViewData)
+                                 {
+                                     { "catName", Model.CategoryModel.CategoryUrlName}
+                                 })
                     </div>
                 }
             </div>
         </div>
         @await Html.PartialAsync("_pagination", Model.CategoryModel.CatalogModel.PaginationInfo)
     }
+}
+
+@{
+    Model.StatusMessage = "";
 }
