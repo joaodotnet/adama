@@ -492,16 +492,13 @@ namespace SalesWeb.Services
             IQueryable<CatalogItem> query = null;
             query = _db.CatalogItems
                 .Include(x => x.CatalogType)
-                .Include(x => x.CatalogIllustration)
-                .ThenInclude(ci => ci.IllustrationType)
-                .Where(x => x.ShowOnShop && (!illustrationId.HasValue || x.CatalogIllustrationId == illustrationId) &&
+                //.Include(x => x.CatalogIllustration)
+                //.ThenInclude(ci => ci.IllustrationType)
+                .Where(x => x.ShowOnShop &&
                 (!typeId.HasValue || x.CatalogTypeId == typeId) &&
                 (x.CatalogType.Description.Contains(searchFor) ||
-                x.CatalogIllustration.Name.Contains(searchFor) ||
-                x.CatalogIllustration.IllustrationType.Name.Contains(searchFor) ||
-                x.Name.Contains(searchFor) ||
-                x.Description.Contains(searchFor)));
-
+                x.Name.Contains(searchFor)));
+                //x.Description.Contains(searchFor)));            
             var totalItems = query.Count();
             var iPage = itemsPage ?? totalItems;
             var itemsOnPage = await query
