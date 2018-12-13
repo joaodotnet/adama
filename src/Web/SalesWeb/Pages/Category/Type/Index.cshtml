@@ -2,12 +2,14 @@
 @model SalesWeb.Pages.Category.Type.IndexModel
 @{
     ViewData["Title"] = Model.CatalogTypeName;
-    if(!string.IsNullOrEmpty(HttpContext.Request.Query["p"]))
+    if (!string.IsNullOrEmpty(HttpContext.Request.Query["p"]))
     {
         ViewBag.NoIndex = true;
     }
 }
 <p class="title">@Model.CatalogTypeName</p>
+
+@await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
 
 <div id="todos" class="news-heading text-center">
     <h2>Todos os Produtos</h2>
@@ -17,15 +19,23 @@
         @foreach (var catalogItem in Model.CatalogModel.CatalogItems)
         {
             <div class="esh-catalog-item col-md-3">
-                @await Html.PartialAsync("_product", catalogItem)
+                @await Html.PartialAsync("_product", catalogItem, new ViewDataDictionary(ViewData)
+                                 {
+                                     { "catName", Model.CategoryName},
+                                     { "typeName", Model.CatalogTypeUrl}
+                                 }))
             </div>
         }
         @if (Model.CatalogModel.CatalogItems.Count() == 0)
         {
             <div class="text-center">
-<p>Lamentamos, mas não foram encontrados resultados!</p>
+                <p>Lamentamos, mas não foram encontrados resultados!</p>
             </div>
         }
     </div>
     @await Html.PartialAsync("_pagination", Model.CatalogModel.PaginationInfo)
 </div>
+
+@{
+    Model.StatusMessage = "";
+}

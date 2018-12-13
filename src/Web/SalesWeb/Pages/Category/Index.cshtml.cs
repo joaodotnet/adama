@@ -19,6 +19,9 @@ namespace SalesWeb.Pages.Category
 
         public CategoryViewModel CategoryModel { get; set; } = new CategoryViewModel();
 
+        [TempData]
+        public string StatusMessage { get; set; }
+
         public async Task<IActionResult> OnGetAsync(string id, int? p)
         {
             var cat = await _catalogService.GetCategory(id); 
