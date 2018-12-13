@@ -7,26 +7,20 @@ using System.Linq;
 using System;
 using System.ComponentModel.DataAnnotations;
 using SalesWeb.Extensions;
-using ApplicationCore.Entities.OrderAggregate;
 using Microsoft.AspNetCore.Mvc;
 using ApplicationCore;
 using Microsoft.Extensions.Options;
+using ApplicationCore.Entities.OrderAggregate;
 
 namespace SalesWeb.Pages.Order
 {
     public class IndexModel : PageModel
     {
-        private readonly IOrderRepository _orderRepository;
-        private readonly IOrderService _orderService;
-        private readonly IEmailSender _emailSender;
-        private readonly EmailSettings _settings;
+        private readonly IAsyncRepository<ApplicationCore.Entities.OrderAggregate.Order> _repository;
 
-        public IndexModel(IOrderRepository orderRepository, IOrderService orderService, IEmailSender emailSender, IOptions<EmailSettings> settings)
+        public IndexModel(IAsyncRepository<ApplicationCore.Entities.OrderAggregate.Order> repository)
         {
-            _orderRepository = orderRepository;
-            _orderService = orderService;
-            _emailSender = emailSender;
-            _settings = settings.Value;
+            _repository = repository;
         }
 
         [TempData]
@@ -42,38 +36,25 @@ namespace SalesWeb.Pages.Order
             public decimal Total { get; set; }
             public string Status { get; set; }
             public OrderStateType StatusType { get; set; }
+            public string InvoiceNr { get; set; }
         }
 
         public async Task OnGet()
         {
-            var orders = await _orderRepository.ListAsync(new CustomerOrdersWithItemsSpecification(User.Identity.Name));
+            var orders = await _repository.ListAsync(new GroceryOrdersSpecification());
 
             Orders = orders
                 .Select(o => new OrderSummary()
                 {
                     OrderDate = o.OrderDate,
                     OrderNumber = o.Id,
+                    InvoiceNr = o.SalesInvoiceNumber,
                     Status = EnumHelper<OrderStateType>.GetDisplayValue(o.OrderState),
                     StatusType = o.OrderState,
                     Total = o.Total()
                 })
                 .OrderByDescending(o => o.OrderDate)
                 .ToList();
-        }
-        public async Task<IActionResult> OnGetCancelOrder(int number)
-        {
-            //Check order number is belong to user
-            var order = await _orderRepository.GetByIdAsync(number);
-            if(order != null && order.BuyerId.ToLower() == User.Identity.Name.ToLower())
-            {
-                await _orderService.UpdateOrderState(order.Id, OrderStateType.CANCELED);
-                StatusMessage = $"A encomenda #{number} foi cancelada com sucesso!";
-                var body = $"A encomenda <a href='http://backoffice.damanojornal.com/Orders/Details?id={order.Id}'> #{order.Id}</a> foi cancelada!";
-                await _emailSender.SendGenericEmailAsync(_settings.FromOrderEmail, _settings.CCEmails, $"A encomenda #{order.Id} foi cancelada!", body);
-            }
-            else
-                StatusMessage = $"Erro: Encomenda {number} não existe!";
-            return RedirectToPage();
-        }
+        }        
     }
 }

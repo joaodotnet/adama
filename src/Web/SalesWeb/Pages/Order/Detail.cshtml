@@ -19,7 +19,7 @@
 
             <article class="esh-orders_detail-items row mt-2">
                 <section class="esh-orders_detail-item col-12 col-sm-3">
-                    <span class="dama-orders-title-mobile d-sm-none">Nº Encomenda: </span>@Html.DisplayFor(_ => Model.OrderDetails.OrderNumber)
+                    <span class="dama-orders-title-mobile d-sm-none">Nº Encomenda: </span>@Html.DisplayFor(_ => Model.OrderDetails.OrderNumber) (@Model.OrderDetails.InvoiceNr)
                 </section>
                 <section class="esh-orders_detail-item col-12 col-sm-3">
                     <span class="dama-orders-title-mobile d-sm-none">Data: </span>@Html.DisplayFor(_ => Model.OrderDetails.OrderDate)
@@ -32,38 +32,7 @@
                 </section>
             </article>
         </section>
-
-        @*<section class="esh-orders_detail-section">
-                <article class="esh-orders_detail-titles row">
-                    <section class="esh-orders_detail-title col-xs-12">Description</section>
-                </article>
-
-                <article class="esh-orders_detail-items row">
-                    <section class="esh-orders_detail-item col-xs-12">@Model.Description</section>
-                </article>
-            </section>*@
-
-        <section class="esh-orders_detail-section mt-3">
-            <article class="esh-orders_detail-titles row">
-                <section class="esh-orders_detail-title col-12">Morada de Entrega</section>
-            </article>
-
-            <article class="esh-orders_detail-items row mt-2">
-                <section class="esh-orders_detail-item col-12">@Model.OrderDetails.ShippingAddress.Name</section>
-            </article>
-            <article class="esh-orders_detail-items row">
-                <section class="esh-orders_detail-item col-12">@Model.OrderDetails.ShippingAddress.Street</section>
-            </article>
-
-            <article class="esh-orders_detail-items row">
-                <section class="esh-orders_detail-item col-12">@Model.OrderDetails.ShippingAddress.PostalCode - @Model.OrderDetails.ShippingAddress.City</section>
-            </article>
-
-            <article class="esh-orders_detail-items row">
-                <section class="esh-orders_detail-item col-12">@Model.OrderDetails.ShippingAddress.Country</section>
-            </article>
-        </section>
-
+       
         @if (!string.IsNullOrEmpty(Model.OrderDetails.BillingAddress?.Street))
         {
 
@@ -127,23 +96,6 @@
             }
         </section>
 
-        @if (Model.OrderDetails.ShippingCost > 0)
-        {
-            <section class="esh-orders_detail-section esh-orders_detail-section--right mt-3">
-                <article class="esh-orders_detail-titles esh-basket-titles--clean row">
-                    <section class="esh-orders_detail-title d-none d-sm-block col-sm-7"></section>
-                    <section class="esh-orders_detail-title col-7 col-sm-3 text-sm-right"><small>Despesas de Envio</small></section>
-                    <section class="esh-orders_detail-item esh-orders_detail-item--mark col-4 col-sm-2 text-nowrap text-right">@Model.OrderDetails.ShippingCost €</section>
-                </article>
-
-                <article class="esh-orders_detail-items row">
-                    <section class="esh-orders_detail-item col-9"></section>
-
-                </article>
-            </section>
-
-        }
-
         <section class="esh-orders_detail-section">
             <article class="esh-orders_detail-titles esh-basket-titles--clean row">
                 <section class="esh-orders_detail-title d-none d-sm-block col-sm-7"></section>
@@ -151,5 +103,15 @@
                 <section class="esh-orders_detail-item esh-orders_detail-item--mark col-4 col-sm-2 text-nowrap text-right">@Model.OrderDetails.Total €</section>
             </article>
         </section>
+        <div class="row">
+            <div class="col">
+                <form asp-page="DownloadInvoice" method="post" class="form-group">
+                    <input type="hidden" asp-for="OrderDetails.OrderNumber" name="OrderNumber" />
+                    <input type="hidden" asp-for="OrderDetails.InvoiceNr" name="InvoiceNr" />
+                    <input type="hidden" asp-for="OrderDetails.InvoiceId" name="InvoiceId" />
+                    <button class="btn btn-secondary" type="submit">Download Fatura</button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
