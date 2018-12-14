@@ -152,7 +152,7 @@ namespace DamaWeb.Pages.Basket
             <td width='400px' style='vertical-align:bottom'>
                 Olá <strong>{user.FirstName} {user.LastName}</strong><br />
                 Obrigada por escolheres a Dama no Jornal®.<br />
-                A sua encomenda foi criada com <strong>Sucesso!</strong> <br />
+                A tua encomenda foi criada com <strong>Sucesso!</strong> <br />
                 O próximo passo será efectuares o pagamento com os dados que vais encontrar a baixo. <br />
                 <strong>Obrigada!</strong><br />
             </td>
