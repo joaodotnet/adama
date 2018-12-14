@@ -21,5 +21,6 @@ namespace SalesWeb.ViewModels
         public Address BillingAddress { get; set; }
 
         public List<OrderItemViewModel> OrderItems { get; set; } = new List<OrderItemViewModel>();
+        public string CustomerEmail { get; set; }
     }
 }

@@ -14,7 +14,7 @@
                 <section class="esh-orders_detail-title col-3">Nº Encomenda</section>
                 <section class="esh-orders_detail-title col-3">Data</section>
                 <section class="esh-orders_detail-title col-3">Total</section>
-                <section class="esh-orders_detail-title col-3">Estado</section>
+                <section class="esh-orders_detail-title col-3">Cliente</section>
             </article>
 
             <article class="esh-orders_detail-items row mt-2">
@@ -28,12 +28,12 @@
                     <span class="dama-orders-title-mobile d-sm-none">Total: </span>@Html.DisplayFor(_ => Model.OrderDetails.Total) €
                 </section>
                 <section class="esh-orders_detail-title col-12 col-sm-3">
-                    <span class="dama-orders-title-mobile d-sm-none">Estado: </span>@Model.OrderDetails.Status
+                    <span class="dama-orders-title-mobile d-sm-none">Cliente: </span>@Html.DisplayFor(_ => Model.OrderDetails.CustomerEmail)
                 </section>
             </article>
         </section>
        
-        @if (!string.IsNullOrEmpty(Model.OrderDetails.BillingAddress?.Street))
+        @if (Model.OrderDetails.BillingAddress != null && !string.IsNullOrEmpty(Model.OrderDetails.BillingAddress?.Street))
         {
 
             <section class="esh-orders_detail-section mt-3">

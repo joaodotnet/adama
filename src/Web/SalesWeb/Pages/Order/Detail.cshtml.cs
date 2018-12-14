@@ -54,6 +54,7 @@ namespace SalesWeb.Pages.Order
                 InvoiceId = order.SalesInvoiceId.Value,
                 BillingAddress = order.BillingToAddress,
                 Status = EnumHelper<OrderStateType>.GetDisplayValue(order.OrderState),
+                CustomerEmail = order.CustomerEmail,
                 Total = order.Total()
             };
 
