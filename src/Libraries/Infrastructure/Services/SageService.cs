@@ -279,7 +279,7 @@ namespace Infrastructure.Services
             var httpClient = CreateHttpClient(auth.AccessToken);
             HttpRequestMessage request = GenerateRequest(HttpMethod.Get, uri, null, httpClient, auth, true);
             var response = await httpClient.SendAsync(request);
-            var result = await HandleResponse(response, HttpMethod.Get, uri, null, auth);
+            var result = await HandleResponse(response, HttpMethod.Get, uri, null, auth, true);
             return await result.Content.ReadAsByteArrayAsync();
         }
 
@@ -294,7 +294,7 @@ namespace Infrastructure.Services
             var httpClient = CreateHttpClient(auth.AccessToken);
             HttpRequestMessage request = GenerateRequest(HttpMethod.Get, uri, null, httpClient, auth, true);
             var response = await httpClient.SendAsync(request);
-            var result = await HandleResponse(response, HttpMethod.Get, uri, null, auth);
+            var result = await HandleResponse(response, HttpMethod.Get, uri, null, auth, true);
             return await result.Content.ReadAsByteArrayAsync();
         }
         private static void SetCarriageAmount(int index, decimal carriageAmount, List<KeyValuePair<string, string>> body)
@@ -354,7 +354,7 @@ namespace Infrastructure.Services
             return idx;
         }
 
-        private async Task<HttpResponseMessage> HandleResponse(HttpResponseMessage response, HttpMethod httpMethod, Uri uri, List<KeyValuePair<string, string>> body, AuthConfig auth)
+        private async Task<HttpResponseMessage> HandleResponse(HttpResponseMessage response, HttpMethod httpMethod, Uri uri, List<KeyValuePair<string, string>> body, AuthConfig auth, bool getPdf = false)
         {
             if (!response.IsSuccessStatusCode)
             {
@@ -374,7 +374,7 @@ namespace Infrastructure.Services
                         _logger.LogInformation($"Get NEW ACCESS TOKEN: StatusCode: {response.StatusCode}, ACCESS TOKEN: {tokens.AccessToken}, REFRESH TOKEN: {tokens.RefreshToken}");
                         //Try Request Again
                         var httpClient = CreateHttpClient(tokens.AccessToken);
-                        HttpRequestMessage request = GenerateRequest(httpMethod, uri, body, httpClient, auth);
+                        HttpRequestMessage request = GenerateRequest(httpMethod, uri, body, httpClient, auth, getPdf);
                         response = await httpClient.SendAsync(request);
                     }
                 }
