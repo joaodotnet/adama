@@ -27,9 +27,18 @@ namespace ApplicationCore.Services
             _settings = settings.Value;
         }
 
+        public async Task<(string AccessToken, string RefreshToken)> GenerateNewAccessTokenAsync(SageApplicationType applicationType, string code)
+        {
+            return await _sageService.GetAccessTokenAsync(applicationType, code);
+        }
+
         public async Task<byte[]> GetPDFInvoiceAsync(SageApplicationType applicationType, long invoiceId)
         {
             return await _sageService.GetPDFInvoice(applicationType, invoiceId);
+        }
+        public async Task<byte[]> GetPDFReceiptAsync(SageApplicationType applicationType, long invoiceId, long paymentId)
+        {
+            return await _sageService.GetPDFReceipt(applicationType, invoiceId, paymentId);
         }
 
         public async Task<SageResponseDTO> RegisterInvoiceAsync(SageApplicationType applicationType, Order order)
