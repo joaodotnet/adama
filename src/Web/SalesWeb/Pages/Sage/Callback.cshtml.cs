@@ -15,13 +15,13 @@ namespace SalesWeb.Pages.Sage
     public class CallbackModel : PageModel
     {
         private readonly AppSettings _settings;
-        private readonly ISageService _sageService;
+        private readonly IInvoiceService _invoiceService;
         private readonly IAuthConfigRepository _authRepository;
 
-        public CallbackModel(IOptions<BackofficeSettings> options, ISageService sageService, IAuthConfigRepository authConfigRepository)
+        public CallbackModel(IOptions<BackofficeSettings> options, IInvoiceService invoiceService, IAuthConfigRepository authConfigRepository)
         {
-            this._settings = options.Value;
-            this._sageService = sageService;
+            _settings = options.Value;
+            _invoiceService = invoiceService;
             _authRepository = authConfigRepository;
         }
         public string Status { get; set; }
@@ -49,7 +49,7 @@ namespace SalesWeb.Pages.Sage
         {
             try
             {
-                var oAuth = await _sageService.GetAccessTokenAsync(SageApplicationType.SALESWEB, code);
+                var oAuth = await _invoiceService.GenerateNewAccessTokenAsync(SageApplicationType.SALESWEB, code);
 
                 Status = "You now have access to your Sage One data.";
 

@@ -48,7 +48,7 @@ namespace SalesWeb
                 options.UseMySql(Configuration.GetConnectionString("IdentityConnection")));
 
             ConfigureServices(services);
-
+            services.AddScoped<IInvoiceService, InvoiceTestService>();
         }
         public void ConfigureTestingServices(IServiceCollection services)
         {
@@ -61,6 +61,8 @@ namespace SalesWeb
                 options.UseInMemoryDatabase("Identity"));
 
             ConfigureServices(services);
+
+            services.AddScoped<IInvoiceService, InvoiceTestService>();
         }
 
         public void ConfigureProductionServices(IServiceCollection services)
@@ -79,6 +81,8 @@ namespace SalesWeb
             //});
 
             ConfigureServices(services);
+
+            services.AddScoped<IInvoiceService, InvoiceService>();
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -159,8 +163,7 @@ namespace SalesWeb
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));           
             services.AddScoped<IMailChimpService, MailChimpService>();            
-            services.AddScoped<IAuthConfigRepository, AuthConfigRepository>();
-            services.AddScoped<IInvoiceService, InvoiceService>();
+            services.AddScoped<IAuthConfigRepository, AuthConfigRepository>();            
             services.AddScoped<ISageService, SageService>();
             services.AddTransient<IEmailSender, EmailSender>();
 

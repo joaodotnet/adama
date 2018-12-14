@@ -146,11 +146,12 @@ namespace DamaWeb.Pages.Basket
 
         private string GetEmailBody(ApplicationCore.Entities.OrderAggregate.Order order, ApplicationUser user, bool pickupAtStore, DeliveryTimeDTO deliveryTime)
         {
+            var name = user != null && !string.IsNullOrEmpty(user.FirstName) ? $"{user.FirstName} {user.LastName}" : order.BuyerId;
             string body = $@"
 <table style='width:550px;'>
         <tr>
             <td width='400px' style='vertical-align:bottom'>
-                Olá <strong>{user.FirstName} {user.LastName}</strong><br />
+                Olá <strong>{name}</strong><br />
                 Obrigada por escolheres a Dama no Jornal®.<br />
                 A tua encomenda foi criada com <strong>Sucesso!</strong> <br />
                 O próximo passo será efectuares o pagamento com os dados que vais encontrar a baixo. <br />

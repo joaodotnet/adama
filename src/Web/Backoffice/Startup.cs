@@ -35,7 +35,18 @@ namespace Backoffice
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureDevelopmentServices(IServiceCollection services)
+        {
+            ConfigureServices(services);
+            services.AddScoped<IInvoiceService, InvoiceTestService>();
+        }
+
+        public void ConfigureProductionServices(IServiceCollection services)
+        {
+            ConfigureServices(services);
+            services.AddScoped<IInvoiceService, InvoiceService>();
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<CookiePolicyOptions>(options =>
@@ -124,8 +135,7 @@ namespace Backoffice
             services.AddScoped<IOrderService, OrderService>();
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<ISageService, SageService>();
-            services.AddScoped<IAuthConfigRepository, AuthConfigRepository>();
-            services.AddScoped<IInvoiceService, InvoiceService>();
+            services.AddScoped<IAuthConfigRepository, AuthConfigRepository>();            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
