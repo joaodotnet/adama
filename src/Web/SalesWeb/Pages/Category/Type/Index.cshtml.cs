@@ -43,7 +43,7 @@ namespace SalesWeb.Pages.Category.Type
             CategoryName = cat;
             CatalogTypeUrl = type;
 
-            CatalogModel = await _catalogService.GetCatalogItems(p ?? 0, Constants.ITEMS_PER_PAGE, catalogModel.IllustrationFilterApplied, catalogType.Value.Item1,category.Value.Item1);
+            CatalogModel = await _catalogService.GetCatalogItems(0, null, catalogModel.IllustrationFilterApplied, catalogType.Value.Item1,category.Value.Item1);
 
             return Page();
         }
