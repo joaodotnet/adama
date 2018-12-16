@@ -59,7 +59,7 @@ namespace Infrastructure.Data
             builder.Property(x => x.UnitPrice)
                 .HasColumnType("decimal(18,2)");
 
-            builder.Ignore(x => x.CustomizeName);
+            //builder.Ignore(x => x.CustomizeName);
             builder.Ignore(x => x.CustomizeSide);
         }
 

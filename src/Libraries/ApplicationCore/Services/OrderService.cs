@@ -56,7 +56,13 @@ namespace ApplicationCore.Services
             {
                 savedOrder.OrderState = OrderStateType.SUBMITTED;
                 SageResponseDTO response;
-
+                //From sales rename product name
+                
+                foreach (var item in savedOrder.OrderItems.Where(x => x.ItemOrdered.CatalogItemId == -1).ToList())
+                {
+                    item.ItemOrdered.Rename(item.CustomizeName);
+                }
+                    
                 try
                 {
                     response = await _invoiceService.RegisterInvoiceAsync(SageApplicationType.SALESWEB, savedOrder);                   

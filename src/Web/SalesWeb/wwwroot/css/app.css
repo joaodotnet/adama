@@ -147,7 +147,7 @@ a:visited {
 }
 
     a:hover {
-        color: #EF7C8D;
+        color: #e0a240;
         text-decoration: underline;
     }
 
@@ -195,8 +195,9 @@ hr {
 }
 
 .btn-primary:hover {
-    background-color: #FC2A7B !important;
-    border: 0;
+    background-color: #fff !important;
+    color:#000000;
+    border: 1px solid #000000;
 }
 
 .btn-outline-pink, .btn-outline-pink:active, .btn-outline-pink:visited {
