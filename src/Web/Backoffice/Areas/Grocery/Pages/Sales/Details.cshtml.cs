@@ -59,6 +59,17 @@ namespace Backoffice.Areas.Grocery.Pages.Sales
                 return NotFound();
             var orderViewModel = _mapper.Map<OrderViewModel>(order);
             orderViewModel.Items = _mapper.Map<List<OrderItemViewModel>>(order.OrderItems);
+
+            
+            string countryName = "Portugal";
+            int.TryParse(orderViewModel.BillingToAddress_Country, out int countryCode);
+            if(countryCode != 0)
+            {
+                var country = await _context.Countries.FindAsync(countryCode);
+                if (country != null)
+                    countryName = country.Name;
+            }
+            orderViewModel.BillingToAddress += $", {countryName}";
             OrderModel = orderViewModel;
 
             //var fileName = string.Format(_settings.InvoiceNameFormat, id);

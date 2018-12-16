@@ -64,6 +64,7 @@ namespace ApplicationCore.Services
                     order.BillingToAddress.Street.Length > 50 ? order.BillingToAddress.Street.Substring(50) : string.Empty,
                     order.BillingToAddress.PostalCode,
                     order.BillingToAddress.City,
+                    order.BillingToAddress.Country == "Portugal" ? "175" : order.BillingToAddress.Country,
                     order.Id,
                     order.ShippingCost);
             }
