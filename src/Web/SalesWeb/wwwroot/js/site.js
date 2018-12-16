@@ -8,6 +8,10 @@ $(document).ready(function () {
         }, 1000);
     });
 });
+$(document).on("blur", "input.decimal", function (e) {
+    $(this).val($(this).val().replace('.', ","));
+});
+
 function toNumber(value) {
     return parseFloat(value).toFixed(2).replace('.', ',');
 }

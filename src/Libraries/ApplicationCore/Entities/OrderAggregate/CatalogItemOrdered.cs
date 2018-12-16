@@ -21,5 +21,10 @@ namespace ApplicationCore.Entities.OrderAggregate
         public int CatalogItemId { get; private set; }
         public string ProductName { get; private set; }
         public string PictureUri { get; private set; }
+
+        public void Rename(string name)
+        {
+            this.ProductName = name;
+        }
     }
 }

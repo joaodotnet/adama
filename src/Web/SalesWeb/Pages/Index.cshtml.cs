@@ -23,6 +23,10 @@ namespace SalesWeb.Pages
 
         public CatalogIndexViewModel CatalogModel { get; set; } = new CatalogIndexViewModel();
 
+        [BindProperty]
+        public ManualViewModel ManualModel { get; set; }
+
+
         //public async Task OnGet(CatalogIndexViewModel catalogModel, int? pageId)
         //{            
         //    //Shop Stuff

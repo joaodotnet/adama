@@ -1,20 +1,20 @@
-﻿using System.Threading.Tasks;
+﻿using ApplicationCore.Interfaces;
+using Infrastructure.Identity;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using SalesWeb.ViewModels;
+using Microsoft.Extensions.Logging;
 using SalesWeb.Interfaces;
-using ApplicationCore.Interfaces;
-using Microsoft.AspNetCore.Identity;
-using Infrastructure.Identity;
+using SalesWeb.ViewModels;
 using System;
-using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace SalesWeb.Pages.Basket
 {
-    public class IndexModel : PageModel
+    public partial class IndexModel : PageModel
     {
         private readonly IBasketService _basketService;
         private const string _basketSessionKey = "basketId";
@@ -38,6 +38,8 @@ namespace SalesWeb.Pages.Basket
         }
 
         public BasketViewModel BasketModel { get; set; } = new BasketViewModel();
+        [BindProperty]
+        public ManualViewModel ManualModel { get; set; }
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -83,19 +85,27 @@ namespace SalesWeb.Pages.Basket
                 attrIds = productDetails.Attributes.Select(x => x.Selected).ToList();
             var options = GetOptionsFromAttributes(attrIds);
             var price = string.IsNullOrEmpty(productDetails.NameInput) ? productDetails.ProductPrice : productDetails.ProductPrice + productDetails.CustomizePrice.Value;
-            await _basketService.AddItemToBasket(BasketModel.Id, productDetails.ProductId, price, productDetails.ProductQuantity, options.Item1, options.Item2, options.Item3, productDetails.NameInput, productDetails.CustomizePictureFileName );
+            await _basketService.AddItemToBasket(BasketModel.Id, productDetails.ProductId, price, productDetails.ProductQuantity, options.Item1, options.Item2, options.Item3, productDetails.NameInput, productDetails.CustomizePictureFileName);
 
             await SetBasketModelAsync();
 
             return RedirectToPage();
         }
-        
-        public async Task OnPostUpdate(Dictionary<string,int> items)
+
+        public async Task OnPostUpdate(Dictionary<string, int> items)
         {
             await SetBasketModelAsync();
             await _basketService.SetQuantities(BasketModel.Id, items);
 
             await SetBasketModelAsync();
+        }
+
+        public async Task<IActionResult> OnPostAddManualAsync()
+        {
+            await SetBasketModelAsync();
+            await _basketService.AddItemToBasket(BasketModel.Id, -1, ManualModel.Price, ManualModel.Quantity, customizeName: ManualModel.Description);
+            await SetBasketModelAsync();
+            return RedirectToPage();
         }
 
         public async Task<IActionResult> OnPostCheckout(Dictionary<string, int> items)
@@ -138,7 +148,7 @@ namespace SalesWeb.Pages.Basket
             }
             else
             {
-                GetOrSetBasketCookieAndUserName();                
+                GetOrSetBasketCookieAndUserName();
                 BasketModel = await _basketViewModelService.GetOrCreateBasketForUser(_username);
             }
         }
@@ -146,8 +156,8 @@ namespace SalesWeb.Pages.Basket
         private void GetOrSetBasketCookieAndUserName()
         {
             if (Request.Cookies.ContainsKey(Constants.BASKET_COOKIENAME))
-            {                
-                _username = Request.Cookies[Constants.BASKET_COOKIENAME];                
+            {
+                _username = Request.Cookies[Constants.BASKET_COOKIENAME];
             }
             if (_username != null) return;
 
@@ -159,7 +169,7 @@ namespace SalesWeb.Pages.Basket
                 IsEssential = true
             };
             Response.Cookies.Append(Constants.BASKET_COOKIENAME, _username, cookieOptions);
-            
+
         }
     }
 }

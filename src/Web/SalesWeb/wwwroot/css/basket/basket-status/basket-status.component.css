@@ -65,7 +65,8 @@
 }
 
 .esh-basketstatus:hover .esh-basketstatus-badge {
-    background-color: #FC2A7B;
-    color: #fff;
+    background-color: #FFFFFF;
+    color: #000000;
+    border: 1px solid #000000;
     transition: all 0.35s;
 }

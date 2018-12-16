@@ -1,4 +1,5 @@
-﻿@page 
+﻿@page
+
 @{
     ViewData["Title"] = "Online";
     @model IndexModel
@@ -41,22 +42,63 @@
         </div>
     </div>
 }
-
-    <div class="news-heading text-center">
-        <h2>Produtos</h2>
-    </div>
-
-    <div class="container">
-        <div class="esh-catalog-items row">
-            @foreach (var catalogItem in Model.CatalogModel.CatalogItems)
-            {
-                <div class="esh-catalog-item col-md-3">
-                    @await Html.PartialAsync("_product", catalogItem)
+<div class="float-right">
+    <a class="btn btn-dama-menta" data-target="#addProductModal" data-toggle="modal" href="#manualProduct" role="button" aria-expanded="false" aria-controls="collapseExample">
+        Adicionar produto personalizado
+    </a>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form asp-page="/Basket/Index" asp-page-handler="AddManual" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Adicionar Produto Personalizado</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-            }
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label asp-for="ManualModel.Description"></label>
+                        <input asp-for="ManualModel.Description" class="form-control" />
+                        <span asp-validation-for="ManualModel.Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ManualModel.Quantity"></label>
+                        <input asp-for="ManualModel.Quantity" class="form-control" />
+                        <span asp-validation-for="ManualModel.Quantity" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ManualModel.Price"></label>
+                        <input asp-for="ManualModel.Price" class="form-control decimal" />
+                        <span asp-validation-for="ManualModel.Price" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-primary">Adicionar</button>
+                </div>
+            </form>
         </div>
-        @await Html.PartialAsync("_pagination", Model.CatalogModel.PaginationInfo)
     </div>
+</div>
+<div class="news-heading text-center">
+    <h2>Produtos</h2>
+</div>
+
+<div class="container">
+    <div class="esh-catalog-items row">
+        @foreach (var catalogItem in Model.CatalogModel.CatalogItems)
+        {
+            <div class="esh-catalog-item col-md-3">
+                @await Html.PartialAsync("_product", catalogItem)
+            </div>
+        }
+    </div>
+    @await Html.PartialAsync("_pagination", Model.CatalogModel.PaginationInfo)
+</div>
 
 @if (Model.CatalogModel.FeaturedCatalogItems.Any())
 {
@@ -76,7 +118,7 @@
         </div>
     </div>
 }
-@{ 
+@{
     Model.StatusMessage = "";
 }
 @section Scripts {
