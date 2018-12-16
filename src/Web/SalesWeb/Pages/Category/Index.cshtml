@@ -14,9 +14,9 @@
 @await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
 
 
-@if (Model.CategoryModel.CatalogModel != null)
+@if (Model.SalesCategoryModel != null)
 {
-    <div class="row">
+    @*<div class="row">
 
         @foreach (var item in Model.CategoryModel.CatalogModel.CatalogTypes)
         {
@@ -40,43 +40,30 @@
             </div>
         }
 
-    </div>
-
-    @if (Model.CategoryModel.CatalogModel.NewCatalogItems.Any())
-    {
-        <div class="news-heading text-center">
-            <h2>Novidades</h2>
-        </div>
-
-        <div class="container">
-
-            <div class="esh-catalog-items row">
-                @foreach (var catalogItem in Model.CategoryModel.CatalogModel.NewCatalogItems)
-                {
-                    <div class="esh-catalog-item col-md-3">
-                        @await Html.PartialAsync("_product", catalogItem)
-                    </div>
-                }
-            </div>
-        </div>
-    }
-    @if (Model.CategoryModel.CatalogModel.CatalogItems.Any())
+    </div>*@
+    
+    @if (Model.SalesCategoryModel.Types.Any())
     {
         <div id="todos" class="news-heading text-center">
             <h2>Todos os Produtos</h2>
         </div>
         <div class="container">
-            <div class="esh-catalog-items row">
-                @foreach (var catalogItem in Model.CategoryModel.CatalogModel.CatalogItems)
-                {
-                    <div class="esh-catalog-item col-md-3">
-                        @await Html.PartialAsync("_product", catalogItem, new ViewDataDictionary(ViewData)
-                                 {
-                                     { "catName", Model.CategoryModel.CategoryUrlName}
-                                 })
-                    </div>
-                }
-            </div>
+
+            @foreach (var type in Model.SalesCategoryModel.Types)
+            {
+                <h4><strong>@type.Name</strong></h4>
+                <div class="esh-catalog-items row">
+                    @foreach (var catalogItem in type.CatalogItems)
+                    {
+                        <div class="esh-catalog-item col-md-3">
+                            @await Html.PartialAsync("_product", catalogItem, new ViewDataDictionary(ViewData)
+                                     {
+                                         { "catName", Model.CategoryModel.CategoryUrlName}
+                                     })
+                        </div>
+                    }
+                </div>
+            }
         </div>
     }
 }

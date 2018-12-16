@@ -99,24 +99,6 @@
     </div>
 </div>
 
-@if (Model.CatalogModel.FeaturedCatalogItems.Any())
-{
-    <div class="news-heading text-center">
-        <h2>Destaques</h2>
-    </div>
-
-    <div class="container">
-
-        <div class="esh-catalog-items row">
-            @foreach (var catalogItem in Model.CatalogModel.FeaturedCatalogItems)
-            {
-                <div class="esh-catalog-item col-md-3">
-                    @await Html.PartialAsync("_product", catalogItem)
-                </div>
-            }
-        </div>
-    </div>
-}
 @{
     Model.StatusMessage = "";
 }
