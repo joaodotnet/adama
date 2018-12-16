@@ -30,7 +30,7 @@ namespace SalesWeb.Pages.Category
             else
                 CategoryModel.CategoryName = cat.Value.Item2;
 
-            CategoryModel.CatalogModel = await _catalogService.GetCategoryCatalogItems(cat.Value.Item1, p ?? 0, Constants.ITEMS_PER_PAGE);
+            CategoryModel.CatalogModel = await _catalogService.GetCategoryCatalogItems(cat.Value.Item1, 0, null);
             //CategoryModel.CatalogTypes = CategoryModel.CatalogModel.CatalogItems.Select(x => (x.CatalogTypeCode,x.CatalogTypeName)).Distinct().ToList();
             CategoryModel.CategoryUrlName = id.ToLower();
 
