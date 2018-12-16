@@ -8,5 +8,6 @@
         public string PictureUri { get; set; }
         public decimal Price { get; set; }
         public string ProductSku { get; set; }
+        public string CatalogTypeName { get; set; }
     }
 }

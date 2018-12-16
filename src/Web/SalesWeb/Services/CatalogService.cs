@@ -77,28 +77,6 @@ namespace SalesWeb.Services
                     Price = i.Price ?? i.CatalogType.Price,
                     ProductSku = i.Sku
                 }),
-                NewCatalogItems = itemsOnPage
-                    .Where(x => x.IsNew)
-                    .Take(8)
-                    .Select(i => new CatalogItemViewModel()
-                    {
-                        CatalogItemId = i.Id,
-                        CatalogItemName = i.Name,
-                        PictureUri = i.PictureUri,
-                        Price = i.Price ?? i.CatalogType.Price,
-                        ProductSku = i.Sku,
-                    }),
-                FeaturedCatalogItems = itemsOnPage
-                    .Where(x => x.IsFeatured)
-                    .Take(8)
-                    .Select(i => new CatalogItemViewModel()
-                    {
-                        CatalogItemId = i.Id,
-                        CatalogItemName = i.Name,
-                        PictureUri = i.PictureUri,
-                        Price = i.Price ?? i.CatalogType.Price,
-                        ProductSku = i.Sku,
-                    }),
                 //Illustrations = await GetIllustrations(),
                 Types = await GetTypes(),
                 IllustrationFilterApplied = illustrationId ?? 0,
@@ -154,12 +132,6 @@ namespace SalesWeb.Services
         public async Task<CatalogIndexViewModel> GetCategoryCatalogItems(int categoryId, int pageIndex, int? itemsPage)
         {
             //TODO: Move to repo
-            //var categories = await _db.CatalogCategories
-            //    .Include(x => x.Category)
-            //    .Include(x => x.CatalogItem)
-            //    .ThenInclude(x => x.CatalogType)
-            //    .Where(x => x.CategoryId == categoryId)
-            //    .ToListAsync();
 
             //Get Category Name
             var category = await _db.Categories.FindAsync(categoryId);
@@ -174,19 +146,6 @@ namespace SalesWeb.Services
 
             var allItems = root.ToList();
 
-            //Get Catalog Types of Category
-            var types = new List<CatalogType>();
-            foreach (var item in allItems)
-            {
-                if (item.CatalogType.CatalogItems
-                    .Where(x => x.CatalogCategories.Any(c => c.CategoryId == categoryId))
-                    .ToList().Count() > 0)
-                {
-                    if (!types.Any(x => x.Id == item.CatalogTypeId))
-                        types.Add(item.CatalogType);
-                }
-            }
-
             var itemsOnPage = allItems
                 .Skip(iPage * pageIndex)
                 .Take(iPage)
@@ -199,54 +158,17 @@ namespace SalesWeb.Services
 
             if (allItems?.Count > 0)
             {
-                //var types = await _db.CatalogTypeCategories
-                //    .Include(x => x.CatalogType)
-                //    .ThenInclude(c => c.CatalogItems)
-                //    .Include(x => x.Category)
-                //    .Where(x => x.CategoryId == categoryId && x.CatalogType.CatalogItems.Count() > 0 && !string.IsNullOrEmpty(x.CatalogType.PictureUri))
-                //    .ToListAsync();
-
+                
                 var vm = new CatalogIndexViewModel()
                 {
-                    NewCatalogItems = allItems
-                    .Where(x => x.IsNew)
-                    .Take(8)
-                    .Select(i => new CatalogItemViewModel()
-                    {
-                        CatalogItemId = i.Id,
-                        CatalogItemName = i.Name,
-                        PictureUri = i.PictureUri,
-                        Price = i.Price ?? i.CatalogType.Price,
-                        ProductSku = i.Sku
-                    }),
-                    FeaturedCatalogItems = allItems
-                    .Where(x => x.IsFeatured)
-                    .Take(8)
-                    .Select(i => new CatalogItemViewModel()
-                    {
-                        CatalogItemId = i.Id,
-                        CatalogItemName = i.Name,
-                        PictureUri = i.PictureUri,
-                        Price = i.Price ?? i.CatalogType.Price,
-                        ProductSku = i.Sku
-                    }),
-                    CatalogTypes = types.OrderBy(x => x.Description).Select(x => new CatalogTypeViewModel()
-                    {
-                        Id = x.Id,
-                        Code = x.Code,
-                        Name = x.Description,
-                        PictureUri = x.PictureUri,
-                        CatNameUri = Utils.StringToUri(category.Name),
-                        TypeNameUri = Utils.StringToUri(x.Description)
-                    })
-                    .ToList(),
                     CatalogItems = itemsOnPage.Select(i => new CatalogItemViewModel()
                     {
                         CatalogItemId = i.Id,
                         CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
                         Price = i.Price ?? i.CatalogType.Price,
-                        ProductSku = i.Sku
+                        ProductSku = i.Sku,
+                        CatalogTypeName = i.CatalogType?.Description
                     }),
                     PaginationInfo = new PaginationInfoViewModel()
                     {

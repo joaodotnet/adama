@@ -19,8 +19,20 @@ namespace SalesWeb.Pages.Category
 
         public CategoryViewModel CategoryModel { get; set; } = new CategoryViewModel();
 
+        public NewCategoryModel SalesCategoryModel { get; set; } = new NewCategoryModel();
+
         [TempData]
         public string StatusMessage { get; set; }
+
+        public class NewCategoryModel
+        {
+            public List<NewCategoryTypes> Types { get; set; } = new List<NewCategoryTypes>();
+        }
+        public class NewCategoryTypes
+        {
+            public string Name { get; set; }
+            public List<CatalogItemViewModel> CatalogItems { get; set; } = new List<CatalogItemViewModel>();
+        }
 
         public async Task<IActionResult> OnGetAsync(string id, int? p)
         {
@@ -34,7 +46,19 @@ namespace SalesWeb.Pages.Category
             //CategoryModel.CatalogTypes = CategoryModel.CatalogModel.CatalogItems.Select(x => (x.CatalogTypeCode,x.CatalogTypeName)).Distinct().ToList();
             CategoryModel.CategoryUrlName = id.ToLower();
 
+            var groupByType = CategoryModel.CatalogModel.CatalogItems.GroupBy(x => x.CatalogTypeName);
+            foreach (var item in groupByType)
+            {
+                SalesCategoryModel.Types.Add(new NewCategoryTypes
+                {
+                    Name = item.Key,
+                    CatalogItems = item.ToList()
+                });
+            }
+
             return Page();
         }
     }
+
+    
 }
