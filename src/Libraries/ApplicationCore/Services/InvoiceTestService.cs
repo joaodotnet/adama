@@ -31,12 +31,14 @@ namespace ApplicationCore.Services
 
         public Task<byte[]> GetPDFInvoiceAsync(SageApplicationType applicationType, long invoiceId)
         {
-            return null;
+            byte[] bytes = null;
+            return Task.FromResult(bytes);
         }
 
         public Task<byte[]> GetPDFReceiptAsync(SageApplicationType applicationType, long invoiceId, long paymentId)
         {
-            return null;
+            byte[] bytes = null;
+            return Task.FromResult(bytes);
         }
 
         public Task<SageResponseDTO> RegisterInvoiceAsync(SageApplicationType applicationType, Order order)

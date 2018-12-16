@@ -93,7 +93,7 @@ namespace Infrastructure.Services
             return await CreateInvoice(auth, body);
         }        
 
-        public async Task<SageResponseDTO> CreateInvoiceWithTaxNumber(SageApplicationType applicationType, List<OrderItem> orderItems, string customerName, string taxNumber, string address, string address2, string postalCode, string city, int referenceId, decimal carriageAmount)
+        public async Task<SageResponseDTO> CreateInvoiceWithTaxNumber(SageApplicationType applicationType, List<OrderItem> orderItems, string customerName, string taxNumber, string address, string address2, string postalCode, string city, string country, int referenceId, decimal carriageAmount)
         {
             var auth = await GetAuthConfigAsync(applicationType);
             if (orderItems == null || orderItems.Count == 0)
@@ -109,7 +109,7 @@ namespace Infrastructure.Services
                 new KeyValuePair<string,string>("sales_invoice[main_address_street_2]", address2),
                 new KeyValuePair<string,string>("sales_invoice[main_address_postcode]", postalCode),
                 new KeyValuePair<string,string>("sales_invoice[main_address_locality]", city),
-                new KeyValuePair<string,string>("sales_invoice[main_address_country_id]", "175"),
+                new KeyValuePair<string,string>("sales_invoice[main_address_country_id]", country),
                 //new KeyValuePair<string,string>("sales_invoice[carriage_tax_rate_id]", "4"),
                 new KeyValuePair<string,string>("sales_invoice[vat_exemption_reason_id]", "10"),
                 new KeyValuePair<string,string>("sales_invoice[reference]", referenceId.ToString())

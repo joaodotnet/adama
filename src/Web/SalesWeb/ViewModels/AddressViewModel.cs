@@ -44,7 +44,7 @@ namespace SalesWeb.ViewModels
         [Display(Name = "País")]
         public string InvoiceAddressCountry { get; set; }
         [Display(Name = "Código Postal")]
-        [RegularExpression("^\\d{4}-\\d{3}?$", ErrorMessage = "O Código Postal (Faturação) deverá ter o formato 8000-100")]
+        //[RegularExpression("^\\d{4}-\\d{3}?$", ErrorMessage = "O Código Postal (Faturação) deverá ter o formato 8000-100")]
         public string InvoiceAddressPostalCode { get; set; }
         [Display(Name = "Guardar sua morada na sua conta")]
         public bool InvoiceSaveAddress { get; set; } = true;

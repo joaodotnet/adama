@@ -63,9 +63,8 @@
                                 <span asp-validation-for="UserAddress.InvoiceAddressPostalCode" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <label asp-for="UserAddress.InvoiceAddressCountry"></label>
-                                <select class="form-control" asp-for="UserAddress.InvoiceAddressCountry">
-                                    <option>Portugal</option>
+                                <label class="w-100" asp-for="UserAddress.InvoiceAddressCountry"></label>
+                                <select class="form-control w-100" asp-for="UserAddress.InvoiceAddressCountry" asp-items="ViewBag.Countries">                                    
                                 </select>
                                 <span asp-validation-for="UserAddress.InvoiceAddressCountry" class="text-danger"></span>
                             </div>                          
@@ -128,6 +127,12 @@
         $('#btn-register').click(function () {
             $('#WantInvoice').val(false);
         });
+
+        $('#UserAddress_InvoiceAddressCountry').select2({
+            theme: 'bootstrap4',
+            width: '100%'
+        });
+
         @if(Model.WantInvoice)
         {
             <text>$('#card-invoice').collapse("show");</text>

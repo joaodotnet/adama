@@ -52,5 +52,6 @@ namespace Backoffice.ViewModels
         public PaymentType PaymentTypeSelected { get; set; }
         public List<OrderItemViewModel> Items { get; set; }
         public bool HasInvoiceReady { get; set; } = false;
+        public string BillingToAddress_Country { get; set; }
     }
 }

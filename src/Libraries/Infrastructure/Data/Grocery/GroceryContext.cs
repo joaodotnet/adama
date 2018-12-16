@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Infrastructure.Data
@@ -23,6 +24,7 @@ namespace Infrastructure.Data
         public DbSet<ApplicationCore.Entities.OrderAggregate.Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<CatalogCategory> CatalogCategories { get; set; }
+        public DbSet<Country> Countries { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -34,7 +36,24 @@ namespace Infrastructure.Data
             builder.Entity<CatalogItem>(ConfigureCatalogItem);
             builder.Entity<CatalogCategory>(ConfigureCatalogCategories);
             builder.Entity<Order>(ConfigureOrder);
-            builder.Entity<OrderItem>(ConfigureOrderItem);            
+            builder.Entity<OrderItem>(ConfigureOrderItem);
+            builder.Entity<Country>(ConfigureCountries);
+        }
+
+        private void ConfigureCountries(EntityTypeBuilder<Country> builder)
+        {
+            builder.ToTable("Country");
+
+            builder.Property(x => x.Id)
+                .ValueGeneratedNever();
+
+            builder.Property(x => x.Code)
+                .HasMaxLength(10)
+                .IsRequired();
+
+            builder.Property(x => x.Name)
+                .HasMaxLength(100)
+                .IsRequired();
         }
 
         private void ConfigureBasket(EntityTypeBuilder<Basket> builder)

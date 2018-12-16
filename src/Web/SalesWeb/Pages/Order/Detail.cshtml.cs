@@ -7,16 +7,20 @@ using SalesWeb.Extensions;
 using ApplicationCore.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using SalesWeb.ViewModels;
+using ApplicationCore.Entities;
 
 namespace SalesWeb.Pages.Order
 {
     public partial class DetailModel : PageModel
     {
         private readonly IRepository<ApplicationCore.Entities.OrderAggregate.Order> _repository;
+        private readonly IRepository<Country> _countryRepository;
 
-        public DetailModel(IRepository<ApplicationCore.Entities.OrderAggregate.Order> repository)
+        public DetailModel(IRepository<ApplicationCore.Entities.OrderAggregate.Order> repository,
+            IRepository<Country> countryRepository)
         {
             _repository = repository;
+            _countryRepository = countryRepository;
         }
 
         [BindProperty]
@@ -28,6 +32,15 @@ namespace SalesWeb.Pages.Order
             if (order == null)
                 return NotFound();
 
+            string countryName = "Portugal";
+            int.TryParse(order.BillingToAddress.Country, out int countryCode);
+            if(countryCode != 0)
+            {
+                var country = _countryRepository.GetById(countryCode);
+                if (country != null)
+                    countryName = country.Name;
+            }
+            
             OrderDetails = new OrderViewModel()
             {
                 OrderDate = order.OrderDate,
@@ -53,6 +66,7 @@ namespace SalesWeb.Pages.Order
                 InvoiceNr = order.SalesInvoiceNumber,
                 InvoiceId = order.SalesInvoiceId.Value,
                 BillingAddress = order.BillingToAddress,
+                CountryName = countryName,
                 Status = EnumHelper<OrderStateType>.GetDisplayValue(order.OrderState),
                 CustomerEmail = order.CustomerEmail,
                 Total = order.Total()

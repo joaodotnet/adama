@@ -1,24 +1,21 @@
-﻿using System.Threading.Tasks;
+﻿using ApplicationCore;
+using ApplicationCore.DTOs;
+using ApplicationCore.Entities;
+using ApplicationCore.Entities.OrderAggregate;
+using ApplicationCore.Exceptions;
+using ApplicationCore.Interfaces;
+using Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using SalesWeb.ViewModels;
-using SalesWeb.Interfaces;
-using ApplicationCore.Interfaces;
-using Microsoft.AspNetCore.Identity;
-using Infrastructure.Identity;
-using System;
-using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
-using ApplicationCore.Entities.OrderAggregate;
-using System.Text;
-using SalesWeb.Extensions;
-using ApplicationCore.Entities;
-using ApplicationCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
+using SalesWeb.Interfaces;
+using SalesWeb.ViewModels;
+using System.Collections.Generic;
 using System.Linq;
-using ApplicationCore.DTOs;
-using Microsoft.ApplicationInsights;
-using ApplicationCore.Exceptions;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace SalesWeb.Pages.Basket
 {
@@ -31,26 +28,29 @@ namespace SalesWeb.Pages.Basket
         private readonly IEmailSender _emailSender;
         private readonly IAuthConfigRepository _authConfigRepository;
         private readonly IInvoiceService _invoiceService;
+        private readonly IAsyncRepository<Country> _countryRepository;
         private readonly AppSettings _settings;
 
         public CheckoutModel(IBasketService basketService,
-            IBasketViewModelService basketViewModelService,            
+            IBasketViewModelService basketViewModelService,
             UserManager<ApplicationUser> userManager,
-            IOrderService orderService,            
+            IOrderService orderService,
             IEmailSender emailSender,
             IOptions<AppSettings> settings,
             IAuthConfigRepository authConfigRepository,
-            IInvoiceService invoiceService)
+            IInvoiceService invoiceService,
+            IAsyncRepository<Country> countryRepository)
         {
             _basketService = basketService;
             _userManager = userManager;
             _orderService = orderService;
-            _basketViewModelService = basketViewModelService;            
+            _basketViewModelService = basketViewModelService;
             _emailSender = emailSender;
             _authConfigRepository = authConfigRepository;
             _invoiceService = invoiceService;
+            _countryRepository = countryRepository;
             _settings = settings.Value;
-            
+
         }
         [BindProperty]
         public BasketViewModel BasketModel { get; set; } = new BasketViewModel();
@@ -83,7 +83,7 @@ namespace SalesWeb.Pages.Basket
                 var user = await _userManager.GetUserAsync(User);
 
                 Address address = new Address(UserAddress.Name, "Mercado de Loulé - Banca nº 44, Praça da Republica", "Loulé", "Portugal", "8100-270"); //,UserAddress.InvoiceAddressStreet, UserAddress.InvoiceAddressCity, UserAddress.InvoiceAddressCountry, UserAddress.InvoiceAddressPostalCode);
-              
+
                 Address billingAddress = null;
                 int? taxNumber = null;
                 if (WantInvoice)
@@ -170,7 +170,9 @@ namespace SalesWeb.Pages.Basket
 
         private async Task SetBasketModelAsync()
         {
-           BasketModel = await _basketViewModelService.GetOrCreateBasketForUser(User.Identity.Name);
+            var countries = await _countryRepository.ListAllAsync();
+            ViewData["Countries"] = new SelectList(countries.OrderBy(x => x.Name), "Id", "Name", "175");
+            BasketModel = await _basketViewModelService.GetOrCreateBasketForUser(User.Identity.Name);
         }
 
 
@@ -192,10 +194,18 @@ namespace SalesWeb.Pages.Basket
                         ModelState.AddModelError("UserAddress.InvoiceAddressPostalCode", "O campo Código Postal é obrigatório.");
                     if (string.IsNullOrEmpty(UserAddress.InvoiceAddressCountry))
                         ModelState.AddModelError("UserAddress.InvoiceAddressCountry", "O campo País é obrigatório.");
+
+                    if (UserAddress.InvoiceAddressCountry == "175") //Portugal
+                    {
+                        //Test PostalCode
+                        Regex rx = new Regex(@"^\\d{4}-\\d{3}?$");
+                        if (!rx.IsMatch(UserAddress.InvoiceAddressPostalCode))
+                            ModelState.AddModelError("UserAddress.InvoiceAddressPostalCode", "O campo Código Postal não é válido para Portugal");
+                    }
                 }
             }
             return ModelState.IsValid;
         }
 
-    }    
+    }
 }
