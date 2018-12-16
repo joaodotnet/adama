@@ -245,7 +245,8 @@ namespace Infrastructure.Services
                 var auth = await GetAuthConfigAsync(applicationType);
                 var builder = new UriBuilder(_baseUrl)
                 {
-                    Path = url
+                    Path = url.Substring(0, url.IndexOf('?') != -1 ? url.IndexOf('?') : url.Length),
+                    Query = url.IndexOf('?') != -1 ? url.Substring(url.IndexOf('?') + 1) : ""
                 };
                 var uri = builder.Uri;
                 var httpClient = CreateHttpClient(auth.AccessToken);
