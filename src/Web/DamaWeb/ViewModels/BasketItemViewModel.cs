@@ -14,5 +14,6 @@ namespace DamaWeb.ViewModels
         public int Quantity { get; set; }
         public string PictureUrl { get; set; }
         public List<AttributeViewModel> Attributes { get; set; } = new List<AttributeViewModel>();
+        public bool IsFromCustomize { get; set; } = false;
     }
 }
