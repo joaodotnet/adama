@@ -104,4 +104,21 @@ else
         O Carrinho está vazio.
     </div>
 }
-@*</div>*@
+@section Scripts {
+
+    <script>
+
+        $(document).ready(function () {
+
+            $('.esh-basket-input').keypress(function (e) {
+                if (e.which == 13) {                    
+                    e.preventDefault();
+                    $('button[name=updatebutton]').click();
+                    return false;    //<---- Add this line
+                }
+            });
+        });
+
+    </script>
+}
+
