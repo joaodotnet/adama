@@ -122,18 +122,20 @@ namespace SalesWeb.Pages.Basket
                     if (invoiceBytes != null)
                     {
                         //Send Email to client (from: info.saborcomtradicao@gmail.com)
-
-                        var body = $"<strong>Olá!</strong><br>" +
-                            $"Obrigada por comprares na Sabor com Tradição.<br>" +
+                        var name = !string.IsNullOrEmpty(UserAddress.InvoiceName) ? UserAddress.InvoiceName : "";
+                        var body = $"<strong>Olá {name}!</strong><br>" +
+                            $"Obrigada por escolheres a <strong>Sabor Com Tradição</strong>, no Mercado Municipal de Loulé.<br>" +
                             $"Enviamos em anexo a fatura relativa à tua encomenda. <br>" +
-                            "<br>Muito Obrigada.<br>" +
-                            "<br>--------------------------------------------------<br>" +
-                            "<br><strong>Hi!</strong><br>" +
+                            "<br><strong>Muito obrigada e até breve!</strong><br>" +
+                            "Susana Mendez<br>" +
+                            "<br>___________________________________________________________<br>" +
+                            $"<br><strong>Hi {name}!</strong><br>" +
                             "Thank you to shopping at Sabor Com Tradição in Loulé, Portugal. <br>" +
                             "We send as attach the invoice relates to your order.<br>" +
-                            "<br>Thank you.<br>" +
-                            "<br>Sabor com Tradição" +
-                            "<br>http://www.saborcomtradicao.com";
+                            "<br>Thank you, see you soon!<br>" +
+                            "Susana Mendez<br>" +
+                            "<br>http://www.saborcomtradicao.com<br>" +
+                            "<img src='https://vendas.saborcomtradicao.com//images/logo-sabor.png' alt='Sabor Com Tradição'/>";
 
                         List<(string, byte[])> files = new List<(string, byte[])>();
                         files.Add(($"FaturaSaborComTradicao#{resOrder.Id}.pdf", invoiceBytes));
