@@ -198,7 +198,7 @@ namespace SalesWeb.Pages.Basket
                     if (UserAddress.InvoiceAddressCountry == "175") //Portugal
                     {
                         //Test PostalCode
-                        Regex rx = new Regex(@"^\\d{4}-\\d{3}?$");
+                        Regex rx = new Regex(@"^\d{4}-\d{3}?$");
                         if (!rx.IsMatch(UserAddress.InvoiceAddressPostalCode))
                             ModelState.AddModelError("UserAddress.InvoiceAddressPostalCode", "O campo Código Postal não é válido para Portugal");
                     }
