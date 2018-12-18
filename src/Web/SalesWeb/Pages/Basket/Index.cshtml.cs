@@ -59,7 +59,7 @@ namespace SalesWeb.Pages.Basket
 
             var options = _basketService.GetFirstOptionFromAttribute(productDetails.CatalogItemId);
 
-            await _basketService.AddItemToBasket(BasketModel.Id, productDetails.CatalogItemId, productDetails.Price, 1, options.Item1, options.Item2, options.Item3);
+            await _basketService.AddItemToBasket(BasketModel.Id, productDetails.CatalogItemId, productDetails.Price, 1, options.Item1, options.Item2, options.Item3, null,null,true);
 
             await SetBasketModelAsync();
 
@@ -85,7 +85,7 @@ namespace SalesWeb.Pages.Basket
                 attrIds = productDetails.Attributes.Select(x => x.Selected).ToList();
             var options = GetOptionsFromAttributes(attrIds);
             var price = string.IsNullOrEmpty(productDetails.NameInput) ? productDetails.ProductPrice : productDetails.ProductPrice + productDetails.CustomizePrice.Value;
-            await _basketService.AddItemToBasket(BasketModel.Id, productDetails.ProductId, price, productDetails.ProductQuantity, options.Item1, options.Item2, options.Item3, productDetails.NameInput, productDetails.CustomizePictureFileName);
+            await _basketService.AddItemToBasket(BasketModel.Id, productDetails.ProductId, price, productDetails.ProductQuantity, options.Item1, options.Item2, options.Item3, productDetails.NameInput, productDetails.CustomizePictureFileName, true);
 
             await SetBasketModelAsync();
 
