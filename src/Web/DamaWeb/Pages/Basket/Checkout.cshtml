@@ -207,27 +207,40 @@
                                 <span class="dama-basket-label">@attr.Label: @attr.Name </span><br />
                             }
                         </section>
-                        <section class="col-3 p-0">@item.UnitPrice.ToString("N2") €</section>
+
+                        <section class="col-3 p-0">
+                            @if (!item.IsFromCustomize)
+                            {
+                                <text>
+                                @item.UnitPrice.ToString("N2") €
+                                </text>
+                            }
+                        </section>
+
                     </article>
                 }
             </div>
             <hr />
-            <article class="row">
-                <section class="offset-2 col-6 text-right">Subtotal</section>
-                <section class="col-4 pl-0">@Model.BasketModel.SubTotal() €</section>
-            </article>
-            <article id="shipping-cost" class="row">
-                <section class="col-8 text-right"><small>Despesas de Envio</small></section>
-                <section class="col-4 pl-0 dama-product-price">@Model.BasketModel.DefaultShippingCost.ToString("N2")</section>
-            </article>
-            <article class="row">
-                <section class="offset-2 col-6 text-right">TOTAL</section>
-                <section id="basket-total" class="col-4 pl-0 dama-product-price">@Model.BasketModel.Total()</section>
-            </article>
-            <hr />
-            <article class="row">
-                <section class="col-12"><small>Tempo de entrega entre @Model.DeliveryTime.Min a @Model.DeliveryTime.Max @(DamaWeb.Extensions.EnumHelper<ApplicationCore.Entities.DeliveryTimeUnitType>.GetDisplayValue(Model.DeliveryTime.Unit))</small></section>
-            </article>
+            @if (!Model.HasCustomizeItems)
+            {
+                <article class="row">
+                    <section class="offset-2 col-6 text-right">Subtotal</section>
+                    <section class="col-4 pl-0">@Model.BasketModel.SubTotal() €</section>
+                </article>
+                <article id="shipping-cost" class="row">
+                    <section class="col-8 text-right"><small>Despesas de Envio</small></section>
+                    <section class="col-4 pl-0 dama-product-price">@Model.BasketModel.DefaultShippingCost.ToString("N2")</section>
+                </article>
+                <article class="row">
+                    <section class="offset-2 col-6 text-right">TOTAL</section>
+                    <section id="basket-total" class="col-4 pl-0 dama-product-price">@Model.BasketModel.Total()</section>
+                </article>
+                <hr />
+
+                <article class="row">
+                    <section class="col-12"><small>Tempo de entrega entre @Model.DeliveryTime.Min a @Model.DeliveryTime.Max @(DamaWeb.Extensions.EnumHelper<ApplicationCore.Entities.DeliveryTimeUnitType>.GetDisplayValue(Model.DeliveryTime.Unit))</small></section>
+                </article>
+            }
             <article class="row">
                 <section class="col-12">
                     <div class="dama-checkout-btn mb-3 float-right mt-3 mt-sm-0">
@@ -246,7 +259,7 @@
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
-<script>
+    <script>
         var originUserAddress = '@Html.Raw(Model.UserAddress.Street)',
             originUserCity = '@Html.Raw(Model.UserAddress.City)',
             originUserPostalCode = '@Model.UserAddress.PostalCode';
@@ -266,7 +279,7 @@
                 $('#UserAddress_InvoiceAddressPostalCode').prop('disabled', true);
                 $('#UserAddress_InvoiceAddressCountry').prop('disabled', true);
             }
-            else {                
+            else {
                 $('#UserAddress_InvoiceAddressStreet').val(originBillingUserAddress);
                 $('#UserAddress_InvoiceAddressStreet').prop('disabled', false);
                 $('#UserAddress_InvoiceAddressCity').val(originBillingUserCity);
@@ -320,7 +333,7 @@
                 </text>
             }
             else
-            { 
+            {
                 <text>
                 $('#damaMapSection').show();
                 $('#deliveryAddress').hide();
@@ -340,7 +353,7 @@
             //Disabled Use same address or not
             @if(Model.UserAddress.UseUserAddress == 2)
             {
-                <text>                
+                <text>
                 $('#UserAddress_UseSameAsShipping').prop('disabled', true);
                 </text>
 
@@ -395,11 +408,11 @@
             });
 
             $('#WantInvoice').change(function () {
-                if ($(this).is(":checked")) 
+                if ($(this).is(":checked"))
                     $('#billing-group').show();
                 else
                     $('#billing-group').hide();
             });
         });
-</script>
+    </script>
 }
