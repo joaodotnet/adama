@@ -55,12 +55,6 @@
                                         @item.UnitPrice.ToString("N2") €
                                     </span>
                                 }
-                                else
-                                {
-                                    <span class="small">
-                                        em análise
-                                    </span>
-                                }
 
                             </div>
                         </div>
@@ -72,22 +66,15 @@
                             </div>
                         </div>
                         <div class="d-none d-sm-block col-sm-2">
-                            @if (!item.IsFromCustomize)
-                            {
-                                <text>
-                                @Math.Round(item.Quantity * item.UnitPrice, 2).ToString("N2") €
-                                </text>
-                            }
-                            else
-                            {
-                                <span class="small">
-                                    em análise
-                                </span>
-                            }
-
+    @if (!item.IsFromCustomize)
+    {
+        <text>
+            @Math.Round(item.Quantity * item.UnitPrice, 2).ToString("N2") €
+        </text>
+    }
                         </div>
                     </div>
-                    <div class="col-1 col-sm-1 m-0 p-0">
+                    <div class="col-1 col-sm-1 m-0 p-0 text-right">
                         <button class="dama-basket-btn" type="submit" name="removebutton" asp-page-handler="Remove" asp-route-id="@i">
                             <i class="fas fa-trash"></i>
                         </button>                        

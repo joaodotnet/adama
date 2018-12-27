@@ -70,6 +70,8 @@ namespace DamaWeb.Pages.Basket
         [BindProperty]
         public DeliveryTimeDTO DeliveryTime { get; set; } = new DeliveryTimeDTO();
 
+        public bool HasCustomizeItems { get; set; } = false;
+
         public async Task OnGet()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -81,8 +83,11 @@ namespace DamaWeb.Pages.Basket
             }
             await SetBasketModelAsync();
 
+            HasCustomizeItems = BasketModel.Items.Any(x => x.IsFromCustomize);
+
             //Set Min and Max Delivery time
-            DeliveryTime = await _basketService.CalculateDeliveryTime(BasketModel.Id);
+            if (!HasCustomizeItems)
+                DeliveryTime = await _basketService.CalculateDeliveryTime(BasketModel.Id);
         }
 
         public async Task<IActionResult> OnPost()
