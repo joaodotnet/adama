@@ -241,7 +241,7 @@ namespace DamaWeb
                                     //Ignore
                                 }
 
-                                context.Response.Redirect("/Error");
+                                context.Response.Redirect("/loja/Error");
                             }
                         });
                 });
