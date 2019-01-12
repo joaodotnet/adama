@@ -79,6 +79,7 @@ namespace DamaWeb.Pages.Basket
             {
                 UserAddress = await _shopService.GetUserAddress(user.Id);
                 UserAddress.InvoiceTaxNumber = user.NIF;
+                UserAddress.Name = $"{user.FirstName} {user.LastName}";
                 UserAddress.ContactPhoneNumber = await _userManager.GetPhoneNumberAsync(user);
             }
             await SetBasketModelAsync();
@@ -95,6 +96,16 @@ namespace DamaWeb.Pages.Basket
             if (ModelState.IsValid && ValidateAddressModel())
             {
                 var user = await _userManager.GetUserAsync(User);
+                //Save Name
+                if(string.IsNullOrEmpty(user.FirstName))
+                {
+                    var hasMoreThan1Name = UserAddress.Name.TrimEnd().IndexOf(" ") != -1;
+                    user.FirstName = UserAddress.Name.TrimEnd().Substring(0, hasMoreThan1Name ? UserAddress.Name.IndexOf(" ") : UserAddress.Name.Length);
+                    if (hasMoreThan1Name)
+                        user.LastName = UserAddress.Name.TrimEnd().Substring(UserAddress.Name.TrimEnd().LastIndexOf(" ") + 1);
+
+                    await _userManager.UpdateAsync(user);
+                }
                 //Save Address
                 if (UserAddress.SaveAddress)
                 {

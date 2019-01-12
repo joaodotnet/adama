@@ -29,7 +29,7 @@ namespace ApplicationCore.Services
             List<OrderItem> items = new List<OrderItem>();
             foreach (var item in order.OrderItems)
             {
-                items.Add(new OrderItem(item.ItemOrdered, item.UnitPrice, item.Units, item.CatalogAttribute1, item.CatalogAttribute2, item.CatalogAttribute3, item.CustomizeName, item.CustomizeSide));
+                items.Add(new OrderItem(item.ItemOrdered, item.UnitPrice, item.Units, item.CatalogAttribute1, item.CatalogAttribute2, item.CatalogAttribute3, item.CustomizeName, item.CustomizeSide, null));
             }
 
             SageResponseDTO response;
