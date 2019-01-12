@@ -1,11 +1,11 @@
-﻿using ApplicationCore.Interfaces;
+﻿using ApplicationCore.Entities;
 using ApplicationCore.Entities.OrderAggregate;
-using System.Threading.Tasks;
-using ApplicationCore.Entities;
-using System.Collections.Generic;
-using Ardalis.GuardClauses;
+using ApplicationCore.Interfaces;
 using ApplicationCore.Specifications;
+using Ardalis.GuardClauses;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ApplicationCore.Services
 {
@@ -16,18 +16,21 @@ namespace ApplicationCore.Services
         private readonly IBasketRepository _basketRepository;
         private readonly IAsyncRepository<CatalogItem> _itemRepository;
         private readonly IRepository<CatalogItem> _itemSyncRepository;
+        private readonly IAsyncRepository<CatalogType> _catalogRepository;
 
         public OrderService(IBasketRepository basketRepository,
             IAsyncRepository<CatalogItem> itemRepository,
             IAsyncRepository<Order> orderRepository,
             IAsyncRepository<CustomizeOrder> customizeOrderRepository,
-            IRepository<CatalogItem> itemSyncRepository)
+            IRepository<CatalogItem> itemSyncRepository,
+            IAsyncRepository<CatalogType> catalogRepository)
         {
             _orderRepository = orderRepository;
             _basketRepository = basketRepository;
             _itemRepository = itemRepository;
             _customizeOrderRepository = customizeOrderRepository;
             _itemSyncRepository = itemSyncRepository;
+            _catalogRepository = catalogRepository;
         }
 
         public async Task<Order> CreateOrderAsync(int basketId, string phoneNumber, int? taxNumber, Address shippingAddress, Address billingAddress, bool useBillingSameAsShipping, decimal shippingCost, string customerEmail)
@@ -38,10 +41,29 @@ namespace ApplicationCore.Services
             var items = new List<OrderItem>();
             foreach (var item in basket.Items)
             {
-                var catalogItem = await _itemRepository.GetByIdAsync(item.CatalogItemId);
-                var itemOrdered = new CatalogItemOrdered(catalogItem.Id, catalogItem.Name, catalogItem.PictureUri);
-                var orderItem = new OrderItem(itemOrdered, item.UnitPrice, item.Quantity, item.CatalogAttribute1, item.CatalogAttribute2, item.CatalogAttribute3, item.CustomizeName, item.CustomizeSide);
-                items.Add(orderItem);
+                if (!item.CatalogTypeId.HasValue)
+                {
+                    var catalogItem = await _itemRepository.GetByIdAsync(item.CatalogItemId);
+                    var itemOrdered = new CatalogItemOrdered(catalogItem.Id, catalogItem.Name, catalogItem.PictureUri);
+                    var orderItem = new OrderItem(itemOrdered, item.UnitPrice, item.Quantity, item.CatalogAttribute1, item.CatalogAttribute2, item.CatalogAttribute3, item.CustomizeName, item.CustomizeSide, new CustomizeItemOrdered());
+                    items.Add(orderItem);
+                }
+                else
+                {
+                    var catalogType = await _catalogRepository.GetByIdAsync(item.CatalogTypeId.Value);
+                    var itemOrdered = new CatalogItemOrdered(0, null, null);
+                    var customizeItem = new CustomizeItemOrdered(
+                        item.CatalogTypeId.Value,
+                        item.CustomizeDescription,
+                        item.CustomizeName,
+                        item.CustomizeColors,
+                        catalogType.Description,
+                        catalogType.PictureUri);
+
+                    var orderItem = new OrderItem(itemOrdered, 0, item.Quantity, null, null, null, null, null, customizeItem);
+
+                    items.Add(orderItem);
+                }
             }
             var order = new Order(basket.BuyerId, phoneNumber, taxNumber, shippingAddress, billingAddress, useBillingSameAsShipping, items, shippingCost);
 
@@ -107,14 +129,16 @@ namespace ApplicationCore.Services
         {
             var spec = new CatalogAttrFilterSpecification(catalogItemId);
             var product = _itemSyncRepository.GetSingleBySpec(spec);
-
             var list = new List<CatalogAttribute>();
-            foreach (var item in product.CatalogAttributes)
+            if (product != null)
             {
-                if ((catalogAttribute1.HasValue && catalogAttribute1 == item.Id) ||
-                       (catalogAttribute2.HasValue && catalogAttribute2 == item.Id) ||
-                       (catalogAttribute3.HasValue && catalogAttribute3 == item.Id))
-                    list.Add(item);
+                foreach (var item in product.CatalogAttributes)
+                {
+                    if ((catalogAttribute1.HasValue && catalogAttribute1 == item.Id) ||
+                           (catalogAttribute2.HasValue && catalogAttribute2 == item.Id) ||
+                           (catalogAttribute3.HasValue && catalogAttribute3 == item.Id))
+                        list.Add(item);
+                }
             }
             return list;
         }
