@@ -42,7 +42,13 @@
                     </section>
                     <section class="esh-orders-item col-12 col-sm-2">
                         <span class="dama-orders-title-mobile d-sm-none">Total: </span>
-                        @Html.DisplayFor(modelItem => item.Total) €
+                        @if (item.Total.HasValue)
+                        {
+                            <text>
+                                @Html.DisplayFor(modelItem => item.Total) €
+                            </text>
+                        }
+
                     </section>
                     <section class="esh-orders-item col-12 col-sm-2">
                         <span class="dama-orders-title-mobile d-sm-none">Estado: </span>
