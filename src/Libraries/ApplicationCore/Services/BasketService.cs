@@ -6,6 +6,8 @@ using ApplicationCore.Entities;
 using System.Linq;
 using Ardalis.GuardClauses;
 using ApplicationCore.DTOs;
+using ApplicationCore.Entities.BasketAggregate;
+using System;
 
 namespace ApplicationCore.Services
 {
@@ -29,34 +31,7 @@ namespace ApplicationCore.Services
 
         public async Task AddItemToBasket(int basketId, int catalogItemId, decimal price, int quantity, int? option1 = null, int? option2 = null, int? option3 = null, string customizeName = null, string customizeSide = null, bool addToExistingItem = false)
         {
-            var basket = await _basketRepository.GetByIdAsync(basketId);
-
-            //var specification = new CatalogAttrFilterSpecification(catalogItemId);
-            //var catalogItem = _itemRepository.GetSingleBySpec(specification);
-
-            //decimal attrsPrice = 0;
-            //if (attrIds == null)
-            //{
-            //    attrIds = new List<int>();
-
-            //    var group = catalogItem.CatalogAttributes.GroupBy(x => x.Type);
-            //    foreach (var attribute in group)
-            //    {
-            //        attrIds.Add(attribute.First().Id);
-            //    }
-            //}
-            //else
-            //{
-            //    foreach (var item in attrIds)
-            //    {
-            //        var attrItem = catalogItem.CatalogAttributes.SingleOrDefault(x => x.Id == item);
-            //        if (attrItem != null)
-            //            attrsPrice += attrItem.Price ?? 0;
-            //    }
-            //}
-
-            //update price 
-            //price += attrsPrice;
+            var basket = await _basketRepository.GetByIdAsync(basketId);            
 
             basket.AddItem(catalogItemId, price, quantity, option1, option2, option3, customizeName, customizeSide, addToExistingItem);
 
@@ -100,6 +75,7 @@ namespace ApplicationCore.Services
                 {
                     _logger.LogInformation($"Updating quantity of item ID:{item.Id} to {quantity}.");
                     item.Quantity = quantity;
+                    item.UpdatedDate = DateTime.Now;
                 }
             }
             await _basketRepository.UpdateAsync(basket);
@@ -125,6 +101,7 @@ namespace ApplicationCore.Services
                 }
             }
             basket.BuyerId = userName;
+            basket.UpdatedDate = DateTime.Now;
             await _basketRepository.UpdateAsync(basket);            
         }
         public async Task DeleteItem(int basketId, int itemIndex)

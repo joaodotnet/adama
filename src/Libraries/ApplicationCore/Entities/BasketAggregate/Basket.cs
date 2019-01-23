@@ -1,13 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using ApplicationCore.Interfaces;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace ApplicationCore.Entities
+namespace ApplicationCore.Entities.BasketAggregate
 {
-    public class Basket : BaseEntity
+    public class Basket : BaseEntity, IAggregateRoot
     {
         public string BuyerId { get; set; }
         private readonly List<BasketItem> _items = new List<BasketItem>();
         public IReadOnlyCollection<BasketItem> Items => _items.AsReadOnly();
+
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
 
         public void AddItem(int catalogItemId, decimal unitPrice, int quantity = 1, int? option1 = null, int? option2 = null, int? option3 = null, string customizeName = null, string customizeSide = null, bool addToExistingItem = false)
         {
@@ -22,13 +27,15 @@ namespace ApplicationCore.Entities
                     CatalogAttribute2 = option2,
                     CatalogAttribute3 = option3,
                     CustomizeName = customizeName,
-                    CustomizeSide = customizeSide
+                    CustomizeSide = customizeSide,
+                    CreatedDate = DateTime.Now
                 });
             }
             else
             {
                 var existingItem = Items.FirstOrDefault(i => i.CatalogItemId == catalogItemId);
-                existingItem.Quantity += quantity;                
+                existingItem.Quantity += quantity;
+                existingItem.UpdatedDate = DateTime.Now;
             }
 
         }

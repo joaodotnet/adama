@@ -7,6 +7,8 @@ using ApplicationCore.Specifications;
 using DamaWeb.Interfaces;
 using DamaWeb.ViewModels;
 using DamaWeb.Extensions;
+using ApplicationCore.Entities.BasketAggregate;
+using System;
 
 namespace DamaWeb.Services
 {
@@ -95,7 +97,7 @@ namespace DamaWeb.Services
 
         private async Task<BasketViewModel> CreateBasketForUser(string userId)
         {
-            var basket = new Basket() { BuyerId = userId };
+            var basket = new Basket() { BuyerId = userId, CreatedDate = DateTime.Now };
             await _basketRepository.AddAsync(basket);
 
             return new BasketViewModel()

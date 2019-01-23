@@ -1,4 +1,4 @@
-﻿using ApplicationCore.Entities;
+﻿using ApplicationCore.Entities.BasketAggregate;
 
 namespace ApplicationCore.Specifications
 {

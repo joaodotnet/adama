@@ -1,5 +1,5 @@
 ﻿using ApplicationCore.Entities;
-using ApplicationCore.Entities.OrderAggregate;
+using ApplicationCore.Entities.BasketAggregate;
 using ApplicationCore.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
