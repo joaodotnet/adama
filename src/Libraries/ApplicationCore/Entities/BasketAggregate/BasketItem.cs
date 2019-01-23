@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-namespace ApplicationCore.Entities
+namespace ApplicationCore.Entities.BasketAggregate
 {
     public class BasketItem : BaseEntity
     {
@@ -12,6 +13,9 @@ namespace ApplicationCore.Entities
         public int? CatalogAttribute3 { get; set; }
         public string CustomizeName { get; set; }
         public string CustomizeSide { get; set; }
+
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
 
         public int BasketId { get; set; }
         public Basket Basket { get; set; }

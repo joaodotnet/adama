@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Entities;
+using ApplicationCore.Entities.BasketAggregate;
 using ApplicationCore.Entities.OrderAggregate;
 using ApplicationCore.Interfaces;
 using Microsoft.EntityFrameworkCore;

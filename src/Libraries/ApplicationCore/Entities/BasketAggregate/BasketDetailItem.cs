@@ -1,4 +1,4 @@
-﻿namespace ApplicationCore.Entities
+﻿namespace ApplicationCore.Entities.BasketAggregate
 {
     public class BasketDetailItem : BaseEntity
     {
