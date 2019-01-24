@@ -2,6 +2,7 @@
 using ApplicationCore.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ApplicationCore.Entities.OrderAggregate
 {
@@ -25,6 +26,7 @@ namespace ApplicationCore.Entities.OrderAggregate
             CustomerEmail = customerEmail;
             TaxNumber = taxNumber;
             PhoneNumber = phoneNumber;
+            OrderState = items.Any(x => x.CustomizeItem.CatalogTypeId.HasValue) ? OrderStateType.UNDER_ANALYSIS : OrderStateType.PENDING;
         }
         public string BuyerId { get; private set; }
         public string CustomerEmail { get; set; }
