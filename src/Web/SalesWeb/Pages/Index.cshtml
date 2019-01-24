@@ -1,0 +1,114 @@
+﻿@page
+
+@{
+    ViewData["Title"] = "Online";
+    @model IndexModel
+}
+
+@await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
+
+@if (Model.CatalogModel.Banners?.Count > 0)
+{
+    <div id="carouselExampleIndicators" class="carousel slide " data-ride="carousel">
+        <ol class="carousel-indicators">
+            @for (int i = 0; i < Model.CatalogModel.Banners.Count; i++)
+            {
+                <li data-target="#carouselExampleIndicators" data-slide-to="@i" class="@(i == 0? "active": "")"></li>
+            }
+        </ol>
+        <div class="carousel-inner" role="listbox">
+            @foreach (var item in Model.CatalogModel.Banners)
+            {
+                <div class="carousel-item @(Model.CatalogModel.Banners[0] == item ? "active": "") @item.LinkClass" uri="@item.LinkButtonUri">
+                    <img class="d-block img-fluid" src="@item.PictureUri" alt="@item.HeadingText">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h3>@item.HeadingText</h3>
+                        <p>@item.ContentText</p>
+                        @if (!string.IsNullOrEmpty(item.LinkButtonText) && !string.IsNullOrEmpty(item.LinkButtonUri))
+                        {
+                            <a class="btn btn-primary" href="@item.LinkButtonUri" role="button">@item.LinkButtonText</a>
+                        }
+                    </div>
+                </div>
+            }
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+}
+<div class="float-right">
+    <a class="btn btn-dama-menta" data-target="#addProductModal" data-toggle="modal" href="#manualProduct" role="button" aria-expanded="false" aria-controls="collapseExample">
+        Adicionar produto personalizado
+    </a>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form asp-page="/Basket/Index" asp-page-handler="AddManual" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Adicionar Produto Personalizado</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label asp-for="ManualModel.Description"></label>
+                        <input asp-for="ManualModel.Description" class="form-control" />
+                        <span asp-validation-for="ManualModel.Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ManualModel.Quantity"></label>
+                        <input asp-for="ManualModel.Quantity" class="form-control" />
+                        <span asp-validation-for="ManualModel.Quantity" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ManualModel.Price"></label>
+                        <input asp-for="ManualModel.Price" class="form-control decimal" />
+                        <span asp-validation-for="ManualModel.Price" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-primary">Adicionar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="news-heading text-center">
+    <h2>Produtos</h2>
+</div>
+
+<div class="container">
+    <div class="esh-catalog-items row">
+        @foreach (var catalogItem in Model.CatalogModel.CatalogItems)
+        {
+            <div class="esh-catalog-item col-md-3">
+                @await Html.PartialAsync("_product", catalogItem)
+            </div>
+        }
+    </div>
+</div>
+
+@{
+    Model.StatusMessage = "";
+}
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.bannerLink').on('click', function () {
+                var uri = $(this).attr('uri');
+                window.location.href = uri;
+            });
+        });
+    </script>
+}

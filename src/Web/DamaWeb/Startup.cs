@@ -21,6 +21,8 @@ using AutoMapper;
 using ApplicationCore;
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Diagnostics;
+using System.Linq;
 
 namespace DamaWeb
 {
@@ -121,6 +123,11 @@ namespace DamaWeb
                 options.MinimumSameSitePolicy = SameSiteMode.Lax;
             });
 
+            // The Tempdata provider cookie is not essential. Make it essential
+            // so Tempdata is functional when tracking is disabled.
+            services.Configure<CookieTempDataProviderOptions>(options => {
+                options.Cookie.IsEssential = true;
+            });
 
             services.AddAutoMapper();
 
@@ -143,6 +150,9 @@ namespace DamaWeb
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));           
             services.AddScoped<IMailChimpService, MailChimpService>();
+            services.AddScoped<IInvoiceService, InvoiceService>();
+            services.AddScoped<ISageService, SageService>();
+            services.AddScoped<IAuthConfigRepository, AuthConfigRepository>();
             services.AddTransient<IEmailSender, EmailSender>();
 
             // Add memory cache services
@@ -175,7 +185,7 @@ namespace DamaWeb
                     options.Conventions.AddPageRoute("/Account/ResetPasswordConfirmation", "conta/confirmacao-recuperacao-password");
                     options.Conventions.AddPageRoute("/Account/Manage/Index", "conta/perfil");
                 })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             _services = services;
         }
@@ -188,12 +198,53 @@ namespace DamaWeb
 
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();                
                 app.UseDatabaseErrorPage();                
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseExceptionHandler(options =>
+                {
+                    options.Run(
+                        async context =>
+                        {
+                            var ex = context.Features.Get<IExceptionHandlerFeature>();
+                            if (ex != null)
+                            {
+                                var err = $"<h1>Error: {ex.Error.Message}</h1>{ex.Error.Source}<hr />{context.Request.Path}<br />";
+                                err += $"QueryString: {context.Request.QueryString}<hr />";
+
+                                err += $"Stack Trace<hr />{ex.Error.StackTrace.Replace(Environment.NewLine, "<br />")}";
+                                if (ex.Error.InnerException != null)
+                                    err +=
+                                        $"Inner Exception<hr />{ex.Error.InnerException?.Message.Replace(Environment.NewLine, "<br />")}";
+                                // This bit here to check for a form collection!
+                                if (context.Request.HasFormContentType && context.Request.Form.Any())
+                                {
+                                    err += "<table border=\"1\"><tr><td colspan=\"2\">Form collection:</td></tr>";
+                                    foreach (var form in context.Request.Form)
+                                    {
+                                        err += $"<tr><td>{form.Key}</td><td>{form.Value}</td></tr>";
+                                    }
+                                    err += "</table>";
+                                }
+                                try
+                                {
+                                    var emailSender = app.ApplicationServices.GetRequiredService<IEmailSender>();
+                                    await emailSender.SendEmailAsync(
+                                        Configuration["Email:FromInfoEmail"],
+                                        Configuration["Email:SupportEmail"],
+                                        "Dama no Jornal - Ocorreu um erro na aplicação", err);
+                                }
+                                catch (Exception)
+                                {
+                                    //Ignore
+                                }
+
+                                context.Response.Redirect("/loja/Error");
+                            }
+                        });
+                });
                 //app.UseHsts();
             }
 

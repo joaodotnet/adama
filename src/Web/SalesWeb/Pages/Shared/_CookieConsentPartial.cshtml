@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNetCore.Http.Features
+
+@{
+    var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
+    var showBanner = !consentFeature?.CanTrack ?? false;
+    var cookieString = consentFeature?.CreateConsentCookie();
+}
+
+@if (showBanner)
+{
+    <nav id="cookieConsent" class="navbar navbar-expand-md navbar-light bg-light fixed-bottom" role="alert">
+        <div class="container-fluid">
+            <div class="navbar-header d-none d-sm-block">
+                <span class="navbar-brand"><span class="fas fa-info-circle" aria-hidden="true"></span></span>
+            </div>
+
+            <span class="navbar-text small consentText">
+                <span class="fas fa-info-circle d-inline d-sm-none" aria-hidden="true"></span>
+                Este site utiliza cookies. Se continuas a navegar, consideramos que aceitas o seu uso. Para mais informações clica na nossa <a asp-page="/Privacy">política de privacidade.</a>
+            </span>
+            <div class="ml-auto consentText">
+                <button type="button" class="btn btn-dama-pink navbar-btn btn-sm" data-cookie-string="@cookieString">Fechar</button>
+            </div>
+        </div>
+    </nav>
+    <script>
+        (function () {
+            document.querySelector("#cookieConsent button[data-cookie-string]").addEventListener("click", function (el) {
+                document.cookie = el.target.dataset.cookieString;
+                document.querySelector("#cookieConsent").setAttribute("hidden", "");
+                document.querySelector("#cookieConsent").classList.remove("d-sm-block");
+                document.querySelector("#cookieConsent").classList.add("d-sm-none");
+            }, false);
+        })();
+    </script>
+}

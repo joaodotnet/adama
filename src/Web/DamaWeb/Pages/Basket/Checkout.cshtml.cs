@@ -80,6 +80,7 @@ namespace DamaWeb.Pages.Basket
                 UserAddress = await _shopService.GetUserAddress(user.Id);
                 UserAddress.InvoiceTaxNumber = user.NIF;
                 UserAddress.ContactPhoneNumber = await _userManager.GetPhoneNumberAsync(user);
+
             }
             await SetBasketModelAsync();
 
@@ -150,13 +151,16 @@ namespace DamaWeb.Pages.Basket
 
         private string GetEmailBody(ApplicationCore.Entities.OrderAggregate.Order order, ApplicationUser user, bool pickupAtStore, DeliveryTimeDTO deliveryTime)
         {
+            var name = user != null && !string.IsNullOrEmpty(user.FirstName) ? $"{user.FirstName} {user.LastName}" : order.BuyerId;
             string body = $@"
 <table style='width:550px;'>
         <tr>
             <td width='400px' style='vertical-align:bottom'>
-                Olá <strong>{user.FirstName} {user.LastName}</strong><br />
-                Obrigada por escolher a Dama no Jornal®.<br />
-                A sua encomenda foi criada com <strong>Sucesso!</strong> <br />
+                Olá <strong>{name}</strong><br />
+                Obrigada por escolheres a Dama no Jornal®.<br />
+                A tua encomenda foi criada com <strong>Sucesso!</strong> <br />
+                O próximo passo será efectuares o pagamento com os dados que vais encontrar a baixo. <br />
+                <strong>Obrigada!</strong><br />
             </td>
             <td>
                 <img src='https://www.damanojornal.com/loja/images/dama_bird.png' width='150' />
@@ -305,7 +309,7 @@ namespace DamaWeb.Pages.Basket
             IBAN PT50004572114025360687172<br />
             NIB 004572114025360687172<br />
             CAIXA DE CRÉDITO AGRÍCOLA<br />
-            <strong>Títular da conta:</strong> Susana Nunes<br />
+            <strong>Titular da conta:</strong> Susana Nunes<br />
         </div>
         <div style='margin-top:20px;text-align:center;width:550px'>
             <span>E envie o comprovativo de pagamento em resposta a este email, ou envie um mail para encomendas@damanojornal.com indicando a referência de encomenda nº {order.Id}.</span>

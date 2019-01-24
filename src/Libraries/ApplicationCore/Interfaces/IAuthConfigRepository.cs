@@ -8,7 +8,7 @@ namespace ApplicationCore.Interfaces
 {
     public interface IAuthConfigRepository
     {
-        Task<AuthConfig> GetAuthConfigAsync(DamaApplicationId applicationId);
-        Task AddOrUpdateAuthConfigAsync(DamaApplicationId applicationId, string accessToken, string refreshToken);
+        Task<AuthConfig> GetAuthConfigAsync(SageApplicationType applicationId);
+        Task UpdateAuthConfigAsync(SageApplicationType applicationId, string accessToken, string refreshToken);
     }
 }

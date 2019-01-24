@@ -1,0 +1,179 @@
+﻿@page
+@model SalesWeb.Pages.Product.IndexModel
+@{
+    ViewData["Title"] = Model.ProductModel.ProductTitle;
+}
+
+<div class="row mt-md-5">
+    <div class="col-md-7">
+        <div class="row align-items-center">
+            <div class="dama-product-thumbnails col-3 text-center">
+                <a href="#" class="top-arrow"><i class="fas fa-chevron-up"></i></a>
+                <div class="slider-nav">
+                    @foreach (var item in Model.ProductModel.ProductImagesUri)
+                    {
+                        <div><img src="@item" class="img-thumbnail" alt="Imagem do Produto" /></div>
+                    }
+                </div>
+                <a href="#" class="bottom-arrow"><i class="fas fa-chevron-down"></i></a>
+            </div>
+            <div class="col-12 col-md-9 text-center">
+                <div class="dama-product-title-mobile pt-1 pb-1">@Model.ProductModel.ProductTitle</div>
+                <div class="slider-for">
+                    @foreach (var item in Model.ProductModel.ProductImagesUri)
+                    {
+                        <div><img src="@item" class="img-fluid" alt="Imagem do Produto" /></div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col mt-4">            
+            <a href="javascript:history.go(-1)" class="link-dama-menta" >&larr; Voltar</a>
+        </div>
+    </div>
+    <div class="col-md-5">
+        @if (!string.IsNullOrEmpty(Model.StatusMessage))
+        {
+            <div class="alert alert-success text-center">@Model.StatusMessage</div>
+        }
+
+        @await Html.PartialAsync("_productDetail", Model.ProductModel)
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        var customizePrice = parseFloat('@Model.ProductModel.CustomizePrice'.replace(',', '.'));
+        var customizePictureFileName = "";
+        $(document).ready(function () {
+            $('.slider-nav').slick({
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                arrows: true,
+                vertical: true,
+                prevArrow: $('.top-arrow'),
+                nextArrow: $('.bottom-arrow'),
+                focusOnSelect: true,
+                asNavFor: '.slider-for'
+            });
+
+            $('.slider-for').slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                arrows: false,
+                fade: true,
+                asNavFor: '.slider-nav',
+                responsive: [
+                    {
+                        breakpoint: 992,
+                        settings: {
+                            infinite: true,
+                            arrows: true,
+                            centerMode: true,
+                        }
+                    }]
+            });
+            $('#btnAdd').on('click', function () {
+                var value = $('#ProductQuantity').val();
+                if (value)
+                    $('#ProductQuantity').val(parseInt(value) + 1);
+                else
+                    $('#ProductQuantity').val(1);
+            });
+            $('#btnSub').on('click', function () {
+                var value = $('#ProductQuantity').val();
+                if (value && parseInt(value) > 1)
+                    $('#ProductQuantity').val(parseInt(value) - 1);
+                else
+                    $('#ProductQuantity').val(1);
+            });
+            
+            //Main Customize Show/hide Click Event
+            $('#customizeSection').on('shown.bs.collapse', function () {
+                $('#btnCustomize').removeClass("btn-outline-pink").addClass('btn-outline-menta');
+            });
+            $('#customizeSection').on('hidden.bs.collapse', function () {
+                $('#btnCustomize').removeClass("btn-outline-menta").addClass('btn-outline-pink');
+            });
+
+            //Add Name Click Event
+            $('#addName').on('shown.bs.collapse', function () {
+                $('#btnAddName').removeClass('btn-dama-menta').addClass('btn-outline-menta');
+                $('#divCustomizeTotal').hide();
+                $('#txtDeliveryStockTime').hide();
+            });
+            $('#addName').on('hidden.bs.collapse', function () {
+                $('#btnAddName').removeClass('btn-outline-menta').addClass('btn-dama-menta');
+                $('#divCustomizeTotal').show();
+                $('#txtDeliveryStockTime').show();
+            });
+
+            //Select Image Event
+            $('#divSelectImage .col').click(function () {
+
+                $(this).toggleClass('dama-customize-color-selected');
+                $(this).siblings().removeClass('dama-customize-color-selected');
+                if ($(this).hasClass('dama-customize-color-selected'))
+                    customizePictureFileName = $(this).attr('fileName');
+                else
+                    customizePictureFileName = null;
+                
+                $('#CustomizePictureFileName').val(customizePictureFileName);
+            }); 
+
+            @*//TODO: To review this
+            $('#saveName').on('click', function () {
+                var productBase = parseFloat('@Model.ProductModel.ProductPrice'.replace(',', '.'));
+                var value = $('#NameInput').val();
+                if (value) {
+                    //$('#nameInputText').text("Personalização: " + value.toString());
+                    var newprice = productBase + customizePrice;
+                    $('.dama-product-price span').text(toNumber(newprice));
+                }
+                else {
+                    //$('#nameInputText').text("");
+                    $('.dama-product-price span').text(toNumber(productBase));
+                }
+            
+            });*@
+            @*$('.atribute-items').on('change', function () {
+                var attr = $(this).val();
+                var productBase = parseFloat('@Model.ProductModel.ProductBasePrice'.replace(',', '.'));
+                $('.dama-product-price span').text(toNumber(productBase));
+                var newprice = productBase;
+                $('.atribute-items').each(function () {
+                    var attrValue = $(this).val();
+                    if (attrValue != -1) {
+                        var handlerUrl = '@Url.Page("/Product/Index", "attributedetails", new { id = "ATTRVALUE" })';
+                        handlerUrl = handlerUrl.replace('ATTRVALUE', attrValue);
+                        $.getJSON(handlerUrl)
+                            .done(function (data) {
+                                if (attr == attrValue && data.sku) {
+                                    //Redirect
+                                    var url = '@Url.Page("/Product/Index", new { id = "SKU" })';
+                                    url = url.replace('SKU', data.sku);
+                                    window.location.href = url;
+                                }
+                                //if (data.price) {
+                                //    newprice += parseFloat(data.price);                                    
+                                //    $('.dama-product-price span').text(toNumber(newprice));
+                                //}
+                            })
+                            .fail(function (jqxhr, textStatus, error) {
+                                var err = textStatus + ", " + error;
+                                console.log("Request Failed: " + err);
+                            });
+                    }
+                });                
+            });*@
+            $('#referenceProducts').on('change', function () {
+                if ($(this).val() != '@Model.ProductModel.ProductSKU') {
+                    var url = '@Url.Page("/Product/Index", new { id = "SKU" })';
+                    url = url.replace('SKU', $(this).val());
+                    window.location.href = url;
+                }
+            });
+            
+        });
+    </script>
+}

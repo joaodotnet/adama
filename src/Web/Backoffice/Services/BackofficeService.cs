@@ -26,22 +26,22 @@ namespace Backoffice.Services
         private readonly AppIdentityDbContext _identityContext;
         private readonly BackofficeSettings _settings;
         private readonly IMapper _mapper;
-        private readonly ISageService _sageService;
         private readonly IInvoiceService _invoiceService;
+        private readonly IAuthConfigRepository _authConfigRepository;
 
         public BackofficeService(DamaContext context,
             IMapper mapper,
-            ISageService sageService,
             AppIdentityDbContext identityContext,
             IOptions<BackofficeSettings> options,
-            IInvoiceService invoiceService)
+            IInvoiceService invoiceService,
+            IAuthConfigRepository authConfigRepository)
         {
             _damaContext = context;
             _identityContext = identityContext;
             _settings = options.Value;
             _mapper = mapper;
-            _sageService = sageService;
             _invoiceService = invoiceService;
+            _authConfigRepository = authConfigRepository;
         }
         public bool CheckIfFileExists(string fullpath, string fileName)
         {
@@ -220,7 +220,7 @@ namespace Backoffice.Services
                 .Include(x => x.OrderItems)
                 .ThenInclude(i => i.ItemOrdered)
                 .SingleOrDefaultAsync(x => x.Id == id);
-            var response =  await _invoiceService.RegisterInvoiceAsync(order);
+            var response =  await _invoiceService.RegisterInvoiceAsync(SageApplicationType.DAMA_BACKOFFICE, order);
 
             if (response.InvoiceId.HasValue)
             {
@@ -234,11 +234,12 @@ namespace Backoffice.Services
 
         public async Task<SageResponseDTO> RegisterPaymentAsync(int id, PaymentType paymentTypeSelected)
         {
+
             var order = await _damaContext.Orders
                 .SingleOrDefaultAsync(x => x.Id == id);
 
             //Payment
-            var response = await _sageService.InvoicePayment(order.SalesInvoiceId.Value, paymentTypeSelected, order.Total());
+            var response = await _invoiceService.RegisterPaymentAsync(SageApplicationType.DAMA_BACKOFFICE, order.SalesInvoiceId.Value, order.Total(), paymentTypeSelected);
 
             if (response != null && response.PaymentId.HasValue)
             {
@@ -249,14 +250,15 @@ namespace Backoffice.Services
             return response;
         }
 
-        public Task<byte[]> GetInvoicePDF(long invoiceId)
+        public async Task<byte[]> GetInvoicePDFAsync(SageApplicationType application, long invoiceId)
         {
-            return _sageService.GetPDFInvoice(invoiceId);
+
+            return await _invoiceService.GetPDFInvoiceAsync(application, invoiceId);
         }
 
-        public Task<byte[]> GetReceiptPDF(long invoiceId, long paymentId)
+        public async Task<byte[]> GetReceiptPDFAsync(long invoiceId, long paymentId)
         {
-            return _sageService.GetPDFReceipt(invoiceId, paymentId);
+            return await _invoiceService.GetPDFReceiptAsync(SageApplicationType.DAMA_BACKOFFICE, invoiceId, paymentId);
         }
 
         public async Task<List<(string, byte[])>> GetOrderDocumentsAsync(int id)

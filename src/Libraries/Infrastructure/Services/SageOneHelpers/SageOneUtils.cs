@@ -20,7 +20,7 @@ namespace Infrastructure.Services.SageOneHelpers
             httpClient.DefaultRequestHeaders.Add("X-Signature", signature);
             httpClient.DefaultRequestHeaders.Add("X-Nonce", nonce);
             httpClient.DefaultRequestHeaders.Add("Accept", !getPdf ? "*/*" : "application/pdf");
-            httpClient.DefaultRequestHeaders.Add("User-Agent", "damanojornal");
+            httpClient.DefaultRequestHeaders.Add("User-Agent", "saborcomtradicao");
             httpClient.Timeout = new TimeSpan(0,0,100000);            
         }
  

@@ -1,6 +1,5 @@
 ﻿using ApplicationCore.Entities;
-using ApplicationCore.Entities.OrderAggregate;
-using System.Collections.Generic;
+using ApplicationCore.Entities.BasketAggregate;
 using System.Threading.Tasks;
 
 namespace ApplicationCore.Interfaces

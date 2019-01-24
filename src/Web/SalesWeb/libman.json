@@ -1,0 +1,21 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "slick-carousel@1.9.0",      
+      "destination": "wwwroot/lib/slick"
+    },
+    {
+      "library": "twitter-bootstrap@4.1.1",
+      "files": [ "css/bootstrap.css", "css/bootstrap.min.css", "js/bootstrap.js", "js/bootstrap.min.js" ],
+      "destination": "wwwroot/lib/bootstrap/"
+    },
+    {
+      "library": "select2@4.0.5",
+      "files": [ "css/select2.css", "css/select2.min.css", "js/select2.js", "js/select2.min.js" ],
+      "destination": "wwwroot/lib/select2"
+    }
+
+  ]
+}

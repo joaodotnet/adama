@@ -1,0 +1,73 @@
+﻿@page
+@using SalesWeb.Pages.Category
+@model IndexModel
+@{
+    ViewData["Title"] = @Model.CategoryModel.CategoryName;
+    if (!string.IsNullOrEmpty(HttpContext.Request.Query["p"]))
+    {
+        ViewBag.NoIndex = true;
+    }
+}
+
+<p class="title">@Model.CategoryModel.CategoryName</p>
+
+@await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
+
+
+@if (Model.SalesCategoryModel != null)
+{
+    @*<div class="row">
+
+        @foreach (var item in Model.CategoryModel.CatalogModel.CatalogTypes)
+        {
+            <div class="col-6 col-sm-3">
+                @if (string.IsNullOrEmpty(item.PictureUri))
+                {
+                    <a asp-page="/Category/Type/Index" asp-route-cat="@item.CatNameUri" asp-route-type="@item.TypeNameUri">
+                        <div class="card">
+                            <div class="card-body">
+                                @item.Name
+                            </div>
+                        </div>
+                    </a>
+                }
+                else
+                {
+                    <a asp-page="/Category/Type/Index" asp-route-cat="@item.CatNameUri" asp-route-type="@item.TypeNameUri">
+                        <img src="@item.PictureUri" class="img-thumbnail" />
+                    </a>
+                }
+            </div>
+        }
+
+    </div>*@
+    
+    @if (Model.SalesCategoryModel.Types.Any())
+    {
+        <div id="todos" class="news-heading text-center">
+            <h2>Todos os Produtos</h2>
+        </div>
+        <div class="container">
+
+            @foreach (var type in Model.SalesCategoryModel.Types)
+            {
+                <h4><strong>@type.Name</strong></h4>
+                <div class="esh-catalog-items row">
+                    @foreach (var catalogItem in type.CatalogItems)
+                    {
+                        <div class="esh-catalog-item col-md-3">
+                            @await Html.PartialAsync("_product", catalogItem, new ViewDataDictionary(ViewData)
+                                     {
+                                         { "catName", Model.CategoryModel.CategoryUrlName}
+                                     })
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+}
+
+@{
+    Model.StatusMessage = "";
+}

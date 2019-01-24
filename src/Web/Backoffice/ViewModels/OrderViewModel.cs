@@ -15,6 +15,8 @@ namespace Backoffice.ViewModels
         public int Id { get; set; }
         [Display(Name = "Email")]
         public string BuyerId { get; set; }
+        [Display(Name = "Email Cliente")]
+        public string CustomerEmail { get; set; }
         public ApplicationUser User { get; set; }
         [Display(Name = "NIF")]
         public int? TaxNumber { get; set; }
@@ -45,9 +47,11 @@ namespace Backoffice.ViewModels
         [Display(Name = "Fatura Nº")]
         public string SalesInvoiceNumber { get; set; }
         public long? SalesInvoiceId { get; set; }
+        [Display(Name = "Pago?")]
         public long? SalesPaymentId { get; set; }
         public PaymentType PaymentTypeSelected { get; set; }
         public List<OrderItemViewModel> Items { get; set; }
         public bool HasInvoiceReady { get; set; } = false;
+        public string BillingToAddress_Country { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.DTOs;
+using ApplicationCore.Entities;
 using ApplicationCore.Entities.OrderAggregate;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,10 @@ namespace ApplicationCore.Interfaces
 {
     public interface IInvoiceService
     {
-        Task<SageResponseDTO> RegisterInvoiceAsync(Order order);
-        Task<byte[]> GetPDFInvoiceAsync(long invoiceId);
+        Task<SageResponseDTO> RegisterInvoiceAsync(SageApplicationType applicationType,Order order);
+        Task<SageResponseDTO> RegisterPaymentAsync(SageApplicationType applicationType, long salesInvoiceId, decimal total, PaymentType paymentType);
+        Task<byte[]> GetPDFInvoiceAsync(SageApplicationType applicationType, long invoiceId);
+        Task<byte[]> GetPDFReceiptAsync(SageApplicationType applicationType, long invoiceId, long paymentId);
+        Task<(string AccessToken, string RefreshToken)> GenerateNewAccessTokenAsync(SageApplicationType applicationType, string code);
     }
 }

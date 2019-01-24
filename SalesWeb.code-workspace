@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "src\\Libraries\\ApplicationCore"
+		},
+		{
+			"path": "src\\Libraries\\Infrastructure"
+		},
+		{
+			"path": "src\\Web\\SalesWeb"
+		}
+	]
+}

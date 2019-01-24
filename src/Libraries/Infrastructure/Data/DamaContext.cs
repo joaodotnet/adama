@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ApplicationCore.Entities;
 using System;
+using ApplicationCore.Entities.BasketAggregate;
 
 namespace Infrastructure.Data
 {
