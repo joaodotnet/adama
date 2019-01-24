@@ -3,13 +3,16 @@ using ApplicationCore.DTOs;
 using ApplicationCore.Entities;
 using ApplicationCore.Entities.OrderAggregate;
 using ApplicationCore.Interfaces;
+using Infrastructure.Exceptions;
 using Infrastructure.Services.SageOneHelpers;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -21,34 +24,39 @@ namespace Infrastructure.Services
         public SageService(
             IOptions<SageSettings> options,
             IAuthConfigRepository authConfigRepository,
-            IAppLogger<SageService> logger) : base(options, authConfigRepository, logger)
+            IAppLogger<SageService> logger,
+            IMemoryCache memoryCache) : base(options, authConfigRepository, logger, memoryCache)
         {
 
         }
 
-        public async Task<(string AccessToken, string RefreshToken)> GetAccessTokenAsync(string code)
+        public async Task<(string AccessToken, string RefreshToken)> GetAccessTokenAsync(SageApplicationType applicationType, string code)
         {
+            var auth = await GetAuthConfigAsync(applicationType);
             var httpClient = CreateHttpClient();
             AddDefaultHeaders(httpClient);
-            var data = SageOneUtils.ConvertPostParams(SageOneUtils.GetAccessTokenPostData(code, _settings.ClientId, _settings.ClientSecret, _settings.CallbackURL));
+            var data = SageOneUtils.ConvertPostParams(SageOneUtils.GetAccessTokenPostData(code, auth.ClientId, auth.ClientSecret, auth.CallbackURL));
             var content = new StringContent(data);
 
             var uri = new Uri(_settings.AccessTokenURL);
             var response = await httpClient.PostAsync(uri, content);
-
-            //await HandleResponse(response);
-            var responseContent = await response.Content.ReadAsStringAsync();
-            JObject jObject = JObject.Parse(responseContent);
-            string access_token = (string)jObject["access_token"];
-            string refresh_token = (string)jObject["refresh_token"];
-            return (access_token, refresh_token);
+            if(response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                JObject jObject = JObject.Parse(responseContent);
+                string access_token = (string)jObject["access_token"];
+                string refresh_token = (string)jObject["refresh_token"];
+                return (access_token, refresh_token);
+            }
+            throw new SageException(response?.StatusCode.ToString(), await response?.Content?.ReadAsStringAsync());
         }
 
-        public async Task<(string AccessToken, string RefreshToken)> GetAccessTokenByRefreshAsync()
+        public async Task<(string AccessToken, string RefreshToken)> GetAccessTokenByRefreshAsync(SageApplicationType applicationType)
         {
+            var auth = await GetAuthConfigAsync(applicationType);
             var httpClient = CreateHttpClient();
             AddDefaultHeaders(httpClient);
-            var data = SageOneUtils.ConvertPostParams(SageOneUtils.GetRefreshTokenPostData(_settings.ClientId, _settings.ClientSecret, _authConfig.RefreshToken));
+            var data = SageOneUtils.ConvertPostParams(SageOneUtils.GetRefreshTokenPostData(auth.ClientId, auth.ClientSecret, auth.RefreshToken));
             var content = new StringContent(data);
 
             var uri = new Uri(_settings.AccessTokenURL);
@@ -62,8 +70,9 @@ namespace Infrastructure.Services
             return (access_token, refresh_token);
         }
 
-        public async Task<SageResponseDTO> CreateAnonymousInvoice(List<OrderItem> orderItems, int referenceId, decimal carriageAmount)
+        public async Task<SageResponseDTO> CreateAnonymousInvoice(SageApplicationType applicationType, List<OrderItem> orderItems, int referenceId, decimal carriageAmount)
         {
+            var auth = await GetAuthConfigAsync(applicationType);
             if (orderItems == null || orderItems.Count == 0)
                 return new SageResponseDTO { Message = "Error Input Data", ResponseBody = "Error: No items" };
 
@@ -81,11 +90,12 @@ namespace Infrastructure.Services
             var idx = AddLinesToBody(orderItems, body);
             SetCarriageAmount(idx, carriageAmount, body);
 
-            return await CreateInvoice(body);
+            return await CreateInvoice(auth, body);
         }        
 
-        public async Task<SageResponseDTO> CreateInvoiceWithTaxNumber(List<OrderItem> orderItems, string customerName, string taxNumber, string address, string address2, string postalCode, string city, int referenceId, decimal carriageAmount)
+        public async Task<SageResponseDTO> CreateInvoiceWithTaxNumber(SageApplicationType applicationType, List<OrderItem> orderItems, string customerName, string taxNumber, string address, string address2, string postalCode, string city, string country, int referenceId, decimal carriageAmount)
         {
+            var auth = await GetAuthConfigAsync(applicationType);
             if (orderItems == null || orderItems.Count == 0)
                 return new SageResponseDTO { Message = "Error Input Data", ResponseBody = "Error: No items" };
 
@@ -99,7 +109,7 @@ namespace Infrastructure.Services
                 new KeyValuePair<string,string>("sales_invoice[main_address_street_2]", address2),
                 new KeyValuePair<string,string>("sales_invoice[main_address_postcode]", postalCode),
                 new KeyValuePair<string,string>("sales_invoice[main_address_locality]", city),
-                new KeyValuePair<string,string>("sales_invoice[main_address_country_id]", "175"),
+                new KeyValuePair<string,string>("sales_invoice[main_address_country_id]", country),
                 //new KeyValuePair<string,string>("sales_invoice[carriage_tax_rate_id]", "4"),
                 new KeyValuePair<string,string>("sales_invoice[vat_exemption_reason_id]", "10"),
                 new KeyValuePair<string,string>("sales_invoice[reference]", referenceId.ToString())
@@ -108,12 +118,12 @@ namespace Infrastructure.Services
             var idx = AddLinesToBody(orderItems, body);
             SetCarriageAmount(idx, carriageAmount, body);
 
-            return await CreateInvoice(body);
+            return await CreateInvoice(auth, body);
         }
 
-        private async Task<SageResponseDTO> CreateInvoice(List<KeyValuePair<string, string>> body)
+        private async Task<SageResponseDTO> CreateInvoice(AuthConfig auth, List<KeyValuePair<string, string>> body)
         {
-            if(_authConfig == null || string.IsNullOrEmpty(_authConfig.AccessToken))
+            if(string.IsNullOrEmpty(auth.AccessToken))
             {
                 return new SageResponseDTO
                 {
@@ -128,10 +138,10 @@ namespace Infrastructure.Services
                 };
                 var uri = builder.Uri;
 
-                var httpClient = CreateHttpClient(_authConfig.AccessToken);
-                HttpRequestMessage request = GenerateRequest(HttpMethod.Post, uri, body, httpClient);
+                var httpClient = CreateHttpClient(auth.AccessToken);
+                HttpRequestMessage request = GenerateRequest(HttpMethod.Post, uri, body, httpClient, auth);
                 var response = await httpClient.SendAsync(request);
-                var result = await HandleResponse(response, HttpMethod.Post, uri, body);
+                var result = await HandleResponse(response, HttpMethod.Post, uri, body, auth);
                 var responseObj = await FormatResponse(result);
                 if (responseObj.StatusCode == HttpStatusCode.Created)
                 {
@@ -152,10 +162,11 @@ namespace Infrastructure.Services
             }
         }
 
-        public async Task<SageResponseDTO> InvoicePayment(long id, PaymentType paymentType, decimal amount)
+        public async Task<SageResponseDTO> InvoicePayment(SageApplicationType applicationType, long id, PaymentType paymentType, decimal amount)
         {
             try
             {
+                var auth = await GetAuthConfigAsync(applicationType);
                 var sagePaymentConfig = GetSagePaymentType(paymentType);
                 List<KeyValuePair<string, string>> body = new List<KeyValuePair<string, string>> {
                     new KeyValuePair<string,string>("sales_invoice_payment[date]",DateTime.Now.ToString("dd-MM-yyyy")),
@@ -171,11 +182,11 @@ namespace Infrastructure.Services
 
                 var uri = builder.Uri;
 
-                var httpClient = CreateHttpClient(_authConfig.AccessToken);
-                HttpRequestMessage request = GenerateRequest(HttpMethod.Post, uri, body, httpClient);
+                var httpClient = CreateHttpClient(auth.AccessToken);
+                HttpRequestMessage request = GenerateRequest(HttpMethod.Post, uri, body, httpClient, auth);
                 var response = await httpClient.SendAsync(request);
 
-                var result = await HandleResponse(response, HttpMethod.Post, uri, body);
+                var result = await HandleResponse(response, HttpMethod.Post, uri, body, auth);
                 var responseObj = await FormatResponse(result);
                 if (responseObj.StatusCode == HttpStatusCode.Created)
                 {
@@ -195,21 +206,22 @@ namespace Infrastructure.Services
             }
         }        
 
-        public async Task<string> GetAccountData()
+        public async Task<string> GetAccountData(SageApplicationType applicationType)
         {
             try
             {
+                var auth = await GetAuthConfigAsync(applicationType);
                 //var uri = new Uri(@"https://api.sageone.com/core/v2/business");
                 var builder = new UriBuilder(_baseUrl)
                 {
                     Path = $"/core/v2/business"
                 };
                 var uri = builder.Uri;
-                var httpClient = CreateHttpClient(_authConfig.AccessToken);
+                var httpClient = CreateHttpClient(auth.AccessToken);
 
-                HttpRequestMessage request = GenerateRequest(HttpMethod.Get, uri, null, httpClient);
+                HttpRequestMessage request = GenerateRequest(HttpMethod.Get, uri, null, httpClient, auth);
                 var response = await httpClient.SendAsync(request);
-                var result = await HandleResponse(response, HttpMethod.Get, uri, null);
+                var result = await HandleResponse(response, HttpMethod.Get, uri, null, auth);
                 //var json = new { StatusCode = response.StatusCode, ResponseBody = await response.Content.ReadAsStringAsync() };
                 return JsonConvert.SerializeObject(await FormatResponse(result), Formatting.Indented);
             }
@@ -226,19 +238,21 @@ namespace Infrastructure.Services
             }
         }
 
-        public async Task<string> GetDataAsync(string url)
+        public async Task<string> GetDataAsync(SageApplicationType applicationType, string url)
         {
             try
             {
+                var auth = await GetAuthConfigAsync(applicationType);
                 var builder = new UriBuilder(_baseUrl)
                 {
-                    Path = url
+                    Path = url.Substring(0, url.IndexOf('?') != -1 ? url.IndexOf('?') : url.Length),
+                    Query = url.IndexOf('?') != -1 ? url.Substring(url.IndexOf('?') + 1) : ""
                 };
                 var uri = builder.Uri;
-                var httpClient = CreateHttpClient(_authConfig.AccessToken);
-                HttpRequestMessage request = GenerateRequest(HttpMethod.Get, uri, null, httpClient);
+                var httpClient = CreateHttpClient(auth.AccessToken);
+                HttpRequestMessage request = GenerateRequest(HttpMethod.Get, uri, null, httpClient, auth);
                 var response = await httpClient.SendAsync(request);
-                var result = await HandleResponse(response, HttpMethod.Get, uri, null);
+                var result = await HandleResponse(response, HttpMethod.Get, uri, null, auth);
                 //var json = new { StatusCode = response.StatusCode, ResponseBody = await response.Content.ReadAsStringAsync() };
                 return JsonConvert.SerializeObject(await FormatResponse(result), Formatting.Indented);
             }
@@ -255,31 +269,33 @@ namespace Infrastructure.Services
             }
         }
 
-        public async Task<byte[]> GetPDFInvoice(long invoiceId)
+        public async Task<byte[]> GetPDFInvoice(SageApplicationType applicationType, long invoiceId)
         {
+            var auth = await GetAuthConfigAsync(applicationType);
             var builder = new UriBuilder(_baseUrl)
             {
                 Path = $"/accounts/v2/sales_invoices/{invoiceId}"
             };
             var uri = builder.Uri;
-            var httpClient = CreateHttpClient(_authConfig.AccessToken);
-            HttpRequestMessage request = GenerateRequest(HttpMethod.Get, uri, null, httpClient, true);
+            var httpClient = CreateHttpClient(auth.AccessToken);
+            HttpRequestMessage request = GenerateRequest(HttpMethod.Get, uri, null, httpClient, auth, true);
             var response = await httpClient.SendAsync(request);
-            var result = await HandleResponse(response, HttpMethod.Get, uri, null);
+            var result = await HandleResponse(response, HttpMethod.Get, uri, null, auth, true);
             return await result.Content.ReadAsByteArrayAsync();
         }
 
-        public async Task<byte[]> GetPDFReceipt(long invoiceId, long paymentId)
+        public async Task<byte[]> GetPDFReceipt(SageApplicationType applicationType, long invoiceId, long paymentId)
         {
+            var auth = await GetAuthConfigAsync(applicationType);
             var builder = new UriBuilder(_baseUrl)
             {
                 Path = $"/accounts/v2/sales_invoices/{invoiceId}/payments/{paymentId}"
             };
             var uri = builder.Uri;
-            var httpClient = CreateHttpClient(_authConfig.AccessToken);
-            HttpRequestMessage request = GenerateRequest(HttpMethod.Get, uri, null, httpClient, true);
+            var httpClient = CreateHttpClient(auth.AccessToken);
+            HttpRequestMessage request = GenerateRequest(HttpMethod.Get, uri, null, httpClient, auth, true);
             var response = await httpClient.SendAsync(request);
-            var result = await HandleResponse(response, HttpMethod.Get, uri, null);
+            var result = await HandleResponse(response, HttpMethod.Get, uri, null, auth, true);
             return await result.Content.ReadAsByteArrayAsync();
         }
         private static void SetCarriageAmount(int index, decimal carriageAmount, List<KeyValuePair<string, string>> body)
@@ -311,14 +327,10 @@ namespace Infrastructure.Services
 
         private (string TypeId, string BankId) GetSagePaymentType(PaymentType paymentType)
         {
-            switch (paymentType)
-            {
-                case PaymentType.TRANSFER:
-                    return ("4","95588");
-                case PaymentType.CASH:
-                default:
-                    return ("5","95589");
-            }
+            var bankInfo = _settings.SageBankings.SingleOrDefault(x => x.Type == paymentType);
+            if(bankInfo != null)
+                return (bankInfo.SageTypeId, bankInfo.BankId);
+            return ("5", "97574");
         }
 
         private static int AddLinesToBody(List<OrderItem> orderItems, List<KeyValuePair<string, string>> body)
@@ -343,7 +355,7 @@ namespace Infrastructure.Services
             return idx;
         }
 
-        private async Task<HttpResponseMessage> HandleResponse(HttpResponseMessage response, HttpMethod httpMethod, Uri uri, List<KeyValuePair<string, string>> body)
+        private async Task<HttpResponseMessage> HandleResponse(HttpResponseMessage response, HttpMethod httpMethod, Uri uri, List<KeyValuePair<string, string>> body, AuthConfig auth, bool getPdf = false)
         {
             if (!response.IsSuccessStatusCode)
             {
@@ -356,14 +368,14 @@ namespace Infrastructure.Services
                     if (error == "invalid_token")
                     {
                         //Request new token
-                        var tokens = await GetAccessTokenByRefreshAsync();
-                        await _authRepository.AddOrUpdateAuthConfigAsync(DamaApplicationId.DAMA_BACKOFFICE, tokens.AccessToken, tokens.RefreshToken);
-                        _authConfig = await _authRepository.GetAuthConfigAsync(DamaApplicationId.DAMA_BACKOFFICE);
+                        var tokens = await GetAccessTokenByRefreshAsync(auth.ApplicationId);
+                        await _authRepository.UpdateAuthConfigAsync(auth.ApplicationId, tokens.AccessToken, tokens.RefreshToken);
+                        auth = await _authRepository.GetAuthConfigAsync(auth.ApplicationId);
                         //Log new token
                         _logger.LogInformation($"Get NEW ACCESS TOKEN: StatusCode: {response.StatusCode}, ACCESS TOKEN: {tokens.AccessToken}, REFRESH TOKEN: {tokens.RefreshToken}");
                         //Try Request Again
-                        var httpClient = CreateHttpClient(_authConfig.AccessToken);
-                        HttpRequestMessage request = GenerateRequest(httpMethod, uri, body, httpClient);
+                        var httpClient = CreateHttpClient(tokens.AccessToken);
+                        HttpRequestMessage request = GenerateRequest(httpMethod, uri, body, httpClient, auth, getPdf);
                         response = await httpClient.SendAsync(request);
                     }
                 }

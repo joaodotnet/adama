@@ -10,12 +10,12 @@
 <a asp-page-handler="SageAuth" class="btn btn-default">Sage Authentication</a>
 <a asp-page-handler="RefreshToken" class="btn btn-default">Refresh Token</a>
 <a asp-page-handler="AccountData" class="btn btn-default">Get Account Data</a>
-<a asp-page-handler="CreateInvoice" class="btn btn-primary">Create Invoice</a>
+@*<a asp-page-handler="CreateInvoice" class="btn btn-primary">Create Invoice</a>*@
 
 <hr />
 <h4>Testes: (Usar somente para testes)</h4>
 <form method="post" >
-    Url: <input type="text" name="url" />
+    Url: <input type="text" name="url" class="form-control" />
     <input type="submit" value="Obter Dados" />
     <br /><br />
     Fatura nº: <input type="text" name="id" />

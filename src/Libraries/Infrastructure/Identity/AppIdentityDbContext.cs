@@ -34,6 +34,18 @@ namespace Infrastructure.Identity
 
             builder.Entity<AuthConfig>().Property(x => x.RefreshToken)
                 .HasMaxLength(255);
+
+            builder.Entity<AuthConfig>().Property(x => x.ClientId)
+                .HasMaxLength(255);
+
+            builder.Entity<AuthConfig>().Property(x => x.ClientSecret)
+                .HasMaxLength(255);
+
+            builder.Entity<AuthConfig>().Property(x => x.SigningSecret)
+                .HasMaxLength(255);
+
+            builder.Entity<AuthConfig>().Property(x => x.CallbackURL)
+                .HasMaxLength(255);
         }
     }
 

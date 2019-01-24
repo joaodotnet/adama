@@ -15,27 +15,19 @@ namespace Infrastructure.Identity
         {
             _context = context;
         }
-        public async Task AddOrUpdateAuthConfigAsync(DamaApplicationId applicationId, string accessToken, string refreshToken)
+        public async Task UpdateAuthConfigAsync(SageApplicationType applicationId, string accessToken, string refreshToken)
         {
             var appConfig = await _context.AuthConfigs.FindAsync(applicationId);
-            if(appConfig == null)
-            {
-                _context.AuthConfigs.Add(new AuthConfig
-                {
-                    ApplicationId = applicationId,
-                    AccessToken = accessToken,
-                    RefreshToken = refreshToken
-                });
-            }
-            else
-            {
+            if(appConfig != null)
+            {               
                 appConfig.AccessToken = accessToken;
                 appConfig.RefreshToken = refreshToken;
+                await _context.SaveChangesAsync();
             }
-            await _context.SaveChangesAsync();
+            
         }
 
-        public async Task<AuthConfig> GetAuthConfigAsync(DamaApplicationId applicationId)
+        public async Task<AuthConfig> GetAuthConfigAsync(SageApplicationType applicationId)
         {
             return await _context.AuthConfigs.FindAsync(applicationId);
         }

@@ -1,0 +1,49 @@
+﻿@using SalesWeb.ViewModels
+@model IEnumerable<MenuItemComponentViewModel>
+
+
+<ul class="navbar-nav text-nowrap">
+    @foreach (var item in Model)
+    {
+        if (item.Childs.Count > 0)
+        {
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle d-none d-sm-block" asp-page="/Category/Index" asp-route-id="@item.NameUri">
+            @item.Name
+        </a>
+        <a class="nav-link dropdown-toggle d-block d-sm-none" id="navbarDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            @item.Name
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            @foreach (var child in item.Childs)
+            {
+
+                @if (!string.IsNullOrEmpty(child.TypeUri))
+                {
+
+                    <a class="dropdown-item" asp-page="/Category/Type/Index" asp-route-cat="@child.NameUri" asp-route-type="@child.TypeUri">
+                        <span class="dropdown-item-text">@child.Name</span>
+                    </a>
+                }
+                else
+                {
+                    <a class="dropdown-item" asp-page="/Category/Index" asp-route-id="@child.NameUri">
+                        <span class="dropdown-item-text">@child.Name</span>
+                    </a>
+
+                }
+
+            }
+        </div>
+    </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link" asp-page="/Category/Index" asp-route-id="@item.NameUri">@item.Name</a>
+            </li>
+
+        }
+
+    }
+</ul>

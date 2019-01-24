@@ -74,8 +74,8 @@ namespace Infrastructure.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error while sending email: {ex.Message}");
-                throw new SendEmailException(ex.Message);
+                _logger.LogError($"Error while sending email: {ex}");
+                throw new SendEmailException(ex.ToString());
             }
         }
 

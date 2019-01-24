@@ -1,7 +1,9 @@
 ﻿using ApplicationCore.DTOs;
+using ApplicationCore.Entities;
 using ApplicationCore.Entities.OrderAggregate;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Specifications;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,19 +15,34 @@ namespace ApplicationCore.Services
     public class InvoiceService : IInvoiceService
     {
         private readonly ISageService _sageService;
+        private readonly IAuthConfigRepository _authConfigRepository;
+        private readonly SageSettings _settings;
 
-        public InvoiceService(ISageService sageService)
+        public InvoiceService(ISageService sageService, 
+            IAuthConfigRepository authConfigRepository,
+            IOptions<SageSettings> settings)
         {
             _sageService = sageService;
+            _authConfigRepository = authConfigRepository;
+            _settings = settings.Value;
         }
 
-        public async Task<byte[]> GetPDFInvoiceAsync(long invoiceId)
+        public async Task<(string AccessToken, string RefreshToken)> GenerateNewAccessTokenAsync(SageApplicationType applicationType, string code)
         {
-            return await _sageService.GetPDFInvoice(invoiceId);
+            return await _sageService.GetAccessTokenAsync(applicationType, code);
         }
 
-        public async Task<SageResponseDTO> RegisterInvoiceAsync(Order order)
-        {                       
+        public async Task<byte[]> GetPDFInvoiceAsync(SageApplicationType applicationType, long invoiceId)
+        {
+            return await _sageService.GetPDFInvoice(applicationType, invoiceId);
+        }
+        public async Task<byte[]> GetPDFReceiptAsync(SageApplicationType applicationType, long invoiceId, long paymentId)
+        {
+            return await _sageService.GetPDFReceipt(applicationType, invoiceId, paymentId);
+        }
+
+        public async Task<SageResponseDTO> RegisterInvoiceAsync(SageApplicationType applicationType, Order order)
+        {
             List<OrderItem> items = new List<OrderItem>();
             foreach (var item in order.OrderItems)
             {
@@ -40,7 +57,7 @@ namespace ApplicationCore.Services
                 var maxStreet1Length = order.BillingToAddress.Street.Length;
                 if (maxStreet1Length >= 50)
                     maxStreet1Length = 50;
-                response = await _sageService.CreateInvoiceWithTaxNumber(
+                response = await _sageService.CreateInvoiceWithTaxNumber(applicationType,
                     items,
                     order.BillingToAddress.Name,
                     order.TaxNumber.Value.ToString(),
@@ -48,13 +65,19 @@ namespace ApplicationCore.Services
                     order.BillingToAddress.Street.Length > 50 ? order.BillingToAddress.Street.Substring(50) : string.Empty,
                     order.BillingToAddress.PostalCode,
                     order.BillingToAddress.City,
+                    order.BillingToAddress.Country == "Portugal" ? "175" : order.BillingToAddress.Country,
                     order.Id,
                     order.ShippingCost);
             }
             else
-                response = await _sageService.CreateAnonymousInvoice(items, order.Id, order.ShippingCost);
+                response = await _sageService.CreateAnonymousInvoice(applicationType, items, order.Id, order.ShippingCost);
 
             return response;
+        }
+
+        public async Task<SageResponseDTO> RegisterPaymentAsync(SageApplicationType applicationType, long salesInvoiceId, decimal total, PaymentType paymentType)
+        {
+            return await _sageService.InvoicePayment(applicationType, salesInvoiceId, paymentType, total);
         }
     }
 }

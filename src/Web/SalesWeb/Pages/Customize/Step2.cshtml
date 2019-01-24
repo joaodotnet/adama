@@ -1,0 +1,172 @@
+﻿@page
+@model SalesWeb.Pages.Customize.Step2Model
+@{
+    ViewData["Title"] = "Personalizar - Passo 2";
+}
+@section Styles {
+    <style type="text/css">
+        @@media screen and (max-width:576px) {
+            .container {
+                padding-left: 0px;
+                padding-right: 0px;
+            }
+        }
+    </style>
+}
+
+<form method="post" asp-page="./Step3" enctype="multipart/form-data">
+    <div class="dama-customize pt-sm-5 pt-2">
+        <div class="row mb-3">
+            <div class="offset-sm-3 col-sm-6 col-12 text-center">
+                <h2>A Personalizar...</h2>
+                <div class="mt-1">
+                    <h3><span class="badge badge-pill badge-light">2</span></h3>
+                </div>
+                <h4 class="mt-3">
+                    Descreve a ilustração que gostarias de Personalizar.
+                </h4>               
+            </div>
+        </div>
+        <div class="row mb-3 mx-2 mx-sm-0">
+            <div class="offset-sm-2 col-sm-8 col-12 p-3 dama-customize-pink text-white dama">
+                <p><strong>Exemplo</strong></p>
+                <p class="dama-customize-small2">
+                    <strong>Descrição:</strong> A minha amiga adora cozinhar, tem cabelo curto e não dispensa a companhia do seu gato cinzento.<br />
+                    Adora cor de rosa e castanho.
+                </p>
+                <p class="dama-customize-small2 mb-0">
+                    <strong>Frase ou nome: Adoro-te Maria</strong>
+                </p>
+            </div>
+        </div>
+        <div class="row mb-4 mx-2 mx-sm-0">
+            <div class="offset-sm-2 col-sm-8 col-12 p-3 dama-customize-border-pink">
+                <strong>Descreve a ilustração...</strong><br />
+                <textarea asp-for="CustomizeModel.Description" name="Description" rows="5" class="w-100 dama-customize-textarea"></textarea>
+                <span asp-validation-for="CustomizeModel.Description" class="text-danger"></span>
+                <strong>Queres adicionar uma frase ou nome?</strong><br />
+                <textarea asp-for="CustomizeModel.Text" name="Text" rows="2" class="w-100 dama-customize-textarea"></textarea>
+            </div>
+        </div>       
+        <div class="row mb-5">
+            <div class="col-12 text-center mb-3">
+                <h4 class="mt-2">
+                    Escolhe duas ou três cores que mais gostes no quadro a baixo.
+                </h4>
+            </div>
+            <div class="offset-sm-2 col-sm-8 pr-0">
+                <div class="row p-1 dama-customize-colors">
+                    <div class="card" style="width: 5rem;background-color:#ffffff">
+                        <div class="card-body">
+                        </div>
+                    </div>
+                    <div class="card" style="width: 5rem;background-color:#FFFACD">
+                        <div class="card-body">
+                        </div>
+                    </div>
+                    <div class="card" style="width: 5rem;background-color:#FFCC00">
+                        <div class="card-body">
+                        </div>
+                    </div>
+                    <div class="card" style="width: 5rem;background-color:#FF8C00">
+                        <div class="card-body">
+                        </div>
+                    </div>
+                    <div class="card" style="width: 5rem;background-color:#FF0000">
+                        <div class="card-body">
+                        </div>
+                    </div>
+                    <div class="card" style="width: 5rem;background-color:#8B0000">
+                        <div class="card-body">
+                        </div>
+                    </div>
+                    <div class="card" style="width: 5rem;background-color:#FFB6C1">
+                        <div class="card-body">
+                        </div>
+                    </div>
+                    @*<div class="w-100 d-none d-sm-block"></div>*@
+                    <div class="card" style="width: 5rem;background-color:#e0a240">
+                        <div class="card-body">
+                        </div>
+                    </div>
+                    <div class="card" style="width: 5rem;background-color:#87CEFA">
+                        <div class="card-body">
+                        </div>
+                    </div>
+                    <div class="card" style="width: 5rem;background-color:#1E90FF">
+                        <div class="card-body">
+                        </div>
+                    </div>
+                    <div class="card" style="width: 5rem;background-color:#A9FCE0">
+                        <div class="card-body">
+                        </div>
+                    </div>
+                    <div class="card" style="width: 5rem;background-color:#02B085">
+                        <div class="card-body">
+                        </div>
+                    </div>
+                    <div class="card" style="width: 5rem;background-color:#DEB887">
+                        <div class="card-body">
+                        </div>
+                    </div>
+                    <div class="card" style="width: 5rem;background-color:#8B4513">
+                        <div class="card-body">
+                        </div>
+                    </div>
+                    <div class="card" style="width: 5rem;background-color:#999999">
+                        <div class="card-body">
+                        </div>
+                    </div>
+                    <div class="card" style="width: 5rem;background-color:#000000">
+                        <div class="card-body">
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+        <div class="row go-section">
+            <div class="offset-sm-2 col-sm-8 col-12 p-sm-0">
+                <div class="row pr-sm-0 m-0">
+                    <div class="col-sm-2 col-3">
+                        <a asp-page="./Index" asp-route-CategoryId="@Model.CustomizeModel.CategoryId" asp-route-CatalogItemId="@Model.CustomizeModel.CatalogItemId" class="btn btn-dama-menta mt-0 mr-3 text-white" role="button">&larr; Voltar</a>
+                    </div>
+                    <div class="offset-sm-7 col-sm-3 offset-3 col-6">
+                        <button type="submit" class="btn btn-dama-menta mt-0 mr-3">Próximo passo &rarr;</button>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+    <input type="hidden" name="CatalogItemId" value="@Model.CustomizeModel.CatalogItemId" />
+    <input id="colors" type="hidden" name="Colors" value="@Model.CustomizeModel.Colors" />
+</form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+        var colors = [];
+        $(document).ready(function () {
+
+            $('.dama-customize-colors .card').click(function () {
+                
+                var color = $(this).css('background-color').replace(/,/g, ';');
+
+                if ($(this).hasClass('dama-customize-color-selected') == false) {
+                    if (colors.length <= 2) {
+                        colors.push(color);
+                        $(this).toggleClass('dama-customize-color-selected');
+                    }
+                }                    
+                else {
+                    var index = colors.indexOf(color);
+                    colors.splice(index, 1);
+                    $(this).toggleClass('dama-customize-color-selected');
+                }
+                
+                $('#colors').val(colors);
+                console.log("colors: " + $('#colors').val());
+            });            
+        });
+    </script>
+}

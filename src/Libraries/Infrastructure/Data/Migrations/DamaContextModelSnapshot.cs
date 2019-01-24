@@ -16,22 +16,26 @@ namespace Infrastructure.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("ApplicationCore.Entities.Basket", b =>
+            modelBuilder.Entity("ApplicationCore.Entities.BasketAggregate.Basket", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("BuyerId");
 
+                    b.Property<DateTime?>("CreatedDate");
+
+                    b.Property<DateTime?>("UpdatedDate");
+
                     b.HasKey("Id");
 
                     b.ToTable("Baskets");
                 });
 
-            modelBuilder.Entity("ApplicationCore.Entities.BasketItem", b =>
+            modelBuilder.Entity("ApplicationCore.Entities.BasketAggregate.BasketItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -52,6 +56,8 @@ namespace Infrastructure.Data.Migrations
 
                     b.Property<string>("CustomizeDescription");
 
+                    b.Property<DateTime?>("CreatedDate");
+
                     b.Property<string>("CustomizeName")
                         .HasMaxLength(100);
 
@@ -62,6 +68,8 @@ namespace Infrastructure.Data.Migrations
 
                     b.Property<decimal>("UnitPrice")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("UpdatedDate");
 
                     b.HasKey("Id");
 
@@ -512,9 +520,9 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("ShopConfigDetail");
                 });
 
-            modelBuilder.Entity("ApplicationCore.Entities.BasketItem", b =>
+            modelBuilder.Entity("ApplicationCore.Entities.BasketAggregate.BasketItem", b =>
                 {
-                    b.HasOne("ApplicationCore.Entities.Basket", "Basket")
+                    b.HasOne("ApplicationCore.Entities.BasketAggregate.Basket", "Basket")
                         .WithMany("Items")
                         .HasForeignKey("BasketId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -615,6 +623,8 @@ namespace Infrastructure.Data.Migrations
 
                             b1.Property<string>("ProductName");
 
+                            b1.HasKey("CustomizeOrderId");
+
                             b1.ToTable("CustomizeOrder");
 
                             b1.HasOne("ApplicationCore.Entities.CustomizeOrder")
@@ -647,6 +657,8 @@ namespace Infrastructure.Data.Migrations
 
                             b1.Property<string>("Street");
 
+                            b1.HasKey("OrderId");
+
                             b1.ToTable("Orders");
 
                             b1.HasOne("ApplicationCore.Entities.OrderAggregate.Order")
@@ -668,6 +680,8 @@ namespace Infrastructure.Data.Migrations
                             b1.Property<string>("PostalCode");
 
                             b1.Property<string>("Street");
+
+                            b1.HasKey("OrderId");
 
                             b1.ToTable("Orders");
 
@@ -717,6 +731,8 @@ namespace Infrastructure.Data.Migrations
                             b1.Property<string>("PictureUri");
 
                             b1.Property<string>("ProductName");
+
+                            b1.HasKey("OrderItemId");
 
                             b1.ToTable("OrderItems");
 

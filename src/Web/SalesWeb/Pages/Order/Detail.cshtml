@@ -1,0 +1,117 @@
+﻿@page
+@using SalesWeb.Extensions;
+@model DetailModel
+
+@{
+    ViewData["Title"] = "Detalhe da Encomenda";
+}
+
+<div class="esh-orders_detail">
+    <div class="container">
+        <h2 class="dama-heading-normal-font">@ViewData["Title"] &nbsp; #@Model.OrderDetails.OrderNumber</h2>
+        <section class="esh-orders_detail-section">
+            <article class="esh-orders_detail-titles row d-none d-sm-flex">
+                <section class="esh-orders_detail-title col-3">Nº Encomenda</section>
+                <section class="esh-orders_detail-title col-3">Data</section>
+                <section class="esh-orders_detail-title col-3">Total</section>
+                <section class="esh-orders_detail-title col-3">Cliente</section>
+            </article>
+
+            <article class="esh-orders_detail-items row mt-2">
+                <section class="esh-orders_detail-item col-12 col-sm-3">
+                    <span class="dama-orders-title-mobile d-sm-none">Nº Encomenda: </span>@Html.DisplayFor(_ => Model.OrderDetails.OrderNumber) (@Model.OrderDetails.InvoiceNr)
+                </section>
+                <section class="esh-orders_detail-item col-12 col-sm-3">
+                    <span class="dama-orders-title-mobile d-sm-none">Data: </span>@Html.DisplayFor(_ => Model.OrderDetails.OrderDate)
+                </section>
+                <section class="esh-orders_detail-item col-12 col-sm-3">
+                    <span class="dama-orders-title-mobile d-sm-none">Total: </span>@Html.DisplayFor(_ => Model.OrderDetails.Total) €
+                </section>
+                <section class="esh-orders_detail-title col-12 col-sm-3">
+                    <span class="dama-orders-title-mobile d-sm-none">Cliente: </span>@Html.DisplayFor(_ => Model.OrderDetails.CustomerEmail)
+                </section>
+            </article>
+        </section>
+       
+        @if (Model.OrderDetails.BillingAddress != null && !string.IsNullOrEmpty(Model.OrderDetails.BillingAddress?.Street))
+        {
+
+            <section class="esh-orders_detail-section mt-3">
+                <article class="esh-orders_detail-titles row">
+                    <section class="esh-orders_detail-title col-12">Morada de Facturação</section>
+                </article>
+                <article class="esh-orders_detail-items row mt-2">
+                    <section class="esh-orders_detail-item col-12">@Model.OrderDetails.BillingAddress.Name</section>
+                </article>
+                <article class="esh-orders_detail-items row">
+                    <section class="esh-orders_detail-item col-12">@Model.OrderDetails.BillingAddress.Street</section>
+                </article>
+
+                <article class="esh-orders_detail-items row">
+                    <section class="esh-orders_detail-item col-12">@Model.OrderDetails.BillingAddress.PostalCode - @Model.OrderDetails.BillingAddress.City</section>
+                </article>
+
+                <article class="esh-orders_detail-items row">
+                    <section class="esh-orders_detail-item col-12">@Model.OrderDetails.CountryName</section>
+                </article>
+            </section>
+        }
+        <section class="esh-orders_detail-section mt-3">
+            <article class="esh-orders_detail-titles row mb-2">
+                <section class="esh-orders_detail-title col-12">DETALHE DA ENCOMENDA</section>
+            </article>
+
+            @for (int i = 0; i < Model.OrderDetails.OrderItems.Count; i++)
+            {
+                var item = Model.OrderDetails.OrderItems[i];
+                <article class="esh-orders_detail-items esh-orders_detail-items--border row align-items-center mb-3">
+                    <section class="esh-orders_detail-item col-4">
+                        <img class="esh-orders_detail-image img-fluid" src="@item.PictureUrl">
+                    </section>
+                    <section class="esh-orders_detail-item esh-orders_detail-item--middle col-8 col-sm-3">
+                        <span class="d-sm-none">@item.Units x </span>@item.ProductName
+                        @if (!string.IsNullOrEmpty(item.CustomizeName))
+                        {
+                            <br />
+                            <small id="nameInputText" class="text-muted dama-small-text">Personalização: @item.CustomizeName</small>
+                        }
+                        @if (item.Attributes?.Count > 0)
+                        {
+                            foreach (var attr in item.Attributes)
+                            {
+                                <br />
+                                <span class="dama-basket-label">@(EnumHelper<ApplicationCore.Entities.AttributeType>.GetDisplayValue(attr.Type)): @attr.AttributeName </span>
+                            }
+                        }
+                        <span class="d-sm-none">
+                            <br />
+                            @Math.Round(item.Units * item.UnitPrice, 2).ToString("N2") €
+                        </span>
+                    </section>
+                    <section class="esh-orders_detail-item esh-orders_detail-item--middle d-none d-sm-block col-sm-2 text-nowrap">@item.UnitPrice.ToString("N2") €</section>
+                    <section class="esh-orders_detail-item esh-orders_detail-item--middle d-none d-sm-block col-sm-1">@item.Units</section>
+                    <section class="esh-orders_detail-item esh-orders_detail-item--middle d-none d-sm-block col-sm-2 text-nowrap">@Math.Round(item.Units * item.UnitPrice, 2).ToString("N2") €</section>
+                </article>
+                <hr class="basket-hr" />
+            }
+        </section>
+
+        <section class="esh-orders_detail-section">
+            <article class="esh-orders_detail-titles esh-basket-titles--clean row">
+                <section class="esh-orders_detail-title d-none d-sm-block col-sm-7"></section>
+                <section class="esh-orders_detail-title col-7 col-sm-3 text-sm-right">TOTAL</section>
+                <section class="esh-orders_detail-item esh-orders_detail-item--mark col-4 col-sm-2 text-nowrap text-right">@Model.OrderDetails.Total €</section>
+            </article>
+        </section>
+        <div class="row">
+            <div class="col">
+                <form asp-page="DownloadInvoice" method="post" class="form-group">
+                    <input type="hidden" asp-for="OrderDetails.OrderNumber" name="OrderNumber" />
+                    <input type="hidden" asp-for="OrderDetails.InvoiceNr" name="InvoiceNr" />
+                    <input type="hidden" asp-for="OrderDetails.InvoiceId" name="InvoiceId" />
+                    <button class="btn btn-secondary" type="submit">Download Fatura</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using Ardalis.GuardClauses;
 using ApplicationCore.Specifications;
 using System.Linq;
+using ApplicationCore.DTOs;
+using System;
+using ApplicationCore.Exceptions;
 
 namespace ApplicationCore.Services
 {
@@ -16,21 +19,24 @@ namespace ApplicationCore.Services
         private readonly IBasketRepository _basketRepository;
         private readonly IAsyncRepository<CatalogItem> _itemRepository;
         private readonly IRepository<CatalogItem> _itemSyncRepository;
+        private readonly IInvoiceService _invoiceService;
 
         public OrderService(IBasketRepository basketRepository,
             IAsyncRepository<CatalogItem> itemRepository,
             IAsyncRepository<Order> orderRepository,
             IAsyncRepository<CustomizeOrder> customizeOrderRepository,
-            IRepository<CatalogItem> itemSyncRepository)
+            IRepository<CatalogItem> itemSyncRepository,
+            IInvoiceService invoiceService)
         {
             _orderRepository = orderRepository;
             _basketRepository = basketRepository;
             _itemRepository = itemRepository;
             _customizeOrderRepository = customizeOrderRepository;
             _itemSyncRepository = itemSyncRepository;
+            _invoiceService = invoiceService;
         }
 
-        public async Task<Order> CreateOrderAsync(int basketId, string phoneNumber, int? taxNumber, Address shippingAddress, Address billingAddress, bool useBillingSameAsShipping, decimal shippingCost, string customerEmail)
+        public async Task<Order> CreateOrderAsync(int basketId, string phoneNumber, int? taxNumber, Address shippingAddress, Address billingAddress, bool useBillingSameAsShipping, decimal shippingCost, string customerEmail = null, bool registerInvoice = false, PaymentType paymentType = PaymentType.CASH)
         {
             //TODO: check price
             var basket = await _basketRepository.GetByIdWithItemsAsync(basketId);
@@ -43,10 +49,60 @@ namespace ApplicationCore.Services
                 var orderItem = new OrderItem(itemOrdered, item.UnitPrice, item.Quantity, item.CatalogAttribute1, item.CatalogAttribute2, item.CatalogAttribute3, item.CustomizeName, item.CustomizeSide);
                 items.Add(orderItem);
             }
-            var order = new Order(basket.BuyerId, phoneNumber, taxNumber, shippingAddress, billingAddress, useBillingSameAsShipping, items, shippingCost);
+            var order = new Order(basket.BuyerId, phoneNumber, taxNumber, shippingAddress, billingAddress, useBillingSameAsShipping, items, shippingCost, customerEmail);
+            var savedOrder = await _orderRepository.AddAsync(order);
 
-            return await _orderRepository.AddAsync(order);
+            if (registerInvoice)
+            {
+                savedOrder.OrderState = OrderStateType.SUBMITTED;
+                SageResponseDTO response;
+                //From sales rename product name
+                
+                foreach (var item in savedOrder.OrderItems.Where(x => x.ItemOrdered.CatalogItemId == -1).ToList())
+                {
+                    item.ItemOrdered.Rename(item.CustomizeName);
+                }
+                    
+                try
+                {
+                    response = await _invoiceService.RegisterInvoiceAsync(SageApplicationType.SALESWEB, savedOrder);                   
+                }
+                catch (Exception ex)
+                {
+                    throw new RegisterInvoiceException(ex.ToString());
+                }
 
+                if (response.InvoiceId.HasValue)
+                {
+                    savedOrder.SalesInvoiceId = response.InvoiceId.Value;
+                    savedOrder.SalesInvoiceNumber = response.InvoiceNumber;
+
+                    await _orderRepository.UpdateAsync(savedOrder);
+
+                    //Generate Payment
+                    try
+                    {
+                        var responsePayment = await _invoiceService.RegisterPaymentAsync(SageApplicationType.SALESWEB, savedOrder.SalesInvoiceId.Value, savedOrder.Total(), paymentType);
+                        if (responsePayment.PaymentId.HasValue)
+                        {
+                            savedOrder.SalesPaymentId = responsePayment.PaymentId.Value;
+                            await _orderRepository.UpdateAsync(savedOrder);
+                        }
+                        else
+                            throw new RegisterInvoiceException($"Fatura gerada com sucesso mas com erro de pagamento: {responsePayment?.Message}");
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new RegisterInvoiceException($"Fatura gerada com sucesso mas com erro de pagamento: {ex}");
+                    }
+                }
+                else //Something wrong
+                {
+                    throw new RegisterInvoiceException(response.Message);
+                }
+            }
+
+            return savedOrder;
         }
 
 
