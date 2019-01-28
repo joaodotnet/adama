@@ -219,5 +219,20 @@ namespace ApplicationCore.Services
             }
         }
 
+        public async Task UpdateOrderItemsPrice(int orderId, List<Tuple<int, decimal>> items)
+        {
+            var order = await GetOrderAsync(orderId);
+            if(order != null && items?.Count > 0)
+            {
+                foreach (var item in items)
+                {
+                    var orderItem = order.OrderItems.SingleOrDefault(x => x.Id == item.Item1);
+                    if (orderItem != null)
+                        orderItem.UpdateItemPrice(item.Item2);
+                }
+                await _orderRepository.UpdateAsync(order);
+            }
+        }
+
     }
 }

@@ -72,7 +72,6 @@ namespace ApplicationCore.Entities.OrderAggregate
             this.TaxNumber = taxNumber;
             this.CustomerEmail = customerEmail;
             this.BillingToAddress = billingAddress;
-        }
-
+        }        
     }
 }

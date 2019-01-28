@@ -168,5 +168,24 @@ namespace Backoffice.Pages.Orders
             StatusMessage = "Mensagem Enviada";
             return RedirectToPage(new { id = OrderModel.Id });
         }
+
+        public async Task<IActionResult> OnPostUpdateItemsPriceAsync()
+        {
+            var order = await _service.GetOrder(OrderModel.Id);
+            if (order == null)
+                return NotFound();
+
+            List<Tuple<int, decimal>> itemsToUpdate = new List<Tuple<int, decimal>>();
+            foreach (var item in OrderModel.Items)
+            {
+                if (item.CustomizeItemCatalogTypeId.HasValue && OrderModel.OrderState != OrderStateType.DELIVERED)
+                    itemsToUpdate.Add(new Tuple<int, decimal>(item.Id, item.UnitPrice));
+            }
+            if(itemsToUpdate.Count > 0)
+                await _orderService.UpdateOrderItemsPrice(OrderModel.Id, itemsToUpdate);
+
+            StatusMessage = "Preços atualizados!";
+            return RedirectToPage(new { id = OrderModel.Id });
+        }
     }
 }
