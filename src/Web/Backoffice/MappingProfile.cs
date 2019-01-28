@@ -45,13 +45,18 @@ namespace Backoffice
             CreateMap<Order, OrderViewModel>()
                 .ForMember(dest => dest.ItemsCount, opts => opts.MapFrom(src => src.OrderItems.Sum(x => x.Units)))
                 .ForMember(dest => dest.ShipToAddress, opts => opts.MapFrom(src => string.IsNullOrEmpty(src.ShipToAddress.Street) ? "" : $"{src.ShipToAddress.Street}, {src.ShipToAddress.PostalCode}, {src.ShipToAddress.City}"))
-                .ForMember(dest => dest.BillingToAddress, opts => opts.MapFrom(src => string.IsNullOrEmpty(src.BillingToAddress.Street) ? "" : $"{src.BillingToAddress.Street}, {src.BillingToAddress.PostalCode}, {src.BillingToAddress.City}"));
+                .ForMember(dest => dest.BillingToAddress, opts => opts.MapFrom(src => string.IsNullOrEmpty(src.BillingToAddress.Street) ? "" : $"{src.BillingToAddress.Street}, {src.BillingToAddress.PostalCode}, {src.BillingToAddress.City}"))
+                .ForMember(dest => dest.HasCustomizeProducts, opts => opts.MapFrom(src => src.OrderItems.Any(i => i.CustomizeItem.CatalogTypeId.HasValue)));
             CreateMap<OrderItem, OrderItemViewModel>()
                 //.ForMember(dest => dest.Attributes, opts => opts.MapFrom(src => src.Details))
                 .ForMember(dest => dest.ProductId, opts => opts.MapFrom(src => src.ItemOrdered.CatalogItemId))
-                .ForMember(dest => dest.PictureUri, opts => opts.MapFrom(src => src.ItemOrdered.PictureUri))
-                .ForMember(dest => dest.ProductName, opts => opts.MapFrom(src => src.ItemOrdered.ProductName))
-                .ForMember(dest => dest.CustomizeName, opts => opts.MapFrom(src => $"{src.CustomizeName} ({src.CustomizeSide})"));
+                .ForMember(dest => dest.PictureUri, opts => opts.MapFrom(src => !src.CustomizeItem.CatalogTypeId.HasValue ? src.ItemOrdered.PictureUri : src.CustomizeItem.PictureUri))
+                .ForMember(dest => dest.ProductName, opts => opts.MapFrom(src => !src.CustomizeItem.CatalogTypeId.HasValue ? src.ItemOrdered.ProductName : src.CustomizeItem.ProductName))
+                //.ForMember(dest => dest.CustomizeName, opts => opts.MapFrom(src => $"{src.CustomizeName} ({src.CustomizeSide})"))
+                .ForMember(dest => dest.CustomizeItemCatalogTypeId, opts => opts.MapFrom(src => src.CustomizeItem.CatalogTypeId))
+                .ForMember(dest => dest.CustomizeItemDescription, opts => opts.MapFrom(src => src.CustomizeItem.Description))
+                .ForMember(dest => dest.CustomizeItemNameOrText, opts => opts.MapFrom(src => src.CustomizeItem.Name))
+                .ForMember(dest => dest.CustomizeItemColors, opts => opts.MapFrom(src => src.CustomizeItem.Colors));
             CreateMap<OrderItemDetail, OrderItemAttributeViewModel>();
             CreateMap<CustomizeOrder, CustomizeOrderViewModel>()
                 .ForMember(dest => dest.ProductId, opts => opts.MapFrom(src => src.ItemOrdered.CatalogItemId))

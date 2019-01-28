@@ -33,5 +33,10 @@ namespace ApplicationCore.Entities.OrderAggregate
             CustomizeName = customizeName;
             CustomizeSide = customizeSide;
         }
+
+        public void UpdateItemPrice(decimal newPrice)
+        {
+            this.UnitPrice = newPrice;
+        }
     }
 }
