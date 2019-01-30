@@ -1,28 +1,27 @@
+using ApplicationCore;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Services;
+using AutoMapper;
+using DamaWeb.Interfaces;
+using DamaWeb.Services;
 using Infrastructure.Data;
 using Infrastructure.Identity;
 using Infrastructure.Logging;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DamaWeb.Interfaces;
-using DamaWeb.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
 using System;
-using System.Text;
-using AutoMapper;
-using ApplicationCore;
 using System.Globalization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Diagnostics;
 using System.Linq;
+using System.Text;
 
 namespace DamaWeb
 {
@@ -39,17 +38,18 @@ namespace DamaWeb
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DamaContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("DamaShopConnection")));
+               options.UseMySql(Configuration.GetConnectionString("DamaShopConnection")));
 
-            // Add Identity DbContext
             services.AddDbContext<AppIdentityDbContext>(options =>
                 options.UseMySql(Configuration.GetConnectionString("IdentityConnection")));
+
+            ConfigureServices(services);
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
                     options.Password.RequireDigit = false;
                     options.Password.RequireLowercase = false;
-                    options.Password.RequireNonAlphanumeric = false;                   
+                    options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
                 })
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
@@ -64,7 +64,7 @@ namespace DamaWeb
                 .AddGoogle(googleOptions =>
                 {
                     googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
-                    googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];                    
+                    googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
                 });
 
             services.ConfigureApplicationCookie(options =>
@@ -73,19 +73,20 @@ namespace DamaWeb
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromHours(1);
                 options.LoginPath = "/Account/Signin";
-                options.LogoutPath = "/Account/Signout";                
+                options.LogoutPath = "/Account/Signout";
                 options.Cookie.IsEssential = true;
             });
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;               
+                options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.Lax;
             });
 
             // The Tempdata provider cookie is not essential. Make it essential
             // so Tempdata is functional when tracking is disabled.
-            services.Configure<CookieTempDataProviderOptions>(options => {
+            services.Configure<CookieTempDataProviderOptions>(options =>
+            {
                 options.Cookie.IsEssential = true;
             });
 
@@ -102,13 +103,13 @@ namespace DamaWeb
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<CatalogService>();
-            services.AddScoped<IShopService,ShopService>();
+            services.AddScoped<IShopService, ShopService>();
             services.Configure<CatalogSettings>(Configuration);
             services.Configure<EmailSettings>(Configuration.GetSection("Email"));
             services.AddSingleton<IUriComposer>(new UriComposer(Configuration.Get<CatalogSettings>()));
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
-            services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));           
+            services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
             services.AddScoped<IMailChimpService, MailChimpService>();
             services.AddScoped<IInvoiceService, InvoiceService>();
             services.AddScoped<ISageService, SageService>();
@@ -153,60 +154,57 @@ namespace DamaWeb
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app,
             IHostingEnvironment env)
-        {        
-            if(env.IsProduction())
-                app.UsePathBase("/loja");
-
-            if (env.IsDevelopment())
+        {
+            if (!env.IsProduction())
             {
-                app.UseDeveloperExceptionPage();                
-                app.UseDatabaseErrorPage();                
+                app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
             else
             {
-                
+                app.UsePathBase("/loja");
                 app.UseExceptionHandler(options =>
                 {
-                    options.Run(
-                        async context =>
+                options.Run(
+                    async context =>
+                    {
+                        var ex = context.Features.Get<IExceptionHandlerFeature>();
+                        if (ex != null)
                         {
-                            var ex = context.Features.Get<IExceptionHandlerFeature>();
-                            if (ex != null)
+                            var err = $"<h1>Error: {ex.Error.Message}</h1>{ex.Error.Source}<hr />{context.Request.Path}<br />";
+                            err += $"QueryString: {context.Request.QueryString}<hr />";
+
+                            err += $"Stack Trace<hr />{ex.Error.StackTrace.Replace(Environment.NewLine, "<br />")}";
+                            if (ex.Error.InnerException != null)
+                                err +=
+                                    $"Inner Exception<hr />{ex.Error.InnerException?.Message.Replace(Environment.NewLine, "<br />")}";
+                            // This bit here to check for a form collection!
+                            if (context.Request.HasFormContentType && context.Request.Form.Any())
                             {
-                                var err = $"<h1>Error: {ex.Error.Message}</h1>{ex.Error.Source}<hr />{context.Request.Path}<br />";
-                                err += $"QueryString: {context.Request.QueryString}<hr />";
-
-                                err += $"Stack Trace<hr />{ex.Error.StackTrace.Replace(Environment.NewLine, "<br />")}";
-                                if (ex.Error.InnerException != null)
-                                    err +=
-                                        $"Inner Exception<hr />{ex.Error.InnerException?.Message.Replace(Environment.NewLine, "<br />")}";
-                                // This bit here to check for a form collection!
-                                if (context.Request.HasFormContentType && context.Request.Form.Any())
+                                err += "<table border=\"1\"><tr><td colspan=\"2\">Form collection:</td></tr>";
+                                foreach (var form in context.Request.Form)
                                 {
-                                    err += "<table border=\"1\"><tr><td colspan=\"2\">Form collection:</td></tr>";
-                                    foreach (var form in context.Request.Form)
-                                    {
-                                        err += $"<tr><td>{form.Key}</td><td>{form.Value}</td></tr>";
-                                    }
-                                    err += "</table>";
+                                    err += $"<tr><td>{form.Key}</td><td>{form.Value}</td></tr>";
                                 }
-                                try
-                                {
-                                    var emailSender = app.ApplicationServices.GetRequiredService<IEmailSender>();
-                                    await emailSender.SendEmailAsync(
-                                        Configuration["Email:FromInfoEmail"],
-                                        Configuration["Email:SupportEmail"],
-                                        "Dama no Jornal - Ocorreu um erro na aplicação", err);
-                                }
-                                catch (Exception)
-                                {
-                                    //Ignore
-                                }
-
-                                context.Response.Redirect("/loja/Error");
+                                err += "</table>";
                             }
-                        });
-                });
+                            try
+                            {
+                                var emailSender = app.ApplicationServices.GetRequiredService<IEmailSender>();
+                                await emailSender.SendEmailAsync(
+                                    Configuration["Email:FromInfoEmail"],
+                                    Configuration["Email:SupportEmail"],
+                                    "Dama no Jornal - Ocorreu um erro na aplicação", err);
+                            }
+                            catch (Exception)
+                            {
+                                //Ignore
+                            }
+
+                            context.Response.Redirect("/loja/Error");
+                        }
+                    });
+            });
                 //app.UseHsts();
             }
 
