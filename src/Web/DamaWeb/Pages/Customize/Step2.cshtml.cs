@@ -64,8 +64,8 @@ namespace DamaWeb.Pages.Customize
             //    CustomizeModel.BuyerName = $"{user.FirstName} {user.LastName}";
             //    CustomizeModel.BuyerPhone = user.PhoneNumber;
             //}
-            StatusMessage = "A sua personalização foi adicionado ao carrinho!";
-            return RedirectToPage("./Index");
+            StatusMessage = "O seu produto personalizado foi adicionado ao carrinho!";
+            return RedirectToPage("./Index", "", "");
         }
 
         private async Task<int> SetBasketModelAsync()
