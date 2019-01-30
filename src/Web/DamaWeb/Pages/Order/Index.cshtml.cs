@@ -55,7 +55,7 @@ namespace DamaWeb.Pages.Order
                     OrderNumber = o.Id,
                     Status = EnumHelper<OrderStateType>.GetDisplayValue(o.OrderState),
                     StatusType = o.OrderState,
-                    Total = o.OrderItems.Any(i => i.CustomizeItem.CatalogTypeId.HasValue) ? default(decimal?) : o.Total()
+                    Total = o.OrderState == OrderStateType.UNDER_ANALYSIS ? default(decimal?) : o.Total()
                 })
                 .OrderByDescending(o => o.OrderDate)
                 .ToList();

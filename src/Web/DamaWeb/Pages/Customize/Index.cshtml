@@ -17,12 +17,21 @@
 
 
 <!-- Mostrar em Popus -->
-@await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
-
-
-<div>
-    Existem produtos personalizados no seu carrinho quer finalizar a encomenda?
-    
+<div id="product-added" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p>@Model.StatusMessage</p>
+            </div>
+            <div class="modal-footer">
+                <a asp-page="/Basket/Index" class="btn btn-primary" role="button">Ver carrinho</a>                
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Continuar a comprar</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <form method="post">
@@ -117,5 +126,14 @@
                 </text>
             }
         });
+        @if(!string.IsNullOrEmpty(Model.StatusMessage))
+        {
+            <text>
+            $(window).on('load', function(){
+                $('#product-added').modal('show');
+            });
+            </text>
+        }
+
     </script>
 }

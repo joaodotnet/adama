@@ -199,6 +199,16 @@ hr {
     border: 0;
 }
 
+.btn-secondary, .btn-secondary:active, .btn-secondary:visited {
+    border: 0;
+    border-radius: 0 !important;
+}
+
+.btn-secondary:hover {
+    border: 0;
+}
+
+
 .btn-outline-pink, .btn-outline-pink:active, .btn-outline-pink:visited {
     border-color: #FC629D;
     color: #FC629D;

@@ -34,40 +34,10 @@ namespace DamaWeb
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; }       
 
-        public void ConfigureDevelopmentServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            // use in-memory database
-            //ConfigureTestingServices(services);
-
-            // use real database            
-            services.AddDbContext<DamaContext>(options => 
-                options.UseMySql(Configuration.GetConnectionString("DamaShopConnection")));
-
-            // Add Identity DbContext
-            services.AddDbContext<AppIdentityDbContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("IdentityConnection")));
-
-            ConfigureServices(services);
-
-        }
-        public void ConfigureTestingServices(IServiceCollection services)
-        {
-            // use in-memory database
-            services.AddDbContext<DamaContext>(c =>
-                c.UseInMemoryDatabase("Catalog"));
-
-            // Add Identity DbContext
-            services.AddDbContext<AppIdentityDbContext>(options =>
-                options.UseInMemoryDatabase("Identity"));
-
-            ConfigureServices(services);
-        }
-
-        public void ConfigureProductionServices(IServiceCollection services)
-        {
-            // use real database            
             services.AddDbContext<DamaContext>(options =>
                 options.UseMySql(Configuration.GetConnectionString("DamaShopConnection")));
 
@@ -75,16 +45,6 @@ namespace DamaWeb
             services.AddDbContext<AppIdentityDbContext>(options =>
                 options.UseMySql(Configuration.GetConnectionString("IdentityConnection")));
 
-            //services.AddHttpsRedirection(options =>
-            //{
-            //    options.HttpsPort = 443;
-            //});
-
-            ConfigureServices(services);
-        }
-
-        public void ConfigureServices(IServiceCollection services)
-        {
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
                     options.Password.RequireDigit = false;
@@ -193,8 +153,9 @@ namespace DamaWeb
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app,
             IHostingEnvironment env)
-        {
-            app.UsePathBase("/loja");
+        {        
+            if(env.IsProduction())
+                app.UsePathBase("/loja");
 
             if (env.IsDevelopment())
             {
@@ -203,6 +164,7 @@ namespace DamaWeb
             }
             else
             {
+                
                 app.UseExceptionHandler(options =>
                 {
                     options.Run(
