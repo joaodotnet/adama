@@ -215,6 +215,13 @@
                                 @item.UnitPrice.ToString("N2") €
                                 </text>
                             }
+                            else
+                            {
+                                <text>
+                                    *
+                                </text>
+                            }
+
                         </section>
 
                     </article>
@@ -236,9 +243,14 @@
                     <section id="basket-total" class="col-4 pl-0 dama-product-price">@Model.BasketModel.Total()</section>
                 </article>
                 <hr />
-
                 <article class="row">
                     <section class="col-12"><small>Tempo de entrega entre @Model.DeliveryTime.Min a @Model.DeliveryTime.Max @(DamaWeb.Extensions.EnumHelper<ApplicationCore.Entities.DeliveryTimeUnitType>.GetDisplayValue(Model.DeliveryTime.Unit))</small></section>
+                </article>
+            }
+            else
+            {
+                <article class="row mb-2">
+                    <section class="col-12 dama-small-text"><small>* O preço dos produtos personalizados serão definidos após a análise do pedido e enviado por email ao cliente</small></section>
                 </article>
             }
             <article class="row">

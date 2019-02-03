@@ -55,7 +55,10 @@
                                         @item.UnitPrice.ToString("N2") €
                                     </span>
                                 }
-
+                                else
+                                {
+                                    <small>em análise</small>
+                                }
                             </div>
                         </div>
                         <div class="col-sm-3 form-group row m-0 p-0">
@@ -66,12 +69,12 @@
                             </div>
                         </div>
                         <div class="d-none d-sm-block col-sm-2">
-    @if (!item.IsFromCustomize)
-    {
-        <text>
-            @Math.Round(item.Quantity * item.UnitPrice, 2).ToString("N2") €
-        </text>
-    }
+                        @if (!item.IsFromCustomize)
+                        {
+                            <text>
+                                @Math.Round(item.Quantity * item.UnitPrice, 2).ToString("N2") €
+                            </text>
+                        }
                         </div>
                     </div>
                     <div class="col-1 col-sm-1 m-0 p-0 text-right">

@@ -33,9 +33,22 @@ namespace DamaWeb
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }       
+        public IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureDevelopmentServices(IServiceCollection services)
+        {
+            services.AddDbContext<DamaContext>(c =>
+                c.UseSqlServer(Configuration.GetConnectionString("DamaShopConnection")));
+
+            // Add Identity DbContext
+            services.AddDbContext<AppIdentityDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+
+
+            ConfigureServices(services);
+        }
+
+        public void ConfigureProductionServices(IServiceCollection services)
         {
             services.AddDbContext<DamaContext>(options =>
                options.UseMySql(Configuration.GetConnectionString("DamaShopConnection")));
@@ -43,8 +56,14 @@ namespace DamaWeb
             services.AddDbContext<AppIdentityDbContext>(options =>
                 options.UseMySql(Configuration.GetConnectionString("IdentityConnection")));
 
-            ConfigureServices(services);
 
+            ConfigureServices(services);
+        }
+
+
+
+        public void ConfigureServices(IServiceCollection services)
+        {
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
                     options.Password.RequireDigit = false;

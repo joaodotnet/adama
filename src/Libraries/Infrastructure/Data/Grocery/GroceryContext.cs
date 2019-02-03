@@ -218,7 +218,8 @@ namespace Infrastructure.Data
             builder.OwnsOne(i => i.ItemOrdered);
 
             builder.Ignore(x => x.CustomizeName);
-            builder.Ignore(x => x.CustomizeSide); 
+            builder.Ignore(x => x.CustomizeSide);
+            builder.Ignore(x => x.CustomizeItem);
             
 
             builder.Property(x => x.UnitPrice)

@@ -19,7 +19,7 @@ namespace ApplicationCore.Entities.OrderAggregate
         DELIVERED,
         [Display(Name = "Cancelado")]
         CANCELED,
-        [Display(Name = "Em análise")]
+        [Display(Name = "A decorrer")]
         UNDER_ANALYSIS
     }
 }
