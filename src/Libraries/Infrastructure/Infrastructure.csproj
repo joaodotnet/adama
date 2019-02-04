@@ -4,6 +4,18 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Data\Grocery\Migrations\SqlServer\**" />
+    <Compile Remove="Data\Migrations\SqlServer\**" />
+    <Compile Remove="Identity\Migrations\SqlServer\**" />
+    <EmbeddedResource Remove="Data\Grocery\Migrations\SqlServer\**" />
+    <EmbeddedResource Remove="Data\Migrations\SqlServer\**" />
+    <EmbeddedResource Remove="Identity\Migrations\SqlServer\**" />
+    <None Remove="Data\Grocery\Migrations\SqlServer\**" />
+    <None Remove="Data\Migrations\SqlServer\**" />
+    <None Remove="Identity\Migrations\SqlServer\**" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
@@ -21,11 +33,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ApplicationCore\ApplicationCore.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Data\Grocery\Migrations\" />
-    <Folder Include="Data\Migrations\" />
-    <Folder Include="Identity\Migrations\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services" />
