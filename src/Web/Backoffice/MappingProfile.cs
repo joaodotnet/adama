@@ -29,6 +29,9 @@ namespace Backoffice
             CreateMap<CatalogItem, ProductViewModel>();
             CreateMap<ProductViewModel, CatalogItem>();
             CreateMap<Pages.Products.CreateModel.ProductCreateViewModel, CatalogItem>();
+            CreateMap<CatalogItem,Pages.Products.EditModel.ProductEditViewModel>()
+                .ForMember(x => x.Picture, opt => opt.Ignore())
+                .ForMember(x => x.OtherPictures, opt => opt.Ignore());
             CreateMap<CatalogAttribute, ProductAttributeViewModel>();
                 //.ForMember(dest => dest.AttributeName,
                 //opts => opts.MapFrom(src => $"{EnumHelper<AttributeType>.GetDisplayValue(src.Attribute.Type)} {src.Attribute.Name}"));
