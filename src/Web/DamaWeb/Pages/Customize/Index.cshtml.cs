@@ -31,6 +31,9 @@ namespace DamaWeb.Pages.Customize
         [FromQuery]
         public int? CatalogItemId { get; set; }
 
+        [TempData]
+        public string StatusMessage { get; set; }
+
         public async Task OnGetAsync()
         {            
             CustomizeModel = await _service.GetCustomizeItems(CategoryId, CatalogItemId);

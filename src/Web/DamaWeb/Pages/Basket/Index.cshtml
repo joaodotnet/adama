@@ -49,9 +49,16 @@
                         <div class="col-sm-3 form-group row m-0 p-0">
                             <label class="d-inline d-sm-none col-3 col-form-label dama-basket-label">Preço</label>
                             <div class="col-9 dama-basket-item">
-                                <span>
-                                    @item.UnitPrice.ToString("N2") €
-                                </span>
+                                @if (!item.IsFromCustomize)
+                                {
+                                    <span>
+                                        @item.UnitPrice.ToString("N2") €
+                                    </span>
+                                }
+                                else
+                                {
+                                    <small>em análise</small>
+                                }
                             </div>
                         </div>
                         <div class="col-sm-3 form-group row m-0 p-0">
@@ -62,10 +69,15 @@
                             </div>
                         </div>
                         <div class="d-none d-sm-block col-sm-2">
-                            @Math.Round(item.Quantity * item.UnitPrice, 2).ToString("N2") €
+                        @if (!item.IsFromCustomize)
+                        {
+                            <text>
+                                @Math.Round(item.Quantity * item.UnitPrice, 2).ToString("N2") €
+                            </text>
+                        }
                         </div>
                     </div>
-                    <div class="col-1 col-sm-1 m-0 p-0">
+                    <div class="col-1 col-sm-1 m-0 p-0 text-right">
                         <button class="dama-basket-btn" type="submit" name="removebutton" asp-page-handler="Remove" asp-route-id="@i">
                             <i class="fas fa-trash"></i>
                         </button>                        
@@ -83,7 +95,12 @@
                 <a asp-page="/Index" class="dama-basket-link">Adicionar mais produtos</a>
             </div>
             <div class="col text-right esh-basket-item--mark">
-                <span>Total </span>@Model.BasketModel.SubTotal() €
+                @if (!Model.BasketModel.Items.Any(x => x.IsFromCustomize))
+                {
+                    <text>
+                    <span>Total </span>@Model.BasketModel.SubTotal() €                
+                    </text>
+                }
             </div>
         </div>
         <div class="row justify-content-between ml-0 mr-0">

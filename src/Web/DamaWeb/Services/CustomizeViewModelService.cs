@@ -27,6 +27,7 @@ namespace DamaWeb.Services
         private readonly EmailSettings _settings;
         private readonly IUriComposer _uriComposer;
         private readonly TelemetryClient _telemetry;
+        private readonly IBasketService _basketService;
 
         public CustomizeViewModelService(
             IAsyncRepository<Category> categoryRepository,
@@ -36,7 +37,8 @@ namespace DamaWeb.Services
             IEmailSender emailSender,
             IOptions<EmailSettings> settings,
             IUriComposer uriComposer,
-            TelemetryClient telemetry)
+            TelemetryClient telemetry,
+            IBasketService basketService)
         {
             _categoryRepository = categoryRepository;
             _catalogRepository = catalogRepository;
@@ -46,6 +48,7 @@ namespace DamaWeb.Services
             _settings = settings.Value;
             _uriComposer = uriComposer;
             _telemetry = telemetry;
+            _basketService = basketService;
         }
 
         public async Task<CustomizeViewModel> GetCustomizeItems(int? categoryid, int? catalogItemId)
@@ -72,6 +75,15 @@ namespace DamaWeb.Services
                     PictureUri = _uriComposer.ComposePicUri(x.PictureUri)
                 }).ToList()
             };
+        }
+
+        public async Task AddCustomizeItemToBasket(int basketId, CustomizeViewModel request)
+        {
+            //Get Catalog Type Name and Sku
+            var catalogType = await _catalogTypeRepository.GetByIdAsync(request.CatalogItemId.Value);
+
+            await _basketService.AddCustomizeItemToBasket(basketId, catalogType.Id, request.Description, request.Text, request.Colors, request.Quantity);
+
         }
 
         public async Task SendCustomizeService(CustomizeViewModel request)

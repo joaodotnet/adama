@@ -9,6 +9,7 @@ namespace Backoffice.ViewModels
 {
     public class OrderItemViewModel
     {
+        public int Id { get; set; }
         [Display(Name = "Id")]
         public int ProductId { get; set; }
         [Display(Name = "SKU")]
@@ -28,6 +29,11 @@ namespace Backoffice.ViewModels
         public List<OrderItemAttributeViewModel> Attributes { get; set; } = new List<OrderItemAttributeViewModel>();
         [Display(Name = "Personalização")]
         public string CustomizeName { get; set; }
+        public string CustomizeSide { get; set; }
+        public string CustomizeItemDescription { get; set; }
+        public string CustomizeItemNameOrText { get; set; }
+        public string CustomizeItemColors { get; set; }
+        public int? CustomizeItemCatalogTypeId { get; set; }        
     }
 
     public class OrderItemAttributeViewModel

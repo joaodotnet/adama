@@ -39,6 +39,9 @@
                 @Html.DisplayNameFor(model => model.OrdersModel[0].OrderState)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.OrdersModel[0].HasCustomizeProducts)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.OrdersModel[0].SalesInvoiceNumber)
             </th>
             <th></th>
@@ -61,7 +64,7 @@
                 @Html.DisplayFor(modelItem => item.ItemsCount)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ShipToAddress)
+                @(item.ShipToAddress.StartsWith("Mercado") ? "Mercado" : "Cliente")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ShippingCost)
@@ -71,6 +74,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.OrderState)
+            </td>
+            <td>
+                @(item.HasCustomizeProducts ? "Sim" : "Não")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.SalesInvoiceNumber)

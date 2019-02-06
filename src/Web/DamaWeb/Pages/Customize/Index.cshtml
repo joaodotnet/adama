@@ -15,6 +15,25 @@
 }
 <img src="~/images/banner-personalizar-2.jpg" class="img-fluid" />
 
+
+<!-- Mostrar em Popus -->
+<div id="product-added" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p>@Model.StatusMessage</p>
+            </div>
+            <div class="modal-footer">
+                <a asp-page="/Basket/Index" class="btn btn-primary" role="button">Ver carrinho</a>                
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Continuar a comprar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <form method="post">
     <div class="dama-customize pt-sm-5 pt-2">
         <div class="text-center">
@@ -23,7 +42,7 @@
                 <h3><span class="badge badge-pill badge-light">1</span></h3>
             </div>
             <h4 class="mt-2">
-                Em que categoria se encontra o produto que queres personalizar?                
+                Em que categoria se encontra o produto que queres personalizar?
             </h4>
         </div>
         <a name="produtos"></a>
@@ -43,30 +62,30 @@
         </div>
         @if (Model.CustomizeModel.ProductTypes.Count > 0)
         {
-        <div class="text-center">
-            <h4 class="mt-2">
-                Qual é o produto?
-            </h4>
-        </div>
-        <div class="row">
-            <div class="offset-1 col-10">
-                <div class="row p-sm-3 dama-customize-cards product-types justify-content-center">
-                    @for (int i = 0; i < Model.CustomizeModel.ProductTypes.Count; i++)
-                    {
-                        <div class="col-6 col-sm-3 pt-3 product-block" catalog-type-id="@Model.CustomizeModel.ProductTypes[i].Id">
-                            <div class="card card-block justify-content-center align-items-center" style="min-width:9rem">
-                                <img class="card-img-top" src="@Model.CustomizeModel.ProductTypes[i].PictureUri" alt="@Model.CustomizeModel.ProductTypes[i].Name">
+            <div class="text-center">
+                <h4 class="mt-2">
+                    Qual é o produto?
+                </h4>
+            </div>
+            <div class="row">
+                <div class="offset-1 col-10">
+                    <div class="row p-sm-3 dama-customize-cards product-types justify-content-center">
+                        @for (int i = 0; i < Model.CustomizeModel.ProductTypes.Count; i++)
+                        {
+                            <div class="col-6 col-sm-3 pt-3 product-block" catalog-type-id="@Model.CustomizeModel.ProductTypes[i].Id">
+                                <div class="card card-block justify-content-center align-items-center" style="min-width:9rem">
+                                    <img class="card-img-top" src="@Model.CustomizeModel.ProductTypes[i].PictureUri" alt="@Model.CustomizeModel.ProductTypes[i].Name">
+                                </div>
                             </div>
-                        </div>
-                    }
+                        }
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row go-section sr-only">
-            <div class="offset-sm-9 col-sm-2 offset-3 col-6">
-                <button type="submit" class="btn btn-dama-menta mt-sm-0 mr-sm-3 mt-3">Próximo passo &rarr;</button>
+            <div class="row go-section sr-only">
+                <div class="offset-sm-9 col-sm-2 offset-3 col-6">
+                    <button type="submit" class="btn btn-dama-menta mt-sm-0 mr-sm-3 mt-3">Próximo passo &rarr;</button>
+                </div>
             </div>
-        </div>
         }
     </div>
     <input type="hidden" asp-for="CustomizeModel.CatalogItemId" />
@@ -89,14 +108,14 @@
                 $('#CustomizeModel_CatalogItemId').val($(this).attr('catalog-type-id'));
                 $('.go-section').removeClass("sr-only");
             });
-            
+
 
             function selectProduct(elem) {
                 elem.find('img').css('border', "5px solid #FC629D");
                 elem.siblings().find('img').css('border', "");
             }
 
-            
+
 
             @if(Model.CustomizeModel.CatalogItemId.HasValue)
             {
@@ -107,5 +126,14 @@
                 </text>
             }
         });
+        @if(!string.IsNullOrEmpty(Model.StatusMessage))
+        {
+            <text>
+            $(window).on('load', function(){
+                $('#product-added').modal('show');
+            });
+            </text>
+        }
+
     </script>
 }

@@ -13,6 +13,9 @@ namespace ApplicationCore.Entities.BasketAggregate
         public int? CatalogAttribute3 { get; set; }
         public string CustomizeName { get; set; }
         public string CustomizeSide { get; set; }
+        public string CustomizeDescription { get; set; }
+        public string CustomizeColors { get; set; }
+        public int? CatalogTypeId { get; set; }
 
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }

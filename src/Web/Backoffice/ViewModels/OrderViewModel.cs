@@ -52,6 +52,8 @@ namespace Backoffice.ViewModels
         public PaymentType PaymentTypeSelected { get; set; }
         public List<OrderItemViewModel> Items { get; set; }
         public bool HasInvoiceReady { get; set; } = false;
+        [Display(Name = "Produtos Personalizados?")]
+        public bool HasCustomizeProducts { get; set; }
         public string BillingToAddress_Country { get; set; }
     }
 }

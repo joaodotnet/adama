@@ -17,14 +17,17 @@ namespace DamaWeb.Services
         private readonly IAsyncRepository<Basket> _basketRepository;
         private readonly IUriComposer _uriComposer;
         private readonly IRepository<CatalogItem> _itemRepository;
+        private readonly IRepository<CatalogType> _typeRepository;
 
         public BasketViewModelService(IAsyncRepository<Basket> basketRepository,
             IRepository<CatalogItem> itemRepository,
+            IRepository<CatalogType> typeRepository,
             IUriComposer uriComposer)
         {
             _basketRepository = basketRepository;
             _uriComposer = uriComposer;
             _itemRepository = itemRepository;
+            _typeRepository = typeRepository;
         }
 
         public async Task<BasketViewModel> GetOrCreateBasketForUser(string userName)
@@ -52,33 +55,42 @@ namespace DamaWeb.Services
                     UnitPrice = i.UnitPrice,
                     Quantity = i.Quantity,
                     CatalogItemId = i.CatalogItemId,
-                    CustomizeName = i.CustomizeName
+                    CustomizeName = i.CustomizeName                    
                 };
-                var spec = new CatalogAttrFilterSpecification(i.CatalogItemId);
-                var item = _itemRepository.GetSingleBySpec(spec);
-                if (item != null)
+                if(i.CatalogItemId != 0)
                 {
-                    itemModel.PictureUrl = _uriComposer.ComposePicUri(item.PictureUri);
-                    itemModel.ProductName = item.Name;                    
-                }
+                    var spec = new CatalogAttrFilterSpecification(i.CatalogItemId);
+                    var item = _itemRepository.GetSingleBySpec(spec);
+                    if (item != null)
+                    {
+                        itemModel.PictureUrl = _uriComposer.ComposePicUri(item.PictureUri);
+                        itemModel.ProductName = item.Name;
 
-                foreach (var attr in item.CatalogAttributes)
-                {
-                    if ((i.CatalogAttribute1.HasValue && i.CatalogAttribute1 == attr.Id) ||
-                        (i.CatalogAttribute2.HasValue && i.CatalogAttribute2 == attr.Id) ||
-                        (i.CatalogAttribute3.HasValue && i.CatalogAttribute3 == attr.Id))
-                        itemModel.Attributes.Add(new AttributeViewModel
+                        foreach (var attr in item.CatalogAttributes)
                         {
-                            Name = attr.Name,
-                            Label = EnumHelper<AttributeType>.GetDisplayValue(attr.Type)
-                        });                   
+                            if ((i.CatalogAttribute1.HasValue && i.CatalogAttribute1 == attr.Id) ||
+                                (i.CatalogAttribute2.HasValue && i.CatalogAttribute2 == attr.Id) ||
+                                (i.CatalogAttribute3.HasValue && i.CatalogAttribute3 == attr.Id))
+                                itemModel.Attributes.Add(new AttributeViewModel
+                                {
+                                    Name = attr.Name,
+                                    Label = EnumHelper<AttributeType>.GetDisplayValue(attr.Type)
+                                });
+                        }
+                    }
                 }
+                else if(i.CatalogTypeId.HasValue)
+                {
+                    itemModel.IsFromCustomize = true;
+                    var typeEntity = _typeRepository.GetById(i.CatalogTypeId.Value);
+                    if(typeEntity != null)
+                    {
+                        itemModel.PictureUrl = typeEntity.PictureUri;
+                        itemModel.ProductName = $"Personalização {typeEntity.Description}";
+                    }
+                }
+                
 
-                //itemModel.Attributes = item.CatalogAttributes.Select(d => new AttributeViewModel
-                //{
-                //    Name = d.Name,
-                //    Label = EnumHelper<AttributeType>.GetDisplayValue(d.Type)
-                //}).ToList();
                 return itemModel;
             }).ToList();
             //Shipping Cost
@@ -86,8 +98,8 @@ namespace DamaWeb.Services
             foreach (var item in viewModel.Items)
             {
                 var spec = new CatalogTypeFilterSpecification(item.CatalogItemId);
-                var catalogItem = _itemRepository.GetSingleBySpec(spec);
-                if (catalogItem.CatalogType.ShippingCost > shippingCost)
+                var catalogItem = _itemRepository.GetSingleBySpec(spec);                
+                if (catalogItem != null && catalogItem.CatalogType.ShippingCost > shippingCost)
                     shippingCost = catalogItem.CatalogType.ShippingCost;
             }
             viewModel.DefaultShippingCost = shippingCost;

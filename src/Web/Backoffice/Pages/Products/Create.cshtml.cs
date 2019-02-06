@@ -14,6 +14,8 @@ using Backoffice.Interfaces;
 using Microsoft.Extensions.Options;
 using Backoffice.Extensions;
 using ApplicationCore;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace Backoffice.Pages.Products
 {
@@ -32,10 +34,53 @@ namespace Backoffice.Pages.Products
             _backofficeSettings = backofficeSettings.Value;
         }
         [BindProperty]
-        public ProductViewModel ProductModel { get; set; }
+        public ProductCreateViewModel ProductModel { get; set; }
 
         [BindProperty]
         public List<CatalogCategoryViewModel> CatalogCategoryModel { get; set; } = new List<CatalogCategoryViewModel>();
+
+        public class ProductCreateViewModel
+        {
+            public int Id { get; set; }
+            [Required]
+            [StringLength(100)]
+            [Display(Name = "Nome")]
+            public string Name { get; set; }
+            [Display(Name = "Descrição")]
+            public string Description { get; set; }
+            [Display(Name = "Preço")]
+            public decimal? Price { get; set; }
+            [Display(Name = "Ilustração")]
+            [Required]
+            public int CatalogIllustrationId { get; set; }
+            [Required]
+            [Display(Name = "Tipo de Produto")]
+            public int CatalogTypeId { get; set; }
+            [Display(Name = "SKU")]
+            public string Sku { get; set; }
+            [Display(Name = "Loja")]
+            public bool ShowOnShop { get; set; }
+            [Display(Name = "Novidade")]
+            public bool IsNew { get; set; }
+            [Display(Name = "Destaque")]
+            public bool IsFeatured { get; set; }
+            [Display(Name = "Personalizar")]
+            public bool CanCustomize { get; set; }
+            [Display(Name = "Imagem Principal")]
+            public IFormFile Picture { get; set; }
+            [Display(Name = "URL da Imagem Principal")]
+            public string PictureUri { get; set; }
+            [Display(Name = "Imagens do Produto")]
+            public List<IFormFile> OtherPictures { get; set; }
+
+            public IList<ProductAttributeViewModel> CatalogAttributes { get; set; } = new List<ProductAttributeViewModel>();
+            [Display(Name = "Imagens do Produto")]
+            public IList<ProductPictureViewModel> CatalogPictures { get; set; } = new List<ProductPictureViewModel>();
+            [Display(Name = "Categorias")]
+            public IList<CatalogCategoryViewModel> CatalogCategories { get; set; } = new List<CatalogCategoryViewModel>();
+            public IList<CatalogReference> CatalogReferences { get; set; } = new List<CatalogReference>();
+
+        }
 
         public async Task<IActionResult> OnGet()
         {
@@ -63,7 +108,9 @@ namespace Backoffice.Pages.Products
             //Save Main Image            
             if (ProductModel.Picture?.Length > 0)
             {
-                var lastCatalogItemId = (await _context.CatalogItems.LastAsync())?.Id ?? 0;
+                var lastCatalogItemId = 0;
+                if(_context.CatalogItems.Any())
+                    lastCatalogItemId = (await _context.CatalogItems.LastAsync()).Id;
 
                 ProductModel.PictureUri = (await _service.SaveFileAsync(ProductModel.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri, (++lastCatalogItemId).ToString())).PictureUri;
             }

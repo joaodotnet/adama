@@ -131,7 +131,17 @@ namespace Backoffice.Services
                 .OrderByDescending(x => x.Id)
                 .ToListAsync();
 
-            return _mapper.Map<List<OrderViewModel>>(orders);
+            var model = _mapper.Map<List<OrderViewModel>>(orders);
+
+            //check if has customize orders
+            foreach (var order in model)
+            {
+                if(order.HasCustomizeProducts && order.OrderState == OrderStateType.UNDER_ANALYSIS)
+                {
+                    order.Total = 0;
+                }
+            }
+            return model;
         }
 
         public async Task<OrderViewModel> GetOrder(int id)

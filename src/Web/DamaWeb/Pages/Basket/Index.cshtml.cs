@@ -81,7 +81,20 @@ namespace DamaWeb.Pages.Basket
 
             return RedirectToPage();
         }
-        
+
+        public async Task<IActionResult> OnPostAddCustomizeToBasketAsync(CustomizeViewModel product)
+        {
+            if (product.CatalogItemId == null)
+                return RedirectToPage("/Customize");
+
+            await SetBasketModelAsync();
+
+            //_basketService.AddItemToBasket(BasketModel.Id, product.CatalogItemId.Value, 0, 1, isFromCustomize)
+
+            return RedirectToPage("./Result");
+        }
+
+
         public async Task OnPostUpdate(Dictionary<string,int> items)
         {
             await SetBasketModelAsync();
