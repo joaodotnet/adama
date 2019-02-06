@@ -94,57 +94,127 @@
         </dd>
     </dl>
     <h4>Produtos</h4>
-    <table class="table">
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].PictureUri)</th>
-            <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].ProductSku)</th>
-            <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].ProductName)</th>
-            <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].Units)</th>
-            <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].UnitPrice)</th>
-            <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].CustomizeName)</th>
-            <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].Attributes)</th>
-        </tr>
+    <form method="post">
+        <table class="table">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].PictureUri)</th>
+                <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].ProductSku)</th>
+                <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].ProductName)</th>
+                <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].Units)</th>
+                <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].UnitPrice)</th>
+                <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].CustomizeName)</th>
+                <th>@Html.DisplayNameFor(model => model.OrderModel.Items[0].Attributes)</th>
+            </tr>
 
-        @foreach (var item in Model.OrderModel.Items)
+            @for (var i = 0; i < Model.OrderModel.Items.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <input type="hidden" asp-for="OrderModel.Items[i].Id" />
+                        <input type="hidden" asp-for="OrderModel.Items[i].CustomizeItemCatalogTypeId" />
+                        <img width="200" src="@Model.OrderModel.Items[i].PictureUri" class="img-responsive" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.OrderModel.Items[i].ProductSku)
+                    </td>
+                    <td>
+
+                        @if (Model.OrderModel.Items[i].CustomizeItemCatalogTypeId.HasValue)
+                        {
+                            <text>
+                                Personalização - @Html.DisplayFor(modelItem => Model.OrderModel.Items[i].ProductName)
+                                <br />
+                                <label>Descrição</label>
+                                <br />
+                                @Html.DisplayFor(model => Model.OrderModel.Items[i].CustomizeItemDescription)
+                                <br />
+                                <label>Nome ou Frase</label>
+                                <br />
+                                @Html.DisplayFor(model => Model.OrderModel.Items[i].CustomizeItemNameOrText)
+                                <br />
+                                <label>Cores </label>
+                                <br />
+                            </text>
+                            if (!string.IsNullOrEmpty(Model.OrderModel.Items[i].CustomizeItemColors))
+                            {
+                                List<string> colors = new List<string>();
+                                var temp = Model.OrderModel.Items[i].CustomizeItemColors.Split(',');
+                                colors.AddRange(temp.Select(x => x.Replace(';', ',')).ToList());
+
+                                foreach (var rgb in colors)
+                                {
+                                    <div style='width:20px;height:20px;display:inline;float:left;background-color: @rgb'>&nbsp;</div>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(modelItem => Model.OrderModel.Items[i].ProductName)
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.OrderModel.Items[i].Units)
+                    </td>
+                    <td>
+                        @if (Model.OrderModel.Items[i].CustomizeItemCatalogTypeId.HasValue && Model.OrderModel.OrderState != ApplicationCore.Entities.OrderAggregate.OrderStateType.DELIVERED)
+                        {
+                            <input asp-for="OrderModel.Items[i].UnitPrice" class="form-control decimal" />
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(modelItem => Model.OrderModel.Items[i].UnitPrice)
+                        }
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(Model.OrderModel.Items[i].CustomizeName))
+                        {
+                            <text>
+                                Nome : @Model.OrderModel.Items[i].CustomizeName
+                                <br />
+                            </text>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.OrderModel.Items[i].CustomizeSide))
+                        {
+                            <text>
+                                Lado: @Model.OrderModel.Items[i].CustomizeSide
+                                <br />
+                            </text>
+                        }
+                        @if (Model.OrderModel.Items[i].CustomizeItemCatalogTypeId.HasValue)
+                        {
+                            <text>
+                                Completa
+                            </text>
+                        }
+
+                    </td>
+                    <td>
+                        <table class="table">
+                            @foreach (var attr in Model.OrderModel.Items[i].Attributes)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => attr.AttributeType)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => attr.AttributeName)
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </td>
+                </tr>
+            }
+        </table>
+        @if (Model.OrderModel.HasCustomizeProducts && Model.OrderModel.OrderState != ApplicationCore.Entities.OrderAggregate.OrderStateType.DELIVERED)
         {
-        <tr>
-            <td>
-                <img width="200" src="@item.PictureUri" class="img-responsive" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductSku)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Units)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UnitPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CustomizeName)
-            </td>
-            <td>
-                <table class="table">
-                    @foreach (var attr in item.Attributes)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => attr.AttributeType)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => attr.AttributeName)
-                            </td>
-                        </tr>
-                    }
-                </table>
-            </td>
-        </tr>
+            <input type="hidden" asp-for="OrderModel.Id" />
+            <input type="hidden" asp-for="OrderModel.OrderState" />
+            <button type="submit" asp-page-handler="UpdateItemsPrice" class="btn btn-info">Atualizar Preços</button>
         }
-    </table>
+    </form>
 </div>
+<hr />
 <div>
     <h4>Mudar de estado para</h4>
     <div class="row">
@@ -155,8 +225,8 @@
                     <select asp-for="OrderModel.OrderState" asp-items="Html.GetEnumSelectList<ApplicationCore.Entities.OrderAggregate.OrderStateType>()" class="form-control"></select>
                     <span asp-validation-for="OrderModel.OrderState" class="text-danger"></span>
                 </div>
-                <input type="submit" value="Atualizar" class="btn btn-default" />                
-            </form>           
+                <input type="submit" value="Atualizar" class="btn btn-default" />
+            </form>
         </div>
     </div>
     <h4>Pagamento</h4>
@@ -166,10 +236,7 @@
             {
                 <form method="post">
                     <input type="hidden" asp-for="OrderModel.Id" />
-                    @*<div class="form-group">
-                    <select asp-for="OrderModel.PaymentTypeSelected" asp-items="Html.GetEnumSelectList<ApplicationCore.DTOs.PaymentType>()" class="form-control"></select>
-                    <span asp-validation-for="OrderModel.PaymentTypeSelected" class="text-danger"></span>
-                </div>*@
+
                     <input type="submit" value="Criar Fatura" class="btn btn-success" asp-page-handler="RegisterInvoice" />
                 </form>
             }
@@ -177,8 +244,6 @@
             {
                 <span class="bold">Fatura nº @Model.OrderModel.SalesInvoiceNumber</span><br>
                 <a asp-page-handler="InvoicePDF" asp-route-id="@Model.OrderModel.Id" asp-route-invoiceId="@Model.OrderModel.SalesInvoiceId">Imprimir Fatura</a>
-                @*<span>|</span>
-            <a asp-page-handler="ReceiptPDF" asp-route-id="@Model.OrderModel.Id" asp-route-invoiceId="@Model.OrderModel.SalesInvoiceId" asp-route-paymentId="@Model.OrderModel.SalesPaymentId">Imprimir Recibo</a>*@
             }
             <br />
             <form method="post">
@@ -198,11 +263,11 @@
 
 
                 }
-            </form>            
+            </form>
         </div>
     </div>
 </div>
-<hr/>
+<hr />
 <div>
     <a asp-page="./Index">Voltar para a lista</a>
 </div>

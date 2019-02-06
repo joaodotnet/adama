@@ -17,5 +17,6 @@ namespace ApplicationCore.Interfaces
         List<CatalogAttribute> GetOrderAttributes(int catalogItemId, int? catalogAttribute1, int? catalogAttribute2, int? catalogAttribute3);
         Task UpdateOrderInvoiceAsync(int id, long? invoiceId, string invoiceNumber);
         Task UpdateOrderBillingAsync(int id, int? taxNumber, string customerEmail, Address billingAddress);
+        Task UpdateOrderItemsPrice(int orderId, List<Tuple<int, decimal>> items);
     }
 }

@@ -39,7 +39,7 @@ namespace DamaWeb.Pages.Order
             public int OrderNumber { get; set; }
             [Display(Name = "Data"), DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy - HH:mm}")]
             public DateTimeOffset OrderDate { get; set; }
-            public decimal Total { get; set; }
+            public decimal? Total { get; set; }
             public string Status { get; set; }
             public OrderStateType StatusType { get; set; }
         }
@@ -55,7 +55,7 @@ namespace DamaWeb.Pages.Order
                     OrderNumber = o.Id,
                     Status = EnumHelper<OrderStateType>.GetDisplayValue(o.OrderState),
                     StatusType = o.OrderState,
-                    Total = o.Total()
+                    Total = o.OrderState == OrderStateType.UNDER_ANALYSIS ? default(decimal?) : o.Total()
                 })
                 .OrderByDescending(o => o.OrderDate)
                 .ToList();

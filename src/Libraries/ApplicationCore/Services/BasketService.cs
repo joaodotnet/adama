@@ -38,6 +38,15 @@ namespace ApplicationCore.Services
             await _basketRepository.UpdateAsync(basket);
         }
 
+        public async Task AddCustomizeItemToBasket(int basketId, int catalogTypeId, string description, string textOrName, string colors, int quantity)
+        {
+            var basket = await _basketRepository.GetByIdAsync(basketId);
+
+            basket.AddCustomizeItem(catalogTypeId, description, textOrName, colors, quantity);
+
+            await _basketRepository.UpdateAsync(basket);
+        }
+
         public async Task DeleteBasketAsync(int basketId)
         {
             var basket = await _basketRepository.GetByIdAsync(basketId);
