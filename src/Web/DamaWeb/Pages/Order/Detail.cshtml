@@ -99,7 +99,12 @@
             <article class="esh-orders_detail-titles row mb-2">
                 <section class="esh-orders_detail-title col-12">DETALHE DA ENCOMENDA</section>
             </article>
-
+            <div class="row align-items-center font-weight-bold d-none d-sm-flex">
+                <div class="col-sm-4">Produto</div>
+                <div class="offset-sm-3 col-sm-2">Preço Unitário</div>
+                <div class="col-sm-1">Qt.</div>
+                <div class="col-sm-2">Total</div>
+            </div>
             @for (int i = 0; i < Model.OrderDetails.OrderItems.Count; i++)
             {
                 var item = Model.OrderDetails.OrderItems[i];
@@ -142,7 +147,17 @@
                         }
                         <span class="d-sm-none">
                             <br />
-                            @Math.Round(item.Units * item.UnitPrice, 2).ToString("N2") €
+                            @if (item.UnitPrice > 0)
+                            {
+                                <text>
+                                @Math.Round(item.Units * item.UnitPrice, 2).ToString("N2") €
+                                </text>
+                            }
+                            else
+                            {
+                                <small>preço em análise</small>
+                            }
+
                         </span>
                     </section>
                     <section class="esh-orders_detail-item esh-orders_detail-item--middle d-none d-sm-block col-sm-2 text-nowrap">@(item.UnitPrice > 0 ? item.UnitPrice.ToString("N2") + " €" : "")</section>
@@ -174,7 +189,7 @@
             <article class="esh-orders_detail-titles esh-basket-titles--clean row">
                 <section class="esh-orders_detail-title d-none d-sm-block col-sm-7"></section>
                 <section class="esh-orders_detail-title col-7 col-sm-3 text-sm-right">TOTAL</section>
-                <section class="esh-orders_detail-item esh-orders_detail-item--mark col-4 col-sm-2 text-nowrap text-right">@(Model.OrderDetails.Total.HasValue ? Model.OrderDetails.Total + " €" : "em análise")</section>
+                <section class="esh-orders_detail-item esh-orders_detail-item--mark col-4 col-sm-2 text-nowrap text-right text-sm-left">@(Model.OrderDetails.Total.HasValue ? Model.OrderDetails.Total + " €" : "em análise")</section>
             </article>
         </section>
     </div>
