@@ -65,6 +65,7 @@ namespace DamaWeb.Services
                     {
                         itemModel.PictureUrl = _uriComposer.ComposePicUri(item.PictureUri);
                         itemModel.ProductName = item.Name;
+                        itemModel.Sku = item.Sku;
 
                         foreach (var attr in item.CatalogAttributes)
                         {
