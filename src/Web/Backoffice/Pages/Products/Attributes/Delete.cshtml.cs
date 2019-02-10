@@ -10,6 +10,7 @@ using Infrastructure.Data;
 using AutoMapper;
 using Backoffice.ViewModels;
 using Backoffice.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace Backoffice.Pages.Products.Attributes
 {
@@ -27,7 +28,20 @@ namespace Backoffice.Pages.Products.Attributes
         }
 
         [BindProperty]
-        public ProductAttributeViewModel CatalogAttributeModel { get; set; }
+        public AttributeViewModel CatalogAttributeModel { get; set; }
+
+        public string ProductName { get; set; }
+
+        public class AttributeViewModel
+        {
+            public int Id { get; set; }
+            public AttributeType Type { get; set; }
+            [Display(Name = "Nome")]
+            [Required]
+            [StringLength(100)]
+            public string Name { get; set; }
+            public int CatalogItemId { get; set; }
+        }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -45,8 +59,8 @@ namespace Backoffice.Pages.Products.Attributes
                 return NotFound();
             }
 
-            CatalogAttributeModel = _mapper.Map<ProductAttributeViewModel>(ca);
-            
+            CatalogAttributeModel = _mapper.Map<AttributeViewModel>(ca);
+            ProductName = ca.Name;    
             return Page();
         }
 

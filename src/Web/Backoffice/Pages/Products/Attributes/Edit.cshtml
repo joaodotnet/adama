@@ -7,18 +7,12 @@
 
 <h2>Editar</h2>
 
-<h4>Atributo do produto @Model.CatalogAttributeModel.CatalogItem.Name</h4>
+<h4>Atributo do produto @Model.ProductName</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="CatalogAttributeModel.CatalogItem.Name" />
-            @*<div class="form-group">
-            <label asp-for="CatalogAttributeModel.Sku" class="control-label"></label>
-            <input asp-for="CatalogAttributeModel.Sku" class="form-control" />
-            <span asp-validation-for="CatalogAttributeModel.Sku" class="text-danger"></span>
-        </div>*@
             <div class="form-group">
                 <label asp-for="CatalogAttributeModel.Type" class="control-label"></label>
                 <select asp-for="CatalogAttributeModel.Type" asp-items="Html.GetEnumSelectList<ApplicationCore.Entities.AttributeType>()" class="form-control"></select>
