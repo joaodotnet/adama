@@ -11,6 +11,7 @@ using Backoffice.ViewModels;
 using AutoMapper;
 using Backoffice.Interfaces;
 using Backoffice.Extensions;
+using System.ComponentModel.DataAnnotations;
 
 namespace Backoffice.Pages.Products.Attributes
 {
@@ -27,6 +28,21 @@ namespace Backoffice.Pages.Products.Attributes
             this._service = service;
         }
 
+        [BindProperty]
+        public AttributeCreateModel CatalogAttributeModel { get; set; } = new AttributeCreateModel();
+
+        public string ProductName { get; set; }
+
+        public class AttributeCreateModel
+        {
+            public AttributeType Type { get; set; }
+            [Display(Name = "Nome")]
+            [Required]
+            [StringLength(100)]
+            public string Name { get; set; }
+            public int CatalogItemId { get; set; }
+        }
+
         public async Task<IActionResult> OnGet(int id)
         {
             var prod = await _context.CatalogItems.FindAsync(id);
@@ -34,14 +50,13 @@ namespace Backoffice.Pages.Products.Attributes
                 return NotFound();
 
             CatalogAttributeModel.CatalogItemId = id;
-            CatalogAttributeModel.CatalogItem = _mapper.Map<ProductViewModel>(prod);
+            ProductName = prod.Name;
+            //CatalogAttributeModel.CatalogItem = _mapper.Map<ProductViewModel>(prod);
             
-            ViewData["ReferenceCatalogItemId"] = new SelectList(_context.CatalogItems, "Id", "Name");
+            //ViewData["ReferenceCatalogItemId"] = new SelectList(_context.CatalogItems, "Id", "Name");
             return Page();
         }
 
-        [BindProperty]
-        public ProductAttributeViewModel CatalogAttributeModel { get; set; } = new ProductAttributeViewModel();
 
         public async Task<IActionResult> OnPostAsync()
         {           
@@ -49,7 +64,7 @@ namespace Backoffice.Pages.Products.Attributes
             {
                 return Page();
             }
-            CatalogAttributeModel.CatalogItem = null;
+            //CatalogAttributeModel.CatalogItem = null;
             var attribute = _mapper.Map<CatalogAttribute>(CatalogAttributeModel);
             _context.CatalogAttributes.Add(attribute);
             await _context.SaveChangesAsync();

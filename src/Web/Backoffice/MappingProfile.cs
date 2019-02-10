@@ -33,8 +33,10 @@ namespace Backoffice
                 .ForMember(x => x.Picture, opt => opt.Ignore())
                 .ForMember(x => x.OtherPictures, opt => opt.Ignore());
             CreateMap<CatalogAttribute, ProductAttributeViewModel>();
-                //.ForMember(dest => dest.AttributeName,
-                //opts => opts.MapFrom(src => $"{EnumHelper<AttributeType>.GetDisplayValue(src.Attribute.Type)} {src.Attribute.Name}"));
+            //.ForMember(dest => dest.AttributeName,
+            //opts => opts.MapFrom(src => $"{EnumHelper<AttributeType>.GetDisplayValue(src.Attribute.Type)} {src.Attribute.Name}"));
+            CreateMap<Pages.Products.Attributes.CreateModel.AttributeCreateModel, CatalogAttribute>();
+            CreateMap<Pages.Products.Attributes.EditModel.AttributeEditModel, CatalogAttribute>();
             CreateMap<ProductAttributeViewModel, CatalogAttribute>();
             CreateMap<ShopConfigViewModel, ShopConfig>();
             CreateMap<ShopConfig, ShopConfigViewModel>();
