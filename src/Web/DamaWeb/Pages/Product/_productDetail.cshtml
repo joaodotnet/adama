@@ -46,20 +46,32 @@
     }
     <div class="row">
         <div class="col">
-            <small>Se ficaste com alguma dúvida, envia-nos <a href="#sendMessageSection" data-toggle="collapse" class="link-dama-black"> uma mensagem aqui.</a></small>
+            <small>Se ficaste com alguma dúvida, envia-nos <a href="#" data-toggle="modal" data-target="#sendMessageSection" class="link-dama-black"> uma mensagem aqui.</a></small>
         </div>
     </div>
-    <div id="sendMessageSection" class="collapse border border-menta mt-2">
-        <div class="form-group dama-product-attr mx-2">
-            <label asp-for="ContactEmailAddress" class="col-form-label"></label>
-            <input asp-for="ContactEmailAddress" class="form-control" />
-            <span asp-validation-for="ContactEmailAddress" class="text-danger"></span>
-        </div>
-        <div class="form-group dama-product-attr mx-2">
-            <label asp-for="Message" class="col-form-label"></label>
-            <textarea asp-for="Message" class="form-control"></textarea>
-        </div>
-        <button type="submit" asp-page="/Product/Index" asp-page-handler="SendMessage" class="btn btn-dama-menta ml-2 mb-2">Enviar</button>
+    <div id="sendMessageSection" class="border border-menta modal fade">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">                
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div class="form-group dama-product-attr mx-2">
+                        <label asp-for="ContactEmailAddress" class="col-form-label"></label>
+                        <input asp-for="ContactEmailAddress" class="form-control" />
+                        <span asp-validation-for="ContactEmailAddress" class="text-danger"></span>
+                    </div>
+                    <div class="form-group dama-product-attr mx-2">
+                        <label asp-for="Message" class="col-form-label"></label>
+                        <textarea asp-for="Message" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-dama-menta" asp-page="/Product/Index" asp-page-handler="SendMessage" >Enviar</button>
+                </div>
+            </div>
+        </div>    
     </div>
 
     <div class="row mt-4 w-100">
