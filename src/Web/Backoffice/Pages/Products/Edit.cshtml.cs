@@ -99,7 +99,8 @@ namespace Backoffice.Pages.Products
                 .Include(p => p.CatalogPictures)
                 .Include(p => p.CatalogReferences)
                 .ThenInclude(cr => cr.ReferenceCatalogItem)
-                .SingleOrDefaultAsync(m => m.Id == id));
+                .AsNoTracking()
+                .SingleOrDefaultAsync(m => m.Id == id));                
 
             if (ProductModel == null)
             {
@@ -274,9 +275,10 @@ namespace Backoffice.Pages.Products
                 .Include(x => x.IllustrationType)
                 .Select(s => new { s.Id, Name = $"{s.Code} - {s.IllustrationType.Code} - {s.Name}" })
                 .OrderBy(x => x.Name)
+                .AsNoTracking()
                 .ToListAsync();
             ViewData["IllustrationId"] = new SelectList(illustrations, "Id", "Name");
-            ViewData["ProductTypeId"] = new SelectList(_context.CatalogTypes.Select(x => new { x.Id, Name = $"{x.Code} - {x.Description}" }), "Id", "Name");
+            ViewData["ProductTypeId"] = new SelectList(_context.CatalogTypes.AsNoTracking().Select(x => new { x.Id, Name = $"{x.Code} - {x.Description}" }), "Id", "Name");
             await SetCatalogCategoryModel();
         }
 
@@ -334,7 +336,10 @@ namespace Backoffice.Pages.Products
         private async Task SetCatalogCategoryModel()
         {
             //Catalog Categories            
-            var allCats = await _context.Categories.Include(x => x.Parent).ToListAsync();
+            var allCats = await _context.Categories
+                .Include(x => x.Parent)
+                .AsNoTracking()
+                .ToListAsync();
             foreach (var item in allCats.Where(x => x.Parent == null).ToList())
             {
                 var catalogCategory = ProductModel.CatalogCategories.SingleOrDefault(x => x.CategoryId == item.Id);
