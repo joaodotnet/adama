@@ -28,7 +28,6 @@ namespace Infrastructure.Data
 
         public static void EnsureDatabaseMigrations(GroceryContext groceryContext)
         {
-            groceryContext.Database.EnsureCreated();
             groceryContext.Database.Migrate();
         }
     }

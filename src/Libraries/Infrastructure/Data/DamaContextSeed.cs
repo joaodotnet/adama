@@ -12,8 +12,7 @@ namespace Infrastructure.Data
     public class DamaContextSeed
     {
         public static void EnsureDatabaseMigrations(DamaContext damaContext)
-        {
-            damaContext.Database.EnsureCreated();
+        {            
             damaContext.Database.Migrate();
         }
         //public static async Task SeedAsync(DamaContext catalogContext,
