@@ -14,8 +14,7 @@ namespace Infrastructure.Identity
         private static string _roleStaff = "Staff";
 
         public static void EnsureDatabaseMigrations(AppIdentityDbContext context)
-        {
-            context.Database.EnsureCreated();
+        {            
             context.Database.Migrate();
         }
 
