@@ -11,8 +11,7 @@ namespace Backoffice.ViewModels
         public bool IsActive { get; set; }
         [Display(Name = "Ordem")]
         public int Order { get; set; }
-        public int CatalogItemId { get; set; }
-        public IFormFile Picture { get; set; }
+        public int CatalogItemId { get; set; }        
         public bool ToRemove { get; set; }
     }
 }

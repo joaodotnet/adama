@@ -110,7 +110,7 @@ namespace Backoffice.Pages.Products
             return Page();
         }
 
-        public async Task<IActionResult> OnPostSaveAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
@@ -138,12 +138,12 @@ namespace Backoffice.Pages.Products
                 ProductModel.PictureUri = (await _service.SaveFileAsync(ProductModel.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri, ProductModel.Id.ToString())).PictureUri;
             }
 
-            //Update images            
-            foreach (var item in ProductModel.CatalogPictures.Where(x => x.Picture != null && !x.ToRemove).ToList())
-            {
-                _service.DeleteFile(_backofficeSettings.WebProductsPictureFullPath, Utils.GetFileName(item.PictureUri));
-                item.PictureUri = (await _service.SaveFileAsync(item.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri, item.Id.ToString())).PictureUri;
-            }
+            ////Update images            
+            //foreach (var item in ProductModel.CatalogPictures.Where(x => x.Picture != null && !x.ToRemove).ToList())
+            //{
+            //    _service.DeleteFile(_backofficeSettings.WebProductsPictureFullPath, Utils.GetFileName(item.PictureUri));
+            //    item.PictureUri = (await _service.SaveFileAsync(item.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri, item.Id.ToString())).PictureUri;
+            //}
             //Save news images
             if (ProductModel.OtherPictures != null)
             {
@@ -162,35 +162,68 @@ namespace Backoffice.Pages.Products
 
             //Save Changes    
             ProductModel.Price = ProductModel.Price == 0 ? default(decimal?) : ProductModel.Price;
-            var prod = _mapper.Map<CatalogItem>(ProductModel);            
-            //foreach (var item in prod.CatalogAttributes)
-            //{
-            //    if (item.Id != 0)
-            //    {
-            //        if (ProductModel.CatalogAttributes.SingleOrDefault(x => x.Id == item.Id).ToRemove)
-            //            _context.Entry(item).State = EntityState.Deleted;
-            //        else
-            //            _context.Entry(item).State = EntityState.Modified;
-            //    }
-            //    else
-            //        _context.Entry(item).State = EntityState.Added;
-            //}
-            foreach (var item in prod.CatalogPictures)
+            //var prod = _mapper.Map<CatalogItem>(ProductModel);
+            var prod = await _context.CatalogItems
+                .Include(p => p.CatalogCategories)                
+                .Include(p => p.CatalogPictures)
+                .SingleOrDefaultAsync(m => m.Id == ProductModel.Id);
+            
+            prod.Name = ProductModel.Name;
+            prod.Description = ProductModel.Description;            
+            prod.CatalogIllustrationId = ProductModel.CatalogIllustrationId;
+            prod.CatalogTypeId = ProductModel.CatalogTypeId;
+            if(!string.IsNullOrEmpty(ProductModel.PictureUri))
+                prod.PictureUri = ProductModel.PictureUri;
+            prod.Price = ProductModel.Price;
+            prod.IsFeatured = ProductModel.IsFeatured;
+            prod.IsNew = ProductModel.IsNew;
+            prod.ShowOnShop = ProductModel.ShowOnShop;
+            prod.CanCustomize = ProductModel.CanCustomize;
+            prod.Sku = ProductModel.Sku;
+            
+            
+            //Other pictutes
+            foreach (var item in ProductModel.CatalogPictures)
             {
-                if (item.Id != 0)
+                var otherPicture = item.Id != 0 ? prod.CatalogPictures.SingleOrDefault(x => x.Id == item.Id) : null;
+
+                if (item.ToRemove && otherPicture != null)
                 {
-                    if (ProductModel.CatalogPictures.SingleOrDefault(x => x.Id == item.Id).ToRemove)
-                    {
-                        _service.DeleteFile(_backofficeSettings.WebProductsPictureFullPath, Utils.GetFileName(item.PictureUri));
-                        _context.Entry(item).State = EntityState.Deleted;
-                    }
-                    else
-                        _context.Entry(item).State = EntityState.Modified;
+                    _context.Entry(otherPicture).State = EntityState.Deleted;
+                    _service.DeleteFile(_backofficeSettings.WebProductsPictureFullPath, Utils.GetFileName(item.PictureUri));
                 }
+                else if(otherPicture != null)
+                {                    
+                    otherPicture.IsActive = item.IsActive;
+                    otherPicture.Order = item.Order;
+                    otherPicture.PictureUri = item.PictureUri;                    
+                }
+                else
+                {
+                    prod.CatalogPictures.Add(new CatalogPicture
+                    {
+                        IsActive = item.IsActive,
+                        Order = item.Order,
+                        PictureUri = item.PictureUri
+                    });
+                }
+
+                //if (item.Id != 0)
+                //{
+                //    if (ProductModel.CatalogPictures.SingleOrDefault(x => x.Id == item.Id).ToRemove)
+                //    {
+                //        _service.DeleteFile(_backofficeSettings.WebProductsPictureFullPath, Utils.GetFileName(item.PictureUri));
+                //        //_context.Entry(item).State = EntityState.Deleted;
+
+                //    }
+                //    else
+                //        _context.Entry(item).State = EntityState.Modified;
+                //}
             }
 
             //Categorias dos Produtos
             var catalogCategoriesDb = await _context.CatalogCategories.Where(x => x.CatalogItemId == prod.Id).ToListAsync();
+            
             //Novos
             foreach (var item in CatalogCategoryModel.Where(x => x.Selected).ToList())
             {
@@ -225,7 +258,7 @@ namespace Backoffice.Pages.Products
 
             }
 
-            _context.Attach(prod).State = EntityState.Modified;
+            //_context.Attach(prod).State = EntityState.Modified;
 
             try
             {
@@ -302,20 +335,11 @@ namespace Backoffice.Pages.Products
             //    ModelState.AddModelError("", $"O nome da imagem {ProductModel.Picture.GetFileName()} já existe, por favor escolha outro nome!");
             //}
             
-            foreach (var item in ProductModel.CatalogPictures)
-            {
-                if (item.Picture != null && item.Picture.Length > 2097152)
-                    ModelState.AddModelError("", $"A imagem {item.Picture.GetFileName()} está muito grande amor, O máximo é 2MB, obrigado!");
-
-                //if(item.Picture != null && string.IsNullOrEmpty(item.PictureUri) && _service.CheckIfFileExists(_backofficeSettings.WebProductsPictureFullPath,item.Picture.GetFileName()))
-                //    ModelState.AddModelError("", $"O nome da imagem {item.Picture.GetFileName()} já existe, por favor escolha outro nome!");
-
-                //if(item.Picture != null && 
-                //    !string.IsNullOrEmpty(item.PictureUri) &&
-                //    item.Picture.GetFileName() != Utils.GetFileName(item.PictureUri) &&
-                //    _service.CheckIfFileExists(_backofficeSettings.WebProductsPictureFullPath, item.Picture.GetFileName()))
-                //    ModelState.AddModelError("", $"O nome da imagem {item.Picture.GetFileName()} já existe, por favor escolha outro nome!");
-            }
+            //foreach (var item in ProductModel.CatalogPictures)
+            //{
+            //    if (item.Picture != null && item.Picture.Length > 2097152)
+            //        ModelState.AddModelError("", $"A imagem {item.Picture.GetFileName()} está muito grande amor, O máximo é 2MB, obrigado!");               
+            //}
 
             if (ProductModel.OtherPictures != null)
             {
