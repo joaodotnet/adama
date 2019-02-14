@@ -1,5 +1,7 @@
 ﻿using ApplicationCore.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,5 +26,10 @@ namespace Infrastructure.Data
             }
         }
 
+        public static void EnsureDatabaseMigrations(GroceryContext groceryContext)
+        {
+            groceryContext.Database.EnsureCreated();
+            groceryContext.Database.Migrate();
+        }
     }
 }

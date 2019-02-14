@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
@@ -11,6 +12,12 @@ namespace Infrastructure.Identity
         private static string _roleAdmin = "Admin";
         private static string _roleGroceryAdmin = "GroceryAdmin";
         private static string _roleStaff = "Staff";
+
+        public static void EnsureDatabaseMigrations(AppIdentityDbContext context)
+        {
+            context.Database.EnsureCreated();
+            context.Database.Migrate();
+        }
 
         public static async Task EnsureRoleAdminCreated(IServiceProvider services)
         {
