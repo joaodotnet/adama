@@ -213,9 +213,8 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <button class="btnChangeImage btn btn-default">Substituir</button>
-                        <input type="submit" asp-page-handler="RemovePicture" value="Remover" class="btnRemoveImage btn btn-danger" />
-                        <input type="file" asp-for="ProductModel.CatalogPictures[i].Picture" class="form-control sr-only" />
+                        @*<button class="btnChangeImage btn btn-default">Substituir</button>*@
+                        <button class="btnRemoveImage btn btn-danger">Remover</button>                        
                         <input type="hidden" asp-for="ProductModel.CatalogPictures[i].ToRemove" class="img-to-remove" />
                         <p class="alert" role="alert"></p>
                     </div>
@@ -224,7 +223,7 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label class="control-label">Carregar novas imagens</label>
-                    <input asp-for="ProductModel.OtherPictures" class="form-control" />
+                    <input asp-for="ProductModel.OtherPictures" type="file" multiple class="form-control" />
                     <span asp-validation-for="ProductModel.OtherPictures" class="text-danger"></span>
                 </div>
             </div>
@@ -233,7 +232,7 @@
     <div class="row">
         <div class="form-group">
             <input type="hidden" asp-for="ProductModel.Id" />
-            <input type="submit" asp-page-handler="Save" value="Gravar" class="btn btn-primary" />
+            <input type="submit" value="Gravar" class="btn btn-primary" />
         </div>
     </div>
 
@@ -250,18 +249,13 @@
     <script>
         $(document).ready(function () {
             SetProductPrice($("#ProductModel_CatalogTypeId").val());
-            $('.remove').on('click', function (e) {
-                e.preventDefault();
-                var tr = $(this).closest('tr');
-                tr.find('.to-remove').val(true);
-                tr.hide();
-            });
-            $('.btnChangeImage').on('click', function (e) {
-                e.preventDefault();
-                var elem = $(this).siblings('input[type=file]');
-                elem.click();
-                $(this).siblings('p').addClass('alert-warning').text('Imagem vai ser substituida!');
-            });
+ 
+            //$('.btnChangeImage').on('click', function (e) {
+            //    e.preventDefault();
+            //    var elem = $(this).siblings('input[type=file]');
+            //    elem.click();
+            //    $(this).siblings('p').addClass('alert-warning').text('Imagem vai ser substituida!');
+            //});
             $('.btnRemoveImage').on('click', function (e) {
                 e.preventDefault();
                 $(this).siblings('p').addClass('alert-danger').text('Imagem vai ser removida!');
