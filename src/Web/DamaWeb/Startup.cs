@@ -38,11 +38,11 @@ namespace DamaWeb
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
             services.AddDbContext<DamaContext>(c =>
-                c.UseSqlServer(Configuration.GetConnectionString("DamaShopConnection")));
+                c.UseMySql(Configuration.GetConnectionString("DamaShopConnection")));
 
             // Add Identity DbContext
             services.AddDbContext<AppIdentityDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+                options.UseMySql(Configuration.GetConnectionString("IdentityConnection")));
 
 
             ConfigureServices(services);
