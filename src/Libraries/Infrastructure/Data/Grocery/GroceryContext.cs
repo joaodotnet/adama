@@ -81,6 +81,9 @@ namespace Infrastructure.Data
 
             //builder.Ignore(x => x.CustomizeName);
             builder.Ignore(x => x.CustomizeSide);
+            builder.Ignore(x => x.CatalogTypeId);
+            builder.Ignore(x => x.CustomizeColors);
+            builder.Ignore(x => x.CustomizeDescription);
         }
 
         private void ConfigureCategory(EntityTypeBuilder<Category> builder)

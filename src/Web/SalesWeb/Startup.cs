@@ -50,20 +50,20 @@ namespace SalesWeb
             ConfigureServices(services);
             services.AddScoped<IInvoiceService, InvoiceTestService>();
         }
-        public void ConfigureTestingServices(IServiceCollection services)
-        {
-            // use in-memory database
-            services.AddDbContext<GroceryContext>(c =>
-                c.UseInMemoryDatabase("Catalog"));
+        //public void ConfigureTestingServices(IServiceCollection services)
+        //{
+        //    // use in-memory database
+        //    services.AddDbContext<GroceryContext>(c =>
+        //        c.UseInMemoryDatabase("Catalog"));
 
-            // Add Identity DbContext
-            services.AddDbContext<AppIdentityDbContext>(options =>
-                options.UseInMemoryDatabase("Identity"));
+        //    // Add Identity DbContext
+        //    services.AddDbContext<AppIdentityDbContext>(options =>
+        //        options.UseInMemoryDatabase("Identity"));
 
-            ConfigureServices(services);
+        //    ConfigureServices(services);
 
-            services.AddScoped<IInvoiceService, InvoiceTestService>();
-        }
+        //    services.AddScoped<IInvoiceService, InvoiceTestService>();
+        //}
 
         public void ConfigureProductionServices(IServiceCollection services)
         {

@@ -38,14 +38,14 @@ namespace Backoffice
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
             services.AddDbContext<DamaContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DamaConnection")));
+                options.UseMySql(Configuration.GetConnectionString("DamaConnection")));
 
             services.AddDbContext<GroceryContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("GroceryConnection")));
+                options.UseMySql(Configuration.GetConnectionString("GroceryConnection")));
 
             // Add Identity DbContext
             services.AddDbContext<AppIdentityDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+                options.UseMySql(Configuration.GetConnectionString("IdentityConnection")));
             ConfigureServices(services);
             services.AddScoped<IInvoiceService, InvoiceTestService>();
         }

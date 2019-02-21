@@ -12,7 +12,7 @@ namespace Infrastructure.Data
         public static async Task SeedAsync(GroceryContext context)
         {
 
-            if (!context.CatalogItems.Any(x => x.Id == -1))
+            if (!context.CatalogItems.Any(x => x.Id == -1) && context.CatalogTypes.Any())
             {
                 context.CatalogItems.Add(new CatalogItem
                 {
