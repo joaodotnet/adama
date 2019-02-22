@@ -17,6 +17,7 @@ namespace ApplicationCore.Entities
         public bool IsNew { get; set; }
         public bool IsFeatured { get; set; }
         public bool CanCustomize { get; set; }
+        public int Stock { get; set; }
 
         public ICollection<CatalogAttribute> CatalogAttributes { get; set; }
         public ICollection<CatalogReference>  CatalogReferences { get; set; }
