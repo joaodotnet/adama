@@ -72,6 +72,7 @@ namespace Backoffice.Pages.Products
             public string PictureUri { get; set; }
             [Display(Name = "Imagens do Produto")]
             public List<IFormFile> OtherPictures { get; set; }
+            public int Stock { get; set; }
 
             public IList<ProductAttributeViewModel> CatalogAttributes { get; set; } = new List<ProductAttributeViewModel>();
             [Display(Name = "Imagens do Produto")]
