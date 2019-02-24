@@ -18,7 +18,7 @@
                 @Html.DisplayNameFor(model => model.CatalogItem[0].Sku)
             </th>
             <th>
-               Nome
+                Nome
             </th>
             <th>
                 Preço
@@ -30,7 +30,10 @@
                 Tipo de Produto
             </th>
             <th>
-               Ativo
+                Ativo
+            </th>
+            <th>
+                Stock
             </th>
             <th></th>
         </tr>
@@ -51,13 +54,16 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @string.Join(",",item.CatalogCategories.Select(x => x.Category.Name))
+                @string.Join(",", item.CatalogCategories.Select(x => x.Category.Name))
             </td>
             <td>
                 @($"{item.CatalogType.Code} - {item.CatalogType.Description}")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ShowOnShop)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stock)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Editar</a> |

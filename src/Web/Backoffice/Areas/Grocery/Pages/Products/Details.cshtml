@@ -22,12 +22,18 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.CatalogItem.Name)
-        </dd>        
+        </dd>
         <dt>
             Preço
         </dt>
         <dd>
             @Html.DisplayFor(model => model.CatalogItem.Price)
+        </dd>
+        <dt>
+            Stock
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CatalogItem.Stock)
         </dd>
         <dt>
             Imagem
@@ -39,7 +45,7 @@
             Categorias
         </dt>
         <dd>
-            @string.Join(",",Model.CatalogItem.CatalogCategories.Select(x => x.Category.Name))
+            @string.Join(",", Model.CatalogItem.CatalogCategories.Select(x => x.Category.Name))
         </dd>
         <dt>
             Tipo de Produto
