@@ -40,6 +40,11 @@
                 <span id="ProductTypePrice"></span>
                 <span asp-validation-for="ProductModel.Price" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="ProductModel.Stock" class="control-label"></label>
+                <input asp-for="ProductModel.Stock" class="form-control" />
+                <span asp-validation-for="ProductModel.Stock" class="text-danger"></span>
+            </div>
             <div class="form-check">
                 <input asp-for="ProductModel.ShowOnShop" class="form-check-input" />
                 <label asp-for="ProductModel.ShowOnShop" class="form-check-label"></label>
@@ -123,6 +128,9 @@
                             @Html.DisplayNameFor(model => model.ProductModel.CatalogAttributes[0].Name)
                         </th>
                         <th>
+                            @Html.DisplayNameFor(model => model.ProductModel.CatalogAttributes[0].Stock)
+                        </th>
+                        <th>
                         </th>
                     </tr>
                 </thead>
@@ -131,18 +139,21 @@
                     {
                         for (int i = 0; i < Model.ProductModel.CatalogAttributes.Count; i++)
                         {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(model => Model.ProductModel.CatalogAttributes[i].Type)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(model => Model.ProductModel.CatalogAttributes[i].Name)
-                                </td>
-                                <td>
-                                    <a asp-page="./Attributes/Edit" asp-route-id="@Model.ProductModel.CatalogAttributes[i].Id">Editar</a> |
-                                    <a asp-page="./Attributes/Delete" asp-route-id="@Model.ProductModel.CatalogAttributes[i].Id">Apagar</a>
-                                </td>
-                            </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(model => Model.ProductModel.CatalogAttributes[i].Type)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => Model.ProductModel.CatalogAttributes[i].Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => Model.ProductModel.CatalogAttributes[i].Stock)
+                        </td>
+                        <td>
+                            <a asp-page="./Attributes/Edit" asp-route-id="@Model.ProductModel.CatalogAttributes[i].Id">Editar</a> |
+                            <a asp-page="./Attributes/Delete" asp-route-id="@Model.ProductModel.CatalogAttributes[i].Id">Apagar</a>
+                        </td>
+                    </tr>
                         }
                     }
                 </tbody>

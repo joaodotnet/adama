@@ -40,6 +40,7 @@ namespace Backoffice.Pages.Products.Attributes
             [Required]
             [StringLength(100)]
             public string Name { get; set; }
+            public int Stock { get; set; }
             public int CatalogItemId { get; set; }
         }
 

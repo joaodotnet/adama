@@ -5,27 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Data\Grocery\Migrations\SqlServer\**" />
-    <Compile Remove="Data\Migrations\SqlServer\**" />
-    <Compile Remove="Identity\Migrations\SqlServer\**" />
-    <EmbeddedResource Remove="Data\Grocery\Migrations\SqlServer\**" />
-    <EmbeddedResource Remove="Data\Migrations\SqlServer\**" />
-    <EmbeddedResource Remove="Identity\Migrations\SqlServer\**" />
-    <None Remove="Data\Grocery\Migrations\SqlServer\**" />
-    <None Remove="Data\Migrations\SqlServer\**" />
-    <None Remove="Identity\Migrations\SqlServer\**" />
-  </ItemGroup>
-
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.1" PrivateAssets="all">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.2" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.4" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0" />
     <PackageReference Include="System.ServiceModel.Duplex" Version="4.5.3" />
     <PackageReference Include="System.ServiceModel.Http" Version="4.5.3" />
     <PackageReference Include="System.ServiceModel.NetTcp" Version="4.5.3" />

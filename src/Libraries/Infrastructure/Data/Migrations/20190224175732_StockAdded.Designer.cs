@@ -3,27 +3,26 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Infrastructure.Data.Migrations.SqlServer
+namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(DamaContext))]
-    partial class DamaContextModelSnapshot : ModelSnapshot
+    [Migration("20190224175732_StockAdded")]
+    partial class StockAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("ApplicationCore.Entities.BasketAggregate.Basket", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("BuyerId");
 
@@ -39,8 +38,7 @@ namespace Infrastructure.Data.Migrations.SqlServer
             modelBuilder.Entity("ApplicationCore.Entities.BasketAggregate.BasketItem", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int>("BasketId");
 
@@ -83,14 +81,15 @@ namespace Infrastructure.Data.Migrations.SqlServer
             modelBuilder.Entity("ApplicationCore.Entities.CatalogAttribute", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int>("CatalogItemId");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100);
+
+                    b.Property<int>("Stock");
 
                     b.Property<int>("Type");
 
@@ -104,8 +103,7 @@ namespace Infrastructure.Data.Migrations.SqlServer
             modelBuilder.Entity("ApplicationCore.Entities.CatalogCategory", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int>("CatalogItemId");
 
@@ -123,8 +121,7 @@ namespace Infrastructure.Data.Migrations.SqlServer
             modelBuilder.Entity("ApplicationCore.Entities.CatalogIllustration", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -154,8 +151,7 @@ namespace Infrastructure.Data.Migrations.SqlServer
             modelBuilder.Entity("ApplicationCore.Entities.CatalogItem", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<bool>("CanCustomize");
 
@@ -183,6 +179,8 @@ namespace Infrastructure.Data.Migrations.SqlServer
                     b.Property<string>("Sku")
                         .HasMaxLength(255);
 
+                    b.Property<int>("Stock");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CatalogIllustrationId");
@@ -195,8 +193,7 @@ namespace Infrastructure.Data.Migrations.SqlServer
             modelBuilder.Entity("ApplicationCore.Entities.CatalogPicture", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int>("CatalogItemId");
 
@@ -217,8 +214,7 @@ namespace Infrastructure.Data.Migrations.SqlServer
             modelBuilder.Entity("ApplicationCore.Entities.CatalogReference", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int>("CatalogItemId");
 
@@ -242,8 +238,7 @@ namespace Infrastructure.Data.Migrations.SqlServer
             modelBuilder.Entity("ApplicationCore.Entities.CatalogType", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<decimal?>("AdditionalTextPrice")
                         .HasColumnType("decimal(18,2)");
@@ -303,8 +298,7 @@ namespace Infrastructure.Data.Migrations.SqlServer
             modelBuilder.Entity("ApplicationCore.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -335,8 +329,7 @@ namespace Infrastructure.Data.Migrations.SqlServer
             modelBuilder.Entity("ApplicationCore.Entities.CustomizeOrder", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("AttachFileName");
 
@@ -370,8 +363,7 @@ namespace Infrastructure.Data.Migrations.SqlServer
             modelBuilder.Entity("ApplicationCore.Entities.FileDetail", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int?>("CatalogTypeId");
 
@@ -402,8 +394,7 @@ namespace Infrastructure.Data.Migrations.SqlServer
             modelBuilder.Entity("ApplicationCore.Entities.IllustrationType", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -423,8 +414,7 @@ namespace Infrastructure.Data.Migrations.SqlServer
             modelBuilder.Entity("ApplicationCore.Entities.OrderAggregate.Order", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("BuyerId");
 
@@ -459,8 +449,7 @@ namespace Infrastructure.Data.Migrations.SqlServer
             modelBuilder.Entity("ApplicationCore.Entities.OrderAggregate.OrderItem", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int?>("CatalogAttribute1");
 
@@ -491,8 +480,7 @@ namespace Infrastructure.Data.Migrations.SqlServer
             modelBuilder.Entity("ApplicationCore.Entities.ShopConfig", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<bool>("IsActive");
 
@@ -512,8 +500,7 @@ namespace Infrastructure.Data.Migrations.SqlServer
             modelBuilder.Entity("ApplicationCore.Entities.ShopConfigDetail", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("ContentText");
 
@@ -632,9 +619,7 @@ namespace Infrastructure.Data.Migrations.SqlServer
                 {
                     b.OwnsOne("ApplicationCore.Entities.OrderAggregate.CatalogItemOrdered", "ItemOrdered", b1 =>
                         {
-                            b1.Property<int>("CustomizeOrderId")
-                                .ValueGeneratedOnAdd()
-                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                            b1.Property<int>("CustomizeOrderId");
 
                             b1.Property<int>("CatalogItemId");
 
@@ -664,9 +649,7 @@ namespace Infrastructure.Data.Migrations.SqlServer
                 {
                     b.OwnsOne("ApplicationCore.Entities.OrderAggregate.Address", "BillingToAddress", b1 =>
                         {
-                            b1.Property<int>("OrderId")
-                                .ValueGeneratedOnAdd()
-                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                            b1.Property<int>("OrderId");
 
                             b1.Property<string>("City");
 
@@ -690,9 +673,7 @@ namespace Infrastructure.Data.Migrations.SqlServer
 
                     b.OwnsOne("ApplicationCore.Entities.OrderAggregate.Address", "ShipToAddress", b1 =>
                         {
-                            b1.Property<int>("OrderId")
-                                .ValueGeneratedOnAdd()
-                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                            b1.Property<int>("OrderId");
 
                             b1.Property<string>("City");
 
@@ -723,9 +704,7 @@ namespace Infrastructure.Data.Migrations.SqlServer
 
                     b.OwnsOne("ApplicationCore.Entities.OrderAggregate.CustomizeItemOrdered", "CustomizeItem", b1 =>
                         {
-                            b1.Property<int>("OrderItemId")
-                                .ValueGeneratedOnAdd()
-                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                            b1.Property<int>("OrderItemId");
 
                             b1.Property<int?>("CatalogTypeId");
 
@@ -751,9 +730,7 @@ namespace Infrastructure.Data.Migrations.SqlServer
 
                     b.OwnsOne("ApplicationCore.Entities.OrderAggregate.CatalogItemOrdered", "ItemOrdered", b1 =>
                         {
-                            b1.Property<int>("OrderItemId")
-                                .ValueGeneratedOnAdd()
-                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                            b1.Property<int>("OrderItemId");
 
                             b1.Property<int>("CatalogItemId");
 
