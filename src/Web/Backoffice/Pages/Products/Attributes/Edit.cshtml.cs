@@ -42,6 +42,7 @@ namespace Backoffice.Pages.Products.Attributes
             [Required]
             [StringLength(100)]
             public string Name { get; set; }
+            public int Stock { get; set; } = 0;
             public int CatalogItemId { get; set; }
         }
 
@@ -71,7 +72,7 @@ namespace Backoffice.Pages.Products.Attributes
                 return Page();
             }
             var ca = _mapper.Map<CatalogAttribute>(CatalogAttributeModel);
-            _context.Attach(ca).State = EntityState.Modified;
+            _context.Attach(ca).State = EntityState.Modified;            
 
             try
             {
@@ -81,6 +82,15 @@ namespace Backoffice.Pages.Products.Attributes
             {
                 
             }
+
+            //Update Total Stock
+            var prod = await _context.CatalogItems
+                .Include(x => x.CatalogAttributes)
+                .SingleOrDefaultAsync(x => x.Id == CatalogAttributeModel.CatalogItemId);
+            prod.Stock = prod.CatalogAttributes.Sum(x => x.Stock);
+
+            await _context.SaveChangesAsync();
+
             return RedirectToPage("/Products/Edit", new { id = ca.CatalogItemId });
         }
     }

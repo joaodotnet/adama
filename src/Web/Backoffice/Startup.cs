@@ -1,28 +1,25 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using ApplicationCore;
+using ApplicationCore.Interfaces;
+using ApplicationCore.Services;
+using AutoMapper;
+using Backoffice.Interfaces;
 using Backoffice.Services;
 using Infrastructure.Data;
 using Infrastructure.Identity;
-using AutoMapper;
-using Microsoft.AspNetCore.Localization;
-using System.Globalization;
-using ApplicationCore.Interfaces;
-using Backoffice.Interfaces;
-using Infrastructure.Services;
-using ApplicationCore;
-using ApplicationCore.Services;
-using Microsoft.AspNetCore.Mvc;
 using Infrastructure.Logging;
+using Infrastructure.Services;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using System;
+using System.Globalization;
 
 namespace Backoffice
 {
@@ -38,7 +35,10 @@ namespace Backoffice
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
             services.AddDbContext<DamaContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("DamaConnection")));
+                options.UseMySql(Configuration.GetConnectionString("DamaConnection"), mysqlOptions =>
+                {
+                    mysqlOptions.ServerVersion(new Version(5, 7, 25), ServerType.MySql);
+                }));
 
             services.AddDbContext<GroceryContext>(options =>
                 options.UseMySql(Configuration.GetConnectionString("GroceryConnection")));
@@ -73,7 +73,7 @@ namespace Backoffice
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            
+
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
@@ -104,7 +104,7 @@ namespace Backoffice
 
             services.AddMvc()
                 .AddRazorPagesOptions(options =>
-                {                    
+                {
                     options.Conventions.AuthorizeFolder("/Account/Manage", "RequireAdministratorRole");
                     options.Conventions.AuthorizePage("/Account/Logout", "RequireAdministratorRole");
                     options.Conventions.AuthorizeFolder("/Category", "RequireAdministratorRole");
@@ -120,7 +120,7 @@ namespace Backoffice
                     options.Conventions.AuthorizeAreaFolder("Grocery", "/Categories", "RequireGroceryRole");
                     options.Conventions.AuthorizeAreaFolder("Grocery", "/Products", "RequireGroceryRole");
                 })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);            
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddAutoMapper();
 
@@ -137,12 +137,12 @@ namespace Backoffice
             services.AddScoped<IOrderService, OrderService>();
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<ISageService, SageService>();
-            services.AddScoped<IAuthConfigRepository, AuthConfigRepository>();            
+            services.AddScoped<IAuthConfigRepository, AuthConfigRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {       
+        {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

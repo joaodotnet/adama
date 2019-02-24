@@ -12,6 +12,7 @@ using AutoMapper;
 using Backoffice.Interfaces;
 using Backoffice.Extensions;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backoffice.Pages.Products.Attributes
 {
@@ -40,19 +41,21 @@ namespace Backoffice.Pages.Products.Attributes
             [Required]
             [StringLength(100)]
             public string Name { get; set; }
+            public int Stock { get; set; } = 0;
             public int CatalogItemId { get; set; }
         }
 
         public async Task<IActionResult> OnGet(int id)
         {
-            var prod = await _context.CatalogItems.FindAsync(id);
+            var prod = await _context.CatalogItems
+                .FindAsync(id);
             if (prod == null)
                 return NotFound();
 
             CatalogAttributeModel.CatalogItemId = id;
             ProductName = prod.Name;
             //CatalogAttributeModel.CatalogItem = _mapper.Map<ProductViewModel>(prod);
-            
+
             //ViewData["ReferenceCatalogItemId"] = new SelectList(_context.CatalogItems, "Id", "Name");
             return Page();
         }
@@ -68,10 +71,13 @@ namespace Backoffice.Pages.Products.Attributes
             var attribute = _mapper.Map<CatalogAttribute>(CatalogAttributeModel);
             _context.CatalogAttributes.Add(attribute);
             await _context.SaveChangesAsync();
-            //var price = attribute.CatalogItem.Price;
-            //if (attribute.Price.HasValue)
-            //    price += attribute.Price.Value;
-            //await _service.AddOrUpdateCatalogPrice(attribute.CatalogItemId, attribute.Id, price);
+
+            //Update Total Stock
+            var prod = await _context.CatalogItems
+                .Include(x => x.CatalogAttributes)
+                .SingleOrDefaultAsync(x => x.Id == CatalogAttributeModel.CatalogItemId);
+            prod.Stock = prod.CatalogAttributes.Sum(x => x.Stock);
+            await _context.SaveChangesAsync();
 
             return RedirectToPage("/Products/Edit", new { id = CatalogAttributeModel.CatalogItemId });
         }

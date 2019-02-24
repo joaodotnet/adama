@@ -20,17 +20,9 @@
                 @Html.DisplayNameFor(model => model.ProductModel[0].CatalogCategories)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProductModel[0].CatalogTypeId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductModel[0].CatalogIllustrationId)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.ProductModel[0].Price)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductModel[0].Sku)
-            </th>
+            
             <th>
                 @Html.DisplayNameFor(model => model.ProductModel[0].ShowOnShop)
             </th>
@@ -42,6 +34,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ProductModel[0].CanCustomize)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductModel[0].Stock)
             </th>
             <th></th>
         </tr>
@@ -55,39 +50,34 @@
             </td>
             <td>
                 @foreach (var cat in item.CatalogCategories)
-        {
-            @cat.Label
-            <br />
-            @foreach (var child in cat.Childs)
-    {
-        @child.Label
-        <br />
-}
-}
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CatalogType.Code)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CatalogIllustration.Code)
+                {
+                    @cat.Label
+                    <br />
+                    @foreach (var child in cat.Childs)
+                    {
+                        @child.Label
+                        <br />
+                    }
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
+           
             <td>
-                @Html.DisplayFor(modelItem => item.Sku)
+                <input type="checkbox" asp-for="@item.ShowOnShop" class="updateProduct" product-id="@item.Id" checkboxType="1" />
             </td>
             <td>
-                <input type="checkbox" asp-for="@item.ShowOnShop" class="updateProduct" product-id="@item.Id" checkboxType="1" />   
-            </td>
-            <td>
-                <input type="checkbox" asp-for="@item.IsNew" class="updateProduct" product-id="@item.Id" checkboxType="2"  />
+                <input type="checkbox" asp-for="@item.IsNew" class="updateProduct" product-id="@item.Id" checkboxType="2" />
             </td>
             <td>
                 <input type="checkbox" asp-for="@item.IsFeatured" class="updateProduct" product-id="@item.Id" checkboxType="3" />
             </td>
             <td>
                 <input type="checkbox" asp-for="@item.CanCustomize" class="updateProduct" product-id="@item.Id" checkboxType="4" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stock)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Editar</a> |
@@ -106,7 +96,7 @@
                 var productId = $(this).attr('product-id');
                 var chooseType = $(this).attr('checkboxType');
                 $.getJSON('@(Url.Page("Index", "UpdateProduct"))' + '&id=' + productId + '&checkboxType=' + chooseType + '&value= ' + $(this).is(":checked"), function (data) {
-          
+
                 });
             });
         });

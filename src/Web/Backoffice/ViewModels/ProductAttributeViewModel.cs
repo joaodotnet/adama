@@ -15,5 +15,6 @@ namespace Backoffice.ViewModels
         public int CatalogItemId { get; set; }
         public ProductViewModel CatalogItem { get; set; }        
         public bool ToRemove { get; set; }
+        public int Stock { get; set; }
     }
 }
