@@ -38,6 +38,8 @@ namespace Backoffice.Pages.Stock
             PopulateList();
 
             var products = await _db.CatalogItems
+                .Include(x => x.CatalogCategories)
+                .ThenInclude(cc => cc.Category)
                 .Include(x => x.CatalogAttributes)
                 .Include(x => x.CatalogType)
                 .Include(x => x.CatalogIllustration)
@@ -55,11 +57,12 @@ namespace Backoffice.Pages.Stock
                     {
                         Stocks.Add(new StockViewModel
                         {
+                            ProductName = item.Name,
                             CatalogItemId = item.Id,
                             CatalogAttributeId = attr.Id,
-                            Category = item.Name,
+                            Category = string.Join(", ", item.CatalogCategories.Select(x => x.Category.Name)),
                             CatalogType = item.CatalogType.Description,
-                            Illustration = item.CatalogIllustration.IllustrationType.Name,
+                            Illustration = item.CatalogIllustration.Name,
                             Attribute = attr.Name,
                             Stock = attr.Stock
                         });
@@ -69,10 +72,11 @@ namespace Backoffice.Pages.Stock
                 {
                     Stocks.Add(new StockViewModel
                     {
+                        ProductName = item.Name,
                         CatalogItemId = item.Id,
-                        Category = item.Name,
+                        Category = string.Join(", ", item.CatalogCategories.Select(x => x.Category.Name)),
                         CatalogType = item.CatalogType.Description,
-                        Illustration = item.CatalogIllustration.IllustrationType.Name,
+                        Illustration = item.CatalogIllustration.Name,
                         Stock = item.Stock
                     });
                 }
@@ -122,7 +126,7 @@ namespace Backoffice.Pages.Stock
         {
             ViewData["CategoryList"] = new SelectList(_db.Categories, "Id", "Name");
             ViewData["CatalogTypeList"] = new SelectList(_db.CatalogTypes, "Id", "Description");
-            ViewData["IllustrationList"] = new SelectList(_db.IllustrationTypes, "Id", "Name");
+            ViewData["IllustrationList"] = new SelectList(_db.CatalogIllustrations, "Id", "Name");
         }
 
         public class StockViewModel
@@ -130,6 +134,8 @@ namespace Backoffice.Pages.Stock
 
             public int CatalogItemId { get; set; }
             public int? CatalogAttributeId { get; set; }
+            [Display(Name = "Nome")]
+            public string ProductName { get; set; }
             [Display(Name = "Categoria")]
             public string Category { get; set; }
             [Display(Name = "Tipo de Produto")]
