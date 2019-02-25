@@ -120,6 +120,8 @@ namespace Backoffice
                     options.Conventions.AuthorizeAreaFolder("Grocery", "/CatalogTypes", "RequireGroceryRole");
                     options.Conventions.AuthorizeAreaFolder("Grocery", "/Categories", "RequireGroceryRole");
                     options.Conventions.AuthorizeAreaFolder("Grocery", "/Products", "RequireGroceryRole");
+                    options.Conventions.AuthorizeAreaFolder("Grocery", "/Stock", "RequireGroceryRole");
+                    options.Conventions.AuthorizeAreaFolder("Grocery", "/Sales", "RequireAdministratorRole");
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 

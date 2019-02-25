@@ -1,5 +1,5 @@
 ﻿@page
-@model Backoffice.Pages.Stock.IndexModel
+@model Backoffice.Areas.Grocery.Pages.Stock.IndexModel
 @{
     ViewData["Title"] = "Stock";
 }
@@ -19,12 +19,6 @@
             <option>Todos</option>
         </select>
     </div>
-    <div class="form-group">
-        <label asp-for="CatalogIllustrationId"></label>
-        <select class="form-control" asp-for="CatalogIllustrationId" asp-items="ViewBag.IllustrationList">
-            <option>Todas</option>
-        </select>
-    </div>
     <button type="submit" class="btn btn-default">Filtrar</button>
 </form>
 
@@ -40,12 +34,6 @@
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Stocks[0].CatalogType)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Stocks[0].Illustration)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Stocks[0].Attribute)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Stocks[0].Stock)
@@ -66,14 +54,7 @@
                     @Html.DisplayFor(modelItem => Model.Stocks[i].CatalogType)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => Model.Stocks[i].Illustration)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => Model.Stocks[i].Attribute)
-                </td>
-                <td>
                     <input type="hidden" asp-for="Stocks[i].CatalogItemId" />
-                    <input type="hidden" asp-for="Stocks[i].CatalogAttributeId" />
                     <input asp-for="Stocks[i].Stock" class="form-control" />
                 </td>
             </tr>
