@@ -55,11 +55,12 @@ namespace Infrastructure.Services
                 mail.Priority = MailPriority.Normal;
                 if (attachFile != null)
                     mail.Attachments.Add(new Attachment(attachFile.OpenReadStream(), attachFile.FileName));
-                else if(files != null)
+                else if(files?.Count > 0)
                 {
                     foreach (var item in files)
                     {
-                        mail.Attachments.Add(new Attachment(new MemoryStream(item.Bytes), item.FileName));
+                        if(item.Bytes != null)
+                            mail.Attachments.Add(new Attachment(new MemoryStream(item.Bytes), item.FileName));
                     }
                 }
 

@@ -197,7 +197,7 @@ namespace SalesWeb.Pages.Basket
                     if (string.IsNullOrEmpty(UserAddress.InvoiceAddressCountry))
                         ModelState.AddModelError("UserAddress.InvoiceAddressCountry", "O campo País é obrigatório.");
 
-                    if (UserAddress.InvoiceAddressCountry == "175") //Portugal
+                    if (UserAddress.InvoiceAddressCountry == "175" && !string.IsNullOrEmpty(UserAddress.InvoiceAddressPostalCode)) //Portugal
                     {
                         //Test PostalCode
                         Regex rx = new Regex(@"^\d{4}-\d{3}?$");
