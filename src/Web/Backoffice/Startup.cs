@@ -116,6 +116,7 @@ namespace Backoffice
                     options.Conventions.AuthorizeFolder("/Orders", "RequireAdministratorRole");
                     options.Conventions.AuthorizeFolder("/Sage", "RequireAdministratorRole");
                     options.Conventions.AuthorizePage("/Index", "RequireAdministratorRole");
+                    options.Conventions.AuthorizePage("/Stock", "RequireAdministratorRole");
                     options.Conventions.AuthorizeAreaFolder("Grocery", "/CatalogTypes", "RequireGroceryRole");
                     options.Conventions.AuthorizeAreaFolder("Grocery", "/Categories", "RequireGroceryRole");
                     options.Conventions.AuthorizeAreaFolder("Grocery", "/Products", "RequireGroceryRole");
