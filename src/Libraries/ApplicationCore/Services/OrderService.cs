@@ -71,7 +71,7 @@ namespace ApplicationCore.Services
                     items.Add(orderItem);
                 }
             }
-            var order = new Order(basket.BuyerId, phoneNumber, taxNumber, shippingAddress, billingAddress, useBillingSameAsShipping, items, shippingCost);
+            var order = new Order(basket.BuyerId, phoneNumber, taxNumber, shippingAddress, billingAddress, useBillingSameAsShipping, items, shippingCost, customerEmail);
             var savedOrder = await _orderRepository.AddAsync(order);
 
             if (registerInvoice)
