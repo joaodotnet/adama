@@ -122,7 +122,8 @@ namespace DamaWeb
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<CatalogService>();
-            services.AddScoped<IShopService, ShopService>();
+            services.AddScoped<IShopService, CacheShopService>();
+            services.AddScoped<ShopService>();
             services.Configure<CatalogSettings>(Configuration);
             services.Configure<EmailSettings>(Configuration.GetSection("Email"));
             services.AddSingleton<IUriComposer>(new UriComposer(Configuration.Get<CatalogSettings>()));

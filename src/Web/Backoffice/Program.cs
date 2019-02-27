@@ -34,6 +34,7 @@ namespace Backoffice
 
                     var damaContext = services.GetRequiredService<DamaContext>();
                     DamaContextSeed.EnsureDatabaseMigrations(damaContext);
+                    DamaContextSeed.SeedAsync(damaContext, loggerFactory).Wait();
 
                     var groceryContext = services.GetRequiredService<GroceryContext>();
                     GroceryContextSeed.EnsureDatabaseMigrations(groceryContext);

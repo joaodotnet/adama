@@ -28,12 +28,19 @@ namespace Backoffice.Pages.ShopConfig
 
         public async Task OnGetAsync()
         {
-            var list = await _context.ShopConfigs
-                .Include(x => x.Details)
-                .ToListAsync();
+            await Initialize();
 
             //var details = await _context.ShopConfigDetails
             //    .Include(s => s.ShopConfig).ToListAsync();
+
+            
+        }
+
+        private async Task Initialize()
+        {
+            List<ApplicationCore.Entities.ShopConfig> list = await _context.ShopConfigs
+                            .Include(x => x.Details)
+                            .ToListAsync();
 
             ShopConfigModel = _mapper.Map<List<ShopConfigViewModel>>(list);
         }
@@ -42,6 +49,7 @@ namespace Backoffice.Pages.ShopConfig
         {
             if (!ModelState.IsValid)
             {
+                await Initialize();
                 return Page();
             }
 
@@ -57,6 +65,27 @@ namespace Backoffice.Pages.ShopConfig
                 catch (DbUpdateConcurrencyException)
                 {
 
+                }
+            }
+            return RedirectToPage("./Index");
+        }
+
+        public async Task<IActionResult> OnPostUpdateSEOAsync()
+        {
+            var input = ShopConfigModel.SingleOrDefault(x => x.Type == ShopConfigType.SEO);
+            if (input != null)
+            {
+                if (string.IsNullOrEmpty(input.Value) || input.Value.Length > 160)
+                {
+                    await Initialize();
+                    ModelState.AddModelError("", "Meta Description é inválida, tem que ter menos de 160 carateres!");
+                    return Page();
+                }
+                else
+                {
+                    var shopConfig = _mapper.Map<ApplicationCore.Entities.ShopConfig>(input);
+                    _context.Attach(shopConfig).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
                 }
             }
             return RedirectToPage("./Index");
