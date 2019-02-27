@@ -16,6 +16,7 @@ namespace ApplicationCore.Entities
 
     public enum ShopConfigType
     {        
-        NEWS_BANNER
+        NEWS_BANNER,
+        SEO
     }
 }
