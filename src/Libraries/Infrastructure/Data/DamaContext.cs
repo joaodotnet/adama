@@ -214,10 +214,8 @@ namespace Infrastructure.Data
             builder.Property(c => c.Order)
                 .IsRequired()
                 .HasDefaultValue(1);
-            builder.Property(c => c.Position)
-                .IsRequired()
-                .HasMaxLength(10)
-                .HasDefaultValue("left");
+            builder.Property(c => c.MetaDescription)
+                .HasMaxLength(161);
             builder.HasOne(x => x.Parent)
                 .WithMany()
                 .HasForeignKey(x => x.ParentId);
@@ -272,7 +270,10 @@ namespace Infrastructure.Data
                 .IsRequired(true);
             builder.Property(x => x.CanCustomize)
                 .IsRequired(true);
-                //.HasDefaultValue(false);
+            //.HasDefaultValue(false);
+
+            builder.Property(c => c.MetaDescription)
+                .HasMaxLength(161);
         }
 
         private void ConfigureCatalogBrand(EntityTypeBuilder<CatalogIllustration> builder)
@@ -341,6 +342,9 @@ namespace Infrastructure.Data
             builder.Property(x => x.DeliveryTimeUnit)
                 .IsRequired()
                 .HasDefaultValue(DeliveryTimeUnitType.Days);
+
+            builder.Property(c => c.MetaDescription)
+                .HasMaxLength(161);
 
             //builder.HasOne(x => x.Category)
             //    .WithMany(c => c.CatalogTypes)

@@ -16,9 +16,10 @@ namespace Backoffice.ViewModels
         [Required]        
         [Display(Name = "Ordem")]
         public int Order { get; set; }
-       
-        [Display(Name = "Posição Web")]
-        public string Position { get; set; }
+
+        [Display(Name = "Meta Description")]
+        [StringLength(161)]
+        public string MetaDescription { get; set; }
 
         [Display(Name="Categoria Pai")]
         public int? ParentId { get; set; }

@@ -20,7 +20,7 @@
                 @Html.DisplayNameFor(model => model.Categories[0].Order)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Categories[0].Position)
+                @Html.DisplayNameFor(model => model.Categories[0].MetaDescription)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Categories[0].ParentId)
@@ -41,7 +41,7 @@
                 @Html.DisplayFor(modelItem => item.Order)
             </td>
             <td>
-                @(item.Position == "left"? "Esquerda" : item.Position == "right" ? "Direita" : "")
+                @Html.DisplayFor(modelItem => item.MetaDescription)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Parent.Name)

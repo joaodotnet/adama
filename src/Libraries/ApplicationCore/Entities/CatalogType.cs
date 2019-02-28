@@ -15,8 +15,7 @@ namespace ApplicationCore.Entities
         public decimal Price { get; set; }
         public decimal? AdditionalTextPrice { get; set; }
         public decimal ShippingCost { get; set; }
-        //public int CategoryId { get; set; }
-        //public Category Category { get; set; }
+        public string MetaDescription { get; set; }
 
         public ICollection<CatalogTypeCategory> Categories { get; set; }
         public ICollection<CatalogItem> CatalogItems { get; set; }

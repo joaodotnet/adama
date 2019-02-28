@@ -53,13 +53,6 @@ namespace Backoffice.Pages.Category
 
         private void PopulateList()
         {
-            List<(string, string)> list = new List<(string, string)>
-            {
-                ("left", "Esquerda"),
-                ("right", "Direita")
-            };            
-
-            ViewData["PositionList"] = new SelectList(list.Select(x => new { Id = x.Item1, Name = x.Item2 }), "Id", "Name");
             ViewData["CategoryList"] = new SelectList(_context.Categories, "Id", "Name");
         }
     }

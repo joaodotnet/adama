@@ -90,7 +90,6 @@ namespace Infrastructure.Data
         {
             //Category
             builder.ToTable("Category");
-            builder.Ignore(b => b.Position);
             builder.Ignore(c => c.CatalogTypes);
 
             builder.Property(c => c.Name)
@@ -106,6 +105,8 @@ namespace Infrastructure.Data
             builder
                 .HasIndex(c => c.Name)
                 .IsUnique();
+
+            builder.Ignore(c => c.MetaDescription);
         }
         private void ConfigureCatalogType(EntityTypeBuilder<CatalogType> builder)
         {
@@ -140,6 +141,7 @@ namespace Infrastructure.Data
             builder.Ignore(x => x.DeliveryTimeUnit);
             builder.Ignore(x => x.Categories);
             builder.Ignore(x => x.PictureTextHelpers);
+            builder.Ignore(x => x.MetaDescription);
         }
 
         private void ConfigureCatalogItem(EntityTypeBuilder<CatalogItem> builder)
@@ -174,8 +176,9 @@ namespace Infrastructure.Data
             builder.Ignore(x => x.IsFeatured);
             builder.Ignore(x => x.CanCustomize);
             builder.Ignore(x => x.Description);
-            builder.Ignore(ci => ci.CatalogReferences);
-            builder.Ignore(ci => ci.CatalogPictures);             
+            builder.Ignore(x => x.CatalogReferences);
+            builder.Ignore(x => x.CatalogPictures);
+            builder.Ignore(x => x.MetaDescription);
         }
 
         private void ConfigureCatalogCategories(EntityTypeBuilder<CatalogCategory> builder)
