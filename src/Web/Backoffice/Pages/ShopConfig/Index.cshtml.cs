@@ -40,7 +40,9 @@ namespace Backoffice.Pages.ShopConfig
         {
             List<ApplicationCore.Entities.ShopConfig> list = await _context.ShopConfigs
                             .Include(x => x.Details)
+                            .OrderByDescending(x => x.Type)
                             .ToListAsync();
+                            
 
             ShopConfigModel = _mapper.Map<List<ShopConfigViewModel>>(list);
         }
