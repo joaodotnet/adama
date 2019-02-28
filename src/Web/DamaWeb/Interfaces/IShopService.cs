@@ -11,7 +11,7 @@ namespace DamaWeb.Interfaces
     public interface IShopService
     {
         //Task<MenuComponentViewModel> GetMenuList();
-        Task<List<MainBannerViewModel>> GetMainBanners();
+        Task<DamaHomePageConfigViewModel> GetDamaHomePageConfig();
         //Task<Category> GetCategory(string name);
         //Task<CatalogType> GetCatalogType(string type);
         Task AddorUpdateUserAddress(ApplicationUser user, AddressViewModel addressModel, AddressType addressType = AddressType.SHIPPING);

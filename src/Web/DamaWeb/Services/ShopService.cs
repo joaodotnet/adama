@@ -18,84 +18,31 @@ namespace DamaWeb.Services
     {
         private readonly DamaContext _db;
         private readonly AppIdentityDbContext _identityDb;
-        private readonly IUriComposer _uriComposer;
         private readonly IMapper _mapper;
-        public ShopService(DamaContext db, IMapper mapper, AppIdentityDbContext identity, IUriComposer uriComposer)
+        public ShopService(DamaContext db, IMapper mapper, AppIdentityDbContext identity)
         {
             _db = db;
             _mapper = mapper;
             _identityDb = identity;
-            _uriComposer = uriComposer;
         }
 
-        //public async Task<CatalogType> GetCatalogType(string type)
-        //{
-        //    var allCatalogTypes = await _db.CatalogTypes.ToListAsync();
-        //    foreach (var item in allCatalogTypes)
-        //    {
-        //        var typeName = item.Description.Replace(" ", "-").ToLower();
-        //        if (Utils.RemoveDiacritics(typeName) == type)
-        //            return item;
-        //    }
-        //    return null;
-        //}
-
-        //public async Task<Category> GetCategory(string name)
-        //{
-        //    var allCategories = await _db.Categories.ToListAsync();
-        //    foreach (var item in allCategories)
-        //    {
-        //        var catName = item.Name.Replace(" ", "-").ToLower();
-        //        if (Utils.RemoveDiacritics(catName) == name.ToLower())
-        //            return item;
-        //    }
-        //    return null;
-        //}
-
-        public async Task<List<MainBannerViewModel>> GetMainBanners()
+        public async Task<DamaHomePageConfigViewModel> GetDamaHomePageConfig()
         {
-            var bannerConfig = await _db.ShopConfigDetails
-                .Include(x => x.ShopConfig)
-                .Where(x => x.ShopConfig.Type == ShopConfigType.NEWS_BANNER && x.ShopConfig.IsActive && x.IsActive)
+            var configs = await _db.ShopConfigs
+                .Include(x => x.Details)
+                .Where(x => x.IsActive)
                 .ToListAsync();
 
-            bannerConfig.ForEach(x =>
+            return new DamaHomePageConfigViewModel
             {
-                x.PictureUri = _uriComposer.ComposePicUri(x.PictureUri);
-            });
-
-            return _mapper.Map<List<MainBannerViewModel>>(bannerConfig);
+                MetaDescription = configs.SingleOrDefault(x => x.Type == ShopConfigType.SEO)?.Value,
+                Banners = _mapper.Map<List<MainBannerViewModel>>(configs.SingleOrDefault(x => x.Type == ShopConfigType.NEWS_BANNER)?
+                .Details
+                .Where(d => d.IsActive)
+                .ToList())
+            };
         }
-
-        //public async Task<MenuComponentViewModel> GetMenuList()
-        //{
-        //    //TODO GET CACHE
-        //    var categories = await _db.Categories
-        //        .Include(x => x.Parent)
-        //        .Include(x => x.CatalogTypes)                
-        //        .ThenInclude(cts => cts.CatalogType)
-        //        .ThenInclude(ct => ct.CatalogItems)
-        //        .Where(x => x.CatalogTypes.Any(ct => ct.CatalogType.CatalogItems != null && ct.CatalogType.CatalogItems.Count > 0))
-        //        .ToListAsync();
-
-        //    MenuComponentViewModel menuViewModel = new MenuComponentViewModel();
-
-        //    var parentsLeft = categories
-        //        .Where(x => !x.ParentId.HasValue && x.Position == "left")
-        //        .OrderBy(x => x.Order)
-        //        .ToList();
-
-        //    GetTopCategories(menuViewModel.Left, categories, parentsLeft);
-
-        //    var parentsRight = categories
-        //        .Where(x => !x.ParentId.HasValue && x.Position == "right")
-        //        .OrderBy(x => x.Order)
-        //        .ToList();
-
-        //    GetTopCategories(menuViewModel.Right, categories, parentsRight);
-
-        //    return menuViewModel;
-        //}
+        
         public async Task AddorUpdateUserAddress(ApplicationUser user, AddressViewModel addressModel, AddressType addressType = AddressType.SHIPPING)
         {
             if(user != null && addressModel != null)

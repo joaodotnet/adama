@@ -20,21 +20,18 @@ namespace DamaWeb.Pages
 
         public CatalogIndexViewModel CatalogModel { get; set; } = new CatalogIndexViewModel();
 
-        //public async Task OnGet(CatalogIndexViewModel catalogModel, int? pageId)
-        //{            
-        //    //Shop Stuff
-        //    CatalogModel = await _catalogService.GetCatalogItems(pageId ?? 0, Constants.ITEMS_PER_PAGE, catalogModel.BrandFilterApplied, catalogModel.TypesFilterApplied);
+        [ViewData]
+        public string MetaDescription { get; set; }
 
-        //    //DamaStuff
-        //    CatalogModel.Banners = await _shopService.GetMainBanners();
-        //}
         public async Task OnGet(CatalogIndexViewModel catalogModel)
         {
             //Shop Stuff
              CatalogModel = await _catalogService.GetCatalogItems(0, null, null, null, null);           
 
             //DamaStuff
-            CatalogModel.Banners = await _shopService.GetMainBanners();
+            var config = await _shopService.GetDamaHomePageConfig();
+            MetaDescription = config.MetaDescription;
+            CatalogModel.Banners = config.Banners;
         }
     }
 }

@@ -19,7 +19,7 @@ namespace DamaWeb.Services
     {
         private readonly IMemoryCache _cache;
         private readonly ShopService _shopService;
-        private static readonly string _bannersKey = "DAMA_BANNERS";
+        private static readonly string _bannersKey = "DAMA_CONFIG";
         private static readonly TimeSpan _defaultCacheDuration = TimeSpan.FromMinutes(60);
 
         public CacheShopService(IMemoryCache cache, ShopService shopService)
@@ -28,12 +28,12 @@ namespace DamaWeb.Services
             _shopService = shopService;
         }
 
-        public async Task<List<MainBannerViewModel>> GetMainBanners()
+        public async Task<DamaHomePageConfigViewModel> GetDamaHomePageConfig()
         {
             return await _cache.GetOrCreateAsync(_bannersKey, async entry =>
             {
                 entry.SlidingExpiration = _defaultCacheDuration;
-                return await _shopService.GetMainBanners();
+                return await _shopService.GetDamaHomePageConfig();
             });
         }
         
