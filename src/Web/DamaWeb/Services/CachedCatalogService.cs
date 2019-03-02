@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ApplicationCore.Specifications;
+using ApplicationCore.Entities;
 
 namespace DamaWeb.Services
 {
@@ -21,7 +22,7 @@ namespace DamaWeb.Services
         private static readonly string _itemsByTagKeyTemplate = "tag-{0}-{1}-{2}-{3}-{4}-{5}";
         private static readonly string _itemsBySearchKeyTemplate = "search-{0}-{1}-{2}-{3}-{4}";
         private static readonly string _menuKeyTemplate = "damamenu";
-        private static readonly string _categoryKeyTemplate = "category-{0}";
+        private static readonly string _catalogTypeItemsKeyTemplate = "catalog-type-items-{0}-{1}-{2}-{3}";
         private static readonly string _categoryTypesKeyTemplate = "category-types-{0}";
         private static readonly TimeSpan _defaultCacheDuration = TimeSpan.FromSeconds(30);
 
@@ -60,13 +61,13 @@ namespace DamaWeb.Services
             });
         }
 
-        public async Task<CatalogIndexViewModel> GetCategoryCatalogItems(int categoryId, int pageIndex, int? itemsPage)
+        public async Task<CategoryViewModel> GetCategoryCatalogItems(string categoryUrlName, int pageIndex, int? itemsPage)
         {
-            string cacheKey = String.Format(_categoryItemsKeyTemplate, categoryId, pageIndex, itemsPage);
+            string cacheKey = String.Format(_categoryItemsKeyTemplate, categoryUrlName, pageIndex, itemsPage);
             return await _cache.GetOrCreateAsync(cacheKey, async entry =>
             {
                 entry.SlidingExpiration = _defaultCacheDuration;
-                return await _catalogService.GetCategoryCatalogItems(categoryId, pageIndex, itemsPage);
+                return await _catalogService.GetCategoryCatalogItems(categoryUrlName, pageIndex, itemsPage);
             });
         }
 
@@ -109,24 +110,34 @@ namespace DamaWeb.Services
             });
         }
 
-        public async Task<(int, string)?> GetCatalogType(string type)
+        public async Task<CatalogTypeViewModel> GetCatalogTypeItemsAsync(string cat, string type, int pageIndex, int itemsPage)
         {
-            string cacheKey = String.Format(_categoryTypesKeyTemplate, type);
+            string cacheKey = String.Format(_catalogTypeItemsKeyTemplate, cat, type, pageIndex, itemsPage);
             return await _cache.GetOrCreateAsync(cacheKey, async entry =>
             {
                 entry.SlidingExpiration = _defaultCacheDuration;
-                return await _catalogService.GetCatalogType(type);
+                return await _catalogService.GetCatalogTypeItemsAsync(cat, type, pageIndex, itemsPage);
             });
         }
 
-        public async Task<(int, string)?> GetCategory(string name)
-        {
-            string cacheKey = String.Format(_categoryKeyTemplate, name);
-            return await _cache.GetOrCreateAsync(cacheKey, async entry =>
-            {
-                entry.SlidingExpiration = _defaultCacheDuration;
-                return await _catalogService.GetCategory(name);
-            });
-        }
+        //public async Task<(int, string)?> GetCatalogType(string type)
+        //{
+        //    string cacheKey = String.Format(_categoryTypesKeyTemplate, type);
+        //    return await _cache.GetOrCreateAsync(cacheKey, async entry =>
+        //    {
+        //        entry.SlidingExpiration = _defaultCacheDuration;
+        //        return await _catalogService.GetCatalogType(type);
+        //    });
+        //}
+
+        //public async Task<Category> GetCategory(string name)
+        //{
+        //    string cacheKey = String.Format(_categoryKeyTemplate, name);
+        //    return await _cache.GetOrCreateAsync(cacheKey, async entry =>
+        //    {
+        //        entry.SlidingExpiration = _defaultCacheDuration;
+        //        return await _catalogService.GetCategory(name);
+        //    });
+        //}
     }
 }

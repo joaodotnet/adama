@@ -2,7 +2,6 @@
 @using DamaWeb.Pages.Category
 @model IndexModel
 @{
-    ViewData["Title"] = @Model.CategoryModel.CategoryName;
     if (!string.IsNullOrEmpty(HttpContext.Request.Query["p"]))
     {
         ViewBag.NoIndex = true;

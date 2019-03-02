@@ -44,6 +44,8 @@ namespace DamaWeb.ViewModels
         [Display(Name = "Mensagem")]
         public string Message { get; set; }
         public List<PictureHelperViewModel> PictureHelpers { get; set; }
+        public string MetaDescription { get; set; }
+        public string Title { get; set; }
     }
 
     public class PictureHelperViewModel

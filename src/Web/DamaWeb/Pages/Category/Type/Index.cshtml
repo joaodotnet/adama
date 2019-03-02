@@ -1,13 +1,12 @@
 ﻿@page
 @model DamaWeb.Pages.Category.Type.IndexModel
 @{
-    ViewData["Title"] = Model.CatalogTypeName;
     if(!string.IsNullOrEmpty(HttpContext.Request.Query["p"]))
     {
         ViewBag.NoIndex = true;
     }
 }
-<p class="title">@Model.CatalogTypeName</p>
+<p class="title">@Model.CatalogTypeModel.Name</p>
 
 <div id="todos" class="news-heading text-center">
     <h2>Todos os Produtos</h2>
@@ -15,18 +14,18 @@
 </div>
 <div class="container">
     <div class="esh-catalog-items row">
-        @foreach (var catalogItem in Model.CatalogModel.CatalogItems)
+        @foreach (var catalogItem in Model.CatalogTypeModel.CatalogModel.CatalogItems)
         {
             <div class="esh-catalog-item col-md-3">
                 @await Html.PartialAsync("_product", catalogItem)
             </div>
         }
-        @if (Model.CatalogModel.CatalogItems.Count() == 0)
+        @if (Model.CatalogTypeModel.CatalogModel.CatalogItems.Count() == 0)
         {
             <div class="text-center">
 <p>Lamentamos, mas não foram encontrados resultados!</p>
             </div>
         }
     </div>
-    @await Html.PartialAsync("_pagination", Model.CatalogModel.PaginationInfo)
+    @await Html.PartialAsync("_pagination", Model.CatalogTypeModel.CatalogModel.PaginationInfo)
 </div>
