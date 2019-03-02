@@ -38,6 +38,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.ProductModel[0].Stock)
             </th>
+            <th>Meta & Title?</th>
             <th></th>
         </tr>
     </thead>
@@ -79,6 +80,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Stock)
             </td>
+            <td>@(!string.IsNullOrEmpty(item.MetaDescription) ? "Sim/" : "Não/")@(!string.IsNullOrEmpty(item.Title) ? "Sim" : "Não")</td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Editar</a> |
                 <a asp-page="./Details" asp-route-id="@item.Id">Detalhes</a> |

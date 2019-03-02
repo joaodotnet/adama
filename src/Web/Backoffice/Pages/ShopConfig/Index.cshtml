@@ -16,16 +16,27 @@
                     <input type="hidden" asp-for="ShopConfigModel[i].Id" />
                     <input type="hidden" asp-for="ShopConfigModel[i].IsActive" />
                     <input type="hidden" asp-for="ShopConfigModel[i].Type" />
+                    <input type="hidden" asp-for="ShopConfigModel[i].Name" />
+                    <input type="hidden" asp-for="ShopConfigModel[i+1].Id" />
+                    <input type="hidden" asp-for="ShopConfigModel[i+1].IsActive" />
+                    <input type="hidden" asp-for="ShopConfigModel[i+1].Type" />
+                    <input type="hidden" asp-for="ShopConfigModel[i+1].Name" />
                     <div class="form-group">
                         <label asp-for="ShopConfigModel[i].Value">Meta Description</label>
                         <textarea asp-for="ShopConfigModel[i].Value" class="form-control"></textarea>
                         <span asp-validation-for="ShopConfigModel[i].Value" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ShopConfigModel[i + 1].Value">Title</label>
+                        <textarea asp-for="ShopConfigModel[i + 1].Value" class="form-control"></textarea>
+                        <span asp-validation-for="ShopConfigModel[i + 1].Value" class="text-danger"></span>
                     </div>
                     <button type="submit" class="btn btn-default">Gravar</button>
                 </form>
             </div>
         </div>
         <hr />
+        i++;
     }
 
     @if (Model.ShopConfigModel[i].Type == ApplicationCore.Entities.ShopConfigType.NEWS_BANNER)

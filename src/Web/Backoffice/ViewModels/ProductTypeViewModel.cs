@@ -46,6 +46,12 @@ namespace Backoffice.ViewModels
         [Display(Name = "Portes")]
         [Required]
         public decimal ShippingCost { get; set; }
+        [Display(Name = "Meta Description")]
+        [StringLength(160)]
+        public string MetaDescription { get; set; }
+        [Display(Name = "Title")]
+        [StringLength(43)]
+        public string Title { get; set; }
 
     }
 }

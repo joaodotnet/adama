@@ -35,7 +35,8 @@ namespace DamaWeb.Services
 
             return new DamaHomePageConfigViewModel
             {
-                MetaDescription = configs.SingleOrDefault(x => x.Type == ShopConfigType.SEO)?.Value,
+                MetaDescription = configs.SingleOrDefault(x => x.Type == ShopConfigType.SEO && x.Name == "Meta Description")?.Value,
+                Title = configs.SingleOrDefault(x => x.Type == ShopConfigType.SEO && x.Name == "Title")?.Value,
                 Banners = _mapper.Map<List<MainBannerViewModel>>(configs.SingleOrDefault(x => x.Type == ShopConfigType.NEWS_BANNER)?
                 .Details
                 .Where(d => d.IsActive)

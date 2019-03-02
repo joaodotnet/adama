@@ -24,16 +24,25 @@
             @Html.DisplayFor(model => model.Category.Order)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.Category.ParentId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Category.Parent.Name)
+        </dd>
+    </dl>
+    <h4>SEO</h4>
+    <dl class="dl-horizontal">
+        <dt>
             @Html.DisplayNameFor(model => model.Category.MetaDescription)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Category.MetaDescription)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Category.ParentId)
+            @Html.DisplayNameFor(model => model.Category.Title)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Category.Parent.Name)
+            @(string.IsNullOrEmpty(Model.Category.Title) ? Model.Category.Name : Model.Category.Title)
         </dd>
     </dl>
     <h4>Tipos de Produtos associados</h4>

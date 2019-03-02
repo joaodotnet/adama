@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ApplicationCore.Entities;
+using AutoMapper;
+using Backoffice.ViewModels;
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using ApplicationCore.Entities;
-using Infrastructure.Data;
-using Backoffice.ViewModels;
-using AutoMapper;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Backoffice.Pages.ShopConfig
 {
@@ -24,7 +23,7 @@ namespace Backoffice.Pages.ShopConfig
         }
 
         [BindProperty]
-        public IList<ShopConfigViewModel> ShopConfigModel { get;set; }        
+        public IList<ShopConfigViewModel> ShopConfigModel { get; set; }
 
         public async Task OnGetAsync()
         {
@@ -33,7 +32,7 @@ namespace Backoffice.Pages.ShopConfig
             //var details = await _context.ShopConfigDetails
             //    .Include(s => s.ShopConfig).ToListAsync();
 
-            
+
         }
 
         private async Task Initialize()
@@ -42,7 +41,7 @@ namespace Backoffice.Pages.ShopConfig
                             .Include(x => x.Details)
                             .OrderByDescending(x => x.Type)
                             .ToListAsync();
-                            
+
 
             ShopConfigModel = _mapper.Map<List<ShopConfigViewModel>>(list);
         }
@@ -74,21 +73,31 @@ namespace Backoffice.Pages.ShopConfig
 
         public async Task<IActionResult> OnPostUpdateSEOAsync()
         {
-            var input = ShopConfigModel.SingleOrDefault(x => x.Type == ShopConfigType.SEO);
+            var input = ShopConfigModel.Where(x => x.Type == ShopConfigType.SEO).ToList();
             if (input != null)
             {
-                if (string.IsNullOrEmpty(input.Value) || input.Value.Length > 160)
+                foreach (var item in input)
                 {
-                    await Initialize();
-                    ModelState.AddModelError("", "Meta Description é inválida, tem que ter menos de 160 carateres!");
-                    return Page();
+                    if (item.Name == "Meta Description" && (string.IsNullOrEmpty(item.Value) || item.Value.Length > 160))
+                    {
+                        await Initialize();
+                        ModelState.AddModelError("", "Meta Description é inválida, tem que ter menos de 160 carateres!");
+                        return Page();
+                    }
+                    else if (item.Name == "Title" && (string.IsNullOrEmpty(item.Value) || item.Value.Length > 43))
+                    {
+                        await Initialize();
+                        ModelState.AddModelError("", "Title é inválida, tem que ter menos de 43 carateres!");
+                        return Page();
+                    }
+                    else
+                    {
+                        var shopConfig = _mapper.Map<ApplicationCore.Entities.ShopConfig>(item);
+                        _context.Attach(shopConfig).State = EntityState.Modified;
+                        
+                    }
                 }
-                else
-                {
-                    var shopConfig = _mapper.Map<ApplicationCore.Entities.ShopConfig>(input);
-                    _context.Attach(shopConfig).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
-                }
+                await _context.SaveChangesAsync();
             }
             return RedirectToPage("./Index");
         }

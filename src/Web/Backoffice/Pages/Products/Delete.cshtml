@@ -73,6 +73,18 @@
             @Html.DisplayFor(model => model.ProductModel.CanCustomize)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.ProductModel.MetaDescription)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductModel.MetaDescription)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductModel.Title)
+        </dt>
+        <dd>
+            @(!string.IsNullOrEmpty(Model.ProductModel.Title) ? Model.ProductModel.Title : Model.ProductModel.Name)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.ProductModel.PictureUri)
         </dt>
         <dd>

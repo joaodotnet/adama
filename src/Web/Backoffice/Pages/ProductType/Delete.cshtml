@@ -69,6 +69,18 @@
         <dd>
             @Html.DisplayFor(model => model.ProductTypeModel.ShippingCost)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductTypeModel.MetaDescription)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductTypeModel.MetaDescription)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductTypeModel.Title)
+        </dt>
+        <dd>
+            @(!string.IsNullOrEmpty(Model.ProductTypeModel.Title)? Model.ProductTypeModel.Title : Model.ProductTypeModel.Description)
+        </dd>
         <dd>
             <img src="@Model.ProductTypeModel.PictureUri" class="img-responsive" />
         </dd>

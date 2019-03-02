@@ -76,7 +76,19 @@
                 <span asp-validation-for="ProductModel.OtherPictures" class="text-danger"></span>
             </div>
         </div>
-        <div class="col-md-offset-2 col-md-4">
+        <div class="col-md-offset-2 col-md-6">
+            <h4>SEO</h4>
+            <div class="form-group">
+                <label asp-for="ProductModel.MetaDescription" class="control-label"></label>
+                <textarea asp-for="ProductModel.MetaDescription" class="form-control"></textarea>
+                <span asp-validation-for="ProductModel.MetaDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductModel.Title" class="control-label"></label>
+                <input asp-for="ProductModel.Title" class="form-control" />
+                <span asp-validation-for="ProductModel.Title" class="text-danger"></span>
+                <small>(se vazio assume o nome do produto)</small>
+            </div>
             <h4>Categorias</h4>
             <ul id="category-list">
                 @for (int i = 0; i < Model.CatalogCategoryModel.Count; i++)

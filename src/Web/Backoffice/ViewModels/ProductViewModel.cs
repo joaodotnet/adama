@@ -44,6 +44,12 @@ namespace Backoffice.ViewModels
         public List<IFormFile> OtherPictures { get; set; }
         [Display(Name = "Stock")]
         public int Stock { get; set; }
+        [Display(Name = "Meta Description")]
+        [StringLength(160)]
+        public string MetaDescription { get; set; }
+        [Display(Name = "Title")]
+        [StringLength(43)]
+        public string Title { get; set; }
 
 
         public IList<ProductAttributeViewModel> CatalogAttributes { get; set; } = new List<ProductAttributeViewModel>();

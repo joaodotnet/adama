@@ -140,6 +140,9 @@ namespace Backoffice.Pages.ProductType
                 productTypeEntity.Price = ProductTypeModel.Price;
                 productTypeEntity.AdditionalTextPrice = ProductTypeModel.AdditionalTextPrice;
                 productTypeEntity.ShippingCost = ProductTypeModel.ShippingCost;
+                productTypeEntity.MetaDescription = ProductTypeModel.MetaDescription;
+                productTypeEntity.Title = ProductTypeModel.Title;
+
                 if (!string.IsNullOrEmpty(ProductTypeModel.PictureUri))
                     productTypeEntity.PictureUri = ProductTypeModel.PictureUri;
 

@@ -107,6 +107,7 @@ namespace Infrastructure.Data
                 .IsUnique();
 
             builder.Ignore(c => c.MetaDescription);
+            builder.Ignore(c => c.Title);
         }
         private void ConfigureCatalogType(EntityTypeBuilder<CatalogType> builder)
         {
@@ -142,6 +143,7 @@ namespace Infrastructure.Data
             builder.Ignore(x => x.Categories);
             builder.Ignore(x => x.PictureTextHelpers);
             builder.Ignore(x => x.MetaDescription);
+            builder.Ignore(x => x.Title);
         }
 
         private void ConfigureCatalogItem(EntityTypeBuilder<CatalogItem> builder)
@@ -179,6 +181,7 @@ namespace Infrastructure.Data
             builder.Ignore(x => x.CatalogReferences);
             builder.Ignore(x => x.CatalogPictures);
             builder.Ignore(x => x.MetaDescription);
+            builder.Ignore(x => x.Title);
         }
 
         private void ConfigureCatalogCategories(EntityTypeBuilder<CatalogCategory> builder)
