@@ -19,6 +19,7 @@ namespace ApplicationCore.Entities
         public bool CanCustomize { get; set; }
         public int Stock { get; set; }
         public string MetaDescription { get; set; }
+        public string Title { get; set; }
 
         public ICollection<CatalogAttribute> CatalogAttributes { get; set; }
         public ICollection<CatalogReference>  CatalogReferences { get; set; }

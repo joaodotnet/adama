@@ -72,6 +72,20 @@
                 <img src="@Model.ProductTypeModel.PictureUri" class="img-thumbnail" />
             </div>
         </div>
+        <div class="col-md-offset-2 col-md-6">
+            <h4>SEO</h4>
+            <div class="form-group">
+                <label asp-for="ProductTypeModel.MetaDescription" class="control-label"></label>
+                <textarea asp-for="ProductTypeModel.MetaDescription" class="form-control"></textarea>
+                <span asp-validation-for="ProductTypeModel.MetaDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductTypeModel.Title" class="control-label"></label>
+                <input asp-for="ProductTypeModel.Title" class="form-control" />
+                <span asp-validation-for="ProductTypeModel.Title" class="text-danger"></span>
+                <small>(se vazio assume a descrição do tipo do produto)</small>
+            </div>
+        </div>
         <div class="col-md-12">
             <div class="form-inline">
                 <div class="form-group col-md-12" style="padding:0px">

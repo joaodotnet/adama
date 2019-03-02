@@ -20,10 +20,13 @@
                 @Html.DisplayNameFor(model => model.Categories[0].Order)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Categories[0].ParentId)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Categories[0].MetaDescription)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Categories[0].ParentId)
+                @Html.DisplayNameFor(model => model.Categories[0].Title)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Categories[0].NrTypeProducts)
@@ -41,10 +44,13 @@
                 @Html.DisplayFor(modelItem => item.Order)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Parent.Name)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.MetaDescription)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Parent.Name)
+                @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.NrTypeProducts)

@@ -6,5 +6,6 @@ namespace DamaWeb.ViewModels
     {
         public string MetaDescription { get; set; }
         public List<MainBannerViewModel> Banners { get; set; }
+        public string Title { get; set; }
     }
 }

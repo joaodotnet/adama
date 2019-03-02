@@ -1,33 +1,37 @@
-﻿using Microsoft.AspNetCore.Builder;
-using ApplicationCore.Entities;
+﻿using ApplicationCore.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
     public class DamaContextSeed
     {
         public static void EnsureDatabaseMigrations(DamaContext damaContext)
-        {            
+        {
             damaContext.Database.Migrate();
         }
         public static async Task SeedAsync(DamaContext catalogContext,
             ILoggerFactory loggerFactory, int? retry = 0)
         {
-            var seoConfig = await catalogContext.ShopConfigs.SingleOrDefaultAsync(x => x.Type == ShopConfigType.SEO);
-            if(seoConfig == null)
+            if (!catalogContext.ShopConfigs.Any(x => x.Type == ShopConfigType.SEO))
             {
-                catalogContext.ShopConfigs.Add(new ShopConfig
-                {
-                    Type = ShopConfigType.SEO,
-                    IsActive = true,
-                    Name = "Meta Description",
-                    Value = "Bem-vindo à Dama no Jornal®. A Loja Online que oferece os Presentes Personalizados mais Criativos. Vem conhecer os nossos Produtos e Personaliza!"
-                });
+                catalogContext.ShopConfigs.AddRange(
+                    new ShopConfig
+                    {
+                        Type = ShopConfigType.SEO,
+                        IsActive = true,
+                        Name = "Meta Description",
+                        Value = "Bem-vindo à Dama no Jornal®. A Loja Online que oferece os Presentes Personalizados mais Criativos. Vem conhecer os nossos Produtos e Personaliza!"
+                    },
+                    new ShopConfig
+                    {
+                        Type = ShopConfigType.SEO,
+                        IsActive = true,
+                        Name = "Title",
+                        Value = "Dama no Jornal - Loja Online"
+                    });
                 await catalogContext.SaveChangesAsync();
             }
 

@@ -18,8 +18,12 @@ namespace Backoffice.ViewModels
         public int Order { get; set; }
 
         [Display(Name = "Meta Description")]
-        [StringLength(161)]
+        [StringLength(160)]
         public string MetaDescription { get; set; }
+
+        [Display(Name = "Title")]
+        [StringLength(43)]
+        public string Title { get; set; }
 
         [Display(Name="Categoria Pai")]
         public int? ParentId { get; set; }

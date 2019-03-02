@@ -22,6 +22,8 @@ namespace DamaWeb.Pages
 
         [ViewData]
         public string MetaDescription { get; set; }
+        [ViewData]
+        public string Title { get; set; }
 
         public async Task OnGet(CatalogIndexViewModel catalogModel)
         {
@@ -31,6 +33,7 @@ namespace DamaWeb.Pages
             //DamaStuff
             var config = await _shopService.GetDamaHomePageConfig();
             MetaDescription = config.MetaDescription;
+            Title = config.Title;
             CatalogModel.Banners = config.Banners;
         }
     }

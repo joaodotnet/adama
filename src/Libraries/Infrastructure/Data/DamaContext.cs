@@ -216,6 +216,8 @@ namespace Infrastructure.Data
                 .HasDefaultValue(1);
             builder.Property(c => c.MetaDescription)
                 .HasMaxLength(161);
+            builder.Property(c => c.Title)
+                .HasMaxLength(61);
             builder.HasOne(x => x.Parent)
                 .WithMany()
                 .HasForeignKey(x => x.ParentId);
@@ -274,6 +276,8 @@ namespace Infrastructure.Data
 
             builder.Property(c => c.MetaDescription)
                 .HasMaxLength(161);
+            builder.Property(c => c.Title)
+                .HasMaxLength(61);
         }
 
         private void ConfigureCatalogBrand(EntityTypeBuilder<CatalogIllustration> builder)
@@ -345,6 +349,8 @@ namespace Infrastructure.Data
 
             builder.Property(c => c.MetaDescription)
                 .HasMaxLength(161);
+            builder.Property(c => c.Title)
+                .HasMaxLength(61);
 
             //builder.HasOne(x => x.Category)
             //    .WithMany(c => c.CatalogTypes)

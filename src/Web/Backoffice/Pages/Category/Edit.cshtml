@@ -24,16 +24,23 @@
                 <span asp-validation-for="Category.Order" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Category.MetaDescription" class="control-label"></label>
-                <input asp-for="Category.MetaDescription" class="form-control" />
-                <span asp-validation-for="Category.MetaDescription" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Category.ParentId" class="control-label"></label>
                 <select asp-for="Category.ParentId" class="form-control" asp-items="ViewBag.CategoryList">
                     <option></option>
                 </select>
                 <span asp-validation-for="Category.ParentId" class="text-danger"></span>
+            </div>
+            <h4>SEO</h4>
+            <div class="form-group">
+                <label asp-for="Category.MetaDescription" class="control-label"></label>
+                <input asp-for="Category.MetaDescription" class="form-control" />
+                <span asp-validation-for="Category.MetaDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Category.Title" class="control-label"></label>
+                <input asp-for="Category.Title" class="form-control" />
+                <span asp-validation-for="Category.Title" class="text-danger"></span>
+                <small>(se vazio assume o nome da categoria)</small>
             </div>
             <input type="hidden" asp-for="Category.Id" />
             <div class="form-group">

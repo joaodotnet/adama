@@ -74,7 +74,19 @@
                 <input type="hidden" asp-for="ProductModel.PictureUri" />
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-offset-2 col-md-6">
+            <h4>SEO</h4>
+            <div class="form-group">
+                <label asp-for="ProductModel.MetaDescription" class="control-label"></label>
+                <textarea asp-for="ProductModel.MetaDescription" class="form-control"></textarea>
+                <span asp-validation-for="ProductModel.MetaDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductModel.Title" class="control-label"></label>
+                <input asp-for="ProductModel.Title" class="form-control" />
+                <span asp-validation-for="ProductModel.Title" class="text-danger"></span>
+                <small>(se vazio assume o nome do produto)</small>
+            </div>
             <h4>Relações</h4>
             <table class="table">
                 <thead>
@@ -91,20 +103,20 @@
                 <tbody>
                     @foreach (var item in Model.ProductModel.CatalogReferences)
                     {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LabelDescription)
-                        </td>
-                        <td>
-                            <a asp-page="/Products/Edit" asp-route-id="@item.ReferenceCatalogItemId">
-                                @Html.DisplayFor(modelItem => item.ReferenceCatalogItem.Name)
-                            </a>
-                        </td>
-                        <td>
-                            <a asp-page="./References/Edit" asp-route-id="@item.Id">Edit</a> |
-                            <a asp-page="./References/Delete" asp-route-id="@item.Id">Delete</a>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LabelDescription)
+                            </td>
+                            <td>
+                                <a asp-page="/Products/Edit" asp-route-id="@item.ReferenceCatalogItemId">
+                                    @Html.DisplayFor(modelItem => item.ReferenceCatalogItem.Name)
+                                </a>
+                            </td>
+                            <td>
+                                <a asp-page="./References/Edit" asp-route-id="@item.Id">Edit</a> |
+                                <a asp-page="./References/Delete" asp-route-id="@item.Id">Delete</a>
+                            </td>
+                        </tr>
                     }
                 </tbody>
                 <tfoot>
@@ -139,21 +151,21 @@
                     {
                         for (int i = 0; i < Model.ProductModel.CatalogAttributes.Count; i++)
                         {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(model => Model.ProductModel.CatalogAttributes[i].Type)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(model => Model.ProductModel.CatalogAttributes[i].Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(model => Model.ProductModel.CatalogAttributes[i].Stock)
-                        </td>
-                        <td>
-                            <a asp-page="./Attributes/Edit" asp-route-id="@Model.ProductModel.CatalogAttributes[i].Id">Editar</a> |
-                            <a asp-page="./Attributes/Delete" asp-route-id="@Model.ProductModel.CatalogAttributes[i].Id">Apagar</a>
-                        </td>
-                    </tr>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(model => Model.ProductModel.CatalogAttributes[i].Type)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(model => Model.ProductModel.CatalogAttributes[i].Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(model => Model.ProductModel.CatalogAttributes[i].Stock)
+                                </td>
+                                <td>
+                                    <a asp-page="./Attributes/Edit" asp-route-id="@Model.ProductModel.CatalogAttributes[i].Id">Editar</a> |
+                                    <a asp-page="./Attributes/Delete" asp-route-id="@Model.ProductModel.CatalogAttributes[i].Id">Apagar</a>
+                                </td>
+                            </tr>
                         }
                     }
                 </tbody>
@@ -166,7 +178,7 @@
                 </tfoot>
             </table>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-offset-2 col-md-6">
             <h4>Categorias</h4>
             <ul id="category-list">
                 @for (int i = 0; i < Model.CatalogCategoryModel.Count; i++)
