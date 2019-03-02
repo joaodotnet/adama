@@ -151,20 +151,11 @@ namespace DamaWeb.Services
             return items;
         }
 
-        public async Task<CatalogIndexViewModel> GetCategoryCatalogItems(int categoryId, int pageIndex, int? itemsPage)
+        public async Task<CategoryViewModel> GetCategoryCatalogItems(string categoryUrlName, int pageIndex, int? itemsPage)
         {
-            //TODO: Move to repo
-            //var categories = await _db.CatalogCategories
-            //    .Include(x => x.Category)
-            //    .Include(x => x.CatalogItem)
-            //    .ThenInclude(x => x.CatalogType)
-            //    .Where(x => x.CategoryId == categoryId)
-            //    .ToListAsync();
+            Category category = await GetCategoryFromUrl(categoryUrlName);
 
-            //Get Category Name
-            var category = await _db.Categories.FindAsync(categoryId);
-
-            var filterSpecification = new CatalogFilterSpecification(null, null, categoryId);
+            var filterSpecification = new CatalogFilterSpecification(null, null, category.Id);
             var root = _itemRepository
                 .List(filterSpecification);
 
@@ -179,7 +170,7 @@ namespace DamaWeb.Services
             foreach (var item in allItems)
             {
                 if (item.CatalogType.CatalogItems
-                    .Where(x => x.CatalogCategories.Any(c => c.CategoryId == categoryId))
+                    .Where(x => x.CatalogCategories.Any(c => c.CategoryId == category.Id))
                     .ToList().Count() > 0)
                 {
                     if (!types.Any(x => x.Id == item.CatalogTypeId))
@@ -199,13 +190,6 @@ namespace DamaWeb.Services
 
             if (allItems?.Count > 0)
             {
-                //var types = await _db.CatalogTypeCategories
-                //    .Include(x => x.CatalogType)
-                //    .ThenInclude(c => c.CatalogItems)
-                //    .Include(x => x.Category)
-                //    .Where(x => x.CategoryId == categoryId && x.CatalogType.CatalogItems.Count() > 0 && !string.IsNullOrEmpty(x.CatalogType.PictureUri))
-                //    .ToListAsync();
-
                 var vm = new CatalogIndexViewModel()
                 {
                     NewCatalogItems = allItems
@@ -258,10 +242,18 @@ namespace DamaWeb.Services
                 };
                 vm.PaginationInfo.Next = (vm.PaginationInfo.ActualPage == vm.PaginationInfo.TotalPages - 1) ? "is-disabled" : "";
                 vm.PaginationInfo.Previous = (vm.PaginationInfo.ActualPage == 0) ? "is-disabled" : "";
-                return vm;
+                return new CategoryViewModel
+                {
+                    CatalogModel = vm,
+                    CategoryName = category.Name,
+                    CategoryUrlName = categoryUrlName.ToLower(),
+                    MetaDescription = category.MetaDescription,
+                    Title = string.IsNullOrEmpty(category.Title) ? category.Name : category.Title
+                };
             }
             return null;
         }
+
 
         public async Task<ProductViewModel> GetCatalogItem(string sku)
         {
@@ -331,7 +323,9 @@ namespace DamaWeb.Services
                     {
                         PictureUri = x.PictureUri,
                         PictureFileName = x.FileName
-                    }).ToList()
+                    }).ToList(),
+                    MetaDescription = product.MetaDescription,
+                    Title = string.IsNullOrEmpty(product.Title) ? product.Name : product.Title
                 };
 
                 //Others prictures
@@ -344,7 +338,6 @@ namespace DamaWeb.Services
                         );
 
                 //Attributes
-                //decimal attrPriceDefault = 0M;
                 foreach (var grpAttr in product.CatalogAttributes.GroupBy(x => x.Type))
                 {
                     //attrPriceDefault += grpAttr.First().Price ?? 0;
@@ -355,23 +348,8 @@ namespace DamaWeb.Services
                         Label = EnumHelper<AttributeType>.GetDisplayValue(grpAttr.Key),
                         DefaultText = GetDefaultText(grpAttr.Key),
                         Selected = grpAttr.First().Id
-                        //Attributes = grpAttr.Select(x => new AttributeViewModel
-                        //{
-                        //    Id = x.Id,
-                        //    Price = x.Price,
-                        //    Sku = x.Sku,
-                        //}).ToList()
                     });
                 }
-                //Categories
-                //foreach (var item in product.CatalogType.Categories)
-                //{
-                //    vm.Categories.Add(new LinkViewModel
-                //    {
-                //        Name = item.Category.Name,
-                //        TagName = Utils.StringToUri(item.Category.Name)
-                //    });
-                //}
                 return vm;
             }
             return null;
@@ -397,20 +375,6 @@ namespace DamaWeb.Services
                     return null;
             }
         }
-
-        //public async Task<AttributeViewModel> GetAttributeDetails(int attributeId)
-        //{
-        //    var attr = await _db.CatalogAttributes
-        //        .Include(x => x.ReferenceCatalogItem)
-        //        .SingleOrDefaultAsync(x => x.Id == attributeId);
-        //    if (attr != null)
-        //        return new AttributeViewModel
-        //        {
-        //            Price = attr.Price,
-        //            ReferenceCatalogSku = attr.ReferenceCatalogItem?.Sku
-        //        };
-        //    return null;
-        //}
 
         public async Task<CatalogIndexViewModel> GetCatalogItemsByTag(int pageIndex, int? itemsPage, string tagName, TagType? tagType, int? typeId, int? illustrationId)
         {
@@ -589,10 +553,7 @@ namespace DamaWeb.Services
                 } 
                 else
                 {
-                    //var types = categories
-                    //    .Where(x => x.Id == item.Id)
-                    //    .Select(x => x.CatalogTypes);
-
+           
                     //Get Catalog Types of Category
                     var category = categories.SingleOrDefault(x => x.Id == item.Id);
                     var types = new List<CatalogType>();
@@ -624,29 +585,32 @@ namespace DamaWeb.Services
             }
         }
 
-        public async Task<(int, string)?> GetCatalogType(string type)
+        public async Task<CatalogTypeViewModel> GetCatalogTypeItemsAsync(string cat, string type, int pageIndex, int itemsPage)
         {
-            var allCatalogTypes = await _db.CatalogTypes.ToListAsync();
-            foreach (var item in allCatalogTypes)
-            {
-                var typeName = item.Description.Replace(" ", "-").ToLower();
-                if (Utils.RemoveDiacritics(typeName) == type)
-                    return (item.Id, item.Description);
-            }
-            return null;
-        }
+            var category = await GetCategoryFromUrl(cat);
+            CatalogType catalogType = await GetCatalogTypeFromUrl(type);
 
-        public async Task<(int, string)?> GetCategory(string name)
+            if (catalogType == null)
+                return null;
+
+            return new CatalogTypeViewModel
+            {
+                Name = catalogType.Description,
+                CatalogModel = await GetCatalogItems(pageIndex, itemsPage, null, catalogType.Id, category.Id),
+                MetaDescription = catalogType.MetaDescription,
+                Title = string.IsNullOrEmpty(catalogType.Title) ? catalogType.Description : catalogType.Title
+            };
+        }
+        private async Task<Category> GetCategoryFromUrl(string categoryUrlName)
         {
             var allCategories = await _db.Categories.ToListAsync();
-            foreach (var item in allCategories)
-            {
-                var catName = item.Name.Replace(" ", "-").ToLower();
-                var normalize = Utils.RemoveDiacritics(catName);
-                if (normalize == name.ToLower())
-                    return (item.Id, item.Name);
-            }
-            return null;
+            return allCategories.SingleOrDefault(x => Utils.RemoveDiacritics(x.Name.Replace(" ", "-").ToLower()) == categoryUrlName.ToLower());
+        }
+
+        private async Task<CatalogType> GetCatalogTypeFromUrl(string type)
+        {
+            var allCatalogTypes= await _db.CatalogTypes.ToListAsync();
+            return allCatalogTypes.SingleOrDefault(x => Utils.RemoveDiacritics(x.Description.Replace(" ", "-").ToLower()) == type);
         }
     }
 }

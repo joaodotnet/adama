@@ -17,19 +17,22 @@ namespace DamaWeb.Pages.Category
             _catalogService = catalogService;
         }
 
+        [ViewData]
+        public string MetaDescription { get; set; }
+        [ViewData]
+        public string Title { get; set; }
+
         public CategoryViewModel CategoryModel { get; set; } = new CategoryViewModel();
 
         public async Task<IActionResult> OnGetAsync(string id, int? p)
         {
-            var cat = await _catalogService.GetCategory(id); 
-            if (!cat.HasValue)
-                return NotFound();
-            else
-                CategoryModel.CategoryName = cat.Value.Item2;
+            //var cat = await _catalogService.GetCategory(id); 
+            //if (!cat.HasValue)
+            //    return NotFound();
 
-            CategoryModel.CatalogModel = await _catalogService.GetCategoryCatalogItems(cat.Value.Item1, p ?? 0, Constants.ITEMS_PER_PAGE);
-            //CategoryModel.CatalogTypes = CategoryModel.CatalogModel.CatalogItems.Select(x => (x.CatalogTypeCode,x.CatalogTypeName)).Distinct().ToList();
-            CategoryModel.CategoryUrlName = id.ToLower();
+            CategoryModel = await _catalogService.GetCategoryCatalogItems(id, p ?? 0, Constants.ITEMS_PER_PAGE);
+            MetaDescription = CategoryModel.MetaDescription;
+            Title = CategoryModel.Title;
 
             return Page();
         }

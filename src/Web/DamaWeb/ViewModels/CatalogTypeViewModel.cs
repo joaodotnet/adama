@@ -13,5 +13,9 @@ namespace DamaWeb.ViewModels
         public string PictureUri { get; set; }
         public string CatNameUri { get; set; }
         public string TypeNameUri { get; set; }
+
+        public CatalogIndexViewModel CatalogModel { get; set; } = new CatalogIndexViewModel();
+        public string MetaDescription { get; set; }
+        public string Title { get; set; }
     }
 }

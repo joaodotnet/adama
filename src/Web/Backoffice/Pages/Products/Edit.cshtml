@@ -65,6 +65,7 @@
                 <label asp-for="ProductModel.CanCustomize" class="form-check-label"></label>
                 <span asp-validation-for="ProductModel.CanCustomize" class="text-danger"></span>
             </div>
+            <br /><br />
             <div class="form-group">
                 <label asp-for="ProductModel.Picture" class="control-label"></label>
                 <input type="file" asp-for="ProductModel.Picture" class="form-control" />
@@ -87,6 +88,7 @@
                 <span asp-validation-for="ProductModel.Title" class="text-danger"></span>
                 <small>(se vazio assume o nome do produto)</small>
             </div>
+            <br /><br />
             <h4>Relações</h4>
             <table class="table">
                 <thead>
@@ -127,7 +129,7 @@
                     </tr>
                 </tfoot>
             </table>
-
+            <br /><br />
 
             <h4>Atributos do Produto</h4>
             <table class="table">
@@ -221,8 +223,8 @@
                 <input type="hidden" asp-for="ProductModel.CatalogPictures[i].Id" />
                 <input type="hidden" asp-for="ProductModel.CatalogPictures[i].CatalogItemId" />
                 <input type="hidden" asp-for="ProductModel.CatalogPictures[i].PictureUri" />
-                <div class="col-md-3">
-                    <img src="@Model.ProductModel.CatalogPictures[i].PictureUri" class="img-responsive" />
+                <div class="col-md-2">
+                    <img src="@Model.ProductModel.CatalogPictures[i].PictureUri" class="img-responsive img-thumbnail" />
                     <div class="form-check">
                         <input asp-for="ProductModel.CatalogPictures[i].IsActive" class="form-check-input" />
                         <label asp-for="ProductModel.CatalogPictures[i].IsActive" class="form-check-label"></label>
@@ -243,7 +245,7 @@
                     </div>
                 </div>
             }
-            <div class="col-md-12">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label class="control-label">Carregar novas imagens</label>
                     <input asp-for="ProductModel.OtherPictures" type="file" multiple class="form-control" />

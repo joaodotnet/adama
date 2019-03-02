@@ -35,24 +35,26 @@ namespace DamaWeb.Pages.Product
         [TempData]
         public string StatusMessage { get; set; }
 
+        [ViewData]
+        public string MetaDescription { get; set; }
+        [ViewData]
+        public string Title { get; set; }
+
         public async Task<IActionResult> OnGetAsync(string id)
         {
             if (string.IsNullOrEmpty(id))
                 return NotFound();
             ProductModel = await _catalogService.GetCatalogItem(id);
 
+
             if (ProductModel == null)
                 return NotFound();
 
+            MetaDescription = ProductModel.MetaDescription;
+            Title = ProductModel.Title;
+
             ViewData["ProductReferences"] = new SelectList(ProductModel.ProductReferences, "Sku", "Name");
 
-            //Update default price
-            //decimal attrDefaultPrice = 0M;
-            //foreach (var item in ProductModel.Attributes.GroupBy(x => x.AttributeType))
-            //{                
-            //    attrDefaultPrice += item.First().Attributes.First().Price ?? 0;
-            //}
-            //ProductModel.ProductTotalPrice = ProductModel.ProductPrice + attrDefaultPrice;
             return Page();
         }
 
