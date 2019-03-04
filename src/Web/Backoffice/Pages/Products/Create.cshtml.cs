@@ -46,6 +46,9 @@ namespace Backoffice.Pages.Products
             [StringLength(100)]
             [Display(Name = "Nome")]
             public string Name { get; set; }
+            [Required]
+            public string Slug { get; set; }
+
             [Display(Name = "Descrição")]
             public string Description { get; set; }
             [Display(Name = "Preço")]
