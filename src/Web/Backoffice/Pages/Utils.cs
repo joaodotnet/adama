@@ -37,5 +37,10 @@ namespace Backoffice.Pages
         {
             return RemoveDiacritics(text.Replace(' ', '-').ToLower());
         }
+
+        public static string EnsureValidSlug(string slug)
+        {
+            return RemoveDiacritics(slug.TrimEnd().Replace(' ', '-'));
+        }
     }
 }

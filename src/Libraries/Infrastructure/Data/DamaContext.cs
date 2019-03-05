@@ -238,9 +238,15 @@ namespace Infrastructure.Data
             builder.ToTable("Catalog");
 
             //builder.HasIndex(ci => ci.Sku)
-            //    .IsUnique();
+            //    .IsUnique();            
             builder.Property(ci => ci.Sku)
                 .HasMaxLength(255);
+
+            builder.HasIndex(ci => ci.Slug)
+                .IsUnique();
+            builder.Property(ci => ci.Slug)
+                .HasMaxLength(100);
+
             builder.Property(ci => ci.Id)
                 //.ForSqlServerUseSequenceHiLo("catalog_hilo")
                 .IsRequired();
