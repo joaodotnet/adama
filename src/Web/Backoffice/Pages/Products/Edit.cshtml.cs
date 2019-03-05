@@ -47,6 +47,9 @@ namespace Backoffice.Pages.Products
             [StringLength(100)]
             [Display(Name = "Nome")]
             public string Name { get; set; }
+            [Required]
+            [StringLength(100)]
+            public string Slug { get; set; }
             [Display(Name = "Descrição")]
             public string Description { get; set; }
             [Display(Name = "Preço")]
@@ -132,6 +135,16 @@ namespace Backoffice.Pages.Products
                 return Page();
             }
 
+            //Fix Slug
+            ProductModel.Slug = Utils.EnsureValidSlug(ProductModel.Slug);
+
+            if ((await SlugExistsAsync(ProductModel.Id, ProductModel.Slug)))
+            {
+                ModelState.AddModelError("ProductModel_Slug", "Já existe um slug com o mesmo nome!");
+                await PopulateLists();
+                return Page();
+            }
+
             //Validate SKU
             ProductModel.Sku = await _service.GetSku(ProductModel.CatalogTypeId, ProductModel.CatalogIllustrationId) + "_" + ProductModel.Id; 
             
@@ -176,6 +189,7 @@ namespace Backoffice.Pages.Products
                 .SingleOrDefaultAsync(m => m.Id == ProductModel.Id);
             
             prod.Name = ProductModel.Name;
+            prod.Slug = ProductModel.Slug;
             prod.Description = ProductModel.Description;            
             prod.CatalogIllustrationId = ProductModel.CatalogIllustrationId;
             prod.CatalogTypeId = ProductModel.CatalogTypeId;
@@ -291,6 +305,10 @@ namespace Backoffice.Pages.Products
             return Page();
         }
 
+        private async Task<bool> SlugExistsAsync(int catalogItemId, string slug)
+        {
+            return await _context.CatalogItems.AnyAsync(x => x.Id != catalogItemId && x.Slug == slug);
+        }
         private bool ValidateAttributesModel()
         {
             foreach (var item in ProductModel.CatalogAttributes)
