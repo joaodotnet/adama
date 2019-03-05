@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using DamaWeb.Interfaces;
 using DamaWeb.ViewModels;
+using ApplicationCore;
 
 namespace DamaWeb.Pages.Tag
 {
@@ -45,7 +46,7 @@ namespace DamaWeb.Pages.Tag
                     tagType = TagType.ILLUSTRATION_TYPE;
             }
 
-            var tagToSearch = Utils.StringToUri(tagName);
+            var tagToSearch = Utils.URLFriendly(tagName);
 
             p = p < 0 ? 0 : p;
 

@@ -136,7 +136,7 @@ namespace Backoffice.Pages.Products
             }
 
             //Fix Slug
-            ProductModel.Slug = Utils.EnsureValidSlug(ProductModel.Slug);
+            ProductModel.Slug = Utils.URLFriendly(ProductModel.Slug);
 
             if ((await SlugExistsAsync(ProductModel.Id, ProductModel.Slug)))
             {
