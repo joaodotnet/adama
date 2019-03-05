@@ -115,7 +115,7 @@ namespace Backoffice.Pages.Products
                 return Page();
             }
             //Fix Slug
-            ProductModel.Slug = Utils.EnsureValidSlug(ProductModel.Slug);
+            ProductModel.Slug = Utils.URLFriendly(ProductModel.Slug);
 
             if((await SlugExistsAsync(ProductModel.Slug)))
             {
