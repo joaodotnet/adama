@@ -90,6 +90,13 @@ namespace Backoffice.Pages.ProductType
                 return Page();
             }
 
+            ProductTypeModel.Slug = Utils.URLFriendly(ProductTypeModel.Slug);
+            if ((await CheckIfSlugExistsAsync(ProductTypeModel.Id, ProductTypeModel.Slug)))
+            {
+                ModelState.AddModelError("ProductTypeModel.Slug", "Este slug já existe!");
+                return Page();
+            }
+
             //Get entity
             var productTypeEntity = await _context.CatalogTypes
                 .Include(x => x.Categories)
@@ -142,6 +149,7 @@ namespace Backoffice.Pages.ProductType
                 productTypeEntity.ShippingCost = ProductTypeModel.ShippingCost;
                 productTypeEntity.MetaDescription = ProductTypeModel.MetaDescription;
                 productTypeEntity.Title = ProductTypeModel.Title;
+                productTypeEntity.Slug = ProductTypeModel.Slug;
 
                 if (!string.IsNullOrEmpty(ProductTypeModel.PictureUri))
                     productTypeEntity.PictureUri = ProductTypeModel.PictureUri;
@@ -188,6 +196,11 @@ namespace Backoffice.Pages.ProductType
             }
             StatusMessage = "As imagens foram removidas";
             return RedirectToPage(new { id });
+        }
+
+        private async Task<bool> CheckIfSlugExistsAsync(int id, string slug)
+        {
+            return await _context.CatalogTypes.AnyAsync(x => x.Id != id && x.Slug == slug);
         }
     }
 }

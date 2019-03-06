@@ -31,14 +31,14 @@ namespace Backoffice.Pages.ProductType
             _backofficeSettings = backofficeSettings.Value;
         }
 
+        [BindProperty]
+        public ProductTypeViewModel ProductTypeModel { get; set; }
+
         public IActionResult OnGet()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
             return Page();
         }
-
-        [BindProperty]
-        public ProductTypeViewModel ProductTypeModel { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -70,6 +70,13 @@ namespace Backoffice.Pages.ProductType
             if(ProductTypeModel.FormFileTextHelpers?.Count > 0 && ProductTypeModel.FormFileTextHelpers.Any(x => x.Length > 2097152))
             {
                 ModelState.AddModelError("", "A menina quer por favor diminuir o tamanho das imagens da localização do nome? O máximo é 2MB, obrigado! Ass.: O seu amor!");
+                return Page();
+            }
+
+            ProductTypeModel.Slug = Utils.URLFriendly(ProductTypeModel.Slug);
+            if((await CheckIfSlugExistsAsync(ProductTypeModel.Slug)))
+            {
+                ModelState.AddModelError("ProductTypeModel.Slug", "Este slug já existe!");
                 return Page();
             }
 
@@ -112,6 +119,11 @@ namespace Backoffice.Pages.ProductType
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
+        }
+
+        private async Task<bool> CheckIfSlugExistsAsync(string slug)
+        {
+            return await _context.CatalogTypes.AnyAsync(x => x.Slug == slug);
         }
     }
 }

@@ -25,6 +25,11 @@
                 <span asp-validation-for="ProductTypeModel.Description" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="ProductTypeModel.Slug" class="control-label"></label>
+                <input asp-for="ProductTypeModel.Slug" class="form-control" />
+                <span asp-validation-for="ProductTypeModel.Slug" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="ProductTypeModel.CategoriesId" class="control-label"></label>
                 <select asp-for="ProductTypeModel.CategoriesId" class="form-control" asp-items="ViewBag.CategoryId" multiple="multiple"></select>
                 <span asp-validation-for="ProductTypeModel.CategoriesId" class="text-danger"></span>
@@ -122,6 +127,10 @@
     <script>
         $(document).ready(function () {
             $('#ProductTypeModel_CategoriesId').select2();
+
+            $('#ProductTypeModel_Description').on('blur', function () {
+                $('#ProductTypeModel_Slug').val(slugify(this.value));
+            });
         });
     </script>
 }

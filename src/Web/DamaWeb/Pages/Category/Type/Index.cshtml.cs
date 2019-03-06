@@ -26,6 +26,8 @@ namespace DamaWeb.Pages.Category.Type
         public async Task<IActionResult> OnGetAsync(string cat, string type, int? p)
         {
             CatalogTypeModel = await _catalogService.GetCatalogTypeItemsAsync(cat, type, p ?? 0, Constants.ITEMS_PER_PAGE);
+            if (CatalogTypeModel == null)
+                return NotFound();
             MetaDescription = CatalogTypeModel.MetaDescription;
             Title = CatalogTypeModel.Title;
 

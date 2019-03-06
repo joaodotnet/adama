@@ -66,7 +66,7 @@ namespace Backoffice.Pages.Category
             //Check if slug exists
             if ((await SlugExistsAsync(Category.Id,Category.Slug)))
             {
-                ModelState.AddModelError("Category_Slug", "Já existe um slug com o mesmo nome!");
+                ModelState.AddModelError("Category.Slug", "Já existe um slug com o mesmo nome!");
                 return Page();
             }
 
@@ -88,7 +88,7 @@ namespace Backoffice.Pages.Category
 
         private async Task<bool> SlugExistsAsync(int id, string slug)
         {
-            return await _context.Categories.AnyAsync(x => x.Id == id && x.Slug == slug);
+            return await _context.Categories.AnyAsync(x => x.Id != id && x.Slug == slug);
         }
 
         private void PopulateList()

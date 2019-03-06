@@ -229,7 +229,7 @@ namespace DamaWeb.Services
                         Name = x.Description,
                         PictureUri = x.PictureUri,
                         CatNameUri = category.Slug,
-                        TypeNameUri = Utils.URLFriendly(x.Description)
+                        TypeNameUri = x.Slug
                     })
                     .ToList(),
                     CatalogItems = itemsOnPage.Select(i => new CatalogItemViewModel()
@@ -429,6 +429,8 @@ namespace DamaWeb.Services
                 (!typeId.HasValue || x.CatalogTypeId == typeId));
 
             var totalItems = query.Count();
+            if (totalItems == 0)
+                return null;
             var iPage = itemsPage ?? totalItems;
             var itemsOnPage = await query
                 .Skip(iPage * pageIndex)
@@ -590,7 +592,7 @@ namespace DamaWeb.Services
                             Id = x.Id,
                             Name = x.Description.ToUpper(),
                             NameUri = item.NameUri,
-                            TypeUri = Utils.URLFriendly(x.Description)
+                            TypeUri = x.Slug
                         }));
                     }
                 }
@@ -600,9 +602,10 @@ namespace DamaWeb.Services
         public async Task<CatalogTypeViewModel> GetCatalogTypeItemsAsync(string cat, string type, int pageIndex, int itemsPage)
         {
             var category = await GetCategoryFromUrl(cat);
+
             CatalogType catalogType = await GetCatalogTypeFromUrl(type);
 
-            if (catalogType == null)
+            if (catalogType == null || category == null)
                 return null;
 
             return new CatalogTypeViewModel
@@ -622,7 +625,7 @@ namespace DamaWeb.Services
         private async Task<CatalogType> GetCatalogTypeFromUrl(string type)
         {
             var allCatalogTypes= await _db.CatalogTypes.ToListAsync();
-            return allCatalogTypes.SingleOrDefault(x => Utils.URLFriendly(x.Description) == type);
+            return allCatalogTypes.SingleOrDefault(x => x.Slug == type);
         }
 
         public string GetSlugFromSku(string sku)

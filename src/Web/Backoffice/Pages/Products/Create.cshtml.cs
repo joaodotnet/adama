@@ -119,7 +119,7 @@ namespace Backoffice.Pages.Products
 
             if((await SlugExistsAsync(ProductModel.Slug)))
             {
-                ModelState.AddModelError("ProductModel_Slug", "Já existe um slug com o mesmo nome!");
+                ModelState.AddModelError("ProductModel.Slug", "Já existe um slug com o mesmo nome!");
                 await PopulateLists();
                 return Page();
             }
