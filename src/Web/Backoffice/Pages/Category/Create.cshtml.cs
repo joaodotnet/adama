@@ -9,6 +9,7 @@ using ApplicationCore.Entities;
 using Infrastructure.Data;
 using Backoffice.ViewModels;
 using AutoMapper;
+using ApplicationCore;
 
 namespace Backoffice.Pages.Category
 {
@@ -45,6 +46,9 @@ namespace Backoffice.Pages.Category
                 ModelState.AddModelError("", $"O nome da Categoria '{Category.Name}' já existe!");
                 return Page();
             }
+            //Fix Slug
+            Category.Slug = Utils.URLFriendly(Category.Slug);
+
             _context.Categories.Add(_mapper.Map<ApplicationCore.Entities.Category>(Category));
             await _context.SaveChangesAsync();
 

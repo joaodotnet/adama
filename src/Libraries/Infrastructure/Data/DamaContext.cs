@@ -221,9 +221,12 @@ namespace Infrastructure.Data
             builder.HasOne(x => x.Parent)
                 .WithMany()
                 .HasForeignKey(x => x.ParentId);
-            builder
-                .HasIndex(c => c.Name)
+            builder.HasIndex(c => c.Name)
                 .IsUnique();
+            builder.HasIndex(x => x.Slug)
+                .IsUnique();
+            builder.Property(x => x.Slug)
+                .HasMaxLength(100);
         }
 
         private void ConfigureBasket(EntityTypeBuilder<Basket> builder)
