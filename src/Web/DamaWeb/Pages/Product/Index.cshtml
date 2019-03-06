@@ -117,56 +117,11 @@
                 
                 $('#CustomizePictureFileName').val(customizePictureFileName);
             }); 
-
-            @*//TODO: To review this
-            $('#saveName').on('click', function () {
-                var productBase = parseFloat('@Model.ProductModel.ProductPrice'.replace(',', '.'));
-                var value = $('#NameInput').val();
-                if (value) {
-                    //$('#nameInputText').text("Personalização: " + value.toString());
-                    var newprice = productBase + customizePrice;
-                    $('.dama-product-price span').text(toNumber(newprice));
-                }
-                else {
-                    //$('#nameInputText').text("");
-                    $('.dama-product-price span').text(toNumber(productBase));
-                }
             
-            });*@
-            @*$('.atribute-items').on('change', function () {
-                var attr = $(this).val();
-                var productBase = parseFloat('@Model.ProductModel.ProductBasePrice'.replace(',', '.'));
-                $('.dama-product-price span').text(toNumber(productBase));
-                var newprice = productBase;
-                $('.atribute-items').each(function () {
-                    var attrValue = $(this).val();
-                    if (attrValue != -1) {
-                        var handlerUrl = '@Url.Page("/Product/Index", "attributedetails", new { id = "ATTRVALUE" })';
-                        handlerUrl = handlerUrl.replace('ATTRVALUE', attrValue);
-                        $.getJSON(handlerUrl)
-                            .done(function (data) {
-                                if (attr == attrValue && data.sku) {
-                                    //Redirect
-                                    var url = '@Url.Page("/Product/Index", new { id = "SKU" })';
-                                    url = url.replace('SKU', data.sku);
-                                    window.location.href = url;
-                                }
-                                //if (data.price) {
-                                //    newprice += parseFloat(data.price);                                    
-                                //    $('.dama-product-price span').text(toNumber(newprice));
-                                //}
-                            })
-                            .fail(function (jqxhr, textStatus, error) {
-                                var err = textStatus + ", " + error;
-                                console.log("Request Failed: " + err);
-                            });
-                    }
-                });                
-            });*@
             $('#referenceProducts').on('change', function () {
                 if ($(this).val() != '@Model.ProductModel.ProductSKU') {
-                    var url = '@Url.Page("/Product/Index", new { id = "SKU" })';
-                    url = url.replace('SKU', $(this).val());
+                    var url = '@Url.Page("/Product/Index", new { id = "SLUG" })';
+                    url = url.replace('SLUG', $(this).val());
                     window.location.href = url;
                 }
             });

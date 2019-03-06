@@ -76,7 +76,8 @@ namespace DamaWeb.Services
                     CatalogItemName = i.Name,
                     PictureUri = i.PictureUri,
                     Price = i.Price ?? i.CatalogType.Price,
-                    ProductSku = i.Sku
+                    ProductSlug = i.Slug
+                    //ProductSku = i.Sku
                 }),
                 NewCatalogItems = itemsOnPage
                     .Where(x => x.IsNew)
@@ -87,7 +88,8 @@ namespace DamaWeb.Services
                         CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
                         Price = i.Price ?? i.CatalogType.Price,
-                        ProductSku = i.Sku,
+                        ProductSlug = i.Slug
+                        //ProductSku = i.Sku,
                     }),
                 FeaturedCatalogItems = itemsOnPage
                     .Where(x => x.IsFeatured)
@@ -98,7 +100,8 @@ namespace DamaWeb.Services
                         CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
                         Price = i.Price ?? i.CatalogType.Price,
-                        ProductSku = i.Sku,
+                        ProductSlug = i.Slug
+                        //ProductSku = i.Sku,
                     }),
                 Illustrations = await GetIllustrations(),
                 Types = await GetTypes(),
@@ -202,7 +205,8 @@ namespace DamaWeb.Services
                         CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
                         Price = i.Price ?? i.CatalogType.Price,
-                        ProductSku = i.Sku
+                        ProductSlug = i.Slug
+                        //ProductSku = i.Sku,
                     }),
                     FeaturedCatalogItems = allItems
                     .Where(x => x.IsFeatured)
@@ -213,7 +217,8 @@ namespace DamaWeb.Services
                         CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
                         Price = i.Price ?? i.CatalogType.Price,
-                        ProductSku = i.Sku
+                        ProductSlug = i.Slug
+                        //ProductSku = i.Sku
                     }),
                     CatalogTypes = types.OrderBy(x => x.Description).Select(x => new CatalogTypeViewModel()
                     {
@@ -231,7 +236,8 @@ namespace DamaWeb.Services
                         CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
                         Price = i.Price ?? i.CatalogType.Price,
-                        ProductSku = i.Sku
+                        ProductSlug = i.Slug
+                        //ProductSku = i.Sku
                     }),
                     PaginationInfo = new PaginationInfoViewModel()
                     {
@@ -277,13 +283,14 @@ namespace DamaWeb.Services
                 List<ProductReferenceViewModel> productReferences = new List<ProductReferenceViewModel>();
                 if (product.CatalogReferences?.Count > 0)
                 {
-                    productReferences.Add(new ProductReferenceViewModel { Label = product.CatalogReferences.First().LabelDescription, Name = product.Name, Sku = product.Sku });
+                    productReferences.Add(new ProductReferenceViewModel { Label = product.CatalogReferences.First().LabelDescription, Name = product.Name, Slug = product.Slug });
                     productReferences.AddRange(product.CatalogReferences
                         .Select(x => new ProductReferenceViewModel
                         {
                             Label = x.LabelDescription,
                             Name = x.ReferenceCatalogItem.Name,
-                            Sku = x.ReferenceCatalogItem.Sku
+                            Sku = x.ReferenceCatalogItem.Sku,
+                            Slug = x.ReferenceCatalogItem.Slug
                         })
                         .ToList());
                 }
@@ -434,7 +441,8 @@ namespace DamaWeb.Services
                     CatalogItemName = x.Name,
                     PictureUri = x.PictureUri,
                     Price = x.Price ?? x.CatalogType.Price,
-                    ProductSku = x.Sku
+                    ProductSlug = x.Slug
+                    //ProductSku = x.Sku
                 }).ToList(),
                 PaginationInfo = new PaginationInfoViewModel()
                 {
@@ -483,7 +491,8 @@ namespace DamaWeb.Services
                     CatalogItemName = x.Name,
                     PictureUri = x.PictureUri,
                     Price = x.Price ?? x.CatalogType.Price,
-                    ProductSku = x.Sku
+                    ProductSlug = x.Slug
+                    //ProductSku = x.Sku
                 }).ToList(),
                 PaginationInfo = new PaginationInfoViewModel()
                 {

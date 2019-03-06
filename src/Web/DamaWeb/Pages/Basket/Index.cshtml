@@ -30,7 +30,7 @@
                 var item = Model.BasketModel.Items[i];
                 <div class="row align-items-center m-0">
                     <div class="col-4 col-sm-3 p-0">
-                        <a asp-page="/Product/Index" asp-route-id="@item.Sku">
+                        <a asp-page="/Product/Index" asp-route-id="@item.Slug">
                             <img class="esh-basket-image img-fluid" src="@item.PictureUrl" />
                         </a>
                     </div>
