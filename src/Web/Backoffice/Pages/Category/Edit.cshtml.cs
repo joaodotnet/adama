@@ -62,6 +62,13 @@ namespace Backoffice.Pages.Category
             }
             //Fix Slug
             Category.Slug = Utils.URLFriendly(Category.Slug);
+            
+            //Check if slug exists
+            if ((await SlugExistsAsync(Category.Id,Category.Slug)))
+            {
+                ModelState.AddModelError("Category_Slug", "Já existe um slug com o mesmo nome!");
+                return Page();
+            }
 
             var category = _mapper.Map<ApplicationCore.Entities.Category>(Category);
 
@@ -78,6 +85,12 @@ namespace Backoffice.Pages.Category
 
             return RedirectToPage("./Index");
         }
+
+        private async Task<bool> SlugExistsAsync(int id, string slug)
+        {
+            return await _context.Categories.AnyAsync(x => x.Id == id && x.Slug == slug);
+        }
+
         private void PopulateList()
         {
             List<(string, string)> list = new List<(string, string)>
