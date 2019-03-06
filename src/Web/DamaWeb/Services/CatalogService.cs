@@ -155,9 +155,11 @@ namespace DamaWeb.Services
             return items;
         }
 
-        public async Task<CategoryViewModel> GetCategoryCatalogItems(string categoryUrlName, int pageIndex, int? itemsPage)
+        public async Task<CategoryViewModel> GetCategoryCatalogItems(string categorySlug, int pageIndex, int? itemsPage)
         {
-            Category category = await GetCategoryFromUrl(categoryUrlName);
+            Category category = await GetCategoryFromUrl(categorySlug);
+            if (category == null)
+                return null;
 
             var filterSpecification = new CatalogFilterSpecification(null, null, category.Id);
             var root = _itemRepository
@@ -226,7 +228,7 @@ namespace DamaWeb.Services
                         Code = x.Code,
                         Name = x.Description,
                         PictureUri = x.PictureUri,
-                        CatNameUri = Utils.URLFriendly(category.Name),
+                        CatNameUri = category.Slug,
                         TypeNameUri = Utils.URLFriendly(x.Description)
                     })
                     .ToList(),
@@ -253,7 +255,7 @@ namespace DamaWeb.Services
                 {
                     CatalogModel = vm,
                     CategoryName = category.Name,
-                    CategoryUrlName = categoryUrlName.ToLower(),
+                    CategoryUrlName = categorySlug,
                     MetaDescription = category.MetaDescription,
                     Title = string.IsNullOrEmpty(category.Title) ? category.Name : category.Title
                 };
@@ -312,7 +314,7 @@ namespace DamaWeb.Services
                     Categories = product.CatalogCategories.Select(x => new LinkViewModel
                     {
                         Name = x.Category.Name,
-                        TagName = Utils.URLFriendly(x.Category.Name)
+                        TagName = x.Category.Slug
                     }).ToList(),
                     Tags = new List<LinkViewModel>
                     {
@@ -541,7 +543,7 @@ namespace DamaWeb.Services
             {
                 Id = x.Id,
                 Name = x.Name.ToUpper(),
-                NameUri = Utils.URLFriendly(x.Name)
+                NameUri = x.Slug
             }));
 
             //SubCategories
@@ -558,7 +560,7 @@ namespace DamaWeb.Services
                     {
                         Id = x.Id,
                         Name = x.Name.ToUpper(),
-                        NameUri = Utils.URLFriendly(x.Name)
+                        NameUri = x.Slug
                     }));
                 } 
                 else
@@ -587,7 +589,7 @@ namespace DamaWeb.Services
                         {
                             Id = x.Id,
                             Name = x.Description.ToUpper(),
-                            NameUri = Utils.URLFriendly(item.Name),
+                            NameUri = item.NameUri,
                             TypeUri = Utils.URLFriendly(x.Description)
                         }));
                     }
@@ -611,10 +613,10 @@ namespace DamaWeb.Services
                 Title = string.IsNullOrEmpty(catalogType.Title) ? catalogType.Description : catalogType.Title
             };
         }
-        private async Task<Category> GetCategoryFromUrl(string categoryUrlName)
+        private async Task<Category> GetCategoryFromUrl(string categorySlug)
         {
             var allCategories = await _db.Categories.ToListAsync();
-            return allCategories.SingleOrDefault(x => Utils.URLFriendly(x.Name) == categoryUrlName.ToLower());
+            return allCategories.SingleOrDefault(x => x.Slug == categorySlug.ToLower());
         }
 
         private async Task<CatalogType> GetCatalogTypeFromUrl(string type)
