@@ -61,7 +61,7 @@ namespace DamaWeb.Pages.Product
             MetaDescription = ProductModel.MetaDescription;
             Title = ProductModel.Title;
 
-            ViewData["ProductReferences"] = new SelectList(ProductModel.ProductReferences, "Sku", "Name");
+            ViewData["ProductReferences"] = new SelectList(ProductModel.ProductReferences, "Slug", "Name");
 
             return Page();
         }

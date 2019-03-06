@@ -16,5 +16,6 @@ namespace DamaWeb.ViewModels
         public List<AttributeViewModel> Attributes { get; set; } = new List<AttributeViewModel>();
         public bool IsFromCustomize { get; set; } = false;
         public string Sku { get; set; }
+        public string Slug { get; set; }
     }
 }
