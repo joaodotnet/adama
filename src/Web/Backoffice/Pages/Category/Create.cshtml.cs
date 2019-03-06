@@ -53,7 +53,7 @@ namespace Backoffice.Pages.Category
             //Check if slug exists
             if ((await SlugExistsAsync(Category.Slug)))
             {
-                ModelState.AddModelError("Category_Slug", "Já existe um slug com o mesmo nome!");
+                ModelState.AddModelError("Category.Slug", "Já existe um slug com o mesmo nome!");
                 return Page();
             }
 

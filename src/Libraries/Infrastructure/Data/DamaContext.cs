@@ -367,7 +367,12 @@ namespace Infrastructure.Data
             builder.HasIndex(x => x.Code)
                .IsUnique();
             builder.Property(x => x.PictureUri)
-                .HasMaxLength(255);            
+                .HasMaxLength(255);
+
+            builder.HasIndex(x => x.Slug)
+                .IsUnique();
+            builder.Property(x => x.Slug)
+                .HasMaxLength(100);
         }
 
         private void ConfigureOrder(EntityTypeBuilder<Order> builder)
