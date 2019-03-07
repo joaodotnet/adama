@@ -21,13 +21,11 @@ namespace DamaWeb.Pages.Tag
         }
         public CatalogIndexViewModel CatalogModel { get; set; } = new CatalogIndexViewModel();
 
-        [BindProperty]
         public string TagName { get; set; }
 
-        [BindProperty]
         public string Tag { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(CatalogIndexViewModel catalogModel, string tagName, string q, int? p)
+        public async Task<IActionResult> OnGetAsync(string tagName, string q, int? p)
         {
             if (string.IsNullOrEmpty(tagName))
                 return NotFound();
@@ -50,8 +48,8 @@ namespace DamaWeb.Pages.Tag
 
             p = p < 0 ? 0 : p;
 
-            CatalogModel = await _service.GetCatalogItemsByTag(p ?? 0, Constants.ITEMS_PER_PAGE, tagToSearch, tagType, catalogModel.TypesFilterApplied, catalogModel.IllustrationFilterApplied);
-            if (catalogModel == null)
+            CatalogModel = await _service.GetCatalogItemsByTag(p ?? 0, Constants.ITEMS_PER_PAGE, tagToSearch, tagType, null, null);
+            if (CatalogModel == null)
                 return NotFound();
             return Page();
         }
