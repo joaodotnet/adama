@@ -318,9 +318,9 @@ namespace DamaWeb.Services
                     }).ToList(),
                     Tags = new List<LinkViewModel>
                     {
-                        new LinkViewModel { Name = product.CatalogType.Description, TagName = "tipo"},
-                        new LinkViewModel { Name = product.CatalogIllustration.Name, TagName = "ilustracao"},
-                        new LinkViewModel { Name = product.CatalogIllustration.IllustrationType.Name, TagName = "ilustracao_tipo"},
+                        new LinkViewModel { Name = product.CatalogType.Description, Uri = product.CatalogType.Slug, TagName = "tipo"},
+                        new LinkViewModel { Name = product.CatalogIllustration.Name, Uri = product.CatalogIllustration.Name, TagName = "ilustracao"},
+                        new LinkViewModel { Name = product.CatalogIllustration.IllustrationType.Name, Uri = product.CatalogIllustration.IllustrationType.Name, TagName = "ilustracao_tipo"},
                     },
                     DeliveryTimeMin = product.CatalogType.DeliveryTimeMin,
                     DeliveryTimeMax = product.CatalogType.DeliveryTimeMax,
