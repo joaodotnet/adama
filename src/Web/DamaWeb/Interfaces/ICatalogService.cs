@@ -17,5 +17,6 @@ namespace DamaWeb.Interfaces
         Task<CatalogIndexViewModel> GetCatalogItemsBySearch(int pageIndex, int? itemsPage, string searchFor, int? typeId, int? illustrationId);
         Task<List<MenuItemComponentViewModel>> GetMenuViewModel();
         Task<CatalogTypeViewModel> GetCatalogTypeItemsAsync(string cat, string type, int pageIndex, int itemsPage);
+        string GetSlugFromSku(string sku);
     }
 }

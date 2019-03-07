@@ -46,6 +46,10 @@ namespace Backoffice.Pages.Products
             [StringLength(100)]
             [Display(Name = "Nome")]
             public string Name { get; set; }
+            [Required]
+            [StringLength(100)]
+            public string Slug { get; set; }
+
             [Display(Name = "Descrição")]
             public string Description { get; set; }
             [Display(Name = "Preço")]
@@ -110,6 +114,15 @@ namespace Backoffice.Pages.Products
                 await PopulateLists();
                 return Page();
             }
+            //Fix Slug
+            ProductModel.Slug = Utils.URLFriendly(ProductModel.Slug);
+
+            if((await SlugExistsAsync(ProductModel.Slug)))
+            {
+                ModelState.AddModelError("ProductModel.Slug", "Já existe um slug com o mesmo nome!");
+                await PopulateLists();
+                return Page();
+            }
 
             ProductModel.Sku = await _service.GetSku(ProductModel.CatalogTypeId, ProductModel.CatalogIllustrationId);
 
@@ -139,6 +152,7 @@ namespace Backoffice.Pages.Products
                 }
             }
             ProductModel.Price = ProductModel.Price == 0 ? default(decimal?) : ProductModel.Price;
+            
             //Catalog Catagories
             var prod = _mapper.Map<CatalogItem>(ProductModel);            
             foreach (var item in CatalogCategoryModel.Where(x => x.Selected).ToList())
@@ -167,6 +181,7 @@ namespace Backoffice.Pages.Products
             return RedirectToPage("./Index");
         }
 
+
         public async Task<IActionResult> OnPostAddAttributeAsync()
         {
             await PopulateLists();
@@ -184,6 +199,11 @@ namespace Backoffice.Pages.Products
         {
             var type = await _context.CatalogTypes.FindAsync(productType);
             return new JsonResult(type.Price);
+        }
+
+        private async Task<bool> SlugExistsAsync(string slug)
+        {
+            return await _context.CatalogItems.AnyAsync(x => x.Slug == slug);
         }
 
         private bool ValidatePictures()

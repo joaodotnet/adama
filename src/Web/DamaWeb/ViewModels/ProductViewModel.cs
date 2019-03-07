@@ -58,6 +58,7 @@ namespace DamaWeb.ViewModels
     {
         public string Label { get; set; }
         public string Sku { get; set; }
+        public string Slug { get; set; }
         public string Name { get; set; }
     }
 

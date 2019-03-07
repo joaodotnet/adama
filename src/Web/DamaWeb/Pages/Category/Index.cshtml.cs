@@ -26,11 +26,10 @@ namespace DamaWeb.Pages.Category
 
         public async Task<IActionResult> OnGetAsync(string id, int? p)
         {
-            //var cat = await _catalogService.GetCategory(id); 
-            //if (!cat.HasValue)
-            //    return NotFound();
-
             CategoryModel = await _catalogService.GetCategoryCatalogItems(id, p ?? 0, Constants.ITEMS_PER_PAGE);
+
+            if (CategoryModel == null)
+                return NotFound();
             MetaDescription = CategoryModel.MetaDescription;
             Title = CategoryModel.Title;
 

@@ -14,6 +14,9 @@ namespace Backoffice.ViewModels
         [StringLength(100)]
         [Display(Name = "Nome")]
         public string Name { get; set; }
+        [Required]
+        [StringLength(100)]
+        public string Slug { get; set; }
         [Display(Name = "Descrição")]        
         public string Description { get; set; }                        
         [Display(Name = "Preço")]

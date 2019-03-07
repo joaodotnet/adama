@@ -19,6 +19,11 @@
                 <span asp-validation-for="Category.Name" class="text-danger"></span>
             </div>
             <div class="form-group required">
+                <label asp-for="Category.Slug" class="control-label"></label>
+                <input asp-for="Category.Slug" class="form-control" />
+                <span asp-validation-for="Category.Slug" class="text-danger"></span>
+            </div>
+            <div class="form-group required">
                 <label asp-for="Category.Order" class="control-label"></label>
                 <input asp-for="Category.Order" class="form-control" />
                 <span asp-validation-for="Category.Order" class="text-danger"></span>
@@ -56,4 +61,12 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            $('#Category_Name').on('blur', function () {
+                $('#Category_Slug').val(slugify(this.value));
+            });
+        });
+    </script>
 }

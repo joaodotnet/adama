@@ -221,9 +221,12 @@ namespace Infrastructure.Data
             builder.HasOne(x => x.Parent)
                 .WithMany()
                 .HasForeignKey(x => x.ParentId);
-            builder
-                .HasIndex(c => c.Name)
+            builder.HasIndex(c => c.Name)
                 .IsUnique();
+            builder.HasIndex(x => x.Slug)
+                .IsUnique();
+            builder.Property(x => x.Slug)
+                .HasMaxLength(100);
         }
 
         private void ConfigureBasket(EntityTypeBuilder<Basket> builder)
@@ -238,9 +241,15 @@ namespace Infrastructure.Data
             builder.ToTable("Catalog");
 
             //builder.HasIndex(ci => ci.Sku)
-            //    .IsUnique();
+            //    .IsUnique();            
             builder.Property(ci => ci.Sku)
                 .HasMaxLength(255);
+
+            builder.HasIndex(ci => ci.Slug)
+                .IsUnique();
+            builder.Property(ci => ci.Slug)
+                .HasMaxLength(100);
+
             builder.Property(ci => ci.Id)
                 //.ForSqlServerUseSequenceHiLo("catalog_hilo")
                 .IsRequired();
@@ -358,7 +367,12 @@ namespace Infrastructure.Data
             builder.HasIndex(x => x.Code)
                .IsUnique();
             builder.Property(x => x.PictureUri)
-                .HasMaxLength(255);            
+                .HasMaxLength(255);
+
+            builder.HasIndex(x => x.Slug)
+                .IsUnique();
+            builder.Property(x => x.Slug)
+                .HasMaxLength(100);
         }
 
         private void ConfigureOrder(EntityTypeBuilder<Order> builder)
