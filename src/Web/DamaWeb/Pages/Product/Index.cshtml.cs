@@ -44,16 +44,24 @@ namespace DamaWeb.Pages.Product
         {
             if (string.IsNullOrEmpty(id))
                 return NotFound();
+            
             ProductModel = await _catalogService.GetCatalogItem(id);
 
-
+            //Old URL logic
             if (ProductModel == null)
+            {
+                var slug = _catalogService.GetSlugFromSku(id);
+                if(!string.IsNullOrEmpty(slug))
+                {
+                    return RedirectToPagePermanent("./Index",new { id = slug });
+                }
                 return NotFound();
+            }
 
             MetaDescription = ProductModel.MetaDescription;
             Title = ProductModel.Title;
 
-            ViewData["ProductReferences"] = new SelectList(ProductModel.ProductReferences, "Sku", "Name");
+            ViewData["ProductReferences"] = new SelectList(ProductModel.ProductReferences, "Slug", "Name");
 
             return Page();
         }

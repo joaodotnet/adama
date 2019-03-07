@@ -13,6 +13,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
 using DamaWeb.Extensions;
+using ApplicationCore;
 
 namespace DamaWeb.Services
 {
@@ -75,7 +76,8 @@ namespace DamaWeb.Services
                     CatalogItemName = i.Name,
                     PictureUri = i.PictureUri,
                     Price = i.Price ?? i.CatalogType.Price,
-                    ProductSku = i.Sku
+                    ProductSlug = i.Slug
+                    //ProductSku = i.Sku
                 }),
                 NewCatalogItems = itemsOnPage
                     .Where(x => x.IsNew)
@@ -86,7 +88,8 @@ namespace DamaWeb.Services
                         CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
                         Price = i.Price ?? i.CatalogType.Price,
-                        ProductSku = i.Sku,
+                        ProductSlug = i.Slug
+                        //ProductSku = i.Sku,
                     }),
                 FeaturedCatalogItems = itemsOnPage
                     .Where(x => x.IsFeatured)
@@ -97,7 +100,8 @@ namespace DamaWeb.Services
                         CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
                         Price = i.Price ?? i.CatalogType.Price,
-                        ProductSku = i.Sku,
+                        ProductSlug = i.Slug
+                        //ProductSku = i.Sku,
                     }),
                 Illustrations = await GetIllustrations(),
                 Types = await GetTypes(),
@@ -151,9 +155,11 @@ namespace DamaWeb.Services
             return items;
         }
 
-        public async Task<CategoryViewModel> GetCategoryCatalogItems(string categoryUrlName, int pageIndex, int? itemsPage)
+        public async Task<CategoryViewModel> GetCategoryCatalogItems(string categorySlug, int pageIndex, int? itemsPage)
         {
-            Category category = await GetCategoryFromUrl(categoryUrlName);
+            Category category = await GetCategoryFromUrl(categorySlug);
+            if (category == null)
+                return null;
 
             var filterSpecification = new CatalogFilterSpecification(null, null, category.Id);
             var root = _itemRepository
@@ -201,7 +207,8 @@ namespace DamaWeb.Services
                         CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
                         Price = i.Price ?? i.CatalogType.Price,
-                        ProductSku = i.Sku
+                        ProductSlug = i.Slug
+                        //ProductSku = i.Sku,
                     }),
                     FeaturedCatalogItems = allItems
                     .Where(x => x.IsFeatured)
@@ -212,7 +219,8 @@ namespace DamaWeb.Services
                         CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
                         Price = i.Price ?? i.CatalogType.Price,
-                        ProductSku = i.Sku
+                        ProductSlug = i.Slug
+                        //ProductSku = i.Sku
                     }),
                     CatalogTypes = types.OrderBy(x => x.Description).Select(x => new CatalogTypeViewModel()
                     {
@@ -220,8 +228,8 @@ namespace DamaWeb.Services
                         Code = x.Code,
                         Name = x.Description,
                         PictureUri = x.PictureUri,
-                        CatNameUri = Utils.StringToUri(category.Name),
-                        TypeNameUri = Utils.StringToUri(x.Description)
+                        CatNameUri = category.Slug,
+                        TypeNameUri = x.Slug
                     })
                     .ToList(),
                     CatalogItems = itemsOnPage.Select(i => new CatalogItemViewModel()
@@ -230,7 +238,8 @@ namespace DamaWeb.Services
                         CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
                         Price = i.Price ?? i.CatalogType.Price,
-                        ProductSku = i.Sku
+                        ProductSlug = i.Slug
+                        //ProductSku = i.Sku
                     }),
                     PaginationInfo = new PaginationInfoViewModel()
                     {
@@ -246,7 +255,7 @@ namespace DamaWeb.Services
                 {
                     CatalogModel = vm,
                     CategoryName = category.Name,
-                    CategoryUrlName = categoryUrlName.ToLower(),
+                    CategoryUrlName = categorySlug,
                     MetaDescription = category.MetaDescription,
                     Title = string.IsNullOrEmpty(category.Title) ? category.Name : category.Title
                 };
@@ -255,7 +264,7 @@ namespace DamaWeb.Services
         }
 
 
-        public async Task<ProductViewModel> GetCatalogItem(string sku)
+        public async Task<ProductViewModel> GetCatalogItem(string slug)
         {
             var product = await _db.CatalogItems
                 .Include(x => x.CatalogCategories)
@@ -269,20 +278,21 @@ namespace DamaWeb.Services
                     .ThenInclude(ct => ct.PictureTextHelpers)
                 .Include(x => x.CatalogReferences)
                     .ThenInclude(cr => cr.ReferenceCatalogItem)
-                .SingleOrDefaultAsync(x => x.Sku == sku);
+                .SingleOrDefaultAsync(x => x.Slug == slug);
 
             if (product != null)
             {
                 List<ProductReferenceViewModel> productReferences = new List<ProductReferenceViewModel>();
                 if (product.CatalogReferences?.Count > 0)
                 {
-                    productReferences.Add(new ProductReferenceViewModel { Label = product.CatalogReferences.First().LabelDescription, Name = product.Name, Sku = product.Sku });
+                    productReferences.Add(new ProductReferenceViewModel { Label = product.CatalogReferences.First().LabelDescription, Name = product.Name, Slug = product.Slug });
                     productReferences.AddRange(product.CatalogReferences
                         .Select(x => new ProductReferenceViewModel
                         {
                             Label = x.LabelDescription,
                             Name = x.ReferenceCatalogItem.Name,
-                            Sku = x.ReferenceCatalogItem.Sku
+                            Sku = x.ReferenceCatalogItem.Sku,
+                            Slug = x.ReferenceCatalogItem.Slug
                         })
                         .ToList());
                 }
@@ -304,7 +314,7 @@ namespace DamaWeb.Services
                     Categories = product.CatalogCategories.Select(x => new LinkViewModel
                     {
                         Name = x.Category.Name,
-                        TagName = Utils.StringToUri(x.Category.Name)
+                        TagName = x.Category.Slug
                     }).ToList(),
                     Tags = new List<LinkViewModel>
                     {
@@ -387,13 +397,13 @@ namespace DamaWeb.Services
                     case TagType.CATALOG_TYPE:
                         query = _db.CatalogItems
                             .Include(x => x.CatalogType)
-                            .Where(x => Utils.StringToUri(x.CatalogType.Description) == tagName);
+                            .Where(x => Utils.URLFriendly(x.CatalogType.Description) == tagName);
                         break;
                     case TagType.ILLUSTRATION:
                         query = _db.CatalogItems
                             .Include(x => x.CatalogType)
                             .Include(x => x.CatalogIllustration)
-                            .Where(x => Utils.StringToUri(x.CatalogIllustration.Name) == tagName);
+                            .Where(x => Utils.URLFriendly(x.CatalogIllustration.Name) == tagName);
                         break;
                     case TagType.ILLUSTRATION_TYPE:
                         query = _db.CatalogItems
@@ -412,13 +422,15 @@ namespace DamaWeb.Services
                     .Include(x => x.CatalogType)
                     .Include(x => x.CatalogIllustration)
                     .ThenInclude(ci => ci.IllustrationType)
-                    .Where(x => Utils.StringToUri(x.CatalogType.Description) == tagName || Utils.StringToUri(x.CatalogIllustration.Name) == tagName || x.CatalogIllustration.IllustrationType.Name == tagName);
+                    .Where(x => Utils.URLFriendly(x.CatalogType.Description) == tagName || Utils.URLFriendly(x.CatalogIllustration.Name) == tagName || x.CatalogIllustration.IllustrationType.Name == tagName);
             }
 
             query = query.Where(x => x.ShowOnShop && (!illustrationId.HasValue || x.CatalogIllustrationId == illustrationId) &&
                 (!typeId.HasValue || x.CatalogTypeId == typeId));
 
             var totalItems = query.Count();
+            if (totalItems == 0)
+                return null;
             var iPage = itemsPage ?? totalItems;
             var itemsOnPage = await query
                 .Skip(iPage * pageIndex)
@@ -433,7 +445,8 @@ namespace DamaWeb.Services
                     CatalogItemName = x.Name,
                     PictureUri = x.PictureUri,
                     Price = x.Price ?? x.CatalogType.Price,
-                    ProductSku = x.Sku
+                    ProductSlug = x.Slug
+                    //ProductSku = x.Sku
                 }).ToList(),
                 PaginationInfo = new PaginationInfoViewModel()
                 {
@@ -482,7 +495,8 @@ namespace DamaWeb.Services
                     CatalogItemName = x.Name,
                     PictureUri = x.PictureUri,
                     Price = x.Price ?? x.CatalogType.Price,
-                    ProductSku = x.Sku
+                    ProductSlug = x.Slug
+                    //ProductSku = x.Sku
                 }).ToList(),
                 PaginationInfo = new PaginationInfoViewModel()
                 {
@@ -531,7 +545,7 @@ namespace DamaWeb.Services
             {
                 Id = x.Id,
                 Name = x.Name.ToUpper(),
-                NameUri = Utils.RemoveDiacritics(x.Name).Replace(" ", "-").ToLower()
+                NameUri = x.Slug
             }));
 
             //SubCategories
@@ -548,7 +562,7 @@ namespace DamaWeb.Services
                     {
                         Id = x.Id,
                         Name = x.Name.ToUpper(),
-                        NameUri = Utils.RemoveDiacritics(x.Name).Replace(" ", "-").ToLower()
+                        NameUri = x.Slug
                     }));
                 } 
                 else
@@ -577,8 +591,8 @@ namespace DamaWeb.Services
                         {
                             Id = x.Id,
                             Name = x.Description.ToUpper(),
-                            NameUri = Utils.RemoveDiacritics(item.Name).Replace(" ", "-").ToLower(),
-                            TypeUri = Utils.RemoveDiacritics(x.Description).Replace(" ", "-").ToLower()
+                            NameUri = item.NameUri,
+                            TypeUri = x.Slug
                         }));
                     }
                 }
@@ -588,9 +602,10 @@ namespace DamaWeb.Services
         public async Task<CatalogTypeViewModel> GetCatalogTypeItemsAsync(string cat, string type, int pageIndex, int itemsPage)
         {
             var category = await GetCategoryFromUrl(cat);
+
             CatalogType catalogType = await GetCatalogTypeFromUrl(type);
 
-            if (catalogType == null)
+            if (catalogType == null || category == null)
                 return null;
 
             return new CatalogTypeViewModel
@@ -601,16 +616,25 @@ namespace DamaWeb.Services
                 Title = string.IsNullOrEmpty(catalogType.Title) ? catalogType.Description : catalogType.Title
             };
         }
-        private async Task<Category> GetCategoryFromUrl(string categoryUrlName)
+        private async Task<Category> GetCategoryFromUrl(string categorySlug)
         {
             var allCategories = await _db.Categories.ToListAsync();
-            return allCategories.SingleOrDefault(x => Utils.RemoveDiacritics(x.Name.Replace(" ", "-").ToLower()) == categoryUrlName.ToLower());
+            return allCategories.SingleOrDefault(x => x.Slug == categorySlug.ToLower());
         }
 
         private async Task<CatalogType> GetCatalogTypeFromUrl(string type)
         {
             var allCatalogTypes= await _db.CatalogTypes.ToListAsync();
-            return allCatalogTypes.SingleOrDefault(x => Utils.RemoveDiacritics(x.Description.Replace(" ", "-").ToLower()) == type);
+            return allCatalogTypes.SingleOrDefault(x => x.Slug == type);
+        }
+
+        public string GetSlugFromSku(string sku)
+        {
+            var spec = new CatalogSkuSpecification(sku);
+            var catalogItem = _itemRepository.GetSingleBySpec(spec);
+            if (catalogItem != null)
+                return catalogItem.Slug;
+            return string.Empty;
         }
     }
 }

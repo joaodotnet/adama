@@ -19,6 +19,9 @@ namespace Backoffice.ViewModels
         [Display(Name = "Descrição")]
         public string Description { get; set; }
         [Required]
+        [StringLength(100)]
+        public string Slug { get; set; }
+        [Required]
         [Display(Name = "Categorias")]
         public List<int> CategoriesId { get; set; } = new List<int>();
         [Display(Name = "Categorias")]

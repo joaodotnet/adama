@@ -8,7 +8,7 @@
     }
 }
 
-<p class="title">@Model.CategoryModel.CategoryName</p>
+<h1 class="title">@Model.CategoryModel.CategoryName</h1>
 
 @if (Model.CategoryModel.CatalogModel != null)
 {
@@ -30,7 +30,7 @@
                 else
                 {
                     <a asp-page="/Category/Type/Index" asp-route-cat="@item.CatNameUri" asp-route-type="@item.TypeNameUri">
-                        <img src="@item.PictureUri" class="img-thumbnail" />
+                        <img src="@item.PictureUri" class="img-thumbnail" alt="@item.Name" />
                     </a>
                 }
             </div>

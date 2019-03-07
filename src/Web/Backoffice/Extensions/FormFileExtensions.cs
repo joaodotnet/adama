@@ -1,3 +1,4 @@
+using ApplicationCore;
 using Backoffice.Pages;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -14,7 +15,7 @@ namespace Backoffice.Extensions
         {
             if (string.IsNullOrEmpty(formFile.FileName))
                 return "";
-            return Utils.StringToNormalizeString(formFile.FileName.Substring(formFile.FileName.LastIndexOf('\\') + 1))
+            return Utils.URLFriendly(formFile.FileName.Substring(formFile.FileName.LastIndexOf('\\') + 1))
                 .Trim('"');            
         }
 

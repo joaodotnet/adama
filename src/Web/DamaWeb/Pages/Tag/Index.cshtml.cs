@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using DamaWeb.Interfaces;
 using DamaWeb.ViewModels;
+using ApplicationCore;
 
 namespace DamaWeb.Pages.Tag
 {
@@ -45,11 +46,13 @@ namespace DamaWeb.Pages.Tag
                     tagType = TagType.ILLUSTRATION_TYPE;
             }
 
-            var tagToSearch = Utils.StringToUri(tagName);
+            var tagToSearch = Utils.URLFriendly(tagName);
 
             p = p < 0 ? 0 : p;
 
             CatalogModel = await _service.GetCatalogItemsByTag(p ?? 0, Constants.ITEMS_PER_PAGE, tagToSearch, tagType, catalogModel.TypesFilterApplied, catalogModel.IllustrationFilterApplied);
+            if (catalogModel == null)
+                return NotFound();
             return Page();
         }
     }

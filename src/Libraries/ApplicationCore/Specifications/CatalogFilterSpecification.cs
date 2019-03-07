@@ -34,4 +34,12 @@ namespace ApplicationCore.Specifications
             AddInclude(x => x.CatalogAttributes);
         }
     }
+
+    public class CatalogSkuSpecification : BaseSpecification<CatalogItem>
+    {
+        public CatalogSkuSpecification(string sku) : base(i => i.Sku == sku)
+        {
+
+        }
+    }
 }
