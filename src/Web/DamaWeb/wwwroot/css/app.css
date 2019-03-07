@@ -151,7 +151,7 @@ a:visited {
         text-decoration: underline;
     }
 
-h1 {
+.logo {
     color: #000000;
     font-family: "Lily Script One", Sans-serif;
     font-size: 41px;
@@ -166,6 +166,12 @@ h2 {
     font-weight: 100;
     line-height: 1.4em
 }
+h1.title {
+    font-family: "Quicksand Medium", sans-serif;
+    font-size: 20px;
+    color: #FC629D;
+    font-weight: 100;
+}
 
 p.title {
     font-family: "Quicksand Medium", sans-serif;
@@ -174,8 +180,10 @@ p.title {
     font-weight: 100;
 }
 
+
 .dama-heading-normal-font {
     font-family: "Quicksand Medium", sans-serif;
+    color: #FC629D;
 }
 
 h4 {
