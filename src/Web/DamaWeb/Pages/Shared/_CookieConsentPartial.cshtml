@@ -10,15 +10,14 @@
 {
     <nav id="cookieConsent" class="navbar navbar-expand-md navbar-light bg-light fixed-bottom" role="alert">
         <div class="container-fluid">
-            <div class="navbar-header d-none d-sm-block">
-                <span class="navbar-brand"><span class="fas fa-info-circle" aria-hidden="true"></span></span>
+            <div class="navbar-header d-none d-md-block order-2 ml-2 ml-xl-0 order-xl-1">
+                <span class="navbar-brand mr-1"><span class="fas fa-info-circle" aria-hidden="true"></span></span>
             </div>
-
-            <span class="navbar-text small consentText">
+            <span class="navbar-text small consentText order-3 order-xl-2">
                 <span class="fas fa-info-circle d-inline d-sm-none" aria-hidden="true"></span>
                 Este site utiliza cookies. Se continuas a navegar, consideramos que aceitas o seu uso. Para mais informações clica na nossa <a asp-page="/Privacy">política de privacidade.</a>
             </span>
-            <div class="ml-auto consentText">
+            <div class="consentText ml-xl-1 mr-xl-auto order-1 order-xl-3">
                 <button type="button" class="btn btn-dama-pink navbar-btn btn-sm" data-cookie-string="@cookieString">Fechar</button>
             </div>
         </div>
