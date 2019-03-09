@@ -21,9 +21,9 @@ namespace Infrastructure.Data
             _dbContext = dbContext;
         }
 
-        public virtual T GetById(int id)
+        public virtual async Task<T> GetByIdAsync(int id)
         {
-            return _dbContext.Set<T>().Find(id);
+            return await _dbContext.Set<T>().FindAsync(id);
         }
 
         public T GetSingleBySpec(ISpecification<T> spec)
@@ -34,11 +34,6 @@ namespace Infrastructure.Data
         public async Task<T> GetSingleBySpecAsync(ISpecification<T> spec)
         {
             return (await ListAsync(spec)).FirstOrDefault();
-        }
-
-        public virtual async Task<T> GetByIdAsync(int id)
-        {
-            return await _dbContext.Set<T>().FindAsync(id);
         }
 
         public IEnumerable<T> ListAll()
