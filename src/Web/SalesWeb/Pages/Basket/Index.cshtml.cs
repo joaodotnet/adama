@@ -57,7 +57,7 @@ namespace SalesWeb.Pages.Basket
             }
             await SetBasketModelAsync();
 
-            var options = _basketService.GetFirstOptionFromAttribute(productDetails.CatalogItemId);
+            var options = await _basketService.GetFirstOptionFromAttributeAsync(productDetails.CatalogItemId);
 
             await _basketService.AddItemToBasket(BasketModel.Id, productDetails.CatalogItemId, productDetails.Price, 1, options.Item1, options.Item2, options.Item3, null,null,true);
 

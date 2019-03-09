@@ -16,16 +16,16 @@ namespace ApplicationCore.Services
         private readonly IAsyncRepository<Basket> _basketRepository;
         private readonly IUriComposer _uriComposer;
         private readonly IAppLogger<BasketService> _logger;
-        private readonly IRepository<CatalogItem> _itemRepository;        
+        private readonly IAsyncRepository<CatalogItem> _itemRepository;        
 
         public BasketService(IAsyncRepository<Basket> basketRepository,
-            IRepository<CatalogItem> itemRepository,
+            IAsyncRepository<CatalogItem> itemRepository,
             IUriComposer uriComposer,
             IAppLogger<BasketService> logger)
         {
             _basketRepository = basketRepository;
             _uriComposer = uriComposer;
-            this._logger = logger;
+            _logger = logger;
             _itemRepository = itemRepository;
         }
 
@@ -135,7 +135,7 @@ namespace ApplicationCore.Services
             foreach (var item in basket.Items)
             {
                 var spec = new CatalogTypeFilterSpecification(item.CatalogItemId);
-                var product = _itemRepository.GetSingleBySpec(spec);
+                var product = await _itemRepository.GetSingleBySpecAsync(spec);
 
                 if(product.CatalogType.DeliveryTimeUnit > deliveryTime.Unit)
                 {
@@ -152,12 +152,12 @@ namespace ApplicationCore.Services
             return deliveryTime;
         }
 
-        public (int?, int?, int?) GetFirstOptionFromAttribute(int catalogItemId)
+        public async Task<(int?, int?, int?)> GetFirstOptionFromAttributeAsync(int catalogItemId)
         {
             var options = (default(int?), default(int?), default(int?));
 
             var spec = new CatalogTypeFilterSpecification(catalogItemId);
-            var product = _itemRepository.GetSingleBySpec(spec);
+            var product = await _itemRepository.GetSingleBySpecAsync(spec);
 
             var group = product.CatalogAttributes.GroupBy(x => x.Type);
             foreach (var attribute in group)

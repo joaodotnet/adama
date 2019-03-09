@@ -31,6 +31,10 @@ namespace Infrastructure.Data
             return List(spec).FirstOrDefault();
         }
 
+        public async Task<T> GetSingleBySpecAsync(ISpecification<T> spec)
+        {
+            return (await ListAsync(spec)).FirstOrDefault();
+        }
 
         public virtual async Task<T> GetByIdAsync(int id)
         {
@@ -49,37 +53,16 @@ namespace Infrastructure.Data
 
         public IEnumerable<T> List(ISpecification<T> spec)
         {
-            // fetch a Queryable that includes all expression-based includes
-            var queryableResultWithIncludes = spec.Includes
-                .Aggregate(_dbContext.Set<T>().AsQueryable(),
-                    (current, include) => current.Include(include));
-
-            // modify the IQueryable to include any string-based include statements
-            var secondaryResult = spec.IncludeStrings
-                .Aggregate(queryableResultWithIncludes,
-                    (current, include) => current.Include(include));
-
-            // return the result of the query using the specification's criteria expression
-            return secondaryResult
-                            .Where(spec.Criteria)
-                            .AsEnumerable();
+            return ApplySpecification(spec).AsEnumerable();
         }
         public async Task<List<T>> ListAsync(ISpecification<T> spec)
         {
-            // fetch a Queryable that includes all expression-based includes
-            var queryableResultWithIncludes = spec.Includes
-                .Aggregate(_dbContext.Set<T>().AsQueryable(),
-                    (current, include) => current.Include(include));
+            return await ApplySpecification(spec).ToListAsync();
+        }
 
-            // modify the IQueryable to include any string-based include statements
-            var secondaryResult = spec.IncludeStrings
-                .Aggregate(queryableResultWithIncludes,
-                    (current, include) => current.Include(include));
-
-            // return the result of the query using the specification's criteria expression
-            return await secondaryResult
-                            .Where(spec.Criteria)
-                            .ToListAsync();
+        public async Task<int> CountAsync(ISpecification<T> spec)
+        {
+            return await ApplySpecification(spec).CountAsync();
         }
 
         public T Add(T entity)
@@ -118,6 +101,11 @@ namespace Infrastructure.Data
         {
             _dbContext.Set<T>().Remove(entity);
             await _dbContext.SaveChangesAsync();
+        }
+
+        private IQueryable<T> ApplySpecification(ISpecification<T> spec)
+        {
+            return SpecificationEvaluator<T>.GetQuery(_dbContext.Set<T>().AsQueryable(), spec);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace ApplicationCore.Interfaces
         Task DeleteItem(int basketId, int itemIndex);
         Task DeleteBasketAsync(int basketId);
         Task<DeliveryTimeDTO> CalculateDeliveryTime(int basketId);
-        (int?,int?,int?) GetFirstOptionFromAttribute(int catalogItemId);
+        Task<(int?,int?,int?)> GetFirstOptionFromAttributeAsync(int catalogItemId);
         Task AddCustomizeItemToBasket(int basketId, int catalogTypeId, string description, string textOrName, string colors, int quantity);
     }
 }
