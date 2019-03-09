@@ -14,10 +14,10 @@ namespace SalesWeb.Pages.Order
     public partial class DetailModel : PageModel
     {
         private readonly IRepository<ApplicationCore.Entities.OrderAggregate.Order> _repository;
-        private readonly IRepository<Country> _countryRepository;
+        private readonly IAsyncRepository<Country> _countryRepository;
 
         public DetailModel(IRepository<ApplicationCore.Entities.OrderAggregate.Order> repository,
-            IRepository<Country> countryRepository)
+            IAsyncRepository<Country> countryRepository)
         {
             _repository = repository;
             _countryRepository = countryRepository;
@@ -26,7 +26,7 @@ namespace SalesWeb.Pages.Order
         [BindProperty]
         public OrderViewModel OrderDetails { get; set; } = new OrderViewModel();
 
-        public IActionResult OnGet(int orderId)
+        public async Task<IActionResult> OnGetAsync(int orderId)
         {
             var order = _repository.GetSingleBySpec(new GroceryOrdersSpecification(orderId));
             if (order == null)
@@ -36,7 +36,7 @@ namespace SalesWeb.Pages.Order
             int.TryParse(order.BillingToAddress.Country, out int countryCode);
             if(countryCode != 0)
             {
-                var country = _countryRepository.GetById(countryCode);
+                var country = await _countryRepository.GetByIdAsync(countryCode);
                 if (country != null)
                     countryName = country.Name;
             }
