@@ -23,7 +23,7 @@ namespace SalesWeb.Services
     public class CatalogService : ICatalogService
     {
         private readonly ILogger<CatalogService> _logger;
-        private readonly IRepository<CatalogItem> _itemRepository;
+        private readonly IAsyncRepository<CatalogItem> _itemRepository;
         private readonly IAsyncRepository<CatalogIllustration> _illustrationRepository;
         private readonly IAsyncRepository<CatalogType> _typeRepository;
         private readonly IUriComposer _uriComposer;
@@ -31,7 +31,7 @@ namespace SalesWeb.Services
 
         public CatalogService(
             ILoggerFactory loggerFactory,
-            IRepository<CatalogItem> itemRepository,
+            IAsyncRepository<CatalogItem> itemRepository,
             IAsyncRepository<CatalogIllustration> illustrationRepository,
             IAsyncRepository<CatalogType> typeRepository,
             IUriComposer uriComposer,
@@ -50,8 +50,8 @@ namespace SalesWeb.Services
             _logger.LogInformation("GetCatalogItems called.");
 
             var filterSpecification = new CatalogFilterSpecification(illustrationId, typeId, categoryId);
-            var root = _itemRepository
-                .List(filterSpecification);
+            var root = await _itemRepository
+                .ListAsync(filterSpecification);
 
             var totalItems = root.Count();
 
@@ -137,8 +137,8 @@ namespace SalesWeb.Services
             var category = await _db.Categories.FindAsync(categoryId);
 
             var filterSpecification = new CatalogFilterSpecification(null, null, categoryId);
-            var root = _itemRepository
-                .List(filterSpecification);
+            var root = await _itemRepository
+                .ListAsync(filterSpecification);
 
             var totalItems = root.Count();
 
