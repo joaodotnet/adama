@@ -24,7 +24,7 @@ namespace DamaWeb.Services
     public class CatalogService : ICatalogService
     {
         private readonly ILogger<CatalogService> _logger;
-        private readonly IRepository<CatalogItem> _itemRepository;
+        private readonly IAsyncRepository<CatalogItem> _itemRepository;
         private readonly IAsyncRepository<CatalogIllustration> _illustrationRepository;
         private readonly IAsyncRepository<CatalogType> _typeRepository;
         private readonly IUriComposer _uriComposer;
@@ -32,7 +32,7 @@ namespace DamaWeb.Services
 
         public CatalogService(
             ILoggerFactory loggerFactory,
-            IRepository<CatalogItem> itemRepository,
+            IAsyncRepository<CatalogItem> itemRepository,
             IAsyncRepository<CatalogIllustration> illustrationRepository,
             IAsyncRepository<CatalogType> typeRepository,
             IUriComposer uriComposer,
@@ -51,8 +51,8 @@ namespace DamaWeb.Services
             _logger.LogInformation("GetCatalogItems called.");
 
             var filterSpecification = new CatalogFilterSpecification(illustrationId, typeId, categoryId);
-            var root = _itemRepository
-                .List(filterSpecification);
+            var root = await _itemRepository
+                .ListAsync(filterSpecification);
 
             var totalItems = root.Count();
 
@@ -162,8 +162,8 @@ namespace DamaWeb.Services
                 return null;
 
             var filterSpecification = new CatalogFilterSpecification(null, null, category.Id);
-            var root = _itemRepository
-                .List(filterSpecification);
+            var root = await _itemRepository
+                .ListAsync(filterSpecification);
 
             var totalItems = root.Count();
 
@@ -534,12 +534,12 @@ namespace DamaWeb.Services
                 .OrderBy(x => x.Order)
                 .ToList();
 
-            GetTopCategories(menuViewModel, categories, parents);
+            await GetTopCategoriesAsync(menuViewModel, categories, parents);
 
             return menuViewModel;
         }
 
-        private void GetTopCategories(List<MenuItemComponentViewModel> model, List<Category> categories, List<Category> parents)
+        private async Task GetTopCategoriesAsync(List<MenuItemComponentViewModel> model, List<Category> categories, List<Category> parents)
         {
             model.AddRange(parents.Select(x => new MenuItemComponentViewModel
             {
@@ -575,7 +575,7 @@ namespace DamaWeb.Services
                     {
                         //Check if has items
                         var filterSpecification = new CatalogFilterSpecification(null, catalogType.CatalogTypeId, category.Id);
-                        var items = _itemRepository.List(filterSpecification).ToList();
+                        var items = await _itemRepository.ListAsync(filterSpecification);
 
                         if (items?.Count() > 0)
                         {
@@ -628,10 +628,10 @@ namespace DamaWeb.Services
             return allCatalogTypes.SingleOrDefault(x => x.Slug == type);
         }
 
-        public string GetSlugFromSku(string sku)
+        public async Task<string> GetSlugFromSkuAsync(string sku)
         {
             var spec = new CatalogSkuSpecification(sku);
-            var catalogItem = _itemRepository.GetSingleBySpec(spec);
+            var catalogItem = await _itemRepository.GetSingleBySpecAsync(spec);
             if (catalogItem != null)
                 return catalogItem.Slug;
             return string.Empty;

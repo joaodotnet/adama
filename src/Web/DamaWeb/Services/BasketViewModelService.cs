@@ -16,11 +16,11 @@ namespace DamaWeb.Services
     {
         private readonly IAsyncRepository<Basket> _basketRepository;
         private readonly IUriComposer _uriComposer;
-        private readonly IRepository<CatalogItem> _itemRepository;
+        private readonly IAsyncRepository<CatalogItem> _itemRepository;
         private readonly IAsyncRepository<CatalogType> _typeRepository;
 
         public BasketViewModelService(IAsyncRepository<Basket> basketRepository,
-            IRepository<CatalogItem> itemRepository,
+            IAsyncRepository<CatalogItem> itemRepository,
             IAsyncRepository<CatalogType> typeRepository,
             IUriComposer uriComposer)
         {
@@ -72,7 +72,7 @@ namespace DamaWeb.Services
                 if (item.CatalogItemId != 0)
                 {
                     var spec = new CatalogTypeFilterSpecification(item.CatalogItemId);
-                    var catalogItem = _itemRepository.GetSingleBySpec(spec);
+                    var catalogItem = await _itemRepository.GetSingleBySpecAsync(spec);
                     if (catalogItem != null)
                     {
                         itemModel.PictureUrl = _uriComposer.ComposePicUri(catalogItem.PictureUri);

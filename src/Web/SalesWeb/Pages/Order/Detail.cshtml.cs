@@ -13,10 +13,10 @@ namespace SalesWeb.Pages.Order
 {
     public partial class DetailModel : PageModel
     {
-        private readonly IRepository<ApplicationCore.Entities.OrderAggregate.Order> _repository;
+        private readonly IAsyncRepository<ApplicationCore.Entities.OrderAggregate.Order> _repository;
         private readonly IAsyncRepository<Country> _countryRepository;
 
-        public DetailModel(IRepository<ApplicationCore.Entities.OrderAggregate.Order> repository,
+        public DetailModel(IAsyncRepository<ApplicationCore.Entities.OrderAggregate.Order> repository,
             IAsyncRepository<Country> countryRepository)
         {
             _repository = repository;
@@ -28,7 +28,7 @@ namespace SalesWeb.Pages.Order
 
         public async Task<IActionResult> OnGetAsync(int orderId)
         {
-            var order = _repository.GetSingleBySpec(new GroceryOrdersSpecification(orderId));
+            var order = await _repository.GetSingleBySpecAsync(new GroceryOrdersSpecification(orderId));
             if (order == null)
                 return NotFound();
 

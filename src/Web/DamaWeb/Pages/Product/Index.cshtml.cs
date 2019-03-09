@@ -50,7 +50,7 @@ namespace DamaWeb.Pages.Product
             //Old URL logic
             if (ProductModel == null)
             {
-                var slug = _catalogService.GetSlugFromSku(id);
+                var slug = await _catalogService.GetSlugFromSkuAsync(id);
                 if(!string.IsNullOrEmpty(slug))
                 {
                     return RedirectToPagePermanent("./Index",new { id = slug });

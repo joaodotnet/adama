@@ -155,7 +155,7 @@ namespace DamaWeb.Pages.Basket
                 if (resOrder.OrderItems.Any(x => x.CustomizeItem.CatalogTypeId.HasValue))
                     body = GeCustomizeEmailBody(resOrder, user, UserAddress.UseUserAddress == 2);
                 else
-                    body = GetEmailBody(resOrder, user, UserAddress.UseUserAddress == 2, DeliveryTime);
+                    body = await GetEmailBodyAsync(resOrder, user, UserAddress.UseUserAddress == 2, DeliveryTime);
 
                 await _emailSender.SendEmailAsync(_settings.FromOrderEmail, resOrder.BuyerId, $"Dama no Jornal® - Encomenda #{resOrder.Id}", body, _settings.CCEmails);
 
@@ -266,7 +266,7 @@ namespace DamaWeb.Pages.Basket
             return ModelState.IsValid;
         }
 
-        private string GetEmailBody(ApplicationCore.Entities.OrderAggregate.Order order, ApplicationUser user, bool pickupAtStore, DeliveryTimeDTO deliveryTime)
+        private async Task<string> GetEmailBodyAsync(ApplicationCore.Entities.OrderAggregate.Order order, ApplicationUser user, bool pickupAtStore, DeliveryTimeDTO deliveryTime)
         {
             var name = user != null && !string.IsNullOrEmpty(user.FirstName) ? $"{user.FirstName} {user.LastName}" : order.BuyerId;
             string body = $@"
@@ -297,7 +297,7 @@ namespace DamaWeb.Pages.Basket
             foreach (var item in order.OrderItems)
             {
                 //Get Attribtues
-                var attributes = _orderService.GetOrderAttributes(item.ItemOrdered.CatalogItemId, item.CatalogAttribute1, item.CatalogAttribute2, item.CatalogAttribute3);
+                var attributes = await _orderService.GetOrderAttributesAsync(item.ItemOrdered.CatalogItemId, item.CatalogAttribute1, item.CatalogAttribute2, item.CatalogAttribute3);
                 body += $@"
             <tr>
                 <td width='250px'>

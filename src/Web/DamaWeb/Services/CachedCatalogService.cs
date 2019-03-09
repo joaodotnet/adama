@@ -121,34 +121,14 @@ namespace DamaWeb.Services
             });
         }
 
-        public string GetSlugFromSku(string sku)
+        public async Task<string> GetSlugFromSkuAsync(string sku)
         {
             string cacheKey = String.Format(_itemGetSlugKeyTemplate, sku);
-            return _cache.GetOrCreate(cacheKey, entry =>
+            return await _cache.GetOrCreateAsync(cacheKey, async entry =>
             {
                 entry.SlidingExpiration = _defaultCacheDuration;
-                return _catalogService.GetSlugFromSku(sku);
+                return await _catalogService.GetSlugFromSkuAsync(sku);
             });
         }
-
-        //public async Task<(int, string)?> GetCatalogType(string type)
-        //{
-        //    string cacheKey = String.Format(_categoryTypesKeyTemplate, type);
-        //    return await _cache.GetOrCreateAsync(cacheKey, async entry =>
-        //    {
-        //        entry.SlidingExpiration = _defaultCacheDuration;
-        //        return await _catalogService.GetCatalogType(type);
-        //    });
-        //}
-
-        //public async Task<Category> GetCategory(string name)
-        //{
-        //    string cacheKey = String.Format(_categoryKeyTemplate, name);
-        //    return await _cache.GetOrCreateAsync(cacheKey, async entry =>
-        //    {
-        //        entry.SlidingExpiration = _defaultCacheDuration;
-        //        return await _catalogService.GetCategory(name);
-        //    });
-        //}
     }
 }
