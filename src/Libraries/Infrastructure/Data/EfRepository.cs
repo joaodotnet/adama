@@ -26,11 +26,6 @@ namespace Infrastructure.Data
             return await _dbContext.Set<T>().FindAsync(id);
         }
 
-        public T GetSingleBySpec(ISpecification<T> spec)
-        {
-            return List(spec).FirstOrDefault();
-        }
-
         public async Task<T> GetSingleBySpecAsync(ISpecification<T> spec)
         {
             return (await ListAsync(spec)).FirstOrDefault();

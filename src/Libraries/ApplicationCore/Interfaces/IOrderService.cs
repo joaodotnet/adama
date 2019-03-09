@@ -14,7 +14,7 @@ namespace ApplicationCore.Interfaces
         Task<Order> GetOrderAsync(int id);
         Task<List<Order>> GetOrdersAsync(string buyerId);
         Task<List<CatalogAttribute>> GetOrderAttributesAsync(int orderId, int orderItemId);
-        List<CatalogAttribute> GetOrderAttributes(int catalogItemId, int? catalogAttribute1, int? catalogAttribute2, int? catalogAttribute3);
+        Task<List<CatalogAttribute>> GetOrderAttributesAsync(int catalogItemId, int? catalogAttribute1, int? catalogAttribute2, int? catalogAttribute3);
         Task UpdateOrderInvoiceAsync(int id, long? invoiceId, string invoiceNumber);
         Task UpdateOrderBillingAsync(int id, int? taxNumber, string customerEmail, Address billingAddress);
         Task UpdateOrderItemsPrice(int orderId, List<Tuple<int, decimal>> items);

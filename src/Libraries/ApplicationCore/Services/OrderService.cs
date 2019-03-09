@@ -18,7 +18,6 @@ namespace ApplicationCore.Services
         private readonly IAsyncRepository<CustomizeOrder> _customizeOrderRepository;
         private readonly IBasketRepository _basketRepository;
         private readonly IAsyncRepository<CatalogItem> _itemRepository;
-        private readonly IRepository<CatalogItem> _itemSyncRepository;
         private readonly IAsyncRepository<CatalogType> _catalogRepository;
         private readonly IInvoiceService _invoiceService;
 
@@ -26,7 +25,6 @@ namespace ApplicationCore.Services
             IAsyncRepository<CatalogItem> itemRepository,
             IAsyncRepository<Order> orderRepository,
             IAsyncRepository<CustomizeOrder> customizeOrderRepository,
-            IRepository<CatalogItem> itemSyncRepository,
             IAsyncRepository<CatalogType> catalogRepository,
             IInvoiceService invoiceService)
         {
@@ -34,7 +32,6 @@ namespace ApplicationCore.Services
             _basketRepository = basketRepository;
             _itemRepository = itemRepository;
             _customizeOrderRepository = customizeOrderRepository;
-            _itemSyncRepository = itemSyncRepository;
             _catalogRepository = catalogRepository;
             _invoiceService = invoiceService;
         }
@@ -180,10 +177,10 @@ namespace ApplicationCore.Services
             return list;
         }
 
-        public List<CatalogAttribute> GetOrderAttributes(int catalogItemId, int? catalogAttribute1, int? catalogAttribute2, int? catalogAttribute3)
+        public async Task<List<CatalogAttribute>> GetOrderAttributesAsync(int catalogItemId, int? catalogAttribute1, int? catalogAttribute2, int? catalogAttribute3)
         {
             var spec = new CatalogAttrFilterSpecification(catalogItemId);
-            var product = _itemSyncRepository.GetSingleBySpec(spec);
+            var product = await _itemRepository.GetSingleBySpecAsync(spec);
             var list = new List<CatalogAttribute>();
             if (product != null)
             {

@@ -80,51 +80,7 @@ namespace DamaWeb.Pages.Order
             OrderDetails = new OrderViewModel()
             {
                 OrderDate = order.OrderDate,
-                OrderItems = order.OrderItems.Select(oi => 
-                {
-                    string uri, name, description = string.Empty, text = string.Empty, colors = string.Empty;
-                    int id;
-                    bool isCustomize = false;
-                    if(oi.CustomizeItem.CatalogTypeId.HasValue)
-                    {
-                        isCustomize = true;
-                        id = oi.CustomizeItem.CatalogTypeId.Value;
-                        uri = oi.CustomizeItem.PictureUri;
-                        name = oi.CustomizeItem.ProductName;
-                        description = oi.CustomizeItem.Description;
-                        text = oi.CustomizeItem.Name;
-                        colors = oi.CustomizeItem.Colors;
-                    }
-                    else
-                    {
-                        id = oi.ItemOrdered.CatalogItemId;
-                        uri = oi.ItemOrdered.PictureUri;
-                        name = oi.ItemOrdered.ProductName;
-                    }
-                    OrderItemViewModel item = new OrderItemViewModel
-                    {
-                        Discount = 0,
-                        PictureUrl = uri,
-                        ProductId = id,
-                        ProductName = name,
-                        CustomizeName = oi.CustomizeName,
-                        UnitPrice = oi.UnitPrice,
-                        Units = oi.Units,
-                        Attributes = _orderService.GetOrderAttributes(oi.ItemOrdered.CatalogItemId, oi.CatalogAttribute1, oi.CatalogAttribute2, oi.CatalogAttribute3)
-                        .Select(x => new OrderItemDetailViewModel
-                        {
-                            Type = x.Type,
-                            AttributeName = x.Name
-                        })
-                        .ToList(),
-                        IsCustomize = isCustomize,
-                        CustomizeDescription = description,
-                        CustomizeText =
-                        text,
-                        CustomizeColors = colors
-                    };
-                    return item;
-                }).ToList(),
+                OrderItems = await GetOrderItems(order.OrderItems),
                 
                 OrderNumber = order.Id,
                 ShippingAddress = order.ShipToAddress,
@@ -135,6 +91,57 @@ namespace DamaWeb.Pages.Order
             };
 
             return Page();
+        }
+
+        private async Task<List<OrderItemViewModel>> GetOrderItems(IReadOnlyCollection<OrderItem> orderItems)
+        {
+            var items = new List<OrderItemViewModel>();
+            foreach (var oi in orderItems)
+            {
+                string uri, name, description = string.Empty, text = string.Empty, colors = string.Empty;
+                int id;
+                bool isCustomize = false;
+                if (oi.CustomizeItem.CatalogTypeId.HasValue)
+                {
+                    isCustomize = true;
+                    id = oi.CustomizeItem.CatalogTypeId.Value;
+                    uri = oi.CustomizeItem.PictureUri;
+                    name = oi.CustomizeItem.ProductName;
+                    description = oi.CustomizeItem.Description;
+                    text = oi.CustomizeItem.Name;
+                    colors = oi.CustomizeItem.Colors;
+                }
+                else
+                {
+                    id = oi.ItemOrdered.CatalogItemId;
+                    uri = oi.ItemOrdered.PictureUri;
+                    name = oi.ItemOrdered.ProductName;
+                }
+                OrderItemViewModel item = new OrderItemViewModel
+                {
+                    Discount = 0,
+                    PictureUrl = uri,
+                    ProductId = id,
+                    ProductName = name,
+                    CustomizeName = oi.CustomizeName,
+                    UnitPrice = oi.UnitPrice,
+                    Units = oi.Units,
+                    Attributes = (await _orderService.GetOrderAttributesAsync(oi.ItemOrdered.CatalogItemId, oi.CatalogAttribute1, oi.CatalogAttribute2, oi.CatalogAttribute3))?
+                    .Select(x => new OrderItemDetailViewModel
+                    {
+                        Type = x.Type,
+                        AttributeName = x.Name
+                    })
+                    .ToList(),
+                    IsCustomize = isCustomize,
+                    CustomizeDescription = description,
+                    CustomizeText =
+                    text,
+                    CustomizeColors = colors
+                };
+                items.Add(item);
+            }
+            return items;
         }
     }    
 }

@@ -16,10 +16,10 @@ namespace SalesWeb.Services
     {
         private readonly IAsyncRepository<Basket> _basketRepository;
         private readonly IUriComposer _uriComposer;
-        private readonly IRepository<CatalogItem> _itemRepository;
+        private readonly IAsyncRepository<CatalogItem> _itemRepository;
 
         public BasketViewModelService(IAsyncRepository<Basket> basketRepository,
-            IRepository<CatalogItem> itemRepository,
+            IAsyncRepository<CatalogItem> itemRepository,
             IUriComposer uriComposer)
         {
             _basketRepository = basketRepository;
@@ -36,16 +36,24 @@ namespace SalesWeb.Services
             {
                 return await CreateBasketForUser(userName);
             }
-            return CreateViewModelFromBasket(basket);
+            return await CreateViewModelFromBasketAsync(basket);
         }
 
-        private BasketViewModel CreateViewModelFromBasket(Basket basket)
+        private async Task<BasketViewModel> CreateViewModelFromBasketAsync(Basket basket)
         {
             var viewModel = new BasketViewModel();
             viewModel.Id = basket.Id;
-            viewModel.BuyerId = basket.BuyerId;            
-            viewModel.Items = basket.Items.Select(i =>
+            viewModel.BuyerId = basket.BuyerId;
+            viewModel.Items = await GetBasketItemsAsync(basket.Items);
+            return viewModel;
+        }
+
+        private async Task<List<BasketItemViewModel>> GetBasketItemsAsync(IReadOnlyCollection<BasketItem> basketItems)
+        {
+            var items = new List<BasketItemViewModel>();
+            foreach (var i in basketItems)
             {
+
                 var itemModel = new BasketItemViewModel()
                 {
                     Id = i.Id,
@@ -55,11 +63,11 @@ namespace SalesWeb.Services
                     CustomizeName = i.CustomizeName
                 };
                 var spec = new CatalogAttrFilterSpecification(i.CatalogItemId);
-                var item = _itemRepository.GetSingleBySpec(spec);
+                var item = await _itemRepository.GetSingleBySpecAsync(spec);
                 if (item != null)
                 {
                     itemModel.PictureUrl = _uriComposer.ComposePicUri(item.PictureUri);
-                    itemModel.ProductName = item.Name;                    
+                    itemModel.ProductName = item.Name;
                 }
 
                 foreach (var attr in item.CatalogAttributes)
@@ -71,30 +79,12 @@ namespace SalesWeb.Services
                         {
                             Name = attr.Name,
                             Label = EnumHelper<AttributeType>.GetDisplayValue(attr.Type)
-                        });                   
+                        });
                 }
-
-                //itemModel.Attributes = item.CatalogAttributes.Select(d => new AttributeViewModel
-                //{
-                //    Name = d.Name,
-                //    Label = EnumHelper<AttributeType>.GetDisplayValue(d.Type)
-                //}).ToList();
-                return itemModel;
-            }).ToList();
-            //Shipping Cost
-            decimal shippingCost = 0;
-            foreach (var item in viewModel.Items)
-            {
-                var spec = new CatalogTypeFilterSpecification(item.CatalogItemId);
-                var catalogItem = _itemRepository.GetSingleBySpec(spec);
-                if (catalogItem.CatalogType.ShippingCost > shippingCost)
-                    shippingCost = catalogItem.CatalogType.ShippingCost;
+                items.Add(itemModel);
             }
-            viewModel.DefaultShippingCost = shippingCost;
-
-            return viewModel;
+            return items;
         }
-
         private async Task<BasketViewModel> CreateBasketForUser(string userId)
         {
             var basket = new Basket() { BuyerId = userId, CreatedDate = DateTime.Now };
