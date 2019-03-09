@@ -140,11 +140,7 @@ namespace SalesWeb
 
             services.AddAutoMapper();
 
-            services.AddScoped(typeof(IRepository<>), typeof(EfGroceryRepository<>));
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfGroceryRepository<>));
-            //services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
-            
-            
 
             services.AddScoped<ICatalogService, CachedCatalogService>();
             services.AddScoped<IBasketService, BasketService>();
