@@ -15,8 +15,6 @@ namespace Infrastructure.Data
         {
         }
 
-        
-
         public Basket GetByIdWithItems(int id)
         {
             return _dbContext.Baskets

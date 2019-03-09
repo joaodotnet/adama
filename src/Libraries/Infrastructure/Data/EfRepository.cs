@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Infrastructure.Data
 {
     /// <typeparam name="T"></typeparam>
-    public class EfRepository<T> : IRepository<T>, IAsyncRepository<T> where T : BaseEntity
+    public class EfRepository<T> : IAsyncRepository<T> where T : BaseEntity
     {
         protected readonly DamaContext _dbContext;
 

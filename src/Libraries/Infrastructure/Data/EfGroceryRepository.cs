@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Infrastructure.Data
 {
     /// <typeparam name="T"></typeparam>
-    public class EfGroceryRepository<T> : IRepository<T>, IAsyncRepository<T> where T : BaseEntity
+    public class EfGroceryRepository<T> : IAsyncRepository<T> where T : BaseEntity
     {
         protected readonly GroceryContext _dbContext;
 
