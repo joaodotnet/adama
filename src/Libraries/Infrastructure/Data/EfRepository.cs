@@ -7,10 +7,6 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Data
 {
-    /// <summary>
-    /// "There's some repetition here - couldn't we have some the sync methods call the async?"
-    /// https://blogs.msdn.microsoft.com/pfxteam/2012/04/13/should-i-expose-synchronous-wrappers-for-asynchronous-methods/
-    /// </summary>
     /// <typeparam name="T"></typeparam>
     public class EfRepository<T> : IRepository<T>, IAsyncRepository<T> where T : BaseEntity
     {
@@ -36,10 +32,6 @@ namespace Infrastructure.Data
             return await _dbContext.Set<T>().ToListAsync();
         }
 
-        public IEnumerable<T> List(ISpecification<T> spec)
-        {
-            return ApplySpecification(spec).AsEnumerable();
-        }
         public async Task<List<T>> ListAsync(ISpecification<T> spec)
         {
             return await ApplySpecification(spec).ToListAsync();
