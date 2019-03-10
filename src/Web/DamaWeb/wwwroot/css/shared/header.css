@@ -1,0 +1,135 @@
+﻿.logo {
+    color: #000000;
+    font-family: "Lily Script One", Sans-serif;
+    font-size: 41px;
+    font-weight: 100;
+    font-style: normal;
+}
+
+.customize-image {
+    position: absolute;
+    top: 45px;
+    right: 9%;
+    z-index: 5;
+}
+
+/* search box */
+.search-text {
+    background-color: #FC629D;
+}
+.search-text input {
+    color: #fff;
+    border-bottom: 1px solid #fff !important;
+    font-size: 14px;
+}
+
+.search-text input::-ms-input-placeholder {
+    color: #fff;
+}
+
+.search-text input::placeholder {
+    color: #fff;
+}
+
+#searchModal {
+    text-align: center;
+}
+
+#search:focus {
+    border-color: #fff;
+    box-shadow: inset 0 1px 1px #fff, 0 0 8px #fff;
+}
+
+/*navigation*/
+.login-nav .nav-link {
+    color: #7A7A7A !important;
+}
+
+    .login-nav .nav-link:hover {
+        border-bottom: 2px solid#7A7A7A !important;
+    }
+
+.navbar-light .navbar-nav .nav-link:hover {
+    /*border-bottom: 3px solid #fff;*/
+    color: #7A7A7A;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: #FC629D;
+    font-weight: 500;
+    font-size: 14px;
+    text-decoration: none;
+    transition: border 1s linear;
+}
+
+.dropdown-menu {
+    background-color: #fff;
+    color: #00A69C;
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dropdown-item {
+    color: #FC629D !important;
+    font-weight: 400;
+    font-size: 14px;
+    text-decoration: none;
+    padding: 15px;
+    margin: auto;
+}
+
+.social-links {
+    text-align: center;
+}
+
+    .social-links a {
+        /*display: inline-block;*/
+        width: 40px;
+        height: 40px;
+        border: 2px solid #fff;
+        border-radius: 50px;
+        margin-right: 4px;
+        cursor: pointer;
+        color: #FC629D;
+    }
+
+        .social-links a i {
+            color: #FC629D;
+        }
+
+    .social-links .nav-link {
+        padding-top: 8px;
+        padding-right: 2px !important;
+        padding-left: 6px !important;
+    }
+
+@media screen and (max-width: 992px) {
+    .customize-image {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    #brand-mobile-image {
+        display: none;
+    }
+
+    .dropdown-item:hover {
+        background-color: #FC629D;
+        transition: background-color 0.35s;
+    }
+
+        .dropdown-item:hover > .dropdown-item-text {
+            background-color: transparent;
+            color: #fff;
+        }
+
+    .dropdown:hover > .dropdown-menu {
+        display: block;
+    }
+
+    .dropdown-toggle:hover > .dropdown-menu {
+        display: block;
+    }
+}

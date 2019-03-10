@@ -1,0 +1,106 @@
+﻿.dama-customize h2 {
+    color: #000000;
+}
+
+.dama-customize .badge-light {
+    background-color: #88C9AC;
+    color: #fff;
+}
+
+.dama-customize-small {
+    font-size: 12px;
+}
+
+.dama-customize-menta {
+    background-color: #88C9AC !important;
+}
+
+.dama-customize-cards .col-sm-4 .card {
+    font-family: "Lily Script One", Sans-serif;
+    min-height: 80px;
+    background-color: #FC629D;
+    cursor: pointer;
+    color: #fff;
+    border-radius: 0;
+}
+
+.dama-customize-pink {
+    background-color: #FC629D;
+}
+
+.dama-customize-cards .product-block .card {
+    border: 0;
+    cursor: pointer;
+}
+
+.dama-customize-gray {
+    background-color: #e8e0e0;
+}
+
+.dama-customize-border-pink {
+    border: 2px dashed #FC629D;
+}
+
+.dama-customize-colors .card {
+    border-radius: 0;
+    padding: 5px;
+    margin: 1px;
+}
+
+.dama-customize-colors .card-body {
+    height: 60px;
+    cursor: pointer;
+}
+
+.dama-customize-color-selected {
+    border: 5px solid #e8e0e0;
+}
+
+.dama-customize-gray textarea {
+    background-color: #fff;
+}
+
+.dama-customize-textarea {
+    background-image: -webkit-linear-gradient(left, #fff 10px, transparent 10px), -webkit-linear-gradient(right, #fff 10px, transparent 10px), -webkit-linear-gradient(#fff 30px, #A9A9A9 30px);
+    background-image: -moz-linear-gradient(left, #fff 10px, transparent 10px), -moz-linear-gradient(right, #fff 10px, transparent 10px), -moz-linear-gradient(#fff 30px, #A9A9A9 30px);
+    background-image: -ms-linear-gradient(left, #fff 10px, transparent 10px), -ms-linear-gradient(right, #fff 10px, transparent 10px), -ms-linear-gradient(#fff 30px, #A9A9A9 30px);
+    background-image: -o-linear-gradient(left, #fff 10px, transparent 10px), -o-linear-gradient(right, #fff 10px, transparent 10px), -o-linear-gradient(#fff 30px, #A9A9A9 30px);
+    background-image: linear-gradient(left, #fff 10px, transparent 10px), linear-gradient(right, #fff 10px, transparent 10px), linear-gradient(#fff 30px, #A9A9A9 30px);
+    background-size: 100% 100%, 100% 100%, 100% 31px;
+    border: 0px;
+    border-radius: 0px;
+    box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0);
+    line-height: 31px;
+    font-family: Arial, Helvetica, Sans-serif;
+    padding: 8px;
+}
+
+    .dama-customize-textarea:focus {
+        outline: none;
+    }
+
+.dama-customize .esh-catalog-button {
+    background-color: #e9435b;
+}
+
+    .dama-customize .esh-catalog-button:hover {
+        background-color: #a83a4a;
+        transition: all 0.35s;
+    }
+
+.dama-customize-question {
+    font-size: 14px;
+}
+
+.form-input-gray, .form-input-gray:focus {
+    background-color: #E6E6E6;
+}
+
+.custom-file-label {
+    border: 1px solid #FC629D;
+}
+
+.custom-file-input {
+    background-color: #FC629D !important;
+    border-radius: 0 !important;
+}
