@@ -1,4 +1,141 @@
-﻿.esh-catalog-hero {
+﻿.btn-outline-pink, .btn-outline-pink:active, .btn-outline-pink:visited {
+    border-color: #FC629D;
+    color: #FC629D;
+    border-radius: 0 !important;
+    background-color: #fff;
+}
+
+    .btn-outline-pink:hover {
+        background-color: #88C9AC;
+        color: #fff;
+        border-color: #88C9AC;
+    }
+
+.btn-outline-menta, .btn-outline-menta:active, .btn-outline-menta:visited {
+    border-color: #88C9AC;
+    color: #88C9AC;
+    border-radius: 0 !important;
+    background-color: #fff;
+}
+
+    .btn-outline-menta:hover {
+        background-color: #88C9AC;
+        color: #fff;
+        border-color: #88C9AC;
+    }
+
+.btn-dama-sm {
+    line-height: 1rem;
+    font-size: 0.8rem;
+}
+
+.link-dama-black {
+    color: #000000;
+    text-decoration: underline;
+}
+
+    .link-dama-black:hover, .link-dama-menta:hover {
+        color: #58AD87;
+    }
+
+.border-menta {
+    border-color: #88C9AC !important;
+}
+
+.dama-product-input {
+    font-size: 0.80rem;
+}
+
+.slick-prev {
+    left: 10px !important;
+    z-index: 1;
+}
+
+.slick-next {
+    right: 10px !important;
+}
+
+
+.slider-for img {
+    width: 100%;
+    margin: 0 auto; /* it centers any block level element */
+}
+
+.dama-product-title {
+    color: #54595f;
+    font-size: 23px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.dama-product-price {
+    color: #000000;
+}
+
+    .dama-product-price::after {
+        content: '€ ';
+    }
+
+.dama-product-description {
+    font-size: 14px;
+}
+
+.dama-product-attr .col-form-label {
+    color: #929292;
+    font-size: 14px;
+}
+
+.dama-product-attr .form-control {
+    color: #333;
+    font-size: 14px;
+}
+
+.dama-product-attr span {
+    font-size: 12px;
+}
+
+.dama-product-attr a {
+    font-size: 14px;
+}
+
+.dama-product-add {
+    background-color: #FC629D;
+    border: 0;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-size: 1rem;
+    height: 2.5rem;
+    transition: all 0.35s;
+    width: 100%;
+}
+
+    .dama-product-add:hover {
+        background-color: #FC2A7B;
+        transition: all 0.35s;
+    }
+
+@media screen and (min-width: 992px) {
+    .dama-product-title-mobile {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .dama-product-title {
+        display: none;
+    }
+
+    .dama-product-thumbnails {
+        display: none;
+    }
+
+    .slider-for img {
+        height: auto;
+        width: auto;
+    }
+}
+
+.esh-catalog-hero {
     background-image: url("../../images/main_banner.png");
     background-size: cover;
     height: 260px;
