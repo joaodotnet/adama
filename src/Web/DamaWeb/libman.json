@@ -93,17 +93,25 @@
         "dist/js/bootstrap.min.js",
         "dist/js/bootstrap.js.map"
       ]
-    }  
-,
-{
-  "provider": "cdnjs",
-  "library": "slick-carousel@1.8.0",
-  "destination": "wwwroot/lib/slick-carousel/",
-  "files": [    
-    "slick.js",
-    "slick-theme.css",
-    "slick.css"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "slick-carousel@1.8.0",
+      "destination": "wwwroot/lib/slick-carousel/",
+      "files": [
+        "slick.js",
+        "slick-theme.css",
+        "slick.css"
+      ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "font-awesome@5.7.2",
+      "destination": "wwwroot/lib/font-awesome/",
+      "files": [
+        "js/all.js",
+        "js/all.min.js"
+      ]
+    }
   ]
-}
-]
 }
