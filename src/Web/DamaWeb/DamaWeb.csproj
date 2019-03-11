@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="BuildBundlerMinifier" Version="2.8.391" />
+    <PackageReference Include="BuildWebCompiler" Version="1.12.394" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.5.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.1" PrivateAssets="All" />
@@ -17,6 +18,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\ApplicationCore\ApplicationCore.csproj" />
     <ProjectReference Include="..\..\Libraries\Infrastructure\Infrastructure.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <DotNetCliToolReference Include="BundlerMinifier.Core" Version="2.8.391" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

@@ -1,0 +1,9 @@
+﻿[
+  {
+    "outputFile": "wwwroot/lib/bootstrap/css/bootstrap.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/bootstrap.scss",
+    "minify": {
+      "enabled": false
+    }
+  }
+]
