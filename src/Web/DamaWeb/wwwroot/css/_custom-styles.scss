@@ -1,0 +1,265 @@
+﻿@font-face {
+    font-family: Lily Script One;
+    font-weight: 700;
+    src: url("../fonts/LilyScriptOne-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: Quicksand Regular;
+    src: url("../fonts/Quicksand-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: Quicksand Medium;
+    src: url("../fonts/Quicksand-Medium.ttf") format("truetype");
+}
+
+html,
+body {
+    font-family: 'Quicksand Medium', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    z-index: 10;
+}
+
+/*** SHARED ****/
+
+.form-input {
+    border-radius: 0;
+    height: 45px;
+    padding: 10px;
+}
+
+.form-group.required label:after {
+    content: "*";
+    color: red;
+}
+
+.form-control {
+    border-radius: 0 !important;
+}
+
+.alert {
+    padding-left: 0;
+}
+
+.alert-danger {
+    background-color: transparent;
+    border: 0;
+    color: #FB0D0D;
+    font-size: 12px;
+}
+
+a,
+a:active,
+a:visited {
+    color: #000000;
+    transition: color 0.35s;
+}
+
+a:hover {
+    color: #EF7C8D;
+    text-decoration: underline;
+}
+
+h1.title {
+    font-family: "Quicksand Medium", sans-serif;
+    font-size: 20px;
+    color: #FC629D;
+    font-weight: 100;
+}
+
+h2 {
+    color: #FC629D;
+    font-family: "Lily Script One", Sans-serif;
+    font-size: 41px;
+    font-weight: 100;
+    line-height: 1.4em
+}
+
+h4 {
+    font-size: 20px;
+}
+
+.dama-heading-normal-font {
+    font-family: "Quicksand Medium", sans-serif;
+    color: #FC629D;
+}
+
+hr {
+    background-color: #fff;
+    border-top: 2px dashed #FC629D;
+}
+
+.btn-primary, .btn-primary:active, .btn-primary:visited {
+    background-color: #FC629D !important;
+    border: 0;
+    color: #fff;
+    border-radius: 0 !important;
+}
+
+.btn-primary:hover {
+    background-color: #FC2A7B !important;
+    border: 0;
+}
+
+.btn-secondary, .btn-secondary:active, .btn-secondary:visited {
+    border: 0;
+    border-radius: 0 !important;
+}
+
+.btn-secondary:hover {
+    border: 0;
+}
+
+.btn-dama-menta {
+    background-color: #88C9AC;
+    border: 0;
+    color: #fff;
+    border-radius: 0 !important;
+    line-height: 1rem;
+    font-size: 0.8rem;
+}
+
+.btn-dama-menta:hover {
+    background-color: #58AD87 !important;
+    border: 0;
+    color: #fff;
+    transition: all 0.35s;
+}
+
+.btn-dama-pink {
+    background-color: #FC629D;
+    border: 0;
+    color: #fff;
+    border-radius: 0 !important;
+    line-height: 1rem;
+    font-size: 0.8rem;
+}
+
+.btn-dama-pink:hover {
+    background-color: #FC2A7B !important;
+    border: 0;
+    color: #fff;
+    transition: all 0.35s;
+}
+
+.link-dama-menta {
+    color: #88C9AC;
+    text-decoration: underline;
+}
+
+.dama-small-text {
+    font-size: 0.7rem;
+}
+
+.nav-pills .nav-link.active {
+    background-color: #5fcbcb;
+}
+
+.btn-link {
+    color: #5fcbcb;
+}
+
+.btn-link:hover {
+    color: #609f9f;
+}
+
+.btn-dama-blue {
+    background-color: #88C9AC;
+    border-color: #fff;
+    border-radius: 0 !important;
+}
+
+@media screen and (max-width: 992px) {
+    .separator {
+        width: 250px;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .separator {
+        width: 395px;
+        height: 26px;
+    }
+}
+/*** End SHARED*/
+
+
+/*** HOME PAGE ****/
+
+/* Carousel */
+.carousel-caption p {
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+/* Make .svg files in the carousel display properly in older browsers */
+.carousel-inner .item img[src$=".svg"] {
+    width: 100%;
+}
+
+.news-heading {
+    padding: 50px 50px;
+}
+
+.bannerLink {
+    cursor: pointer;
+}
+/***END HOMEPAGE ***/
+
+
+/*** SEARCH PAGE ***/
+
+p.title {
+    font-family: "Quicksand Medium", sans-serif;
+    font-size: 20px;
+    color: #FC629D;
+    font-weight: 100;
+}
+/*** END SEARCH PAGE ****/
+
+
+/*** SIGIN IN PAGE ***/
+
+.btn-facebook {
+    color: #fff;
+    background-color: #3b5998;
+    border-color: rgba(0,0,0,0.2);
+}
+
+.btn-google {
+    color: #444;
+    background-color: #fff;
+    border-color: rgba(0,0,0,0.2);
+}
+
+.btn-social {
+    position: relative;
+    padding-left: 44px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.btn-social:hover {
+    color: #eee;
+}
+
+.btn-google:hover {
+    color: #000000;
+}
+
+.btn-social :first-child {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 37px;
+    padding: 7px;
+    font-size: 1.9em;
+    text-align: center;
+    border-right: 1px solid rgba(0,0,0,0.2);
+}
+
+/*** END SIGN IN PAGE*/

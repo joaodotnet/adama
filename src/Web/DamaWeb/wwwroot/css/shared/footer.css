@@ -25,6 +25,19 @@
         margin: 5px;
     }
 
+.esh-app-footer {
+    background-color: #FC629D;
+    border-top: 1px solid #EEEEEE;
+    margin-top: 2.5rem;
+    padding-bottom: 2.5rem;
+    padding-top: 2.5rem;
+    width: 100%;
+}
+
+.esh-app-footer-text {
+    color: #fff;
+    font-size: 11px;
+}
 @media screen and (max-width: 992px) {
     .consentText {
         font-size: 10px;
