@@ -35,31 +35,10 @@ body {
     color: red;
 }
 
-.form-control {
-    border-radius: 0 !important;
-}
-
-.alert {
-    padding-left: 0;
-}
-
-.alert-danger {
-    background-color: transparent;
-    border: 0;
-    color: #FB0D0D;
-    font-size: 12px;
-}
-
 a,
 a:active,
 a:visited {
-    color: #000000;
     transition: color 0.35s;
-}
-
-a:hover {
-    color: #EF7C8D;
-    text-decoration: underline;
 }
 
 h1.title {
