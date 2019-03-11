@@ -90,8 +90,20 @@
         "scss/_utilities.scss",
         "scss/_variables.scss",
         "dist/js/bootstrap.js",
+        "dist/js/bootstrap.min.js",
         "dist/js/bootstrap.js.map"
       ]
     }  
+,
+{
+  "provider": "cdnjs",
+  "library": "slick-carousel@1.8.0",
+  "destination": "wwwroot/lib/slick-carousel/",
+  "files": [    
+    "slick.js",
+    "slick-theme.css",
+    "slick.css"
+  ]
+}
 ]
 }

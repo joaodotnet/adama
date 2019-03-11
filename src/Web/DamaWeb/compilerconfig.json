@@ -1,7 +1,7 @@
 ﻿[
   {
-    "outputFile": "wwwroot/lib/bootstrap/css/bootstrap.css",
-    "inputFile": "wwwroot/lib/bootstrap/scss/bootstrap.scss",
+    "outputFile": "wwwroot/css/site.css",
+    "inputFile": "wwwroot/css/site.scss",
     "minify": {
       "enabled": false
     }
