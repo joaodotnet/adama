@@ -1,28 +1,4 @@
-﻿@font-face {
-    font-family: Lily Script One;
-    font-weight: 700;
-    src: url("../fonts/LilyScriptOne-Regular.ttf") format("truetype");
-}
-
-@font-face {
-    font-family: Quicksand Regular;
-    src: url("../fonts/Quicksand-Regular.ttf") format("truetype");
-}
-
-@font-face {
-    font-family: Quicksand Medium;
-    src: url("../fonts/Quicksand-Medium.ttf") format("truetype");
-}
-
-html,
-body {
-    font-family: 'Quicksand Medium', sans-serif;
-    font-size: 18px;
-    font-weight: 400;
-    z-index: 10;
-}
-
-/*** SHARED ****/
+﻿/*** SHARED ****/
 
 .form-input {
     border-radius: 0;
@@ -41,8 +17,7 @@ a:visited {
     transition: color 0.35s;
 }
 
-h1.title {
-    font-family: "Quicksand Medium", sans-serif;
+h1.title {    
     font-size: 20px;
     color: #FC629D;
     font-weight: 100;
@@ -50,38 +25,23 @@ h1.title {
 
 h2 {
     color: #FC629D;
+}
+
+h2.lily {
+    color: #FC629D;
     font-family: "Lily Script One", Sans-serif;
     font-size: 41px;
     font-weight: 100;
     line-height: 1.4em
 }
 
-h4 {
-    font-size: 20px;
-}
-
-.dama-heading-normal-font {
-    font-family: "Quicksand Medium", sans-serif;
-    color: #FC629D;
-}
-
 hr {
     background-color: #fff;
     border-top: 2px dashed #FC629D;
 }
-
-.btn-primary, .btn-primary:active, .btn-primary:visited {
-    background-color: #FC629D !important;
-    border: 0;
+.btn-primary{
     color: #fff;
-    border-radius: 0 !important;
 }
-
-.btn-primary:hover {
-    background-color: #FC2A7B !important;
-    border: 0;
-}
-
 .btn-secondary, .btn-secondary:active, .btn-secondary:visited {
     border: 0;
     border-radius: 0 !important;
