@@ -42,46 +42,16 @@ hr {
 .btn-primary{
     color: #fff;
 }
-.btn-secondary, .btn-secondary:active, .btn-secondary:visited {
-    border: 0;
-    border-radius: 0 !important;
-}
 
-.btn-secondary:hover {
-    border: 0;
-}
-
-.btn-dama-menta {
-    background-color: #88C9AC;
-    border: 0;
-    color: #fff;
-    border-radius: 0 !important;
-    line-height: 1rem;
-    font-size: 0.8rem;
-}
-
-.btn-dama-menta:hover {
-    background-color: #58AD87 !important;
-    border: 0;
+.btn-menta {
     color: #fff;
     transition: all 0.35s;
 }
-
-.btn-dama-pink {
-    background-color: #FC629D;
-    border: 0;
+.btn-menta:hover{
     color: #fff;
-    border-radius: 0 !important;
-    line-height: 1rem;
-    font-size: 0.8rem;
 }
 
-.btn-dama-pink:hover {
-    background-color: #FC2A7B !important;
-    border: 0;
-    color: #fff;
-    transition: all 0.35s;
-}
+/* VOU AQUI */
 
 .link-dama-menta {
     color: #88C9AC;
