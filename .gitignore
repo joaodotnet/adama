@@ -294,3 +294,4 @@ src/Web/DamaWeb/wwwroot/images/producttypes/
 src/Web/Backoffice/wwwroot/images/products/
 .vscode/
 invoices/
+*.min.css
