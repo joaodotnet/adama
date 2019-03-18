@@ -36,6 +36,10 @@ $h4-font-size: 1.25rem;
 $primary: #FC629D;
 $btn-border-width: 0;
 $btn-border-radius: 0;
+
+/* Colors */
+$theme-colors: ( "menta": #88C9AC );
+
 // @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 // Some example variables that you can uncomment:
 // Enabling shadows and gradients
@@ -56,5 +60,4 @@ $btn-border-radius: 0;
 //$light: #dfe6ee;
 //$dark: #303745;
 // Adding (!) an additional theme color (ex. classes btn-cool, bg-cool)
-$theme-colors: ( "menta": #88C9AC );
 //$font-family-sans-sewowrif: -apple-system, BlinkMacSystemFont, "Open Sans", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
