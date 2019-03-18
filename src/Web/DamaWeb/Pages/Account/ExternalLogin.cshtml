@@ -4,7 +4,7 @@
     ViewData["Title"] = "Registo";
 }
 
-<h2 class="dama-heading-normal-font">@ViewData["Title"]</h2>
+<h2>@ViewData["Title"]</h2>
 <h4>Associa a tua conta @Model.LoginProvider.</h4>
 
 
@@ -36,7 +36,7 @@
                 <input asp-for="Input.SubscribeNewsletter" class="form-check-input">
                 <label class="form-check-label small" asp-for="Input.SubscribeNewsletter"></label>
             </div>
-            <button type="submit" class="btn btn-dama-menta">Associar</button>
+            <button type="submit" class="btn btn-sm btn-menta">Associar</button>
         </form>
     </div>
 </div>

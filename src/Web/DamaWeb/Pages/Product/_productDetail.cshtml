@@ -68,7 +68,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-dama-menta" asp-page="/Product/Index" asp-page-handler="SendMessage" >Enviar</button>
+                    <button type="submit" class="btn btn-sm btn-menta" asp-page="/Product/Index" asp-page-handler="SendMessage" >Enviar</button>
                 </div>
             </div>
         </div>    
@@ -97,7 +97,7 @@
                     &#9679; Queres acrescentar um nome/frase?
                 </div>
                 <div class="col-12 col-md-4">
-                    <a id="btnAddName" class="btn btn-dama-menta btn-dama-sm w-100" role="button" data-toggle="collapse" href="#addName">ADICIONAR</a>
+                    <a id="btnAddName" class="btn btn-sm btn-menta w-100" role="button" data-toggle="collapse" href="#addName">ADICIONAR</a>
                 </div>
             </div>
             @*<small id="nameInputText" class="text-muted ml-3 dama-small-text"></small>*@
@@ -141,7 +141,7 @@
             <div id="divCustomizeTotal" class="row mb-4 mb-md-3 align-items-center">
                 <div class="col-12 col-md-8 dama-customize-question  mb-2 mb-sm-0">&#9679; Queres uma ilustração personalizada?</div>
                 <div class="col-12 col-md-4">
-                    <a class="btn btn-dama-menta w-100 text-white" role="button" asp-page="/Customize/Index" asp-route-CategoryId="@Model.CategoryId" asp-route-CatalogItemId="@Model.ProductTypeId" asp-fragment="produtos">PERSONALIZAR</a>
+                    <a class="btn btn-sm btn-menta w-100" role="button" asp-page="/Customize/Index" asp-route-CategoryId="@Model.CategoryId" asp-route-CatalogItemId="@Model.ProductTypeId" asp-fragment="produtos">PERSONALIZAR</a>
                 </div>
             </div>
         }
