@@ -6469,7 +6469,6 @@ hr {
 .link-underline {
   text-decoration: underline; }
 
-/* VOU AQUI */
 .dama-small-text {
   font-size: 0.7rem; }
 
@@ -6482,6 +6481,7 @@ hr {
 .btn-link:hover {
   color: #609f9f; }
 
+/* VOU AQUI */
 .btn-dama-blue {
   background-color: #88C9AC;
   border-color: #fff;
