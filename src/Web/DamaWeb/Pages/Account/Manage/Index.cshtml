@@ -4,7 +4,7 @@
     ViewData["Title"] = "Perfil";
 }
 
-<h2 class="dama-heading-normal-font">@ViewData["Title"]</h2>
+<h2>@ViewData["Title"]</h2>
 @await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
 <div class="row">
     <div class="col-md-6">
@@ -50,7 +50,7 @@
                 <input asp-for="Input.NIF" class="form-control" />
                 <span asp-validation-for="Input.NIF" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-dama-menta">Gravar</button>
+            <button type="submit" class="btn btn-sm btn-menta">Gravar</button>
         </form>
     </div>
 </div>

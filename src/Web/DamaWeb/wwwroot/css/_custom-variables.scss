@@ -9,6 +9,37 @@ $input-focus-border-color: #5fcbcb;
 /* Links */
 $link-color: #000000;
 $link-hover-color: #EF7C8D;
+
+/*Font*/
+@font-face {
+    font-family: Lily Script One;
+    font-weight: 700;
+    src: url("../fonts/LilyScriptOne-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: Quicksand Regular;
+    src: url("../fonts/Quicksand-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: Quicksand Medium;
+    src: url("../fonts/Quicksand-Medium.ttf") format("truetype");
+}
+$font-family-base: 'Quicksand Medium', sans-serif;
+$font-size-base: 1.125rem;
+
+/* Headings */
+$h4-font-size: 1.25rem;
+
+/* Buttons */
+$primary: #FC629D;
+$btn-border-width: 0;
+$btn-border-radius: 0;
+
+/* Colors */
+$theme-colors: ( "menta": #88C9AC );
+
 // @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 // Some example variables that you can uncomment:
 // Enabling shadows and gradients
@@ -29,8 +60,4 @@ $link-hover-color: #EF7C8D;
 //$light: #dfe6ee;
 //$dark: #303745;
 // Adding (!) an additional theme color (ex. classes btn-cool, bg-cool)
-//$theme-colors: (
-//  "cool": #4d3fa3
-//);
 //$font-family-sans-sewowrif: -apple-system, BlinkMacSystemFont, "Open Sans", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-

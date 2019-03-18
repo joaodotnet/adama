@@ -9,7 +9,7 @@
 <div class="account-login-container">
     <div class="row">
         <div class="col-sm-5">
-            <h2 class="dama-heading-normal-font">Login</h2>
+            <h2>Login</h2>
             <section>
                 <h4>Para fazer Login usa a tua conta de Facebook ou Google.</h4>
                 <form asp-page="./ExternalLogin" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
@@ -31,7 +31,7 @@
                                 }
                                 else
                                 {
-                                    <button type="submit" class="btn btn-dama-menta" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    <button type="submit" class="btn btn-sm btn-menta" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
                                 }
                             }
                         </p>
@@ -73,7 +73,7 @@
             </section>
         </div>
         <div class="offset-sm-1 col-sm-5">
-            <h2 class="dama-heading-normal-font">Registo</h2>
+            <h2>Registo</h2>
             <section>
                 <h4>Para fazeres o teu registo, preenche os campos abaixo.</h4>
                 <form asp-route-returnurl="@ViewData["ReturnUrl"]" asp-page-handler="Register" method="post">
@@ -115,7 +115,7 @@
                     <div class="form-group">
                         <div class="form-check">
                             <input asp-for="UserDetails.AgreeToTerms" class="form-check-input" />
-                            <label asp-for="UserDetails.AgreeToTerms" class="form-check-label small">Declaro que li e aceito os <a class="link-dama-menta" href="https://www.damanojornal.com/termos-e-condicoes/" target="_blank">Termos e Condições</a>.</label>
+                            <label asp-for="UserDetails.AgreeToTerms" class="form-check-label small">Declaro que li e aceito os <a class="text-menta link-underline" href="https://www.damanojornal.com/termos-e-condicoes/" target="_blank">Termos e Condições</a>.</label>
                         </div>
                         <span asp-validation-for="UserDetails.AgreeToTerms" class="text-danger small"></span>
                     </div>
