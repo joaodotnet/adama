@@ -171,7 +171,7 @@
         @if (Model.OrderDetails.ShippingCost > 0)
         {
             <section class="esh-orders_detail-section esh-orders_detail-section--right mt-3">
-                <article class="esh-orders_detail-titles esh-basket-titles--clean row">
+                <article class="esh-orders_detail-titles dnj-basket-titles--clean row">
                     <section class="esh-orders_detail-title d-none d-sm-block col-sm-7"></section>
                     <section class="esh-orders_detail-title col-7 col-sm-3 text-sm-right"><small>Despesas de Envio</small></section>
                     <section class="esh-orders_detail-item esh-orders_detail-item--mark col-4 col-sm-2 text-nowrap text-right">@Model.OrderDetails.ShippingCost €</section>
@@ -186,7 +186,7 @@
         }
 
         <section class="esh-orders_detail-section">
-            <article class="esh-orders_detail-titles esh-basket-titles--clean row">
+            <article class="esh-orders_detail-titles dnj-basket-titles--clean row">
                 <section class="esh-orders_detail-title d-none d-sm-block col-sm-7"></section>
                 <section class="esh-orders_detail-title col-7 col-sm-3 text-sm-right">TOTAL</section>
                 <section class="esh-orders_detail-item esh-orders_detail-item--mark col-4 col-sm-2 text-nowrap text-right text-sm-left">@(Model.OrderDetails.Total.HasValue ? Model.OrderDetails.Total + " €" : "em análise")</section>
