@@ -31,14 +31,14 @@
     border-radius: 50%;
     color: #FFFFFF;
     display: block;
-    height: 1.5rem;
+    height: 1.6rem;
     left: 50%;
     position: absolute;
     text-align: center;
     top: 0;
     transform: translateX(-38%);
     transition: all 0.35s;
-    width: 1.5rem;
+    width: 1.6rem;
 }
 @media (max-width: 576px) {
     .esh-basketstatus-badge {

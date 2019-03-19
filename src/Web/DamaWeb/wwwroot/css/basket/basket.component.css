@@ -73,6 +73,7 @@
 }
 
     .esh-basket-checkout:hover {
+        color: #fff;
         background-color: #FC2A7B;
         transition: all 0.35s;
     }
