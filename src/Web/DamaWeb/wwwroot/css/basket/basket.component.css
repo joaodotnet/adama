@@ -1,63 +1,63 @@
-﻿.esh-basket {
+﻿.dnj-basket {
     min-height: 80vh;
 }
 
-.esh-basket-titles {
+.dnj-basket-titles {
     padding-bottom: 1rem;
     padding-top: 2rem;
 }
 
-.esh-basket-titles--clean {
+.dnj-basket-titles--clean {
     padding-bottom: 0;
     padding-top: 0;
 }
 
-.esh-basket-title {
+.dnj-basket-title {
     text-transform: uppercase;
 }
 
-.esh-basket-items--border {
+.dnj-basket-items--border {
     border-bottom: 1px solid #EEEEEE;
     padding: .5rem 0;
 }
 
-    .esh-basket-items--border:last-of-type {
+    .dnj-basket-items--border:last-of-type {
         border-color: transparent;
     }
 
-.esh-basket-items-margin-left1 {
+.dnj-basket-items-margin-left1 {
     margin-left: 1px;
 }
 
-.esh-basket-item {
+.dnj-basket-item {
     font-size: 1rem;
     font-weight: 300;
 }
 
-.esh-basket-item--middle {
+.dnj-basket-item--middle {
     line-height: 8rem;
 }
 
 @media screen and (max-width: 1024px) {
-    .esh-basket-item--middle {
+    .dnj-basket-item--middle {
         line-height: 1rem;
     }
 }
 
-.esh-basket-item--mark {
+.dnj-basket-item--mark {
     color: #EF7C8D;
 }
 
-/*.esh-basket-image {
+/*.dnj-basket-image {
     height: 8rem;
 }*/
 
-.esh-basket-input {
+.dnj-basket-input {
     line-height: 1rem;
     width: 100%;
 }
 
-.esh-basket-checkout {
+.dnj-basket-checkout {
     background-color: #FC629D;
     border: 0;
     border-radius: 0;
@@ -72,14 +72,14 @@
     transition: all 0.35s;
 }
 
-    .esh-basket-checkout:hover {
+    .dnj-basket-checkout:hover {
         color: #fff;
         background-color: #FC2A7B;
         transition: all 0.35s;
     }
 
 @media (max-width: 576px) {
-    .esh-basket-checkout {
+    .dnj-basket-checkout {
         padding: 10px 10px;
     }
     .dama-basket-link {
@@ -109,11 +109,11 @@
     cursor: pointer;
 }
 
-.esh-identity-item a {
+.dnj-identity-item a {
     color: #808080;
 }
 
-.esh-identity-item a:hover {
+.dnj-identity-item a:hover {
     text-decoration: underline !important;
     color: #fff !important;
     transition: color 0.35s;

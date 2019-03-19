@@ -130,13 +130,6 @@
     }
 }
 
-.esh-catalog-hero {
-    background-image: url("../../images/main_banner.png");
-    background-size: cover;
-    height: 260px;
-    width: 100%;
-}
-
 .esh-catalog-title {
     position: relative;
     top: 74.28571px;

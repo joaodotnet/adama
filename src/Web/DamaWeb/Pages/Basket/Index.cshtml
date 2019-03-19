@@ -10,14 +10,14 @@
 {
     <form method="post">
         <div class="d-none d-sm-block">
-            <article class="esh-basket-titles row ">
+            <article class="dnj-basket-titles row ">
                 <br />
-                <section class="esh-basket-title col-sm-3">Produto</section>
+                <section class="dnj-basket-title col-sm-3">Produto</section>
                 <div class="col-sm-8 row m-0 p-0">
-                    <section class="esh-basket-title col-sm-4 hidden-lg-down"></section>
-                    <section class="esh-basket-title col-sm-3">Preço</section>
-                    <section class="esh-basket-title col-sm-3">Quantidade</section>
-                    <section class="esh-basket-title col-sm-2">Subtotal</section>                    
+                    <section class="dnj-basket-title col-sm-4 hidden-lg-down"></section>
+                    <section class="dnj-basket-title col-sm-3">Preço</section>
+                    <section class="dnj-basket-title col-sm-3">Quantidade</section>
+                    <section class="dnj-basket-title col-sm-2">Subtotal</section>                    
                 </div>
                 <div class="col-sm-1"></div>
             </article>
@@ -31,11 +31,11 @@
                 <div class="row align-items-center m-0">
                     <div class="col-4 col-sm-3 p-0">
                         <a asp-page="/Product/Index" asp-route-id="@item.Slug">
-                            <img class="esh-basket-image img-fluid" src="@item.PictureUrl" />
+                            <img class="dnj-basket-image img-fluid" src="@item.PictureUrl" />
                         </a>
                     </div>
                     <div class="col-7 col-sm row m-0 p-0 align-items-center">
-                        <div class="esh-basket-item col-sm-4">
+                        <div class="dnj-basket-item col-sm-4">
                             @item.ProductName
                             @if (!string.IsNullOrEmpty(item.CustomizeName))
                             {
@@ -67,7 +67,7 @@
                             <label for="@("Items[" + i + "].Value")" class="col-3 col-form-label d-inline d-sm-none dama-basket-label">Qt.</label>
                             <div class="col-5 col-sm-10">
                                 <input type="hidden" name="@("Items[" + i + "].Key")" value="@item.Id" />
-                                <input type="number" class="esh-basket-input form-control dama-basket-item" min="1" name="@("Items[" + i + "].Value")" value="@item.Quantity" />
+                                <input type="number" class="dnj-basket-input form-control dama-basket-item" min="1" name="@("Items[" + i + "].Value")" value="@item.Quantity" />
                             </div>
                         </div>
                         <div class="d-none d-sm-block col-sm-2">
@@ -96,7 +96,7 @@
             <div class="col text-left">
                 <a asp-page="/Index" class="dama-basket-link">Adicionar mais produtos</a>
             </div>
-            <div class="col text-right esh-basket-item--mark">
+            <div class="col text-right dnj-basket-item--mark">
                 @if (!Model.BasketModel.Items.Any(x => x.IsFromCustomize))
                 {
                     <text>
@@ -107,12 +107,12 @@
         </div>
         <div class="row justify-content-between ml-0 mr-0">
             <div class="col-6 offset-sm-8 col-sm-2">
-                <button class="btn btn-default esh-basket-checkout" name="updatebutton" type="submit" asp-page-handler="Update">
+                <button class="btn btn-default dnj-basket-checkout" name="updatebutton" type="submit" asp-page-handler="Update">
                     Atualizar
                 </button>
             </div>
             <div class="col-6 col-sm-2">
-                <input class="btn btn-default esh-basket-checkout" name="checkoutbutton" type="submit" asp-page-handler="Checkout" value="Encomendar"/>
+                <input class="btn btn-default dnj-basket-checkout" name="checkoutbutton" type="submit" asp-page-handler="Checkout" value="Encomendar"/>
             </div>
         </div>
     </form>
@@ -129,7 +129,7 @@ else
 
         $(document).ready(function () {
 
-            $('.esh-basket-input').keypress(function (e) {
+            $('.dnj-basket-input').keypress(function (e) {
                 if (e.which == 13) {                    
                     e.preventDefault();
                     $('button[name=updatebutton]').click();
