@@ -59,13 +59,13 @@
                         @Html.DisplayFor(modelItem => item.Status)
                     </section>
                     <section class="esh-orders-item col-12 col-sm-1">
-                        <a class="btn btn-menta btn-block d-sm-none" role="button" asp-page="Detail" asp-route-orderId="@item.OrderNumber">Ver Detalhe</a>
+                        <a class="btn btn-primary btn-block d-sm-none" role="button" asp-page="Detail" asp-route-orderId="@item.OrderNumber">Ver Detalhe</a>
                         <a class="esh-orders-link-detail d-none d-sm-block" asp-page="Detail" asp-route-orderId="@item.OrderNumber">Detalhe</a>
                     </section>
                     <section class="esh-orders-item col-12 col-sm-1 mt-2 mb-2 mt-sm-0 mb-sm-0">
                         @if (item.StatusType == ApplicationCore.Entities.OrderAggregate.OrderStateType.PENDING)
                         {
-                            <a class="btn btn-primary btn-block d-sm-none btnCancel" role="button" data-order-number="@item.OrderNumber">Cancelar</a>
+                            <a class="btn btn-menta text-white btn-block d-sm-none btnCancel" role="button" data-order-number="@item.OrderNumber">Cancelar</a>
                             <a class="esh-orders-link-cancel d-none d-sm-block btnCancel" href="#" role="button" data-order-number="@item.OrderNumber">Cancelar</a>
                         }
                     </section>
