@@ -9,7 +9,10 @@
       "files": [
         "slick.js",
         "slick-theme.css",
-        "slick.css"
+        "slick.css",
+        "ajax-loader.gif",
+        "fonts/slick.ttf",
+        "fonts/slick.woff"
       ]
     },
     {

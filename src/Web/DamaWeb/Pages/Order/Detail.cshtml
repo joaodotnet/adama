@@ -138,13 +138,16 @@
                             }
                             <br />
                             <span class="dama-basket-label">@Html.DisplayNameFor(_ => item.CustomizeColors) :</span>
-                            var colors = item.CustomizeColors.Split(',');
-                            foreach (var rgb in colors)
+                            @if (!string.IsNullOrEmpty(item.CustomizeColors))
                             {
-                                var rgbText = rgb.Replace(';', ',');
+                                var colors = item.CustomizeColors.Split(',');
+                                foreach (var rgb in colors)
+                                {
+                                    var rgbText = rgb.Replace(';', ',');
                                 <div class="order-customize-colors" style='background-color: @rgbText'>&nbsp;</div>
+                                    }
+                                }
                             }
-                        }
                         <span class="d-sm-none">
                             <br />
                             @if (item.UnitPrice > 0)
@@ -173,8 +176,8 @@
             <section class="esh-orders_detail-section esh-orders_detail-section--right mt-3">
                 <article class="esh-orders_detail-titles dnj-basket-titles--clean row">
                     <section class="esh-orders_detail-title d-none d-sm-block col-sm-7"></section>
-                    <section class="esh-orders_detail-title col-7 col-sm-3 text-sm-right"><small>Despesas de Envio</small></section>
-                    <section class="esh-orders_detail-item esh-orders_detail-item--mark col-4 col-sm-2 text-nowrap text-right">@Model.OrderDetails.ShippingCost €</section>
+                    <section class="esh-orders_detail-title col-8 col-sm-3 text-sm-right"><small>Despesas de Envio</small></section>
+                    <section class="esh-orders_detail-item esh-orders_detail-item--mark col-4 col-sm-2 text-nowrap text-right text-sm-left">@Model.OrderDetails.ShippingCost €</section>
                 </article>
 
                 <article class="esh-orders_detail-items row">
@@ -188,7 +191,7 @@
         <section class="esh-orders_detail-section">
             <article class="esh-orders_detail-titles dnj-basket-titles--clean row">
                 <section class="esh-orders_detail-title d-none d-sm-block col-sm-7"></section>
-                <section class="esh-orders_detail-title col-7 col-sm-3 text-sm-right">TOTAL</section>
+                <section class="esh-orders_detail-title col-8 col-sm-3 text-sm-right">TOTAL</section>
                 <section class="esh-orders_detail-item esh-orders_detail-item--mark col-4 col-sm-2 text-nowrap text-right text-sm-left">@(Model.OrderDetails.Total.HasValue ? Model.OrderDetails.Total + " €" : "em análise")</section>
             </article>
         </section>
