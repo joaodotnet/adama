@@ -8,6 +8,9 @@
     <UserSecretsId>bd63e5e3-22d5-4e59-8b0e-0467d9e7d4e1</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\site.css" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="BuildBundlerMinifier" Version="2.8.391" />
     <PackageReference Include="BuildWebCompiler" Version="1.12.394" />
