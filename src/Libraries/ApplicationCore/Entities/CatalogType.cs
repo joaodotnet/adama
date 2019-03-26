@@ -14,7 +14,7 @@ namespace ApplicationCore.Entities
         public DeliveryTimeUnitType DeliveryTimeUnit { get; set; } = DeliveryTimeUnitType.Days;
         public decimal Price { get; set; }
         public decimal? AdditionalTextPrice { get; set; }
-        public decimal ShippingCost { get; set; }
+        public int? Weight { get; set; }
         public string MetaDescription { get; set; }
         public string Title { get; set; }
         public string Slug { get; set; }

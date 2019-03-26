@@ -9,6 +9,8 @@ using DamaWeb.ViewModels;
 using DamaWeb.Extensions;
 using ApplicationCore.Entities.BasketAggregate;
 using System;
+using Microsoft.Extensions.Options;
+using ApplicationCore;
 
 namespace DamaWeb.Services
 {
@@ -16,16 +18,19 @@ namespace DamaWeb.Services
     {
         private readonly IAsyncRepository<Basket> _basketRepository;
         private readonly IUriComposer _uriComposer;
+        private readonly CatalogSettings _settings;
         private readonly IAsyncRepository<CatalogItem> _itemRepository;
         private readonly IAsyncRepository<CatalogType> _typeRepository;
 
         public BasketViewModelService(IAsyncRepository<Basket> basketRepository,
             IAsyncRepository<CatalogItem> itemRepository,
             IAsyncRepository<CatalogType> typeRepository,
-            IUriComposer uriComposer)
+            IUriComposer uriComposer,
+            IOptions<CatalogSettings> settings)
         {
             _basketRepository = basketRepository;
             _uriComposer = uriComposer;
+            _settings = settings.Value;
             _itemRepository = itemRepository;
             _typeRepository = typeRepository;
         }
@@ -47,17 +52,15 @@ namespace DamaWeb.Services
             var viewModel = new BasketViewModel();
             viewModel.Id = basket.Id;
             viewModel.BuyerId = basket.BuyerId;
-            var result = await GetBasketItemsAndShipping(basket.Items);
-            viewModel.Items = result.Items; 
-            viewModel.DefaultShippingCost = result.ShippingCost;
+            viewModel.Items = await GetBasketItems(basket.Items);
+            viewModel.DefaultShippingCost = _settings.DefaultShippingCost;
 
             return viewModel;
         }
 
-        private async Task<(List<BasketItemViewModel> Items, decimal ShippingCost)> GetBasketItemsAndShipping(IReadOnlyCollection<BasketItem> basketItems)
+        private async Task<List<BasketItemViewModel>> GetBasketItems(IReadOnlyCollection<BasketItem> basketItems)
         {
             var items = new List<BasketItemViewModel>();
-            decimal shippingCost = 0;
             foreach (var item in basketItems)
             {
                 var itemModel = new BasketItemViewModel()
@@ -91,9 +94,6 @@ namespace DamaWeb.Services
                                     Label = EnumHelper<AttributeType>.GetDisplayValue(attr.Type)
                                 });
                         }
-
-                        if (catalogItem != null && catalogItem.CatalogType.ShippingCost > shippingCost)
-                            shippingCost = catalogItem.CatalogType.ShippingCost;
                     }
                 }
                 else if (item.CatalogTypeId.HasValue)
@@ -109,7 +109,7 @@ namespace DamaWeb.Services
 
                 items.Add(itemModel);
             }
-            return (items,shippingCost);
+            return items;
         }
 
         private async Task<BasketViewModel> CreateBasketForUser(string userId)

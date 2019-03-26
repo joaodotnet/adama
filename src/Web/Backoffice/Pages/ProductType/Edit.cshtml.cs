@@ -146,7 +146,7 @@ namespace Backoffice.Pages.ProductType
                 productTypeEntity.DeliveryTimeUnit = ProductTypeModel.DeliveryTimeUnit;
                 productTypeEntity.Price = ProductTypeModel.Price;
                 productTypeEntity.AdditionalTextPrice = ProductTypeModel.AdditionalTextPrice;
-                productTypeEntity.ShippingCost = ProductTypeModel.ShippingCost;
+                productTypeEntity.Weight = ProductTypeModel.Weight;
                 productTypeEntity.MetaDescription = ProductTypeModel.MetaDescription;
                 productTypeEntity.Title = ProductTypeModel.Title;
                 productTypeEntity.Slug = ProductTypeModel.Slug;

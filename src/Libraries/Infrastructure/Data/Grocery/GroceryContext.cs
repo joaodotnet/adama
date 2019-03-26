@@ -136,7 +136,7 @@ namespace Infrastructure.Data
                .IsUnique();
 
             builder.Ignore(x => x.AdditionalTextPrice);
-            builder.Ignore(x => x.ShippingCost);
+            builder.Ignore(x => x.Weight);
             builder.Ignore(x => x.PictureUri);
             builder.Ignore(x => x.DeliveryTimeMin);
             builder.Ignore(x => x.DeliveryTimeMax);
