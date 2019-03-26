@@ -46,15 +46,13 @@ namespace Backoffice.ViewModels
         [Display(Name = "Imagens Adicionar Frase/Nome")]
         public IList<IFormFile> FormFileTextHelpers { get; set; }
         public IList<FileDetailViewModel> PictureTextHelpers { get; set; } = new List<FileDetailViewModel>();
-        [Display(Name = "Portes")]
-        [Required]
-        public decimal ShippingCost { get; set; }
+        [Display(Name = "Peso (gramas)")]
+        public int? Weight{ get; set; }
         [Display(Name = "Meta Description")]
         [StringLength(160)]
         public string MetaDescription { get; set; }
         [Display(Name = "Title")]
         [StringLength(43)]
         public string Title { get; set; }
-
     }
 }

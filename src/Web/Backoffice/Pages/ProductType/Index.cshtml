@@ -38,7 +38,7 @@
                 @Html.DisplayNameFor(model => model.ProductTypesModel[0].DeliveryTimeUnit)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProductTypesModel[0].ShippingCost)
+                @Html.DisplayNameFor(model => model.ProductTypesModel[0].Weight)
             </th>
             <th>
                 Meta & Title?
@@ -74,7 +74,7 @@
                 @Html.DisplayFor(modelItem => item.DeliveryTimeUnit)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ShippingCost)
+                @Html.DisplayFor(modelItem => item.Weight)
             </td>
             <td>@(!string.IsNullOrEmpty(item.MetaDescription) ? "Sim/": "Não/")@(!string.IsNullOrEmpty(item.Title) ? "Sim" : "Não")</td>
             <td>
