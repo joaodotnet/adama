@@ -18,6 +18,41 @@ namespace Infrastructure.Data
         public static async Task SeedAsync(DamaContext catalogContext,
             ILoggerFactory loggerFactory, int? retry = 0)
         {
+            if(!catalogContext.ShippingPriceWeights.Any())
+            {
+                catalogContext.ShippingPriceWeights.AddRange(
+                    new ShippingPriceWeight
+                    {
+                        MinWeight = 0,
+                        MaxWeight = 20,
+                        Price = 0.53M
+                    },
+                    new ShippingPriceWeight
+                    {
+                        MinWeight = 20,
+                        MaxWeight = 50,
+                        Price = 0.70M,
+                    },
+                    new ShippingPriceWeight
+                    {
+                        MinWeight = 50,
+                        MaxWeight = 100,
+                        Price = 0.85M,
+                    },
+                    new ShippingPriceWeight
+                    {
+                        MinWeight = 100,
+                        MaxWeight = 500,
+                        Price = 1.50M,
+                    },
+                    new ShippingPriceWeight
+                    {
+                        MinWeight = 500,
+                        MaxWeight = 2000,
+                        Price = 3.5M
+                    });
+                await catalogContext.SaveChangesAsync();
+            }
             if (!catalogContext.ShopConfigs.Any(x => x.Type == ShopConfigType.SEO))
             {
                 catalogContext.ShopConfigs.AddRange(

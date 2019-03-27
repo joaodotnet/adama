@@ -70,6 +70,8 @@ namespace Backoffice
                 .ForMember(dest => dest.ProductPictureUri, opts => opts.MapFrom(src => src.ItemOrdered.PictureUri));
             CreateMap<FileDetail, FileDetailViewModel>();
             CreateMap<FileDetailViewModel, FileDetail>();
+            CreateMap<ShippingPriceWeight, ShippingPriceViewModel>();
+            CreateMap<ShippingPriceViewModel, ShippingPriceWeight>();
         }
     }
 }

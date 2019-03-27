@@ -33,6 +33,7 @@ namespace Infrastructure.Data
         public DbSet<ApplicationCore.Entities.CustomizeOrder> CustomizeOrders { get; set; }
         public DbSet<CatalogReference> CatalogReferences { get; set; }
         public DbSet<FileDetail> FileDetails { get; set; }
+        public DbSet<ShippingPriceWeight> ShippingPriceWeights { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
