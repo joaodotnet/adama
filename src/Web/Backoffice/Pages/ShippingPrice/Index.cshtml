@@ -1,0 +1,49 @@
+﻿@page
+@model Backoffice.Pages.ShippingPrice.IndexModel
+
+@{
+    ViewData["Title"] = "Tabela de Preços por Peso";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>
+    <a asp-page="Create">Criar nova relação Preço/Peso</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ShippingPriceWeight[0].MinWeight)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShippingPriceWeight[0].MaxWeight)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShippingPriceWeight[0].Price)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ShippingPriceWeight)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MinWeight)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaxWeight)
+                </td>
+                <td>
+                    @item.Price.ToString("N2") €
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Editar</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Id">Detalhes</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.Id">Remover</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
