@@ -342,7 +342,7 @@ namespace DamaWeb.Pages.Basket
         <table width='100%'>
             <tr>
                 <td>Subtotal</td>
-                <td style='text-align:right'>{order.Total() - order.ShippingCost} €</td>
+                <td style='text-align:right'>{(order.Total() - order.ShippingCost).ToString("N2")} €</td>
             </tr>
             <tr>
                 <td colspan='2'>
@@ -351,7 +351,7 @@ namespace DamaWeb.Pages.Basket
             </tr>
             <tr>
                 <td>Envio</td>
-                <td style='text-align:right'>{order.ShippingCost} €</td>
+                <td style='text-align:right'>{order.ShippingCost.ToString("N2")} €</td>
             </tr>
             <tr>
                 <td colspan='2'>
@@ -360,7 +360,7 @@ namespace DamaWeb.Pages.Basket
             </tr>
             <tr>
                 <td><strong>Total</strong></td>
-                <td style='text-align:right'>{order.Total()} €</td>
+                <td style='text-align:right'>{order.Total().ToString("N2")} €</td>
             </tr>
             <tr>
                 <td colspan='2'>
