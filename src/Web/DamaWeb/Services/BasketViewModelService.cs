@@ -21,10 +21,12 @@ namespace DamaWeb.Services
         private readonly CatalogSettings _settings;
         private readonly IAsyncRepository<CatalogItem> _itemRepository;
         private readonly IAsyncRepository<CatalogType> _typeRepository;
+        private readonly IAsyncRepository<ShippingPriceWeight> _priceWeightRepository;
 
         public BasketViewModelService(IAsyncRepository<Basket> basketRepository,
             IAsyncRepository<CatalogItem> itemRepository,
             IAsyncRepository<CatalogType> typeRepository,
+            IAsyncRepository<ShippingPriceWeight> priceWeightRepository,
             IUriComposer uriComposer,
             IOptions<CatalogSettings> settings)
         {
@@ -33,6 +35,7 @@ namespace DamaWeb.Services
             _settings = settings.Value;
             _itemRepository = itemRepository;
             _typeRepository = typeRepository;
+            _priceWeightRepository = priceWeightRepository;
         }
 
         public async Task<BasketViewModel> GetOrCreateBasketForUser(string userName)
@@ -52,15 +55,19 @@ namespace DamaWeb.Services
             var viewModel = new BasketViewModel();
             viewModel.Id = basket.Id;
             viewModel.BuyerId = basket.BuyerId;
-            viewModel.Items = await GetBasketItems(basket.Items);
-            viewModel.DefaultShippingCost = _settings.DefaultShippingCost;
+            var result = await GetBasketItemsAndShipping(basket.Items);
+            viewModel.Items = result.Items;
+            viewModel.DefaultShippingCost = result.ShippingCost;
 
             return viewModel;
         }
 
-        private async Task<List<BasketItemViewModel>> GetBasketItems(IReadOnlyCollection<BasketItem> basketItems)
+        private async Task<(List<BasketItemViewModel> Items, decimal ShippingCost)> GetBasketItemsAndShipping(IReadOnlyCollection<BasketItem> basketItems)
         {
             var items = new List<BasketItemViewModel>();
+            decimal shippingCost = _settings.DefaultShippingCost;
+            int totalWeight = 0;
+            bool allItemsWithWeight = true;
             foreach (var item in basketItems)
             {
                 var itemModel = new BasketItemViewModel()
@@ -94,6 +101,12 @@ namespace DamaWeb.Services
                                     Label = EnumHelper<AttributeType>.GetDisplayValue(attr.Type)
                                 });
                         }
+                        if (!catalogItem.CatalogType.Weight.HasValue || catalogItem.CatalogType.Weight == 0)
+                            allItemsWithWeight = false;
+                        else
+                            totalWeight += catalogItem.CatalogType.Weight.Value * item.Quantity;
+                        //if (catalogItem != null && catalogItem.CatalogType.ShippingCost > shippingCost)
+                        //    shippingCost = catalogItem.CatalogType.ShippingCost;
                     }
                 }
                 else if (item.CatalogTypeId.HasValue)
@@ -109,7 +122,29 @@ namespace DamaWeb.Services
 
                 items.Add(itemModel);
             }
-            return items;
+            if (allItemsWithWeight)
+                shippingCost = await CalculateShippingCostAsync(totalWeight);
+            return (items, shippingCost);
+        }
+
+        private async Task<decimal> CalculateShippingCostAsync(int totalWeight)
+        {
+            var table = await _priceWeightRepository.ListAllAsync();
+            if(table.Count > 0)
+            {
+                foreach (var item in table)
+                {
+                    if (item.MaxWeight.HasValue)
+                    {
+                        if (totalWeight > item.MinWeight && totalWeight <= item.MaxWeight.Value)
+                            return item.Price;
+                    }
+                    else if (totalWeight > item.MinWeight)
+                        return item.Price;
+                    
+                }
+            }
+            return _settings.DefaultShippingCost;
         }
 
         private async Task<BasketViewModel> CreateBasketForUser(string userId)
