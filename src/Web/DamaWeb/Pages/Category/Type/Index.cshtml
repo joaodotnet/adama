@@ -1,7 +1,7 @@
 ﻿@page
 @model DamaWeb.Pages.Category.Type.IndexModel
 @{
-    if(!string.IsNullOrEmpty(HttpContext.Request.Query["p"]))
+    if (!string.IsNullOrEmpty(HttpContext.Request.Query["p"]))
     {
         ViewBag.NoIndex = true;
     }
@@ -12,20 +12,24 @@
     <h2 class="lily">Todos os Produtos</h2>
     <img class="separator" src="~/images/barra-coracao.png" />
 </div>
+
 <div class="container">
-    <div class="esh-catalog-items row">
-        @foreach (var catalogItem in Model.CatalogTypeModel.CatalogModel.CatalogItems)
-        {
-            <div class="esh-catalog-item col-md-3">
-                @await Html.PartialAsync("_product", catalogItem)
-            </div>
-        }
-        @if (Model.CatalogTypeModel.CatalogModel.CatalogItems.Count() == 0)
-        {
-            <div class="text-center">
-<p>Lamentamos, mas não foram encontrados resultados!</p>
-            </div>
-        }
-    </div>
-    @await Html.PartialAsync("_pagination", Model.CatalogTypeModel.CatalogModel.PaginationInfo)
+    @if (Model.CatalogTypeModel.CatalogModel.CatalogItems.Any())
+    {
+        <div class="esh-catalog-items row">
+            @foreach (var catalogItem in Model.CatalogTypeModel.CatalogModel.CatalogItems)
+            {
+                <div class="esh-catalog-item col-md-3">
+                    @await Html.PartialAsync("_product", catalogItem)
+                </div>
+            }
+        </div>
+        <partial name="_pagination" for="CatalogTypeModel.CatalogModel.PaginationInfo" />
+    }
+    else
+    {
+        <div class="text-center">
+            <p>Lamentamos, mas não foram encontrados resultados!</p>
+        </div>
+    }
 </div>

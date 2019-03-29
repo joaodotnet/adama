@@ -1,4 +1,4 @@
-using ApplicationCore;
+ï»¿using ApplicationCore;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Services;
 using AutoMapper;
@@ -213,7 +213,7 @@ namespace DamaWeb
                                 await emailSender.SendEmailAsync(
                                     Configuration["Email:FromInfoEmail"],
                                     Configuration["Email:SupportEmail"],
-                                    "Dama no Jornal - Ocorreu um erro na aplicação", err);
+                                    "Dama no Jornal - Ocorreu um erro na aplicaÃ§Ã£o", err);
                             }
                             catch (Exception)
                             {
