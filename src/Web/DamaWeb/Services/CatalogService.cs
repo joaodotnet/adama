@@ -319,8 +319,8 @@ namespace DamaWeb.Services
                     Tags = new List<LinkViewModel>
                     {
                         new LinkViewModel { Name = product.CatalogType.Description, Uri = product.CatalogType.Slug, TagName = "tipo"},
-                        new LinkViewModel { Name = product.CatalogIllustration.Name, Uri = product.CatalogIllustration.Name, TagName = "ilustracao"},
-                        new LinkViewModel { Name = product.CatalogIllustration.IllustrationType.Name, Uri = product.CatalogIllustration.IllustrationType.Name, TagName = "ilustracao_tipo"},
+                        new LinkViewModel { Name = product.CatalogIllustration.Name, Uri = Utils.URLFriendly(product.CatalogIllustration.Name), TagName = "ilustracao"},
+                        new LinkViewModel { Name = product.CatalogIllustration.IllustrationType.Name, Uri = Utils.URLFriendly(product.CatalogIllustration.IllustrationType.Name), TagName = "ilustracao_tipo"},
                     },
                     DeliveryTimeMin = product.CatalogType.DeliveryTimeMin,
                     DeliveryTimeMax = product.CatalogType.DeliveryTimeMax,
@@ -410,7 +410,7 @@ namespace DamaWeb.Services
                             .Include(x => x.CatalogType)
                             .Include(x => x.CatalogIllustration)
                             .ThenInclude(ci => ci.IllustrationType)
-                            .Where(x => x.CatalogIllustration.IllustrationType.Name == tagName);
+                            .Where(x => Utils.URLFriendly(x.CatalogIllustration.IllustrationType.Name) == tagName);
                         break;
                     default:
                         break;
@@ -422,7 +422,7 @@ namespace DamaWeb.Services
                     .Include(x => x.CatalogType)
                     .Include(x => x.CatalogIllustration)
                     .ThenInclude(ci => ci.IllustrationType)
-                    .Where(x => Utils.URLFriendly(x.CatalogType.Description) == tagName || Utils.URLFriendly(x.CatalogIllustration.Name) == tagName || x.CatalogIllustration.IllustrationType.Name == tagName);
+                    .Where(x => Utils.URLFriendly(x.CatalogType.Description) == tagName || Utils.URLFriendly(x.CatalogIllustration.Name) == tagName || Utils.URLFriendly(x.CatalogIllustration.IllustrationType.Name) == tagName);
             }
 
             query = query.Where(x => x.ShowOnShop && (!illustrationId.HasValue || x.CatalogIllustrationId == illustrationId) &&

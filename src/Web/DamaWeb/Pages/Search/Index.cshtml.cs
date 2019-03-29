@@ -33,6 +33,9 @@ namespace DamaWeb.Pages.Search
             CatalogModel = await _service.GetCatalogItemsBySearch(p ?? 0, Constants.ITEMS_PER_PAGE, SearchFor, catalogModel.TypesFilterApplied, catalogModel.IllustrationFilterApplied);
             CatalogModel.TypesFilterApplied = type;
             CatalogModel.IllustrationFilterApplied = illustration;
+            ViewData["SearchFor"] = SearchFor;
+            ViewData["TypeId"] = CatalogModel.TypesFilterApplied;
+            ViewData["IllustrationId"] = CatalogModel.IllustrationFilterApplied;
             return Page();
         }
 

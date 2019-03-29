@@ -73,6 +73,6 @@
                 }
             </div>
         </div>
-        @await Html.PartialAsync("_pagination", Model.CategoryModel.CatalogModel.PaginationInfo)
+        <partial name="_pagination" for="CategoryModel.CatalogModel.PaginationInfo" />
     }
 }
