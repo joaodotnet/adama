@@ -1,4 +1,4 @@
-using ApplicationCore;
+﻿using ApplicationCore;
 using Backoffice.Pages;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -15,8 +15,11 @@ namespace Backoffice.Extensions
         {
             if (string.IsNullOrEmpty(formFile.FileName))
                 return "";
-            return Utils.URLFriendly(formFile.FileName.Substring(formFile.FileName.LastIndexOf('\\') + 1))
-                .Trim('"');            
+
+            var fileNameWithExtension = formFile.FileName.Substring(formFile.FileName.LastIndexOf('\\') + 1).Trim('"');
+            var extension = fileNameWithExtension.Substring(fileNameWithExtension.LastIndexOf('.'));
+            var fileNameSuglify = Utils.URLFriendly(fileNameWithExtension.Substring(0, fileNameWithExtension.LastIndexOf('.')));
+            return fileNameSuglify + extension;
         }
 
         public static string GetFileNameSimplify(this IFormFile formFile)
