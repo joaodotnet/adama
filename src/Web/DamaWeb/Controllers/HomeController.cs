@@ -33,6 +33,9 @@ namespace DamaWeb.Controllers
                 //Home page
                 AddXmlElement(xml,"");
 
+                //Home page /Loja
+                AddXmlElement(xml, "/loja");
+
                 var categories = await _catalogService.GetMenuViewModel();
                 foreach (var item in categories)
                 {
