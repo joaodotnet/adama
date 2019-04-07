@@ -80,7 +80,7 @@ namespace DamaWeb.Controllers
 
             xml.WriteStartElement("url");
             xml.WriteElementString("loc", host+url);
-            xml.WriteElementString("lastmod", "2019-04-06");
+            xml.WriteElementString("lastmod", "2019-04-07");
             xml.WriteEndElement();
         }
     }
