@@ -27,8 +27,8 @@ namespace DamaWeb.Pages.Tag
 
         public async Task<IActionResult> OnGetAsync(string tagName, string q, int? p)
         {
-            if (string.IsNullOrEmpty(tagName))
-                return NotFound();
+            if (string.IsNullOrEmpty(tagName) || tagName.Contains(" "))
+                return RedirectPermanent(Url.Page("/Index"));
 
             TagName = tagName;
             Tag = q;
