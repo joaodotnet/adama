@@ -7,6 +7,8 @@ namespace ApplicationCore.Entities
     public class ShopConfigDetail : BaseEntity
     {
         public string PictureUri { get; set; }
+        public string PictureWebpUri { get; set; }
+        public string PictureMobileUri { get; set; }
         public string HeadingText { get; set; }
         public string ContentText { get; set; }
         public string LinkButtonUri { get; set; }

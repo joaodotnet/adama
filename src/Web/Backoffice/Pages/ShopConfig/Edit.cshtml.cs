@@ -13,6 +13,7 @@ using AutoMapper;
 using Backoffice.Interfaces;
 using Microsoft.Extensions.Options;
 using ApplicationCore;
+using Microsoft.AspNetCore.Http;
 
 namespace Backoffice.Pages.ShopConfig
 {
@@ -41,7 +42,7 @@ namespace Backoffice.Pages.ShopConfig
                 return NotFound();
             }
 
-            var detail = await _context.ShopConfigDetails                
+            var detail = await _context.ShopConfigDetails
                 .SingleOrDefaultAsync(m => m.Id == id);
 
             if (detail == null)
@@ -61,16 +62,23 @@ namespace Backoffice.Pages.ShopConfig
                 return Page();
             }
 
-            if (ShopConfigDetailModel.Picture != null && ShopConfigDetailModel.Picture.Length > 2097152)
-            {
-                ModelState.AddModelError("", "A menina quer por favor diminuir o tamanho do ficheiro? O máximo é 2MB, obrigado! Ass.: O seu amor!");
+            if (IsImageSizeInvalid(ShopConfigDetailModel.Picture))
                 return Page();
-            }
+
+            if (IsImageSizeInvalid(ShopConfigDetailModel.PictureWebp))
+                return Page();
+
+            if (IsImageSizeInvalid(ShopConfigDetailModel.PictureMobile))
+                return Page();
 
             if (ShopConfigDetailModel.Picture != null && ShopConfigDetailModel.Picture.Length > 0)
-            {
-                ShopConfigDetailModel.PictureUri = (await _service.SaveFileAsync(ShopConfigDetailModel.Picture, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, ShopConfigDetailModel.Id.ToString())).PictureUri;
-            }
+                ShopConfigDetailModel.PictureUri = await SaveFileAsync(ShopConfigDetailModel.Picture);
+
+            if (ShopConfigDetailModel.PictureWebp != null && ShopConfigDetailModel.PictureWebp.Length > 0)
+                ShopConfigDetailModel.PictureWebpUri = await SaveFileAsync(ShopConfigDetailModel.PictureWebp);
+
+            if (ShopConfigDetailModel.PictureMobile != null && ShopConfigDetailModel.PictureMobile.Length > 0)
+                ShopConfigDetailModel.PictureMobileUri = await SaveFileAsync(ShopConfigDetailModel.PictureMobile);
 
             var shopConfigDetail = _mapper.Map<ShopConfigDetail>(ShopConfigDetailModel);
             _context.Attach(shopConfigDetail).State = EntityState.Modified;
@@ -81,10 +89,25 @@ namespace Backoffice.Pages.ShopConfig
             }
             catch (DbUpdateConcurrencyException)
             {
-                
+
             }
 
             return RedirectToPage("./Index");
+        }
+
+        private async Task<string> SaveFileAsync(IFormFile picture)
+        {
+            return (await _service.SaveFileAsync(picture, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, ShopConfigDetailModel.Id.ToString())).PictureUri;
+        }
+
+        private bool IsImageSizeInvalid(IFormFile file)
+        {
+            if (file != null && file.Length > 150000)
+            {
+                ModelState.AddModelError("", "A menina quer por favor diminuir o tamanho do ficheiro? O máximo é 150kb, obrigado! Ass.: O seu amor!");
+                return true;
+            }
+            return false;
         }
     }
 }

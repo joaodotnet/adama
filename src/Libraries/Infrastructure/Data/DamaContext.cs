@@ -440,6 +440,10 @@ namespace Infrastructure.Data
             builder.ToTable("ShopConfigDetail");
             builder.Property(x => x.PictureUri)
                 .HasMaxLength(255);
+            builder.Property(x => x.PictureWebpUri)
+                .HasMaxLength(255);
+            builder.Property(x => x.PictureMobileUri)
+                .HasMaxLength(255);
             builder.Property(x => x.IsActive)
                 .IsRequired();
 
