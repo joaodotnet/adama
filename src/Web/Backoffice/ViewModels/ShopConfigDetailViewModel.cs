@@ -20,6 +20,10 @@ namespace Backoffice.ViewModels
         public bool IsActive { get; set; }
         [Display(Name = "Imagem")]
         public IFormFile Picture { get; set; }
+        public IFormFile PictureWebp { get; set; }
+        public IFormFile PictureMobile { get; set; }
         public int ShopConfigId { get; set; }
+        public string PictureWebpUri { get; set; }
+        public string PictureMobileUri { get; set; }
     }
 }

@@ -17,17 +17,21 @@
         <div class="carousel-inner" role="listbox">
             @foreach (var item in Model.CatalogModel.Banners)
             {
-                <div class="carousel-item @(Model.CatalogModel.Banners[0] == item ? "active": "") @item.LinkClass" uri="@item.LinkButtonUri">
-                    <img class="d-block img-fluid" src="@item.PictureUri" alt="@item.HeadingText">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h3>@item.HeadingText</h3>
-                        <p>@item.ContentText</p>
-                        @if (!string.IsNullOrEmpty(item.LinkButtonText) && !string.IsNullOrEmpty(item.LinkButtonUri))
-                        {
-                            <a class="btn btn-primary" href="@item.LinkButtonUri" role="button">@item.LinkButtonText</a>
-                        }
-                    </div>
+            <div class="carousel-item @(Model.CatalogModel.Banners[0] == item ? "active": "") @item.LinkClass" uri="@item.LinkButtonUri">
+                @*<img class="d-block img-fluid" src="@item.PictureUri" alt="@item.HeadingText">*@
+                <picture>
+                    <source type="image/webp" srcset="@item.PictureUri" alt="@item.HeadingText">
+                    <img src="@item.PictureUri" alt="@item.HeadingText">
+                </picture>
+                <div class="carousel-caption d-none d-md-block">
+                    <h3>@item.HeadingText</h3>
+                    <p>@item.ContentText</p>
+                    @if (!string.IsNullOrEmpty(item.LinkButtonText) && !string.IsNullOrEmpty(item.LinkButtonUri))
+                    {
+                        <a class="btn btn-primary" href="@item.LinkButtonUri" role="button">@item.LinkButtonText</a>
+                    }
                 </div>
+            </div>
             }
             <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
