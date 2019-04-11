@@ -20,8 +20,9 @@
             <div class="carousel-item @(Model.CatalogModel.Banners[0] == item ? "active": "") @item.LinkClass" uri="@item.LinkButtonUri">
                 @*<img class="d-block img-fluid" src="@item.PictureUri" alt="@item.HeadingText">*@
                 <picture>
-                    <source type="image/webp" srcset="@item.PictureUri" alt="@item.HeadingText">
-                    <img src="@item.PictureUri" alt="@item.HeadingText">
+                    <source media="(min-width: 576px)" type="image/webp" srcset="@item.PictureWebpUri" alt="@item.HeadingText">
+                    <source media="(max-width: 576px)" srcset="@item.PictureMobileUri">
+                    <img src="@item.PictureUri" alt="@item.HeadingText" class="img-fluid">
                 </picture>
                 <div class="carousel-caption d-none d-md-block">
                     <h3>@item.HeadingText</h3>
