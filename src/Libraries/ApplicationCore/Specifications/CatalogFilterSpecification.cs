@@ -16,6 +16,12 @@ namespace ApplicationCore.Specifications
             AddInclude(x => x.CatalogType);
             AddInclude(x => x.CatalogCategories);
         }
+
+        public CatalogFilterSpecification(bool onlyActive)
+            :base(x => !onlyActive || (onlyActive && x.ShowOnShop))
+        {
+            AddInclude(x => x.CatalogPictures);
+        }
     }
 
     public class CatalogAttrFilterSpecification : BaseSpecification<CatalogItem>
