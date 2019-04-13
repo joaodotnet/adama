@@ -61,8 +61,7 @@ namespace Infrastructure.Data
         private void ConfigureBasketItem(EntityTypeBuilder<BasketItem> builder)
         {
             builder.ToTable("BasketItem");
-            builder.Property(x => x.CustomizeName)
-                .HasMaxLength(100);
+            
             builder.Property(x => x.CustomizeSide)
                 .HasMaxLength(100);
 
@@ -403,9 +402,7 @@ namespace Infrastructure.Data
             builder.OwnsOne(i => i.ItemOrdered);
 
             builder.OwnsOne(i => i.CustomizeItem);
-
-            builder.Property(x => x.CustomizeName)
-                .HasMaxLength(100);
+        
             builder.Property(x => x.CustomizeSide)
                 .HasMaxLength(100);
             builder.Property(x => x.UnitPrice)
