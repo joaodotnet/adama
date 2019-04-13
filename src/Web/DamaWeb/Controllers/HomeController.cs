@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
+using ApplicationCore.Entities;
+using ApplicationCore.Interfaces;
+using ApplicationCore.Specifications;
 using DamaWeb.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Http;
@@ -15,10 +18,13 @@ namespace DamaWeb.Controllers
     public class HomeController : ControllerBase
     {
         private readonly ICatalogService _catalogService;
+        private readonly IAsyncRepository<CatalogItem> _catalogRepository;
 
-        public HomeController(ICatalogService catalogService)
+        public HomeController(ICatalogService catalogService,
+            IAsyncRepository<CatalogItem> catalogRepository)
         {
             _catalogService = catalogService;
+            _catalogRepository = catalogRepository;
         }
         [Route("/sitemap.xml")]
         public async Task SitemapXml()
@@ -72,6 +78,29 @@ namespace DamaWeb.Controllers
 
                 xml.WriteEndElement();
             }
+        }
+        [Route("updatepictures")]
+        public async Task<IActionResult> UpdatePicturesAsync()
+        {
+            var spec = new CatalogFilterSpecification(false);
+            var products = await _catalogRepository.ListAsync(spec);
+            foreach (var item in products)
+            {
+                //Add main
+                if(!string.IsNullOrEmpty(item.PictureUri) && !item.CatalogPictures.Any(x => x.IsMain))
+                {
+                    //item.CatalogPictures.ToList().ForEach(x => x.Order += 1);
+                    item.CatalogPictures.Add(new CatalogPicture
+                    {
+                        IsActive = true,
+                        IsMain = true,
+                        PictureUri = item.PictureUri,
+                        Order = 0
+                    });
+                    await _catalogRepository.UpdateAsync(item);
+                }
+            }
+            return Ok();
         }
 
         private void AddXmlElement(XmlWriter xml, string url)
