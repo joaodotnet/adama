@@ -306,10 +306,10 @@ namespace DamaWeb.Services
                     ProductDescription = product.Description,
                     ProductPrice = product.Price ?? product.CatalogType.Price,
                     ProductQuantity = 1,
-                    ProductImagesUri = new List<string>
-                    {
-                        product.PictureUri
-                    },
+                    ProductImagesUri = new List<string>(),
+                    //{
+                    //    product.PictureUri
+                    //},
                     Attributes = new List<ProductAttributeViewModel>(),
                     Categories = product.CatalogCategories.Select(x => new LinkViewModel
                     {

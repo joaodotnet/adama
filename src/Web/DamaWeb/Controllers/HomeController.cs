@@ -79,29 +79,6 @@ namespace DamaWeb.Controllers
                 xml.WriteEndElement();
             }
         }
-        [Route("updatepictures")]
-        public async Task<IActionResult> UpdatePicturesAsync()
-        {
-            var spec = new CatalogFilterSpecification(false);
-            var products = await _catalogRepository.ListAsync(spec);
-            foreach (var item in products)
-            {
-                //Add main
-                if(!string.IsNullOrEmpty(item.PictureUri) && !item.CatalogPictures.Any(x => x.IsMain))
-                {
-                    //item.CatalogPictures.ToList().ForEach(x => x.Order += 1);
-                    item.CatalogPictures.Add(new CatalogPicture
-                    {
-                        IsActive = true,
-                        IsMain = true,
-                        PictureUri = item.PictureUri,
-                        Order = 0
-                    });
-                    await _catalogRepository.UpdateAsync(item);
-                }
-            }
-            return Ok();
-        }
 
         private void AddXmlElement(XmlWriter xml, string url)
         {
