@@ -153,9 +153,9 @@ namespace Backoffice.Pages.Products
             {
                 if (!string.IsNullOrEmpty(ProductModel.PictureUri))
                 {
-                    _service.DeleteFile(_backofficeSettings.WebProductsPictureFullPath, Utils.GetFileName(ProductModel.PictureUri));
+                    _service.DeleteFile(_backofficeSettings.WebProductsPictureV2FullPath, Utils.GetFileName(ProductModel.PictureUri));
                 }
-                ProductModel.PictureUri = (await _service.SaveFileAsync(ProductModel.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri, ProductModel.Id.ToString())).PictureUri;
+                ProductModel.PictureUri = _service.SaveFile(ProductModel.Picture, 469, 469, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, ProductModel.Id.ToString()).PictureUri;
             }
 
             ////Update images            
@@ -175,7 +175,7 @@ namespace Backoffice.Pages.Products
                     {
                         IsActive = true,
                         Order = ++order,
-                        PictureUri = (await _service.SaveFileAsync(item, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri, (++lastCatalogPictureId).ToString())).PictureUri
+                        PictureUri = _service.SaveFile(item, 469, 469, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, (++lastCatalogPictureId).ToString()).PictureUri
                     });
                 }
             }
@@ -193,8 +193,8 @@ namespace Backoffice.Pages.Products
             prod.Description = ProductModel.Description;            
             prod.CatalogIllustrationId = ProductModel.CatalogIllustrationId;
             prod.CatalogTypeId = ProductModel.CatalogTypeId;
-            if(!string.IsNullOrEmpty(ProductModel.PictureUri))
-                prod.PictureUri = ProductModel.PictureUri;
+            //if(!string.IsNullOrEmpty(ProductModel.PictureUri))
+            //    prod.PictureUri = ProductModel.PictureUri;
             prod.Price = ProductModel.Price;
             prod.IsFeatured = ProductModel.IsFeatured;
             prod.IsNew = ProductModel.IsNew;
@@ -205,6 +205,22 @@ namespace Backoffice.Pages.Products
             prod.MetaDescription = ProductModel.MetaDescription;
             prod.Title = ProductModel.Title;
             
+            //Main Picture
+            if(!string.IsNullOrEmpty(ProductModel.PictureUri))
+            {
+                var mainPic = prod.CatalogPictures.SingleOrDefault(x => x.IsMain);
+                if (mainPic == null)
+                    prod.CatalogPictures.Add(new CatalogPicture
+                    {
+                        IsActive = true,
+                        IsMain = true,
+                        Order = 0,
+                        PictureUri = ProductModel.PictureUri
+                    });
+                else
+                    mainPic.PictureUri = ProductModel.PictureUri;
+            }
+
             //Other pictutes
             foreach (var item in ProductModel.CatalogPictures)
             {
@@ -213,7 +229,7 @@ namespace Backoffice.Pages.Products
                 if (item.ToRemove && otherPicture != null)
                 {
                     _context.Entry(otherPicture).State = EntityState.Deleted;
-                    _service.DeleteFile(_backofficeSettings.WebProductsPictureFullPath, Utils.GetFileName(item.PictureUri));
+                    _service.DeleteFile(_backofficeSettings.WebProductsPictureV2FullPath, Utils.GetFileName(item.PictureUri));
                 }
                 else if(otherPicture != null)
                 {                    
@@ -227,21 +243,10 @@ namespace Backoffice.Pages.Products
                     {
                         IsActive = item.IsActive,
                         Order = item.Order,
-                        PictureUri = item.PictureUri
+                        PictureUri = item.PictureUri,
+                        IsMain = false
                     });
                 }
-
-                //if (item.Id != 0)
-                //{
-                //    if (ProductModel.CatalogPictures.SingleOrDefault(x => x.Id == item.Id).ToRemove)
-                //    {
-                //        _service.DeleteFile(_backofficeSettings.WebProductsPictureFullPath, Utils.GetFileName(item.PictureUri));
-                //        //_context.Entry(item).State = EntityState.Deleted;
-
-                //    }
-                //    else
-                //        _context.Entry(item).State = EntityState.Modified;
-                //}
             }
 
             //Categorias dos Produtos
