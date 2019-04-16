@@ -133,7 +133,7 @@ namespace Backoffice.Pages.Products
                 if(_context.CatalogItems.Any())
                     lastCatalogItemId = (await _context.CatalogItems.LastAsync()).Id;
 
-                ProductModel.PictureUri = (await _service.SaveFileAsync(ProductModel.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri, (++lastCatalogItemId).ToString())).PictureUri;
+                ProductModel.PictureUri = _service.SaveFile(ProductModel.Picture, 469, 469, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, (++lastCatalogItemId).ToString()).PictureUri;
             }
 
             //Save other images
@@ -147,7 +147,7 @@ namespace Backoffice.Pages.Products
                     {
                         IsActive = true,
                         Order = ++order,
-                        PictureUri = (await _service.SaveFileAsync(item, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri, (++lastCatalogPictureId).ToString())).PictureUri
+                        PictureUri = _service.SaveFile(item, 469, 469, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, (++lastCatalogPictureId).ToString()).PictureUri
                     });
                 }
             }

@@ -64,11 +64,10 @@ namespace DamaWeb.Controllers
                         //Set pictureHighUri
                         picture.PictureHighUri = picture.PictureUri;
                         Uri uri = new Uri(picture.PictureUri);
-                        var path = Path.Combine(_backofficeSettings.WebProductsPictureFullPath, "v2");
                         var name = Utils.URLFriendly(Path.GetFileNameWithoutExtension(uri.LocalPath));
                         var fileName = name + Path.GetExtension(uri.LocalPath);
-                        var fullPath = Path.Combine(path, fileName);
-                        picture.PictureUri = _backofficeSettings.WebProductsPictureUri + "v2/" + fileName;
+                        var fullPath = Path.Combine(_backofficeSettings.WebProductsPictureV2FullPath, fileName);
+                        picture.PictureUri = _backofficeSettings.WebProductsPictureV2Uri + fileName;
 
                         //Get Image
                         var originalImage = Path.Combine(_backofficeSettings.WebProductsPictureFullPath, Path.GetFileName(uri.LocalPath));

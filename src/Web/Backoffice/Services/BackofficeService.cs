@@ -12,6 +12,9 @@ using Infrastructure.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -60,7 +63,7 @@ namespace Backoffice.Services
                 System.IO.File.Delete(Path.Combine(fullpath, fileName));
         }
 
-        public async Task<PictureInfo> SaveFileAsync(IFormFile formFile, string fullPath, string uriPath, string addToFilename)
+        public PictureInfo SaveFile(IFormFile formFile, int width, int height, string fullPath, string uriPath, string addToFilename)
         {
             var info = new PictureInfo
             {
@@ -75,17 +78,31 @@ namespace Backoffice.Services
                 filename = name + filename.Substring(filename.LastIndexOf('.'));
             }
 
+            ////High
+            //var fileNameHigh = filename.Replace(".", "-high.");
+            //var fileHighPath = Path.Combine(
+            //    fullPath,
+            //    fileNameHigh);
+            //using (var stream = new FileStream(fileHighPath, FileMode.Create))
+            //{
+            //    await formFile.CopyToAsync(stream);
+            //}
+
+            //Medium
             var filePath = Path.Combine(
                 fullPath,
                 filename);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            using (Image<Rgba32> image = Image.Load(formFile.OpenReadStream()))
             {
-                await formFile.CopyToAsync(stream);
+                image.Mutate(x => x
+                     .Resize(width, height));
+
+                image.Save(filePath); // Automatic encoder selected based on extension.
             }
 
             info.Location = filePath;
             info.PictureUri = uriPath + filename;
+            //info.PictureHighUri = uriPath + fileNameHigh;
 
             return info;
         }
@@ -136,7 +153,7 @@ namespace Backoffice.Services
             //check if has customize orders
             foreach (var order in model)
             {
-                if(order.HasCustomizeProducts && order.OrderState == OrderStateType.UNDER_ANALYSIS)
+                if (order.HasCustomizeProducts && order.OrderState == OrderStateType.UNDER_ANALYSIS)
                 {
                     order.Total = 0;
                 }
@@ -185,7 +202,7 @@ namespace Backoffice.Services
 
 
             //Get user info
-            orderViewModel.User = _identityContext.Users.SingleOrDefault(x => x.Email == order.BuyerId);            
+            orderViewModel.User = _identityContext.Users.SingleOrDefault(x => x.Email == order.BuyerId);
 
             return orderViewModel;
         }
@@ -230,7 +247,7 @@ namespace Backoffice.Services
                 .Include(x => x.OrderItems)
                 .ThenInclude(i => i.ItemOrdered)
                 .SingleOrDefaultAsync(x => x.Id == id);
-            var response =  await _invoiceService.RegisterInvoiceAsync(SageApplicationType.DAMA_BACKOFFICE, order);
+            var response = await _invoiceService.RegisterInvoiceAsync(SageApplicationType.DAMA_BACKOFFICE, order);
 
             if (response.InvoiceId.HasValue)
             {

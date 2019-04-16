@@ -11,7 +11,9 @@ namespace ApplicationCore
         public string WebNewsPictureUri { get; set; }
         public string WebNewsPictureFullPath { get; set; }
         public string WebProductsPictureUri { get; set; }
+        public string WebProductsPictureV2Uri { get; set; }
         public string WebProductsPictureFullPath { get; set; }
+        public string WebProductsPictureV2FullPath { get; set; }
         public string WebProductTypesPictureUri { get; set; }
         public string WebProductTypesPictureFullPath { get; set; }
         public string InvoicesFolderFullPath { get; set; }
