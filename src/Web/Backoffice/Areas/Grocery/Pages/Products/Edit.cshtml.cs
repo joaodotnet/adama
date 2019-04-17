@@ -86,7 +86,7 @@ namespace Backoffice.Areas.Grocery.Pages.Products
                 {
                     _service.DeleteFile(_backofficeSettings.GroceryProductsPictureFullPath, Utils.GetFileName(CatalogItem.PictureUri));
                 }
-                CatalogItem.PictureUri = (await _service.SaveFileAsync(Picture, _backofficeSettings.GroceryProductsPictureFullPath, _backofficeSettings.GroceryProductsPictureUri, CatalogItem.Id.ToString())).PictureUri;
+                CatalogItem.PictureUri = _service.SaveFile(Picture, _backofficeSettings.GroceryProductsPictureFullPath, _backofficeSettings.GroceryProductsPictureUri, CatalogItem.Id.ToString(), true, 500, 500).PictureUri;
             }
 
             //CatalogCategories

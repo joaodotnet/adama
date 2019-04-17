@@ -69,7 +69,7 @@ namespace Backoffice.Areas.Grocery.Pages.Products
             {
                 var lastCatalogItemId = (await _context.CatalogItems.AnyAsync()) ? (await _context.CatalogItems.LastAsync()).Id : 0;
 
-                CatalogItem.PictureUri = (await _service.SaveFileAsync(Picture, _backofficeSettings.GroceryProductsPictureFullPath, _backofficeSettings.GroceryProductsPictureUri, (++lastCatalogItemId).ToString())).PictureUri;
+                CatalogItem.PictureUri = _service.SaveFile(Picture, _backofficeSettings.GroceryProductsPictureFullPath, _backofficeSettings.GroceryProductsPictureUri, (++lastCatalogItemId).ToString(), true, 500, 500).PictureUri;
             }
 
             //Catalog Catagories

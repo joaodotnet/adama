@@ -66,7 +66,7 @@ namespace Backoffice.Pages.ProductType
             {
                 if (!string.IsNullOrEmpty(type.PictureUri))
                 {
-                    _service.DeleteFile(_backofficeSettings.WebProductTypesPictureFullPath, Utils.GetFileName(type.PictureUri));
+                    _service.DeleteFile(_backofficeSettings.WebProductTypesPictureV2FullPath, Utils.GetFileName(type.PictureUri));
                 }
 
                 _context.CatalogTypes.Remove(type);

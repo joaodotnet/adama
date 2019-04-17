@@ -63,7 +63,7 @@ namespace Backoffice.Services
                 System.IO.File.Delete(Path.Combine(fullpath, fileName));
         }
 
-        public PictureInfo SaveFile(IFormFile formFile, int width, int height, string fullPath, string uriPath, string addToFilename)
+        public PictureInfo SaveFile(IFormFile formFile, string fullPath, string uriPath, string addToFilename, bool resize = false, int width = 0, int height = 0)
         {
             var info = new PictureInfo
             {
@@ -88,16 +88,28 @@ namespace Backoffice.Services
             //    await formFile.CopyToAsync(stream);
             //}
 
-            //Medium
             var filePath = Path.Combine(
                 fullPath,
                 filename);
-            using (Image<Rgba32> image = Image.Load(formFile.OpenReadStream()))
-            {
-                image.Mutate(x => x
-                     .Resize(width, height));
 
-                image.Save(filePath); // Automatic encoder selected based on extension.
+            //Medium
+            if (resize)
+            {
+                using (Image<Rgba32> image = Image.Load(formFile.OpenReadStream()))
+                {
+                    image.Mutate(x => x
+                         .Resize(width, height));
+
+                    image.Save(filePath); // Automatic encoder selected based on extension.
+                }
+            }
+            else
+            {
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    formFile.CopyTo(stream);
+                }
+
             }
 
             info.Location = filePath;

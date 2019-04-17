@@ -155,7 +155,7 @@ namespace Backoffice.Pages.Products
                 {
                     _service.DeleteFile(_backofficeSettings.WebProductsPictureV2FullPath, Utils.GetFileName(ProductModel.PictureUri));
                 }
-                ProductModel.PictureUri = _service.SaveFile(ProductModel.Picture, 469, 469, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, ProductModel.Id.ToString()).PictureUri;
+                ProductModel.PictureUri = _service.SaveFile(ProductModel.Picture, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, ProductModel.Id.ToString(), true, 469, 469).PictureUri;
             }
 
             ////Update images            
@@ -175,7 +175,7 @@ namespace Backoffice.Pages.Products
                     {
                         IsActive = true,
                         Order = ++order,
-                        PictureUri = _service.SaveFile(item, 469, 469, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, (++lastCatalogPictureId).ToString()).PictureUri
+                        PictureUri = _service.SaveFile(item, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, (++lastCatalogPictureId).ToString(), true, 469, 469).PictureUri
                     });
                 }
             }
@@ -218,11 +218,11 @@ namespace Backoffice.Pages.Products
                         PictureUri = ProductModel.PictureUri
                     });
                 else
-                    mainPic.PictureUri = ProductModel.PictureUri;
+                    prod.CatalogPictures.SingleOrDefault(x => x.IsMain).PictureUri = ProductModel.PictureUri;
             }
 
             //Other pictutes
-            foreach (var item in ProductModel.CatalogPictures)
+            foreach (var item in ProductModel.CatalogPictures.Where(x => !x.IsMain).ToList())
             {
                 var otherPicture = item.Id != 0 ? prod.CatalogPictures.SingleOrDefault(x => x.Id == item.Id) : null;
 
