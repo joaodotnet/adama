@@ -63,14 +63,16 @@ namespace DamaWeb.Services
                 .Take(iPage)
                 .ToList();
 
-            itemsOnPage.ForEach(x =>
-            {
-                x.PictureUri = _uriComposer.ComposePicUri(x.PictureUri);
-            });
+            //itemsOnPage.ForEach(x =>
+            //{
+            //    x.PictureUri = _uriComposer.ComposePicUri(x.PictureUri);
+            //});
 
             var vm = new CatalogIndexViewModel()
             {
-                CatalogItems = itemsOnPage.Select(i => new CatalogItemViewModel()
+                CatalogItems = itemsOnPage
+                .OrderByDescending(x => x.Id)
+                .Select(i => new CatalogItemViewModel()
                 {
                     CatalogItemId = i.Id,
                     CatalogItemName = i.Name,
@@ -81,6 +83,7 @@ namespace DamaWeb.Services
                 }),
                 NewCatalogItems = itemsOnPage
                     .Where(x => x.IsNew)
+                    .OrderByDescending(x => x.Id)
                     .Take(8)
                     .Select(i => new CatalogItemViewModel()
                     {
@@ -93,6 +96,7 @@ namespace DamaWeb.Services
                     }),
                 FeaturedCatalogItems = itemsOnPage
                     .Where(x => x.IsFeatured)
+                    .OrderByDescending(x => x.Id)
                     .Take(8)
                     .Select(i => new CatalogItemViewModel()
                     {
@@ -169,7 +173,9 @@ namespace DamaWeb.Services
 
             var iPage = itemsPage ?? totalItems;
 
-            var allItems = root.ToList();
+            var allItems = root
+                .OrderByDescending(x => x.Id)
+                .ToList();
 
             //Get Catalog Types of Category
             var types = new List<CatalogType>();
