@@ -59,6 +59,7 @@ namespace DamaWeb.Services
             var iPage = itemsPage ?? totalItems;
 
             var itemsOnPage = root
+                .OrderByDescending(x => x.Id)
                 .Skip(iPage * pageIndex)
                 .Take(iPage)
                 .ToList();
@@ -71,7 +72,6 @@ namespace DamaWeb.Services
             var vm = new CatalogIndexViewModel()
             {
                 CatalogItems = itemsOnPage
-                .OrderByDescending(x => x.Id)
                 .Select(i => new CatalogItemViewModel()
                 {
                     CatalogItemId = i.Id,
@@ -83,7 +83,6 @@ namespace DamaWeb.Services
                 }),
                 NewCatalogItems = itemsOnPage
                     .Where(x => x.IsNew)
-                    .OrderByDescending(x => x.Id)
                     .Take(8)
                     .Select(i => new CatalogItemViewModel()
                     {
@@ -96,7 +95,6 @@ namespace DamaWeb.Services
                     }),
                 FeaturedCatalogItems = itemsOnPage
                     .Where(x => x.IsFeatured)
-                    .OrderByDescending(x => x.Id)
                     .Take(8)
                     .Select(i => new CatalogItemViewModel()
                     {
