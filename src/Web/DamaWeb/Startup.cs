@@ -155,7 +155,6 @@ namespace DamaWeb
                     options.Conventions.AddPageRoute("/Search/Index", "procurar/{q?}");
                     options.Conventions.AddPageRoute("/Customize/Index", "personalizar/");
                     options.Conventions.AddPageRoute("/Customize/Step2", "personalizar/passo2");
-                    options.Conventions.AddPageRoute("/Customize/Step3", "personalizar/passo3");
                     options.Conventions.AddPageRoute("/Customize/Result", "personalizar/resultado");
                     options.Conventions.AddPageRoute("/Privacy", "privacidade");
                     options.Conventions.AddPageRoute("/NotFound", "pagina-nao-encontrada");

@@ -9,6 +9,7 @@ namespace Backoffice.ViewModels
         public string PictureUri { get; set; }
         [Display(Name = "Ativo")]
         public bool IsActive { get; set; }
+        public bool IsMain { get; set; }
         [Display(Name = "Ordem")]
         public int Order { get; set; }
         public int CatalogItemId { get; set; }        

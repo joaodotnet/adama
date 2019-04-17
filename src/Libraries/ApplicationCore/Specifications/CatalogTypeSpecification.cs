@@ -10,5 +10,12 @@ namespace ApplicationCore.Specifications
         {
             AddInclude(x => x.CatalogItems);
         }
+
+        public CatalogTypeSpecification(bool includeHelpers)
+            : base(x => true)
+        {
+            if(includeHelpers)
+                AddInclude(x => x.PictureTextHelpers);
+        }
     }
 }

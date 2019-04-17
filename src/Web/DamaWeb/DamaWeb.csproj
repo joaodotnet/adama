@@ -29,9 +29,6 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Update="Pages\Customize\Step3.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
     <Content Update="Pages\Customize\Step2.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
