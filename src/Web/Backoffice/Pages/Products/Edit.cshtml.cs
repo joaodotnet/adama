@@ -86,7 +86,7 @@ namespace Backoffice.Pages.Products
 
             public IList<ProductAttributeViewModel> CatalogAttributes { get; set; } = new List<ProductAttributeViewModel>();
             [Display(Name = "Imagens do Produto")]
-            public IList<ProductPictureViewModel> CatalogPictures { get; set; } = new List<ProductPictureViewModel>();
+            public List<ProductPictureViewModel> CatalogPictures { get; set; } = new List<ProductPictureViewModel>();
             [Display(Name = "Categorias")]
             public IList<CatalogCategoryViewModel> CatalogCategories { get; set; } = new List<CatalogCategoryViewModel>();
             public IList<CatalogReference> CatalogReferences { get; set; } = new List<CatalogReference>();
@@ -110,7 +110,9 @@ namespace Backoffice.Pages.Products
                 .Include(p => p.CatalogReferences)
                 .ThenInclude(cr => cr.ReferenceCatalogItem)
                 .AsNoTracking()
-                .SingleOrDefaultAsync(m => m.Id == id));                
+                .SingleOrDefaultAsync(m => m.Id == id));
+
+            ProductModel.CatalogPictures.RemoveAll(x => x.IsMain);
 
             if (ProductModel == null)
             {
@@ -164,7 +166,7 @@ namespace Backoffice.Pages.Products
             //    _service.DeleteFile(_backofficeSettings.WebProductsPictureFullPath, Utils.GetFileName(item.PictureUri));
             //    item.PictureUri = (await _service.SaveFileAsync(item.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri, item.Id.ToString())).PictureUri;
             //}
-            //Save news images
+            //Save other images
             if (ProductModel.OtherPictures != null)
             {
                 var order = ProductModel.CatalogPictures.Count == 0 ? 0 : ProductModel.CatalogPictures.Max(x => x.Order);
@@ -175,6 +177,7 @@ namespace Backoffice.Pages.Products
                     {
                         IsActive = true,
                         Order = ++order,
+                        IsMain = false,
                         PictureUri = _service.SaveFile(item, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, (++lastCatalogPictureId).ToString(), true, 469, 469).PictureUri
                     });
                 }
@@ -193,8 +196,8 @@ namespace Backoffice.Pages.Products
             prod.Description = ProductModel.Description;            
             prod.CatalogIllustrationId = ProductModel.CatalogIllustrationId;
             prod.CatalogTypeId = ProductModel.CatalogTypeId;
-            //if(!string.IsNullOrEmpty(ProductModel.PictureUri))
-            //    prod.PictureUri = ProductModel.PictureUri;
+            if(!string.IsNullOrEmpty(ProductModel.PictureUri))
+                prod.PictureUri = ProductModel.PictureUri;
             prod.Price = ProductModel.Price;
             prod.IsFeatured = ProductModel.IsFeatured;
             prod.IsNew = ProductModel.IsNew;
