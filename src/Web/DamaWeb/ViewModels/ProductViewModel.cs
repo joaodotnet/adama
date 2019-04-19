@@ -17,7 +17,7 @@ namespace DamaWeb.ViewModels
         public string ProductTitle { get; set; }
         public string ProductDescription { get; set; }
         public decimal ProductPrice { get; set; }
-        public List<string> ProductImagesUri { get; set; }
+        public List<(string Medium,string High)> ProductImagesUri { get; set; }
         public List<ProductAttributeViewModel> Attributes { get; set; }
         public int ProductQuantity { get; set; } = 1;
         [Display(Name = "Referência:")]

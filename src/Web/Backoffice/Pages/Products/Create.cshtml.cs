@@ -133,15 +133,16 @@ namespace Backoffice.Pages.Products
                 if(_context.CatalogItems.Any())
                     lastCatalogItemId = (await _context.CatalogItems.LastAsync()).Id;
 
-                var pictureUri = _service.SaveFile(ProductModel.Picture, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, (++lastCatalogItemId).ToString(), true, 469, 469).PictureUri;
-                ProductModel.PictureUri = pictureUri;
+                var info = _service.SaveFile(ProductModel.Picture, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, (++lastCatalogItemId).ToString(), true, 700, 700);
+                ProductModel.PictureUri = info.PictureUri;
 
                 ProductModel.CatalogPictures.Add(new ProductPictureViewModel
                 {
                     IsActive = true,
                     IsMain = true,
                     Order = 0,
-                    PictureUri = pictureUri
+                    PictureUri = info.PictureUri,
+                    PictureHighUri = info.PictureHighUri
                 });
             }
 
@@ -152,12 +153,14 @@ namespace Backoffice.Pages.Products
                 var order = 0;
                 foreach (var item in ProductModel.OtherPictures)
                 {
+                    var info = _service.SaveFile(item, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, (++lastCatalogPictureId).ToString(), true, 700, 700);
                     ProductModel.CatalogPictures.Add(new ProductPictureViewModel
                     {
                         IsActive = true,
                         IsMain = false,
                         Order = ++order,
-                        PictureUri = _service.SaveFile(item, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, (++lastCatalogPictureId).ToString(), true, 469, 469).PictureUri
+                        PictureUri = info.PictureUri,
+                        PictureHighUri = info.PictureHighUri
                     });
                 }
             }
