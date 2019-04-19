@@ -108,9 +108,9 @@ namespace Backoffice.Pages.ProductType
             {
                 if(!string.IsNullOrEmpty(productTypeEntity.PictureUri))
                 {
-                    _service.DeleteFile(_backofficeSettings.WebProductTypesPictureFullPath, Utils.GetFileName(productTypeEntity.PictureUri));
+                    _service.DeleteFile(_backofficeSettings.WebProductTypesPictureV2FullPath, Utils.GetFileName(productTypeEntity.PictureUri));
                 }
-                ProductTypeModel.PictureUri = (await _service.SaveFileAsync(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureFullPath, _backofficeSettings.WebProductTypesPictureUri, ProductTypeModel.Id.ToString())).PictureUri;
+                ProductTypeModel.PictureUri = _service.SaveFile(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureV2FullPath, _backofficeSettings.WebProductTypesPictureV2Uri, ProductTypeModel.Id.ToString(), true, 255, 116).PictureUri;
             }
 
             //Save Images Text Helpers
@@ -126,7 +126,7 @@ namespace Backoffice.Pages.ProductType
                 foreach (var item in ProductTypeModel.FormFileTextHelpers)
                 {
                     var lastId = _context.FileDetails.Count() > 0 ? (await _context.FileDetails.LastAsync()).Id : 0;
-                    var pictureInfo = await _service.SaveFileAsync(item, _backofficeSettings.WebProductTypesPictureFullPath, _backofficeSettings.WebProductTypesPictureUri, (++lastId).ToString());
+                    var pictureInfo = _service.SaveFile(item, _backofficeSettings.WebProductTypesPictureV2FullPath, _backofficeSettings.WebProductTypesPictureV2Uri, (++lastId).ToString(), true, 112, 96);
                     productTypeEntity.PictureTextHelpers.Add(new FileDetail
                     {
                         PictureUri = pictureInfo.PictureUri,

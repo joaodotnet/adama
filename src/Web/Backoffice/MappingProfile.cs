@@ -31,6 +31,7 @@ namespace Backoffice
             CreateMap<Pages.Products.CreateModel.ProductCreateViewModel, CatalogItem>();
             CreateMap<CatalogItem,Pages.Products.EditModel.ProductEditViewModel>()
                 .ForMember(x => x.Picture, opt => opt.Ignore())
+                .ForMember(x => x.PictureUri, opt => opt.MapFrom(src => src.CatalogPictures.SingleOrDefault(x => x.IsMain).PictureUri))
                 .ForMember(x => x.OtherPictures, opt => opt.Ignore());
             CreateMap<CatalogAttribute, ProductAttributeViewModel>();
             //.ForMember(dest => dest.AttributeName,

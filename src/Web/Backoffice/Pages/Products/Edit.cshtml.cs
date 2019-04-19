@@ -86,7 +86,7 @@ namespace Backoffice.Pages.Products
 
             public IList<ProductAttributeViewModel> CatalogAttributes { get; set; } = new List<ProductAttributeViewModel>();
             [Display(Name = "Imagens do Produto")]
-            public IList<ProductPictureViewModel> CatalogPictures { get; set; } = new List<ProductPictureViewModel>();
+            public List<ProductPictureViewModel> CatalogPictures { get; set; } = new List<ProductPictureViewModel>();
             [Display(Name = "Categorias")]
             public IList<CatalogCategoryViewModel> CatalogCategories { get; set; } = new List<CatalogCategoryViewModel>();
             public IList<CatalogReference> CatalogReferences { get; set; } = new List<CatalogReference>();
@@ -110,7 +110,9 @@ namespace Backoffice.Pages.Products
                 .Include(p => p.CatalogReferences)
                 .ThenInclude(cr => cr.ReferenceCatalogItem)
                 .AsNoTracking()
-                .SingleOrDefaultAsync(m => m.Id == id));                
+                .SingleOrDefaultAsync(m => m.Id == id));
+
+            ProductModel.CatalogPictures.RemoveAll(x => x.IsMain);
 
             if (ProductModel == null)
             {
@@ -153,9 +155,9 @@ namespace Backoffice.Pages.Products
             {
                 if (!string.IsNullOrEmpty(ProductModel.PictureUri))
                 {
-                    _service.DeleteFile(_backofficeSettings.WebProductsPictureFullPath, Utils.GetFileName(ProductModel.PictureUri));
+                    _service.DeleteFile(_backofficeSettings.WebProductsPictureV2FullPath, Utils.GetFileName(ProductModel.PictureUri));
                 }
-                ProductModel.PictureUri = (await _service.SaveFileAsync(ProductModel.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri, ProductModel.Id.ToString())).PictureUri;
+                ProductModel.PictureUri = _service.SaveFile(ProductModel.Picture, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, ProductModel.Id.ToString(), true, 469, 469).PictureUri;
             }
 
             ////Update images            
@@ -164,7 +166,7 @@ namespace Backoffice.Pages.Products
             //    _service.DeleteFile(_backofficeSettings.WebProductsPictureFullPath, Utils.GetFileName(item.PictureUri));
             //    item.PictureUri = (await _service.SaveFileAsync(item.Picture, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri, item.Id.ToString())).PictureUri;
             //}
-            //Save news images
+            //Save other images
             if (ProductModel.OtherPictures != null)
             {
                 var order = ProductModel.CatalogPictures.Count == 0 ? 0 : ProductModel.CatalogPictures.Max(x => x.Order);
@@ -175,7 +177,8 @@ namespace Backoffice.Pages.Products
                     {
                         IsActive = true,
                         Order = ++order,
-                        PictureUri = (await _service.SaveFileAsync(item, _backofficeSettings.WebProductsPictureFullPath, _backofficeSettings.WebProductsPictureUri, (++lastCatalogPictureId).ToString())).PictureUri
+                        IsMain = false,
+                        PictureUri = _service.SaveFile(item, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, (++lastCatalogPictureId).ToString(), true, 469, 469).PictureUri
                     });
                 }
             }
@@ -205,15 +208,31 @@ namespace Backoffice.Pages.Products
             prod.MetaDescription = ProductModel.MetaDescription;
             prod.Title = ProductModel.Title;
             
+            //Main Picture
+            if(!string.IsNullOrEmpty(ProductModel.PictureUri))
+            {
+                var mainPic = prod.CatalogPictures.SingleOrDefault(x => x.IsMain);
+                if (mainPic == null)
+                    prod.CatalogPictures.Add(new CatalogPicture
+                    {
+                        IsActive = true,
+                        IsMain = true,
+                        Order = 0,
+                        PictureUri = ProductModel.PictureUri
+                    });
+                else
+                    prod.CatalogPictures.SingleOrDefault(x => x.IsMain).PictureUri = ProductModel.PictureUri;
+            }
+
             //Other pictutes
-            foreach (var item in ProductModel.CatalogPictures)
+            foreach (var item in ProductModel.CatalogPictures.Where(x => !x.IsMain).ToList())
             {
                 var otherPicture = item.Id != 0 ? prod.CatalogPictures.SingleOrDefault(x => x.Id == item.Id) : null;
 
                 if (item.ToRemove && otherPicture != null)
                 {
                     _context.Entry(otherPicture).State = EntityState.Deleted;
-                    _service.DeleteFile(_backofficeSettings.WebProductsPictureFullPath, Utils.GetFileName(item.PictureUri));
+                    _service.DeleteFile(_backofficeSettings.WebProductsPictureV2FullPath, Utils.GetFileName(item.PictureUri));
                 }
                 else if(otherPicture != null)
                 {                    
@@ -227,21 +246,10 @@ namespace Backoffice.Pages.Products
                     {
                         IsActive = item.IsActive,
                         Order = item.Order,
-                        PictureUri = item.PictureUri
+                        PictureUri = item.PictureUri,
+                        IsMain = false
                     });
                 }
-
-                //if (item.Id != 0)
-                //{
-                //    if (ProductModel.CatalogPictures.SingleOrDefault(x => x.Id == item.Id).ToRemove)
-                //    {
-                //        _service.DeleteFile(_backofficeSettings.WebProductsPictureFullPath, Utils.GetFileName(item.PictureUri));
-                //        //_context.Entry(item).State = EntityState.Deleted;
-
-                //    }
-                //    else
-                //        _context.Entry(item).State = EntityState.Modified;
-                //}
             }
 
             //Categorias dos Produtos

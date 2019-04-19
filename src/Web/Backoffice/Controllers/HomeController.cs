@@ -1,0 +1,137 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Xml;
+using ApplicationCore;
+using ApplicationCore.Entities;
+using ApplicationCore.Interfaces;
+using ApplicationCore.Specifications;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+
+namespace DamaWeb.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class HomeController : ControllerBase
+    {
+        private readonly IAsyncRepository<CatalogItem> _catalogRepository;
+        private readonly IAsyncRepository<CatalogType> _catalogTypeRepository;
+        private readonly BackofficeSettings _backofficeSettings;
+
+        public HomeController(
+            IAsyncRepository<CatalogItem> catalogRepository,
+            IAsyncRepository<CatalogType> catalogTypeRepository,
+            IOptions<BackofficeSettings> settings)
+        {
+            _catalogRepository = catalogRepository;
+            _catalogTypeRepository = catalogTypeRepository;
+            _backofficeSettings = settings.Value;
+        }
+        [Route("updatepictures")]
+        public async Task<IActionResult> UpdatePicturesAsync()
+        {
+            var spec = new CatalogFilterSpecification(false);
+            var products = await _catalogRepository.ListAsync(spec);
+
+            //Add main Picture
+            foreach (var item in products)
+            {
+                if (!string.IsNullOrEmpty(item.PictureUri) && !item.CatalogPictures.Any(x => x.IsMain))
+                {
+                    //item.CatalogPictures.ToList().ForEach(x => x.Order += 1);
+                    item.CatalogPictures.Add(new CatalogPicture
+                    {
+                        IsActive = true,
+                        IsMain = true,
+                        PictureUri = item.PictureUri,
+                        Order = 0
+                    });
+                    await _catalogRepository.UpdateAsync(item);
+                }
+            }
+            //Set current Picture to PictureHighUri
+            products = await _catalogRepository.ListAsync(spec);
+            foreach (var product in products)
+            {
+                foreach (var picture in product.CatalogPictures)
+                {
+                    if (!string.IsNullOrEmpty(picture.PictureUri) && string.IsNullOrEmpty(picture.PictureHighUri))
+                    {
+                        //Set pictureHighUri
+                        picture.PictureHighUri = picture.PictureUri;
+                        Uri uri = new Uri(picture.PictureUri);
+                        var name = Utils.URLFriendly(Path.GetFileNameWithoutExtension(uri.LocalPath));
+                        var fileName = name + Path.GetExtension(uri.LocalPath);
+                        var fullPath = Path.Combine(_backofficeSettings.WebProductsPictureV2FullPath, fileName);
+                        picture.PictureUri = _backofficeSettings.WebProductsPictureV2Uri + fileName;
+
+                        //Get Image
+                        var originalImage = Path.Combine(_backofficeSettings.WebProductsPictureFullPath, Path.GetFileName(uri.LocalPath));
+                        using (Image<Rgba32> image = Image.Load(originalImage))
+                        {
+                            image.Mutate(x => x
+                                 .Resize(469, 469));
+
+                            image.Save(fullPath); // Automatic encoder selected based on extension.
+                        }
+                    }
+                }
+                await _catalogRepository.UpdateAsync(product);
+                
+            }
+
+            //Product Types
+            var typesSpec = new CatalogTypeSpecification(true);
+            var types = await _catalogTypeRepository.ListAsync(typesSpec);
+            foreach (var item in types)
+            {
+                //Main Picture
+                if (!string.IsNullOrEmpty(item.PictureUri) && !item.PictureUri.Contains("v2"))
+                {
+                    Uri uri = new Uri(item.PictureUri);
+                    var fileName = Path.GetFileName(uri.LocalPath);
+                    var originalImagePath = Path.Combine(_backofficeSettings.WebProductTypesPictureFullPath, fileName);
+                    var newImagePath = Path.Combine(_backofficeSettings.WebProductTypesPictureV2FullPath, fileName);
+                    using (Image<Rgba32> image = Image.Load(originalImagePath))
+                    {
+                        image.Mutate(x => x
+                             .Resize(255, 116));
+
+                        image.Save(newImagePath); // Automatic encoder selected based on extension.
+                    }
+                    item.PictureUri = _backofficeSettings.WebProductTypesPictureV2Uri + fileName;
+
+                    if (item.PictureTextHelpers?.Count > 0)
+                    {
+                        foreach (var helper in item.PictureTextHelpers)
+                        {
+                            Uri uriHelper = new Uri(helper.PictureUri);
+                            var fileNameHelper = Path.GetFileName(uriHelper.LocalPath);
+                            var originalHelperPath = Path.Combine(_backofficeSettings.WebProductTypesPictureFullPath, fileNameHelper);
+                            var newHelperPath = Path.Combine(_backofficeSettings.WebProductTypesPictureV2FullPath, fileNameHelper);
+                            using (Image<Rgba32> image = Image.Load(originalHelperPath))
+                            {
+                                image.Mutate(x => x
+                                     .Resize(112, 96));
+
+                                image.Save(newHelperPath); // Automatic encoder selected based on extension.
+                            }
+                            helper.PictureUri = _backofficeSettings.WebProductTypesPictureV2Uri + fileNameHelper;
+                            helper.Location = newHelperPath;
+                        }
+                    }
+                    await _catalogTypeRepository.UpdateAsync(item);
+                }
+            }
+
+            return Ok();
+        }
+    }
+}

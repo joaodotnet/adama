@@ -72,13 +72,13 @@ namespace Backoffice.Pages.ShopConfig
                 return Page();
 
             if (ShopConfigDetailModel.Picture != null && ShopConfigDetailModel.Picture.Length > 0)
-                ShopConfigDetailModel.PictureUri = await SaveFileAsync(ShopConfigDetailModel.Picture);
+                ShopConfigDetailModel.PictureUri = SaveFile(ShopConfigDetailModel.Picture, true, 1110, 414);
 
             if (ShopConfigDetailModel.PictureWebp != null && ShopConfigDetailModel.PictureWebp.Length > 0)
-                ShopConfigDetailModel.PictureWebpUri = await SaveFileAsync(ShopConfigDetailModel.PictureWebp);
+                ShopConfigDetailModel.PictureWebpUri = SaveFile(ShopConfigDetailModel.PictureWebp, false);
 
             if (ShopConfigDetailModel.PictureMobile != null && ShopConfigDetailModel.PictureMobile.Length > 0)
-                ShopConfigDetailModel.PictureMobileUri = await SaveFileAsync(ShopConfigDetailModel.PictureMobile);
+                ShopConfigDetailModel.PictureMobileUri = SaveFile(ShopConfigDetailModel.PictureMobile, true, 525, 196);
 
             var shopConfigDetail = _mapper.Map<ShopConfigDetail>(ShopConfigDetailModel);
             _context.Attach(shopConfigDetail).State = EntityState.Modified;
@@ -95,9 +95,9 @@ namespace Backoffice.Pages.ShopConfig
             return RedirectToPage("./Index");
         }
 
-        private async Task<string> SaveFileAsync(IFormFile picture)
+        private string SaveFile(IFormFile picture, bool resize, int width = 0, int height = 0)
         {
-            return (await _service.SaveFileAsync(picture, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, ShopConfigDetailModel.Id.ToString())).PictureUri;
+            return _service.SaveFile(picture, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, ShopConfigDetailModel.Id.ToString(), resize, width, height).PictureUri;
         }
 
         private bool IsImageSizeInvalid(IFormFile file)
