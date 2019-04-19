@@ -65,13 +65,13 @@ namespace Backoffice.Pages.ShopConfig
 
             var lastShopDetailId = (_context.ShopConfigDetails.Count() > 0 ? (await _context.ShopConfigDetails.LastAsync())?.Id : 0) + 1;
             if (ShopConfigDetailModel.Picture.Length > 0)
-                ShopConfigDetailModel.PictureUri = (await _service.SaveFileAsync(ShopConfigDetailModel.Picture, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, (lastShopDetailId).ToString())).PictureUri;
+                ShopConfigDetailModel.PictureUri = _service.SaveFile(ShopConfigDetailModel.Picture, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, (lastShopDetailId).ToString(), true, 1110, 414).PictureUri;
 
             if (ShopConfigDetailModel.PictureWebp.Length > 0)
-                ShopConfigDetailModel.PictureWebpUri = (await _service.SaveFileAsync(ShopConfigDetailModel.PictureWebp, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, (lastShopDetailId).ToString())).PictureUri;
+                ShopConfigDetailModel.PictureWebpUri = _service.SaveFile(ShopConfigDetailModel.PictureWebp, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, (lastShopDetailId).ToString()).PictureUri;
 
             if (ShopConfigDetailModel.PictureMobile.Length > 0)
-                ShopConfigDetailModel.PictureMobileUri = (await _service.SaveFileAsync(ShopConfigDetailModel.PictureMobile, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, (lastShopDetailId).ToString())).PictureUri;
+                ShopConfigDetailModel.PictureMobileUri = _service.SaveFile(ShopConfigDetailModel.PictureMobile, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, (lastShopDetailId).ToString(), true, 525, 196).PictureUri;
 
             _context.ShopConfigDetails.Add(_mapper.Map<ShopConfigDetail>(ShopConfigDetailModel));
             await _context.SaveChangesAsync();

@@ -11,5 +11,6 @@ namespace Backoffice.Services
         public string Filename { get; set; }
         public string Extension { get; set; }
         public string Location { get; set; }
+        public string PictureHighUri { get; set; }
     }
 }

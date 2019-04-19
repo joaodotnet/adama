@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
+using ApplicationCore.Entities;
+using ApplicationCore.Interfaces;
+using ApplicationCore.Specifications;
 using DamaWeb.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Http;
@@ -15,10 +18,13 @@ namespace DamaWeb.Controllers
     public class HomeController : ControllerBase
     {
         private readonly ICatalogService _catalogService;
+        private readonly IAsyncRepository<CatalogItem> _catalogRepository;
 
-        public HomeController(ICatalogService catalogService)
+        public HomeController(ICatalogService catalogService,
+            IAsyncRepository<CatalogItem> catalogRepository)
         {
             _catalogService = catalogService;
+            _catalogRepository = catalogRepository;
         }
         [Route("/sitemap.xml")]
         public async Task SitemapXml()

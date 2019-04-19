@@ -13,7 +13,7 @@ namespace Backoffice.Interfaces
 {
     public interface IBackofficeService
     {
-        Task<PictureInfo> SaveFileAsync(IFormFile formFile, string fullPath, string uriPath, string addToFileName);
+        PictureInfo SaveFile(IFormFile formFile, string fullPath, string uriPath, string addToFileName, bool resize = false, int width = 0, int height = 0);
         Task SaveFileAsync(byte[] bytes, string invoicesFolderFullPath, string fileName);
         void DeleteFile(string fullpath);
         void DeleteFile(string fullpath, string fileName);

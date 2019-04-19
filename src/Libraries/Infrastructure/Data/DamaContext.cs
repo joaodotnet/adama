@@ -163,7 +163,12 @@ namespace Infrastructure.Data
         {
             builder.ToTable("CatalogPicture");
             builder.Property(x => x.PictureUri)
+                .HasMaxLength(1000)
                 .IsRequired();
+            builder.Property(x => x.PictureHighUri)
+                .HasMaxLength(1000);
+            builder.Property(x => x.PictureLowUri)
+                .HasMaxLength(1000);
             builder.HasOne(x => x.CatalogItem)
                 .WithMany(p => p.CatalogPictures)
                 .HasForeignKey(x => x.CatalogItemId);

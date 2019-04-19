@@ -339,10 +339,10 @@ namespace DamaWeb.Services
                 };
 
                 //Others prictures
-                if (product.CatalogPictures.Where(x => x.IsActive).Count() > 0)
+                if (product.CatalogPictures.Where(x => x.IsActive && !x.IsMain).Count() > 0)
                     vm.ProductImagesUri.AddRange(
                         product.CatalogPictures
-                        .Where(x => x.IsActive)
+                        .Where(x => x.IsActive && !x.IsMain)
                         .OrderBy(x => x.Order)
                         .Select(x => x.PictureUri)
                         );

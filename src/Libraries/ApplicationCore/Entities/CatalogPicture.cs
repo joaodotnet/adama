@@ -6,7 +6,10 @@ namespace ApplicationCore.Entities
 {
     public class CatalogPicture : BaseEntity
     {
-        public string PictureUri { get; set; }        
+        public string PictureUri { get; set; }
+        public string PictureHighUri { get; set; }
+        public string PictureLowUri { get; set; }
+        public bool IsMain { get; set; }
         public bool IsActive { get; set; }
         public int Order { get; set; }
         public int CatalogItemId { get; set; }

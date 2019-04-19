@@ -74,7 +74,7 @@
             <div class="form-group">
                 <label asp-for="ProductModel.Picture" class="control-label"></label>
                 <input type="file" asp-for="ProductModel.Picture" class="form-control" />
-                <small>(quadrado)</small>
+                <small>(469*469)</small>
                 <span asp-validation-for="ProductModel.Picture" class="text-danger"></span>
                 <img src="@Model.ProductModel.PictureUri" class="img-responsive" />
                 <input type="hidden" asp-for="ProductModel.PictureUri" />
@@ -228,6 +228,8 @@
                 <input type="hidden" asp-for="ProductModel.CatalogPictures[i].Id" />
                 <input type="hidden" asp-for="ProductModel.CatalogPictures[i].CatalogItemId" />
                 <input type="hidden" asp-for="ProductModel.CatalogPictures[i].PictureUri" />
+                <input type="hidden" asp-for="ProductModel.CatalogPictures[i].IsMain" />
+
                 <div class="col-md-2">
                     <img src="@Model.ProductModel.CatalogPictures[i].PictureUri" class="img-responsive img-thumbnail" />
                     <div class="form-check">
