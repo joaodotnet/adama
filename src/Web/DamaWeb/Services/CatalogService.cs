@@ -306,10 +306,10 @@ namespace DamaWeb.Services
                     ProductDescription = product.Description,
                     ProductPrice = product.Price ?? product.CatalogType.Price,
                     ProductQuantity = 1,
-                    ProductImagesUri = new List<string>(),
-                    //{
-                    //    product.PictureUri
-                    //},
+                    ProductImagesUri = new List<string>
+                    {
+                        product.PictureUri
+                    },
                     Attributes = new List<ProductAttributeViewModel>(),
                     Categories = product.CatalogCategories.Select(x => new LinkViewModel
                     {
@@ -339,10 +339,10 @@ namespace DamaWeb.Services
                 };
 
                 //Others prictures
-                if (product.CatalogPictures.Where(x => x.IsActive).Count() > 0)
+                if (product.CatalogPictures.Where(x => x.IsActive && !x.IsMain).Count() > 0)
                     vm.ProductImagesUri.AddRange(
                         product.CatalogPictures
-                        .Where(x => x.IsActive)
+                        .Where(x => x.IsActive && !x.IsMain)
                         .OrderBy(x => x.Order)
                         .Select(x => x.PictureUri)
                         );

@@ -133,14 +133,15 @@ namespace Backoffice.Pages.Products
                 if(_context.CatalogItems.Any())
                     lastCatalogItemId = (await _context.CatalogItems.LastAsync()).Id;
 
-                //ProductModel.PictureUri = _service.SaveFile(ProductModel.Picture, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, (++lastCatalogItemId).ToString(),true, 469, 469).PictureUri;
+                var pictureUri = _service.SaveFile(ProductModel.Picture, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, (++lastCatalogItemId).ToString(), true, 469, 469).PictureUri;
+                ProductModel.PictureUri = pictureUri;
 
                 ProductModel.CatalogPictures.Add(new ProductPictureViewModel
                 {
                     IsActive = true,
                     IsMain = true,
                     Order = 0,
-                    PictureUri = _service.SaveFile(ProductModel.Picture, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, (++lastCatalogItemId).ToString(), true, 469, 469).PictureUri
+                    PictureUri = pictureUri
                 });
             }
 
