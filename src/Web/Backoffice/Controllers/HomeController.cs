@@ -150,7 +150,8 @@ namespace DamaWeb.Controllers
                     Uri uriHelper = new Uri(mainPic.PictureHighUri);
                     var fileName = Path.GetFileName(uriHelper.LocalPath);
                     var originalPath = Path.Combine(_backofficeSettings.WebProductsPictureFullPath, fileName);
-                    var newPath = Path.Combine(_backofficeSettings.WebProductsPictureV2FullPath, fileName);
+                    var newFileName = Utils.URLFriendly(Path.GetFileNameWithoutExtension(uriHelper.LocalPath)) + Path.GetExtension(uriHelper.LocalPath);
+                    var newPath = Path.Combine(_backofficeSettings.WebProductsPictureV2FullPath, newFileName);
                     using (Image<Rgba32> image = Image.Load(originalPath))
                     {
                         var options = new ResizeOptions
@@ -163,9 +164,47 @@ namespace DamaWeb.Controllers
 
                         image.Save(newPath, new JpegEncoder { Quality = 90 }); // Automatic encoder selected based on extension.
                     }
-                    item.PictureUri = mainPic.PictureUri = _backofficeSettings.WebProductsPictureV2Uri + fileName;
+                    item.PictureUri = mainPic.PictureUri = _backofficeSettings.WebProductsPictureV2Uri + newFileName;
                     await _catalogRepository.UpdateAsync(item);
                 }
+            }
+            return Ok();
+        }
+
+        [Route("updateotherpicture")]
+        public async Task<IActionResult> UpdateOtherPicturesAsync()
+        {
+            var spec = new CatalogFilterSpecification(false);
+            var products = await _catalogRepository.ListAsync(spec);
+
+            foreach (var item in products)
+            {
+                foreach (var other in item.CatalogPictures.Where(x => !x.IsMain).ToList())
+                {
+                    if (!string.IsNullOrEmpty(other.PictureHighUri))
+                    {
+                        Uri uri = new Uri(other.PictureHighUri);
+                        var fileName = Path.GetFileName(uri.LocalPath);
+                        var originalPath = Path.Combine(_backofficeSettings.WebProductsPictureFullPath, fileName);
+                        var newFileName = Utils.URLFriendly(Path.GetFileNameWithoutExtension(uri.LocalPath)) + Path.GetExtension(uri.LocalPath);
+                        var newPath = Path.Combine(_backofficeSettings.WebProductsPictureV2FullPath, newFileName);
+                        using (Image<Rgba32> image = Image.Load(originalPath))
+                        {
+                            var options = new ResizeOptions
+                            {
+                                Mode = ResizeMode.Crop,
+                                Size = new SixLabors.Primitives.Size(700, 700)
+                            };
+
+                            image.Mutate(x => x.Resize(options));
+
+                            image.Save(newPath, new JpegEncoder { Quality = 90 }); // Automatic encoder selected based on extension.
+                        }
+                        other.PictureUri = _backofficeSettings.WebProductsPictureV2Uri + newFileName;
+                    }
+                }
+                await _catalogRepository.UpdateAsync(item);
+
             }
             return Ok();
         }
