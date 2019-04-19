@@ -12,6 +12,7 @@ using ApplicationCore.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
@@ -84,7 +85,7 @@ namespace DamaWeb.Controllers
                     }
                 }
                 await _catalogRepository.UpdateAsync(product);
-                
+
             }
 
             //Product Types
@@ -131,6 +132,41 @@ namespace DamaWeb.Controllers
                 }
             }
 
+            return Ok();
+        }
+
+        [Route("updatemainpicture")]
+        public async Task<IActionResult> UpdateMainPicturesAsync()
+        {
+            var spec = new CatalogFilterSpecification(false);
+            var products = await _catalogRepository.ListAsync(spec);
+
+            //Add main Picture
+            foreach (var item in products)
+            {
+                var mainPic = item.CatalogPictures.SingleOrDefault(x => x.IsMain);
+                if (mainPic != null && !string.IsNullOrEmpty(mainPic.PictureHighUri))
+                {
+                    Uri uriHelper = new Uri(mainPic.PictureHighUri);
+                    var fileName = Path.GetFileName(uriHelper.LocalPath);
+                    var originalPath = Path.Combine(_backofficeSettings.WebProductsPictureFullPath, fileName);
+                    var newPath = Path.Combine(_backofficeSettings.WebProductsPictureV2FullPath, fileName);
+                    using (Image<Rgba32> image = Image.Load(originalPath))
+                    {
+                        var options = new ResizeOptions
+                        {
+                            Mode = ResizeMode.Crop,
+                            Size = new SixLabors.Primitives.Size(700, 700)
+                        };
+
+                        image.Mutate(x => x.Resize(options));
+
+                        image.Save(newPath, new JpegEncoder { Quality = 90 }); // Automatic encoder selected based on extension.
+                    }
+                    item.PictureUri = mainPic.PictureUri = _backofficeSettings.WebProductsPictureV2Uri + fileName;
+                    await _catalogRepository.UpdateAsync(item);
+                }
+            }
             return Ok();
         }
     }

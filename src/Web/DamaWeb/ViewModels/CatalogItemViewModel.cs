@@ -9,5 +9,6 @@
         public decimal Price { get; set; }
         //public string ProductSku { get; set; }
         public string ProductSlug { get; set; }
+        public string PictureHighUri { get; set; }
     }
 }

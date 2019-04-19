@@ -14,5 +14,6 @@ namespace Backoffice.ViewModels
         public int Order { get; set; }
         public int CatalogItemId { get; set; }        
         public bool ToRemove { get; set; }
+        public string PictureHighUri { get; set; }
     }
 }

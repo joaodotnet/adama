@@ -78,15 +78,15 @@ namespace Backoffice.Services
                 filename = name + filename.Substring(filename.LastIndexOf('.'));
             }
 
-            ////High
-            //var fileNameHigh = filename.Replace(".", "-high.");
-            //var fileHighPath = Path.Combine(
-            //    fullPath,
-            //    fileNameHigh);
-            //using (var stream = new FileStream(fileHighPath, FileMode.Create))
-            //{
-            //    await formFile.CopyToAsync(stream);
-            //}
+            //High
+            var fileNameHigh = filename.Replace(".", "-high.");
+            var fileHighPath = Path.Combine(
+                fullPath,
+                fileNameHigh);
+            using (var stream = new FileStream(fileHighPath, FileMode.Create))
+            {
+                formFile.CopyTo(stream);
+            }
 
             var filePath = Path.Combine(
                 fullPath,
@@ -101,6 +101,16 @@ namespace Backoffice.Services
                          .Resize(width, height));
 
                     image.Save(filePath); // Automatic encoder selected based on extension.
+
+                    var options = new ResizeOptions
+                    {
+                        Mode = ResizeMode.Crop,
+                        Size = new SixLabors.Primitives.Size(width, height)
+                    };
+
+                    image.Mutate(x => x.Resize(options));      
+
+                    image.Save(filePath, new SixLabors.ImageSharp.Formats.Jpeg.JpegEncoder { Quality = 90 }); // Automatic encoder selected based on extension.
                 }
             }
             else
@@ -114,7 +124,7 @@ namespace Backoffice.Services
 
             info.Location = filePath;
             info.PictureUri = uriPath + filename;
-            //info.PictureHighUri = uriPath + fileNameHigh;
+            info.PictureHighUri = uriPath + fileNameHigh;
 
             return info;
         }
