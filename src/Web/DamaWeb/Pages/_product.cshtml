@@ -3,7 +3,7 @@
 
 <form asp-page="/Basket/Index" method="post">
 
-    <a asp-page="/Product/Index" asp-route-id="@Model.ProductSlug">
+    <a asp-page="/Product" asp-route-id="@Model.ProductSlug">
         <img class="esh-catalog-thumbnail" src="@Model.PictureUri" alt="@Model.CatalogItemName - Presentes Personalizados - Dama no Jornal&reg;" />
     </a>
     <input class="esh-catalog-button" type="submit" value="ADICIONAR" />
