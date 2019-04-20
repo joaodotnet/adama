@@ -344,7 +344,11 @@ namespace DamaWeb.Services
                         PictureUri = x.PictureUri,
                         PictureFileName = x.FileName
                     }).ToList(),
-                    MetaDescription = product.MetaDescription,
+                    MetaDescription = !string.IsNullOrEmpty(product.MetaDescription) ? 
+                        product.MetaDescription : 
+                        !string.IsNullOrEmpty(product.CatalogType.MetaDescription) ? 
+                            $"{product.CatalogType.MetaDescription} {product.Name}" : 
+                            "",
                     Title = string.IsNullOrEmpty(product.Title) ? product.Name : product.Title
                 };
 

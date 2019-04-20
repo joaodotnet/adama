@@ -83,6 +83,7 @@ namespace Backoffice.Pages.Products
             [Display(Name = "Title")]
             [StringLength(43)]
             public string Title { get; set; }
+            public string CatalogTypeMeta { get; set; }
 
             public IList<ProductAttributeViewModel> CatalogAttributes { get; set; } = new List<ProductAttributeViewModel>();
             [Display(Name = "Imagens do Produto")]
