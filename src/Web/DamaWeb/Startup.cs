@@ -146,6 +146,9 @@ namespace DamaWeb
                     options.Conventions.AuthorizePage("/Account/Logout");
                     options.Conventions.AuthorizePage("/Basket/Checkout");
                     options.Conventions.AddPageRoute("/Basket/Index", "carrinho");
+                    options.Conventions.AddPageRoute("/Order/Index", "as-minhas-encomendas");
+                    options.Conventions.AddPageRoute("/Order/Detail", "detalhe-da-encomenda/{orderId}");
+                    options.Conventions.AddPageRoute("/Basket/Checkout", "carrinho/encomendar");
                     //options.Conventions.AddPageRoute("/Category/Redirect", "{id}/");
                     options.Conventions.AddPageRoute("/Category/Index", "categoria/{id}/");
                     options.Conventions.AddPageRoute("/Category/Type/Redirect", "{cat}/{type}");
