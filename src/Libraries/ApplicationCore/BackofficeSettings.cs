@@ -8,6 +8,7 @@ namespace ApplicationCore
 {
     public class BackofficeSettings : AppSettings
     {
+        public string WebPicturesFullPath { get; set; }
         public string WebNewsPictureUri { get; set; }
         public string WebNewsPictureFullPath { get; set; }
         public string WebProductsPictureUri { get; set; }

@@ -208,5 +208,44 @@ namespace DamaWeb.Controllers
             }
             return Ok();
         }
+
+        [Route("resizephoto")]
+        public IActionResult ResizePhoto(string name, int width, int height, int? quality = 0)
+        {
+            var sourceFile = Path.Combine(_backofficeSettings.WebPicturesFullPath, name);
+            if (System.IO.File.Exists(sourceFile))
+            {
+                //Backup
+                var backupFolder = Path.Combine(_backofficeSettings.WebPicturesFullPath, "backup");
+                if (!System.IO.Directory.Exists(backupFolder))
+                {
+                    System.IO.Directory.CreateDirectory(backupFolder);
+                }
+                var backupFile = Path.Combine(backupFolder, name);
+                if (!System.IO.File.Exists(backupFile))
+                {
+                    System.IO.File.Copy(sourceFile, backupFile, false);
+                }
+
+                //Resize
+                using (Image<Rgba32> image = Image.Load(sourceFile))
+                {
+                    var options = new ResizeOptions
+                    {
+                        Mode = ResizeMode.Crop,
+                        Size = new SixLabors.Primitives.Size(width, height)
+                    };
+
+                    image.Mutate(x => x.Resize(options));
+
+                    if (sourceFile.ToLower().EndsWith(".jpg"))
+                        image.Save(sourceFile, new JpegEncoder { Quality = quality });
+                    else
+                        image.Save(sourceFile);
+                }
+                return Ok();
+            }
+            return NotFound();
+        }
     }
 }
