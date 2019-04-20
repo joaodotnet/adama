@@ -69,7 +69,7 @@ namespace DamaWeb.Controllers
                 var products = await _catalogService.GetCatalogItems(0, null, null, null, null);
                 foreach (var item in products.CatalogItems)
                 {
-                    var url = Url.Page("/Product/Index", new { id = item.ProductSlug });
+                    var url = Url.Page("/Product", new { id = item.ProductSlug });
                     AddXmlElement(xml, url);
                 }
 
