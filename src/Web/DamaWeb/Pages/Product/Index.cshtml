@@ -17,9 +17,9 @@
             <div class="col-12 col-md-9 text-center">
                 <h1 class="dama-product-title-mobile pt-1 pb-1">@Model.ProductModel.ProductTitle</h1>
                 <div class="slider-for">
-                    @foreach (var item in Model.ProductModel.ProductImagesUri)
+                    @for (int i = 0; i < Model.ProductModel.ProductImagesUri.Count; i++)
                     {
-                        <div><img src="@item.Medium" class="img-fluid" alt="@Model.ProductModel.ProductTitle - Presentes Personalizados - Dama no Jornal&reg;" /></div>
+                        <div><img src="@Model.ProductModel.ProductImagesUri[i].Medium" class="img-fluid" alt="@Model.ProductModel.ProductTitle @(i+1) - Presentes Personalizados - Dama no Jornal&reg;" /></div>
                     }
                 </div>
             </div>
