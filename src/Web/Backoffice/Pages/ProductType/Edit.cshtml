@@ -57,15 +57,18 @@
                 <span asp-validation-for="ProductTypeModel.FormFileTextHelpers" class="text-danger"></span>
                 @if (Model.ProductTypeModel?.PictureTextHelpers?.Count > 0)
                 {
-                    @foreach (var item in Model.ProductTypeModel.PictureTextHelpers)
-                    {
-                        <div class="col-md-6">
-                            <img src="@item.PictureUri" class="img-thumbnail" />
+                    <div class="row">
+                        @foreach (var item in Model.ProductTypeModel.PictureTextHelpers)
+                        {
+                            <div class="col-md-6">
+                                <img src="@item.PictureUri" class="img-thumbnail" />
+                            </div>
+                        }
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a asp-page="./Edit" asp-page-handler="RemoveAdditionalImages" asp-route-id="@Model.ProductTypeModel.Id" class="btn btn-danger" role="button">Remover imagens</a>
                         </div>
-                    }
-
-                    <div class="col-md-12">
-                        <a asp-page="./Edit" asp-page-handler="RemoveAdditionalImages" asp-route-id="@Model.ProductTypeModel.Id" class="btn btn-danger" role="button">Remover imagens</a>
                     </div>
                 }
             </div>
