@@ -34,6 +34,7 @@ namespace Backoffice.Pages.Products
                 .Include(p => p.CatalogAttributes)
                 .Include(p => p.CatalogCategories)
                     .ThenInclude( cc => cc.Category)
+                    .OrderByDescending(p => p.Id)
                 .ToListAsync());
 
             foreach (var item in ProductModel)

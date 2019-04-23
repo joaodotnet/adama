@@ -81,9 +81,9 @@ namespace Backoffice.Pages.ShopConfig
 
         private bool IsImageSizeInvalid(IFormFile file)
         {
-            if (file == null || file.Length == 0 || (file != null && file.Length > 150000))
+            if (file == null || file.Length == 0 || (file != null && file.Length > 300000))
             {
-                ModelState.AddModelError("", "A menina quer por favor escolher um tamanho entre 1kb e 150kb, obrigado! Ass.: O seu amor!");
+                ModelState.AddModelError("", "A menina quer por favor escolher um tamanho entre 1kb e 300kb, obrigado! Ass.: O seu amor!");
                 return true;
             }
             return false;
