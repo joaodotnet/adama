@@ -84,7 +84,7 @@ namespace Backoffice.Pages.ProductType
             if (ProductTypeModel?.Picture?.Length > 0)
             {
                 var lastId = _context.CatalogTypes.Count() > 0 ? (await _context.CatalogTypes.LastAsync()).Id : 0;
-                ProductTypeModel.PictureUri = _service.SaveFile(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureV2FullPath, _backofficeSettings.WebProductTypesPictureV2Uri, (++lastId).ToString(), true, 255, 116).PictureUri;
+                ProductTypeModel.PictureUri = _service.SaveFile(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureV2FullPath, _backofficeSettings.WebProductTypesPictureV2Uri, (++lastId).ToString(), true, 300).PictureUri;
             }
 
             //Save Images Text Helpers
@@ -93,7 +93,7 @@ namespace Backoffice.Pages.ProductType
                 foreach (var item in ProductTypeModel.FormFileTextHelpers)
                 {
                     var lastId = _context.FileDetails.Count() > 0 ? (await _context.FileDetails.LastAsync()).Id : 0;
-                    var pictureInfo = _service.SaveFile(item, _backofficeSettings.WebProductTypesPictureV2FullPath, _backofficeSettings.WebProductTypesPictureV2Uri, (++lastId).ToString(), true, 112, 96);
+                    var pictureInfo = _service.SaveFile(item, _backofficeSettings.WebProductTypesPictureV2FullPath, _backofficeSettings.WebProductTypesPictureV2Uri, (++lastId).ToString(), true, 150);
                     ProductTypeModel.PictureTextHelpers.Add(new FileDetailViewModel
                     {
                         PictureUri = pictureInfo.PictureUri,
