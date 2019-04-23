@@ -110,7 +110,7 @@ namespace Backoffice.Pages.ProductType
                 {
                     _service.DeleteFile(_backofficeSettings.WebProductTypesPictureV2FullPath, Utils.GetFileName(productTypeEntity.PictureUri));
                 }
-                ProductTypeModel.PictureUri = _service.SaveFile(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureV2FullPath, _backofficeSettings.WebProductTypesPictureV2Uri, ProductTypeModel.Id.ToString(), true, 255, 116).PictureUri;
+                ProductTypeModel.PictureUri = _service.SaveFile(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureV2FullPath, _backofficeSettings.WebProductTypesPictureV2Uri, ProductTypeModel.Id.ToString(), false).PictureUri;
             }
 
             //Save Images Text Helpers
