@@ -110,7 +110,7 @@ namespace Backoffice.Pages.ProductType
                 {
                     _service.DeleteFile(_backofficeSettings.WebProductTypesPictureV2FullPath, Utils.GetFileName(productTypeEntity.PictureUri));
                 }
-                ProductTypeModel.PictureUri = _service.SaveFile(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureV2FullPath, _backofficeSettings.WebProductTypesPictureV2Uri, ProductTypeModel.Id.ToString(), false).PictureUri;
+                ProductTypeModel.PictureUri = _service.SaveFile(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureV2FullPath, _backofficeSettings.WebProductTypesPictureV2Uri, ProductTypeModel.Id.ToString(), true, 300).PictureUri;
             }
 
             //Save Images Text Helpers
@@ -126,7 +126,7 @@ namespace Backoffice.Pages.ProductType
                 foreach (var item in ProductTypeModel.FormFileTextHelpers)
                 {
                     var lastId = _context.FileDetails.Count() > 0 ? (await _context.FileDetails.LastAsync()).Id : 0;
-                    var pictureInfo = _service.SaveFile(item, _backofficeSettings.WebProductTypesPictureV2FullPath, _backofficeSettings.WebProductTypesPictureV2Uri, (++lastId).ToString(), true, 112, 96);
+                    var pictureInfo = _service.SaveFile(item, _backofficeSettings.WebProductTypesPictureV2FullPath, _backofficeSettings.WebProductTypesPictureV2Uri, (++lastId).ToString(), true, 150);
                     productTypeEntity.PictureTextHelpers.Add(new FileDetail
                     {
                         PictureUri = pictureInfo.PictureUri,
