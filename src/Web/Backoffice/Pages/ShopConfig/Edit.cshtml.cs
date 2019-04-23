@@ -102,9 +102,9 @@ namespace Backoffice.Pages.ShopConfig
 
         private bool IsImageSizeInvalid(IFormFile file)
         {
-            if (file != null && file.Length > 150000)
+            if (file != null && file.Length > 300000)
             {
-                ModelState.AddModelError("", "A menina quer por favor diminuir o tamanho do ficheiro? O máximo é 150kb, obrigado! Ass.: O seu amor!");
+                ModelState.AddModelError("", "A menina quer por favor diminuir o tamanho do ficheiro? O máximo é 300kb, obrigado! Ass.: O seu amor!");
                 return true;
             }
             return false;
