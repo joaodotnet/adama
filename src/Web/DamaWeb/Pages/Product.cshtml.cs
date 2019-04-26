@@ -47,10 +47,10 @@ namespace DamaWeb.Pages
             //Old URL logic
             if (ProductView == null)
             {
-                var slug = await _catalogService.GetSlugFromSkuAsync(id);
-                if(!string.IsNullOrEmpty(slug))
+                var catalog = await _catalogService.GetCategoryCatalogItems(id, 0, Constants.ITEMS_PER_PAGE);
+                if (catalog != null && !string.IsNullOrEmpty(catalog.CategoryUrlName))
                 {
-                    return RedirectToPagePermanent("./Index",new { id = slug });
+                    return RedirectToPagePermanent("/Category/Index", new { id = catalog.CategoryUrlName });
                 }
                 return NotFound();
             }
