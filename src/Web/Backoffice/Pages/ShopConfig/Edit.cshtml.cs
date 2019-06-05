@@ -72,13 +72,13 @@ namespace Backoffice.Pages.ShopConfig
                 return Page();
 
             if (ShopConfigDetailModel.Picture != null && ShopConfigDetailModel.Picture.Length > 0)
-                ShopConfigDetailModel.PictureUri = SaveFile(ShopConfigDetailModel.Picture, true, 1110, 414);
+                ShopConfigDetailModel.PictureUri = SaveFile(ShopConfigDetailModel.Picture, true, 1600);
 
             if (ShopConfigDetailModel.PictureWebp != null && ShopConfigDetailModel.PictureWebp.Length > 0)
                 ShopConfigDetailModel.PictureWebpUri = SaveFile(ShopConfigDetailModel.PictureWebp, false);
 
             if (ShopConfigDetailModel.PictureMobile != null && ShopConfigDetailModel.PictureMobile.Length > 0)
-                ShopConfigDetailModel.PictureMobileUri = SaveFile(ShopConfigDetailModel.PictureMobile, true, 525, 196);
+                ShopConfigDetailModel.PictureMobileUri = SaveFile(ShopConfigDetailModel.PictureMobile, true, 525);
 
             var shopConfigDetail = _mapper.Map<ShopConfigDetail>(ShopConfigDetailModel);
             _context.Attach(shopConfigDetail).State = EntityState.Modified;
