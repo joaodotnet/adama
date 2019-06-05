@@ -47,10 +47,17 @@ namespace DamaWeb.Pages
             //Old URL logic
             if (ProductView == null)
             {
-                var slug = await _catalogService.GetSlugFromSkuAsync(id);
-                if(!string.IsNullOrEmpty(slug))
+                //if category
+                var category = await _catalogService.GetCategoryCatalogItems(id, 0, Constants.ITEMS_PER_PAGE);
+                if (category != null && !string.IsNullOrEmpty(category.CategoryUrlName))
                 {
-                    return RedirectToPagePermanent("./Index",new { id = slug });
+                    return RedirectToPagePermanent("/Category/Index", new { id = category.CategoryUrlName });
+                }
+                //if product by sku
+                var catalogSlug = await _catalogService.GetSlugFromSkuAsync(id);
+                if(!string.IsNullOrEmpty(catalogSlug))
+                {
+                    return RedirectToPagePermanent("/Product", new { id = catalogSlug });
                 }
                 return NotFound();
             }
