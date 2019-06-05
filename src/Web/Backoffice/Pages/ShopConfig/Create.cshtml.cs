@@ -65,13 +65,13 @@ namespace Backoffice.Pages.ShopConfig
 
             var lastShopDetailId = (_context.ShopConfigDetails.Count() > 0 ? (await _context.ShopConfigDetails.LastAsync())?.Id : 0) + 1;
             if (ShopConfigDetailModel.Picture.Length > 0)
-                ShopConfigDetailModel.PictureUri = _service.SaveFile(ShopConfigDetailModel.Picture, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, (lastShopDetailId).ToString(), true, 1600).PictureUri;
+                ShopConfigDetailModel.PictureUri = _service.SaveFile(ShopConfigDetailModel.Picture, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, (lastShopDetailId).ToString(), true, 1110, 414).PictureUri;
 
             if (ShopConfigDetailModel.PictureWebp.Length > 0)
                 ShopConfigDetailModel.PictureWebpUri = _service.SaveFile(ShopConfigDetailModel.PictureWebp, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, (lastShopDetailId).ToString()).PictureUri;
 
             if (ShopConfigDetailModel.PictureMobile.Length > 0)
-                ShopConfigDetailModel.PictureMobileUri = _service.SaveFile(ShopConfigDetailModel.PictureMobile, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, (lastShopDetailId).ToString(), true, 525).PictureUri;
+                ShopConfigDetailModel.PictureMobileUri = _service.SaveFile(ShopConfigDetailModel.PictureMobile, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, (lastShopDetailId).ToString(), true, 525, 196).PictureUri;
 
             _context.ShopConfigDetails.Add(_mapper.Map<ShopConfigDetail>(ShopConfigDetailModel));
             await _context.SaveChangesAsync();
@@ -81,9 +81,9 @@ namespace Backoffice.Pages.ShopConfig
 
         private bool IsImageSizeInvalid(IFormFile file)
         {
-            if (file == null || file.Length == 0 || (file != null && file.Length > 300000))
+            if (file == null || file.Length == 0 || (file != null && file.Length > 4000000))
             {
-                ModelState.AddModelError("", "A menina quer por favor escolher um tamanho entre 1kb e 300kb, obrigado! Ass.: O seu amor!");
+                ModelState.AddModelError("", "A menina quer por favor escolher um tamanho entre 1kb e 4MB, obrigado! Ass.: O seu amor!");
                 return true;
             }
             return false;

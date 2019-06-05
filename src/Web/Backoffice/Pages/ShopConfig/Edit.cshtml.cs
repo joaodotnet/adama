@@ -72,13 +72,13 @@ namespace Backoffice.Pages.ShopConfig
                 return Page();
 
             if (ShopConfigDetailModel.Picture != null && ShopConfigDetailModel.Picture.Length > 0)
-                ShopConfigDetailModel.PictureUri = SaveFile(ShopConfigDetailModel.Picture, true, 1600);
+                ShopConfigDetailModel.PictureUri = SaveFile(ShopConfigDetailModel.Picture, true, 1110, 414);
 
             if (ShopConfigDetailModel.PictureWebp != null && ShopConfigDetailModel.PictureWebp.Length > 0)
                 ShopConfigDetailModel.PictureWebpUri = SaveFile(ShopConfigDetailModel.PictureWebp, false);
 
             if (ShopConfigDetailModel.PictureMobile != null && ShopConfigDetailModel.PictureMobile.Length > 0)
-                ShopConfigDetailModel.PictureMobileUri = SaveFile(ShopConfigDetailModel.PictureMobile, true, 525);
+                ShopConfigDetailModel.PictureMobileUri = SaveFile(ShopConfigDetailModel.PictureMobile, true, 525, 196);
 
             var shopConfigDetail = _mapper.Map<ShopConfigDetail>(ShopConfigDetailModel);
             _context.Attach(shopConfigDetail).State = EntityState.Modified;
@@ -102,9 +102,9 @@ namespace Backoffice.Pages.ShopConfig
 
         private bool IsImageSizeInvalid(IFormFile file)
         {
-            if (file != null && file.Length > 300000)
+            if (file != null && file.Length > 4000000)
             {
-                ModelState.AddModelError("", "A menina quer por favor diminuir o tamanho do ficheiro? O máximo é 300kb, obrigado! Ass.: O seu amor!");
+                ModelState.AddModelError("", "A menina quer por favor diminuir o tamanho do ficheiro? O máximo é 4MB, obrigado! Ass.: O seu amor!");
                 return true;
             }
             return false;
