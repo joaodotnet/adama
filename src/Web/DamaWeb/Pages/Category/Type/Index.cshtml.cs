@@ -27,7 +27,7 @@ namespace DamaWeb.Pages.Category.Type
         {
             CatalogTypeModel = await _catalogService.GetCatalogTypeItemsAsync(cat, type, p ?? 0, Constants.ITEMS_PER_PAGE);
             if (CatalogTypeModel == null)
-                return NotFound();
+                return RedirectToPage("/Category/Index", new { id = cat });
             MetaDescription = CatalogTypeModel.MetaDescription;
             Title = CatalogTypeModel.Title;
 
