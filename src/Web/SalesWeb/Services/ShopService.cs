@@ -80,64 +80,7 @@ namespace SalesWeb.Services
         //    GetTopCategories(menuViewModel.Right, categories, parentsRight);
 
         //    return menuViewModel;
-        //}
-        public async Task AddorUpdateUserAddress(ApplicationUser user, AddressViewModel addressModel, AddressType addressType = AddressType.SHIPPING)
-        {
-            if(user != null && addressModel != null)
-            {
-                //get user Addresses
-                var addresses = await _identityDb.UserAddresses
-                    .Include(x => x.User)
-                    .Where(x => x.UserId == user.Id && x.AddressType == addressType)
-                    .FirstOrDefaultAsync();
-
-                user.BillingAddressSameAsShipping = addressModel.UseSameAsShipping;
-                if (addresses == null)
-                {                    
-                    var newAddress = new UserAddress
-                    {
-                        User = user,
-                        AddressType = addressType
-                    };
-                    if(addressType == AddressType.SHIPPING)
-                    {                        
-                        newAddress.Street = addressModel.Street;
-                        newAddress.City = addressModel.City;
-                        newAddress.PostalCode = addressModel.PostalCode;
-                        newAddress.Country = addressModel.Country;
-                    }
-                    else
-                    {
-                        newAddress.Street = addressModel.InvoiceAddressStreet;
-                        newAddress.City = addressModel.InvoiceAddressCity;
-                        newAddress.PostalCode = addressModel.InvoiceAddressPostalCode;
-                        newAddress.Country = addressModel.InvoiceAddressCountry;
-                    }
-                    _identityDb.UserAddresses.Add(newAddress);
-                }
-                else
-                {                                                            
-
-                    if (addressType == AddressType.SHIPPING)
-                    {
-                        addresses.Street = addressModel.Street;
-                        addresses.City = addressModel.City;
-                        addresses.PostalCode = addressModel.PostalCode;
-                        addresses.Country = addressModel.Country;                        
-                    }
-                    else
-                    {
-                        addresses.Street = addressModel.InvoiceAddressStreet;
-                        addresses.City = addressModel.InvoiceAddressCity;
-                        addresses.PostalCode = addressModel.InvoiceAddressPostalCode;
-                        addresses.Country = addressModel.InvoiceAddressCountry;
-                    }
-                    
-                }
-
-                await _identityDb.SaveChangesAsync();
-            }            
-        }
+        //}     
 
         public async Task<AddressViewModel> GetUserAddress(string userId)
         {

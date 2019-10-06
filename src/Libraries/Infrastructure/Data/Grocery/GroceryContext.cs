@@ -124,10 +124,6 @@ namespace Infrastructure.Data
                 .IsRequired()
                 .HasMaxLength(25);
 
-            builder.Property(x => x.Description)
-                .IsRequired()
-                .HasMaxLength(100);
-
             builder.Property(x => x.Price)
                 .IsRequired()
                 .HasColumnType("decimal(18,2)");
@@ -146,6 +142,7 @@ namespace Infrastructure.Data
             builder.Ignore(x => x.MetaDescription);
             builder.Ignore(x => x.Title);
             builder.Ignore(x => x.Slug);
+            builder.Ignore(x => x.Description);
         }
 
         private void ConfigureCatalogItem(EntityTypeBuilder<CatalogItem> builder)
@@ -176,8 +173,7 @@ namespace Infrastructure.Data
 
             builder.Property(x => x.ShowOnShop)
                 .IsRequired(true);
-            builder.Ignore(x => x.IsNew);
-            builder.Ignore(x => x.IsFeatured);
+            builder.Ignore(x => x.IsNew);            
             builder.Ignore(x => x.CanCustomize);
             builder.Ignore(x => x.Description);
             builder.Ignore(x => x.CatalogReferences);

@@ -60,6 +60,9 @@ namespace SalesWeb.Services
             var itemsOnPage = root
                 .Skip(iPage * pageIndex)
                 .Take(iPage)
+                .OrderByDescending(x => x.IsFeatured)
+                .ThenBy(x => x.CatalogType.Code.StartsWith("QF") ? 0 : x.CatalogType.Code.StartsWith("SM") ? 1 : 2)
+                .ThenBy(x => x.Name)
                 .ToList();
 
             itemsOnPage.ForEach(x =>
