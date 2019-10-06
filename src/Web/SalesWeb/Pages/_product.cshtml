@@ -1,22 +1,20 @@
 ﻿@model CatalogItemViewModel
 
 
-<form asp-page="/Basket/Index" asp-route-catName="@ViewData["catName"]" asp-route-typeName="@ViewData["typeName"]"  method="post">
-
-    <img class="esh-catalog-thumbnail" src="@Model.PictureUri" />
-    <input class="esh-catalog-button" type="submit" value="ADICIONAR" />
-
-    <div class="esh-catalog-name">
-        <span>@Html.Raw(Model.CatalogItemName.Replace("-","<br>"))</span>
+<form class="form-inline" asp-page="/Basket/Index" asp-route-catName="@ViewData["catName"]" asp-route-typeName="@ViewData["typeName"]"  method="post">
+    @if (!string.IsNullOrEmpty(Model.PictureUri))
+    {
+    <img class="img-thumbnail" src="@Model.PictureUri" width="50" />
+    }
+    <div class="form-group">
+        <span>@Model.CatalogItemName</span>
     </div>
-    <div class="esh-catalog-price">
-        <span>@Model.Price.ToString("N2")</span>
+    <div class="form-group esh-catalog-price">
+        <span>&nbsp; @Model.Price.ToString("N2")</span>
     </div>
-    @*<input type="hidden" asp-for="@Model.CatalogBrand" name="brand" />
-    <input type="hidden" asp-for="@Model.CatalogBrandId" name="brandId" />
-    <input type="hidden" asp-for="@Model.CatalogType" name="type" />
-    <input type="hidden" asp-for="@Model.CatalogTypeId" name="typeId" />
-    <input type="hidden" asp-for="@Model.Description" name="description" />*@
+    <div class="ml-auto">
+        <input class="btn btn-primary" type="submit" value="ADICIONAR" />
+    </div>
     <input type="hidden" asp-for="CatalogItemId"  />
     <input type="hidden" asp-for="CatalogItemName"/>
     <input type="hidden" asp-for="PictureUri" />

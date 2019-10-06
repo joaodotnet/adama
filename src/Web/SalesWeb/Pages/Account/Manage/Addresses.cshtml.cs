@@ -1,4 +1,4 @@
-using ApplicationCore.Entities;
+﻿using ApplicationCore.Entities;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -45,28 +45,6 @@ namespace SalesWeb.Pages.Account.Manage
             UserAddress = await _shopService.GetUserAddress(user.Id);            
 
             return Page();
-        }
-
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
-
-            await _shopService.AddorUpdateUserAddress(user, UserAddress, AddressType.SHIPPING);
-            await _shopService.AddorUpdateUserAddress(user, UserAddress, AddressType.BILLING);
-
-            _logger.LogInformation("User changed their addresses.");
-            StatusMessage = "A sua morada foi alterada";
-
-            return RedirectToPage();
         }
     }
 }

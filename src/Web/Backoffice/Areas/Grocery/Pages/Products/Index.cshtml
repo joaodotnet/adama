@@ -33,6 +33,9 @@
                 Ativo
             </th>
             <th>
+                Destaque
+            </th>
+            <th>
                 Stock
             </th>
             <th></th>
@@ -61,6 +64,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ShowOnShop)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsFeatured)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Stock)
