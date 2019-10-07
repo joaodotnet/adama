@@ -72,6 +72,17 @@
                 var uri = $(this).attr('uri');
                 window.location.href = uri;
             });
+
+            $('.btn-add-product').on('click', function (e) {
+                e.preventDefault();
+                var form = $(this).closest('form');
+                $.post(form.attr('action'), form.serialize())
+                    .done(function () {                       
+                    })
+                    .fail(function () {
+                        alert("Ocorreu um erro ao adicionar o produto ao carrinho");
+                    });
+            });
         });
     </script>
 }
