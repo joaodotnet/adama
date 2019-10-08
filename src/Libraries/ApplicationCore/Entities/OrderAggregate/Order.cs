@@ -12,7 +12,7 @@ namespace ApplicationCore.Entities.OrderAggregate
         {
         }
 
-        public Order(string buyerId, string phoneNumber, int? taxNumber, Address shipToAddress, Address billingAddress, bool useBillingSameAsShipping, List<OrderItem> items, decimal shippingCost, string customerEmail = null)
+        public Order(string buyerId, string phoneNumber, int? taxNumber, Address shipToAddress, Address billingAddress, bool useBillingSameAsShipping, List<OrderItem> items, decimal shippingCost, string observations, string customerEmail = null)
         {
             ShipToAddress = shipToAddress;
             if (billingAddress != null)
@@ -27,6 +27,7 @@ namespace ApplicationCore.Entities.OrderAggregate
             TaxNumber = taxNumber;
             PhoneNumber = phoneNumber;
             OrderState = items.Any(x => x.CustomizeItem.CatalogTypeId.HasValue) ? OrderStateType.UNDER_ANALYSIS : OrderStateType.PENDING;
+            Observations = observations;
         }
         public string BuyerId { get; private set; }
         public string CustomerEmail { get; set; }
@@ -41,6 +42,7 @@ namespace ApplicationCore.Entities.OrderAggregate
         public long? SalesInvoiceId { get; set; }
         public string SalesInvoiceNumber { get; set; }
         public long? SalesPaymentId { get; set; }
+        public string Observations { get; private set; }
 
         // DDD Patterns comment
         // Using a private collection field, better for DDD Aggregate's encapsulation

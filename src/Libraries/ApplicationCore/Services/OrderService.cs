@@ -60,7 +60,7 @@ namespace ApplicationCore.Services
                         item.CustomizeDescription,
                         item.CustomizeName,
                         item.CustomizeColors,
-                        catalogType.Description,
+                        catalogType.Name,
                         catalogType.PictureUri);
 
                     var orderItem = new OrderItem(itemOrdered, 0, item.Quantity, null, null, null, null, null, customizeItem);
@@ -68,7 +68,7 @@ namespace ApplicationCore.Services
                     items.Add(orderItem);
                 }
             }
-            var order = new Order(basket.BuyerId, phoneNumber, taxNumber, shippingAddress, billingAddress, useBillingSameAsShipping, items, shippingCost, customerEmail);
+            var order = new Order(basket.BuyerId, phoneNumber, taxNumber, shippingAddress, billingAddress, useBillingSameAsShipping, items, shippingCost, basket.Observations, customerEmail);
             var savedOrder = await _orderRepository.AddAsync(order);
 
             if (registerInvoice)
@@ -157,22 +157,26 @@ namespace ApplicationCore.Services
             return await _orderRepository.ListAsync(spec);
         }
 
-        public async Task<List<CatalogAttribute>> GetOrderAttributesAsync(int orderId, int orderItemId)
+        public async Task<List<(int OrderItemId, List<CatalogAttribute> Attributes)>> GetOrderAttributesAsync(List<OrderItem> orderItems)
         {
-            var specOrders = new OrdersSpecification(orderId);
-            var order = (await _orderRepository.ListAsync(specOrders)).FirstOrDefault();
-            var orderItem = order.OrderItems.SingleOrDefault(x => x.Id == orderItemId);
+            //var specOrders = new OrdersSpecification(orderId);
+            //var order = (await _orderRepository.ListAsync(specOrders)).FirstOrDefault();
+            //var orderItem = order.OrderItems.SingleOrDefault(x => x.Id == orderItemId);
 
-            var spec = new CatalogAttrFilterSpecification(orderItem.ItemOrdered.CatalogItemId);
-            var product = (await _itemRepository.ListAsync(spec)).FirstOrDefault();
-
-            var list = new List<CatalogAttribute>();
-            foreach (var item in product.CatalogAttributes)
+            var list = new List<(int OrderItemId, List<CatalogAttribute> Attributes)>();
+            foreach (var orderItem in orderItems)
             {
-                if ((orderItem.CatalogAttribute1.HasValue && orderItem.CatalogAttribute1 == item.Id) ||
-                       (orderItem.CatalogAttribute2.HasValue && orderItem.CatalogAttribute2 == item.Id) ||
-                       (orderItem.CatalogAttribute3.HasValue && orderItem.CatalogAttribute3 == item.Id))
-                    list.Add(item);
+                var spec = new CatalogAttrFilterSpecification(orderItem.ItemOrdered.CatalogItemId);
+                var product = await _itemRepository.GetSingleBySpecAsync(spec);
+                var listItem = (orderItem.Id, new List<CatalogAttribute>());
+                foreach (var item in product.CatalogAttributes)
+                {
+                    if ((orderItem.CatalogAttribute1.HasValue && orderItem.CatalogAttribute1 == item.Id) ||
+                            (orderItem.CatalogAttribute2.HasValue && orderItem.CatalogAttribute2 == item.Id) ||
+                            (orderItem.CatalogAttribute3.HasValue && orderItem.CatalogAttribute3 == item.Id))
+                        listItem.Item2.Add(item);
+                }
+                list.Add(listItem);
             }
             return list;
         }

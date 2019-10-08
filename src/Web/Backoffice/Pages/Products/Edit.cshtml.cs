@@ -355,7 +355,7 @@ namespace Backoffice.Pages.Products
                 .AsNoTracking()
                 .ToListAsync();
             ViewData["IllustrationId"] = new SelectList(illustrations, "Id", "Name");
-            ViewData["ProductTypeId"] = new SelectList(_context.CatalogTypes.AsNoTracking().Select(x => new { x.Id, Name = $"{x.Code} - {x.Description}" }), "Id", "Name");
+            ViewData["ProductTypeId"] = new SelectList(_context.CatalogTypes.AsNoTracking().Select(x => new { x.Id, Name = $"{x.Code} - {x.Name}" }), "Id", "Name");
             await SetCatalogCategoryModel();
         }
 

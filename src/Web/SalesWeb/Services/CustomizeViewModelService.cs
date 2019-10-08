@@ -68,7 +68,7 @@ namespace SalesWeb.Services
                 {
                     Id = x.Id,
                     Code = x.Code,
-                    Name = x.Description,
+                    Name = x.Name,
                     PictureUri = _uriComposer.ComposePicUri(x.PictureUri)
                 }).ToList()
             };
@@ -88,7 +88,7 @@ namespace SalesWeb.Services
                 Description = request.Description,
                 Text = request.Text,
                 Colors = request.Colors,
-                ItemOrdered = new ApplicationCore.Entities.OrderAggregate.CatalogItemOrdered(catalogType.Id, catalogType.Description, catalogType.PictureUri),
+                ItemOrdered = new ApplicationCore.Entities.OrderAggregate.CatalogItemOrdered(catalogType.Id, catalogType.Name, catalogType.PictureUri),
                 AttachFileName = GetFileName(request.UploadFile?.FileName)
             });
 
@@ -99,7 +99,7 @@ namespace SalesWeb.Services
             var body = $"Email: {request.BuyerEmail} <br>" +
                 $"Nome: {request.BuyerName} <br>" +
                 $"Telemóvel: {request.BuyerPhone} <br>" +
-                $"Tipo de Produto: {catalogType.Description} ({catalogType.Code}) <br>" + //Nome de produto (SKU) 
+                $"Tipo de Produto: {catalogType.Name} ({catalogType.Code}) <br>" + //Nome de produto (SKU) 
                 $"Descrição da Ilustração: {request.Description} <br>" +
                 $"Frase ou nome: {request.Text} <br>" +
                 $"Cores: {request.Colors} <br>";

@@ -90,7 +90,7 @@ namespace ApplicationCore.Services
             await _basketRepository.UpdateAsync(basket);
         }
 
-        public async Task TransferBasketAsync(string anonymousId, string userName)
+        public async Task TransferBasketAsync(string anonymousId, string userName, bool isGuest)
         {
             Guard.Against.NullOrEmpty(anonymousId, nameof(anonymousId));
             Guard.Against.NullOrEmpty(userName, nameof(userName));            
@@ -99,7 +99,7 @@ namespace ApplicationCore.Services
             var basket = (await _basketRepository.ListAsync(basketSpec)).LastOrDefault();
             if (basket == null) return;
 
-            if (basket.Items?.Count > 0)
+            if (!isGuest && basket.Items?.Count > 0)
             {
                 //Delete previous baskets
                 var basketSpecUser = new BasketWithItemsSpecification(userName);
@@ -171,6 +171,23 @@ namespace ApplicationCore.Services
             }
 
             return options;
+        }
+
+        public async Task AddObservationAsync(int basketId, string message)
+        {
+            var basket = await _basketRepository.GetByIdAsync(basketId);
+            basket.Observations = message;
+            await _basketRepository.UpdateAsync(basket);
+        }
+
+        public async Task RemoveObservationsAsync(int basketId)
+        {
+            var basket = await _basketRepository.GetByIdAsync(basketId);
+            if (basket != null)
+            {
+                basket.Observations = null;
+                await _basketRepository.UpdateAsync(basket);
+            }
         }
     }
 }

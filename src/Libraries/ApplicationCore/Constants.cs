@@ -1,4 +1,4 @@
-﻿namespace DamaWeb
+﻿namespace ApplicationCore
 {
     public static class Constants
     {

@@ -140,7 +140,7 @@ namespace Backoffice.Pages.ProductType
             if (productTypeEntity != null)
             {                
                 productTypeEntity.Code = ProductTypeModel.Code;
-                productTypeEntity.Description = ProductTypeModel.Description;
+                productTypeEntity.Name = ProductTypeModel.Description;
                 productTypeEntity.DeliveryTimeMin = ProductTypeModel.DeliveryTimeMin;
                 productTypeEntity.DeliveryTimeMax = ProductTypeModel.DeliveryTimeMax;
                 productTypeEntity.DeliveryTimeUnit = ProductTypeModel.DeliveryTimeUnit;

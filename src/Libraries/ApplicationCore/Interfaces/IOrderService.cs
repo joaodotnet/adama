@@ -13,8 +13,7 @@ namespace ApplicationCore.Interfaces
         Task UpdateOrderState(int id, OrderStateType orderState, bool isCustomizeOrder = false);
         Task<Order> GetOrderAsync(int id);
         Task<List<Order>> GetOrdersAsync(string buyerId);
-        Task<List<CatalogAttribute>> GetOrderAttributesAsync(int orderId, int orderItemId);
-        Task<List<CatalogAttribute>> GetOrderAttributesAsync(int catalogItemId, int? catalogAttribute1, int? catalogAttribute2, int? catalogAttribute3);
+        Task<List<(int OrderItemId, List<CatalogAttribute> Attributes)>> GetOrderAttributesAsync(List<OrderItem> orderItems);
         Task UpdateOrderInvoiceAsync(int id, long? invoiceId, string invoiceNumber);
         Task UpdateOrderBillingAsync(int id, int? taxNumber, string customerEmail, Address billingAddress);
         Task UpdateOrderItemsPrice(int orderId, List<Tuple<int, decimal>> items);

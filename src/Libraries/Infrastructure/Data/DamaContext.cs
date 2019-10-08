@@ -335,7 +335,7 @@ namespace Infrastructure.Data
                 .IsRequired()
                 .HasMaxLength(25);
 
-            builder.Property(x => x.Description)
+            builder.Property(x => x.Name)
                 .IsRequired()
                 .HasMaxLength(100);
 
