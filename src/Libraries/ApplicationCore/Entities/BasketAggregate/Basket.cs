@@ -13,6 +13,8 @@ namespace ApplicationCore.Entities.BasketAggregate
 
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
+        public string Observations { get; set; }
+        public bool IsGuest { get; set; }
 
         public void AddItem(int catalogItemId, decimal unitPrice, int quantity = 1, int? option1 = null, int? option2 = null, int? option3 = null, string customizeName = null, string customizeSide = null, bool addToExistingItem = false)
         {

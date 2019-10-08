@@ -10,5 +10,21 @@ namespace ApplicationCore.Specifications
         {
             AddInclude(x => x.CatalogCategories);
         }
+
+        public CategorySpecification(bool forMenuList)
+            : base(x => x.CatalogCategories.Count > 0)
+        {
+            AddInclude(x => x.Parent);
+            AddInclude(x => x.CatalogCategories);
+            AddInclude($"{nameof(Category.CatalogCategories)}.{nameof(CatalogCategory.CatalogItem)}");
+            AddInclude(x => x.CatalogTypes);
+            AddInclude($"{nameof(Category.CatalogTypes)}.{nameof(CatalogTypeCategory.CatalogType)}");
+            ApplyOrderBy(x => x.Order);
+        }
+
+        public CategorySpecification(string slug)
+            : base(x => x.Slug == slug)
+        {
+        }
     }
 }

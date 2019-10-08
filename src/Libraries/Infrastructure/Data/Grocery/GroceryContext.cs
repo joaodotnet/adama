@@ -142,7 +142,7 @@ namespace Infrastructure.Data
             builder.Ignore(x => x.MetaDescription);
             builder.Ignore(x => x.Title);
             builder.Ignore(x => x.Slug);
-            builder.Ignore(x => x.Description);
+            builder.Ignore(x => x.Name);
         }
 
         private void ConfigureCatalogItem(EntityTypeBuilder<CatalogItem> builder)

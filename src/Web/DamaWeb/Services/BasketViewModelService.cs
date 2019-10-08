@@ -116,7 +116,7 @@ namespace DamaWeb.Services
                     if (typeEntity != null)
                     {
                         itemModel.PictureUrl = typeEntity.PictureUri;
-                        itemModel.ProductName = $"Personalização {typeEntity.Description}";
+                        itemModel.ProductName = $"Personalização {typeEntity.Name}";
                     }
                 }
 

@@ -154,7 +154,7 @@ namespace DamaWeb.Services
             };
             foreach (CatalogType type in types)
             {
-                items.Add(new SelectListItem() { Value = type.Id.ToString(), Text = type.Description });
+                items.Add(new SelectListItem() { Value = type.Id.ToString(), Text = type.Name });
             }
 
             return items;
@@ -231,11 +231,11 @@ namespace DamaWeb.Services
                         ProductSlug = i.Slug
                         //ProductSku = i.Sku
                     }),
-                    CatalogTypes = types.OrderBy(x => x.Description).Select(x => new CatalogTypeViewModel()
+                    CatalogTypes = types.OrderBy(x => x.Name).Select(x => new CatalogTypeViewModel()
                     {
                         Id = x.Id,
                         Code = x.Code,
-                        Name = x.Description,
+                        Name = x.Name,
                         PictureUri = x.PictureUri,
                         CatNameUri = category.Slug,
                         TypeNameUri = x.Slug
@@ -328,7 +328,7 @@ namespace DamaWeb.Services
                     }).ToList(),
                     Tags = new List<LinkViewModel>
                     {
-                        new LinkViewModel { Name = product.CatalogType.Description, Uri = product.CatalogType.Slug, TagName = "tipo"},
+                        new LinkViewModel { Name = product.CatalogType.Name, Uri = product.CatalogType.Slug, TagName = "tipo"},
                         new LinkViewModel { Name = product.CatalogIllustration.Name, Uri = Utils.URLFriendly(product.CatalogIllustration.Name), TagName = "ilustracao"},
                         new LinkViewModel { Name = product.CatalogIllustration.IllustrationType.Name, Uri = Utils.URLFriendly(product.CatalogIllustration.IllustrationType.Name), TagName = "ilustracao_tipo"},
                     },
@@ -411,7 +411,7 @@ namespace DamaWeb.Services
                     case TagType.CATALOG_TYPE:
                         query = _db.CatalogItems
                             .Include(x => x.CatalogType)
-                            .Where(x => Utils.URLFriendly(x.CatalogType.Description) == tagName);
+                            .Where(x => Utils.URLFriendly(x.CatalogType.Name) == tagName);
                         break;
                     case TagType.ILLUSTRATION:
                         query = _db.CatalogItems
@@ -436,7 +436,7 @@ namespace DamaWeb.Services
                     .Include(x => x.CatalogType)
                     .Include(x => x.CatalogIllustration)
                     .ThenInclude(ci => ci.IllustrationType)
-                    .Where(x => Utils.URLFriendly(x.CatalogType.Description) == tagName || Utils.URLFriendly(x.CatalogIllustration.Name) == tagName || Utils.URLFriendly(x.CatalogIllustration.IllustrationType.Name) == tagName);
+                    .Where(x => Utils.URLFriendly(x.CatalogType.Name) == tagName || Utils.URLFriendly(x.CatalogIllustration.Name) == tagName || Utils.URLFriendly(x.CatalogIllustration.IllustrationType.Name) == tagName);
             }
 
             query = query.Where(x => x.ShowOnShop && (!illustrationId.HasValue || x.CatalogIllustrationId == illustrationId) &&
@@ -488,7 +488,7 @@ namespace DamaWeb.Services
                 .ThenInclude(ci => ci.IllustrationType)
                 .Where(x => x.ShowOnShop && (!illustrationId.HasValue || x.CatalogIllustrationId == illustrationId) &&
                 (!typeId.HasValue || x.CatalogTypeId == typeId) &&
-                (x.CatalogType.Description.Contains(searchFor) ||
+                (x.CatalogType.Name.Contains(searchFor) ||
                 x.CatalogIllustration.Name.Contains(searchFor) ||
                 x.CatalogIllustration.IllustrationType.Name.Contains(searchFor) ||
                 x.Name.Contains(searchFor) ||
@@ -603,10 +603,10 @@ namespace DamaWeb.Services
 
                     if (types?.Count() >= 0)
                     {
-                        item.Childs.AddRange(types.OrderBy(x => x.Description).Select(x => new MenuItemComponentViewModel
+                        item.Childs.AddRange(types.OrderBy(x => x.Name).Select(x => new MenuItemComponentViewModel
                         {
                             Id = x.Id,
-                            Name = x.Description.ToUpper(),
+                            Name = x.Name.ToUpper(),
                             NameUri = item.NameUri,
                             TypeUri = x.Slug
                         }));
@@ -626,10 +626,10 @@ namespace DamaWeb.Services
 
             return new CatalogTypeViewModel
             {
-                Name = catalogType.Description,
+                Name = catalogType.Name,
                 CatalogModel = await GetCatalogItems(pageIndex, itemsPage, null, catalogType.Id, category.Id),
                 MetaDescription = catalogType.MetaDescription,
-                Title = string.IsNullOrEmpty(catalogType.Title) ? catalogType.Description : catalogType.Title
+                Title = string.IsNullOrEmpty(catalogType.Title) ? catalogType.Name : catalogType.Title
             };
         }
         private async Task<Category> GetCategoryFromUrl(string categorySlug)
