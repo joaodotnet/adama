@@ -8,7 +8,8 @@ namespace Infrastructure.Identity
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int? NIF { get; set; }
-        public bool BillingAddressSameAsShipping { get; set; }
+        public GenderType? Gender { get; set; }
+        public int Score { get; set; }
         public ICollection<UserAddress> Addresses { get; set; }
     }
 }

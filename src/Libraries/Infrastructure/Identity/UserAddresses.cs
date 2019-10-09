@@ -13,6 +13,10 @@ namespace Infrastructure.Identity
         public string PostalCode { get; set; }        
         public AddressType AddressType { get; set; }
         public string UserId { get; set; }
+        public string Name { get; set; }
+        public int? TaxNumber { get; set; }
+        public string ContactNumber { get; set; }
+        public bool? BillingAddressSameAsShipping { get; set; }
         public ApplicationUser User { get; set; }
     }
 }

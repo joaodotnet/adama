@@ -63,6 +63,9 @@ namespace Infrastructure.Data
             var navigation = builder.Metadata.FindNavigation(nameof(Basket.Items));
 
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+            
+            builder.Ignore(x => x.Observations);
+            builder.Ignore(x => x.IsGuest);
         }
 
         private void ConfigureBasketItem(EntityTypeBuilder<BasketItem> builder)
@@ -109,6 +112,8 @@ namespace Infrastructure.Data
             builder.Ignore(c => c.MetaDescription);
             builder.Ignore(c => c.Title);
             builder.Ignore(c => c.Slug);
+            builder.Ignore(c => c.H1Text);
+            builder.Ignore(c => c.Description);
         }
         private void ConfigureCatalogType(EntityTypeBuilder<CatalogType> builder)
         {
@@ -143,6 +148,9 @@ namespace Infrastructure.Data
             builder.Ignore(x => x.Title);
             builder.Ignore(x => x.Slug);
             builder.Ignore(x => x.Name);
+            builder.Ignore(x => x.H1Text);
+            builder.Ignore(x => x.Description);
+            builder.Ignore(x => x.Question);
         }
 
         private void ConfigureCatalogItem(EntityTypeBuilder<CatalogItem> builder)
@@ -219,6 +227,7 @@ namespace Infrastructure.Data
             builder.Ignore(x => x.ShippingCost);
             builder.Ignore(x => x.SalesPaymentId);
             builder.Ignore(x => x.UseBillingSameAsShipping);
+            builder.Ignore(x => x.Observations);
         }
 
         private void ConfigureOrderItem(EntityTypeBuilder<OrderItem> builder)
