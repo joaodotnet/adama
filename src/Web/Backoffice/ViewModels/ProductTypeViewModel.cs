@@ -16,8 +16,8 @@ namespace Backoffice.ViewModels
         public string Code { get; set; }
         [Required]
         [StringLength(100)]
-        [Display(Name = "Descrição")]
-        public string Description { get; set; }
+        [Display(Name = "Nome")]
+        public string Name { get; set; }
         [Required]
         [StringLength(100)]
         public string Slug { get; set; }
@@ -54,5 +54,14 @@ namespace Backoffice.ViewModels
         [Display(Name = "Title")]
         [StringLength(43)]
         public string Title { get; set; }
+
+        [Display(Name = "Texto H1")]
+        [StringLength(50)]
+        public string H1Text { get; set; }
+        [Display(Name = "Descrição")]
+        public string Description { get; set; }
+        [Display(Name = "Questão personalizar (loja)")]
+        [StringLength(255)]
+        public string Question { get; set; }
     }
 }

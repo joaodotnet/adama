@@ -20,9 +20,9 @@
                 <span asp-validation-for="ProductTypeModel.Code" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProductTypeModel.Description" class="control-label"></label>
-                <input asp-for="ProductTypeModel.Description" class="form-control" />
-                <span asp-validation-for="ProductTypeModel.Description" class="text-danger"></span>
+                <label asp-for="ProductTypeModel.Name" class="control-label"></label>
+                <input asp-for="ProductTypeModel.Name" class="form-control" />
+                <span asp-validation-for="ProductTypeModel.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ProductTypeModel.Slug" class="control-label"></label>
@@ -75,6 +75,21 @@
                 <span asp-validation-for="ProductTypeModel.Title" class="text-danger"></span>
                 <small>(se vazio assume a descrição do tipo do produto)</small>
             </div>
+            <div class="form-group">
+                <label asp-for="ProductTypeModel.H1Text" class="control-label"></label>
+                <input asp-for="ProductTypeModel.H1Text" class="form-control" />
+                <span asp-validation-for="ProductTypeModel.H1Text" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductTypeModel.Description" class="control-label"></label>
+                <textarea asp-for="ProductTypeModel.Description" class="form-control"></textarea>
+                <span asp-validation-for="ProductTypeModel.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductTypeModel.Question" class="control-label"></label>
+                <input asp-for="ProductTypeModel.Question" class="form-control" />
+                <span asp-validation-for="ProductTypeModel.Question" class="text-danger"></span>
+            </div>
         </div>
         <div class="col-md-12">
             <div class="form-inline">
@@ -111,7 +126,7 @@
         $(document).ready(function () {
             $('#ProductTypeModel_CategoriesId').select2();
 
-             $('#ProductTypeModel_Description').on('blur', function () {
+             $('#ProductTypeModel_Name').on('blur', function () {
                 $('#ProductTypeModel_Slug').val(slugify(this.value));
             });
         });
