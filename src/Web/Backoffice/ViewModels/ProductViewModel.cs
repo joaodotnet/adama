@@ -64,7 +64,7 @@ namespace Backoffice.ViewModels
 
         public string DisplayCatalogTypeName {
             get {
-                return $"{this.CatalogType?.Code} - {this.CatalogType?.Description}";
+                return $"{this.CatalogType?.Code} - {this.CatalogType?.Name}";
             }
         }
         public string DisplayIllustrationName
