@@ -1,0 +1,91 @@
+﻿@model DamaWeb.ViewModels.BasketViewModel
+<h2 class="text-center small-xs">RESUMO DA ENCOMENDA</h2>
+
+<article class="row mx-0 mt-3 mt-sm-5">
+    <section class="col-9 px-3 dama-basket-label">Produto</section>
+    <section class="col-3 px-3 dama-basket-label text-center">Preço</section>
+</article>
+<hr class="dama-hr-tiny-pink my-2" />
+<div>
+    @foreach (var item in Model.Items)
+    {
+        <article class="row py-2 m-0">
+            <section class="col-9 px-3">
+                <span class="font-weight-bold">
+                    @item.Quantity @item.ProductName
+                </span>
+                @if (!string.IsNullOrEmpty(item.ProductName2))
+                {
+                    <br />
+                    <span>
+                        @item.ProductName2
+                    </span>
+                }
+                @if (!string.IsNullOrEmpty(item.CustomizeName))
+                {
+                    <br />
+                    <small id="nameInputText" class="text-muted dama-small-text">Personalização: @item.CustomizeName</small>
+                }
+                @foreach (var attr in item.Attributes)
+                {
+                    <br />
+                    <span class="dama-basket-label">@attr.Label: @attr.Name </span><br />
+                }
+            </section>
+
+            <section class="col-3 px-sm-3 text-right">
+                @if (!item.IsFromCustomize)
+                {
+                    <text>
+                        @item.UnitPrice.ToString("N2") €
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        *
+                    </text>
+                }
+
+            </section>
+        </article>
+    }    
+</div>
+<hr class="dama-hr-tiny-pink my-2" />
+@if (!Model.HasCustomizeItems)
+{
+    <article class="row m-0">
+        <section class="col-9 px-3">SUBTOTAL</section>
+        <section class="col-3 px-sm-3 dama-product-price text-right">@Model.SubTotal()</section>
+    </article>
+    <article id="shipping-cost" class="row m-0 @(Model.ShowShippingCost ? "d-flex": "d-none")">
+        <section class="col-9 px-3"><small>Despesas de Envio</small></section>
+        <section class="col-3 px-sm-3 dama-product-price text-right">@Model.DefaultShippingCost.ToString("N2")</section>
+    </article>
+    <article class="row m-0">
+        <section class="col-9 px-3">TOTAL</section>
+        <section id="basket-total" class="col-3 px-sm-3 dama-product-price text-right">@Model.Total()</section>
+    </article>
+
+    <hr class="dama-hr-tiny-pink" />
+    <article class="row m-0">
+        <section class="col-12 px-3"><small>Tempo de entrega entre @Model.DeliveryTime.Min a @Model.DeliveryTime.Max @(DamaWeb.Extensions.EnumHelper<ApplicationCore.Entities.DeliveryTimeUnitType>.GetDisplayValue(Model.DeliveryTime.Unit)).</small></section>
+    </article>
+    <article class="row m-0">
+        <section class="col-12 px-3"><small>O pagamento será efetuado por transferência bancária.</small></section>
+    </article>
+}
+else
+{
+    <article class="row mb-2">
+        <section class="col-12 dama-small-text"><small>* O preço dos produtos personalizados serão definidos após a análise do pedido e enviado por email ao cliente</small></section>
+    </article>
+}
+@if (Model.CanSubmit)
+{
+    <article class="row mt-3 mt-sm-2">
+        <section class="col-12 mb-3">
+            <input class="btn btn-primary btn-block p-2 m-auto" type="submit" value="Finalizar Encomenda" />
+        </section>
+    </article>
+}

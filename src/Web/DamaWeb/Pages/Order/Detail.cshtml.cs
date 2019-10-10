@@ -40,6 +40,7 @@ namespace DamaWeb.Pages.Order
             public Address BillingAddress { get; set; }
 
             public List<OrderItemViewModel> OrderItems { get; set; } = new List<OrderItemViewModel>();
+            public int? TaxNumber { get; set; }
         }
 
         public class OrderItemViewModel
@@ -59,6 +60,14 @@ namespace DamaWeb.Pages.Order
             [Display(Name = "Cores")]
             public string CustomizeColors { get; set; }
             public bool IsCustomize { get; set; }
+            public string DisplayProductName
+            {
+                get
+                {
+                    return !IsCustomize ? ProductName : $"Personalização: {ProductName}";
+                }
+            }
+
         }
 
         public class OrderItemDetailViewModel
@@ -81,7 +90,7 @@ namespace DamaWeb.Pages.Order
             {
                 OrderDate = order.OrderDate,
                 OrderItems = await GetOrderItems(order.OrderItems),
-                
+                TaxNumber = order.TaxNumber,
                 OrderNumber = order.Id,
                 ShippingAddress = order.ShipToAddress,
                 BillingAddress = order.BillingToAddress,

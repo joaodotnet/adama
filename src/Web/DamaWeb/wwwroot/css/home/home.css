@@ -1,0 +1,392 @@
+﻿/*.heading-section {
+    height: 40vh;
+}*/
+
+.heading-tag {
+    font-family: "Going Foward";
+    font-size: 2.5rem;
+}
+
+.heading-text {
+    font-size: 20px;
+    line-height: 25px;
+    color: #000000;
+}
+
+.heading-subtext {
+    font-family: "Going Foward";
+    font-size: 25px;
+}
+
+.slide-section .glide__arrow {
+    top: 30%;
+    color: #4D4D4D;
+    box-shadow: none;
+    border: 0;
+    padding: 0;
+}
+.slide-section .glide__arrow--left {
+    left: 0;
+}
+
+.slide-section .glide__arrow--right {
+    right: 0;
+}
+
+@media (min-width: 544px) {
+    .heading-text {
+        font-size: 25px;
+        line-height: 37px;
+    }
+
+    .heading-tag {
+        font-size: 3.5rem;
+    }
+
+    .heading-subtext {
+        font-size: 25px;
+    }
+}
+
+@media (min-width: 960px) {
+    .heading-text {
+        font-size: 30px;
+        line-height: 37px;
+    }
+
+    .heading-tag {
+        font-size: 5.5rem;
+    }
+
+    .heading-subtext {
+        font-size: 30px;
+    }
+}
+
+.wavy-underline {
+    position: relative;
+    /*transition: all 1s ease;*/
+}
+
+    .wavy-underline::before {
+        content: '';
+        position: absolute;
+        top: 90%;
+        width: 100%;
+        height: 0.25em;
+        background: linear-gradient(135deg, transparent, transparent 45%, #FC629D, transparent 55%, transparent 100%), linear-gradient(45deg, transparent, transparent 45%, #FC629D, transparent 55%, transparent 100%);
+        background-size: 0.5em 0.5em;
+        background-repeat: repeat-x, repeat-x;
+    }
+
+.bird-left {
+    top: 0px;
+    left: -220px;
+    position: absolute;
+    -webkit-animation-name: bird-left;
+    -webkit-animation-duration: 3s;
+    -webkit-animation-fill-mode: forwards;
+    animation-name: bird-left;
+    animation-duration: 3s;
+    animation-fill-mode: forwards;
+}
+
+    .bird-left img {
+        width: 60px;
+    }
+
+.bird-right {
+    display: none;
+    position: absolute;
+    top: -85px;
+    right: 20%;
+    opacity: 0;
+    -webkit-animation-name: bird-right;
+    -webkit-animation-duration: 3s;
+    -webkit-animation-fill-mode: forwards;
+    animation-name: bird-right;
+    animation-duration: 3s;
+    animation-fill-mode: forwards;
+}
+
+
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes bird-left {
+    from {
+        left: -220px;
+    }
+
+    to {
+        left: 20px;
+    }
+}
+
+@keyframes bird-left {
+    from {
+        left: -220px;
+    }
+
+    to {
+        left: 20px;
+    }
+}
+
+@media (min-width: 544px) {
+    .bird-left {
+        /*top: -235px;*/
+        display: none;
+    }
+
+        .bird-left img {
+            width: 100px;
+        }
+
+    .bird-right {
+        display: block;
+        -webkit-animation-name: bird-right-544;
+        animation-name: bird-right-544;
+    }
+}
+
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes bird-right-544 {
+    from {
+        right: 20%;
+        opacity: 0;
+    }
+
+    to {
+        right: 70%;
+        opacity: 1;
+    }
+}
+
+@keyframes bird-right-544 {
+    from {
+        right: 20%;
+        opacity: 0
+    }
+
+    to {
+        right: 70%;
+        opacity: 1;
+    }
+}
+
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes bird-left-960 {
+    from {
+        left: -220px;
+    }
+
+    to {
+        left: 100px;
+    }
+}
+
+@keyframes bird-left-960 {
+    from {
+        left: -220px;
+    }
+
+    to {
+        left: 100px;
+    }
+}
+
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes bird-right-960 {
+    from {
+        right: 20%;
+        opacity: 0;
+    }
+
+    to {
+        right: 70%;
+        opacity: 1;
+    }
+}
+
+@keyframes bird-right-960 {
+    from {
+        right: 20%;
+        opacity: 0
+    }
+
+    to {
+        right: 70%;
+        opacity: 1;
+    }
+}
+
+@media (min-width: 960px) {
+    .bird-left {
+        display: block;
+        top: -235px;
+        -webkit-animation-name: bird-left-960;
+        animation-name: bird-left-960;
+    }
+
+        .bird-left img {
+            width: 100px;
+        }
+
+    .bird-right {
+        display: block;
+        -webkit-animation-name: bird-right-960;
+        animation-name: bird-right-960;
+    }
+}
+
+.dama-figure {
+    position: absolute;
+    z-index: 5;
+    left: 50%;
+    margin-left: -25%;
+}
+
+    .dama-figure img {
+        width: 200px;
+    }
+
+/*.full-width-div {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 545px;
+    z-index: -5;
+}*/
+
+.dama-arrow {
+    position: absolute;
+    z-index: 5;
+    left: 49%;
+    top: 200px;
+}
+
+/*.banner-section {
+    margin-top: 260px;
+}*/
+@media (max-width: 544px) {
+    .main-figures {
+        min-height: 184px;
+    }
+    .slide-section .glide__arrow--left {
+        left: -10px;
+    }
+
+    .slide-section .glide__arrow--right {
+        right: -10px;
+    }
+}
+
+@media (min-width: 544px) {
+    .dama-figure {
+        left: initial;
+        margin-left: initial;
+        top: -145px;
+        right: 0px;
+    }
+
+        .dama-figure img {
+            width: 200px;
+        }
+
+    /*.full-width-div {
+        top: 441px;
+    }*/
+
+    .dama-arrow {
+        top: 39px;
+    }
+
+    /*.banner-section {
+        margin-top: 90px;
+    }*/
+}
+
+@media (min-width: 960px) {
+    .dama-figure {
+        left: initial;
+        margin-left: initial;
+        top: -145px;
+        right: 100px;
+    }
+
+        .dama-figure img {
+            width: 200px;
+        }
+
+    /*.full-width-div {
+        top: 600px;
+    }*/
+
+    .dama-arrow {
+        top: 60px;
+    }
+
+    /*.banner-section {
+        margin-top: 200px;
+    }*/
+}
+
+@media (min-width: 1280px) {
+    .dama-figure {
+        left: initial;
+        margin-left: initial;
+        top: -240px;
+        right: 100px;
+    }
+
+        .dama-figure img {
+            width: 300px;
+        }
+
+    /*.full-width-div {
+        top: 600px;
+    }*/
+
+    .dama-arrow {
+        top: 100px;
+    }
+
+    /*.banner-section {
+        margin-top: 200px;
+    }*/
+}
+
+@media (min-width: 1400px) {
+
+    .dama-figure {
+        top: -219px;
+        right: 100px;
+    }
+
+        .dama-figure img {
+            width: 400px;
+        }
+
+    /*.full-width-div {
+        top: initial;
+    }*/
+
+    /*.banner-section {
+        margin-top: 312px;
+    }*/
+
+    .dama-arrow {
+        top: 200px;
+    }
+}
+
+.top-fil2 {
+    fill: #FCEBD6;
+}
+
+.top-fil1 {
+    fill: #FFF6EB;
+}
+
+.top-fil0 {
+    fill: #FFF9F2
+}

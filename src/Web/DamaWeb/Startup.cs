@@ -21,6 +21,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace DamaWeb
@@ -64,6 +65,20 @@ namespace DamaWeb
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
+            // The Tempdata provider cookie is not essential. Make it essential
+            // so Tempdata is functional when tracking is disabled.
+            services.Configure<CookieTempDataProviderOptions>(options =>
+            {
+                options.Cookie.IsEssential = true;
+            });
+
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
                     options.Password.RequireDigit = false;
@@ -95,19 +110,6 @@ namespace DamaWeb
                 options.LogoutPath = "/Account/Signout";
                 options.Cookie.IsEssential = true;
             });
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.Lax;
-            });
-
-            // The Tempdata provider cookie is not essential. Make it essential
-            // so Tempdata is functional when tracking is disabled.
-            services.Configure<CookieTempDataProviderOptions>(options =>
-            {
-                options.Cookie.IsEssential = true;
-            });
 
             services.AddAutoMapper();
 
@@ -134,6 +136,11 @@ namespace DamaWeb
             services.AddScoped<ISageService, SageService>();
             services.AddScoped<IAuthConfigRepository, AuthConfigRepository>();
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddHttpClient<IMailChimpService, MailChimpService>(options =>
+            {
+                options.BaseAddress = new Uri(Configuration["MailChimpBaseUrl"]);
+                options.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Configuration["MailChimpBasicAuth"]);
+            });
 
             // Add memory cache services
             services.AddMemoryCache();
@@ -143,12 +150,12 @@ namespace DamaWeb
                 {
                     options.Conventions.AuthorizeFolder("/Order");
                     options.Conventions.AuthorizeFolder("/Account/Manage");
-                    options.Conventions.AuthorizePage("/Account/Logout");
-                    options.Conventions.AuthorizePage("/Basket/Checkout");
+                    options.Conventions.AuthorizePage("/Account/Logout");                    
                     options.Conventions.AddPageRoute("/Basket/Index", "carrinho");
                     options.Conventions.AddPageRoute("/Order/Index", "as-minhas-encomendas");
                     options.Conventions.AddPageRoute("/Order/Detail", "detalhe-da-encomenda/{orderId}");
                     options.Conventions.AddPageRoute("/Basket/Checkout", "carrinho/encomendar");
+                    options.Conventions.AddPageRoute("/Basket/CheckoutStep2", "carrinho/encomendar/passo2");
                     //options.Conventions.AddPageRoute("/Category/Redirect", "{id}/");
                     options.Conventions.AddPageRoute("/Category/Index", "categoria/{id}/");
                     options.Conventions.AddPageRoute("/Category/Type/Redirect", "{cat}/{type}");

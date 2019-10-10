@@ -75,4 +75,11 @@
         </div>
         <partial name="_pagination" for="CategoryModel.CatalogModel.PaginationInfo" />
     }
+
+    <partial name="_DescriptionSection" for="CategoryModel.DescriptionSection" />
+    <partial name="_productAdded" />
 }
+
+@section Scripts {
+    <script src="~/js/pages/category.js" asp-append-version="true"></script>
+}	}

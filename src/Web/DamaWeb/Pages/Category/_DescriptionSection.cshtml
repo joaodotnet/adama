@@ -1,0 +1,17 @@
+﻿@model DamaWeb.ViewModels.DescriptionViewModel
+
+@if (Model != null && !string.IsNullOrEmpty(Model.H1Text))
+{
+    <section class="row dama-bg-yellow p-3 p-sm-5 justify-content-around">
+        <div class="col-12 col-sm-6">
+            <h1 class="text-uppercase categoryTitle text-center text-sm-left">@Model.H1Text</h1>
+            <p>
+                @Html.Raw(Model.Description)
+            </p>
+        </div>
+        <div class="col-12 col-sm-3 align-self-center text-center">
+            <h2 class="categoryCustomizeQuestion text-uppercase">@Model.Question</h2>
+            <a asp-page="/Customize/Index" class="btn btn-primary btn-block mt-3 py-2" role="button">PERSONALIZA AQUI!</a>
+        </div>
+    </section>
+}

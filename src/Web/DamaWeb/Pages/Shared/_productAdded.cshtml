@@ -1,0 +1,37 @@
+﻿<!-- Modal -->
+<div class="modal fade" id="productAddedModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h5 class="modal-title text-uppercase">
+                    1 Produto adicionado ao carrinho
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </h5>
+                <div class="row my-3">
+                    <div class="col">
+                        <div id="product-added-img"></div>
+                    </div>
+                    <div class="col">
+                        <div id="product-added-name" class="mt-3 text-uppercase"></div>
+                        <div id="product-added-price" class="font-weight-bold mt-3"></div>
+                    </div>
+                </div>
+                <hr class="dama-hr-tiny-pink" />
+                <div class="row mt-3">
+                    <div class="col">Total (<span id="basket-products"></span> produtos) </div>
+                    <div class="col text-right font-weight-bold"><span id="basket-total"></span></div>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <div class="col">
+                        <a role="button" class="btn btn-block btn-primary text-white" asp-page="/Basket/Index">Ver carrinho</a>
+                    </div>
+                    <div class="col">
+                        <a role="button" class="btn btn-block btn-primary text-white" asp-page="/Basket/Checkout">Checkout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

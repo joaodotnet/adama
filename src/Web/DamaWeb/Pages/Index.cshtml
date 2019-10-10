@@ -1,4 +1,5 @@
-﻿@page 
+﻿@page
+
 @{
     @model IndexModel
 }
@@ -15,22 +16,22 @@
         <div class="carousel-inner" role="listbox">
             @foreach (var item in Model.CatalogModel.Banners)
             {
-            <div class="carousel-item @(Model.CatalogModel.Banners[0] == item ? "active": "") @item.LinkClass" uri="@item.LinkButtonUri">
-                @*<img class="d-block img-fluid" src="@item.PictureUri" alt="@item.HeadingText">*@
-                <picture>
-                    <source media="(min-width: 576px)" type="image/webp" srcset="@item.PictureWebpUri" alt="@item.HeadingText">
-                    <source media="(max-width: 576px)" srcset="@item.PictureMobileUri">
-                    <img src="@item.PictureUri" alt="@item.HeadingText" class="img-fluid">
-                </picture>
-                <div class="carousel-caption d-none d-md-block">
-                    <h3>@item.HeadingText</h3>
-                    <p>@item.ContentText</p>
-                    @if (!string.IsNullOrEmpty(item.LinkButtonText) && !string.IsNullOrEmpty(item.LinkButtonUri))
-                    {
-                        <a class="btn btn-primary" href="@item.LinkButtonUri" role="button">@item.LinkButtonText</a>
-                    }
+                <div class="carousel-item @(Model.CatalogModel.Banners[0] == item ? "active": "") @item.LinkClass" uri="@item.LinkButtonUri">
+                    @*<img class="d-block img-fluid" src="@item.PictureUri" alt="@item.HeadingText">*@
+                    <picture>
+                        <source media="(min-width: 576px)" type="image/webp" srcset="@item.PictureWebpUri" alt="@item.HeadingText">
+                        <source media="(max-width: 576px)" srcset="@item.PictureMobileUri">
+                        <img src="@item.PictureUri" alt="@item.HeadingText" class="img-fluid">
+                    </picture>
+                    <div class="carousel-caption d-none d-md-block">
+                        <h3>@item.HeadingText</h3>
+                        <p>@item.ContentText</p>
+                        @if (!string.IsNullOrEmpty(item.LinkButtonText) && !string.IsNullOrEmpty(item.LinkButtonUri))
+                        {
+                            <a class="btn btn-primary" href="@item.LinkButtonUri" role="button">@item.LinkButtonText</a>
+                        }
+                    </div>
                 </div>
-            </div>
             }
             <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -92,5 +93,13 @@
                 window.location.href = uri;
             });
         });
+
+        @if(!string.IsNullOrEmpty(Model.StatusMessage))
+            {
+                <text>
+                $('.toast').toast({ delay: 5000 });
+                $('.toast').toast('show');
+                </text>
+            }
     </script>
 }
