@@ -1,60 +1,235 @@
 @page
 @model IndexModel
 @{
-    ViewData["Title"] = "Perfil";
+    ViewData["Title"] = "O Meu Perfil";
 }
 
-<h2>@ViewData["Title"]</h2>
+
+<h1 class="text-uppercase">@ViewData["Title"]</h1>
 @await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
-<div class="row">
-    <div class="col-md-6">
-        <form method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
+<div class="row mx-sm-5 mt-4 mt-sm-5 justify-content-around">
+    <div class="col-12 col-sm-4 p-sm-3 border-right border-primary">
+        <h2 class="text-sm-center text-uppercase">Os Meus Dados</h2>
+        <div class="userData collapse show mt-3">
+            <dl>
+                <dt>@Html.DisplayFor(_ => Model.UserData.Username)</dt>
+                <dd class="mb-0">@Html.DisplayFor(_ => Model.UserData.Fullname)</dd>
+                @if (!string.IsNullOrEmpty(Model.UserData.PhoneNumber))
+                {
+                    <dd class="mb-0">tlm. @Html.DisplayFor(_ => Model.UserData.PhoneNumber)</dd>
+                }
+                @if (Model.UserData.NIF.HasValue)
+                {
+                    <dd class="mb-0">nif @Html.DisplayFor(_ => Model.UserData.NIF)</dd>
+                }
+            </dl>
+            <a class="btn-link" data-toggle="collapse" href=".userData" aria-expanded="false" aria-controls="collapseUserData">EDITAR</a>
+        </div>
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <form class="userData collapse" method="post">
             <div class="form-group">
-                <label asp-for="Username"></label>
-                <input asp-for="Username" class="form-control" disabled />
+                <label asp-for="UserData.Username"></label>
+                <input asp-for="UserData.Username" class="form-control" disabled />
             </div>
             <div class="form-group">
-                <label asp-for="Input.Email"></label>
+                <label>Password</label>
+                <small class="form-text">
+                    <button asp-page="./ChangePassword" class="btn btn-link">Clica aqui para mudar a tua password.</button>
+                </small>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserData.Email"></label>
                 @if (Model.IsEmailConfirmed)
                 {
                     <div class="input-group">
-                        <input asp-for="Input.Email" class="form-control" />
+                        <input asp-for="UserData.Email" class="form-control" />
                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                     </div>
                 }
                 else
                 {
-                    <input asp-for="Input.Email" class="form-control" />
+                    <input asp-for="UserData.Email" class="form-control" />
                     <button asp-page-handler="SendVerificationEmail" class="btn btn-link">Enviar email de confirmação</button>
                 }
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                <span asp-validation-for="UserData.Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Input.Firstname"></label>
-                <input asp-for="Input.Firstname" class="form-control" />
-                <span asp-validation-for="Input.Firstname" class="text-danger"></span>
+                <label asp-for="UserData.Firstname"></label>
+                <input asp-for="UserData.Firstname" class="form-control" />
+                <span asp-validation-for="UserData.Firstname" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Input.Lastname"></label>
-                <input asp-for="Input.Lastname" class="form-control" />
-                <span asp-validation-for="Input.Lastname" class="text-danger"></span>
+                <label asp-for="UserData.Lastname"></label>
+                <input asp-for="UserData.Lastname" class="form-control" />
+                <span asp-validation-for="UserData.Lastname" class="text-danger"></span>
+            </div>
+            <div class="text-center my-4">
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" asp-for="UserData.Gender" value="@GenderType.FEMALE" id="Gender@Female" class="custom-control-input">
+                    <label class="custom-control-label" for="Gender@Female">Feminino</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" asp-for="UserData.Gender" value="@GenderType.MALE" id="Gender@Male" class="custom-control-input">
+                    <label class="custom-control-label" for="Gender@Male">Masculino</label>
+                </div>
             </div>
             <div class="form-group">
-                <label asp-for="Input.PhoneNumber"></label>
-                <input asp-for="Input.PhoneNumber" class="form-control" />
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                <label asp-for="UserData.PhoneNumber"></label>
+                <input asp-for="UserData.PhoneNumber" class="form-control" />
+                <span asp-validation-for="UserData.PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Input.NIF"></label>
-                <input asp-for="Input.NIF" class="form-control" />
-                <span asp-validation-for="Input.NIF" class="text-danger"></span>
+                <label asp-for="UserData.NIF"></label>
+                <input asp-for="UserData.NIF" class="form-control" />
+                <span asp-validation-for="UserData.NIF" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-sm btn-menta">Gravar</button>
+            <button type="submit" class="btn btn-sm btn-menta">Editar</button>
+            <a class="btn-link small" data-toggle="collapse" href=".userData" aria-expanded="false" aria-controls="collapseUserData">Cancelar</a>
         </form>
     </div>
-</div>
 
+    <div class="col-12 col-sm-4 p-sm-3 mt-2 mt-sm-0">
+        <hr class="dama-hr border-primary mb-4 d-block d-sm-none" />
+        <h2 class="text-center text-uppercase">Moradas Gravadas</h2>
+        <div class="addressData collapse show mt-3">
+            @if (Model.UserShippingAddress != null)
+            {
+                <h4>Morada de Entrega</h4>
+                <address>
+                    @if (!string.IsNullOrEmpty(Model.UserShippingAddress.Name))
+                    {
+                        <strong>@Html.DisplayFor(_ => Model.UserShippingAddress.Name)</strong><br />
+                    }
+                    @if (!string.IsNullOrEmpty(Model.UserShippingAddress.ContactPhoneNumber))
+                    {
+                        <span>@Html.DisplayFor(_ => Model.UserShippingAddress.ContactPhoneNumber)</span> <br />
+                    }
+                    <span>@Html.DisplayFor(_ => Model.UserShippingAddress.Street)</span> <br />
+                    <span>@Html.DisplayFor(_ => Model.UserShippingAddress.PostalCode)</span> <span>@Html.DisplayFor(_ => Model.UserShippingAddress.City)</span> <span>@Html.DisplayFor(_ => Model.UserShippingAddress.Country)</span>
+                </address>
+            }
+            @if (Model.UserBillingAddress != null)
+            {
+                <h4>Morada de Faturação</h4>
+                @if (Model.CopyInvoiceFromAddress)
+                {
+                    <p>A mesma que a morada de entrega.</p>
+                }
+                else
+                {
+                    <address>
+                        @if (!string.IsNullOrEmpty(Model.UserBillingAddress.Name))
+                        {
+                            <strong>@Html.DisplayFor(_ => Model.UserBillingAddress.Name)</strong><br />
+                        }
+                        <span>@Html.DisplayFor(_ => Model.UserBillingAddress.AddressStreet)</span> <br />
+                        <span>@Html.DisplayFor(_ => Model.UserBillingAddress.AddressPostalCode)</span> <span>@Html.DisplayFor(_ => Model.UserBillingAddress.AddressCity)</span> <span>@Html.DisplayFor(_ => Model.UserBillingAddress.AddressCountry)</span>
+                    </address>
+                }
+            }
+
+            @if (Model.UserShippingAddress == null && Model.UserBillingAddress == null)
+            {
+                <p>Sem moradas registadas!</p>
+            }
+
+            <a class="btn-link" data-toggle="collapse" href=".addressData" aria-expanded="false" aria-controls="collapseAddressData">EDITAR</a>
+        </div>
+        <form class="collapse addressData" method="post" asp-page-handler="UpdateAddress">
+            <h4>Morada de Entrega</h4>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UserShippingAddress.Name"></label>
+                <input class="form-control" asp-for="UserShippingAddress.Name">
+                <span asp-validation-for="UserShippingAddress.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserShippingAddress.ContactPhoneNumber"></label>
+                <input class="form-control" asp-for="UserShippingAddress.ContactPhoneNumber">
+                <span asp-validation-for="UserShippingAddress.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserShippingAddress.Street"></label>
+                <input class="form-control" asp-for="UserShippingAddress.Street">
+                <span asp-validation-for="UserShippingAddress.Street" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserShippingAddress.PostalCode"></label>
+                <input class="form-control" asp-for="UserShippingAddress.PostalCode">
+                <span asp-validation-for="UserShippingAddress.PostalCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserShippingAddress.City"></label>
+                <input class="form-control" asp-for="UserShippingAddress.City">
+                <span asp-validation-for="UserShippingAddress.City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserShippingAddress.Country"></label>
+                <select class="form-control" asp-for="UserShippingAddress.Country">
+                    <option>Portugal</option>
+                </select>
+                <span asp-validation-for="UserShippingAddress.Country" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" asp-for="CopyInvoiceFromAddress">
+                <label class="form-check-label" asp-for="CopyInvoiceFromAddress"></label>
+            </div>
+            <hr />
+            <div id="billingAddress" class="collapse @(Model.CopyInvoiceFromAddress ? "" : "show")">
+                <h4>Morada de Faturação</h4>
+                <div class="form-group required">
+                    <label asp-for="UserBillingAddress.Name"></label>
+                    <input asp-for="UserBillingAddress.Name" class="form-control">
+                    <span asp-validation-for="UserBillingAddress.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group required">
+                    <label asp-for="UserBillingAddress.TaxNumber"></label>
+                    <input asp-for="UserBillingAddress.TaxNumber" class="form-control">
+                    <span asp-validation-for="UserBillingAddress.TaxNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group required">
+                    <label asp-for="UserBillingAddress.AddressStreet"></label>
+                    <input class="form-control" asp-for="UserBillingAddress.AddressStreet">
+                    <span asp-validation-for="UserBillingAddress.AddressStreet" class="text-danger"></span>
+                </div>
+                <div class="form-group required">
+                    <label asp-for="UserBillingAddress.AddressCity"></label>
+                    <input class="form-control" asp-for="UserBillingAddress.AddressCity">
+                    <span asp-validation-for="UserBillingAddress.AddressCity" class="text-danger"></span>
+                </div>
+                <div class="form-group required">
+                    <label asp-for="UserBillingAddress.AddressPostalCode"></label>
+                    <input class="form-control" asp-for="UserBillingAddress.AddressPostalCode">
+                    <span asp-validation-for="UserBillingAddress.AddressPostalCode" class="text-danger"></span>
+                </div>
+                <div class="form-group required">
+                    <label asp-for="UserBillingAddress.AddressCountry"></label>
+                    <select class="form-control" asp-for="UserBillingAddress.AddressCountry">
+                        <option>Portugal</option>
+                    </select>
+                    <span asp-validation-for="UserBillingAddress.AddressCountry" class="text-danger"></span>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-sm btn-menta">Editar</button>
+            <a class="btn-link small" data-toggle="collapse" href=".addressData" aria-expanded="false" aria-controls="collapseUserAddress">Cancelar</a>
+        </form>
+        <hr class="dama-hr border-primary mt-4 d-block d-sm-none" />
+    </div>
+    <div class="col-12 col-sm-4 p-0 p-sm-3 mt-5 mt-sm-0">
+        @if (Model.Score.HasValue)
+        {
+            <h2 class="text-center text-uppercase">Já tenho</h2>
+            <h4 class="text-uppercase text-center mt-3">@Model.Score PONTOS!</h4>
+        }
+        else
+        {
+            <h2 class="text-center text-uppercase">Sem pontos</h2>
+            <p class="text-center">Faz uma encomenda para ganhares pontos e descontos ❤</p>
+        }
+        <img src="~/images/dama-pontos.jpg" class="img-fluid" />
+    </div>
+</div>
 @section Scripts {
-    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <partial name="_ValidationScriptsPartial" />
+    <script src="/js/pages/profile.js" asp-append-version="true"></script>
 }

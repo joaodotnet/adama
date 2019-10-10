@@ -1,59 +1,51 @@
-﻿.footer-links {
-    width: 300px;
+﻿.fil2 {
+    fill: #FF96BE
+}
+
+.fil1 {
+    fill: #FFB8D3
+}
+
+.fil0 {
+    fill: #FFE3EE
+}
+
+.dnj-app-footer {
+    background-color: #FF96BE;
+    padding-bottom: 2.5rem;
+    margin-top: -50px;
+}
+
+.footer-links {
     padding-top: 30px;
 }
 
 .footer-link {
     width: 100%;
     padding: 5px 5px;
+    text-transform: uppercase;
 }
 
-    .footer-link a,
-    .footer-link a:active,
-    .footer-link a:hover,
-    .footer-link a:visited {
-        color: #fff;
-        text-decoration: none;
-    }
-
-    .footer-link:hover {
-        border: 1px solid #fff;
-        transition: color 0.35s;
-    }
-
-    .footer-link i {
-        margin: 5px;
-    }
-
-.esh-app-footer {
-    background-color: #FC629D;
-    border-top: 1px solid #EEEEEE;
-    margin-top: 2.5rem;
-    padding-bottom: 2.5rem;
-    padding-top: 2.5rem;
-    width: 100%;
+#newsletterSection {
+    margin-top: 70px;
 }
 
-.esh-app-footer-text {
-    color: #fff;
-    font-size: 11px;
+.footer-waves {
+    /*top: -230px;
+    position: relative;
+    z-index: -5;*/
 }
+@media screen and (max-width:540px) {
+    .dnj-app-footer {
+        margin-top: 0px;
+    }
+    #copyText {
+        font-size: 12px;
+    }
+}
+
 @media screen and (max-width: 992px) {
     .consentText {
         font-size: 10px;
-    }
-
-    .footer-img img {
-        width: 200px;
-    }
-
-    .footer-text {
-        display: none;
-    }
-}
-
-@media screen and (min-width: 992px) {
-    .footer-text-mobile {
-        display: none
     }
 }

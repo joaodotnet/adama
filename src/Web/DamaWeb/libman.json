@@ -17,7 +17,7 @@
     },
     {
       "provider": "cdnjs",
-      "library": "font-awesome@5.7.2",
+      "library": "font-awesome@5.8.2",
       "destination": "wwwroot/lib/font-awesome/",
       "files": [
         "js/all.js",
@@ -120,6 +120,11 @@
         "dist/js/bootstrap.js",
         "dist/js/bootstrap.min.js"
       ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "Glide.js@3.3.0",
+      "destination": "wwwroot/lib/Glide.js/"
     }
   ]
 }

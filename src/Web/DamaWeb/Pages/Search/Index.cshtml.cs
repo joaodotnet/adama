@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using DamaWeb.Interfaces;
 using DamaWeb.ViewModels;
+using ApplicationCore;
 
 namespace DamaWeb.Pages.Search
 {
@@ -30,7 +31,7 @@ namespace DamaWeb.Pages.Search
             SearchFor = q;
             var type = catalogModel.TypesFilterApplied;
             var illustration = CatalogModel.IllustrationFilterApplied;
-            CatalogModel = await _service.GetCatalogItemsBySearch(p ?? 0, Constants.ITEMS_PER_PAGE, SearchFor, catalogModel.TypesFilterApplied, catalogModel.IllustrationFilterApplied);
+            CatalogModel = await _service.GetCatalogItemsBySearch(p ?? 0, Constants.ITEMS_PER_PAGE, SearchFor);
             CatalogModel.TypesFilterApplied = type;
             CatalogModel.IllustrationFilterApplied = illustration;
             ViewData["SearchFor"] = SearchFor;

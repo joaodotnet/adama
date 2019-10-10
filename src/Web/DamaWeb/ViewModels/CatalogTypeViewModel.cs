@@ -17,5 +17,8 @@ namespace DamaWeb.ViewModels
         public CatalogIndexViewModel CatalogModel { get; set; } = new CatalogIndexViewModel();
         public string MetaDescription { get; set; }
         public string Title { get; set; }
+        public List<CatalogItemViewModel> Items { get; set; }
+        public string CategoryName { get; set; }
+        public DescriptionViewModel DescriptionSection { get; set; }
     }
 }

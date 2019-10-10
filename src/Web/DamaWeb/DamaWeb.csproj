@@ -6,6 +6,7 @@
     <ApplicationInsightsResourceId>/subscriptions/31f88066-cd85-4eae-9bf3-9a1232e478ca/resourcegroups/damaResource/providers/microsoft.insights/components/DamaWebInsights</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/f503b163-650e-424d-a084-35cbe94061fb/resourcegroups/DamanoJornalResource/providers/microsoft.insights/components/DamaNoJornalWeb</ApplicationInsightsAnnotationResourceId>
     <UserSecretsId>bd63e5e3-22d5-4e59-8b0e-0467d9e7d4e1</UserSecretsId>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\css\site.css" />

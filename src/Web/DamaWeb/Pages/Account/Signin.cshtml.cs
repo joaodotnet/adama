@@ -71,7 +71,7 @@ namespace DamaWeb.Pages.Account
 
         public async Task OnGet(string returnUrl = null)
         {
-            returnUrl = Utils.FixBasePath(returnUrl);
+            //returnUrl = Utils.FixBasePath(returnUrl);
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
@@ -110,7 +110,7 @@ namespace DamaWeb.Pages.Account
                 string anonymousBasketId = Request.Cookies[Constants.BASKET_COOKIENAME];
                 if (!String.IsNullOrEmpty(anonymousBasketId))
                 {
-                    await _basketService.TransferBasketAsync(anonymousBasketId, LoginDetails.Email);
+                    await _basketService.TransferBasketAsync(anonymousBasketId, LoginDetails.Email, false);
                     Response.Cookies.Delete(Constants.BASKET_COOKIENAME);
                 }                
                 return RedirectToPage(returnUrl ?? "/Index");
@@ -135,7 +135,15 @@ namespace DamaWeb.Pages.Account
             }
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = UserDetails.Email, Email = UserDetails.Email, FirstName = UserDetails.FirstName, LastName = UserDetails.LastName, PhoneNumber = UserDetails.PhoneNumber };
+                var user = new ApplicationUser
+                {
+                    UserName = UserDetails.Email,
+                    Email = UserDetails.Email,
+                    FirstName = UserDetails.FirstName,
+                    LastName = UserDetails.LastName,
+                    PhoneNumber = UserDetails.PhoneNumber,
+                    Gender = UserDetails.Gender
+                };
                 var result = await _userManager.CreateAsync(user, UserDetails.Password);
                 if (result.Succeeded)
                 {                    
@@ -143,7 +151,7 @@ namespace DamaWeb.Pages.Account
                     string anonymousBasketId = Request.Cookies[Constants.BASKET_COOKIENAME];
                     if (!String.IsNullOrEmpty(anonymousBasketId))
                     {
-                        await _basketService.TransferBasketAsync(anonymousBasketId, UserDetails.Email);
+                        await _basketService.TransferBasketAsync(anonymousBasketId, UserDetails.Email, false);
                         Response.Cookies.Delete(Constants.BASKET_COOKIENAME);
                     }
 
@@ -178,19 +186,9 @@ namespace DamaWeb.Pages.Account
         {
             foreach (var error in result.Errors)
             {
-                string description = TryTranslate(error.Description);
+                string description = Utils.TryTranslate(error.Description, UserDetails.Email);
                 ModelState.AddModelError("", description);
             }
-        }
-
-        private string TryTranslate(string description)
-        {
-            if(description.LastIndexOf("is already taken.") > 0)
-            {
-                return $"O email '{UserDetails.Email}' já se encontra registado.";
-            }
-            return description;
-
         }
     }
 }

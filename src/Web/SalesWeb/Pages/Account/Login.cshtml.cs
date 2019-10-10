@@ -107,7 +107,7 @@ namespace SalesWeb.Pages.Account
                 string anonymousBasketId = Request.Cookies[Constants.BASKET_COOKIENAME];
                 if (!String.IsNullOrEmpty(anonymousBasketId))
                 {
-                    await _basketService.TransferBasketAsync(anonymousBasketId, LoginDetails.Email);
+                    await _basketService.TransferBasketAsync(anonymousBasketId, LoginDetails.Email, false);
                     Response.Cookies.Delete(Constants.BASKET_COOKIENAME);
                 }                
                 return RedirectToPage(returnUrl ?? "/Index");

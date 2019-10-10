@@ -6,194 +6,126 @@
     ViewData["Title"] = "Detalhe da Encomenda";
 }
 
-<style>
-    .order-customize-colors {
-        width: 20px;
-        height: 20px;
-        display: inline-flex;
-    }
-</style>
+<div class="dnj-orders_detail">
 
-<div class="esh-orders_detail">
-    <div class="container">
-        <h2>@ViewData["Title"] &nbsp; #@Model.OrderDetails.OrderNumber</h2>
-        <section class="esh-orders_detail-section">
-            <article class="esh-orders_detail-titles row d-none d-sm-flex">
-                <section class="esh-orders_detail-title col-3">Nº Encomenda</section>
-                <section class="esh-orders_detail-title col-3">Data</section>
-                <section class="esh-orders_detail-title col-3">Total</section>
-                <section class="esh-orders_detail-title col-3">Estado</section>
-            </article>
+    <h1 class="text-uppercase">As Minhas Encomendas</h1>
+    <h2 class="text-uppercase mt-3 mt-sm-5">@ViewData["Title"] Número #@Model.OrderDetails.OrderNumber</h2>
 
-            <article class="esh-orders_detail-items row mt-2">
-                <section class="esh-orders_detail-item col-12 col-sm-3">
-                    <span class="dama-orders-title-mobile d-sm-none">Nº Encomenda: </span>@Html.DisplayFor(_ => Model.OrderDetails.OrderNumber)
-                </section>
-                <section class="esh-orders_detail-item col-12 col-sm-3">
-                    <span class="dama-orders-title-mobile d-sm-none">Data: </span>@Html.DisplayFor(_ => Model.OrderDetails.OrderDate)
-                </section>
-                <section class="esh-orders_detail-item col-12 col-sm-3">
-                    <span class="dama-orders-title-mobile d-sm-none">Total: </span>@(Model.OrderDetails.Total.HasValue ? Model.OrderDetails.Total.Value.ToString("N2") + "€" : "Em análise" )
-                </section>
-                <section class="esh-orders_detail-title col-12 col-sm-3">
-                    <span class="dama-orders-title-mobile d-sm-none">Estado: </span>@Model.OrderDetails.Status
-                </section>
-            </article>
-        </section>
-
-        @*<section class="esh-orders_detail-section">
-                <article class="esh-orders_detail-titles row">
-                    <section class="esh-orders_detail-title col-xs-12">Description</section>
-                </article>
-
-                <article class="esh-orders_detail-items row">
-                    <section class="esh-orders_detail-item col-xs-12">@Model.Description</section>
-                </article>
-            </section>*@
-
-        <section class="esh-orders_detail-section mt-3">
-            <article class="esh-orders_detail-titles row">
-                <section class="esh-orders_detail-title col-12">Morada de Entrega</section>
-            </article>
-
-            <article class="esh-orders_detail-items row mt-2">
-                <section class="esh-orders_detail-item col-12">@Model.OrderDetails.ShippingAddress.Name</section>
-            </article>
-            <article class="esh-orders_detail-items row">
-                <section class="esh-orders_detail-item col-12">@Model.OrderDetails.ShippingAddress.Street</section>
-            </article>
-
-            <article class="esh-orders_detail-items row">
-                <section class="esh-orders_detail-item col-12">@Model.OrderDetails.ShippingAddress.PostalCode - @Model.OrderDetails.ShippingAddress.City</section>
-            </article>
-
-            <article class="esh-orders_detail-items row">
-                <section class="esh-orders_detail-item col-12">@Model.OrderDetails.ShippingAddress.Country</section>
-            </article>
-        </section>
-
-        @if (!string.IsNullOrEmpty(Model.OrderDetails.BillingAddress?.Street))
-        {
-
-            <section class="esh-orders_detail-section mt-3">
-                <article class="esh-orders_detail-titles row">
-                    <section class="esh-orders_detail-title col-12">Morada de Facturação</section>
-                </article>
-                <article class="esh-orders_detail-items row mt-2">
-                    <section class="esh-orders_detail-item col-12">@Model.OrderDetails.BillingAddress.Name</section>
-                </article>
-                <article class="esh-orders_detail-items row">
-                    <section class="esh-orders_detail-item col-12">@Model.OrderDetails.BillingAddress.Street</section>
-                </article>
-
-                <article class="esh-orders_detail-items row">
-                    <section class="esh-orders_detail-item col-12">@Model.OrderDetails.BillingAddress.PostalCode - @Model.OrderDetails.BillingAddress.City</section>
-                </article>
-
-                <article class="esh-orders_detail-items row">
-                    <section class="esh-orders_detail-item col-12">@Model.OrderDetails.BillingAddress.Country</section>
-                </article>
-            </section>
-        }
-        <section class="esh-orders_detail-section mt-3">
-            <article class="esh-orders_detail-titles row mb-2">
-                <section class="esh-orders_detail-title col-12">DETALHE DA ENCOMENDA</section>
-            </article>
-            <div class="row align-items-center font-weight-bold d-none d-sm-flex">
-                <div class="col-sm-4">Produto</div>
-                <div class="offset-sm-3 col-sm-2">Preço Unitário</div>
-                <div class="col-sm-1">Qt.</div>
-                <div class="col-sm-2">Total</div>
+    @foreach (var item in Model.OrderDetails.OrderItems)
+    {
+        <div class="row mt-3 mt-sm-5">
+            <div class="col-12 col-sm-4 order-2 order-sm-0">
+                <img class="img-fluid" src="@item.PictureUrl">
             </div>
-            @for (int i = 0; i < Model.OrderDetails.OrderItems.Count; i++)
-            {
-                var item = Model.OrderDetails.OrderItems[i];
-                <article class="esh-orders_detail-items esh-orders_detail-items--border row align-items-center mb-3">
-                    <section class="esh-orders_detail-item col-4">
-                        <img class="esh-orders_detail-image img-fluid" src="@item.PictureUrl">
-                    </section>
-                    <section class="esh-orders_detail-item esh-orders_detail-item--middle col-8 col-sm-3">
-                        <span class="d-sm-none">@item.Units x </span>@(!item.IsCustomize ? item.ProductName : $"Personalização: {item.ProductName}")
-                        @if (!string.IsNullOrEmpty(item.CustomizeName))
+            <div class="col-12 col-sm-4 order-0 order-sm-1 border-right border-primary">
+                <dl>
+                    <dt>Produto</dt>
+                    <dd>@item.DisplayProductName</dd>
+                    <dt>Quantidade</dt>
+                    <dd>@item.Units</dd>
+                    @if (!string.IsNullOrEmpty(item.CustomizeName))
+                    {
+                        <dt>Personalização</dt>
+                        <dd>@item.CustomizeName</dd>
+                    }
+                    @if (item.Attributes?.Count > 0)
+                    {
+                        foreach (var attr in item.Attributes)
                         {
-                            <br />
-                            <small id="nameInputText" class="text-muted dama-small-text">Personalização: @item.CustomizeName</small>
+                            <dt>@(EnumHelper<ApplicationCore.Entities.AttributeType>.GetDisplayValue(attr.Type))</dt>
+                            <dd>@attr.AttributeName</dd>
                         }
-                        @if (item.Attributes?.Count > 0)
+                    }
+                    @if (item.IsCustomize)
+                    {
+                        <dt>@Html.DisplayNameFor(_ => item.CustomizeDescription)</dt>
+                        <dd>@item.CustomizeDescription</dd>
+                        @if (!string.IsNullOrEmpty(item.CustomizeText))
                         {
-                            foreach (var attr in item.Attributes)
-                            {
-                                <br />
-                                <span class="dama-basket-label">@(EnumHelper<ApplicationCore.Entities.AttributeType>.GetDisplayValue(attr.Type)): @attr.AttributeName </span>
-                            }
+                            <dt>@Html.DisplayNameFor(_ => item.CustomizeText)</dt>
+                            <dd>@item.CustomizeText</dd>
                         }
-                        @if (item.IsCustomize)
+
+                        @if (!string.IsNullOrEmpty(item.CustomizeColors))
                         {
-                            <br />
-                            <span class="dama-basket-label">@Html.DisplayNameFor(_ => item.CustomizeDescription) : @item.CustomizeDescription </span>
-                            @if (!string.IsNullOrEmpty(item.CustomizeText))
-                            {
-                                <br />
-                                <span class="dama-basket-label">@Html.DisplayNameFor(_ => item.CustomizeText) : @item.CustomizeText </span>
-                            }
-                            <br />
-                            <span class="dama-basket-label">@Html.DisplayNameFor(_ => item.CustomizeColors) :</span>
-                            @if (!string.IsNullOrEmpty(item.CustomizeColors))
-                            {
-                                var colors = item.CustomizeColors.Split(',');
-                                foreach (var rgb in colors)
-                                {
-                                    var rgbText = rgb.Replace(';', ',');
-                                <div class="order-customize-colors" style='background-color: @rgbText'>&nbsp;</div>
+                            <dt>@Html.DisplayNameFor(_ => item.CustomizeColors)</dt>
+                            <dd>
+                                @{
+                                    var colors = item.CustomizeColors.Split(',');
+                                    foreach (var rgb in colors)
+                                    {
+                                        var rgbText = rgb.Replace(';', ',');
+                                        <div class="order-customize-colors" style='background-color: @rgbText'>&nbsp;</div>
                                     }
                                 }
-                            }
-                        <span class="d-sm-none">
-                            <br />
-                            @if (item.UnitPrice > 0)
-                            {
-                                <text>
+                            </dd>
+                        }
+                    }
+                    <dt>Data</dt>
+                    <dd>@Html.DisplayFor(_ => Model.OrderDetails.OrderDate)</dd>
+                    <dt>Total</dt>
+                    <dd>
+                        @if (item.UnitPrice > 0)
+                        {
+                            <text>
                                 @Math.Round(item.Units * item.UnitPrice, 2).ToString("N2") €
-                                </text>
-                            }
-                            else
-                            {
-                                <small>preço em análise</small>
-                            }
+                            </text>
+                        }
+                        else
+                        {
+                            <small>preço em análise</small>
+                        }
+                    </dd>
+                    <dt>Estado</dt>
+                    <dd>@Model.OrderDetails.Status</dd>
+                </dl>
+            </div>
+            <div class="col-12 col-sm-4 order-1 order-sm-2">
+                <dl>
+                    <dt>Morada de Entrega</dt>
+                    <dd>
+                        @Model.OrderDetails.ShippingAddress.Name <br />
+                        @Model.OrderDetails.ShippingAddress.Street <br />
+                        @Model.OrderDetails.ShippingAddress.PostalCode @Model.OrderDetails.ShippingAddress.City  - @Model.OrderDetails.ShippingAddress.Country
+                    </dd>
+                    @if (!string.IsNullOrEmpty(Model.OrderDetails.BillingAddress?.Street))
+                    {
+                        <dt>Morada de Faturação</dt>
+                        <dd>
+                            @Model.OrderDetails.BillingAddress.Name <br />
+                            @Model.OrderDetails.TaxNumber <br />
+                            @Model.OrderDetails.BillingAddress.Street <br />
+                            @Model.OrderDetails.BillingAddress.PostalCode @Model.OrderDetails.BillingAddress.City  - @Model.OrderDetails.BillingAddress.Country
+                        </dd>
+                    }
+                </dl>
+            </div>
+        </div>
+    }
 
-                        </span>
-                    </section>
-                    <section class="esh-orders_detail-item esh-orders_detail-item--middle d-none d-sm-block col-sm-2 text-nowrap">@(item.UnitPrice > 0 ? item.UnitPrice.ToString("N2") + " €" : "")</section>
-                    <section class="esh-orders_detail-item esh-orders_detail-item--middle d-none d-sm-block col-sm-1">@item.Units</section>
-                    <section class="esh-orders_detail-item esh-orders_detail-item--middle d-none d-sm-block col-sm-2 text-nowrap">@(item.UnitPrice > 0 ? Math.Round(item.Units * item.UnitPrice, 2).ToString("N2") + " €" : "em análise")</section>
-                </article>
-                <hr class="basket-hr" />
-            }
-        </section>
+    @if (Model.OrderDetails.ShippingCost > 0)
+    {
+        <section class="dnj-orders_detail-section dnj-orders_detail-section--right mt-3">
+            <article class="dnj-orders_detail-titles dnj-basket-titles--clean row">
+                <section class="dnj-orders_detail-title d-none d-sm-block col-sm-7"></section>
+                <section class="dnj-orders_detail-title col-8 col-sm-3 text-sm-right"><small>Despesas de Envio</small></section>
+                <section class="dnj-orders_detail-item dnj-orders_detail-item--mark col-4 col-sm-2 text-nowrap text-right text-sm-left">@Model.OrderDetails.ShippingCost €</section>
+            </article>
 
-        @if (Model.OrderDetails.ShippingCost > 0)
-        {
-            <section class="esh-orders_detail-section esh-orders_detail-section--right mt-3">
-                <article class="esh-orders_detail-titles dnj-basket-titles--clean row">
-                    <section class="esh-orders_detail-title d-none d-sm-block col-sm-7"></section>
-                    <section class="esh-orders_detail-title col-8 col-sm-3 text-sm-right"><small>Despesas de Envio</small></section>
-                    <section class="esh-orders_detail-item esh-orders_detail-item--mark col-4 col-sm-2 text-nowrap text-right text-sm-left">@Model.OrderDetails.ShippingCost €</section>
-                </article>
+            <article class="dnj-orders_detail-items row">
+                <section class="dnj-orders_detail-item col-9"></section>
 
-                <article class="esh-orders_detail-items row">
-                    <section class="esh-orders_detail-item col-9"></section>
-
-                </article>
-            </section>
-
-        }
-
-        <section class="esh-orders_detail-section">
-            <article class="esh-orders_detail-titles dnj-basket-titles--clean row">
-                <section class="esh-orders_detail-title d-none d-sm-block col-sm-7"></section>
-                <section class="esh-orders_detail-title col-8 col-sm-3 text-sm-right">TOTAL</section>
-                <section class="esh-orders_detail-item esh-orders_detail-item--mark col-4 col-sm-2 text-nowrap text-right text-sm-left">@(Model.OrderDetails.Total.HasValue ? Model.OrderDetails.Total + " €" : "em análise")</section>
             </article>
         </section>
-    </div>
+
+    }
+
+    <section class="dnj-orders_detail-section">
+        <article class="dnj-orders_detail-titles dnj-basket-titles--clean row">
+            <section class="dnj-orders_detail-title d-none d-sm-block col-sm-7"></section>
+            <section class="dnj-orders_detail-title col-8 col-sm-3 text-sm-right">TOTAL</section>
+            <section class="dnj-orders_detail-item dnj-orders_detail-item--mark col-4 col-sm-2 text-nowrap text-right text-sm-left">@(Model.OrderDetails.Total.HasValue ? Model.OrderDetails.Total + " €" : "em análise")</section>
+        </article>
+    </section>
+
 </div>

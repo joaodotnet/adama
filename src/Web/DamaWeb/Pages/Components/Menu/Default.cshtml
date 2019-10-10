@@ -2,48 +2,65 @@
 @model IEnumerable<MenuItemComponentViewModel>
 
 
-<ul class="navbar-nav text-nowrap">
-    @foreach (var item in Model)
-    {
-        if (item.Childs.Count > 0)
+    <ul class="navbar-nav mx-auto text-nowrap">
+        @foreach (var item in Model)
         {
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle d-none d-sm-block" asp-page="/Category/Index" asp-route-id="@item.NameUri">
-            @item.Name
-        </a>
-        <a class="nav-link dropdown-toggle d-block d-sm-none" id="navbarDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            @item.Name
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            @foreach (var child in item.Childs)
+            if (item.Childs.Count > 0)
             {
-
-                @if (!string.IsNullOrEmpty(child.TypeUri))
-                {
-
-                    <a class="dropdown-item" asp-page="/Category/Type/Index" asp-route-cat="@child.NameUri" asp-route-type="@child.TypeUri">
-                        <span class="dropdown-item-text">@child.Name</span>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-none d-sm-block" asp-page="/Category/Index" asp-route-id="@item.NameUri">
+                        @item.Name
                     </a>
-                }
-                else
-                {
-                    <a class="dropdown-item" asp-page="/Category/Index" asp-route-id="@child.NameUri">
-                        <span class="dropdown-item-text">@child.Name</span>
+                    <a class="nav-link dropdown-toggle d-block d-sm-none" id="navbarDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        @item.Name
                     </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item d-block d-sm-none" asp-page="/Category/Index" asp-route-id="@item.NameUri">
+                            <span class="dropdown-item-text text-primary">VER TODOS</span>
+                        </a>
+                        @foreach (var child in item.Childs)
+                        {
 
-                }
+                            @if (!string.IsNullOrEmpty(child.TypeUri))
+                            {
+
+                                <a class="dropdown-item" asp-page="/Category/Type/Index" asp-route-cat="@child.NameUri" asp-route-type="@child.TypeUri">
+                                    <span class="dropdown-item-text">@child.Name</span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="dropdown-item" asp-page="/Category/Index" asp-route-id="@child.NameUri">
+                                    <span class="dropdown-item-text">@child.Name</span>
+                                </a>
+
+                            }
+
+                        }
+                    </div>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item">
+                    <a class="nav-link" asp-page="/Category/Index" asp-route-id="@item.NameUri">@item.Name</a>
+                </li>
 
             }
-        </div>
-    </li>
         }
-        else
-        {
-            <li class="nav-item">
-                <a class="nav-link" asp-page="/Category/Index" asp-route-id="@item.NameUri">@item.Name</a>
-            </li>
-
-        }
-
-    }
-</ul>
+        <li id="customizeLinkMenu" class="nav-item">
+            <a class="nav-link text-center" asp-page="/Customize/Index">PERSONALIZAR</a>
+        </li>
+        <li class="nav-item d-block d-sm-none">
+            <a class="nav-link text-black-50" href="#">NEWSLETTER</a>
+        </li>
+        <li class="nav-item d-block d-sm-none">
+            <a class="nav-link text-black-50" href="#">ONDE NOS PODE ENCONTRAR?</a>
+        </li>
+        <li class="nav-item d-block d-sm-none">
+            <a class="nav-link text-black-50" href="#">TERMOS E CONDIÇÕES</a>
+        </li>
+        <li class="nav-item d-block d-sm-none">
+            <a class="nav-link text-black-50" href="#">POLÍTICA DE PRIVACIDADE</a>
+        </li>
+    </ul>

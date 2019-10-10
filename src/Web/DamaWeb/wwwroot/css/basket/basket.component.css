@@ -2,18 +2,9 @@
     min-height: 80vh;
 }
 
-.dnj-basket-titles {
-    padding-bottom: 1rem;
-    padding-top: 2rem;
-}
-
-.dnj-basket-titles--clean {
-    padding-bottom: 0;
-    padding-top: 0;
-}
-
 .dnj-basket-title {
     text-transform: uppercase;
+    color: #4D4D4D;
 }
 
 .dnj-basket-items--border {
@@ -70,6 +61,7 @@
     text-align: center;
     text-transform: uppercase;
     transition: all 0.35s;
+    width: 100%;
 }
 
     .dnj-basket-checkout:hover {
@@ -82,6 +74,7 @@
     .dnj-basket-checkout {
         padding: 10px 10px;
     }
+
     .dama-basket-link {
         font-size: 14px;
     }
@@ -93,8 +86,6 @@
 
 .dama-basket-label {
     font-size: 14px;
-    color: #808080;
-    padding-right: 10px;
 }
 
 @media (max-width: 576px) {
@@ -113,22 +104,69 @@
     color: #808080;
 }
 
-.dnj-identity-item a:hover {
-    text-decoration: underline !important;
-    color: #fff !important;
-    transition: color 0.35s;
+    .dnj-identity-item a:hover {
+        text-decoration: underline !important;
+        color: #fff !important;
+        transition: color 0.35s;
+    }
+
+.offer-card-price::after {
+    content: '€';
 }
 
+.offerCard input, .offerCard textarea, .observationCard textarea {
+    font-size: 14px;
+}
+
+.offer-cancel {
+    color: #4D4D4D;
+}
+
+    .offer-cancel:hover {
+        color: #4D4D4D;
+        text-decoration: underline;
+    }
+
+.dnj-basket-price {
+    font-size: 22px;
+    font-weight: 100;
+    text-align: center;
+}
+
+    .dnj-basket-price::after {
+        content: '€';
+    }
+
 /* Checkout */
-.dama-checkout-text span{
+.dama-checkout-text span {
     font-size: 14px;
 }
-.dama-checkout-items {
-    font-size: 14px;
-}
+
 @media (min-width: 576px) {
     .dama-checkout-btn {
         position: absolute;
         bottom: -60px;
     }
+}
+
+.dama-register-bird {
+    top: -35px;
+    left: -123px;
+    z-index: -5;
+}
+@media (max-width: 576px) {
+    .btn-block-xs {
+        display: block;
+        width: 100%;
+    }
+}
+
+#deliverySection {
+    width:300px;
+    text-align: left;
+}
+
+#copyInvoiceSection {
+    width: 305px;
+    text-align:left;
 }

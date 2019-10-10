@@ -28,59 +28,63 @@ namespace SalesWeb.Services
             _uriComposer = uriComposer;
         }
 
-        //public async Task<CatalogType> GetCatalogType(string type)
-        //{
-        //    var allCatalogTypes = await _db.CatalogTypes.ToListAsync();
-        //    foreach (var item in allCatalogTypes)
-        //    {
-        //        var typeName = item.Description.Replace(" ", "-").ToLower();
-        //        if (Utils.RemoveDiacritics(typeName) == type)
-        //            return item;
-        //    }
-        //    return null;
-        //}
+        public async Task AddorUpdateUserAddress(ApplicationUser user, AddressViewModel addressModel, AddressType addressType = AddressType.SHIPPING)
+        {
+            if(user != null && addressModel != null)
+            {
+                //get user Addresses
+                var addresses = await _identityDb.UserAddresses
+                    .Include(x => x.User)
+                    .Where(x => x.UserId == user.Id && x.AddressType == addressType)
+                    .FirstOrDefaultAsync();
 
-        //public async Task<Category> GetCategory(string name)
-        //{
-        //    var allCategories = await _db.Categories.ToListAsync();
-        //    foreach (var item in allCategories)
-        //    {
-        //        var catName = item.Name.Replace(" ", "-").ToLower();
-        //        if (Utils.RemoveDiacritics(catName) == name.ToLower())
-        //            return item;
-        //    }
-        //    return null;
-        //}
+                //user.BillingAddressSameAsShipping = addressModel.UseSameAsShipping;
+                if (addresses == null)
+                {                    
+                    var newAddress = new UserAddress
+                    {
+                        User = user,
+                        AddressType = addressType
+                    };
+                    if(addressType == AddressType.SHIPPING)
+                    {                        
+                        newAddress.Street = addressModel.Street;
+                        newAddress.City = addressModel.City;
+                        newAddress.PostalCode = addressModel.PostalCode;
+                        newAddress.Country = addressModel.Country;
+                    }
+                    else
+                    {
+                        newAddress.Street = addressModel.InvoiceAddressStreet;
+                        newAddress.City = addressModel.InvoiceAddressCity;
+                        newAddress.PostalCode = addressModel.InvoiceAddressPostalCode;
+                        newAddress.Country = addressModel.InvoiceAddressCountry;
+                    }
+                    _identityDb.UserAddresses.Add(newAddress);
+                }
+                else
+                {                                                            
 
-        //public async Task<MenuComponentViewModel> GetMenuList()
-        //{
-        //    //TODO GET CACHE
-        //    var categories = await _db.Categories
-        //        .Include(x => x.Parent)
-        //        .Include(x => x.CatalogTypes)                
-        //        .ThenInclude(cts => cts.CatalogType)
-        //        .ThenInclude(ct => ct.CatalogItems)
-        //        .Where(x => x.CatalogTypes.Any(ct => ct.CatalogType.CatalogItems != null && ct.CatalogType.CatalogItems.Count > 0))
-        //        .ToListAsync();
+                    if (addressType == AddressType.SHIPPING)
+                    {
+                        addresses.Street = addressModel.Street;
+                        addresses.City = addressModel.City;
+                        addresses.PostalCode = addressModel.PostalCode;
+                        addresses.Country = addressModel.Country;                        
+                    }
+                    else
+                    {
+                        addresses.Street = addressModel.InvoiceAddressStreet;
+                        addresses.City = addressModel.InvoiceAddressCity;
+                        addresses.PostalCode = addressModel.InvoiceAddressPostalCode;
+                        addresses.Country = addressModel.InvoiceAddressCountry;
+                    }
+                    
+                }
 
-        //    MenuComponentViewModel menuViewModel = new MenuComponentViewModel();
-
-        //    var parentsLeft = categories
-        //        .Where(x => !x.ParentId.HasValue && x.Position == "left")
-        //        .OrderBy(x => x.Order)
-        //        .ToList();
-
-        //    GetTopCategories(menuViewModel.Left, categories, parentsLeft);
-
-        //    var parentsRight = categories
-        //        .Where(x => !x.ParentId.HasValue && x.Position == "right")
-        //        .OrderBy(x => x.Order)
-        //        .ToList();
-
-        //    GetTopCategories(menuViewModel.Right, categories, parentsRight);
-
-        //    return menuViewModel;
-        //}     
+                await _identityDb.SaveChangesAsync();
+            }            
+        }
 
         public async Task<AddressViewModel> GetUserAddress(string userId)
         {
@@ -95,7 +99,7 @@ namespace SalesWeb.Services
                 var defaultAddress = addresses.FirstOrDefault();
                 if (defaultAddress != null)
                 {
-                    addressViewModel.UseSameAsShipping = defaultAddress.User?.BillingAddressSameAsShipping ?? false;
+                    //addressViewModel.UseSameAsShipping = defaultAddress.User?.BillingAddressSameAsShipping ?? false;
                     addressViewModel.Name = $"{defaultAddress.User?.FirstName} {defaultAddress.User?.LastName}";
                     addressViewModel.InvoiceName = $"{defaultAddress.User.FirstName} {defaultAddress.User?.LastName}";
                 }

@@ -3,18 +3,22 @@
 @{
     ViewData["Title"] = "Resultado";
 }
-<h2>Obrigada!</h2>
+<div class="container">    
+    <div class="row justify-content-center mt-3 mt-sm-5">
+        <div class="col-sm-4">
+            <div class="text-center d-none d-sm-block"><img src="~/images/bird-right.png" /></div>
+            <h1 class="text-uppercase mt-sm-5 text-center text-sm-left">Obrigada!</h1>
+            <p class="mt-3 text-center text-sm-left">A sua encomenda #@Model.OrderNumber foi criada com <strong>Sucesso!</strong></p>
+            <p class="text-center text-sm-left">Para concluires, consulta o teu email.</p>            
+            <p class="mt-4 mt-sm-5 pt-sm-3 text-center text-sm-left">Obrigada por escolheres a <strong>Dama no Jornal&reg;!</strong></p>
+            <div class="text-center text-sm-left">
+                <a class="btn btn-menta p-2 mt-3" role="button" asp-page="/Index">VOLTAR À LOJA</a>
+            </div>
+        </div>
+        <div class="col-sm-4 mt-4 mt-sm-0">
+            <img src="~/images/obrigada.png" class="img-fluid" alt="Dama no Jornal" />
+        </div>
+    </div>
 
-<div class="row">
-    <div class="col-sm-6">
-        <p>A sua encomenda #@Model.OrderNumber foi criada com <strong>Sucesso!</strong></p>
-        <p>Para concluir consulte o seu email.</p>
-        <br />
-        <p>Obrigado por escolher a <strong>Dama no Jornal&reg;!</strong></p>
-    </div>
-    <div class="col-sm-6">
-        <img src="~/images/obrigada.png" class="img-fluid" alt="Dama no Jornal" />
-    </div>
+
 </div>
-
-

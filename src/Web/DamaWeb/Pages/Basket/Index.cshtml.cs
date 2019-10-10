@@ -11,10 +11,12 @@ using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel.DataAnnotations;
+using ApplicationCore;
 
 namespace DamaWeb.Pages.Basket
 {
-    public class IndexModel : PageModel
+    public partial class IndexModel : PageModel
     {
         private readonly IBasketService _basketService;
         private const string _basketSessionKey = "basketId";
@@ -37,6 +39,7 @@ namespace DamaWeb.Pages.Basket
             _logger = loggerFactory.CreateLogger<BasketViewModel>();
         }
 
+        [BindProperty]
         public BasketViewModel BasketModel { get; set; } = new BasketViewModel();
 
         public async Task OnGet()
@@ -54,11 +57,11 @@ namespace DamaWeb.Pages.Basket
 
             var options = await _basketService.GetFirstOptionFromAttributeAsync(productDetails.CatalogItemId);
 
-            await _basketService.AddItemToBasket(BasketModel.Id, productDetails.CatalogItemId, productDetails.Price, 1, options.Item1, options.Item2, options.Item3);
+            await _basketService.AddItemToBasket(BasketModel.Id, productDetails.CatalogItemId, productDetails.Price, 1, options.Item1, options.Item2, options.Item3, addToExistingItem: true);
 
             await SetBasketModelAsync();
 
-            return RedirectToPage();
+            return new OkObjectResult(new { items = BasketModel.Items.Sum(x => x.Quantity), total = BasketModel.SubTotal() });
         }
 
         public async Task<IActionResult> OnPostAddToBasketAsync(ProductViewModel productDetails)
@@ -99,7 +102,6 @@ namespace DamaWeb.Pages.Basket
         {
             await SetBasketModelAsync();
             await _basketService.SetQuantities(BasketModel.Id, items);
-
             await SetBasketModelAsync();
         }
 
@@ -117,6 +119,18 @@ namespace DamaWeb.Pages.Basket
             await SetBasketModelAsync();
             await _basketService.DeleteItem(BasketModel.Id, id);
             await SetBasketModelAsync();
+        }
+
+        public async Task OnPostAddObservationAsync()
+        {
+            await _basketService.AddObservationAsync(BasketModel.Id, BasketModel.Observations);
+            await SetBasketModelAsync();
+        }
+
+        public async Task<IActionResult> OnPostRemoveObservations()
+        {
+            await _basketService.RemoveObservationsAsync(BasketModel.Id);
+            return RedirectToPage();
         }
 
         private (int?, int?, int?) GetOptionsFromAttributes(List<int> attrIds)
@@ -164,7 +178,6 @@ namespace DamaWeb.Pages.Basket
                 IsEssential = true
             };
             Response.Cookies.Append(Constants.BASKET_COOKIENAME, _username, cookieOptions);
-            
         }
     }
 }

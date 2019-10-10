@@ -2,427 +2,184 @@
 @model CheckoutModel
 @{
     ViewData["Title"] = "Encomendar";
+
+    bool showLoginError = false, showRegisterError = false, showGuestError = false;
+    if (ViewBag.LoginFailed != null && (bool)ViewBag.LoginFailed)
+    {
+        showLoginError = true;
+        ViewBag.LoginFailed = null;
+    }
+    if (ViewBag.RegisterFailed != null && (bool)ViewBag.RegisterFailed)
+    {
+        showRegisterError = true;
+        ViewBag.RegisterFailed = null;
+    }
+    if (ViewBag.GuestFailed != null && (bool)ViewBag.GuestFailed)
+    {
+        showGuestError = true;
+        ViewBag.GuestFailed = null;
+    }
 }
 
-<h2>Encomendar</h2>
-
-<form id="checkout-form" method="post">
-    <input type="hidden" asp-for="BasketModel.Id" />
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="row">
-        <div class="col-sm-9">
-            <div class="accordion" id="checkoutAccordion">
-                <div class="card">
-                    <div class="card-header" id="headingOne">
-                        <h5 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#chooseDeliverySection" aria-expanded="true" aria-controls="chooseDeliverySection">
-                                1. Como quer receber a sua Encomenda?
-                            </button>
-                        </h5>
-                    </div>
-
-                    <div id="chooseDeliverySection" class="collapse show" aria-labelledby="headingOne" data-parent="#checkoutAccordion">
-                        <div class="card-body text-center">
-                            <div class="form-check-inline">
-                                <label class="form-check-label">
-                                    <input asp-for="UserAddress.UseUserAddress" class="form-check-input" type="radio" value="1">
-                                    Na sua morada
-                                </label>
-                            </div>
-                            <div class="form-check-inline">
-                                <label class="form-check-label">
-                                    <input asp-for="UserAddress.UseUserAddress" class="form-check-input" type="radio" value="2">
-                                    Levantar na nossa loja em Loulé
-                                </label>
-                            </div>
-                            <div class="d-block">
-                                <span asp-validation-for="UserAddress.UseUserAddress" class="text-danger"></span>
-                            </div>
-                        </div>
-                    </div>
+<div class="mt-2 mt-sm-4">
+    <h1 class="text-uppercase">Encomendar</h1>
+    <div class="row mt-2 mt-sm-5">
+        <div class="col-12 col-sm-4 text-center border-right border-primary p-4">
+            <section id="loginSection">
+                <h2>JÁ ÉS NOSSO CLIENTE?</h2>
+                <div class="loginCard collapse @(showLoginError ? "" : "show")">
+                    <a class="btn btn-menta mt-sm-3 px-4 btn-block-xs" role="button" data-toggle="collapse" href=".loginCard" aria-expanded="false" aria-controls="collapseLogin">LOGIN</a>
                 </div>
-                <div class="card">
-                    <div class="card-header" id="headingTwo">
-                        <h5 class="mb-0">
-                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#deliverySection" aria-expanded="false" aria-controls="deliverySection">
-                                2. Morada de Entrega
-                            </button>
-                        </h5>
-                    </div>
-                    <div id="deliverySection" class="collapse" aria-labelledby="headingTwo" data-parent="#checkoutAccordion">
-                        <div class="card-body">
+                <div class="collapse loginCard @(showLoginError ? "show" : "")">
+                    <div class="card card-body border-0">
+                        <form class="text-left" asp-page-handler="SignIn">
+                            <div asp-validation-summary="ModelOnly" class="text-danger small"></div>
                             <div class="form-group required">
-                                <label asp-for="UserAddress.Name"></label>
-                                <input asp-for="UserAddress.Name" class="form-control">
-                                <span asp-validation-for="UserAddress.Name" class="text-danger"></span>
+                                <label asp-for="LoginModel.Email" class="control-label form-label"></label>
+                                <input asp-for="LoginModel.Email" class="form-control form-input form-input-center" />
+                                <span asp-validation-for="LoginModel.Email" class="text-danger small"></span>
                             </div>
                             <div class="form-group required">
-                                <label asp-for="UserAddress.ContactPhoneNumber"></label>
-                                <input asp-for="UserAddress.ContactPhoneNumber" class="form-control">
-                                <span asp-validation-for="UserAddress.ContactPhoneNumber" class="text-danger"></span>
+                                <label asp-for="LoginModel.Password" class="control-label form-label"></label>
+                                <input asp-for="LoginModel.Password" class="form-control form-input form-input-center" />
+                                <span asp-validation-for="LoginModel.Password" class="text-danger small"></span>
                             </div>
-                            <div class="row p-0 m-0">
-                                <div id="deliveryAddress" class="col-12 p-0">
-                                    <div class="form-group required">
-                                        <label asp-for="UserAddress.Street"></label>
-                                        <input class="form-control" asp-for="UserAddress.Street">
-                                        <span asp-validation-for="UserAddress.Street" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group required">
-                                        <label asp-for="UserAddress.City"></label>
-                                        <input class="form-control" asp-for="UserAddress.City">
-                                        <span asp-validation-for="UserAddress.City" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group required">
-                                        <label asp-for="UserAddress.PostalCode"></label>
-                                        <input class="form-control" asp-for="UserAddress.PostalCode">
-                                        <span asp-validation-for="UserAddress.PostalCode" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group required">
-                                        <label asp-for="UserAddress.Country"></label>
-                                        <select class="form-control" asp-for="UserAddress.Country">
-                                            <option>Portugal</option>
-                                        </select>
-                                        <span asp-validation-for="UserAddress.Country" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" asp-for="UserAddress.SaveAddress">
-                                        <label class="form-check-label" asp-for="UserAddress.SaveAddress"></label>
-                                        <span asp-validation-for="UserAddress.SaveAddress" class="text-danger"></span>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div id="damaMapSection">
-                                <div class="text-center">
-                                    <span>Mercado de Loulé, Praça da Republica, Banca Nº 44 - <a class="underline" href="http://saborcomtradicao.com/" target="_blank"> Sabor com Tradição </a></span>
-                                </div>
-                                <div class="mt-3">
-                                    <iframe width="100%" height="300"
-                                            frameborder="0" style="border:0"
-                                            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB2Av0vyWQSV7OOZK_LdJ3i52TSC8pLPF8&q=Mercado+Municipal+de+Loulé+(Desde+1908)" allowfullscreen></iframe>
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label asp-for="LoginModel.RememberMe">
+                                        <input asp-for="LoginModel.RememberMe" />
+                                        @Html.DisplayNameFor(m => m.LoginModel.RememberMe)
+                                    </label>
                                 </div>
                             </div>
                             <div class="text-center">
-                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#billingSection">Seguinte</button>
+                                <button type="submit" class="btn btn-menta px-4 btn-block-xs">LOGIN</button>
                             </div>
-                        </div>
+                            <div class="form-group small text-center mt-1">
+                                <a asp-page="/Account/ForgotPassword">Esqueces-te a password?</a>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-header" id="headingThree">
-                        <h5 class="mb-0">
-                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#billingSection" aria-expanded="false" aria-controls="billingSection">
-                                3. Morada de Faturação
-                            </button>
-                        </h5>
-                    </div>
-                    <div id="billingSection" class="collapse" aria-labelledby="headingThree" data-parent="#checkoutAccordion">
-                        <div class="card-body">
-                            <div class="form-check text-center">
-                                <label class="form-check-label">
-                                    <input asp-for="WantInvoice" class="form-check-input" type="checkbox" />
-                                    Deseja fatura com NIF?
-                                </label>
-                            </div>
-                            <div id="billing-group">
-                                <div class="form-group">
-                                    <label asp-for="UserAddress.InvoiceName"></label>
-                                    <input asp-for="UserAddress.InvoiceName" class="form-control">
-                                    <span asp-validation-for="UserAddress.InvoiceName" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="UserAddress.InvoiceTaxNumber"></label>
-                                    <input asp-for="UserAddress.InvoiceTaxNumber" class="form-control">
-                                    <span asp-validation-for="UserAddress.InvoiceTaxNumber" class="text-danger"></span>
-                                </div>
-                                <div id="grpSameAsShipping" class="form-check">
-                                    <label class="form-check-label">
-                                        <input asp-for="UserAddress.UseSameAsShipping" class="form-check-input" type="checkbox" />
-                                        <strong>Usar a mesma morada na fatura</strong>
-                                    </label>
-                                </div>
-                                <div id="invoice-address-controls">
-                                    <div class="form-group">
-                                        <label asp-for="UserAddress.InvoiceAddressStreet"></label>
-                                        <input class="form-control" asp-for="UserAddress.InvoiceAddressStreet">
-                                        <span asp-validation-for="UserAddress.InvoiceAddressStreet" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label asp-for="UserAddress.InvoiceAddressCity"></label>
-                                        <input class="form-control" asp-for="UserAddress.InvoiceAddressCity">
-                                        <span asp-validation-for="UserAddress.InvoiceAddressCity" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label asp-for="UserAddress.InvoiceAddressPostalCode"></label>
-                                        <input class="form-control" asp-for="UserAddress.InvoiceAddressPostalCode">
-                                        <span asp-validation-for="UserAddress.InvoiceAddressPostalCode" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label asp-for="UserAddress.InvoiceAddressCountry"></label>
-                                        <select class="form-control" asp-for="UserAddress.InvoiceAddressCountry">
-                                            <option>Portugal</option>
-                                        </select>
-                                        <span asp-validation-for="UserAddress.InvoiceAddressCountry" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" asp-for="UserAddress.InvoiceSaveAddress">
-                                        <label class="form-check-label" asp-for="UserAddress.InvoiceSaveAddress"></label>
-                                        <span asp-validation-for="UserAddress.InvoiceSaveAddress" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="text-center mt-3">
-                                <input class="btn btn-primary p-1 m-auto" type="submit" value="Finalizar Encomenda" />
-                            </div>
-                        </div>
+            </section>
+            <section id="resgisterSection" class="mt-3 mt-sm-5 pt-3">
+                <div>Ainda não és nosso cliente?</div>
+                <h2>FAZ AQUI O TEU REGISTO GRÁTIS!</h2>
+                <div class="small">E GANHA PONTOS COM AS TUAS COMPRAS</div>
+                <div class="registerCard collapse @(showRegisterError ? "" : "show")">
+                    <a class="btn btn-menta mt-1 mt-sm-3 px-4 btn-block-xs" role="button" data-toggle="collapse" href=".registerCard" aria-expanded="false" aria-controls="collapseRegister">REGISTAR</a>
+                    <div class="position-relative dama-register-bird d-none d-sm-block">
+                        <img src="~/images/bird-left.png" width="50" class="img-fluid" />
                     </div>
                 </div>
-            </div>
+                <div class="collapse registerCard @(showRegisterError ? "show" : "")">
+                    <div class="card card-body border-0">
+                        <form class="text-left" asp-page-handler="Register" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger small"></div>
+                            <div class="form-group required">
+                                <label asp-for="RegisterModel.FirstName"></label>
+                                <input asp-for="RegisterModel.FirstName" class="form-control" />
+                                <span asp-validation-for="RegisterModel.FirstName" class="text-danger small"></span>
+                            </div>
+                            <div class="form-group required">
+                                <label asp-for="RegisterModel.LastName"></label>
+                                <input asp-for="RegisterModel.LastName" class="form-control" />
+                                <span asp-validation-for="RegisterModel.LastName" class="text-danger small"></span>
+                            </div>
+                            <div class="text-center">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" asp-for="RegisterModel.Gender" value="@GenderType.FEMALE" id="Gender@Female" class="custom-control-input">
+                                    <label class="custom-control-label" for="Gender@Female">Feminino</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" asp-for="RegisterModel.Gender" value="@GenderType.MALE" id="Gender@Male" class="custom-control-input">
+                                    <label class="custom-control-label" for="Gender@Male">Masculino</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="RegisterModel.PhoneNumber"></label>
+                                <input asp-for="RegisterModel.PhoneNumber" class="form-control" />
+                                <span asp-validation-for="RegisterModel.PhoneNumber" class="text-danger small"></span>
+                            </div>
+                            <div class="form-group required">
+                                <label asp-for="RegisterModel.Email"></label>
+                                <input asp-for="RegisterModel.Email" class="form-control" />
+                                <span asp-validation-for="RegisterModel.Email" class="text-danger small"></span>
+                            </div>
+                            <div class="form-group required">
+                                <label asp-for="RegisterModel.Password"></label>
+                                <input asp-for="RegisterModel.Password" class="form-control" />
+                                <span asp-validation-for="RegisterModel.Password" class="text-danger small"></span>
+                            </div>
+                            <div class="form-group required">
+                                <label asp-for="RegisterModel.ConfirmPassword"></label>
+                                <input asp-for="RegisterModel.ConfirmPassword" class="form-control" />
+                                <span asp-validation-for="RegisterModel.ConfirmPassword" class="text-danger small"></span>
+                            </div>
+                            <div class="form-group form-check">
+                                <input asp-for="RegisterModel.SubscribeNewsletter" class="form-check-input">
+                                <label class="form-check-label small" asp-for="RegisterModel.SubscribeNewsletter"></label>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input asp-for="RegisterModel.AgreeToTerms" class="form-check-input" />
+                                    <label asp-for="RegisterModel.AgreeToTerms" class="form-check-label small">Declaro que li e aceito os <a class="text-menta link-underline" asp-page="/Terms" target="_blank">Termos e Condições</a>.</label>
+                                </div>
+                                <span asp-validation-for="RegisterModel.AgreeToTerms" class="text-danger small"></span>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-menta px-4 btn-block-xs">REGISTAR</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
         </div>
-        <div class="col-sm-3 bg-light pt-2 mt-3 mt-sm-0" style="min-height:450px">
-            <h4>Resumo da encomenda</h4>
-            <article class="row m-0">
-                <section class="col-2 p-0">Qt.</section>
-                <section class="col-7 p-0">Produto</section>
-                <section class="col-3 p-0">Preço</section>
-            </article>
-            <hr />
-            <div class="dama-checkout-items">
-                @foreach (var item in Model.BasketModel.Items)
-                {
-                    <article class="row pt-sm-1 m-0">
-                        <section class="col-2 p-0">@item.Quantity</section>
-                        <section class="col-7 p-0">
-                            @item.ProductName
-
-                            @if (!string.IsNullOrEmpty(item.CustomizeName))
-                            {
-                                <br />
-                                <small id="nameInputText" class="text-muted dama-small-text">Personalização: @item.CustomizeName</small>
-                            }
-                            @foreach (var attr in item.Attributes)
-                            {
-                                <br />
-                                <span class="dama-basket-label">@attr.Label: @attr.Name </span><br />
-                            }
-                        </section>
-
-                        <section class="col-3 p-0">
-                            @if (!item.IsFromCustomize)
-                            {
-                                <text>
-                                @item.UnitPrice.ToString("N2") €
-                                </text>
-                            }
-                            else
-                            {
-                                <text>
-                                    *
-                                </text>
-                            }
-
-                        </section>
-
-                    </article>
-                }
-            </div>
-            <hr />
-            @if (!Model.HasCustomizeItems)
-            {
-                <article class="row">
-                    <section class="offset-2 col-6 text-right">Subtotal</section>
-                    <section class="col-4 pl-0">@Model.BasketModel.SubTotal() €</section>
-                </article>
-                <article id="shipping-cost" class="row">
-                    <section class="col-8 text-right"><small>Despesas de Envio</small></section>
-                    <section class="col-4 pl-0 dama-product-price">@Model.BasketModel.DefaultShippingCost.ToString("N2")</section>
-                </article>
-                <article class="row">
-                    <section class="offset-2 col-6 text-right">TOTAL</section>
-                    <section id="basket-total" class="col-4 pl-0 dama-product-price">@Model.BasketModel.Total()</section>
-                </article>
-                <hr />
-                <article class="row">
-                    <section class="col-12"><small>Tempo de entrega entre @Model.DeliveryTime.Min a @Model.DeliveryTime.Max @(DamaWeb.Extensions.EnumHelper<ApplicationCore.Entities.DeliveryTimeUnitType>.GetDisplayValue(Model.DeliveryTime.Unit))</small></section>
-                </article>
-            }
-            else
-            {
-                <article class="row mb-2">
-                    <section class="col-12 dama-small-text"><small>* O preço dos produtos personalizados serão definidos após a análise do pedido e enviado por email ao cliente</small></section>
-                </article>
-            }
-            <article class="row mt-3 mt-sm-2">
-                <section class="col-12 mb-3 float-right">
-                    <input class="btn btn-primary btn-block p-1 m-auto" type="submit" value="Finalizar Encomenda" />
-                </section>
-            </article>
+        <div class="col-12 col-sm-4 text-center px-4 py-sm-4 pt-2 pb-4">
+            <section id="guessSection">
+                <h2>ENTRA COMO CONVIDADO</h2>
+                <div class="guestCard collapse @(showGuestError ? "" : "show")">
+                    <a class="btn btn-menta mt-3 px-4 btn-block-xs" role="button" data-toggle="collapse" href=".guestCard" aria-expanded="false" aria-controls="collapseGuest">ENTRAR</a>
+                </div>
+                <div class="collapse guestCard @(showGuestError ? "show" : "")">
+                    <div class="card card-body border-0">
+                        <form class="text-left" asp-page-handler="LogInAsGuest">
+                            <div asp-validation-summary="ModelOnly" class="text-danger small"></div>
+                            <div class="form-group required">
+                                <label asp-for="GuestModel.Email" class="control-label form-label"></label>
+                                <input asp-for="GuestModel.Email" class="form-control form-input form-input-center" />
+                                <span asp-validation-for="GuestModel.Email" class="text-danger small"></span>
+                            </div>
+                            <div class="form-group form-check">
+                                <input asp-for="GuestModel.SubscribeNewsletter" class="form-check-input">
+                                <label class="form-check-label small" asp-for="GuestModel.SubscribeNewsletter"></label>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input asp-for="GuestModel.AgreeToTerms" class="form-check-input" />
+                                    <label asp-for="GuestModel.AgreeToTerms" class="form-check-label small">Declaro que li e aceito os <a class="text-menta link-underline" asp-page="/Terms" target="_blank">Termos e Condições</a>.</label>
+                                </div>
+                                <span asp-validation-for="GuestModel.AgreeToTerms" class="text-danger small"></span>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-menta px-4 btn-block-xs">ENTRAR</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="mt-5 d-none d-sm-block">
+                    <img src="~/images/dama-cat-low.png" class="img-fluid" />
+                </div>
+            </section>
+        </div>
+        <div class="col-12 col-sm-4">
+            <section class="border border-primary p-2 p-sm-4">
+                <partial name="_resumeOrder" for="BasketModel" />
+            </section>
         </div>
     </div>
-    <input type="hidden" asp-for="DeliveryTime.Min" />
-    <input type="hidden" asp-for="DeliveryTime.Max" />
-    <input type="hidden" asp-for="DeliveryTime.Unit" />
-    <input type="hidden" asp-for="BasketModel.DefaultShippingCost" />
-</form>
+</div>
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-
-    <script>
-        var originUserAddress = '@Html.Raw(Model.UserAddress.Street)',
-            originUserCity = '@Html.Raw(Model.UserAddress.City)',
-            originUserPostalCode = '@Model.UserAddress.PostalCode';
-        var originBillingUserAddress = '@Html.Raw(Model.UserAddress.InvoiceAddressStreet)',
-            originBillingUserCity = '@Html.Raw(Model.UserAddress.InvoiceAddressCity)',
-            originBillingUserPostalCode = '@Model.UserAddress.InvoiceAddressPostalCode';
-
-        ShowDisableAddressControls(@Model.UserAddress.UseSameAsShipping.ToString().ToLower());
-
-        function ShowDisableAddressControls(isChecked) {
-            if (isChecked) {
-                $('#UserAddress_InvoiceAddressStreet').val($('#UserAddress_Street').val());
-                $('#UserAddress_InvoiceAddressStreet').prop('disabled', true);
-                $('#UserAddress_InvoiceAddressCity').val($('#UserAddress_City').val());
-                $('#UserAddress_InvoiceAddressCity').prop('disabled', true);
-                $('#UserAddress_InvoiceAddressPostalCode').val($('#UserAddress_PostalCode').val());
-                $('#UserAddress_InvoiceAddressPostalCode').prop('disabled', true);
-                $('#UserAddress_InvoiceAddressCountry').prop('disabled', true);
-            }
-            else {
-                $('#UserAddress_InvoiceAddressStreet').val(originBillingUserAddress);
-                $('#UserAddress_InvoiceAddressStreet').prop('disabled', false);
-                $('#UserAddress_InvoiceAddressCity').val(originBillingUserCity);
-                $('#UserAddress_InvoiceAddressCity').prop('disabled', false);
-                $('#UserAddress_InvoiceAddressPostalCode').val(originBillingUserPostalCode);
-                $('#UserAddress_InvoiceAddressPostalCode').prop('disabled', false);
-                $('#UserAddress_InvoiceAddressCountry').prop('disabled', false);
-            }
-        }
-
-        function formIsValid(controlToShow) {
-
-            if (controlToShow == "deliverySection" || controlToShow == "billingSection") {
-
-                if ($('#UserAddress_UseUserAddress').valid() == false) {
-                    $('#chooseDeliverySection').collapse("show");
-                    return false;
-                }
-            }
-
-            if (controlToShow == "billingSection") {
-                var isValid = true;
-                if($('#UserAddress_Name').valid() == false)
-                    isValid = false;
-                if ($('#UserAddress_ContactPhoneNumber').valid() == false)
-                    isValid = false;
-                if ($('#UserAddress_Street').valid() == false)
-                    isValid = false;
-                if ($('#UserAddress_City').valid() == false)
-                    isValid = false;
-                if ($('#UserAddress_PostalCode').valid() == false)
-                    isValid = false;
-                if ($('#UserAddress_Country').valid() == false)
-                    isValid = false;
-                if (isValid == false) {
-                    $('#deliverySection').collapse("show");
-                    return false;
-                }
-            }
-
-            return true;
-        }
-    $(document).ready(function () {
-
-            //Show Map or Delivery Address
-            @if (!Model.UserAddress.UseUserAddress.HasValue || Model.UserAddress.UseUserAddress == 1 )
-            {
-                <text>
-                $('#damaMapSection').hide();
-                $('#deliveryAddress').show();
-                </text>
-            }
-            else
-            {
-                <text>
-                $('#damaMapSection').show();
-                $('#deliveryAddress').hide();
-                </text>
-            }
-
-            //Show Billing Address or Nor
-            @if(Model.WantInvoice)
-            {
-                <text>$('#billing-group').show();</text>
-            }
-            else
-            {
-                <text>$('#billing-group').hide();</text>
-            }
-
-            //Disabled Use same address or not
-            @if(Model.UserAddress.UseUserAddress == 2)
-            {
-                <text>
-                $('#UserAddress_UseSameAsShipping').prop('disabled', true);
-                </text>
-
-            }
-
-            $('input[type=radio][name="UserAddress.UseUserAddress"]').click(function () {
-                if (this.value == '1') {
-                    $('#shipping-cost').removeClass('d-none').addClass('d-flex');
-                    $('#basket-total').text(toNumber(@Model.BasketModel.Total().ToString().Replace(',','.')));
-
-                    $('#UserAddress_Street').val(originUserAddress);
-                    //$('#UserAddress_Street').prop('disabled', false);
-                    $('#UserAddress_City').val(originUserCity);
-                    //$('#UserAddress_City').prop('disabled', false);
-                    $('#UserAddress_PostalCode').val(originUserPostalCode);
-                    //$('#UserAddress_PostalCode').prop('disabled', false);
-                    $('#damaMapSection').hide();
-                    $('#deliveryAddress').removeClass('col-6').addClass('col-12');
-                    $('#deliveryAddress').show();
-                    $('#UserAddress_UseSameAsShipping').prop('disabled', false);
-
-                    ShowDisableAddressControls(@Model.UserAddress.UseSameAsShipping.ToString().ToLower());
-                }
-                else if (this.value == '2') {
-
-                    $('#shipping-cost').removeClass('d-flex').addClass('d-none');
-                    $('#basket-total').text(toNumber(@Model.BasketModel.SubTotal().ToString().Replace(',', '.')));
-                    $('#UserAddress_Street').val('Mercado de Loulé, Praça da Republica');
-                    //$('#UserAddress_Street').prop('disabled', true);
-                    $('#UserAddress_City').val('Loulé');
-                    //$('#UserAddress_City').prop('disabled', true);
-                    $('#UserAddress_PostalCode').val("8100-270");
-                    //$('#UserAddress_PostalCode').prop('disabled', true);
-                    $('#damaMapSection').show();
-                    $('#deliveryAddress').removeClass('col-12').addClass('col-6');
-                    $('#deliveryAddress').hide();
-                    $('#UserAddress_UseSameAsShipping').prop('disabled', true);
-
-                    ShowDisableAddressControls(false);
-
-                }
-
-                 $('#deliverySection').collapse("show");
-            });
-
-            $('#UserAddress_UseSameAsShipping').click(function () {
-                ShowDisableAddressControls(this.checked);
-            });
-
-            $('#checkoutAccordion').on('show.bs.collapse', function (e) {
-                return formIsValid($(e.target).attr('id'));
-            });
-
-            $('#WantInvoice').change(function () {
-                if ($(this).is(":checked"))
-                    $('#billing-group').show();
-                else
-                    $('#billing-group').hide();
-            });
-        });
-    </script>
 }

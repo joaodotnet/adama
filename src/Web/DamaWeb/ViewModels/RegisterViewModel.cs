@@ -1,4 +1,5 @@
 ﻿using DamaWeb.ViewModels.DataAnnotations;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
 using System.Collections.Generic;
@@ -38,5 +39,6 @@ namespace DamaWeb.ViewModels
         public bool SubscribeNewsletter { get; set; } = true;       
         [EnforceTrue(ErrorMessage = "Deves aceitar os Termos e Condições.")]
         public bool AgreeToTerms { get; set; } = false;
+        public GenderType? Gender { get; set; }
     }    
 }

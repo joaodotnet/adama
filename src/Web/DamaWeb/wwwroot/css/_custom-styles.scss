@@ -1,4 +1,7 @@
 ﻿/*** SHARED ****/
+html {
+    scroll-behavior: smooth;
+}
 
 .form-input {
     border-radius: 0;
@@ -11,20 +14,44 @@
     color: red;
 }
 
-a,
-a:active,
-a:visited {
-    transition: color 0.35s;
-}
-
-h1.title {    
-    font-size: 20px;
+h1 {
+    font-size: 2.2rem;
     color: #FC629D;
-    font-weight: 100;
 }
 
 h2 {
+    color: #000000;
+    font-family: "Quicksand Medium", Sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1.4em;
+}
+
+h2.mainpage {
+    color: #4D4D4D;
+    font-size: 2.5rem;
+    font-family: "Quicksand Medium", Sans-serif;
+}
+
+@media (max-width: 544px) {
+    h1 {
+        font-size: 1.2rem;
+    }
+
+    h2 {
+        font-size: 1rem;
+    }
+
+    h3 {
+        font-size: 1.3rem;
+    }
+}
+
+
+h1.title {
+    font-size: 20px;
     color: #FC629D;
+    font-weight: 100;
 }
 
 h2.lily {
@@ -35,23 +62,48 @@ h2.lily {
     line-height: 1.4em
 }
 
-hr {
-    background-color: #fff;
-    border-top: 2px dashed #FC629D;
+
+h4 {
+    color: #FC629D;
 }
-.btn-primary, .btn-primary:hover{
-    color: #fff;
+
+.dama-hr {
+    margin: 0px;
+    border-top-width: 2px;
+    border-color: #4D4D4D;
+}
+
+.dama-hr-tiny {
+    margin: 0px;
+    border-top-width: 1px;
+    border-color: #4D4D4D;
+}
+
+.dama-hr-tiny-pink {
+    margin: 0px;
+    border-top-width: 1px;
+    border-color: #FC629D;
 }
 
 .btn-menta {
     color: #fff;
     transition: all 0.35s;
 }
-.btn-menta:hover{
+
+.btn-menta:hover {
     color: #fff;
 }
 
-.link-underline {    
+.btn-light-pink2 {
+    color: #FC629D;
+    transition: all 0.35s;
+}
+
+.btn-light-pink2:hover {
+    color: #FC629D;
+}
+
+.link-underline {
     text-decoration: underline;
 }
 
@@ -69,6 +121,25 @@ hr {
 
 .btn-link:hover {
     color: #609f9f;
+}
+
+.btn-primary {
+    color: #fff;
+}
+
+.btn-primary:hover {
+    color: #fff;
+}
+
+.dama-toast {
+    position: absolute;
+    top: 76px;
+    /*right: 0;*/
+    z-index: 30;
+}
+
+.vh-71 {
+    min-height: 71vh !important;
 }
 
 @media screen and (max-width: 992px) {
@@ -99,18 +170,13 @@ hr {
     width: 100%;
 }
 
-.news-heading {
-    padding: 50px 50px;
-}
-
 .bannerLink {
     cursor: pointer;
 }
+
+
 /***END HOMEPAGE ***/
-
-
 /*** SEARCH PAGE ***/
-
 p.title, h2.title {
     font-family: "Quicksand Medium", sans-serif;
     font-size: 20px;
@@ -162,4 +228,248 @@ p.title, h2.title {
     border-right: 1px solid rgba(0,0,0,0.2);
 }
 
+.dama-bg-yellow {
+    background-color: #FFF9F2;
+}
+
 /*** END SIGN IN PAGE*/
+
+/*** Contacts ***/
+.underline {
+    text-decoration: underline;
+}
+
+.dama-signature {
+    width: 400px;
+    font-weight: 900;
+}
+
+/*.contact-wave {
+    position: absolute;
+    width: 100%;
+    left: 0;
+}*/
+
+.contact-wave-margin {
+    margin-top: -226px;
+    z-index: -5;
+}
+
+.contact-instagram-margin-top {
+    margin-bottom: 30px;
+}
+/*** About Us ***/
+.team-heading {
+    position: absolute;
+    z-index: 5;
+    left: 40%;
+    top: 256px;
+    font-size: 4rem;
+}
+
+.team-wave {
+    margin-top: -52px;
+    z-index: -5;
+}
+
+.doubles-waves-fil2 {
+    fill: #FCEBD6
+}
+
+.doubles-waves-fil1 {
+    fill: #FFF6EB
+}
+
+.doubles-waves-fil0 {
+    fill: #FFF9F2
+}
+/*.features-section {
+    margin-top: 412px;
+}*/
+
+.green-waves-fil2 {
+    fill: #9FD4BC
+}
+
+.green-waves-fil1 {
+    fill: #D3F0E3
+}
+
+.green-waves-fil0 {
+    fill: #FFF9F2
+}
+
+.instagram-section {
+    background-color: #FCEBD6;
+    /*position: absolute;
+    width: 100%;
+    left: 0;*/
+    padding: 50px 100px 50px 100px;
+}
+
+#instagram-feed {
+    cursor: pointer;
+}
+/*.instagram-bottom {
+    margin-bottom:661px;
+}*/
+
+iframe {
+    pointer-events: none;
+}
+
+/* FAQ */
+.card-border-bottom {
+    border-left: 0;
+    border-top: 0;
+    border-right: 0;
+    border-bottom: 1px solid #4D4D4D !important;
+}
+
+.card-border-bottom .card-body {
+    padding: 10px;
+}
+
+.accordion-toggle {
+    color: #5fcbcb;
+}
+
+.accordion-toggle:before {
+    display: none;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f0d7";
+}
+
+.accordion-toggle.collapsed:before {
+    content: "\f0da";
+}
+
+/*** Modals ***/
+#productAddedModal .modal-content {
+    padding: 10px;
+}
+
+#productAddedModal .modal-body {
+    border: 2px solid #FC629D;
+}
+
+#productAddedModal .modal-title {
+    font-size: 1rem;
+    text-align: center;
+}
+
+#productAddedModal button.close {
+    line-height: 0.7;
+}
+
+#product-added-price::after {
+    content: '€';
+}
+
+#basket-total::after {
+    content: '€';
+}
+
+@media (max-width: 544px) {
+    .info-wave {
+        /*margin-top: -70px;*/
+        z-index: -5;
+    }
+
+    .team-wave {
+        margin-top: -19px;
+    }
+
+    /*.features-section {
+        margin-top: 55px;
+    }*/
+
+    .dama-signature {
+        width: 370px;
+    }
+
+    .about-title {
+        font-size: 1.3rem;
+    }
+
+    .instagram-section {
+        padding: 10px;
+    }
+
+    /*.instagram-bottom {
+        margin-bottom: 346px;
+    }*/
+
+    .contact-wave-margin {
+        margin-top: -58px;
+    }
+
+    .contact-instagram-margin-top {
+        margin-bottom: 0px;
+    }
+}
+
+@media (min-width: 544px ) and (max-width: 960px) {
+    /*.instagram-bottom {
+        margin-bottom: 500px;
+    }*/
+    .contact-wave-margin {
+        margin-top: -105px;
+    }
+
+    .contact-instagram-margin-top {
+        margin-bottom: 0px;
+    }
+}
+
+@media (min-width: 960px ) and (max-width: 1200px) {
+
+    .contact-wave-margin {
+        margin-top: -130px;
+    }
+
+    .contact-instagram-margin-top {
+        margin-bottom: 0px;
+    }
+}
+
+@media (min-width: 1200px ) and (max-width: 1400px) {
+
+    .contact-wave-margin {
+        margin-top: -178px;
+    }
+
+    .contact-instagram-margin-top {
+        margin-bottom: 0px;
+    }
+}
+
+
+/* CATEGORY PAGE */
+.categoryTitle {
+    color: #000000;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.categoryCustomizeQuestion {
+    font-size: 1.6rem;
+    line-height: 38px;
+}
+
+@media (max-width: 544px) {
+    .categoryTitle {
+        font-size: 1.2rem;
+        line-height: 30px;
+    }
+
+    .categoryCustomizeQuestion {
+        font-size: 1.2rem;
+        line-height: 30px;
+    }
+}

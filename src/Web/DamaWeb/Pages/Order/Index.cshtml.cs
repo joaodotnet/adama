@@ -32,6 +32,8 @@ namespace DamaWeb.Pages.Order
         [TempData]
         public string StatusMessage { get; set; }
 
+        public int? Score { get; set; }
+
         public List<OrderSummary> Orders { get; set; } = new List<OrderSummary>();
 
         public class OrderSummary
