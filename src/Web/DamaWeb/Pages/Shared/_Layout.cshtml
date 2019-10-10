@@ -46,7 +46,7 @@
 </head>
 <body>
     <!-- Top Bar -->
-    <nav id="topbar" class="navbar navbar-expand-lg navbar-dark bg-light-pink">
+    <nav id="topbar" class="navbar navbar-expand-lg navbar-light">
         <div class="container justify-content-start">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -54,16 +54,12 @@
             <a asp-page="/Index" class="navbar-brand d-flex d-lg-none">
                 <img src="~/images/brand_full.png" alt="Dama no Jornal" />
             </a>
-            <a class="nav-link order-6 order-lg-1" data-toggle="collapse" href="#searchcollapse"><i class="fas fa-search fa-inverse fa-lg"></i></a>
+            <a class="nav-link order-6 order-lg-1" data-toggle="collapse" href="#searchcollapse"><i class="fas fa-search fa-lg"></i></a>
             <div class="divider-vertical d-none d-lg-flex order-lg-2"></div>
             <ul class="navbar-nav d-none d-lg-flex order-lg-3">
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="collapse" href="#newslettercollapse">Newsletter</a>
                 </li>
-                @*<div class="divider-vertical"></div>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Blog</a>
-                    </li>*@
             </ul>
             <ul class="navbar-nav ml-auto flex-row order-lg-4">
                 @(await Html.PartialAsync("_LoginPartial"))
@@ -74,7 +70,7 @@
                     <a class="nav-link" href="https://www.facebook.com/damanojornal/" target="_blank">
                         <span class="fa-stack fa-1x" style="vertical-align: middle;">
                             <i class="fa fa-circle fa-stack-2x icon-background"></i>
-                            <i class="fab fa-facebook-f fa-stack-1x text-light-pink"></i>
+                            <i class="fab fa-facebook-f fa-stack-1x text-white"></i>
                         </span>
                     </a>
                 </li>
@@ -82,25 +78,25 @@
                     <a class="nav-link" href="https://www.instagram.com/damanojornal/" target="_blank">
                         <span class="fa-stack fa-1x" style="vertical-align: middle;">
                             <i class="fa fa-circle fa-stack-2x icon-background"></i>
-                            <i class="fab fa-instagram fa-stack-1x text-light-pink"></i>
+                            <i class="fab fa-instagram fa-stack-1x text-white"></i>
                         </span>
                     </a>
                 </li>
             </ul>
         </div>
     </nav>
-    <div class="dama-bar"></div>
+    <hr class="dama-hr-tiny" />
     <!-- Search -->
     <div class="collapse topActioncollapse" id="searchcollapse">
         <div class="row">
             <div class="col-12 col-sm-3">
-                <div class="card bg-light-pink py-3 border-0">
+                <div class="card bg-light py-3 border-0">
                     <div class="card-body">
                         <form asp-page="/Search/Index" method="get">
                             <div class="input-group">
                                 <input name="q" class="form-control" autocomplete="off" type="search" placeholder="Procurar..." aria-label="Search">
                                 <div class="input-group-append">
-                                    <button type="submit" class="input-group-text bg-white"><i class="fas fa-search text-light-pink"></i></button>
+                                    <button type="submit" class="input-group-text bg-white"><i class="fas fa-search"></i></button>
                                 </div>
                             </div>
                         </form>
@@ -113,19 +109,19 @@
     <div class="collapse topActioncollapse" id="newslettercollapse">
         <div class="row">
             <div class="col-12 col-sm-3">
-                <div class="card bg-light-pink py-3 border-0">
+                <div class="card bg-light py-3 border-0">
                     <div class="card-body">
                         <form method="post" asp-page="/Index" asp-page-handler="SubscribeNewsletter">
                             <div class="input-group">
                                 <input type="email" class="form-control" name="newsletterEmail" placeholder="email" />
                                 <div class="input-group-append">
-                                    <button type="submit" class="subscribeNewsLetter input-group-text bg-white"><i class="fas fa-caret-square-right text-light-pink"></i></button>
+                                    <button type="submit" class="subscribeNewsLetter input-group-text bg-white"><i class="fas fa-caret-square-right"></i></button>
                                 </div>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="" name="newsletterTerms">
                                 <label class="form-check-label text-black-50 small" for="newsletterTerms">
-                                    Li e aceito os termos de <a class="link-underline" asp-page="/Terms">Política e Privacidade</a>
+                                    Li e aceito os termos de <a class="link-underline" href="https://www.damanojornal.com/politica-de-privacidade/">Política e Privacidade</a>
                                 </label>
                             </div>
                             <span class="errorNewsletterSubscribeMsg text-danger small"></span>
@@ -144,10 +140,13 @@
             </a>
             <ul class="navbar-nav mr-auto dama-header-link">
                 <li class="nav-item">
-                    <a class="nav-link about-link" asp-page="/AboutUs">SOBRE NÓS</a>
+                    <a class="nav-link about-link" href="https://www.damanojornal.com">INÍCIO</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link contact-link" asp-page="/Contacts">CONTACTOS</a>
+                    <a class="nav-link about-link" href="https://www.damanojornal.com/sobre/">SOBRE NÓS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link contact-link" href="https://www.damanojornal.com/contactos/">CONTACTOS</a>
                 </li>
             </ul>
         </div>
@@ -162,10 +161,13 @@
             <div id="navbarMain" class="collapse navbar-collapse py-2 px-2">
                 <ul class="navbar-nav d-block d-sm-none">
                     <li class="nav-item">
-                        <a class="nav-link text-black-50 about-link" asp-page="/AboutUs">SOBRE NÓS</a>
+                        <a class="nav-link text-black-50 about-link" href="https://www.damanojornal.com">INÍCIO</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-black-50 contact-link" asp-page="/Contacts">CONTACTOS</a>
+                        <a class="nav-link text-black-50 about-link"href="https://www.damanojornal.com/sobre/">SOBRE NÓS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-black-50 contact-link"  href="https://www.damanojornal.com/contactos/">CONTACTOS</a>
                         <div class="dropdown-divider border-primary"></div>
                     </li>
 
@@ -192,13 +194,13 @@
                             <div class="row justify-content-center mt-2">
                                 <a href="https://www.facebook.com/damanojornal/" target="_blank">
                                     <span class="fa-stack fa-1x">
-                                        <i class="fa fa-circle fa-stack-2x icon-background"></i>
+                                        <i class="fa fa-circle fa-stack-2x icon-background-white"></i>
                                         <i class="fab fa-facebook-f fa-stack-1x text-primary"></i>
                                     </span>
                                 </a>
                                 <a href="https://www.instagram.com/damanojornal/" target="_blank">
                                     <span class="fa-stack fa-1x">
-                                        <i class="fa fa-circle fa-stack-2x icon-background"></i>
+                                        <i class="fa fa-circle fa-stack-2x icon-background-white"></i>
                                         <i class="fab fa-instagram fa-stack-1x text-primary"></i>
                                     </span>
                                 </a>
@@ -209,19 +211,19 @@
                 <section class="col-12 col-lg-3 footer-links text-center order-2 order-lg-2">
                     <span class="d-block d-lg-none text-white text-uppercase">Informações</span>
                     <div class="footer-link">
-                        <a class="btn btn-light-pink2 btn-block" role="button" asp-page="/Contacts" asp-fragment="eventos">Eventos</a>
+                        <a class="btn btn-light-pink2 btn-block" role="button" href="https://www.damanojornal.com/proximos-eventos/">Eventos</a>
                     </div>
                     <div class="footer-link">
-                        <a class="btn btn-light-pink2 btn-block" role="button" asp-page="/Contacts">Contactos</a>
+                        <a class="btn btn-light-pink2 btn-block" role="button" href="https://www.damanojornal.com/contactos/">Contactos</a>
                     </div>
                     <div class="footer-link">
-                        <a class="btn btn-light-pink2 btn-block" role="button" asp-page="/Faq">Perguntas Frequentes</a>
+                        <a class="btn btn-light-pink2 btn-block" role="button" href="https://www.damanojornal.com/perguntas-frequentes/">Perguntas Frequentes</a>
                     </div>
                     <div class="footer-link">
-                        <a class="btn btn-light-pink2 btn-block" role="button" asp-page="/Terms">Termos e Condições</a>
+                        <a class="btn btn-light-pink2 btn-block" role="button" href="https://www.damanojornal.com/termos-e-condicoes/">Termos e Condições</a>
                     </div>
                     <div class="footer-link">
-                        <a class="btn btn-light-pink2 btn-block" role="button" asp-page="/Privacy">Política de Privacidade</a>
+                        <a class="btn btn-light-pink2 btn-block" role="button" href="https://www.damanojornal.com/politica-de-privacidade/">Política de Privacidade</a>
                     </div>
                 </section>
                 <section id="newsletterSection" class="col-lg-4 text-center text-white order-1 order-lg-3">
@@ -235,7 +237,7 @@
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="" name="newsletterTerms">
                             <label class="form-check-label text-black-50 small" for="newsletterTerms">
-                                Li e aceito os termos de <a class="link-underline" asp-page="/Terms">Política e Privacidade</a>
+                                Li e aceito os termos de <a class="link-underline" href="https://www.damanojornal.com/politica-de-privacidade/">Política e Privacidade</a>
                             </label>
                         </div>
                         <button type="submit" class="subscribeNewsLetter btn btn-primary text-white mt-2">SUBSCREVER</button>
@@ -244,7 +246,6 @@
             </article>
         </div>
     </footer>
-    <div class="dama-bar"></div>
     <div class="container pb-3">
         <div class="row">
             <div id="copyText" class="col pt-3 pb-2 text-black-50 text-center text-lg-left small">
