@@ -67,7 +67,7 @@
             <div class="divider-vertical d-none d-lg-flex order-lg-5"></div>
             <ul class="navbar-nav d-none d-lg-flex order-lg-6">
                 <li class="nav-item">
-                    <a class="nav-link" href="https://www.facebook.com/damanojornal/" target="_blank">
+                    <a class="nav-link" href="https://www.facebook.com/damanojornal/" target="_blank" title="Dama no Jornal no Facebook">
                         <span class="fa-stack fa-1x" style="vertical-align: middle;">
                             <i class="fa fa-circle fa-stack-2x icon-background"></i>
                             <i class="fab fa-facebook-f fa-stack-1x text-white"></i>
@@ -75,7 +75,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="https://www.instagram.com/damanojornal/" target="_blank">
+                    <a class="nav-link" href="https://www.instagram.com/damanojornal/" target="_blank" title="Dama no Jornal no Instagram">
                         <span class="fa-stack fa-1x" style="vertical-align: middle;">
                             <i class="fa fa-circle fa-stack-2x icon-background"></i>
                             <i class="fab fa-instagram fa-stack-1x text-white"></i>
@@ -226,7 +226,7 @@
                         <a class="btn btn-light-pink2 btn-block" role="button" href="https://www.damanojornal.com/politica-de-privacidade/">Política de Privacidade</a>
                     </div>
                 </section>
-                <section id="newsletterSection" class="col-lg-4 text-center text-white order-1 order-lg-3">
+                <section id="newsletterSection" class="col-lg-4 text-center text-white order-1 order-lg-3 mt-lg-5 mt-0">
                     <h4 class="text-white">SUBSCREVE A NOSSA NEWSLETTER</h4>
                     <p class="small">E FICA A PAR DE TODAS AS NOVIDADES!</p>
                     <form method="post" asp-page="/Index" asp-page-handler="SubscribeNewsletter">
@@ -250,6 +250,9 @@
         <div class="row">
             <div id="copyText" class="col pt-3 pb-2 text-black-50 text-center text-lg-left small">
                 © Copyright 2010-@DateTime.Now.Year Dama no Jornal&reg; | All Rights Reserved
+            </div>
+            <div id="copyText" class="col pt-3 pb-2 text-center text-lg-right small">
+                <a href="https://dotnet.microsoft.com/learn/aspnet/what-is-aspnet-core" class="text-black-50" target="_blank">Powered by .Net Core 2.2</a>
             </div>
         </div>
     </div>

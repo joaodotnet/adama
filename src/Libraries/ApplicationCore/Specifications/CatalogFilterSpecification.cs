@@ -80,4 +80,19 @@ namespace ApplicationCore.Specifications
 
         }
     }
+
+    public class CatalogTagSpecification : BaseSpecification<CatalogItem>
+    {
+        public CatalogTagSpecification(string tagName, TagType? tagType) : 
+            base(x => x.ShowOnShop && (
+            (tagType.HasValue && tagType.Value == TagType.CATALOG_TYPE && Utils.URLFriendly(x.CatalogType.Name) == tagName) || 
+            (tagType.HasValue && tagType.Value == TagType.ILLUSTRATION && Utils.URLFriendly(x.CatalogIllustration.Name) == tagName) ||
+            (tagType.HasValue && tagType.Value == TagType.ILLUSTRATION_TYPE && Utils.URLFriendly(x.CatalogIllustration.IllustrationType.Name) == tagName) || 
+            (!tagType.HasValue && (Utils.URLFriendly(x.CatalogType.Name) == tagName || Utils.URLFriendly(x.CatalogIllustration.Name) == tagName || Utils.URLFriendly(x.CatalogIllustration.IllustrationType.Name) == tagName))))
+        {
+            AddInclude(x => x.CatalogType);
+            AddInclude(x => x.CatalogIllustration);
+            AddInclude($"{nameof(CatalogItem.CatalogIllustration)}.{nameof(CatalogIllustration.IllustrationType)}");
+        }
+    }
 }

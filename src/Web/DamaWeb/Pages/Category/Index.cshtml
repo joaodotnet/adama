@@ -50,7 +50,7 @@
             <div class="esh-catalog-items row">
                 @foreach (var catalogItem in Model.CategoryModel.CatalogModel.NewCatalogItems)
                 {
-                    <div class="esh-catalog-item col-md-3">
+                    <div class="esh-catalog-item col-md-2 col-6">
                         @await Html.PartialAsync("_product", catalogItem)
                     </div>
                 }
@@ -67,7 +67,7 @@
             <div class="esh-catalog-items row">
                 @foreach (var catalogItem in Model.CategoryModel.CatalogModel.CatalogItems)
                 {
-                    <div class="esh-catalog-item col-md-3">
+                    <div class="esh-catalog-item col-md-2 col-6">
                         @await Html.PartialAsync("_product", catalogItem)
                     </div>
                 }
