@@ -15,11 +15,11 @@
     <img class="separator" src="~/images/barra-coracao.png" />
 </div>
 
-<div class="container">
+<div class="container mt-3">
     <div class="esh-catalog-items row">
         @foreach (var catalogItem in Model.CatalogModel.CatalogItems)
         {
-            <div class="dnj-catalog-item col-md-3">
+            <div class="dnj-catalog-item col-md-2 col-6">
                 @await Html.PartialAsync("_product", catalogItem)
             </div>
         }

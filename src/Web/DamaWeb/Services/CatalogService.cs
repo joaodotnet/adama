@@ -81,7 +81,7 @@ namespace DamaWeb.Services
                 }),
                 NewCatalogItems = itemsOnPage
                     .Where(x => x.IsNew)
-                    .Take(8)
+                    .Take(12)
                     .Select(i => new CatalogItemViewModel()
                     {
                         CatalogItemId = i.Id,
@@ -94,7 +94,7 @@ namespace DamaWeb.Services
                     }),
                 FeaturedCatalogItems = itemsOnPage
                     .Where(x => x.IsFeatured)
-                    .Take(8)
+                    .Take(12)
                     .Select(i => new CatalogItemViewModel()
                     {
                         CatalogItemId = i.Id,
@@ -199,7 +199,7 @@ namespace DamaWeb.Services
                 {
                     NewCatalogItems = allItems
                     .Where(x => x.IsNew)
-                    .Take(8)
+                    .Take(12)
                     .Select(i => new CatalogItemViewModel()
                     {
                         CatalogItemId = i.Id,
@@ -212,7 +212,7 @@ namespace DamaWeb.Services
                     }),
                     FeaturedCatalogItems = allItems
                     .Where(x => x.IsFeatured)
-                    .Take(8)
+                    .Take(12)
                     .Select(i => new CatalogItemViewModel()
                     {
                         CatalogItemId = i.Id,
@@ -394,83 +394,48 @@ namespace DamaWeb.Services
             }
         }
 
-        //public async Task<CatalogIndexViewModel> GetCatalogItemsByTag(int pageIndex, int? itemsPage, string tagName, TagType? tagType, int? typeId, int? illustrationId)
-        //{
-        //    tagName = tagName.ToLower().Trim();
-        //    IQueryable<CatalogItem> query = null;
-        //    if (tagType.HasValue)
-        //    {
-        //        switch (tagType.Value)
-        //        {
-        //            case TagType.CATALOG_TYPE:
-        //                query = _db.CatalogItems
-        //                    .Include(x => x.CatalogType)
-        //                    .Where(x => Utils.URLFriendly(x.CatalogType.Name) == tagName);
-        //                break;
-        //            case TagType.ILLUSTRATION:
-        //                query = _db.CatalogItems
-        //                    .Include(x => x.CatalogType)
-        //                    .Include(x => x.CatalogIllustration)
-        //                    .Where(x => Utils.URLFriendly(x.CatalogIllustration.Name) == tagName);
-        //                break;
-        //            case TagType.ILLUSTRATION_TYPE:
-        //                query = _db.CatalogItems
-        //                    .Include(x => x.CatalogType)
-        //                    .Include(x => x.CatalogIllustration)
-        //                    .ThenInclude(ci => ci.IllustrationType)
-        //                    .Where(x => Utils.URLFriendly(x.CatalogIllustration.IllustrationType.Name) == tagName);
-        //                break;
-        //            default:
-        //                break;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        query = _db.CatalogItems
-        //            .Include(x => x.CatalogType)
-        //            .Include(x => x.CatalogIllustration)
-        //            .ThenInclude(ci => ci.IllustrationType)
-        //            .Where(x => Utils.URLFriendly(x.CatalogType.Name) == tagName || Utils.URLFriendly(x.CatalogIllustration.Name) == tagName || Utils.URLFriendly(x.CatalogIllustration.IllustrationType.Name) == tagName);
-        //    }
+        public async Task<CatalogIndexViewModel> GetCatalogItemsByTag(int pageIndex, int? itemsPage, string tagName, TagType? tagType)
+        {
+            //TODO: Add Count to EfRepository and get paging from DB, not in memory
+            tagName = tagName.ToLower().Trim();
+            var spec = new CatalogTagSpecification(tagName, tagType);
 
-        //    query = query.Where(x => x.ShowOnShop && (!illustrationId.HasValue || x.CatalogIllustrationId == illustrationId) &&
-        //        (!typeId.HasValue || x.CatalogTypeId == typeId));
+            var allItems = await _itemRepository.ListAsync(spec);
+            var totalItems = allItems.Count();
+            if (totalItems == 0)
+                return null;
+            var iPage = itemsPage ?? totalItems;
+            var itemsOnPage = allItems
+                .Skip(iPage * pageIndex)
+                .Take(iPage)
+                .ToList();
 
-        //    var totalItems = query.Count();
-        //    if (totalItems == 0)
-        //        return null;
-        //    var iPage = itemsPage ?? totalItems;
-        //    var itemsOnPage = await query
-        //        .Skip(iPage * pageIndex)
-        //        .Take(iPage)
-        //        .ToListAsync();
-
-        //    var vm = new CatalogIndexViewModel
-        //    {
-        //        CatalogItems = itemsOnPage.Select(x => new CatalogItemViewModel
-        //        {
-        //            CatalogItemId = x.Id,
-        //            CatalogItemName = x.Name,
-        //            PictureUri = x.PictureUri,
-        //            PictureHighUri = x.CatalogPictures?.SingleOrDefault(p => p.IsMain)?.PictureHighUri,
-        //            Price = x.Price ?? x.CatalogType.Price,
-        //            ProductSlug = x.Slug
-        //            //ProductSku = x.Sku
-        //        }).ToList(),
-        //        PaginationInfo = new PaginationInfoViewModel()
-        //        {
-        //            ActualPage = pageIndex,
-        //            ItemsPerPage = itemsOnPage.Count,
-        //            TotalItems = totalItems,
-        //            TotalPages = iPage != 0 ? int.Parse(Math.Ceiling(((decimal)totalItems / iPage)).ToString()) : 0
-        //        },
-        //        Illustrations = await GetIllustrations(),
-        //        Types = await GetTypes(),
-        //    };
-        //    vm.PaginationInfo.Next = (vm.PaginationInfo.TotalItems == 0 || vm.PaginationInfo.ActualPage == vm.PaginationInfo.TotalPages - 1) ? "is-disabled" : "";
-        //    vm.PaginationInfo.Previous = (vm.PaginationInfo.ActualPage == 0) ? "is-disabled" : "";
-        //    return vm;
-        //}
+            var vm = new CatalogIndexViewModel
+            {
+                CatalogItems = itemsOnPage.Select(x => new CatalogItemViewModel
+                {
+                    CatalogItemId = x.Id,
+                    CatalogItemName = x.Name,
+                    PictureUri = x.PictureUri,
+                    PictureHighUri = x.CatalogPictures?.SingleOrDefault(p => p.IsMain)?.PictureHighUri,
+                    Price = x.Price ?? x.CatalogType.Price,
+                    ProductSlug = x.Slug
+                    //ProductSku = x.Sku
+                }).ToList(),
+                PaginationInfo = new PaginationInfoViewModel()
+                {
+                    ActualPage = pageIndex,
+                    ItemsPerPage = itemsOnPage.Count,
+                    TotalItems = totalItems,
+                    TotalPages = iPage != 0 ? int.Parse(Math.Ceiling(((decimal)totalItems / iPage)).ToString()) : 0
+                },
+                Illustrations = await GetIllustrations(),
+                Types = await GetTypes(),
+            };
+            vm.PaginationInfo.Next = (vm.PaginationInfo.TotalItems == 0 || vm.PaginationInfo.ActualPage == vm.PaginationInfo.TotalPages - 1) ? "is-disabled" : "";
+            vm.PaginationInfo.Previous = (vm.PaginationInfo.ActualPage == 0) ? "is-disabled" : "";
+            return vm;
+        }
         public async Task<CatalogIndexViewModel> GetCatalogItemsBySearch(int pageIndex, int? itemsPage, string searchFor)
         {
             searchFor = searchFor.ToLower().Trim();
