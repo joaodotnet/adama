@@ -131,7 +131,7 @@ namespace DamaWeb
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
-            services.AddScoped<IMailChimpService, MailChimpService>();
+            //services.AddScoped<IMailChimpService, MailChimpService>();
             services.AddScoped<IInvoiceService, InvoiceService>();
             services.AddScoped<ISageService, SageService>();
             services.AddScoped<IAuthConfigRepository, AuthConfigRepository>();
