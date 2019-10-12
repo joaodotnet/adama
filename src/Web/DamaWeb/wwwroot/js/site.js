@@ -31,8 +31,8 @@ $(document).ready(function () {
         $('#product-added-img').append(formObj.find('img').clone());
         $('#product-added-name').append(formObj.find('.esh-catalog-name span').clone());
         $('#product-added-price').append(formObj.find('.dnj-catalog-price span').clone());
-        $('#productAddedModal').modal('show');        
-        $.post('/Basket/Index', formObj.serialize(), function (data) {
+        $('#productAddedModal').modal('show');
+        $.post(formObj.attr('action'), formObj.serialize(), function (data) {
             $('#basket-products').text(data.items);
             $('#basket-total').text(toNumber(data.total));
         });
