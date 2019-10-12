@@ -14,7 +14,7 @@ namespace Infrastructure.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("ApplicationCore.Entities.BasketAggregate.Basket", b =>
@@ -25,6 +25,13 @@ namespace Infrastructure.Data.Migrations
                     b.Property<string>("BuyerId");
 
                     b.Property<DateTime?>("CreatedDate");
+
+                    b.Property<bool>("IsGuest")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Observations")
+                        .HasMaxLength(5000);
 
                     b.Property<DateTime?>("UpdatedDate");
 
@@ -277,18 +284,26 @@ namespace Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(0);
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(100);
+                    b.Property<string>("Description");
+
+                    b.Property<string>("H1Text")
+                        .HasMaxLength(50);
 
                     b.Property<string>("MetaDescription")
                         .HasMaxLength(161);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100);
 
                     b.Property<string>("PictureUri")
                         .HasMaxLength(255);
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Question")
+                        .HasMaxLength(255);
 
                     b.Property<string>("Slug")
                         .HasMaxLength(100);
@@ -326,6 +341,11 @@ namespace Infrastructure.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("H1Text")
+                        .HasMaxLength(50);
 
                     b.Property<string>("MetaDescription")
                         .HasMaxLength(161);
@@ -450,6 +470,9 @@ namespace Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("BuyerId");
+
+                    b.Property<string>("Observations")
+                        .HasMaxLength(5000);
 
                     b.Property<DateTimeOffset>("OrderDate");
 

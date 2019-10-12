@@ -35,16 +35,6 @@ namespace DamaWeb.Services
                 entry.SlidingExpiration = _defaultCacheDuration;
                 return await _shopService.GetDamaHomePageConfig();
             });
-        }
-        
-        public async Task AddorUpdateUserAddress(ApplicationUser user, AddressViewModel addressModel, AddressType addressType = AddressType.SHIPPING)
-        {
-            await _shopService.AddorUpdateUserAddress(user, addressModel, addressType);
-        }
-
-        public async Task<AddressViewModel> GetUserAddress(string userId)
-        {
-            return await _shopService.GetUserAddress(userId);
         }        
     }
 }

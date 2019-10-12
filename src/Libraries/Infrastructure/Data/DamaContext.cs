@@ -232,13 +232,22 @@ namespace Infrastructure.Data
                 .IsUnique();
             builder.Property(x => x.Slug)
                 .HasMaxLength(100);
+            builder.Property(x => x.H1Text)
+               .HasMaxLength(50);
         }
 
         private void ConfigureBasket(EntityTypeBuilder<Basket> builder)
         {           
             var navigation = builder.Metadata.FindNavigation(nameof(Basket.Items));
 
-            navigation.SetPropertyAccessMode(PropertyAccessMode.Field);            
+            navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+            builder.Property(x => x.Observations)
+                .HasMaxLength(5000);
+
+            builder.Property(x => x.IsGuest)
+                .HasDefaultValue(false);
+
         }
 
         private void ConfigureCatalogItem(EntityTypeBuilder<CatalogItem> builder)
@@ -335,7 +344,7 @@ namespace Infrastructure.Data
                 .IsRequired()
                 .HasMaxLength(25);
 
-            builder.Property(x => x.Description)
+            builder.Property(x => x.Name)
                 .IsRequired()
                 .HasMaxLength(100);
 
@@ -361,9 +370,6 @@ namespace Infrastructure.Data
             builder.Property(c => c.Title)
                 .HasMaxLength(61);
 
-            //builder.HasOne(x => x.Category)
-            //    .WithMany(c => c.CatalogTypes)
-            //    .HasForeignKey(x => x.CategoryId);
             builder.HasIndex(x => x.Code)
                .IsUnique();
             builder.Property(x => x.PictureUri)
@@ -373,6 +379,12 @@ namespace Infrastructure.Data
                 .IsUnique();
             builder.Property(x => x.Slug)
                 .HasMaxLength(100);
+
+            builder.Property(x => x.H1Text)
+                .HasMaxLength(50);
+
+            builder.Property(x => x.Question)
+                .HasMaxLength(255);
         }
 
         private void ConfigureOrder(EntityTypeBuilder<Order> builder)
@@ -394,8 +406,8 @@ namespace Infrastructure.Data
 
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
 
-            //builder.Property(x => x.UseBillingSameAsShipping)
-            //    .IsRequired();
+            builder.Property(x => x.Observations)
+                .HasMaxLength(5000);
 
             builder.OwnsOne(o => o.ShipToAddress);
             builder.OwnsOne(o => o.BillingToAddress);

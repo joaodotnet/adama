@@ -46,7 +46,7 @@ namespace Backoffice.Areas.Grocery.Pages.Stock
                 ProductName = x.Name,
                 CatalogItemId = x.Id,
                 Category = string.Join(", ", x.CatalogCategories.Select(cc => cc.Category.Name)),
-                CatalogType = x.CatalogType.Description,
+                CatalogType = x.CatalogType.Name,
                 Stock = x.Stock
             }).ToList();            
         }

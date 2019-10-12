@@ -27,6 +27,11 @@ namespace Infrastructure.Identity
                 .HasForeignKey(x => x.UserId)
                 .IsRequired();
 
+            builder.Entity<UserAddress>().Property(x => x.Name)
+                .HasMaxLength(255);
+            builder.Entity<UserAddress>().Property(x => x.ContactNumber)
+                .HasMaxLength(255);
+
             builder.Entity<AuthConfig>().ToTable("AuthConfig");
 
             builder.Entity<AuthConfig>().Property(x => x.AccessToken)

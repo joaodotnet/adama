@@ -48,6 +48,16 @@
                 <small>(se vazio assume o nome da categoria)</small>
             </div>
             <div class="form-group">
+                <label asp-for="Category.H1Text" class="control-label"></label>
+                <input asp-for="Category.H1Text" class="form-control" />
+                <span asp-validation-for="Category.H1Text" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Category.Description" class="control-label"></label>
+                <textarea asp-for="Category.Description" class="form-control"></textarea>
+                <span asp-validation-for="Category.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Criar" class="btn btn-default" />
             </div>
         </form>

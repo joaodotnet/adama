@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using DamaWeb.Interfaces;
 using DamaWeb.ViewModels;
+using ApplicationCore;
 
 namespace DamaWeb.Pages.Category
 {

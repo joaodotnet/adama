@@ -1,102 +1,88 @@
-﻿.esh-orders {
+﻿.dnj-orders {
     min-height: 80vh;
     overflow-x: hidden;
 }
 
-.esh-orders-header {
-    background-color: #00A69C;
-    height: 4rem;
-}
-
-.esh-orders-back {
-    color: rgba(255, 255, 255, 0.4);
-    line-height: 4rem;
-    text-decoration: none;
-    text-transform: uppercase;
-    transition: color 0.35s;
-}
-
-    .esh-orders-back:hover {
-        color: #FFFFFF;
-        transition: color 0.35s;
-    }
-
-.esh-orders-titles {
+.dnj-orders-titles {
+    font-weight: 600;
     padding-bottom: 1rem;
     padding-top: 2rem;
 }
 
-.esh-orders-title {
+.dnj-orders-title {
     text-transform: uppercase;
 }
 
-.esh-orders_detail-titles {
+.dnj-orders_detail .border-right {
+    border-right-style: dashed !important;
+}
+
+.dnj-orders_detail-titles {
     font-weight: bold;
     text-transform: uppercase;
 }
 
-.esh-orders-items {
-    position: relative;
-}
-
 @media (min-width: 576px) {
-    .esh-orders-items {
-        height: 2rem;
+    .dnj-orders-items {
+        height: 2.5rem;
         line-height: 2rem;
     }
 }
-@media (min-width: 576px) {
-    .esh-orders-items:nth-of-type(2n + 1):before {
-        background-color: #EEEEFF;
-        content: '';
-        height: 100%;
-        left: 0;
-        margin-left: -100vw;
-        position: absolute;
-        top: 0;
-        width: 200vw;
-        z-index: -1;
-    }
-}
 
-.esh-orders-item {
+.dnj-orders-item {
     font-weight: 300;
 }
 
-.esh-orders-item--hover {
-    opacity: 0;
-    pointer-events: none;
+@media (max-width: 576px) {
+    .dnj-orders-item {
+        height: 1.8rem;
+    }
+
+    .dnj-orders_detail h2 {
+        font-size: 1rem;
+    }
 }
 
-.esh-orders-items:hover .esh-orders-item--hover {
+.dnj-orders-items:hover .dnj-orders-item--hover {
     opacity: 1;
     pointer-events: all;
 }
 
-.esh-orders-link-detail,
-.esh-orders-link-detail:active,
-.esh-orders-link-detail:visited {
+.dnj-orders-link-detail,
+.dnj-orders-link-detail:active,
+.dnj-orders-link-detail:visited {
     color: #88C9AC;
     text-decoration: none;
     transition: color 0.35s;
 }
 
-.esh-orders-link-cancel,
-.esh-orders-link-cancel:active,
-.esh-orders-link-cancel:visited {
+.dnj-orders-link-cancel,
+.dnj-orders-link-cancel:active,
+.dnj-orders-link-cancel:visited {
     color: #808080;
     text-decoration: none;
     transition: color 0.35s;
 }
 
-    .esh-orders-link-detail:hover,
-    .esh-orders-link-cancel:hover {
-        color: #58AD87;
-        text-decoration: underline;
-        transition: color 0.35s;
-    }
+.dnj-orders-link-detail:hover {
+    color: #58AD87;
+    text-decoration: underline;
+    transition: color 0.35s;
+}
+
+.dnj-orders-link-cancel:hover {
+    color: #636262;
+    text-decoration: underline;
+    transition: color 0.35s;
+}
 
 .dama-orders-title-mobile {
-    color: #808080;
+    color: #000000;
     font-weight: bold;
+}
+
+.order-customize-colors {
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
 }

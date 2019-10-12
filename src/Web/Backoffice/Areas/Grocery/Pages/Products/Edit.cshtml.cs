@@ -167,7 +167,7 @@ namespace Backoffice.Areas.Grocery.Pages.Products
 
         private async Task PopulateLists()
         {
-            ViewData["CatalogTypeId"] = new SelectList(_context.CatalogTypes.Select(x => new { x.Id, Text = $"{x.Code} - {x.Description}" }), "Id", "Text");
+            ViewData["CatalogTypeId"] = new SelectList(_context.CatalogTypes.Select(x => new { x.Id, Text = $"{x.Code} - {x.Name}" }), "Id", "Text");
             await SetCatalogCategoryModel();
         }
 

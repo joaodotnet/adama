@@ -61,7 +61,7 @@ namespace Backoffice.Pages.Stock
                             CatalogItemId = item.Id,
                             CatalogAttributeId = attr.Id,
                             Category = string.Join(", ", item.CatalogCategories.Select(x => x.Category.Name)),
-                            CatalogType = item.CatalogType.Description,
+                            CatalogType = item.CatalogType.Name,
                             Illustration = item.CatalogIllustration.Name,
                             Attribute = attr.Name,
                             Stock = attr.Stock
@@ -75,7 +75,7 @@ namespace Backoffice.Pages.Stock
                         ProductName = item.Name,
                         CatalogItemId = item.Id,
                         Category = string.Join(", ", item.CatalogCategories.Select(x => x.Category.Name)),
-                        CatalogType = item.CatalogType.Description,
+                        CatalogType = item.CatalogType.Name,
                         Illustration = item.CatalogIllustration.Name,
                         Stock = item.Stock
                     });

@@ -14,7 +14,7 @@ namespace Infrastructure.Identity.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("ApplicationCore.Entities.AuthConfig", b =>
@@ -51,8 +51,6 @@ namespace Infrastructure.Identity.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<bool>("BillingAddressSameAsShipping");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
@@ -62,6 +60,8 @@ namespace Infrastructure.Identity.Migrations
                     b.Property<bool>("EmailConfirmed");
 
                     b.Property<string>("FirstName");
+
+                    b.Property<int?>("Gender");
 
                     b.Property<string>("LastName");
 
@@ -82,6 +82,8 @@ namespace Infrastructure.Identity.Migrations
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<int>("Score");
 
                     b.Property<string>("SecurityStamp");
 
@@ -109,13 +111,23 @@ namespace Infrastructure.Identity.Migrations
 
                     b.Property<int>("AddressType");
 
+                    b.Property<bool?>("BillingAddressSameAsShipping");
+
                     b.Property<string>("City");
 
+                    b.Property<string>("ContactNumber")
+                        .HasMaxLength(255);
+
                     b.Property<string>("Country");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(255);
 
                     b.Property<string>("PostalCode");
 
                     b.Property<string>("Street");
+
+                    b.Property<int?>("TaxNumber");
 
                     b.Property<string>("UserId")
                         .IsRequired();

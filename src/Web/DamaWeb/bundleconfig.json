@@ -8,6 +8,7 @@
       "wwwroot/css/site.css",
       "wwwroot/css/shared/header.css",
       "wwwroot/css/shared/footer.css",
+      "wwwroot/css/home/home.css",
       "wwwroot/css/basket/basket.component.css",
       "wwwroot/css/catalog/pager.css",
       "wwwroot/css/catalog/catalog.css",
@@ -15,14 +16,17 @@
       "wwwroot/css/orders/orders.component.css",
       "wwwroot/css/customize/customize.css",
       "wwwroot/lib/slick-carousel/slick.css",
-      "wwwroot/lib/slick-carousel/slick-theme.css"
+      "wwwroot/lib/slick-carousel/slick-theme.css",
+      "wwwroot/lib/Glide.js/css/glide.core.css",
+      "wwwroot/lib/Glide.js/css/glide.theme.css"
     ]
   },
   {
     "outputFileName": "wwwroot/js/site.min.js",
     "inputFiles": [
       "wwwroot/js/site.js",
-      "wwwroot/lib/slick-carousel/slick.js"
+      "wwwroot/lib/slick-carousel/slick.js",
+      "wwwroot/lib/Glide.js/glide.js"
     ],
     // Optionally specify minification options
     "minify": {

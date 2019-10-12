@@ -250,7 +250,7 @@ namespace Backoffice.Pages.Products
                 .OrderBy(x => x.Name)
                 .ToListAsync();
             ViewData["IllustrationId"] = new SelectList(illustrations, "Id", "Name");
-            var types = _context.CatalogTypes.Select(x => new { x.Id, Name = $"{x.Code} - {x.Description}" });
+            var types = _context.CatalogTypes.Select(x => new { x.Id, Name = $"{x.Code} - {x.Name}" });
             ViewData["ProductTypeId"] = new SelectList(types, "Id", "Name");
             await SetCatalogCategoryModel(types.First().Id);
         }

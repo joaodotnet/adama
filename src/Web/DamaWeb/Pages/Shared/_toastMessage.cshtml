@@ -1,0 +1,19 @@
+﻿@model string
+@if (!string.IsNullOrEmpty(Model))
+{
+    <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center">
+        <div class="toast dama-toast bg-light">
+            <div class="toast-header">
+                <img src="~/favicon.png" width="24" class="rounded mr-2 img-fluid" alt="Dama no Jornal&reg;" />
+                <strong class="mr-auto">Dama no Jornal&reg;</strong>
+                <small>just now</small>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                @Model
+            </div>
+        </div>
+    </div>
+}

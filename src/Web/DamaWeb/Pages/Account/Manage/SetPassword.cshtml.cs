@@ -1,4 +1,4 @@
-using Infrastructure.Identity;
+﻿using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -83,7 +83,7 @@ namespace DamaWeb.Pages.Account.Manage
             }
 
             await _signInManager.SignInAsync(user, isPersistent: false);
-            StatusMessage = "Your password has been set.";
+            StatusMessage = "A tua nova password foi registada.";
 
             return RedirectToPage();
         }

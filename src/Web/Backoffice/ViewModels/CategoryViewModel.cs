@@ -28,6 +28,12 @@ namespace Backoffice.ViewModels
         [StringLength(43)]
         public string Title { get; set; }
 
+        [Display(Name = "Texto H1")]
+        [StringLength(50)]
+        public string H1Text { get; set; }
+        [Display(Name = "Descrição")]
+        public string Description { get; set; }
+
         [Display(Name="Categoria Pai")]
         public int? ParentId { get; set; }
         public CategoryViewModel Parent { get; set; }

@@ -1,4 +1,4 @@
-using ApplicationCore.Interfaces;
+﻿using ApplicationCore.Interfaces;
 using ApplicationCore.Services;
 using Infrastructure.Data;
 using Infrastructure.Identity;
@@ -21,6 +21,7 @@ using AutoMapper;
 using ApplicationCore;
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http.Headers;
 
 namespace SalesWeb
 {
@@ -162,6 +163,11 @@ namespace SalesWeb
             services.AddScoped<IAuthConfigRepository, AuthConfigRepository>();            
             services.AddScoped<ISageService, SageService>();
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddHttpClient<IMailChimpService, MailChimpService>(options =>
+            {
+                options.BaseAddress = new Uri(Configuration["MailChimpBaseUrl"]);
+                options.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Configuration["MailChimpBasicAuth"]);
+            });
 
             // Add memory cache services
             services.AddMemoryCache();

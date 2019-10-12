@@ -20,9 +20,9 @@
                 <span asp-validation-for="ProductTypeModel.Code" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProductTypeModel.Description" class="control-label"></label>
-                <input asp-for="ProductTypeModel.Description" class="form-control" />
-                <span asp-validation-for="ProductTypeModel.Description" class="text-danger"></span>
+                <label asp-for="ProductTypeModel.Name" class="control-label"></label>
+                <input asp-for="ProductTypeModel.Name" class="form-control" />
+                <span asp-validation-for="ProductTypeModel.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ProductTypeModel.Slug" class="control-label"></label>
@@ -131,7 +131,7 @@
         $(document).ready(function () {
             $('#ProductTypeModel_CategoriesId').select2();
 
-            $('#ProductTypeModel_Description').on('blur', function () {
+            $('#ProductTypeModel_Name').on('blur', function () {
                 $('#ProductTypeModel_Slug').val(slugify(this.value));
             });
         });

@@ -58,6 +58,8 @@ namespace DamaWeb.Services
             var result = await GetBasketItemsAndShipping(basket.Items);
             viewModel.Items = result.Items;
             viewModel.DefaultShippingCost = result.ShippingCost;
+            viewModel.ShowShippingCost = false;           
+            viewModel.Observations = basket.Observations;
 
             return viewModel;
         }
@@ -86,7 +88,8 @@ namespace DamaWeb.Services
                     if (catalogItem != null)
                     {
                         itemModel.PictureUrl = _uriComposer.ComposePicUri(catalogItem.PictureUri);
-                        itemModel.ProductName = catalogItem.Name;
+                        itemModel.ProductName = GetProductPrincipalName(catalogItem.Name);
+                        itemModel.ProductName2 = GetProductSecondaryName(catalogItem.Name);
                         itemModel.Sku = catalogItem.Sku;
                         itemModel.Slug = catalogItem.Slug;
 
@@ -116,7 +119,7 @@ namespace DamaWeb.Services
                     if (typeEntity != null)
                     {
                         itemModel.PictureUrl = typeEntity.PictureUri;
-                        itemModel.ProductName = $"Personalização {typeEntity.Description}";
+                        itemModel.ProductName = $"Personalização {typeEntity.Name}";
                     }
                 }
 
@@ -126,6 +129,20 @@ namespace DamaWeb.Services
                 shippingCost = await CalculateShippingCostAsync(totalWeight);
             return (items, shippingCost);
         }
+        private string GetProductPrincipalName(string name)
+        {
+            if (name.IndexOf("-") > 0)
+                return name.Substring(0, name.LastIndexOf("-"));
+            return name;
+        }
+
+        private string GetProductSecondaryName(string name)
+        {
+            if (name.IndexOf("-") > 0)
+                return name.Substring(name.LastIndexOf("-") + 1);
+            return "";
+        }
+
 
         private async Task<decimal> CalculateShippingCostAsync(int totalWeight)
         {

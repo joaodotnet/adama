@@ -8,7 +8,7 @@
     {
         <meta name="robots" content="noindex" />
     }
-        <title>@ViewData["Title"] - Dama no Jornal&reg;</title>
+    <title>@ViewData["Title"] - Dama no Jornal&reg;</title>
 
     <environment names="Production">
         <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -20,23 +20,13 @@
 
             gtag('config', 'UA-112025066-1');
         </script>
-        @*<!-- Hotjar Tracking Code for www.damanojornal.com/loja -->
-        <script>
-            (function (h, o, t, j, a, r) {
-                h.hj = h.hj || function () { (h.hj.q = h.hj.q || []).push(arguments) };
-                h._hjSettings = { hjid: 962489, hjsv: 6 };
-                a = o.getElementsByTagName('head')[0];
-                r = o.createElement('script'); r.async = 1;
-                r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
-                a.appendChild(r);
-            })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
-        </script>*@
     </environment>
-    
+
     <environment names="Development">
         <link rel="stylesheet" href="~/css/site.css" />
         <link rel="stylesheet" href="~/css/shared/header.css" />
         <link rel="stylesheet" href="~/css/shared/footer.css" />
+        <link rel="stylesheet" href="~/css/home/home.css" />
         <link rel="stylesheet" href="~/css/basket/basket.component.css" />
         <link rel="stylesheet" href="~/css/basket/basket-status/basket-status.component.css" />
         <link rel="stylesheet" href="~/css/catalog/pager.css" />
@@ -45,6 +35,8 @@
         <link rel="stylesheet" href="~/css/customize/customize.css" />
         <link href="~/lib/slick-carousel/slick.css" rel="stylesheet" />
         <link href="~/lib/slick-carousel/slick-theme.css" rel="stylesheet" />
+        <link href="~/lib/Glide.js/css/glide.core.css" rel="stylesheet" />
+        <link href="~/lib/Glide.js/css/glide.theme.css" rel="stylesheet" />
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
@@ -53,127 +45,225 @@
     @RenderSection("styles", required: false)
 </head>
 <body>
-    <form class="form-inline py-2 search-text w-100 d-none d-sm-block" asp-page="/Search/Index" method="get">
-        <input id="search" name="q" class="bg-transparent border-left-0 border-right-0 border-top-0 border-light ml-5" autocomplete="off" type="search" placeholder="Procurar" aria-label="Search">
-    </form>
-    <div class="customize-image">
-        <a asp-page="/Customize/Index"><img src="~/images/personalizar.png" width="250" /></a>
-        <div class="row justify-content-center">
-            <div class="social-links"><a class="nav-link" href="https://www.facebook.com/damanojornal/" target="_blank"><i class="fab fa-facebook-f"></i></a></div>
-            <div class="social-links"><a class="nav-link" href="https://www.instagram.com/damanojornal/" target="_blank"><i class="fab fa-instagram"></i></a></div>
-        </div>
-    </div>
-    <!-- Desktop -->
-    <nav class="navbar navbar-expand-md navbar-light pt-sm-3 pb-0 px-5 mr-5 d-none d-sm-flex w-75">
-        <a href="https://www.damanojornal.com" class="navbar-brand">
-            <img src="~/images/brand_full.png" width="150" alt="Dama no Jornal" />
-        </a>
-        <ul class="navbar-nav ml-auto login-nav">
-            @await Html.PartialAsync("_LoginPartial")
-        </ul>
-    </nav>
-    <!-- Desktop -->
-    <nav class="navbar navbar-light navbar-expand-md justify-content-between pb-md-2 d-none d-sm-flex w-75">
-        <div class="navbar-collapse collapse justify-content-end text-center">
-            <a asp-page="/Index" class="navbar-brand">
-                <span class="logo">A Loja</span>
+    <!-- Top Bar -->
+    <nav id="topbar" class="navbar navbar-expand-lg navbar-light">
+        <div class="container justify-content-start">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a asp-page="/Index" class="navbar-brand d-flex d-lg-none">
+                <img src="~/images/brand_full.png" alt="Dama no Jornal" />
             </a>
-            @await Component.InvokeAsync("Menu")
-        </div>
-    </nav>
-
-    <!-- Mobile -->
-    <nav class="navbar navbar-light navbar-expand-md justify-content-between pb-md-2 d-flex d-sm-none">
-        <a id="brand-mobile-image" asp-page="/Index" class="navbar-brand">
-            <img src="~/images/brand.png" width="50px;" alt="Dama no Jornal" />
-        </a>
-        <ul class="list-inline ml-auto pr-1">
-            @await Html.PartialAsync("_LoginPartial")
-        </ul>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="navbar-collapse collapse text-center" id="collapsingNavbar">
-            <div></div>
-            @await Component.InvokeAsync("Menu")
-            <ul class="navbar-nav">
+            <a class="nav-link order-6 order-lg-1" data-toggle="collapse" href="#searchcollapse"><i class="fas fa-search fa-lg"></i></a>
+            <div class="divider-vertical d-none d-lg-flex order-lg-2"></div>
+            <ul class="navbar-nav d-none d-lg-flex order-lg-3">
                 <li class="nav-item">
-                    <a class="nav-link" asp-page="/Customize/Index">PERSONALIZAR</a>
+                    <a class="nav-link" data-toggle="collapse" href="#newslettercollapse">Newsletter</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto flex-row order-lg-4">
+                @(await Html.PartialAsync("_LoginPartial"))
+            </ul>
+            <div class="divider-vertical d-none d-lg-flex order-lg-5"></div>
+            <ul class="navbar-nav d-none d-lg-flex order-lg-6">
+                <li class="nav-item">
+                    <a class="nav-link" href="https://www.facebook.com/damanojornal/" target="_blank" title="Dama no Jornal no Facebook">
+                        <span class="fa-stack fa-1x" style="vertical-align: middle;">
+                            <i class="fa fa-circle fa-stack-2x icon-background"></i>
+                            <i class="fab fa-facebook-f fa-stack-1x text-white"></i>
+                        </span>
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="modal" data-target="#searchModal">PROCURAR</a>
+                    <a class="nav-link" href="https://www.instagram.com/damanojornal/" target="_blank" title="Dama no Jornal no Instagram">
+                        <span class="fa-stack fa-1x" style="vertical-align: middle;">
+                            <i class="fa fa-circle fa-stack-2x icon-background"></i>
+                            <i class="fab fa-instagram fa-stack-1x text-white"></i>
+                        </span>
+                    </a>
                 </li>
             </ul>
         </div>
     </nav>
-
-    <!-- Search Modal -->
-    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm" style="width:80%" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Procurar</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+    <hr class="dama-hr-tiny" />
+    <!-- Search -->
+    <div class="collapse topActioncollapse" id="searchcollapse">
+        <div class="row">
+            <div class="col-12 col-sm-3">
+                <div class="card bg-light py-3 border-0">
+                    <div class="card-body">
+                        <form asp-page="/Search/Index" method="get">
+                            <div class="input-group">
+                                <input name="q" class="form-control" autocomplete="off" type="search" placeholder="Procurar..." aria-label="Search">
+                                <div class="input-group-append">
+                                    <button type="submit" class="input-group-text bg-white"><i class="fas fa-search"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <form class="form-inline" asp-page="/Search/Index" method="get">
-                        <input name="q" class="form-control" autocomplete="off" type="search" placeholder="Procurar" aria-label="Search">
-                    </form>
+            </div>
+        </div>
+    </div>
+    <!-- Newsletter -->
+    <div class="collapse topActioncollapse" id="newslettercollapse">
+        <div class="row">
+            <div class="col-12 col-sm-3">
+                <div class="card bg-light py-3 border-0">
+                    <div class="card-body">
+                        <form method="post" asp-page="/Index" asp-page-handler="SubscribeNewsletter">
+                            <div class="input-group">
+                                <input type="email" class="form-control" name="newsletterEmail" placeholder="email" />
+                                <div class="input-group-append">
+                                    <button type="submit" class="subscribeNewsLetter input-group-text bg-white"><i class="fas fa-caret-square-right"></i></button>
+                                </div>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="newsletterTerms">
+                                <label class="form-check-label text-black-50 small" for="newsletterTerms">
+                                    Li e aceito os termos de <a class="link-underline" href="https://www.damanojornal.com/politica-de-privacidade/">Política e Privacidade</a>
+                                </label>
+                            </div>
+                            <span class="errorNewsletterSubscribeMsg text-danger small"></span>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- First NavBar -->
+    <nav class="navbar navbar-expand-lg navbar-light d-none d-lg-block">
+        <div class="container align-items-end">
+            <a asp-page="/Index" class="navbar-brand">
+                <img src="~/images/logo_dama150.png" alt="Dama no Jornal" />
+            </a>
+            <ul class="navbar-nav mr-auto dama-header-link">
+                <li class="nav-item">
+                    <a class="nav-link about-link" href="https://www.damanojornal.com">INÍCIO</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link about-link" href="https://www.damanojornal.com/sobre/">SOBRE NÓS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link contact-link" href="https://www.damanojornal.com/contactos/">CONTACTOS</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!-- Personalizar button -->
+    <div class="container position-relative d-none d-lg-block">
+        <a asp-page="/Customize/Index" class="btn-personalizar">personalizar</a>
+    </div>
+    <!-- Second NavBar -->
+    <nav class="navbar navbar-light navbar-expand-lg">
+        <div id="containerMain" class="container">
+            <div id="navbarMain" class="collapse navbar-collapse py-2 px-2">
+                <ul class="navbar-nav d-block d-sm-none">
+                    <li class="nav-item">
+                        <a class="nav-link text-black-50 about-link" href="https://www.damanojornal.com">INÍCIO</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-black-50 about-link"href="https://www.damanojornal.com/sobre/">SOBRE NÓS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-black-50 contact-link"  href="https://www.damanojornal.com/contactos/">CONTACTOS</a>
+                        <div class="dropdown-divider border-primary"></div>
+                    </li>
+
+                </ul>
+                @await Component.InvokeAsync("Menu")
+            </div>
+        </div>
+    </nav>
+
     <partial name="_CookieConsentPartial" />
 
     <div class="container body-content ">
-        <hr />
         @RenderBody()
     </div>
 
-
-    <footer class="esh-app-footer">
+    <footer class="dnj-app-footer">
         <div class="container">
-            <article class="row">
-                <section class="offset-sm-2 col-sm-4">
-                    <div class="text-center footer-img">
-                        <a href="https://www.damanojornal.com" alt="Dama no Jornal" title="Dama no Jornal"><img width="319px" src="~/images/flor-com-logo-1.png" /></a>
-                    </div>
-                    <div class="esh-app-footer-text footer-text"> © Copyright 2010-@DateTime.Now.Year Dama no Jornal | All Rights Reserved </div>
-                </section>
-                <section class="col-12 col-sm-4 footer-links text-center">
-                    <div class="footer-link text-center">
-                        <a href="https://www.damanojornal.com/perguntas-frequentes/">Perguntas Frequentes</a>
-                    </div>
-                    <div class="footer-link text-center">
-                        <a href="https://www.damanojornal.com/proximos-eventos/">Eventos</a>
-                    </div>
-                    <div class="footer-link text-center">
-                        <a href="https://www.damanojornal.com/contactos/">Contactos</a>
-                    </div>
-                    <div class="footer-link text-center text-nowrap">
-                        <a href="https://www.damanojornal.com/termos-e-condicoes/">Termos e Condições</a>
-                    </div>
-                    <div class="footer-link text-center text-nowrap">
-                        <a href="https://www.damanojornal.com/politica-de-privacidade/">Política de Privacidade</a>
-                    </div>
+            <article class="row justify-content-center">
+                <section class="col-lg-3 order-3 order-lg-1">
                     <div class="text-center">
-                        <a href="https://www.facebook.com/damanojornal/" class="px-2" target="_blank"><i class="fab fa-facebook-f fa-inverse"></i></a>
-                        <a href="https://www.instagram.com/damanojornal/" class="px-2" target="_blank"><i class="fab fa-instagram fa-inverse"></i></a>
+                        <a asp-page="/Index" class="d-none d-lg-block" alt="Dama no Jornal" title="Dama no Jornal"><img src="~/images/logo_name_transparent170.png" /></a>
+                        <div id="footer-social" class="mt-3">
+                            <span class="text-white">SEGUE-NOS:</span>
+                            <div class="row justify-content-center mt-2">
+                                <a href="https://www.facebook.com/damanojornal/" target="_blank">
+                                    <span class="fa-stack fa-1x">
+                                        <i class="fa fa-circle fa-stack-2x icon-background-white"></i>
+                                        <i class="fab fa-facebook-f fa-stack-1x text-primary"></i>
+                                    </span>
+                                </a>
+                                <a href="https://www.instagram.com/damanojornal/" target="_blank">
+                                    <span class="fa-stack fa-1x">
+                                        <i class="fa fa-circle fa-stack-2x icon-background-white"></i>
+                                        <i class="fab fa-instagram fa-stack-1x text-primary"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="esh-app-footer-text footer-text-mobile"> © Copyright 2010-@DateTime.Now.Year Dama no Jornal | All Rights Reserved </div>
+                </section>
+                <section class="col-12 col-lg-3 footer-links text-center order-2 order-lg-2">
+                    <span class="d-block d-lg-none text-white text-uppercase">Informações</span>
+                    <div class="footer-link">
+                        <a class="btn btn-light-pink2 btn-block" role="button" href="https://www.damanojornal.com/proximos-eventos/">Eventos</a>
+                    </div>
+                    <div class="footer-link">
+                        <a class="btn btn-light-pink2 btn-block" role="button" href="https://www.damanojornal.com/contactos/">Contactos</a>
+                    </div>
+                    <div class="footer-link">
+                        <a class="btn btn-light-pink2 btn-block" role="button" href="https://www.damanojornal.com/perguntas-frequentes/">Perguntas Frequentes</a>
+                    </div>
+                    <div class="footer-link">
+                        <a class="btn btn-light-pink2 btn-block" role="button" href="https://www.damanojornal.com/termos-e-condicoes/">Termos e Condições</a>
+                    </div>
+                    <div class="footer-link">
+                        <a class="btn btn-light-pink2 btn-block" role="button" href="https://www.damanojornal.com/politica-de-privacidade/">Política de Privacidade</a>
+                    </div>
+                </section>
+                <section id="newsletterSection" class="col-lg-4 text-center text-white order-1 order-lg-3 mt-lg-5 mt-0">
+                    <h4 class="text-white">SUBSCREVE A NOSSA NEWSLETTER</h4>
+                    <p class="small">E FICA A PAR DE TODAS AS NOVIDADES!</p>
+                    <form method="post" asp-page="/Index" asp-page-handler="SubscribeNewsletter">
+                        <div class="form-group offset-2 col-8">
+                            <input type="email" class="form-control" name="newsletterEmail" placeholder="email" />
+                            <span class="errorNewsletterSubscribeMsg text-danger small"></span>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" name="newsletterTerms">
+                            <label class="form-check-label text-black-50 small" for="newsletterTerms">
+                                Li e aceito os termos de <a class="link-underline" href="https://www.damanojornal.com/politica-de-privacidade/">Política e Privacidade</a>
+                            </label>
+                        </div>
+                        <button type="submit" class="subscribeNewsLetter btn btn-primary text-white mt-2">SUBSCREVER</button>
+                    </form>
                 </section>
             </article>
         </div>
     </footer>
+    <div class="container pb-3">
+        <div class="row">
+            <div id="copyText" class="col pt-3 pb-2 text-black-50 text-center text-lg-left small">
+                © Copyright 2010-@DateTime.Now.Year Dama no Jornal&reg; | All Rights Reserved
+            </div>
+            <div id="copyText" class="col pt-3 pb-2 text-center text-lg-right small">
+                <a href="https://dotnet.microsoft.com/learn/aspnet/what-is-aspnet-core" class="text-black-50" target="_blank">Powered by .Net Core 2.2</a>
+            </div>
+        </div>
+    </div>
 
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/lib/font-awesome/js/all.js"></script>
+        <script data-search-pseudo-elements src="~/lib/font-awesome/js/all.js"></script>
         <script src="~/lib/slick-carousel/slick.js"></script>
+        <script src="~/lib/Glide.js/glide.js"></script>
+
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">
@@ -187,7 +277,7 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"
                 asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 
-        <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"
+        <script  data-search-pseudo-elements defer src="https://use.fontawesome.com/releases/v5.8.2/js/all.js" 
                 asp-fallback-src="~/lib/font-awesome/js/all.min.js">
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>

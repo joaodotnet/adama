@@ -34,7 +34,7 @@
 
             @foreach (var catalogItem in Model.CatalogModel.CatalogItems)
             {
-                <div class="esh-catalog-item col-md-3">
+                <div class="dnj-catalog-item col-md-3">
                     @await Html.PartialAsync("_product", catalogItem)
                 </div>
             }
@@ -48,3 +48,4 @@
         </div>
     }
 </div>
+<partial name="_productAdded" />

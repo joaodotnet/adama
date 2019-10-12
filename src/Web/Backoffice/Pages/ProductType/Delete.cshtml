@@ -19,10 +19,10 @@
             @Html.DisplayFor(model => model.ProductTypeModel.Code)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.ProductTypeModel.Description)
+            @Html.DisplayNameFor(model => model.ProductTypeModel.Name)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ProductTypeModel.Description)
+            @Html.DisplayFor(model => model.ProductTypeModel.Name)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.ProductTypeModel.Slug)
@@ -86,7 +86,7 @@
             @Html.DisplayNameFor(model => model.ProductTypeModel.Title)
         </dt>
         <dd>
-            @(!string.IsNullOrEmpty(Model.ProductTypeModel.Title) ? Model.ProductTypeModel.Title : Model.ProductTypeModel.Description)
+            @(!string.IsNullOrEmpty(Model.ProductTypeModel.Title) ? Model.ProductTypeModel.Title : Model.ProductTypeModel.Name)
         </dd>
         <dd>
             <img src="@Model.ProductTypeModel.PictureUri" class="img-responsive" />

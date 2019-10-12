@@ -5,12 +5,9 @@
     ViewData["Title"] = "My Basket";
 }
 
-<a class="dnj-basketstatus "
-   asp-page="/Basket/Index">
-        <div class="dnj-basketstatus-image">
-            <img src="~/images/cart.png" />
-        </div>
-        <div class="dnj-basketstatus-badge">
-            @Model.ItemsCount
-        </div>
+
+<a class="nav-link"
+   asp-page="/Basket/Index"
+   title="O meu Carrinho">
+    <i class="fas fa-shopping-cart fa-lg"></i>
 </a>

@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Entities;
+﻿using ApplicationCore.DTOs;
+using ApplicationCore.Entities;
 using ApplicationCore.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -15,9 +16,14 @@ namespace ApplicationCore.Services
         {
             this._accountRepository = repository;
         }
-        public async Task AddOrUpdateUserAddress(string userId, bool useSameAsShipping, string street, string postalCode, string city, string country, AddressType addressType = AddressType.SHIPPING)
+        public async Task AddOrUpdateUserAddress(string userId, string name, int? taxNumber, string contactNumber, bool useSameAsShipping, string street, string postalCode, string city, string country, AddressType addressType = AddressType.SHIPPING)
         {
-            await _accountRepository.AddOrUpdateUserAddress(userId, useSameAsShipping, street, postalCode, city, country, addressType);
+            await _accountRepository.AddOrUpdateUserAddress(userId, name, taxNumber, contactNumber, useSameAsShipping, street, postalCode, city, country, addressType);
+        }
+
+        public async Task<List<UserAddressDTO>> GetUserAddress(string userId)
+        {
+            return await _accountRepository.GetUserAddressAsync(userId);
         }
     }
 }

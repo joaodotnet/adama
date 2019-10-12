@@ -197,7 +197,7 @@ namespace DamaWeb.Pages.Account
             string anonymousBasketId = Request.Cookies[Constants.BASKET_COOKIENAME];
             if (!String.IsNullOrEmpty(anonymousBasketId))
             {
-                await _basketService.TransferBasketAsync(anonymousBasketId, email);
+                await _basketService.TransferBasketAsync(anonymousBasketId, email, false);
                 Response.Cookies.Delete(Constants.BASKET_COOKIENAME);
             }
         }

@@ -1,0 +1,197 @@
+﻿@page
+@model DamaWeb.Pages.Basket.CheckoutStep2Model
+@{
+    ViewData["Title"] = "Como Queres Receber a Tua Encomenda?";
+}
+<h1 class="text-uppercase">@ViewData["Title"]</h1>
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row mt-2 mt-sm-5">
+        <div class="col-12 col-sm-4 text-center border-right border-primary p-sm-4">
+            <section class="p-3">
+                <div id="deliverySection" class="m-auto">
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" asp-for="DeliveryMethod" value="@ApplicationCore.Entities.DeliveryMethodType.HOME"
+                               id="DeliveryMethodType@HOME" class="custom-control-input">
+                        <label class="custom-control-label" for="DeliveryMethodType@HOME">NA TUA MORADA</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline mt-2">
+                        <input type="radio" asp-for="DeliveryMethod" value="@ApplicationCore.Entities.DeliveryMethodType.STORE"
+                               id="DeliveryMethodType@STORE" class="custom-control-input">
+                        <label class="custom-control-label" for="DeliveryMethodType@STORE">NA NOSSA LOJA EM LOULÉ</label>
+                    </div>
+                    <span asp-validation-for="DeliveryMethod" class="text-danger"></span>
+                </div>
+            </section>
+            <section id="homeSection" class="row p-0 m-0 text-left mt-1 mt-sm-3 collapse @(Model.DeliveryMethod == ApplicationCore.Entities.DeliveryMethodType.HOME ? "show" : "")">
+                <div id="deliveryAddress" class="col-12 p-0">
+                    <div class="form-group required">
+                        <label asp-for="BuyerAddress.Name"></label>
+                        <input asp-for="BuyerAddress.Name" class="form-control">
+                        <span asp-validation-for="BuyerAddress.Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group required">
+                        <label asp-for="BuyerAddress.Street"></label>
+                        <input class="form-control" asp-for="BuyerAddress.Street">
+                        <span asp-validation-for="BuyerAddress.Street" class="text-danger"></span>
+                    </div>
+                    <div class="form-group required">
+                        <label asp-for="BuyerAddress.ContactPhoneNumber"></label>
+                        <input asp-for="BuyerAddress.ContactPhoneNumber" class="form-control">
+                        <span asp-validation-for="BuyerAddress.ContactPhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group required">
+                        <label asp-for="BuyerAddress.City"></label>
+                        <input class="form-control" asp-for="BuyerAddress.City">
+                        <span asp-validation-for="BuyerAddress.City" class="text-danger"></span>
+                    </div>
+                    <div class="form-group required">
+                        <label asp-for="BuyerAddress.PostalCode"></label>
+                        <input class="form-control" asp-for="BuyerAddress.PostalCode">
+                        <span asp-validation-for="BuyerAddress.PostalCode" class="text-danger"></span>
+                    </div>
+                    <div class="form-group required">
+                        <label asp-for="BuyerAddress.Country"></label>
+                        <select class="form-control" asp-for="BuyerAddress.Country">
+                            <option>Portugal</option>
+                        </select>
+                        <span asp-validation-for="BuyerAddress.Country" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="BuyerAddress.TaxNumber"></label>
+                        <input class="form-control" asp-for="BuyerAddress.TaxNumber">
+                        <span asp-validation-for="BuyerAddress.TaxNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" asp-for="BuyerAddress.SaveAddress">
+                        <label class="form-check-label" asp-for="BuyerAddress.SaveAddress"></label>
+                        <span asp-validation-for="BuyerAddress.SaveAddress" class="text-danger"></span>
+                    </div>
+                </div>
+            </section>
+            <section id="storeSection" class="mt-3 p-3 text-left collapse @(Model.DeliveryMethod == ApplicationCore.Entities.DeliveryMethodType.STORE ? "show" : "")">
+                <div class="form-group required">
+                    <label asp-for="StoreAddress.Name"></label>
+                    <input asp-for="StoreAddress.Name" class="form-control">
+                    <span asp-validation-for="StoreAddress.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group required">
+                    <label asp-for="StoreAddress.ContactPhone"></label>
+                    <input asp-for="StoreAddress.ContactPhone" class="form-control">
+                    <span asp-validation-for="StoreAddress.ContactPhone" class="text-danger"></span>
+                </div>
+                <div id="damaMapSection">
+                    <div class="text-center">
+                        <span>Mercado de Loulé, Praça da Republica, Banca Nº 44 - <a class="underline" href="http://saborcomtradicao.com/" target="_blank"> Sabor com Tradição </a></span>
+                    </div>
+                    <div class="mt-3">
+                        <iframe width="100%" height="300"
+                                frameborder="0" style="border:0"
+                                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB2Av0vyWQSV7OOZK_LdJ3i52TSC8pLPF8&q=Mercado+Municipal+de+Loulé+(Desde+1908)" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="col-12 col-sm-4 text-center px-4 py-sm-4 pt-2 pb-4 mt-3 mt-sm-0">
+            <section>
+                <div>
+                    <label>
+                        DADOS DE FATURAÇÃO
+                    </label>
+                </div>
+                <div class="mt-1 mt-sm-5">
+                    <input type="hidden" asp-for="WantInvoiceWithTaxNumber" />
+                    <div class="small">Deseja fatura com NIF?</div>
+                    <div class="invoiceOptions collapse mt-2 @(Model.WantInvoiceWithTaxNumber ? "" : "show")">
+                        <a id="btnWantInvoice" class="btn btn-menta" role="button" data-toggle="collapse" href=".invoiceOptions" aria-expanded="false" aria-controls="collapseInvoiceOptions">ADICIONAR</a>
+                    </div>
+                    <div class="small invoiceOptions collapse @(Model.WantInvoiceWithTaxNumber ? "show" : "")">
+                        <a id="btnCancelInvoice" data-toggle="collapse" href=".invoiceOptions" aria-expanded="false" aria-controls="collapseInvoiceOptions">Cancelar</a>
+                    </div>
+                </div>
+                <div class="p-sm-3 invoiceOptions collapse @(Model.WantInvoiceWithTaxNumber ? "show" : "")">
+                    <div id="copyInvoiceSection" class="m-auto">
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" asp-for="CopyInvoiceFromAddress" value="true"
+                                   id="CopyInvoiceFromAddress@true" class="custom-control-input">
+                            <label class="custom-control-label small" for="CopyInvoiceFromAddress@true">Copiar a tua morada e os teus dados?</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline mt-2">
+                            <input type="radio" asp-for="CopyInvoiceFromAddress" value="false"
+                                   id="CopyInvoiceFromAddress@false" class="custom-control-input">
+                            <label class="custom-control-label small" for="CopyInvoiceFromAddress@false">Adicionar dados de faturação</label>
+                        </div>
+                    </div>
+                    <div id="invoiceDetails" class="text-left collapse @(Model.CopyInvoiceFromAddress ? "" : "show")">
+                        <div class="form-group required">
+                            <label asp-for="InvoiceInput.Name"></label>
+                            <input asp-for="InvoiceInput.Name" class="form-control">
+                            <span asp-validation-for="InvoiceInput.Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group required">
+                            <label asp-for="InvoiceInput.TaxNumber"></label>
+                            <input asp-for="InvoiceInput.TaxNumber" class="form-control">
+                            <span asp-validation-for="InvoiceInput.TaxNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-group required">
+                            <label asp-for="InvoiceInput.AddressStreet"></label>
+                            <input class="form-control" asp-for="InvoiceInput.AddressStreet">
+                            <span asp-validation-for="InvoiceInput.AddressStreet" class="text-danger"></span>
+                        </div>
+                        <div class="form-group required">
+                            <label asp-for="InvoiceInput.AddressCity"></label>
+                            <input class="form-control" asp-for="InvoiceInput.AddressCity">
+                            <span asp-validation-for="InvoiceInput.AddressCity" class="text-danger"></span>
+                        </div>
+                        <div class="form-group required">
+                            <label asp-for="InvoiceInput.AddressPostalCode"></label>
+                            <input class="form-control" asp-for="InvoiceInput.AddressPostalCode">
+                            <span asp-validation-for="InvoiceInput.AddressPostalCode" class="text-danger"></span>
+                        </div>
+                        <div class="form-group required">
+                            <label asp-for="InvoiceInput.AddressCountry"></label>
+                            <select class="form-control" asp-for="InvoiceInput.AddressCountry">
+                                <option>Portugal</option>
+                            </select>
+                            <span asp-validation-for="InvoiceInput.AddressCountry" class="text-danger"></span>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" asp-for="InvoiceInput.InvoiceSaveAddress">
+                            <label class="form-check-label" asp-for="InvoiceInput.InvoiceSaveAddress"></label>
+                            <span asp-validation-for="InvoiceInput.InvoiceSaveAddress" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="col-12 col-sm-4">
+            <section class="border border-primary p-2 p-sm-4">
+                <partial name="_resumeOrder" for="BasketModel" />
+            </section>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <environment include="Development">
+        <script src="/js/pages/checkout.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="/js/pages/checkout.js" asp-append-version="true"></script>
+    </environment>
+    <script>
+        setBasketTotals(@Model.BasketModel.TotalWithoutShipping().ToString().Replace(',','.'),@Model.BasketModel.TotalWithShipping().ToString().Replace(',','.'));
+
+        $(document).ready(function () {
+            @if(Model.DeliveryMethod == ApplicationCore.Entities.DeliveryMethodType.STORE && Model.WantInvoiceWithTaxNumber)
+            {
+                <text>
+                    $('#copyInvoiceSection').hide();
+                    $('#invoiceDetails').collapse('show');
+                </text>
+            }
+        });
+    </script>
+}

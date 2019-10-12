@@ -48,7 +48,7 @@ namespace DamaWeb.Pages.Tag
 
             p = p < 0 ? 0 : p;
 
-            CatalogModel = await _service.GetCatalogItemsByTag(p ?? 0, Constants.ITEMS_PER_PAGE, tagToSearch, tagType, null, null);
+            CatalogModel = await _service.GetCatalogItemsByTag(p ?? 0, Constants.ITEMS_PER_PAGE, tagToSearch, tagType);
             if (CatalogModel == null)
                 return NotFound();
             return Page();

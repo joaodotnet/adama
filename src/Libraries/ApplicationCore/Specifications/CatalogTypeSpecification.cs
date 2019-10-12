@@ -17,5 +17,10 @@ namespace ApplicationCore.Specifications
             if(includeHelpers)
                 AddInclude(x => x.PictureTextHelpers);
         }
+
+        public CatalogTypeSpecification(string slug)
+            : base(x => x.Slug == slug)
+        {
+        }
     }
 }

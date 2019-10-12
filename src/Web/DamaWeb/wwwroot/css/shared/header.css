@@ -1,66 +1,97 @@
-﻿.logo {
-    color: #000000;
-    font-family: "Lily Script One", Sans-serif;
-    font-size: 41px;
-    font-weight: 100;
-    font-style: normal;
+﻿#topbar a, #footer-social a {    
+    transition: transform .2s;
 }
 
-.customize-image {
-    position: absolute;
-    top: 43px;
-    right: 9%;
-    z-index: 5;
-}
-
-/* search box */
-.search-text {
-    background-color: #FC629D;
-}
-.search-text input {
-    color: #fff;
-    border-bottom: 1px solid #fff !important;
-    font-size: 14px;
-}
-
-.search-text input::-ms-input-placeholder {
-    color: #fff;
-}
-
-.search-text input::placeholder {
-    color: #fff;
-}
-
-#searchModal {
-    text-align: center;
-}
-
-#search:focus {
-    border-color: #fff;
-    box-shadow: inset 0 1px 1px #fff, 0 0 8px #fff;
-}
-
-/*navigation*/
-.login-nav .nav-link {
-    color: #7A7A7A !important;
-}
-
-    .login-nav .nav-link:hover {
-        border-bottom: 2px solid#7A7A7A !important;
+    #topbar a:hover, #footer-social a:hover {
+        transform: scale(1.5);
     }
 
-.navbar-light .navbar-nav .nav-link:hover {
-    /*border-bottom: 3px solid #fff;*/
-    color: #7A7A7A;
+.dama-bar {
+    height: 20px;
+    background-image: url("../../images/barra.png");
+    background-repeat: repeat-x;
+    z-index: 25;
+    position: relative;
 }
 
-.navbar-light .navbar-nav .nav-link {
-    color: #FC629D;
-    font-weight: 500;
-    font-size: 14px;
-    text-decoration: none;
-    transition: border 1s linear;
+.topActioncollapse.collapsing {
+    position: absolute !important;
+    z-index: 20;
+    width: 100%;
+    top: 69px;
 }
+
+.topActioncollapse.collapse.show {
+    display: block;
+    position: absolute;
+    z-index: 20;
+    width: 100%;
+    top: 69px;
+}
+
+
+.btn-personalizar {
+    position: absolute;
+    padding-left: 10px;
+    padding-right: 10px;
+    right: 15px;
+    border-bottom: 45px solid #FC629D;
+    border-left: 25px solid rgba(0, 0, 0, 0);
+    height: 0px;
+    top: -36px;
+    color: #fff;
+    font-family: "Going Foward", sans-serif;
+    font-size: 30px;
+}
+
+    .btn-personalizar:hover {
+        color: #fff;
+        border-bottom-color: #FC2A7B;
+    }
+
+/*navigation*/
+.nav-link {
+    font-size: 15px;
+}
+
+.dama-header-link .nav-link {
+    font-size: 12px;
+}
+
+@media screen and (min-width: 540px) {
+    #navbarMain {
+        border-top: 2px solid #FC629D;
+        border-bottom: 2px solid #FC629D;
+    }
+}
+
+#navbarMain a {
+    color: #FC629D;
+}
+
+    #navbarMain a:hover {
+        color: #7A7A7A;
+    }
+
+.divider-vertical {
+    height: 40px;
+    margin: 0 9px;
+    border-left: 1px dotted #f2f2f2;
+    border-right: 1px dotted #000000;
+}
+
+#topbar .fa-stack {
+    font-size: 0.8em;
+}
+
+.icon-background {
+    color: #9c9c9c;
+}
+
+.icon-background-white {
+    color: #fff;
+}
+
 
 .dropdown-menu {
     background-color: #fff;
@@ -68,6 +99,7 @@
     border: none;
     margin: 0;
     padding: 0;
+    box-shadow: 0px 0px 10px #b2b2b2;
 }
 
 .dropdown-item {
@@ -79,41 +111,37 @@
     margin: auto;
 }
 
-.social-links {
-    text-align: center;
-}
-
-    .social-links a {
-        /*display: inline-block;*/
-        width: 40px;
-        height: 40px;
-        border: 2px solid #fff;
-        border-radius: 50px;
-        margin-right: 4px;
-        cursor: pointer;
-        color: #FC629D;
+@media screen and (max-width:540px) {
+    .dropdown-toggle::after {
+        float: right;
+        font-size: 25px;
     }
 
-        .social-links a i {
-            color: #FC629D;
+    #navbarMain {
+        box-shadow: 0px 0px 10px #b2b2b2;
+    }
+
+    #containerMain {
+        margin: initial;
+        position: absolute;
+        right: 0px;
+        left: 26px;
+        background-color: white;
+        z-index: 2;
+        top: 5px;
+        width: 257px;
+    }
+
+    #customizeLinkMenu {
+        background-color: #FC629D;
+    }
+
+        #customizeLinkMenu a {
+            color: #fff;
         }
-
-    .social-links .nav-link {
-        padding-top: 8px;
-        padding-right: 2px !important;
-        padding-left: 6px !important;
-    }
-
-@media screen and (max-width: 992px) {
-    .customize-image {
-        display: none;
-    }
 }
 
 @media screen and (min-width: 992px) {
-    #brand-mobile-image {
-        display: none;
-    }
 
     .dropdown-item:hover {
         background-color: #FC629D;

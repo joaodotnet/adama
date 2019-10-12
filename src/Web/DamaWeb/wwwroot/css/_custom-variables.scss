@@ -4,7 +4,14 @@
 
 /* Inputs */
 $input-border-radius: 0;
+/*$input-border-width: 0;*/
 $input-focus-border-color: #5fcbcb;
+
+/* Cards */
+$card-border-radius: 0;
+
+/* Modals */
+$modal-content-border-radius: 0;
 
 /* Links */
 $link-color: #000000;
@@ -26,6 +33,12 @@ $link-hover-color: #EF7C8D;
     font-family: Quicksand Medium;
     src: url("../fonts/Quicksand-Medium.ttf") format("truetype");
 }
+
+@font-face {
+    font-family: Going Foward;
+    src: url("../fonts/GoingFoward-TTF.ttf") format('truetype');
+}
+
 $font-family-base: 'Quicksand Medium', sans-serif;
 $font-size-base: 1.125rem;
 
@@ -39,9 +52,16 @@ $btn-border-radius: 0;
 $btn-border-radius-lg: 0;
 $btn-border-radius-sm: 0;
 
-/* Colors */
-$theme-colors: ( "menta": #88C9AC );
+$custom-select-border-color: #FFB8D3;
+/* Navbar */
+$navbar-dark-color: #ffffff;
 
+/* Containers */
+
+$container-max-widths: ( sm: 540px, md: 960px, lg: 1280px, xl: 1600px );
+
+/* Colors */
+$theme-colors: ( "menta": #88C9AC, "light-pink": #FFB8D3, "light-pink2": #FFE3EE );
 // @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 // Some example variables that you can uncomment:
 // Enabling shadows and gradients

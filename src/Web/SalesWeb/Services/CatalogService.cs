@@ -126,7 +126,7 @@ namespace SalesWeb.Services
             };
             foreach (CatalogType type in types)
             {
-                items.Add(new SelectListItem() { Value = type.Id.ToString(), Text = type.Description });
+                items.Add(new SelectListItem() { Value = type.Id.ToString(), Text = type.Name });
             }
 
             return items;
@@ -171,7 +171,7 @@ namespace SalesWeb.Services
                         PictureUri = i.PictureUri,
                         Price = i.Price ?? i.CatalogType.Price,
                         ProductSku = i.Sku,
-                        CatalogTypeName = i.CatalogType?.Description
+                        CatalogTypeName = i.CatalogType?.Name
                     }),
                     PaginationInfo = new PaginationInfoViewModel()
                     {
@@ -241,7 +241,7 @@ namespace SalesWeb.Services
                     }).ToList(),
                     Tags = new List<LinkViewModel>
                     {
-                        new LinkViewModel { Name = product.CatalogType.Description, TagName = "tipo"},
+                        new LinkViewModel { Name = product.CatalogType.Name, TagName = "tipo"},
                         new LinkViewModel { Name = product.CatalogIllustration.Name, TagName = "ilustracao"},
                         new LinkViewModel { Name = product.CatalogIllustration.IllustrationType.Name, TagName = "ilustracao_tipo"},
                     },
@@ -348,7 +348,7 @@ namespace SalesWeb.Services
                     case TagType.CATALOG_TYPE:
                         query = _db.CatalogItems
                             .Include(x => x.CatalogType)
-                            .Where(x => Utils.StringToUri(x.CatalogType.Description) == tagName);
+                            .Where(x => Utils.StringToUri(x.CatalogType.Name) == tagName);
                         break;
                     case TagType.ILLUSTRATION:
                         query = _db.CatalogItems
@@ -373,7 +373,7 @@ namespace SalesWeb.Services
                     .Include(x => x.CatalogType)
                     .Include(x => x.CatalogIllustration)
                     .ThenInclude(ci => ci.IllustrationType)
-                    .Where(x => Utils.StringToUri(x.CatalogType.Description) == tagName || Utils.StringToUri(x.CatalogIllustration.Name) == tagName || x.CatalogIllustration.IllustrationType.Name == tagName);
+                    .Where(x => Utils.StringToUri(x.CatalogType.Name) == tagName || Utils.StringToUri(x.CatalogIllustration.Name) == tagName || x.CatalogIllustration.IllustrationType.Name == tagName);
             }
 
             query = query.Where(x => x.ShowOnShop && (!illustrationId.HasValue || x.CatalogIllustrationId == illustrationId) &&
@@ -421,7 +421,7 @@ namespace SalesWeb.Services
                 //.ThenInclude(ci => ci.IllustrationType)
                 .Where(x => x.ShowOnShop &&
                 (!typeId.HasValue || x.CatalogTypeId == typeId) &&
-                (x.CatalogType.Description.Contains(searchFor) ||
+                (x.CatalogType.Name.Contains(searchFor) ||
                 x.Name.Contains(searchFor)));
                 //x.Description.Contains(searchFor)));            
             var totalItems = query.Count();
@@ -533,12 +533,12 @@ namespace SalesWeb.Services
 
                     if (types?.Count() >= 0)
                     {
-                        item.Childs.AddRange(types.OrderBy(x => x.Description).Select(x => new MenuItemComponentViewModel
+                        item.Childs.AddRange(types.OrderBy(x => x.Name).Select(x => new MenuItemComponentViewModel
                         {
                             Id = x.Id,
-                            Name = x.Description.ToUpper(),
+                            Name = x.Name.ToUpper(),
                             NameUri = Utils.RemoveDiacritics(item.Name).Replace(" ", "-").ToLower(),
-                            TypeUri = Utils.RemoveDiacritics(x.Description).Replace(" ", "-").ToLower()
+                            TypeUri = Utils.RemoveDiacritics(x.Name).Replace(" ", "-").ToLower()
                         }));
                     }
                 }
@@ -550,9 +550,9 @@ namespace SalesWeb.Services
             var allCatalogTypes = await _db.CatalogTypes.ToListAsync();
             foreach (var item in allCatalogTypes)
             {
-                var typeName = item.Description.Replace(" ", "-").ToLower();
+                var typeName = item.Name.Replace(" ", "-").ToLower();
                 if (Utils.RemoveDiacritics(typeName) == type)
-                    return (item.Id, item.Description);
+                    return (item.Id, item.Name);
             }
             return null;
         }

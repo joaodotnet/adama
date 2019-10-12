@@ -9,7 +9,7 @@ namespace DamaWeb.ViewModels
 {
     public class AddressViewModel
     {
-        [Required(ErrorMessage = "Por favor escolha o método de entrega.")]
+        //[Required(ErrorMessage = "Por favor escolha o método de entrega.")]
         //[Range(1,2,ErrorMessage = "Por favor escolha o método de entrega.")]
         public int? UseUserAddress { get; set; }
         [Display(Name = "Nome")]
@@ -35,25 +35,27 @@ namespace DamaWeb.ViewModels
         [Required(ErrorMessage = "O campo Código Postal é obrigatório")]
         [RegularExpression("^\\d{4}-\\d{3}?$", ErrorMessage = "O Código Postal deverá ter o formato 8000-100")]
         public string PostalCode { get; set; }
+        [Display(Name = "NIF")]
+        public int? TaxNumber { get; set; }
         [Display(Name = "Guardar sua morada na sua conta")]
         public bool SaveAddress { get; set; } = true;
-        public bool UseSameAsShipping { get; set; } = true;
-        [Display(Name = "Nome")]
-        public string InvoiceName { get; set; }
-        [Display(Name = "NIF")]
-        public int? InvoiceTaxNumber { get; set; }
-        [Display(Name = "Morada")]
-        [StringLength(100, ErrorMessage = "O campo Morada têm que ter no máximo 100 caracteres!")]
-        public string InvoiceAddressStreet { get; set; }
-        [Display(Name = "Cidade")]
-        public string InvoiceAddressCity { get; set; }
-        [Display(Name = "País")]
-        public string InvoiceAddressCountry { get; set; }
-        [Display(Name = "Código Postal")]
-        [RegularExpression("^\\d{4}-\\d{3}?$", ErrorMessage = "O Código Postal (Faturação) deverá ter o formato 8000-100")]
-        public string InvoiceAddressPostalCode { get; set; }
-        [Display(Name = "Guardar sua morada na sua conta")]
-        public bool InvoiceSaveAddress { get; set; } = true;
+        //public bool UseSameAsShipping { get; set; } = true;
+        //[Display(Name = "Nome")]
+        //public string InvoiceName { get; set; }
+        //[Display(Name = "NIF")]
+        //public int? InvoiceTaxNumber { get; set; }
+        //[Display(Name = "Morada")]
+        //[StringLength(100, ErrorMessage = "O campo Morada têm que ter no máximo 100 caracteres!")]
+        //public string InvoiceAddressStreet { get; set; }
+        //[Display(Name = "Cidade")]
+        //public string InvoiceAddressCity { get; set; }
+        //[Display(Name = "País")]
+        //public string InvoiceAddressCountry { get; set; }
+        //[Display(Name = "Código Postal")]
+        //[RegularExpression("^\\d{4}-\\d{3}?$", ErrorMessage = "O Código Postal (Faturação) deverá ter o formato 8000-100")]
+        //public string InvoiceAddressPostalCode { get; set; }
+        //[Display(Name = "Guardar sua morada na sua conta")]
+        //public bool InvoiceSaveAddress { get; set; } = true;
     }
 
     //public class RequiredIfAttribute : ValidationAttribute, IClientModelValidator

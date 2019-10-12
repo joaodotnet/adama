@@ -50,6 +50,18 @@
         <dd>
             @(string.IsNullOrEmpty(Model.Category.Title) ? Model.Category.Name : Model.Category.Title)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Category.H1Text)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Category.H1Text)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Category.Description)
+        </dt>
+        <dd>
+            @Html.Raw(Model.Category.Description)
+        </dd>
     </dl>
     <h4>Tipos de Produtos associados</h4>
     <table class="table">
@@ -59,7 +71,7 @@
                     @Html.DisplayNameFor(model => model.Category.ProductTypes[0].Code)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Category.ProductTypes[0].Description)
+                    @Html.DisplayNameFor(model => model.Category.ProductTypes[0].Name)
                 </th>
                 <th></th>
             </tr>
@@ -72,7 +84,7 @@
                         @Html.DisplayFor(modelItem => item.Code)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Description)
+                        @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>
                         <a asp-page="/ProductType/Edit" asp-route-id="@item.Id">Editar</a> |

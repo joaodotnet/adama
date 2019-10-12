@@ -105,16 +105,16 @@ namespace Infrastructure.Data
 
             if(catalogContext.CatalogTypes.All(x => string.IsNullOrEmpty(x.Slug)))
             {
-                var bolsas = await catalogContext.CatalogTypes.Where(x => x.Description == "Bolsa de Telemóvel").ToListAsync();
+                var bolsas = await catalogContext.CatalogTypes.Where(x => x.Name == "Bolsa de Telemóvel").ToListAsync();
                 if (bolsas?.Count > 1)
                 {
                     foreach (var item in bolsas)
                     {
-                        item.Description = item.Code == "BTL_M" ? "Bolsa de Telemóvel Mulher" : "Bolsa de Telemóvel Homem";
+                        item.Name = item.Code == "BTL_M" ? "Bolsa de Telemóvel Mulher" : "Bolsa de Telemóvel Homem";
                     }
                     await catalogContext.SaveChangesAsync();
                 }
-                await catalogContext.CatalogTypes.ForEachAsync(x => x.Slug = Utils.URLFriendly(x.Description));
+                await catalogContext.CatalogTypes.ForEachAsync(x => x.Slug = Utils.URLFriendly(x.Name));
                 await catalogContext.SaveChangesAsync();
             }
 
