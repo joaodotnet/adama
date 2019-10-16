@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5E817B37-742
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DamaNoJornal.Windows", "src\Mobile\DamaNoJornal\DamaNoJornal.Windows\DamaNoJornal.Windows.csproj", "{C3C1E2CF-B1F7-4654-BBDC-50143DB22E0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DamaNoJornal.Droid", "src\Mobile\DamaApp\DamaApp.Droid\DamaNoJornal.Droid.csproj", "{62DBB163-9CA9-4818-B48B-13233DF37C24}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DamaNoJornal.Droid", "src\Mobile\DamaNoJornal\DamaNoJornal.Droid\DamaNoJornal.Droid.csproj", "{62DBB163-9CA9-4818-B48B-13233DF37C24}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

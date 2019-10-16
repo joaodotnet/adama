@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.29326.143
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SalesWeb", "src\Web\SalesWeb\SalesWeb.csproj", "{97369E04-0B93-44A2-9488-DC2D95957006}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationCore", "src\Libraries\ApplicationCore\ApplicationCore.csproj", "{50DA7C45-03F7-4B16-B72E-311F05A82D9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationCore", "src\Shared\ApplicationCore\ApplicationCore.csproj", "{50DA7C45-03F7-4B16-B72E-311F05A82D9C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Libraries\Infrastructure\Infrastructure.csproj", "{68B55AB6-98F0-4D17-90DB-80228CB7DAB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Shared\Infrastructure\Infrastructure.csproj", "{68B55AB6-98F0-4D17-90DB-80228CB7DAB0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backoffice", "src\Web\Backoffice\Backoffice.csproj", "{3048DA41-4D43-42FD-AA2C-63AC97F4BBC1}"
 EndProject

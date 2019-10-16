@@ -20,8 +20,8 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\ApplicationCore\ApplicationCore.csproj" />
-    <ProjectReference Include="..\..\Libraries\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Shared\ApplicationCore\ApplicationCore.csproj" />
+    <ProjectReference Include="..\..\Shared\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="BundlerMinifier.Core" Version="2.8.391" />
