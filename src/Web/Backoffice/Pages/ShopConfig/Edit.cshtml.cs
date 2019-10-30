@@ -62,23 +62,20 @@ namespace Backoffice.Pages.ShopConfig
                 return Page();
             }
 
-            if (IsImageSizeInvalid(ShopConfigDetailModel.Picture))
+            if (ShopConfigDetailModel.Picture?.Length > 0 &&  IsImageSizeInvalid(ShopConfigDetailModel.Picture))
                 return Page();
 
-            if (IsImageSizeInvalid(ShopConfigDetailModel.PictureWebp))
+            if (ShopConfigDetailModel.PictureWebp?.Length > 0 && IsImageSizeInvalid(ShopConfigDetailModel.PictureWebp))
                 return Page();
 
-            if (IsImageSizeInvalid(ShopConfigDetailModel.PictureMobile))
-                return Page();
-
-            if (ShopConfigDetailModel.Picture != null && ShopConfigDetailModel.Picture.Length > 0)
-                ShopConfigDetailModel.PictureUri = SaveFile(ShopConfigDetailModel.Picture, true, 1600);
+            if (ShopConfigDetailModel.Picture?.Length > 0)
+            {
+                ShopConfigDetailModel.PictureUri = SaveFile(ShopConfigDetailModel.Picture, true, false, 1600);
+                ShopConfigDetailModel.PictureMobileUri = SaveFile(ShopConfigDetailModel.Picture, true, true, 525);
+            }
 
             if (ShopConfigDetailModel.PictureWebp != null && ShopConfigDetailModel.PictureWebp.Length > 0)
-                ShopConfigDetailModel.PictureWebpUri = SaveFile(ShopConfigDetailModel.PictureWebp, false);
-
-            if (ShopConfigDetailModel.PictureMobile != null && ShopConfigDetailModel.PictureMobile.Length > 0)
-                ShopConfigDetailModel.PictureMobileUri = SaveFile(ShopConfigDetailModel.PictureMobile, true, 525);
+                ShopConfigDetailModel.PictureWebpUri = SaveFile(ShopConfigDetailModel.PictureWebp, false, false);
 
             var shopConfigDetail = _mapper.Map<ShopConfigDetail>(ShopConfigDetailModel);
             _context.Attach(shopConfigDetail).State = EntityState.Modified;
@@ -95,9 +92,10 @@ namespace Backoffice.Pages.ShopConfig
             return RedirectToPage("./Index");
         }
 
-        private string SaveFile(IFormFile picture, bool resize, int width = 0, int height = 0)
+        private string SaveFile(IFormFile picture, bool resize, bool isMobile, int width = 0, int height = 0)
         {
-            return _service.SaveFile(picture, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, ShopConfigDetailModel.Id.ToString(), resize, width, height).PictureUri;
+            string addToFileName = isMobile ? "Mobile" + ShopConfigDetailModel.Id.ToString() : ShopConfigDetailModel.Id.ToString();
+            return _service.SaveFile(picture, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, addToFileName, resize, width, height).PictureUri;
         }
 
         private bool IsImageSizeInvalid(IFormFile file)
