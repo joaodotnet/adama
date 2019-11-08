@@ -64,5 +64,10 @@ namespace ApplicationCore.Entities.BasketAggregate
         {
             _items.RemoveAll(_ => true);
         }
+
+        public void RemoveEmptyItems()
+        {
+            _items.RemoveAll(i => i.Quantity == 0);
+        }
     }
 }

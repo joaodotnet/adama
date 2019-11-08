@@ -26,7 +26,7 @@ namespace ApplicationCore.Entities.OrderAggregate
             CustomerEmail = customerEmail;
             TaxNumber = taxNumber;
             PhoneNumber = phoneNumber;
-            OrderState = items.Any(x => x.CustomizeItem.CatalogTypeId.HasValue) ? OrderStateType.UNDER_ANALYSIS : OrderStateType.PENDING;
+            OrderState = items.Any(x => x.CustomizeItem?.CatalogTypeId != null) ? OrderStateType.UNDER_ANALYSIS : OrderStateType.PENDING;
             Observations = observations;
         }
         public string BuyerId { get; private set; }

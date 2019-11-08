@@ -21,7 +21,7 @@ namespace ApplicationCore.Entities.OrderAggregate
         protected OrderItem()
         {
         }
-        public OrderItem(CatalogItemOrdered itemOrdered, decimal unitPrice, int units, int? option1, int? option2, int? option3, string customizeName, string customizeSide, CustomizeItemOrdered customizeItem)
+        public OrderItem(CatalogItemOrdered itemOrdered, decimal unitPrice, int units, int? option1 = null, int? option2 = null, int? option3 = null, string customizeName = null, string customizeSide = null, CustomizeItemOrdered customizeItem = null)
         {
             ItemOrdered = itemOrdered;
             CustomizeItem = customizeItem;
