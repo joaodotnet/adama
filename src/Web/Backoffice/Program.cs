@@ -30,14 +30,10 @@ namespace Backoffice
                     AppIdentityDbContextSeed.EnsureDatabaseMigrations(context);
                     AppIdentityDbContextSeed.EnsureRoleAdminCreated(services).Wait();                    
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-                    AppIdentityDbContextSeed.SeedAsync(userManager, context).Wait();
 
                     var damaContext = services.GetRequiredService<DamaContext>();
                     DamaContextSeed.EnsureDatabaseMigrations(damaContext);
                     DamaContextSeed.SeedAsync(damaContext, loggerFactory).Wait();
-
-                    var groceryContext = services.GetRequiredService<GroceryContext>();
-                    GroceryContextSeed.EnsureDatabaseMigrations(groceryContext);
                 }
                 catch (Exception ex)
                 {

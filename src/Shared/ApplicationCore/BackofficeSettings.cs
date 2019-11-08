@@ -20,9 +20,6 @@ namespace ApplicationCore
         public string WebProductTypesPictureFullPath { get; set; }
         public string WebProductTypesPictureV2FullPath { get; set; }
         public string InvoicesFolderFullPath { get; set; }
-        public string InvoiceGroceryNameFormat { get; set; }
-        public string GroceryProductsPictureFullPath { get; set; }
-        public string GroceryProductsPictureUri { get; set; }
         
     }
 }

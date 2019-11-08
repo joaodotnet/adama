@@ -16,21 +16,6 @@
     <ProjectReference Include="..\..\Shared\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>  
   <ItemGroup>
-    <Content Update="Areas\Grocery\Pages\Sales\Details.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Areas\Grocery\Pages\Sales\Index.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Areas\Grocery\Pages\Sales\_StatusMessage.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Areas\Grocery\Pages\_ValidationScriptsPartial.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Areas\Grocery\Pages\_ViewImports.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
     <Content Update="Pages\ProductType\_StatusMessage.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
