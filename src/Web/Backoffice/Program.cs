@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Infrastructure.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Infrastructure.Data;
+using Microsoft.Extensions.Hosting;
 
 namespace Backoffice
 {
@@ -18,7 +19,7 @@ namespace Backoffice
     {
         public static void Main(string[] args)
         {
-            var host = CreateWebHostBuilder(args).Build();
+            var host = CreateHostBuilder(args).Build();
 
             using (var scope = host.Services.CreateScope())
             {
@@ -28,7 +29,7 @@ namespace Backoffice
                 {
                     var context = services.GetRequiredService<AppIdentityDbContext>();
                     AppIdentityDbContextSeed.EnsureDatabaseMigrations(context);
-                    AppIdentityDbContextSeed.EnsureRoleAdminCreated(services).Wait();                    
+                    AppIdentityDbContextSeed.EnsureRoleAdminCreated(services).Wait();
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
                     var damaContext = services.GetRequiredService<DamaContext>();
@@ -45,8 +46,11 @@ namespace Backoffice
             host.Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
     }
 }
