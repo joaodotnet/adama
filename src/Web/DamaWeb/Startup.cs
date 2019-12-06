@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -28,13 +29,14 @@ namespace DamaWeb
 {
     public class Startup
     {
-        private IServiceCollection _services;
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            Env = env;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Env { get; set; }
 
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
@@ -61,15 +63,13 @@ namespace DamaWeb
             ConfigureServices(services);
         }
 
-
-
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                options.MinimumSameSitePolicy = SameSiteMode.Unspecified;
             });
 
             // The Tempdata provider cookie is not essential. Make it essential
@@ -111,7 +111,7 @@ namespace DamaWeb
                 options.Cookie.IsEssential = true;
             });
 
-            services.AddAutoMapper();
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
 
@@ -145,8 +145,9 @@ namespace DamaWeb
             // Add memory cache services
             services.AddMemoryCache();
 
-            services.AddMvc()
-                .AddRazorPagesOptions(options =>
+            services.AddApplicationInsightsTelemetry();
+
+            var builder = services.AddRazorPages(options =>
                 {
                     options.Conventions.AuthorizeFolder("/Order");
                     options.Conventions.AuthorizeFolder("/Account/Manage");
@@ -178,19 +179,24 @@ namespace DamaWeb
                     options.Conventions.AddPageRoute("/Account/ResetPasswordConfirmation", "conta/confirmacao-recuperacao-password");
                     options.Conventions.AddPageRoute("/Account/Manage/Index", "conta/perfil");
                 })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                .AddControllersAsServices();
 
-            _services = services;
+#if DEBUG
+            if (Env.IsDevelopment())
+            {
+                builder.AddRazorRuntimeCompilation();
+            }
+#endif
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app,
-            IHostingEnvironment env)
+            IWebHostEnvironment env)
         {
             if (!env.IsProduction())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -257,7 +263,11 @@ namespace DamaWeb
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            app.UseRouting();
+
             app.UseAuthentication();
+            app.UseAuthorization();
+
 
             app.Use(async (ctx, next) =>
             {
@@ -273,29 +283,11 @@ namespace DamaWeb
                 }
             });
 
-            app.UseMvc();
-        }
-
-        private void ListAllRegisteredServices(IApplicationBuilder app)
-        {
-            app.Map("/allservices", builder => builder.Run(async context =>
+            app.UseEndpoints(endpoints =>
             {
-                var sb = new StringBuilder();
-                sb.Append("<h1>All Services</h1>");
-                sb.Append("<table><thead>");
-                sb.Append("<tr><th>Type</th><th>Lifetime</th><th>Instance</th></tr>");
-                sb.Append("</thead><tbody>");
-                foreach (var svc in _services)
-                {
-                    sb.Append("<tr>");
-                    sb.Append($"<td>{svc.ServiceType.FullName}</td>");
-                    sb.Append($"<td>{svc.Lifetime}</td>");
-                    sb.Append($"<td>{svc.ImplementationType?.FullName}</td>");
-                    sb.Append("</tr>");
-                }
-                sb.Append("</tbody></table>");
-                await context.Response.WriteAsync(sb.ToString());
-            }));
+                endpoints.MapControllers();
+                endpoints.MapRazorPages();
+            });
         }
     }
 }
