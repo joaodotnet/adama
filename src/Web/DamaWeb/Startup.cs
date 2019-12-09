@@ -151,7 +151,7 @@ namespace DamaWeb
                 {
                     options.Conventions.AuthorizeFolder("/Order");
                     options.Conventions.AuthorizeFolder("/Account/Manage");
-                    options.Conventions.AuthorizePage("/Account/Logout");                    
+                    options.Conventions.AuthorizePage("/Account/Logout");
                     options.Conventions.AddPageRoute("/Basket/Index", "carrinho");
                     options.Conventions.AddPageRoute("/Order/Index", "as-minhas-encomendas");
                     options.Conventions.AddPageRoute("/Order/Detail", "detalhe-da-encomenda/{orderId}");
