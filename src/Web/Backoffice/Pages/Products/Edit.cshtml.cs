@@ -84,6 +84,8 @@ namespace Backoffice.Pages.Products
             [StringLength(43)]
             public string Title { get; set; }
             public string CatalogTypeMeta { get; set; }
+            [Display(Name = "Desconto")]
+            public decimal? Discount { get; set; }
 
             public IList<ProductAttributeViewModel> CatalogAttributes { get; set; } = new List<ProductAttributeViewModel>();
             [Display(Name = "Imagens do Produto")]
@@ -205,6 +207,7 @@ namespace Backoffice.Pages.Products
             if(!string.IsNullOrEmpty(ProductModel.PictureUri))
                 prod.PictureUri = ProductModel.PictureUri;
             prod.Price = ProductModel.Price;
+            prod.Discount = ProductModel.Discount;
             prod.IsFeatured = ProductModel.IsFeatured;
             prod.IsNew = ProductModel.IsNew;
             prod.ShowOnShop = ProductModel.ShowOnShop;
@@ -348,14 +351,20 @@ namespace Backoffice.Pages.Products
 
         private async Task PopulateLists()
         {
-            var illustrations = await _context.CatalogIllustrations
+            var illustrationsDb = await _context.CatalogIllustrations
                 .Include(x => x.IllustrationType)
+                .AsNoTracking()
+                .ToListAsync();
+            var illustrations = illustrationsDb
                 .Select(s => new { s.Id, Name = $"{s.Code} - {s.IllustrationType.Code} - {s.Name}" })
                 .OrderBy(x => x.Name)
+                .ToList();
+            var types = await _context.CatalogTypes
                 .AsNoTracking()
                 .ToListAsync();
             ViewData["IllustrationId"] = new SelectList(illustrations, "Id", "Name");
-            ViewData["ProductTypeId"] = new SelectList(_context.CatalogTypes.AsNoTracking().Select(x => new { x.Id, Name = $"{x.Code} - {x.Name}" }), "Id", "Name");
+
+            ViewData["ProductTypeId"] = new SelectList(types.Select(x => new { x.Id, Name = $"{x.Code} - {x.Name}" }), "Id", "Name");
             await SetCatalogCategoryModel();
         }
 

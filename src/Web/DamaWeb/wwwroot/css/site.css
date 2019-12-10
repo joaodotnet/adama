@@ -7734,3 +7734,9 @@ iframe {
   .categoryCustomizeQuestion {
     font-size: 1.2rem;
     line-height: 30px; } }
+
+.line-through {
+  text-decoration: line-through; }
+
+.left-auto {
+  left: auto; }

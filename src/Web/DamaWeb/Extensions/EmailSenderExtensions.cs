@@ -89,11 +89,14 @@ namespace Microsoft.AspNetCore.Mvc
                             <td>Personalização: {item.CustomizeName} ({sideText})</td>
                         </tr>";
                 }
-                foreach (var attr in attributes?.Attributes)
+                if (attributes != null)
                 {
-                    body += $@"<tr>
+                    foreach (var attr in attributes?.Attributes)
+                    {
+                        body += $@"<tr>
                             <td>{EnumHelper<AttributeType>.GetDisplayValue(attr.Type)}: {attr.Name}</td>
                         </tr>";
+                    }
                 }
                 body += $@"<tr>
                             <td>Quantidade: {item.Units}</td>
