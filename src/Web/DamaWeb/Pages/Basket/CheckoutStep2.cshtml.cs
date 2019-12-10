@@ -146,9 +146,12 @@ namespace DamaWeb.Pages.Basket
             if(BuyerAddress.SaveAddress && _signInManager.IsSignedIn(HttpContext.User))
             {
                 var user = await _userManager.GetUserAsync(User);
-                user.FirstName = BuyerAddress.Name.IndexOf(" ") > 0 ? BuyerAddress.Name.Substring(0, BuyerAddress.Name.IndexOf(" ")) : BuyerAddress.Name;
-                if (BuyerAddress.Name.IndexOf(" ") > 0)
-                    user.LastName = BuyerAddress.Name.Substring(BuyerAddress.Name.LastIndexOf(" "));
+                if (!string.IsNullOrEmpty(BuyerAddress.Name))
+                {
+                    user.FirstName = BuyerAddress.Name.IndexOf(" ") > 0 ? BuyerAddress.Name.Substring(0, BuyerAddress.Name.IndexOf(" ")) : BuyerAddress.Name;
+                    if (BuyerAddress.Name.IndexOf(" ") > 0)
+                        user.LastName = BuyerAddress.Name.Substring(BuyerAddress.Name.LastIndexOf(" "));
+                }
                 user.NIF = BuyerAddress.TaxNumber;
                 user.PhoneNumber = BuyerAddress.ContactPhoneNumber;
                 await _userManager.UpdateAsync(user);
