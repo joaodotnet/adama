@@ -22,7 +22,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.ProductModel[0].Price)
             </th>
-            
+            <th>
+                @Html.DisplayNameFor(model => model.ProductModel[0].Discount)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.ProductModel[0].ShowOnShop)
             </th>
@@ -64,7 +66,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
-           
+            <td>
+                @Html.DisplayFor(modelItem => item.Discount)
+            </td>
             <td>
                 <input type="checkbox" asp-for="@item.ShowOnShop" class="updateProduct" product-id="@item.Id" checkboxType="1" />
             </td>

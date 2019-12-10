@@ -274,10 +274,9 @@ namespace Infrastructure.Data
 
             builder.Property(ci => ci.Price)
                 .HasColumnType("decimal(18,2)");
-            //    .IsRequired(true);
 
-            //builder.Property(ci => ci.PictureUri)
-            //    .IsRequired(true);
+            builder.Property(ci => ci.Discount)
+                .HasColumnType("decimal(18,2)");
 
             builder.HasOne(ci => ci.CatalogIllustration)
                 .WithMany()

@@ -53,6 +53,8 @@ namespace Backoffice.ViewModels
         [Display(Name = "Title")]
         [StringLength(43)]
         public string Title { get; set; }
+        [Display(Name = "Desconto")]
+        public decimal? Discount { get; set; }
 
 
         public IList<ProductAttributeViewModel> CatalogAttributes { get; set; } = new List<ProductAttributeViewModel>();

@@ -83,6 +83,8 @@ namespace Backoffice.Pages.Products
             [Display(Name = "Title")]
             [StringLength(43)]
             public string Title { get; set; }
+            [Display(Name = "Desconto")]
+            public decimal? Discount { get; set; }
 
 
             public IList<ProductAttributeViewModel> CatalogAttributes { get; set; } = new List<ProductAttributeViewModel>();
@@ -244,13 +246,20 @@ namespace Backoffice.Pages.Products
 
         private async Task PopulateLists()
         {
-            var illustrations = await _context.CatalogIllustrations
-                .Include(x => x.IllustrationType)
+            var illustrationsDb = await _context.CatalogIllustrations
+               .Include(x => x.IllustrationType)
+               .AsNoTracking()
+               .ToListAsync();
+            var illustrations = illustrationsDb
                 .Select(s => new { s.Id, Name = $"{s.Code} - {s.IllustrationType.Code} - {s.Name}" })
                 .OrderBy(x => x.Name)
+                .ToList();
+            var typesDb = await _context.CatalogTypes
+                .AsNoTracking()
                 .ToListAsync();
             ViewData["IllustrationId"] = new SelectList(illustrations, "Id", "Name");
-            var types = _context.CatalogTypes.Select(x => new { x.Id, Name = $"{x.Code} - {x.Name}" });
+            var types = typesDb
+                .Select(x => new { x.Id, Name = $"{x.Code} - {x.Name}" });
             ViewData["ProductTypeId"] = new SelectList(types, "Id", "Name");
             await SetCatalogCategoryModel(types.First().Id);
         }
