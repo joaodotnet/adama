@@ -30,7 +30,7 @@ namespace DamaWeb.Pages.Tag
             if (string.IsNullOrEmpty(tagName) || tagName.Contains(" "))
                 return RedirectPermanent(Url.Page("/Index"));
 
-            TagName = tagName;
+            TagName = Uri.UnescapeDataString(tagName);
             Tag = q;
 
             TagType? tagType = null;
@@ -44,7 +44,7 @@ namespace DamaWeb.Pages.Tag
                     tagType = TagType.ILLUSTRATION_TYPE;
             }
 
-            var tagToSearch = Utils.URLFriendly(tagName);
+            var tagToSearch = Uri.UnescapeDataString(tagName);
 
             p = p < 0 ? 0 : p;
 

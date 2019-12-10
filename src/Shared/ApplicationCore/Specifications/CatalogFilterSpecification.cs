@@ -85,10 +85,10 @@ namespace ApplicationCore.Specifications
     {
         public CatalogTagSpecification(string tagName, TagType? tagType) : 
             base(x => x.ShowOnShop && (
-            (tagType.HasValue && tagType.Value == TagType.CATALOG_TYPE && Utils.URLFriendly(x.CatalogType.Name) == tagName) || 
-            (tagType.HasValue && tagType.Value == TagType.ILLUSTRATION && Utils.URLFriendly(x.CatalogIllustration.Name) == tagName) ||
-            (tagType.HasValue && tagType.Value == TagType.ILLUSTRATION_TYPE && Utils.URLFriendly(x.CatalogIllustration.IllustrationType.Name) == tagName) || 
-            (!tagType.HasValue && (Utils.URLFriendly(x.CatalogType.Name) == tagName || Utils.URLFriendly(x.CatalogIllustration.Name) == tagName || Utils.URLFriendly(x.CatalogIllustration.IllustrationType.Name) == tagName))))
+            (tagType.HasValue && tagType.Value == TagType.CATALOG_TYPE && x.CatalogType.Slug == tagName) || 
+            (tagType.HasValue && tagType.Value == TagType.ILLUSTRATION && x.CatalogIllustration.Name == tagName) ||
+            (tagType.HasValue && tagType.Value == TagType.ILLUSTRATION_TYPE && x.CatalogIllustration.IllustrationType.Name == tagName) || 
+            (!tagType.HasValue && (x.CatalogType.Slug == tagName || x.CatalogIllustration.Name == tagName || x.CatalogIllustration.IllustrationType.Name == tagName))))
         {
             AddInclude(x => x.CatalogType);
             AddInclude(x => x.CatalogIllustration);
