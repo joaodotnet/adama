@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace Backoffice
@@ -68,7 +69,6 @@ namespace Backoffice
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
                     options.Password.RequireUppercase = false;
@@ -82,32 +82,26 @@ namespace Backoffice
                 options.AddPolicy("RequireGroceryRole", policy => policy.RequireRole("GroceryAdmin"));
             });
 
+            services.AddRazorPages(options =>
+            {
+                options.Conventions.AuthorizeFolder("/Account/Manage", "RequireAdministratorRole");
+                options.Conventions.AuthorizePage("/Account/Logout", "RequireAdministratorRole");
+                options.Conventions.AuthorizeFolder("/Category", "RequireAdministratorRole");
+                options.Conventions.AuthorizeFolder("/Illustrations", "RequireAdministratorRole");
+                options.Conventions.AuthorizeFolder("/IllustrationsTypes", "RequireAdministratorRole");
+                options.Conventions.AuthorizeFolder("/Products", "RequireAdministratorRole");
+                options.Conventions.AuthorizeFolder("/ProductType", "RequireAdministratorRole");
+                options.Conventions.AuthorizeFolder("/ShopConfig", "RequireAdministratorRole");
+                options.Conventions.AuthorizeFolder("/Orders", "RequireAdministratorRole");
+                options.Conventions.AuthorizeFolder("/Sage", "RequireAdministratorRole");
+                options.Conventions.AuthorizePage("/Index", "RequireAdministratorRole");
+                options.Conventions.AuthorizePage("/Stock", "RequireAdministratorRole");
+            })
+            .AddRazorRuntimeCompilation();
 
+            services.AddControllers();
 
-            services.AddMvc()
-                .AddRazorPagesOptions(options =>
-                {
-                    options.Conventions.AuthorizeFolder("/Account/Manage", "RequireAdministratorRole");
-                    options.Conventions.AuthorizePage("/Account/Logout", "RequireAdministratorRole");
-                    options.Conventions.AuthorizeFolder("/Category", "RequireAdministratorRole");
-                    options.Conventions.AuthorizeFolder("/Illustrations", "RequireAdministratorRole");
-                    options.Conventions.AuthorizeFolder("/IllustrationsTypes", "RequireAdministratorRole");
-                    options.Conventions.AuthorizeFolder("/Products", "RequireAdministratorRole");
-                    options.Conventions.AuthorizeFolder("/ProductType", "RequireAdministratorRole");
-                    options.Conventions.AuthorizeFolder("/ShopConfig", "RequireAdministratorRole");
-                    options.Conventions.AuthorizeFolder("/Orders", "RequireAdministratorRole");
-                    options.Conventions.AuthorizeFolder("/Sage", "RequireAdministratorRole");
-                    options.Conventions.AuthorizePage("/Index", "RequireAdministratorRole");
-                    options.Conventions.AuthorizePage("/Stock", "RequireAdministratorRole");
-                    options.Conventions.AuthorizeAreaFolder("Grocery", "/CatalogTypes", "RequireGroceryRole");
-                    options.Conventions.AuthorizeAreaFolder("Grocery", "/Categories", "RequireGroceryRole");
-                    options.Conventions.AuthorizeAreaFolder("Grocery", "/Products", "RequireGroceryRole");
-                    options.Conventions.AuthorizeAreaFolder("Grocery", "/Stock", "RequireGroceryRole");
-                    options.Conventions.AuthorizeAreaFolder("Grocery", "/Sales", "RequireAdministratorRole");
-                })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            services.AddAutoMapper();
+            services.AddAutoMapper(typeof(Startup));
 
             // Register no-op EmailSender used by account confirmation and password reset during development
             // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
@@ -125,12 +119,12 @@ namespace Backoffice
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+                //app.UseDatabaseErrorPage();
             }
             else
             {
@@ -155,13 +149,14 @@ namespace Backoffice
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            app.UseAuthentication();
+            app.UseRouting();
 
-            app.UseMvc(routes =>
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }

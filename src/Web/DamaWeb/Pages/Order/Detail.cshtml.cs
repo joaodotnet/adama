@@ -110,7 +110,7 @@ namespace DamaWeb.Pages.Order
                 string uri, name, description = string.Empty, text = string.Empty, colors = string.Empty;
                 int id;
                 bool isCustomize = false;
-                if (oi.CustomizeItem.CatalogTypeId.HasValue)
+                if (oi.CustomizeItem?.CatalogTypeId.HasValue == true)
                 {
                     isCustomize = true;
                     id = oi.CustomizeItem.CatalogTypeId.Value;

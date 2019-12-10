@@ -163,6 +163,9 @@ namespace ApplicationCore.Services
             //var order = (await _orderRepository.ListAsync(specOrders)).FirstOrDefault();
             //var orderItem = order.OrderItems.SingleOrDefault(x => x.Id == orderItemId);
 
+            if (orderItems.Any(x => x.CustomizeItem != null))
+                return null;
+
             var list = new List<(int OrderItemId, List<CatalogAttribute> Attributes)>();
             foreach (var orderItem in orderItems)
             {

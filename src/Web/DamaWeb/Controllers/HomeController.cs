@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using ApplicationCore.Entities;
@@ -27,17 +29,17 @@ namespace DamaWeb.Controllers
             _catalogRepository = catalogRepository;
         }
         [Route("/sitemap.xml")]
-        public async Task SitemapXml()
+        public async Task<IActionResult> SitemapXml()
         {
-            Response.ContentType = "application/xml";
+            StringBuilder builder = new StringBuilder();
 
-            using (var xml = XmlWriter.Create(Response.Body, new XmlWriterSettings { Indent = true }))
+            using (var xml = XmlWriter.Create(builder, new XmlWriterSettings { Indent = true }))
             {
                 xml.WriteStartDocument();
                 xml.WriteStartElement("urlset", "http://www.sitemaps.org/schemas/sitemap/0.9");
 
                 //Home page
-                AddXmlElement(xml,"");
+                AddXmlElement(xml, "");
 
                 //Home page /Loja
                 AddXmlElement(xml, "/loja");
@@ -70,14 +72,26 @@ namespace DamaWeb.Controllers
                 foreach (var item in products.CatalogItems)
                 {
                     var url = Url.Page("/Product", new { id = item.ProductSlug });
-                    AddXmlElement(xml, url);
+                    AddXmlElement(xml, Uri.EscapeUriString(url));
                 }
 
                 var urlCustomize = Url.Page("/Customize/Index");
                 AddXmlElement(xml, urlCustomize);
 
                 xml.WriteEndElement();
+                xml.WriteEndDocument();
+                //xmlString = sw.ToString();
             }
+
+            return new ContentResult
+            {
+                ContentType = "application/xml",
+                Content = builder.ToString(),
+                StatusCode = 200
+            };
+            //byte[] data = Encoding.UTF8.GetBytes(xmlString);
+            //Response.ContentType = "application/xml";
+            //await Response.Body.WriteAsync(data, 0, data.Length);
         }
 
         private void AddXmlElement(XmlWriter xml, string url)
@@ -85,7 +99,7 @@ namespace DamaWeb.Controllers
             string host = Request.Scheme + "://" + Request.Host;
 
             xml.WriteStartElement("url");
-            xml.WriteElementString("loc", host+url);
+            xml.WriteElementString("loc", host + url);
             xml.WriteElementString("lastmod", "2019-04-07");
             xml.WriteEndElement();
         }

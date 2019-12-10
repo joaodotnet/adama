@@ -126,6 +126,8 @@ namespace ApplicationCore.Services
             var basketSpec = new BasketWithItemsSpecification(basketId);
             var basket = (await _basketRepository.ListAsync(basketSpec)).SingleOrDefault();
 
+            if (basket.Items.Any(x => x.CatalogTypeId.HasValue))
+                return null;
             DeliveryTimeDTO deliveryTime = new DeliveryTimeDTO
             {
                 Min = 2,
