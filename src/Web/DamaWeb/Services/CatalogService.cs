@@ -75,7 +75,8 @@ namespace DamaWeb.Services
                     CatalogItemName = i.Name,
                     PictureUri = i.PictureUri,
                     PictureHighUri = i.CatalogPictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
-                    Price = i.Price ?? i.CatalogType.Price,
+                    Price = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) - i.Discount.Value : (i.Price ?? i.CatalogType.Price),
+                    PriceBeforeDiscount = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) : default(decimal?),
                     ProductSlug = i.Slug
                     //ProductSku = i.Sku
                 }),
@@ -88,7 +89,8 @@ namespace DamaWeb.Services
                         CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
                         PictureHighUri = i.CatalogPictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
-                        Price = i.Price ?? i.CatalogType.Price,
+                        Price = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) - i.Discount.Value : (i.Price ?? i.CatalogType.Price),
+                        PriceBeforeDiscount = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) : default(decimal?),
                         ProductSlug = i.Slug
                         //ProductSku = i.Sku,
                     }),
@@ -101,7 +103,8 @@ namespace DamaWeb.Services
                         CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
                         PictureHighUri = i.CatalogPictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
-                        Price = i.Price ?? i.CatalogType.Price,
+                        Price = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) - i.Discount.Value : (i.Price ?? i.CatalogType.Price),
+                        PriceBeforeDiscount = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) : default(decimal?),
                         ProductSlug = i.Slug
                         //ProductSku = i.Sku,
                     }),
@@ -206,9 +209,9 @@ namespace DamaWeb.Services
                         CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
                         PictureHighUri = i.CatalogPictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
-                        Price = i.Price ?? i.CatalogType.Price,
+                        Price = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) - i.Discount.Value : (i.Price ?? i.CatalogType.Price),
+                        PriceBeforeDiscount = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) : default(decimal?),
                         ProductSlug = i.Slug
-                        //ProductSku = i.Sku,
                     }),
                     FeaturedCatalogItems = allItems
                     .Where(x => x.IsFeatured)
@@ -219,9 +222,9 @@ namespace DamaWeb.Services
                         CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
                         PictureHighUri = i.CatalogPictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
-                        Price = i.Price ?? i.CatalogType.Price,
+                        Price = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) - i.Discount.Value : (i.Price ?? i.CatalogType.Price),
+                        PriceBeforeDiscount = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) : default(decimal?),
                         ProductSlug = i.Slug
-                        //ProductSku = i.Sku
                     }),
                     CatalogTypes = types.OrderBy(x => x.Name).Select(x => new CatalogTypeViewModel()
                     {
@@ -239,7 +242,8 @@ namespace DamaWeb.Services
                         CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
                         PictureHighUri = i.CatalogPictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
-                        Price = i.Price ?? i.CatalogType.Price,
+                        Price = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) - i.Discount.Value : (i.Price ?? i.CatalogType.Price),
+                        PriceBeforeDiscount = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) : default(decimal?),
                         ProductSlug = i.Slug
                         //ProductSku = i.Sku
                     }),
@@ -301,7 +305,8 @@ namespace DamaWeb.Services
                     ProductSKU = product.Sku,
                     ProductTitle = product.Name,
                     ProductDescription = product.Description,
-                    ProductPrice = product.Price ?? product.CatalogType.Price,
+                    ProductPrice = product.Discount.HasValue ? (product.Price ?? product.CatalogType.Price) - product.Discount.Value : (product.Price ?? product.CatalogType.Price),
+                    ProductPriceBeforeDiscount = product.Discount.HasValue ? (product.Price ?? product.CatalogType.Price) : default(decimal?),
                     ProductQuantity = 1,
                     ProductImagesUri = new List<(string, string)>
                     {
