@@ -4,7 +4,7 @@
         <a asp-page="/Product" asp-route-id="@Model.ProductSlug">
             @if(Model.PriceBeforeDiscount.HasValue)
             {
-                <img src="~/images/promocao.png" width="120" class="card-img-overlay left-auto" />
+                <img src="~/images/promocao.png" width="90" class="card-img-overlay left-auto" />
             }
             <img class="esh-catalog-thumbnail" src="@Model.PictureUri" alt="@Model.CatalogItemName - Presentes Personalizados - Dama no Jornal&reg;" />
         </a>
