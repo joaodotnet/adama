@@ -176,7 +176,7 @@ namespace Backoffice.Pages.Products
             if (ProductModel.OtherPictures != null)
             {
                 var order = ProductModel.CatalogPictures.Count == 0 ? 0 : ProductModel.CatalogPictures.Max(x => x.Order);
-                var lastCatalogPictureId = _context.CatalogPictures.Count() > 0 ? (await _context.CatalogPictures.AsNoTracking().LastAsync()).Id : 0;
+                var lastCatalogPictureId = _context.CatalogPictures.Count() > 0 ? GetLastCatalogPictureId() : 0;
                 foreach (var item in ProductModel.OtherPictures)
                 {
                     var info = _service.SaveFile(item, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, (++lastCatalogPictureId).ToString(), true, 700, 700);
@@ -323,6 +323,14 @@ namespace Backoffice.Pages.Products
                 CatalogItemId = ProductModel.Id
             });
             return Page();
+        }
+        private int GetLastCatalogPictureId()
+        {
+            return _context.CatalogPictures
+                .AsNoTracking()
+                .AsEnumerable()
+                .Last()
+                .Id;
         }
 
         private async Task<bool> SlugExistsAsync(int catalogItemId, string slug)

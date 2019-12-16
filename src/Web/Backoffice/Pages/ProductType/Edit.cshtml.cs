@@ -125,7 +125,7 @@ namespace Backoffice.Pages.ProductType
 
                 foreach (var item in ProductTypeModel.FormFileTextHelpers)
                 {
-                    var lastId = _context.FileDetails.Count() > 0 ? (await _context.FileDetails.LastAsync()).Id : 0;
+                    var lastId = _context.FileDetails.Count() > 0 ? GetLastFileDetailsId() : 0;
                     var pictureInfo = _service.SaveFile(item, _backofficeSettings.WebProductTypesPictureV2FullPath, _backofficeSettings.WebProductTypesPictureV2Uri, (++lastId).ToString(), true, 150);
                     productTypeEntity.PictureTextHelpers.Add(new FileDetail
                     {
@@ -196,6 +196,14 @@ namespace Backoffice.Pages.ProductType
             }
             StatusMessage = "As imagens foram removidas";
             return RedirectToPage(new { id });
+        }
+
+        private int GetLastFileDetailsId()
+        {
+            return _context.FileDetails
+                .AsEnumerable()
+                .Last()
+                .Id;
         }
 
         private async Task<bool> CheckIfSlugExistsAsync(int id, string slug)

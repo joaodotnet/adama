@@ -60,11 +60,11 @@ namespace Backoffice.Pages.ShopConfig
             if (ShopConfigDetailModel.PictureWebp?.Length > 0 && IsImageSizeInvalid(ShopConfigDetailModel.PictureWebp))
                 return Page();
 
-            var lastShopDetailId = (_context.ShopConfigDetails.Count() > 0 ? (await _context.ShopConfigDetails.LastAsync())?.Id : 0) + 1;
+            var lastShopDetailId = (_context.ShopConfigDetails.Count() > 0 ? GetLastShopConfigDetailsId() : 0) + 1;
             if (ShopConfigDetailModel.Picture.Length > 0)
             {
                 ShopConfigDetailModel.PictureUri = _service.SaveFile(ShopConfigDetailModel.Picture, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, (lastShopDetailId).ToString(), true, 1600).PictureUri;
-                ShopConfigDetailModel.PictureMobileUri = _service.SaveFile(ShopConfigDetailModel.Picture, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, "Mobile" +(lastShopDetailId).ToString(), true, 525).PictureUri;
+                ShopConfigDetailModel.PictureMobileUri = _service.SaveFile(ShopConfigDetailModel.Picture, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, "Mobile" + (lastShopDetailId).ToString(), true, 525).PictureUri;
             }
             if (ShopConfigDetailModel.PictureWebp?.Length > 0)
                 ShopConfigDetailModel.PictureWebpUri = _service.SaveFile(ShopConfigDetailModel.PictureWebp, _backofficeSettings.WebNewsPictureFullPath, _backofficeSettings.WebNewsPictureUri, (lastShopDetailId).ToString()).PictureUri;
@@ -73,6 +73,14 @@ namespace Backoffice.Pages.ShopConfig
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
+        }
+
+        private int GetLastShopConfigDetailsId()
+        {
+            return _context.ShopConfigDetails
+                .AsEnumerable()
+                .Last()
+                .Id;
         }
 
         private bool IsImageSizeInvalid(IFormFile file)

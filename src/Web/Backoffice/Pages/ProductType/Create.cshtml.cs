@@ -83,16 +83,16 @@ namespace Backoffice.Pages.ProductType
             //Save Image
             if (ProductTypeModel?.Picture?.Length > 0)
             {
-                var lastId = _context.CatalogTypes.Count() > 0 ? (await _context.CatalogTypes.LastAsync()).Id : 0;
+                var lastId = _context.CatalogTypes.Count() > 0 ? GetLastCatalogTypeId() : 0;
                 ProductTypeModel.PictureUri = _service.SaveFile(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureV2FullPath, _backofficeSettings.WebProductTypesPictureV2Uri, (++lastId).ToString(), true, 300).PictureUri;
             }
 
             //Save Images Text Helpers
-            if(ProductTypeModel?.FormFileTextHelpers?.Count > 0)
+            if (ProductTypeModel?.FormFileTextHelpers?.Count > 0)
             {
                 foreach (var item in ProductTypeModel.FormFileTextHelpers)
                 {
-                    var lastId = _context.FileDetails.Count() > 0 ? (await _context.FileDetails.LastAsync()).Id : 0;
+                    var lastId = _context.FileDetails.Count() > 0 ? GetLastFileDetailsId() : 0;
                     var pictureInfo = _service.SaveFile(item, _backofficeSettings.WebProductTypesPictureV2FullPath, _backofficeSettings.WebProductTypesPictureV2Uri, (++lastId).ToString(), true, 150);
                     ProductTypeModel.PictureTextHelpers.Add(new FileDetailViewModel
                     {
@@ -119,6 +119,22 @@ namespace Backoffice.Pages.ProductType
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
+        }
+
+        private int GetLastFileDetailsId()
+        {
+            return _context.FileDetails
+                .AsEnumerable()
+                .Last()
+                .Id;
+        }
+
+        private int GetLastCatalogTypeId()
+        {
+            return _context.CatalogTypes
+                .AsEnumerable()
+                .Last()
+                .Id;
         }
 
         private async Task<bool> CheckIfSlugExistsAsync(string slug)

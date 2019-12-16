@@ -132,8 +132,8 @@ namespace Backoffice.Pages.Products
             if (ProductModel.Picture?.Length > 0)
             {
                 var lastCatalogItemId = 0;
-                if(_context.CatalogItems.Any())
-                    lastCatalogItemId = (await _context.CatalogItems.LastAsync()).Id;
+                if (_context.CatalogItems.Any())
+                    lastCatalogItemId = GetLastCatalogId();
 
                 var info = _service.SaveFile(ProductModel.Picture, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, (++lastCatalogItemId).ToString(), true, 700, 700);
                 ProductModel.PictureUri = info.PictureUri;
@@ -151,7 +151,7 @@ namespace Backoffice.Pages.Products
             //Save other images
             if (ProductModel.OtherPictures?.Count > 0)
             {
-                var lastCatalogPictureId = _context.CatalogPictures.Count() > 0 ? (await _context.CatalogPictures.LastAsync()).Id : 0;
+                var lastCatalogPictureId = _context.CatalogPictures.Count() > 0 ? GetLastCatalogPictureId() : 0;
                 var order = 0;
                 foreach (var item in ProductModel.OtherPictures)
                 {
@@ -196,7 +196,6 @@ namespace Backoffice.Pages.Products
             return RedirectToPage("./Index");
         }
 
-
         public async Task<IActionResult> OnPostAddAttributeAsync()
         {
             await PopulateLists();
@@ -214,6 +213,22 @@ namespace Backoffice.Pages.Products
         {
             var type = await _context.CatalogTypes.FindAsync(productType);
             return new JsonResult(type.Price);
+        }
+
+        private int GetLastCatalogId()
+        {
+            return _context.CatalogItems
+                .AsEnumerable()
+                .Last().Id;
+        }
+
+        private int GetLastCatalogPictureId()
+        {
+            return _context.CatalogPictures
+                .AsNoTracking()
+                .AsEnumerable()
+                .Last()
+                .Id;
         }
 
         private async Task<bool> SlugExistsAsync(string slug)
