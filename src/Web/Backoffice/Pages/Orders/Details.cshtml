@@ -236,12 +236,26 @@
             {
                 <form method="post">
                     <input type="hidden" asp-for="OrderModel.Id" />
-
-                    <input type="submit" value="Criar Fatura" class="btn btn-success" asp-page-handler="RegisterInvoice" />
+                    <div class="form-group">
+                        <select asp-for="OrderModel.PaymentTypeSelected" asp-items="Html.GetEnumSelectList<ApplicationCore.DTOs.PaymentType>()" class="form-control"></select>
+                        <span asp-validation-for="OrderModel.PaymentTypeSelected" class="text-danger"></span>
+                    </div>
+                    <input type="submit" value="Criar Fatura/Pagamento" class="btn btn-success" asp-page-handler="RegisterInvoice" />
                 </form>
             }
             else
             {
+                if (!Model.OrderModel.SalesPaymentId.HasValue)
+                {
+                    <form method="post">
+                        <input type="hidden" asp-for="OrderModel.Id" />
+                        <div class="form-group">
+                            <select asp-for="OrderModel.PaymentTypeSelected" asp-items="Html.GetEnumSelectList<ApplicationCore.DTOs.PaymentType>()" class="form-control"></select>
+                            <span asp-validation-for="OrderModel.PaymentTypeSelected" class="text-danger"></span>
+                        </div>
+                        <input type="submit" value="Criar Pagamento" class="btn btn-success" asp-page-handler="CreatePayment" />
+                    </form>
+                }
                 <span class="bold">Fatura nº @Model.OrderModel.SalesInvoiceNumber</span><br>
                 <a asp-page-handler="InvoicePDF" asp-route-id="@Model.OrderModel.Id" asp-route-invoiceId="@Model.OrderModel.SalesInvoiceId">Imprimir Fatura</a>
             }

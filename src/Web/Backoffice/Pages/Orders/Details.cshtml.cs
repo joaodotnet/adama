@@ -69,21 +69,29 @@ namespace Backoffice.Pages.Orders
         {
             SageResponseDTO response = await _service.RegisterInvoiceAsync(OrderModel.Id);
             if (response.Message == "Success")
-                StatusMessage = $"Sucesso foi criado a fatura: {response.InvoiceNumber}";
+            {
+                SageResponseDTO responsePayment = await _service.RegisterPaymentAsync(OrderModel.Id, OrderModel.PaymentTypeSelected);
+                if (responsePayment.Message == "Success")
+                    StatusMessage = $"Sucesso foi criada a factura/recibo {response.InvoiceNumber}";
+                else
+                {
+                    StatusMessage = $"Foi criado a fatura {response.InvoiceNumber} mas ocorreu um erro ao gerar recibo: {responsePayment.Message}, Resposta: {responsePayment.ResponseBody}";
+                }
+            }
             else
                 StatusMessage = $"Erro: {response.Message}, Resposta: {response.ResponseBody}";
             return RedirectToPage(new { id = OrderModel.Id });
         }
 
-        // public async Task<IActionResult> OnPostCreatePaymentAsync()
-        // {
-        //     SageResponseDTO response = await _service.RegisterPaymentAsync(OrderModel.Id, OrderModel.PaymentTypeSelected);
-        //     if (response.Message == "Success")
-        //         StatusMessage = $"Sucesso foi criado o recibo sobre a fatura {OrderModel.SalesInvoiceNumber}";
-        //     else
-        //         StatusMessage = $"Erro: {response.Message}, Resposta: {response.ResponseBody}";
-        //     return RedirectToPage(new { id = OrderModel.Id });
-        // }
+        public async Task<IActionResult> OnPostCreatePaymentAsync()
+        {
+            SageResponseDTO response = await _service.RegisterPaymentAsync(OrderModel.Id, OrderModel.PaymentTypeSelected);
+            if (response.Message == "Success")
+                StatusMessage = $"Sucesso foi criado o recibo sobre a fatura {OrderModel.SalesInvoiceNumber}";
+            else
+                StatusMessage = $"Erro: {response.Message}, Resposta: {response.ResponseBody}";
+            return RedirectToPage(new { id = OrderModel.Id });
+        }
 
         public async Task<IActionResult> OnGetInvoicePDFAsync(int id, long invoiceId)
         {

@@ -194,7 +194,7 @@ namespace Backoffice.Services
 
             var orderViewModel = _mapper.Map<OrderViewModel>(order);
             orderViewModel.Items = _mapper.Map<List<OrderItemViewModel>>(order.OrderItems);
-            orderViewModel.Items.ForEach(async x => x.ProductSku = await GetSkuAsync(x.ProductId));
+            //orderViewModel.Items.ForEach(async x => x.ProductSku = await GetSkuAsync(x.ProductId));
 
             //Attributes
             foreach (var item in orderViewModel.Items)
