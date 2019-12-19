@@ -257,9 +257,9 @@
                     </form>
                 }
                 <span class="bold">Fatura nº @Model.OrderModel.SalesInvoiceNumber</span><br>
-                <a asp-page-handler="InvoicePDF" asp-route-id="@Model.OrderModel.Id" asp-route-invoiceId="@Model.OrderModel.SalesInvoiceId">Imprimir Fatura</a>
+                <a asp-page-handler="InvoicePDF" asp-route-id="@Model.OrderModel.Id" asp-route-invoiceId="@Model.OrderModel.SalesInvoiceId" class="btn btn-default">Imprimir Fatura</a>
             }
-            <br />
+            <br /><br />
             <form method="post">
                 <input type="hidden" asp-for="OrderModel.Id" />
                 <button type="submit" asp-page-handler="SendEmailToClient" class="btn btn-info">Enviar mail a cliente</button>

@@ -17,15 +17,15 @@ using Microsoft.Extensions.Options;
 namespace Backoffice.Pages.Orders
 {
     public class DetailsModel : PageModel
-    {        
+    {
         private readonly IBackofficeService _service;
         private readonly IOrderService _orderService;
         private readonly BackofficeSettings _settings;
         private readonly EmailSettings _emailSettings;
         private readonly IEmailSender _emailSender;
 
-        public DetailsModel(IBackofficeService service, 
-            IOrderService orderService, 
+        public DetailsModel(IBackofficeService service,
+            IOrderService orderService,
             IOptions<BackofficeSettings> options,
             IOptions<EmailSettings> emailOptions,
             IEmailSender emailSender)
@@ -56,11 +56,11 @@ namespace Backoffice.Pages.Orders
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 await _orderService.UpdateOrderState(OrderModel.Id, OrderModel.OrderState);
                 StatusMessage = $"O estado da encomenda #{OrderModel.Id} foi alterada para {EnumHelper<OrderStateType>.GetDisplayValue(OrderModel.OrderState)}";
-                return RedirectToPage(new { id = OrderModel.Id });                
+                return RedirectToPage(new { id = OrderModel.Id });
             }
             return Page();
         }
@@ -95,7 +95,7 @@ namespace Backoffice.Pages.Orders
 
         public async Task<IActionResult> OnGetInvoicePDFAsync(int id, long invoiceId)
         {
-            var fileName = string.Format(_settings.InvoiceNameFormat,id);
+            var fileName = string.Format(_settings.InvoiceNameFormat, id);
             //Check if file already exist
             if (_service.CheckIfFileExists(_settings.InvoicesFolderFullPath, fileName))
             {
@@ -109,39 +109,39 @@ namespace Backoffice.Pages.Orders
             {
                 var bytes = await _service.GetInvoicePDFAsync(ApplicationCore.Entities.SageApplicationType.DAMA_BACKOFFICE, invoiceId);
 
-                if(bytes.Length > 0)
+                if (bytes.Length > 0)
                     await _service.SaveFileAsync(bytes, _settings.InvoicesFolderFullPath, fileName);
 
-                return File(bytes, "application/pdf",fileName);
+                return File(bytes, "application/pdf", fileName);
             }
 
         }
 
         public async Task<IActionResult> OnGetReceiptPDFAsync(int id, long? invoiceId, long? paymentId)
         {
-            if(!invoiceId.HasValue || !paymentId.HasValue)
+            if (!invoiceId.HasValue || !paymentId.HasValue)
             {
                 return NotFound();
             }
             var fileName = string.Format(_settings.ReceiptNameFormat, id);
-           //Check if file already exist
-           if (_service.CheckIfFileExists(_settings.InvoicesFolderFullPath, fileName))
-           {
+            //Check if file already exist
+            if (_service.CheckIfFileExists(_settings.InvoicesFolderFullPath, fileName))
+            {
                 byte[] fileBytes = await System.IO.File.ReadAllBytesAsync(
                    Path.Combine(
                        _settings.InvoicesFolderFullPath,
                        fileName));
                 return File(fileBytes, "application/pdf");
-           }
-           else
-           {
-               var bytes = await _service.GetReceiptPDFAsync(invoiceId.Value,paymentId.Value);
+            }
+            else
+            {
+                var bytes = await _service.GetReceiptPDFAsync(invoiceId.Value, paymentId.Value);
 
-                if(bytes.Length > 0)
+                if (bytes.Length > 0)
                     await _service.SaveFileAsync(bytes, _settings.InvoicesFolderFullPath, fileName);
 
-               return File(bytes, "application/pdf", fileName);
-           }
+                return File(bytes, "application/pdf", fileName);
+            }
         }
 
         public async Task<ActionResult> OnPostSendEmailToClient()
@@ -157,7 +157,7 @@ namespace Backoffice.Pages.Orders
             //{
             //    files.Add((fileName,await _service.GetInvoicePDF(order.SalesInvoiceId.Value)));
             //}
-            if(_service.CheckIfFileExists(_settings.InvoicesFolderFullPath, fileName))
+            if (_service.CheckIfFileExists(_settings.InvoicesFolderFullPath, fileName))
             {
                 var invoicePath = Path.Combine(_settings.InvoicesFolderFullPath, fileName);
                 files.Add((fileName, await System.IO.File.ReadAllBytesAsync(invoicePath)));
@@ -167,12 +167,14 @@ namespace Backoffice.Pages.Orders
             var name = order.User != null ? $"{order.User.FirstName} {order.User.LastName}" : order.BuyerId;
             var body = $"<strong>Olá {name}!</strong><br>" +
                 $"Obrigada por comprares na Dama no Jornal®.<br>" +
-                $"O pagamento relativo à encomenda #{order.Id} <strong>foi recebido.</strong><br><br>";
+                $"A tua encomenda já foi enviada";
             if (files.Count > 0)
-                body += $"Enviamos em anexo a fatura relativa à tua encomenda. <br>";
-            body += $"Estamos a preparar a expedição.";
+                body += ", segue em anexo a fatura";
+            body += ".<br><br>" +
+                "Até já!";
 
-            await _emailSender.SendGenericEmailAsync(_emailSettings.FromOrderEmail, order.BuyerId, $"Dama no Jornal® - Encomenda #{order.Id} - Pagamento", body, _emailSettings.CCEmails, files);
+
+            await _emailSender.SendGenericEmailAsync(_emailSettings.FromOrderEmail, order.BuyerId, $"Dama no Jornal® - Encomenda #{order.Id} - Envio", body, _emailSettings.CCEmails, files);
             StatusMessage = "Mensagem Enviada";
             return RedirectToPage(new { id = OrderModel.Id });
         }
@@ -189,7 +191,7 @@ namespace Backoffice.Pages.Orders
                 if (item.CustomizeItemCatalogTypeId.HasValue && OrderModel.OrderState != OrderStateType.DELIVERED)
                     itemsToUpdate.Add(new Tuple<int, decimal>(item.Id, item.UnitPrice));
             }
-            if(itemsToUpdate.Count > 0)
+            if (itemsToUpdate.Count > 0)
                 await _orderService.UpdateOrderItemsPrice(OrderModel.Id, itemsToUpdate);
 
             StatusMessage = "Preços atualizados!";
