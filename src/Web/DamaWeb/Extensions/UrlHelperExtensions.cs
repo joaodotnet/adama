@@ -1,4 +1,7 @@
-﻿namespace Microsoft.AspNetCore.Mvc
+﻿using System.Text;
+using Microsoft.AspNetCore.WebUtilities;
+
+namespace Microsoft.AspNetCore.Mvc
 {
     public static class UrlHelperExtensions
     {
@@ -14,6 +17,7 @@
 
         public static string EmailConfirmationLink(this IUrlHelper urlHelper, string userId, string code, string scheme)
         {
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
             return urlHelper.Page(
                 "/Account/ConfirmEmail",
                 pageHandler: null,

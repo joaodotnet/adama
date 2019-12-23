@@ -26,9 +26,6 @@
     <ProjectReference Include="..\..\Shared\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <DotNetCliToolReference Include="BundlerMinifier.Core" Version="2.8.391" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
