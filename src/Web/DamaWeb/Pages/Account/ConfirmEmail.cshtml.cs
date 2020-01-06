@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Logging;
 
 namespace DamaWeb.Pages.Account
 {
@@ -16,10 +17,12 @@ namespace DamaWeb.Pages.Account
     public class ConfirmEmailModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ILogger<ConfirmEmailModel> _logger;
 
-        public ConfirmEmailModel(UserManager<ApplicationUser> userManager)
+        public ConfirmEmailModel(UserManager<ApplicationUser> userManager, ILogger<ConfirmEmailModel> logger)
         {
             _userManager = userManager;
+            _logger = logger;
         }
 
         public async Task<IActionResult> OnGetAsync(string userId, string code)
@@ -28,19 +31,30 @@ namespace DamaWeb.Pages.Account
             {
                 return RedirectToPage("/Index");
             }
-
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
+            try
             {
-                throw new ApplicationException($"Unable to load user with ID '{userId}'.");
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null)
+                {
+                    _logger.LogError("Unable to load user with ID '{userId}'.", userId);
+                    return RedirectToPage("/Index");
+                }
+
+                code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+
+                var result = await _userManager.ConfirmEmailAsync(user, code);
+                if (!result.Succeeded)
+                {
+                    _logger.LogError("Error confirming email for user with ID '{userId}': {messages}", userId, GetErrors(result));
+                    return RedirectToPage("/Index");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,"Error in Confirm Email Page");
+                return RedirectToPage("/Index");
             }
 
-            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-            var result = await _userManager.ConfirmEmailAsync(user, code);
-            if (!result.Succeeded)
-            {
-                throw new ApplicationException($"Error confirming email for user with ID '{userId}': {GetErrors(result)}");
-            }
 
             return Page();
         }
