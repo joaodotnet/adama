@@ -20,6 +20,31 @@
 
             gtag('config', 'UA-112025066-1');
         </script>
+
+        @if (ViewBag.IsAddConversion != null && ViewBag.IsAddConversion == true)
+        {
+            <!-- Ads Conversion-->
+            <!-- Global site tag (gtag.js) - Google Ads: 799161024 -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id=AW-799161024"></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag() { dataLayer.push(arguments); }
+                gtag('js', new Date());
+
+                gtag('config', 'AW-799161024');
+            </script>
+        }
+        <!-- Hotjar Tracking Code for www.damanojornal.com/loja -->
+        <script>
+            (function (h, o, t, j, a, r) {
+                h.hj = h.hj || function () { (h.hj.q = h.hj.q || []).push(arguments) };
+                h._hjSettings = { hjid: 962489, hjsv: 6 };
+                a = o.getElementsByTagName('head')[0];
+                r = o.createElement('script'); r.async = 1;
+                r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+                a.appendChild(r);
+            })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
+        </script>
     </environment>
 
     <environment names="Development">
