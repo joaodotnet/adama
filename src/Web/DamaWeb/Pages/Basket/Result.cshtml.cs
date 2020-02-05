@@ -16,17 +16,21 @@ namespace DamaWeb.Pages.Basket
         {
             _orderService = orderService;
         }
+        [ViewData]
         public int OrderNumber { get; set; }
+        [ViewData]
+        public decimal TotalOrder { get; set; }
         [ViewData]
         public bool IsAddConversion { get; set; } = false;
         public async Task OnGetAsync(int id)
         {
-            OrderNumber = id;
+            OrderNumber = id;            
 
             //Adwords conversion
             var order = await _orderService.GetOrderAsync(id);
+            TotalOrder = order.Total();
 
-            if(order?.OrderItems?.Count > 0)
+            if (order?.OrderItems?.Count > 0)
             {
                 if (order.OrderItems.Any(x => x.ItemOrdered != null && x.ItemOrdered.CatalogItemId == 279))
                     IsAddConversion = true;

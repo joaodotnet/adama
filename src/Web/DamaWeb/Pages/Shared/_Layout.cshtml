@@ -19,19 +19,29 @@
             gtag('js', new Date());
 
             gtag('config', 'UA-112025066-1');
+            gtag('config', 'AW-799161024');
         </script>
 
         @if (ViewBag.IsAddConversion != null && ViewBag.IsAddConversion == true)
-        {
-            <!-- Ads Conversion-->
-            <!-- Global site tag (gtag.js) - Google Ads: 799161024 -->
-            <script async src="https://www.googletagmanager.com/gtag/js?id=AW-799161024"></script>
+        {            
+            <!-- Event snippet for Agenda 2020 conversion page -->
             <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag() { dataLayer.push(arguments); }
-                gtag('js', new Date());
-
-                gtag('config', 'AW-799161024');
+                gtag('event', 'conversion', {
+                    'send_to': 'AW-799161024/43xyCN3-g8ABEMD1iP0C',
+                    'transaction_id': '@ViewBag.OrderNumber'
+                });
+            </script>
+        }
+        @if (ViewBag.OrderNumber != null)
+        {
+            <!-- Event snippet for Compra conversion page -->
+            <script>
+                gtag('event', 'conversion', {
+                    'send_to': 'AW-799161024/0IxECMim2MIBEMD1iP0C',
+                    'value': @ViewBag.TotalOrder,
+                    'currency': 'EUR',
+                    'transaction_id': '@ViewBag.OrderNumber'
+                });
             </script>
         }
         <!-- Hotjar Tracking Code for www.damanojornal.com/loja -->
