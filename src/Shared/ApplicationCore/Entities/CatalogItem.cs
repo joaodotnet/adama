@@ -22,6 +22,7 @@ namespace ApplicationCore.Entities
         public string MetaDescription { get; set; }
         public string Title { get; set; }
         public decimal? Discount { get; set; }
+        public bool IsUnavailable { get; set; }
 
         public ICollection<CatalogAttribute> CatalogAttributes { get; set; }
         public ICollection<CatalogReference>  CatalogReferences { get; set; }

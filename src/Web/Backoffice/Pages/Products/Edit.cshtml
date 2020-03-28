@@ -75,6 +75,11 @@
                 <label asp-for="ProductModel.CanCustomize" class="form-check-label"></label>
                 <span asp-validation-for="ProductModel.CanCustomize" class="text-danger"></span>
             </div>
+            <div class="form-check">
+                <input asp-for="ProductModel.IsUnavailable" class="form-check-input" />
+                <label asp-for="ProductModel.IsUnavailable" class="form-check-label"></label>
+                <span asp-validation-for="ProductModel.IsUnavailable" class="text-danger"></span>
+            </div>
             <br /><br />
             <div class="form-group">
                 <label asp-for="ProductModel.Picture" class="control-label"></label>

@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Backoffice.ViewModels;
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using ApplicationCore.Entities;
-using Infrastructure.Data;
-using Backoffice.ViewModels;
-using AutoMapper;
 
 namespace Backoffice.Pages.Products
 {
@@ -57,6 +55,8 @@ namespace Backoffice.Pages.Products
                 product.IsFeatured = value;
             else if (checkboxType == 4)
                 product.CanCustomize = value;
+            else if (checkboxType == 5)
+                product.IsUnavailable = value;
 
             await _context.SaveChangesAsync();
             return new JsonResult("OK");

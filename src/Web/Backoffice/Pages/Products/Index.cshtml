@@ -38,59 +38,59 @@
                 @Html.DisplayNameFor(model => model.ProductModel[0].CanCustomize)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProductModel[0].Stock)
+                @Html.DisplayNameFor(model => model.ProductModel[0].IsUnavailable)
             </th>
-            <th>Meta & Title?</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model.ProductModel)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @foreach (var cat in item.CatalogCategories)
-                {
-                    @cat.Label
-                    <br />
-                    @foreach (var child in cat.Childs)
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @foreach (var cat in item.CatalogCategories)
                     {
-                        @child.Label
+                        @cat.Label
                         <br />
+                        @foreach (var child in cat.Childs)
+                        {
+                            @child.Label
+                            <br />
+                        }
                     }
-                }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Discount)
-            </td>
-            <td>
-                <input type="checkbox" asp-for="@item.ShowOnShop" class="updateProduct" product-id="@item.Id" checkboxType="1" />
-            </td>
-            <td>
-                <input type="checkbox" asp-for="@item.IsNew" class="updateProduct" product-id="@item.Id" checkboxType="2" />
-            </td>
-            <td>
-                <input type="checkbox" asp-for="@item.IsFeatured" class="updateProduct" product-id="@item.Id" checkboxType="3" />
-            </td>
-            <td>
-                <input type="checkbox" asp-for="@item.CanCustomize" class="updateProduct" product-id="@item.Id" checkboxType="4" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Stock)
-            </td>
-            <td>@(!string.IsNullOrEmpty(item.MetaDescription) ? "Sim/" : "Não/")@(!string.IsNullOrEmpty(item.Title) ? "Sim" : "Não")</td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Editar</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Detalhes</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Remover</a>
-            </td>
-        </tr>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Discount)
+                </td>
+                <td>
+                    <input type="checkbox" asp-for="@item.ShowOnShop" class="updateProduct" product-id="@item.Id" checkboxType="1" />
+                </td>
+                <td>
+                    <input type="checkbox" asp-for="@item.IsNew" class="updateProduct" product-id="@item.Id" checkboxType="2" />
+                </td>
+                <td>
+                    <input type="checkbox" asp-for="@item.IsFeatured" class="updateProduct" product-id="@item.Id" checkboxType="3" />
+                </td>
+                <td>
+                    <input type="checkbox" asp-for="@item.CanCustomize" class="updateProduct" product-id="@item.Id" checkboxType="4" />
+                </td>
+                <td>
+                    <input type="checkbox" asp-for="@item.IsUnavailable" class="updateProduct" product-id="@item.Id" checkboxType="5" />
+                </td>
+                <td>
+                    <div style="display:flex">
+                        <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-default" role="button"><i class="fas fa-edit"></i></a>
+                        <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-default" role="button"><i class="fas fa-eye"></i></a>
+                        <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-default" role="button"><i class="fas fa-trash"></i></a>
+                    </div>
+                </td>
+            </tr>
         }
     </tbody>
 </table>

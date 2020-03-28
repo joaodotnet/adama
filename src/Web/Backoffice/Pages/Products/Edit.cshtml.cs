@@ -70,6 +70,8 @@ namespace Backoffice.Pages.Products
             public bool IsFeatured { get; set; }
             [Display(Name = "Personalizar")]
             public bool CanCustomize { get; set; }
+            [Display(Name = "Indisponível")]
+            public bool IsUnavailable { get; set; }
             [Display(Name = "Imagem Principal")]            
             public IFormFile Picture { get; set; }
             [Display(Name = "URL da Imagem Principal")]
@@ -212,6 +214,7 @@ namespace Backoffice.Pages.Products
             prod.IsNew = ProductModel.IsNew;
             prod.ShowOnShop = ProductModel.ShowOnShop;
             prod.CanCustomize = ProductModel.CanCustomize;
+            prod.IsUnavailable = ProductModel.IsUnavailable;
             prod.Sku = ProductModel.Sku;
             prod.Stock = ProductModel.Stock;
             prod.MetaDescription = ProductModel.MetaDescription;

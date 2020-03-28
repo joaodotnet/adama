@@ -55,6 +55,8 @@ namespace Backoffice.ViewModels
         public string Title { get; set; }
         [Display(Name = "Desconto")]
         public decimal? Discount { get; set; }
+        [Display(Name = "Indisponível")]
+        public bool IsUnavailable { get; set; }
 
 
         public IList<ProductAttributeViewModel> CatalogAttributes { get; set; } = new List<ProductAttributeViewModel>();
