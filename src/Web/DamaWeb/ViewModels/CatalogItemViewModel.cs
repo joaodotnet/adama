@@ -11,5 +11,6 @@
         //public string ProductSku { get; set; }
         public string ProductSlug { get; set; }
         public string PictureHighUri { get; set; }
+        public bool IsUnavailable { get; set; }
     }
 }

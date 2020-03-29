@@ -6,12 +6,13 @@ namespace ApplicationCore.Specifications
 
     public class CatalogFilterSpecification : BaseSpecification<CatalogItem>
     {
-        public CatalogFilterSpecification(int? IllustrationId, int? typeId, int? categoryId, bool? canCustomize = null)
+        public CatalogFilterSpecification(int? IllustrationId, int? typeId, int? categoryId, bool? canCustomize = null, bool? showOnlyAvailable = null)
             : base(i => i.ShowOnShop &&
             (!IllustrationId.HasValue || i.CatalogIllustrationId == IllustrationId) &&
             (!typeId.HasValue || i.CatalogTypeId == typeId) &&
             (!categoryId.HasValue || i.CatalogCategories.Any(x => x.CategoryId == categoryId)) &&
-            (!canCustomize.HasValue || i.CanCustomize == canCustomize.Value))
+            (!canCustomize.HasValue || i.CanCustomize == canCustomize.Value) &&
+            (!showOnlyAvailable.HasValue || (showOnlyAvailable.HasValue && !showOnlyAvailable.Value) || (showOnlyAvailable.HasValue && showOnlyAvailable.Value && !i.IsUnavailable)))
         {
             AddInclude(x => x.CatalogType);
             AddInclude(x => x.CatalogCategories);
@@ -42,8 +43,9 @@ namespace ApplicationCore.Specifications
 
     public class CatalogSearchSpecification : BaseSpecification<CatalogItem>
     {
-        public CatalogSearchSpecification(string searchFor)
+        public CatalogSearchSpecification(string searchFor, bool showOnlyAvailabe)
             : base(x => x.ShowOnShop &&
+                (!showOnlyAvailabe || (showOnlyAvailabe && !x.IsUnavailable)) &&
                 (x.CatalogType.Name.Contains(searchFor) ||
                 x.CatalogIllustration.Name.Contains(searchFor) ||
                 x.CatalogIllustration.IllustrationType.Name.Contains(searchFor) ||
@@ -83,8 +85,10 @@ namespace ApplicationCore.Specifications
 
     public class CatalogTagSpecification : BaseSpecification<CatalogItem>
     {
-        public CatalogTagSpecification(string tagName, TagType? tagType) : 
-            base(x => x.ShowOnShop && (
+        public CatalogTagSpecification(string tagName, TagType? tagType, bool showOnlyAvailable) : 
+            base(x => x.ShowOnShop &&
+            (!showOnlyAvailable || (showOnlyAvailable && !x.IsUnavailable)) &&
+            (
             (tagType.HasValue && tagType.Value == TagType.CATALOG_TYPE && x.CatalogType.Slug == tagName) || 
             (tagType.HasValue && tagType.Value == TagType.ILLUSTRATION && x.CatalogIllustration.Name == tagName) ||
             (tagType.HasValue && tagType.Value == TagType.ILLUSTRATION_TYPE && x.CatalogIllustration.IllustrationType.Name == tagName) || 

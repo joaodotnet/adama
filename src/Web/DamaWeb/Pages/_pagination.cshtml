@@ -12,6 +12,7 @@
                        asp-route-TypesFilterApplied="@ViewBag.TypeId"
                        asp-route-IllustrationFilterApplied="@ViewBag.IllustrationId"
 					   asp-route-p="@(Model.ActualPage - 1)"
+					   asp-route-oa="@Context.Request.Query["oa"]"
                        asp-fragment="todos"
 					   aria-label="Anterior">
 						< Anterior
@@ -32,6 +33,7 @@
                        asp-route-TypesFilterApplied="@ViewBag.TypeId"
                        asp-route-IllustrationFilterApplied="@ViewBag.IllustrationId"
 					   asp-route-p="@(Model.ActualPage + 1)"
+					   asp-route-oa="@Context.Request.Query["oa"]"
                        asp-fragment="todos"
 					   aria-label="Seguinte">
 						Seguinte >

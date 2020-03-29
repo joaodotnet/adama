@@ -43,11 +43,11 @@ namespace DamaWeb.Services
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int? itemsPage, int? illustrationId, int? typeId, int? categoryId)
+        public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int? itemsPage, int? illustrationId, int? typeId, int? categoryId, string onlyAvailable = null)
         {
             _logger.LogInformation("GetCatalogItems called.");
 
-            var filterSpecification = new CatalogFilterSpecification(illustrationId, typeId, categoryId);
+            var filterSpecification = new CatalogFilterSpecification(illustrationId, typeId, categoryId, showOnlyAvailable: onlyAvailable == "true");
             var root = await _itemRepository
                 .ListAsync(filterSpecification);
 
@@ -77,8 +77,8 @@ namespace DamaWeb.Services
                     PictureHighUri = i.CatalogPictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
                     Price = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) - i.Discount.Value : (i.Price ?? i.CatalogType.Price),
                     PriceBeforeDiscount = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) : default(decimal?),
-                    ProductSlug = i.Slug
-                    //ProductSku = i.Sku
+                    ProductSlug = i.Slug,
+                    IsUnavailable = i.IsUnavailable
                 }),
                 NewCatalogItems = itemsOnPage
                     .Where(x => x.IsNew)
@@ -91,8 +91,8 @@ namespace DamaWeb.Services
                         PictureHighUri = i.CatalogPictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
                         Price = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) - i.Discount.Value : (i.Price ?? i.CatalogType.Price),
                         PriceBeforeDiscount = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) : default(decimal?),
-                        ProductSlug = i.Slug
-                        //ProductSku = i.Sku,
+                        ProductSlug = i.Slug,
+                        IsUnavailable = i.IsUnavailable
                     }),
                 FeaturedCatalogItems = itemsOnPage
                     .Where(x => x.IsFeatured)
@@ -105,8 +105,8 @@ namespace DamaWeb.Services
                         PictureHighUri = i.CatalogPictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
                         Price = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) - i.Discount.Value : (i.Price ?? i.CatalogType.Price),
                         PriceBeforeDiscount = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) : default(decimal?),
-                        ProductSlug = i.Slug
-                        //ProductSku = i.Sku,
+                        ProductSlug = i.Slug,
+                        IsUnavailable = i.IsUnavailable
                     }),
                 Illustrations = await GetIllustrations(),
                 Types = await GetTypes(),
@@ -160,13 +160,13 @@ namespace DamaWeb.Services
             return items;
         }
 
-        public async Task<CategoryViewModel> GetCategoryCatalogItems(string categorySlug, int pageIndex, int? itemsPage)
+        public async Task<CategoryViewModel> GetCategoryCatalogItems(string categorySlug, int pageIndex, int? itemsPage, string onlyAvailable = null)
         {
             Category category = await GetCategoryFromUrl(categorySlug);
             if (category == null)
                 return null;
 
-            var filterSpecification = new CatalogFilterSpecification(null, null, category.Id);
+            var filterSpecification = new CatalogFilterSpecification(null, null, category.Id, showOnlyAvailable: onlyAvailable == "true");
             var root = await _itemRepository
                 .ListAsync(filterSpecification);
 
@@ -211,7 +211,8 @@ namespace DamaWeb.Services
                         PictureHighUri = i.CatalogPictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
                         Price = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) - i.Discount.Value : (i.Price ?? i.CatalogType.Price),
                         PriceBeforeDiscount = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) : default(decimal?),
-                        ProductSlug = i.Slug
+                        ProductSlug = i.Slug,
+                        IsUnavailable = i.IsUnavailable
                     }),
                     FeaturedCatalogItems = allItems
                     .Where(x => x.IsFeatured)
@@ -224,7 +225,8 @@ namespace DamaWeb.Services
                         PictureHighUri = i.CatalogPictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
                         Price = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) - i.Discount.Value : (i.Price ?? i.CatalogType.Price),
                         PriceBeforeDiscount = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) : default(decimal?),
-                        ProductSlug = i.Slug
+                        ProductSlug = i.Slug,
+                        IsUnavailable = i.IsUnavailable
                     }),
                     CatalogTypes = types.OrderBy(x => x.Name).Select(x => new CatalogTypeViewModel()
                     {
@@ -244,8 +246,8 @@ namespace DamaWeb.Services
                         PictureHighUri = i.CatalogPictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
                         Price = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) - i.Discount.Value : (i.Price ?? i.CatalogType.Price),
                         PriceBeforeDiscount = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) : default(decimal?),
-                        ProductSlug = i.Slug
-                        //ProductSku = i.Sku
+                        ProductSlug = i.Slug,
+                        IsUnavailable = i.IsUnavailable
                     }),
                     PaginationInfo = new PaginationInfoViewModel()
                     {
@@ -341,7 +343,8 @@ namespace DamaWeb.Services
                         !string.IsNullOrEmpty(product.CatalogType.MetaDescription) ? 
                             $"{product.CatalogType.MetaDescription} {product.Name}" : 
                             "",
-                    Title = string.IsNullOrEmpty(product.Title) ? product.Name : product.Title
+                    Title = string.IsNullOrEmpty(product.Title) ? product.Name : product.Title,
+                    IsUnavailable = product.IsUnavailable
                 };
 
                 //Others prictures
@@ -399,11 +402,11 @@ namespace DamaWeb.Services
             }
         }
 
-        public async Task<CatalogIndexViewModel> GetCatalogItemsByTag(int pageIndex, int? itemsPage, string tagName, TagType? tagType)
+        public async Task<CatalogIndexViewModel> GetCatalogItemsByTag(int pageIndex, int? itemsPage, string tagName, TagType? tagType, string onlyAvailable = null)
         {
             //TODO: Add Count to EfRepository and get paging from DB, not in memory
             tagName = tagName.ToLower().Trim();
-            var spec = new CatalogTagSpecification(tagName, tagType);
+            var spec = new CatalogTagSpecification(tagName, tagType, onlyAvailable == "true");
 
             var allItems = await _itemRepository.ListAsync(spec);
             var totalItems = allItems.Count();
@@ -424,8 +427,8 @@ namespace DamaWeb.Services
                     PictureUri = x.PictureUri,
                     PictureHighUri = x.CatalogPictures?.SingleOrDefault(p => p.IsMain)?.PictureHighUri,
                     Price = x.Price ?? x.CatalogType.Price,
-                    ProductSlug = x.Slug
-                    //ProductSku = x.Sku
+                    ProductSlug = x.Slug,
+                    IsUnavailable = x.IsUnavailable
                 }).ToList(),
                 PaginationInfo = new PaginationInfoViewModel()
                 {
@@ -441,11 +444,11 @@ namespace DamaWeb.Services
             vm.PaginationInfo.Previous = (vm.PaginationInfo.ActualPage == 0) ? "is-disabled" : "";
             return vm;
         }
-        public async Task<CatalogIndexViewModel> GetCatalogItemsBySearch(int pageIndex, int? itemsPage, string searchFor)
+        public async Task<CatalogIndexViewModel> GetCatalogItemsBySearch(int pageIndex, int? itemsPage, string searchFor, string onlyAvailable = null)
         {
             searchFor = searchFor.ToLower().Trim();
 
-            var spec = new CatalogSearchSpecification(searchFor);
+            var spec = new CatalogSearchSpecification(searchFor, onlyAvailable == "true");
             var items = await _itemRepository.ListAsync(spec);
 
             var totalItems = items.Count();           
@@ -465,8 +468,8 @@ namespace DamaWeb.Services
                     PictureUri = x.PictureUri,
                     PictureHighUri = x.CatalogPictures?.SingleOrDefault(p => p.IsMain)?.PictureHighUri,
                     Price = x.Price ?? x.CatalogType.Price,
-                    ProductSlug = x.Slug
-                    //ProductSku = x.Sku
+                    ProductSlug = x.Slug,
+                    IsUnavailable = x.IsUnavailable
                 }).ToList(),
                 PaginationInfo = new PaginationInfoViewModel()
                 {
@@ -501,7 +504,7 @@ namespace DamaWeb.Services
             return menuViewModel;
         }
 
-        public async Task<CatalogTypeViewModel> GetCatalogTypeItemsAsync(string cat, string type, int pageIndex, int itemsPage)
+        public async Task<CatalogTypeViewModel> GetCatalogTypeItemsAsync(string cat, string type, int pageIndex, int itemsPage, string onlyAvailable = null)
         {
             var category = await GetCategoryFromUrl(cat);
 
@@ -515,7 +518,7 @@ namespace DamaWeb.Services
                 CatNameUri = category.Slug,
                 CategoryName = category.Name,
                 Name = catalogType.Name,
-                CatalogModel = await GetCatalogItems(pageIndex, itemsPage, null, catalogType.Id, category.Id),
+                CatalogModel = await GetCatalogItems(pageIndex, itemsPage, null, catalogType.Id, category.Id, onlyAvailable),
                 MetaDescription = catalogType.MetaDescription,
                 Title = string.IsNullOrEmpty(catalogType.Title) ? catalogType.Name : catalogType.Title,
                 DescriptionSection = new DescriptionViewModel

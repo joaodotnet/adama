@@ -1,7 +1,9 @@
 ﻿@model ProductViewModel
 
-    <form asp-page="/Basket/Index" asp-page-handler="addtobasket" method="post">
-        <h1 class="dama-product-title">@Model.ProductTitle</h1>
+<form asp-page="/Basket/Index" asp-page-handler="addtobasket" method="post">
+    <h1 class="dama-product-title">@Model.ProductTitle</h1>
+    @if (!Model.IsUnavailable)
+    {
         @if (Model.ProductPriceBeforeDiscount.HasValue)
         {
             <div class="discount-img text-right">
@@ -11,6 +13,7 @@
                 <div class="dama-product-price line-through text-muted">
                     <span>@Model.ProductPriceBeforeDiscount</span>
                 </div>
+
             </div>
         }
         <div class="row justify-content-center mt-3 mt-md-3">
@@ -18,6 +21,17 @@
                 <span>@Model.ProductPrice</span>
             </div>
         </div>
+    }
+    else
+    {
+        <div class="row justify-content-center mt-3 mt-md-3">
+            <h2>INDISPONÍVEL</h2>
+        </div>
+    }
+    @if (!Model.IsUnavailable)
+    {
+
+
         <div class="text-center my-3 my-sm-3 mt-md-3 mb-md-3">
             <img class="separator" src="~/images/barra-coracao.png" />
         </div>
@@ -154,50 +168,49 @@
                 }
             </div>
         }
+    }
+
+    <div class="text-center my-3 my-sm-3">
+        <img class="separator" src="~/images/barra-coracao.png" />
+    </div>
+
+    <p class="dama-product-description my-3 my-sm-3">@Html.Raw(Model.ProductDescription)</p>
 
 
 
-        <div class="text-center my-3 my-sm-3">
-            <img class="separator" src="~/images/barra-coracao.png" />
+
+    <hr />
+    <div class="row dama-product-attr mt-2 mt-md-4">
+        <label asp-for="ProductSKU" class="col-3 col-form-label"></label>
+        <div class="col-9">
+            <span>@Model.ProductSKU</span>
         </div>
-
-        <p class="dama-product-description my-3 my-sm-3">@Html.Raw(Model.ProductDescription)</p>
-
-
-
-
-        <hr />
-        <div class="row dama-product-attr mt-2 mt-md-4">
-            <label asp-for="ProductSKU" class="col-3 col-form-label"></label>
-            <div class="col-9">
-                <span>@Model.ProductSKU</span>
-            </div>
+    </div>
+    <div class="row dama-product-attr mt-md-2">
+        <label class="col-3 col-form-label">Categorias:</label>
+        <div class="col-9">
+            @foreach (var item in Model.Categories)
+            {
+                <a asp-page="/Category/Index" asp-route-id="@item.TagName">@item.Name</a>
+            }
         </div>
-        <div class="row dama-product-attr mt-md-2">
-            <label class="col-3 col-form-label">Categorias:</label>
-            <div class="col-9">
-                @foreach (var item in Model.Categories)
+    </div>
+    <div class="row dama-product-attr mt-md-2">
+        <label class="col-3 col-form-label">Tags:</label>
+        <div class="col-9">
+            @foreach (var item in Model.Tags)
+            {
+                <a asp-page="/Tag/Index" asp-route-tagName="@item.Uri" asp-route-q="@item.TagName">@item.Name</a>
+                @if (item != Model.Tags.Last())
                 {
-                    <a asp-page="/Category/Index" asp-route-id="@item.TagName">@item.Name</a>
+                    <text>,</text>
                 }
-            </div>
+            }
         </div>
-        <div class="row dama-product-attr mt-md-2">
-            <label class="col-3 col-form-label">Tags:</label>
-            <div class="col-9">
-                @foreach (var item in Model.Tags)
-                {
-                    <a asp-page="/Tag/Index" asp-route-tagName="@item.Uri" asp-route-q="@item.TagName">@item.Name</a>
-                    @if (item != Model.Tags.Last())
-                    {
-                        <text>,</text>
-                    }
-                }
-            </div>
-        </div>
-        <input type="hidden" asp-for="ProductSKU" />
-        <input type="hidden" asp-for="ProductId" />
-        <input type="hidden" asp-for="ProductPrice" />
-        <input type="hidden" asp-for="CustomizePrice" />
-        <input type="hidden" asp-for="CustomizePictureFileName" />
-    </form>
+    </div>
+    <input type="hidden" asp-for="ProductSKU" />
+    <input type="hidden" asp-for="ProductId" />
+    <input type="hidden" asp-for="ProductPrice" />
+    <input type="hidden" asp-for="CustomizePrice" />
+    <input type="hidden" asp-for="CustomizePictureFileName" />
+</form>

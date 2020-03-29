@@ -241,7 +241,7 @@
 }
 
 .esh-catalog-button.is-disabled {
-    opacity: .5;
+    opacity: .3;
     pointer-events: none;
 }
 
@@ -270,4 +270,21 @@
 
 .slick-arrow {
     color: #ef7e8e;
+}
+
+.image {
+    position: relative;
+    width: 100%; /* for IE 6 */
+}
+
+.img-opacity {
+    opacity: 0.3;
+}
+
+.text-on-image {
+    position: absolute;
+    top: 100px;
+    left: 0;
+    width: 100%;
+    color: #4D4D4D;
 }

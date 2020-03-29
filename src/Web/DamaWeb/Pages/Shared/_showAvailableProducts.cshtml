@@ -1,0 +1,9 @@
+﻿@{
+    var ischecked = Context.Request.Query["oa"] == "true" ? "checked" : "";
+}
+    <div class="d-flex">
+            <div class="custom-control custom-switch ml-auto">
+                <input type="checkbox" class="custom-control-input showAvailableProducts" id="sAvailable" @ischecked />
+                <label class="custom-control-label" for="sAvailable">Mostrar apenas produtos disponíveis</label>
+            </div>
+    </div>

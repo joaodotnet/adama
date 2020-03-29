@@ -31,7 +31,7 @@ namespace DamaWeb.Pages.Search
             SearchFor = q;
             var type = catalogModel.TypesFilterApplied;
             var illustration = CatalogModel.IllustrationFilterApplied;
-            CatalogModel = await _service.GetCatalogItemsBySearch(p ?? 0, Constants.ITEMS_PER_PAGE, SearchFor);
+            CatalogModel = await _service.GetCatalogItemsBySearch(p ?? 0, Constants.ITEMS_PER_PAGE, SearchFor, HttpContext.Request.Query["oa"]);
             CatalogModel.TypesFilterApplied = type;
             CatalogModel.IllustrationFilterApplied = illustration;
             ViewData["SearchFor"] = SearchFor;

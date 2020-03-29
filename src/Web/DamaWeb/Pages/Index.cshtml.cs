@@ -34,7 +34,7 @@ namespace DamaWeb.Pages
         public async Task OnGet(CatalogIndexViewModel catalogModel)
         {
             //Shop Stuff
-             CatalogModel = await _catalogService.GetCatalogItems(0, null, null, null, null);           
+             CatalogModel = await _catalogService.GetCatalogItems(0, null, null, null, null, HttpContext.Request.Query["oa"]);           
 
             //DamaStuff
             var config = await _shopService.GetDamaHomePageConfig();

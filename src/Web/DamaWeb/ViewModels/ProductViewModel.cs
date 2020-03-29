@@ -47,6 +47,7 @@ namespace DamaWeb.ViewModels
         public string MetaDescription { get; set; }
         public string Title { get; set; }
         public decimal? ProductPriceBeforeDiscount { get; set; }
+        public bool IsUnavailable { get; set; }
     }
 
     public class PictureHelperViewModel

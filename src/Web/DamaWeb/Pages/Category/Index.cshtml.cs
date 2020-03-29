@@ -27,7 +27,7 @@ namespace DamaWeb.Pages.Category
 
         public async Task<IActionResult> OnGetAsync(string id, int? p)
         {
-            CategoryModel = await _catalogService.GetCategoryCatalogItems(id, p ?? 0, Constants.ITEMS_PER_PAGE);
+            CategoryModel = await _catalogService.GetCategoryCatalogItems(id, p ?? 0, Constants.ITEMS_PER_PAGE, HttpContext.Request.Query["oa"]);
 
             if (CategoryModel == null)
                 return NotFound();

@@ -37,6 +37,15 @@ $(document).ready(function () {
             $('#basket-total').text(toNumber(data.total));
         });
     });
+
+    $('.showAvailableProducts').on('change', function (e) {
+        var urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('oa'))
+            urlParams.set('oa',this.checked);
+        else
+            urlParams.append('oa', this.checked);
+        window.location.href = window.location.pathname + '?' + urlParams.toString();
+    });
 });
 
 function GetSliderBasicOptions(glideType) {

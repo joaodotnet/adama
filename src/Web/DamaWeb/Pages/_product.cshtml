@@ -1,24 +1,35 @@
 ﻿@model CatalogItemViewModel
+@{
+    var imageOpacityClass = Model.IsUnavailable ? "img-opacity" : "";
+    var disabled = Model.IsUnavailable ? "disabled" : "";
+    var isdisabledClass = Model.IsUnavailable ? "is-disabled" : "";
+}
 
-    <form asp-page="/Basket/Index" method="post" class="text-center">
-        <a asp-page="/Product" asp-route-id="@Model.ProductSlug">
-            @if(Model.PriceBeforeDiscount.HasValue)
+<form asp-page="/Basket/Index" method="post" class="text-center">
+    <a asp-page="/Product" asp-route-id="@Model.ProductSlug">
+        @if (Model.PriceBeforeDiscount.HasValue)
+        {
+            <img src="~/images/promocao.png" width="90" class="card-img-overlay left-auto" />
+        }
+        <div class="image">
+            <img class="esh-catalog-thumbnail @imageOpacityClass" src="@Model.PictureUri" alt="@Model.CatalogItemName - Presentes Personalizados - Dama no Jornal&reg;" />
+            @if (Model.IsUnavailable)
             {
-                <img src="~/images/promocao.png" width="90" class="card-img-overlay left-auto" />
+                <h2 class="text-on-image">INDISPONÍVEL</h2>
             }
-            <img class="esh-catalog-thumbnail" src="@Model.PictureUri" alt="@Model.CatalogItemName - Presentes Personalizados - Dama no Jornal&reg;" />
-        </a>
-        <input class="esh-catalog-button add-product" type="submit" value="ADICIONAR" />
+        </div>
+    </a>
+    <input class="esh-catalog-button @isdisabledClass add-product" type="submit" value="ADICIONAR" @disabled />
 
-        <div class="esh-catalog-name">
-            <span>@Html.Raw(Model.CatalogItemName.Replace("-", "<br>"))</span>
-        </div>
-        <div class="dnj-catalog-price">
-            <span>@Model.Price.ToString("N2")</span>
-        </div>
-        <input type="hidden" asp-for="CatalogItemId" name="CatalogItemId" />
-        <input type="hidden" asp-for="CatalogItemName" name="CatologItemName" />
-        <input type="hidden" asp-for="PictureUri" name="PictureUri" />
-        <input type="hidden" asp-for="Price" name="Price" />
-    </form>
+    <div class="esh-catalog-name">
+        <span>@Html.Raw(Model.CatalogItemName.Replace("-", "<br>"))</span>
+    </div>
+    <div class="dnj-catalog-price">
+        <span>@Model.Price.ToString("N2")</span>
+    </div>
+    <input type="hidden" asp-for="CatalogItemId" name="CatalogItemId" />
+    <input type="hidden" asp-for="CatalogItemName" name="CatologItemName" />
+    <input type="hidden" asp-for="PictureUri" name="PictureUri" />
+    <input type="hidden" asp-for="Price" name="Price" />
+</form>
 
