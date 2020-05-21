@@ -6,11 +6,7 @@
 }
 
 <form asp-page="/Basket/Index" method="post" class="text-center">
-    <a asp-page="/Product" asp-route-id="@Model.ProductSlug">
-        @if (Model.PriceBeforeDiscount.HasValue)
-        {
-            <img src="~/images/promocao.png" width="90" class="card-img-overlay left-auto" />
-        }
+    <a asp-page="/Product" asp-route-id="@Model.ProductSlug">      
         <div class="image">
             <img class="esh-catalog-thumbnail @imageOpacityClass" src="@Model.PictureUri" alt="@Model.CatalogItemName - Presentes Personalizados - Dama no Jornal&reg;" />
             @if (Model.IsUnavailable)
