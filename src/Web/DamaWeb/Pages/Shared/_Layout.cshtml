@@ -44,7 +44,7 @@
                 });
             </script>
         }
-        <!-- Hotjar Tracking Code for www.damanojornal.com/loja -->
+        @* <!-- Hotjar Tracking Code for www.damanojornal.com/loja -->
         <script>
             (function (h, o, t, j, a, r) {
                 h.hj = h.hj || function () { (h.hj.q = h.hj.q || []).push(arguments) };
@@ -54,7 +54,7 @@
                 r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
                 a.appendChild(r);
             })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
-        </script>
+        </script> *@
     </environment>
 
     <environment names="Development">
@@ -90,12 +90,12 @@
                 <img src="~/images/brand_full.png" alt="Dama no Jornal" />
             </a>
             <a class="nav-link order-6 order-lg-1" data-toggle="collapse" href="#searchcollapse"><i class="fas fa-search fa-lg"></i></a>
-            <div class="divider-vertical d-none d-lg-flex order-lg-2"></div>
+            @* <div class="divider-vertical d-none d-lg-flex order-lg-2"></div>
             <ul class="navbar-nav d-none d-lg-flex order-lg-3">
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="collapse" href="#newslettercollapse">Newsletter</a>
                 </li>
-            </ul>
+            </ul> *@
             <ul class="navbar-nav ml-auto flex-row order-lg-4">
                 @(await Html.PartialAsync("_LoginPartial"))
             </ul>
@@ -141,7 +141,7 @@
         </div>
     </div>
     <!-- Newsletter -->
-    <div class="collapse topActioncollapse" id="newslettercollapse">
+    @* <div class="collapse topActioncollapse" id="newslettercollapse">
         <div class="row">
             <div class="col-12 col-sm-3">
                 <div class="card bg-light py-3 border-0">
@@ -165,7 +165,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> *@
 
     <!-- First NavBar -->
     <nav class="navbar navbar-expand-lg navbar-light d-none d-lg-block">
@@ -261,7 +261,7 @@
                         <a class="btn btn-light-pink2 btn-block" role="button" href="https://www.damanojornal.com/politica-de-privacidade/">Política de Privacidade</a>
                     </div>
                 </section>
-                <section id="newsletterSection" class="col-lg-4 text-center text-white order-1 order-lg-3 mt-lg-5 mt-0">
+                @* <section id="newsletterSection" class="col-lg-4 text-center text-white order-1 order-lg-3 mt-lg-5 mt-0">
                     <h4 class="text-white">SUBSCREVE A NOSSA NEWSLETTER</h4>
                     <p class="small">E FICA A PAR DE TODAS AS NOVIDADES!</p>
                     <form method="post" asp-page="/Index" asp-page-handler="SubscribeNewsletter">
@@ -277,7 +277,7 @@
                         </div>
                         <button type="submit" class="subscribeNewsLetter btn btn-primary text-white mt-2">SUBSCREVER</button>
                     </form>
-                </section>
+                </section> *@
             </article>
         </div>
     </footer>
