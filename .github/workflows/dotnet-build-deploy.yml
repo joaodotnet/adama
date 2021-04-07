@@ -22,12 +22,12 @@ jobs:
     - name: Test
       run: dotnet test tests/UnitTests/UnitTests.csproj --verbosity normal
     - name: Publish
-      run: dotnet publish src/Web/DamaWeb/DamaWeb.csproj --runtime linux-x64 --configuration Release --output '/publish' --no-self-contained
+      run: dotnet publish src/Web/DamaWeb/DamaWeb.csproj --runtime linux-x64 --configuration Release --output 'artifact' --no-self-contained
     - name: Archive Release
       uses: thedoctor0/zip-release@master
       with:
         filename: 'DamaWeb.zip'
-        path: /publish
+        path: artifact
     - uses: actions/upload-artifact@v2
       with:
         name: drop
