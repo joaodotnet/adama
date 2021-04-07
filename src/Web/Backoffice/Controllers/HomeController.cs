@@ -75,7 +75,7 @@ namespace DamaWeb.Controllers
 
                         //Get Image
                         var originalImage = Path.Combine(_backofficeSettings.WebProductsPictureFullPath, Path.GetFileName(uri.LocalPath));
-                        using (Image<Rgba32> image = (Image<Rgba32>)Image.Load(originalImage))
+                        using (Image image = Image.Load(originalImage))
                         {
                             image.Mutate(x => x
                                  .Resize(469, 469));
@@ -100,7 +100,7 @@ namespace DamaWeb.Controllers
                     var fileName = Path.GetFileName(uri.LocalPath);
                     var originalImagePath = Path.Combine(_backofficeSettings.WebProductTypesPictureFullPath, fileName);
                     var newImagePath = Path.Combine(_backofficeSettings.WebProductTypesPictureV2FullPath, fileName);
-                    using (Image<Rgba32> image = (Image<Rgba32>)Image.Load(originalImagePath))
+                    using (Image image = Image.Load(originalImagePath))
                     {
                         image.Mutate(x => x
                              .Resize(255, 116));
@@ -117,7 +117,7 @@ namespace DamaWeb.Controllers
                             var fileNameHelper = Path.GetFileName(uriHelper.LocalPath);
                             var originalHelperPath = Path.Combine(_backofficeSettings.WebProductTypesPictureFullPath, fileNameHelper);
                             var newHelperPath = Path.Combine(_backofficeSettings.WebProductTypesPictureV2FullPath, fileNameHelper);
-                            using (Image<Rgba32> image = (Image<Rgba32>)Image.Load(originalHelperPath))
+                            using (Image image = Image.Load(originalHelperPath))
                             {
                                 image.Mutate(x => x
                                      .Resize(112, 96));
@@ -135,117 +135,117 @@ namespace DamaWeb.Controllers
             return Ok();
         }
 
-        //[Route("updatemainpicture")]
-        //public async Task<IActionResult> UpdateMainPicturesAsync()
-        //{
-        //    var spec = new CatalogFilterSpecification(false);
-        //    var products = await _catalogRepository.ListAsync(spec);
+        [Route("updatemainpicture")]
+        public async Task<IActionResult> UpdateMainPicturesAsync()
+        {
+            var spec = new CatalogFilterSpecification(false);
+            var products = await _catalogRepository.ListAsync(spec);
 
-        //    //Add main Picture
-        //    foreach (var item in products)
-        //    {
-        //        var mainPic = item.CatalogPictures.SingleOrDefault(x => x.IsMain);
-        //        if (mainPic != null && !string.IsNullOrEmpty(mainPic.PictureHighUri))
-        //        {
-        //            Uri uriHelper = new Uri(mainPic.PictureHighUri);
-        //            var fileName = Path.GetFileName(uriHelper.LocalPath);
-        //            var originalPath = Path.Combine(_backofficeSettings.WebProductsPictureFullPath, fileName);
-        //            var newFileName = Utils.URLFriendly(Path.GetFileNameWithoutExtension(uriHelper.LocalPath)) + Path.GetExtension(uriHelper.LocalPath);
-        //            var newPath = Path.Combine(_backofficeSettings.WebProductsPictureV2FullPath, newFileName);
-        //            using (Image<Rgba32> image = (Image<Rgba32>)Image.Load(originalPath))
-        //            {
-        //                var options = new ResizeOptions
-        //                {
-        //                    Mode = ResizeMode.Crop,
-        //                    Size = new SixLabors.Primitives.Size(700, 700)
-        //                };
+            //Add main Picture
+            foreach (var item in products)
+            {
+                var mainPic = item.CatalogPictures.SingleOrDefault(x => x.IsMain);
+                if (mainPic != null && !string.IsNullOrEmpty(mainPic.PictureHighUri))
+                {
+                    Uri uriHelper = new Uri(mainPic.PictureHighUri);
+                    var fileName = Path.GetFileName(uriHelper.LocalPath);
+                    var originalPath = Path.Combine(_backofficeSettings.WebProductsPictureFullPath, fileName);
+                    var newFileName = Utils.URLFriendly(Path.GetFileNameWithoutExtension(uriHelper.LocalPath)) + Path.GetExtension(uriHelper.LocalPath);
+                    var newPath = Path.Combine(_backofficeSettings.WebProductsPictureV2FullPath, newFileName);
+                    using (Image image = Image.Load(originalPath))
+                    {
+                        var options = new ResizeOptions
+                        {
+                            Mode = ResizeMode.Crop,
+                            Size = new Size(700, 700)
+                        };
 
-        //                image.Mutate(x => x.Resize(options));
+                        image.Mutate(x => x.Resize(options));
 
-        //                image.Save(newPath, new JpegEncoder { Quality = 90 }); // Automatic encoder selected based on extension.
-        //            }
-        //            item.PictureUri = mainPic.PictureUri = _backofficeSettings.WebProductsPictureV2Uri + newFileName;
-        //            await _catalogRepository.UpdateAsync(item);
-        //        }
-        //    }
-        //    return Ok();
-        //}
+                        image.Save(newPath, new JpegEncoder { Quality = 90 }); // Automatic encoder selected based on extension.
+                    }
+                    item.PictureUri = mainPic.PictureUri = _backofficeSettings.WebProductsPictureV2Uri + newFileName;
+                    await _catalogRepository.UpdateAsync(item);
+                }
+            }
+            return Ok();
+        }
 
-        //[Route("updateotherpicture")]
-        //public async Task<IActionResult> UpdateOtherPicturesAsync()
-        //{
-        //    var spec = new CatalogFilterSpecification(false);
-        //    var products = await _catalogRepository.ListAsync(spec);
+        [Route("updateotherpicture")]
+        public async Task<IActionResult> UpdateOtherPicturesAsync()
+        {
+            var spec = new CatalogFilterSpecification(false);
+            var products = await _catalogRepository.ListAsync(spec);
 
-        //    foreach (var item in products)
-        //    {
-        //        foreach (var other in item.CatalogPictures.Where(x => !x.IsMain).ToList())
-        //        {
-        //            if (!string.IsNullOrEmpty(other.PictureHighUri))
-        //            {
-        //                Uri uri = new Uri(other.PictureHighUri);
-        //                var fileName = Path.GetFileName(uri.LocalPath);
-        //                var originalPath = Path.Combine(_backofficeSettings.WebProductsPictureFullPath, fileName);
-        //                var newFileName = Utils.URLFriendly(Path.GetFileNameWithoutExtension(uri.LocalPath)) + Path.GetExtension(uri.LocalPath);
-        //                var newPath = Path.Combine(_backofficeSettings.WebProductsPictureV2FullPath, newFileName);
-        //                using (Image<Rgba32> image = Image.Load(originalPath))
-        //                {
-        //                    var options = new ResizeOptions
-        //                    {
-        //                        Mode = ResizeMode.Crop,
-        //                        Size = new SixLabors.Primitives.Size(700, 700)
-        //                    };
+            foreach (var item in products)
+            {
+                foreach (var other in item.CatalogPictures.Where(x => !x.IsMain).ToList())
+                {
+                    if (!string.IsNullOrEmpty(other.PictureHighUri))
+                    {
+                        Uri uri = new Uri(other.PictureHighUri);
+                        var fileName = Path.GetFileName(uri.LocalPath);
+                        var originalPath = Path.Combine(_backofficeSettings.WebProductsPictureFullPath, fileName);
+                        var newFileName = Utils.URLFriendly(Path.GetFileNameWithoutExtension(uri.LocalPath)) + Path.GetExtension(uri.LocalPath);
+                        var newPath = Path.Combine(_backofficeSettings.WebProductsPictureV2FullPath, newFileName);
+                        using (Image image = Image.Load(originalPath))
+                        {
+                            var options = new ResizeOptions
+                            {
+                                Mode = ResizeMode.Crop,
+                                Size = new Size(700, 700)
+                            };
 
-        //                    image.Mutate(x => x.Resize(options));
+                            image.Mutate(x => x.Resize(options));
 
-        //                    image.Save(newPath, new JpegEncoder { Quality = 90 }); // Automatic encoder selected based on extension.
-        //                }
-        //                other.PictureUri = _backofficeSettings.WebProductsPictureV2Uri + newFileName;
-        //            }
-        //        }
-        //        await _catalogRepository.UpdateAsync(item);
+                            image.Save(newPath, new JpegEncoder { Quality = 90 }); // Automatic encoder selected based on extension.
+                        }
+                        other.PictureUri = _backofficeSettings.WebProductsPictureV2Uri + newFileName;
+                    }
+                }
+                await _catalogRepository.UpdateAsync(item);
 
-        //    }
-        //    return Ok();
-        //}
+            }
+            return Ok();
+        }
 
-        //[Route("resizephoto")]
-        //public IActionResult ResizePhoto(string name, int width, int height, int? quality = 0)
-        //{
-        //    var sourceFile = Path.Combine(_backofficeSettings.WebPicturesFullPath, name);
-        //    if (System.IO.File.Exists(sourceFile))
-        //    {
-        //        //Backup
-        //        var backupFolder = Path.Combine(_backofficeSettings.WebPicturesFullPath, "backup");
-        //        if (!System.IO.Directory.Exists(backupFolder))
-        //        {
-        //            System.IO.Directory.CreateDirectory(backupFolder);
-        //        }
-        //        var backupFile = Path.Combine(backupFolder, name);
-        //        if (!System.IO.File.Exists(backupFile))
-        //        {
-        //            System.IO.File.Copy(sourceFile, backupFile, false);
-        //        }
+        [Route("resizephoto")]
+        public IActionResult ResizePhoto(string name, int width, int height, int? quality = 0)
+        {
+            var sourceFile = Path.Combine(_backofficeSettings.WebPicturesFullPath, name);
+            if (System.IO.File.Exists(sourceFile))
+            {
+                //Backup
+                var backupFolder = Path.Combine(_backofficeSettings.WebPicturesFullPath, "backup");
+                if (!System.IO.Directory.Exists(backupFolder))
+                {
+                    System.IO.Directory.CreateDirectory(backupFolder);
+                }
+                var backupFile = Path.Combine(backupFolder, name);
+                if (!System.IO.File.Exists(backupFile))
+                {
+                    System.IO.File.Copy(sourceFile, backupFile, false);
+                }
 
-        //        //Resize
-        //        using (Image<Rgba32> image = Image.Load(sourceFile))
-        //        {
-        //            var options = new ResizeOptions
-        //            {
-        //                Mode = ResizeMode.Crop,
-        //                Size = new SixLabors.Primitives.Size(width, height)
-        //            };
+                //Resize
+                using (Image image = Image.Load(sourceFile))
+                {
+                    var options = new ResizeOptions
+                    {
+                        Mode = ResizeMode.Crop,
+                        Size = new Size(width, height)
+                    };
 
-        //            image.Mutate(x => x.Resize(options));
+                    image.Mutate(x => x.Resize(options));
 
-        //            if (sourceFile.ToLower().EndsWith(".jpg"))
-        //                image.Save(sourceFile, new JpegEncoder { Quality = quality });
-        //            else
-        //                image.Save(sourceFile);
-        //        }
-        //        return Ok();
-        //    }
-        //    return NotFound();
-        //}
+                    if (sourceFile.ToLower().EndsWith(".jpg"))
+                        image.Save(sourceFile, new JpegEncoder { Quality = quality });
+                    else
+                        image.Save(sourceFile);
+                }
+                return Ok();
+            }
+            return NotFound();
+        }
     }
 }

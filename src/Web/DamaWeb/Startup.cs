@@ -41,11 +41,11 @@ namespace DamaWeb
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
             services.AddDbContext<DamaContext>(c =>
-                c.UseMySql(Configuration.GetConnectionString("DamaShopConnection")));
+                c.UseMySql(Configuration.GetConnectionString("DamaShopConnection"), MariaDbServerVersion.LatestSupportedServerVersion));
 
             // Add Identity DbContext
             services.AddDbContext<AppIdentityDbContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("IdentityConnection")));
+                options.UseMySql(Configuration.GetConnectionString("IdentityConnection"), MariaDbServerVersion.LatestSupportedServerVersion));
 
 
             ConfigureServices(services);
@@ -54,10 +54,10 @@ namespace DamaWeb
         public void ConfigureProductionServices(IServiceCollection services)
         {
             services.AddDbContext<DamaContext>(options =>
-               options.UseMySql(Configuration.GetConnectionString("DamaShopConnection")));
+               options.UseMySql(Configuration.GetConnectionString("DamaShopConnection"), MariaDbServerVersion.LatestSupportedServerVersion));
 
             services.AddDbContext<AppIdentityDbContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("IdentityConnection")));
+                options.UseMySql(Configuration.GetConnectionString("IdentityConnection"), MariaDbServerVersion.LatestSupportedServerVersion));
 
 
             ConfigureServices(services);
