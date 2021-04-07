@@ -45,4 +45,6 @@ jobs:
         name: drop
         # Destination path
         path: /home/azureuser/deploy/
+    - name: Deploy DamaShop
+      run: /home/azureuser/deploy/shopDeploy.sh
   
