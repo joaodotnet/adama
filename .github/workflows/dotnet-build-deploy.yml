@@ -18,9 +18,9 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore DamaNoJornal.sln
     - name: Build
-      run: dotnet build DamaNoJornal.sln --no-restore
+      run: dotnet build DamaNoJornal.sln --no-restore --configuration Release
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test tests/UnitTests/UnitTests.csproj --no-build --verbosity normal
     - name: Publish
       run: dotnet publish src/Web/DamaWeb/DamaWeb.csproj --runtime linux-x64 --self-contained false --configuration Release --output '/publish'
     - name: Archive Release
