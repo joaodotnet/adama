@@ -23,12 +23,26 @@ jobs:
       run: dotnet test tests/UnitTests/UnitTests.csproj --verbosity normal
     - name: Publish
       run: dotnet publish src/Web/DamaWeb/DamaWeb.csproj --runtime linux-x64 --configuration Release --output 'DamaWeb' --no-self-contained
-    #- name: Archive Release
-    #  uses: thedoctor0/zip-release@master
-    #  with:
-    #    filename: 'DamaWeb.zip'
-    #    path: artifact
+    - name: Archive Release
+      uses: thedoctor0/zip-release@master
+      with:
+        filename: 'DamaWeb.zip'
+        path: DamaWeb
     - uses: actions/upload-artifact@v2
       with:
         name: drop
-        path: 'DamaWeb/'
+        path: 'DamaWeb.zip'
+  
+  deploy:
+    needs: build
+    runs-on: self-hosted    
+    
+    steps:
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v2.0.9
+      with:
+        # Artifact name
+        name: drop
+        # Destination path
+        path: /home/azureuser/deploy/
+  
