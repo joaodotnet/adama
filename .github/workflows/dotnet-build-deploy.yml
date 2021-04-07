@@ -55,4 +55,3 @@ jobs:
         Email.SmtpServer: 'smtp.damanojornal.com'
     - name: Deploy DamaShop
       run: /home/azureuser/deploy/shopDeploy.sh
-  
