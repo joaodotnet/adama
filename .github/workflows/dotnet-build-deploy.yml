@@ -45,6 +45,14 @@ jobs:
         name: drop
         # Destination path
         path: /home/azureuser/deploy/
+    - name: AppSettings substituion
+      uses: microsoft/variable-substitution@v1 
+      with:
+        files: 'appsettings.json'
+      env:        
+        ApplicationInsights.InstrumentationKey: ${{ secrets.APPLICATIONINSIGHTSKEY }}
+        Authentication.Facebook.AppId: ${{ secrets.FACEBOOKAPPID }}
+        Email.SmtpServer: 'smtp.damanojornal.com'
     - name: Deploy DamaShop
       run: /home/azureuser/deploy/shopDeploy.sh
   
