@@ -50,7 +50,7 @@ jobs:
     - name: AppSettings substituion
       uses: microsoft/variable-substitution@v1 
       with:
-        files: '~/deploy/damashop/files/DamaWeb/appsettings.json'      
+        files: '/home/azureuser/deploy/damashop/files/DamaWeb/appsettings.json'      
       env:        
         ApplicationInsights.InstrumentationKey: ${{ secrets.APPLICATIONINSIGHTSKEY }}
         Authentication.Facebook.AppId: ${{ secrets.FACEBOOKAPPID }}
