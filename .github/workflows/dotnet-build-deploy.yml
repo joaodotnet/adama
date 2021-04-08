@@ -37,9 +37,6 @@ jobs:
     needs: build
     runs-on: self-hosted  
     
-    env:
-      SERVER: Production
-    
     steps:
     - name: Download a Build Artifact
       uses: actions/download-artifact@v2.0.9
@@ -55,8 +52,8 @@ jobs:
       with:
         files: '/home/azureuser/deploy/damashop/files/DamaWeb/appsettings.json'      
       env:        
-        ApplicationInsights.InstrumentationKey: ${{ env.APPLICATIONINSIGHTSKEY }}
-        Authentication.Facebook.AppId: ${{ env.FACEBOOKAPPID }}
+        ApplicationInsights.InstrumentationKey: ${{ secrets.APPLICATIONINSIGHTSKEY }}
+        Authentication.Facebook.AppId: ${{ secrets.FACEBOOKAPPID }}
         Email.SmtpServer: 'smtp.damanojornal.com'
     - name: Deploy DamaShop
       run: /home/azureuser/deploy/shopDeploy.sh
