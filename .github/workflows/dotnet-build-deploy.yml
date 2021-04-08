@@ -45,10 +45,12 @@ jobs:
         name: drop
         # Destination path
         path: /home/azureuser/deploy/
+    - name: Unzip Artifact
+      run: unzip ~/deploy/DamaWeb.zip -d ~/deploy/damashop/files/
     - name: AppSettings substituion
       uses: microsoft/variable-substitution@v1 
       with:
-        files: 'appsettings.json'
+        files: '~/deploy/damashop/files/DamaWeb/appsettings.json'      
       env:        
         ApplicationInsights.InstrumentationKey: ${{ secrets.APPLICATIONINSIGHTSKEY }}
         Authentication.Facebook.AppId: ${{ secrets.FACEBOOKAPPID }}
