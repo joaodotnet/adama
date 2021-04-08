@@ -52,8 +52,21 @@ jobs:
       with:
         files: '/home/azureuser/deploy/damashop/files/DamaWeb/appsettings.json'      
       env:        
+        ConnectionStrings.DamaShopConnection: ${{ secrets.DAMASHOPCONNECTIONSTRING }}
+        ConnectionStrings.IdentityConnection: ${{ secrets.IDENTITYCONNECTIONSTRING }}
+        Email.SmtpServer: ${{ secrets.SMTPSERVER }}
+        Email.SmtpUsername: ${{ secrets.SMTPUSERNAME }}
+        Email.SmtpPassword: ${{ secrets.SMTPPASSWORD }}
+        Email.FromInfoEmail: ${{ secrets.FROMINFOEMAIL }}
+        Email.FromOrderEmail: ${{ secrets.FROMORDEREMAIL }}
+        Email.CCEmails: 'joaofbbg@gmail.com,susana.m.mendez@gmail.com'
+        Email.SupportEmail: 'joaofbbg@gmail.com'
+        MailChimpBasicAuth: ${{ secrets.MAILCHIMPBASICAUTH }}
+        MailChimpListId: ${{ secrets.MAILCHIMPLISTID }}
         ApplicationInsights.InstrumentationKey: ${{ secrets.APPLICATIONINSIGHTSKEY }}
         Authentication.Facebook.AppId: ${{ secrets.FACEBOOKAPPID }}
-        Email.SmtpServer: 'smtp.damanojornal.com'
+        Authentication.Facebook.AppSecret: ${{ secrets.FACEBOOKAPPSECRET }}
+        Authentication.Goolgle.ClientId: ${{ secrets.GOOGLECLIENTID }}
+        Authentication.Goolgle.ClientSecret: ${{ secrets.GOOGLECLIENTSECRET }}
     - name: Deploy DamaShop
       run: /home/azureuser/deploy/shopDeploy.sh
