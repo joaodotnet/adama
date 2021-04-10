@@ -2,7 +2,7 @@ name: .NET
 
 on:
   push:
-    branches: [ net5.0 ]
+    branches: [ master ]
 
 jobs:
   build:
