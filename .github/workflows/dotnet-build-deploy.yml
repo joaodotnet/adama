@@ -79,9 +79,7 @@ jobs:
         Authentication.Google.ClientSecret: ${{ secrets.GOOGLECLIENTSECRET }}
         Sage.ClientId: ${{ secrets.SAGECLIENTID }}
         Sage.ClientSecret: ${{ secrets.SAGECLIENTSECRET }}
-        Sage.SigningSecret: ${{ secrets.SAGESIGNINGSECRET }}
-    #- name: Deploy DamaShop
-    #  run: /home/azureuser/deploy/shopDeploy.sh
+        Sage.SigningSecret: ${{ secrets.SAGESIGNINGSECRET }}    
     - name: Stop Service damaShop
       run: sudo service damashop stop
     - name: Copy DamaShop files to directory
@@ -90,12 +88,12 @@ jobs:
       run: sudo service damashop start
     - name: Remove DamaShop temp files
       run: rm -rf ~/deploy/damashop/files/*
-    #- name: Stop Service Backoffice
-    #  run: sudo service backoffice stop
+    - name: Stop Service Backoffice
+      run: sudo service backoffice stop
     - name: Copy Backoffice files to directory
       run: sudo rsync -a ~/deploy/backoffice/files/Backoffice/*  /var/aspnetcore/backoffice/
-    #- name: Start Service Backoffice
-    #  run: sudo service backoffice start
+    - name: Start Service Backoffice
+      run: sudo service backoffice start
     - name: Remove Backoffice temp files
       run: rm -rf ~/deploy/backoffice/files/*
     
