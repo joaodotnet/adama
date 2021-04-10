@@ -36,7 +36,7 @@ namespace Backoffice
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
             services.AddDbContext<DamaContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("DamaConnection"), MariaDbServerVersion.LatestSupportedServerVersion));
+                options.UseMySql(Configuration.GetConnectionString("DamaShopConnection"), MariaDbServerVersion.LatestSupportedServerVersion));
 
             // Add Identity DbContext
             services.AddDbContext<AppIdentityDbContext>(options =>
@@ -48,7 +48,7 @@ namespace Backoffice
         public void ConfigureProductionServices(IServiceCollection services)
         {
             services.AddDbContext<DamaContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("DamaConnection"), MariaDbServerVersion.LatestSupportedServerVersion));
+                options.UseMySql(Configuration.GetConnectionString("DamaShopConnection"), MariaDbServerVersion.LatestSupportedServerVersion));
 
             // Add Identity DbContext
             services.AddDbContext<AppIdentityDbContext>(options =>
