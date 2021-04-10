@@ -59,7 +59,7 @@ jobs:
     - name: AppSettings substituion
       uses: microsoft/variable-substitution@v1 
       with:
-        files: '/home/azureuser/deploy/damashop/files/DamaWeb/appsettings.json, /home/azureuser/deploy/damashop/files/Backoffice/appsettings.json'      
+        files: '/home/azureuser/deploy/damashop/files/DamaWeb/appsettings.json, /home/azureuser/deploy/backoffice/files/Backoffice/appsettings.json'      
       env:        
         ConnectionStrings.DamaShopConnection: ${{ secrets.DAMASHOPCONNECTIONSTRING }}
         ConnectionStrings.IdentityConnection: ${{ secrets.IDENTITYCONNECTIONSTRING }}
@@ -83,5 +83,5 @@ jobs:
     - name: Deploy DamaShop
       run: /home/azureuser/deploy/shopDeploy.sh
     - name: Copy Backoffice files to directory
-      run: sudo rsync -a ~/deploy/backoffice/files/*  /var/aspnetcore/backoffice/
+      run: sudo rsync -a ~/deploy/backoffice/files/Backoffice/*  /var/aspnetcore/backoffice/
     
