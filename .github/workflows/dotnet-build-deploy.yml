@@ -53,9 +53,9 @@ jobs:
         # Destination path
         path: /home/azureuser/deploy/
     - name: Unzip Dama Web Artifact
-      run: unzip ~/deploy/DamaWeb.zip -d ~/deploy/damashop/files/
+      run: unzip -o ~/deploy/DamaWeb.zip -d ~/deploy/damashop/files/
     - name: Unzip Backoffice
-      run: unzip ~/deploy/Backoffice.zip -d ~/deploy/backoffice/files/
+      run: unzip -o ~/deploy/Backoffice.zip -d ~/deploy/backoffice/files/
     - name: AppSettings substituion
       uses: microsoft/variable-substitution@v1 
       with:
