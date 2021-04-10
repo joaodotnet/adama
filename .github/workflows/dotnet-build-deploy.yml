@@ -53,9 +53,9 @@ jobs:
         # Destination path
         path: /home/azureuser/deploy/
     - name: Unzip Dama Web Artifact
-      run: unzip ~/deploy/DamaWeb.zip -d ~/deploy/damashop/files/
+      run: unzip -o ~/deploy/DamaWeb.zip -d ~/deploy/damashop/files/
     - name: Unzip Backoffice
-      run: unzip ~/deploy/Backoffice.zip -d ~/deploy/backoffice/files/
+      run: unzip -o ~/deploy/Backoffice.zip -d ~/deploy/backoffice/files/
     - name: AppSettings substituion
       uses: microsoft/variable-substitution@v1 
       with:
@@ -90,12 +90,12 @@ jobs:
       run: sudo service damashop start
     - name: Remove DamaShop temp files
       run: rm -rf ~/deploy/damashop/files/*
-    - name: Stop Service Backoffice
-      run: sudo service backoffice stop
+    #- name: Stop Service Backoffice
+    #  run: sudo service backoffice stop
     - name: Copy Backoffice files to directory
       run: sudo rsync -a ~/deploy/backoffice/files/Backoffice/*  /var/aspnetcore/backoffice/
-    - name: Start Service Backoffice
-      run: sudo service backoffice start
+    #- name: Start Service Backoffice
+    #  run: sudo service backoffice start
     - name: Remove Backoffice temp files
-      run: rm -rf ~/deploy/backoffice/files/
+      run: rm -rf ~/deploy/backoffice/files/*
     
