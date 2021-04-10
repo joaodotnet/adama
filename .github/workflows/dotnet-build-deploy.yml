@@ -1,0 +1,99 @@
+name: .NET
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore DamaNoJornal.sln
+    - name: Build
+      run: dotnet build DamaNoJornal.sln --no-restore --configuration Release
+    - name: Test
+      run: dotnet test tests/UnitTests/UnitTests.csproj --verbosity normal
+    - name: Publish Web
+      run: dotnet publish src/Web/DamaWeb/DamaWeb.csproj --runtime linux-x64 --configuration Release --output 'DamaWeb' --no-self-contained
+    - name: Publish Backoffice
+      run: dotnet publish src/Web/Backoffice/Backoffice.csproj --runtime linux-x64 --configuration Release --output 'Backoffice' --no-self-contained
+    - name: Zip DamaWeb Release
+      uses: thedoctor0/zip-release@master
+      with:
+        filename: 'DamaWeb.zip'
+        path: DamaWeb
+    - name: Zip Backoffice Release
+      uses: thedoctor0/zip-release@master
+      with:
+        filename: 'Backoffice.zip'
+        path: Backoffice
+    - uses: actions/upload-artifact@v2
+      with:
+        name: drop
+        path: '*.zip'          
+        if-no-files-found: error
+  deploy:
+    needs: build
+    runs-on: self-hosted  
+    
+    steps:
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v2.0.9
+      with:
+        # Artifact name
+        name: drop
+        # Destination path
+        path: /home/azureuser/deploy/
+    - name: Unzip Dama Web Artifact
+      run: unzip -o ~/deploy/DamaWeb.zip -d ~/deploy/damashop/files/
+    - name: Unzip Backoffice
+      run: unzip -o ~/deploy/Backoffice.zip -d ~/deploy/backoffice/files/
+    - name: AppSettings substituion
+      uses: microsoft/variable-substitution@v1 
+      with:
+        files: '/home/azureuser/deploy/damashop/files/DamaWeb/appsettings.json, /home/azureuser/deploy/backoffice/files/Backoffice/appsettings.json'      
+      env:        
+        ConnectionStrings.DamaShopConnection: ${{ secrets.DAMASHOPCONNECTIONSTRING }}
+        ConnectionStrings.IdentityConnection: ${{ secrets.IDENTITYCONNECTIONSTRING }}
+        Email.SmtpServer: ${{ secrets.SMTPSERVER }}
+        Email.SmtpUsername: ${{ secrets.SMTPUSERNAME }}
+        Email.SmtpPassword: ${{ secrets.SMTPPASSWORD }}
+        Email.FromInfoEmail: ${{ secrets.FROMINFOEMAIL }}
+        Email.FromOrderEmail: ${{ secrets.FROMORDEREMAIL }}
+        Email.CCEmails: 'joaofbbg@gmail.com,susana.m.mendez@gmail.com'
+        Email.SupportEmail: 'joaofbbg@gmail.com'
+        MailChimpBasicAuth: ${{ secrets.MAILCHIMPBASICAUTH }}
+        MailChimpListId: ${{ secrets.MAILCHIMPLISTID }}
+        ApplicationInsights.InstrumentationKey: ${{ secrets.APPLICATIONINSIGHTSKEY }}
+        Authentication.Facebook.AppId: ${{ secrets.FACEBOOKAPPID }}
+        Authentication.Facebook.AppSecret: ${{ secrets.FACEBOOKAPPSECRET }}
+        Authentication.Google.ClientId: ${{ secrets.GOOGLECLIENTID }}
+        Authentication.Google.ClientSecret: ${{ secrets.GOOGLECLIENTSECRET }}
+        Sage.ClientId: ${{ secrets.SAGECLIENTID }}
+        Sage.ClientSecret: ${{ secrets.SAGECLIENTSECRET }}
+        Sage.SigningSecret: ${{ secrets.SAGESIGNINGSECRET }}    
+    - name: Stop Service damaShop
+      run: sudo service damashop stop
+    - name: Copy DamaShop files to directory
+      run: sudo rsync -a ~/deploy/damashop/files/DamaWeb/*  /var/aspnetcore/damashop/
+    - name: Start Service damashop
+      run: sudo service damashop start
+    - name: Remove DamaShop temp files
+      run: rm -rf ~/deploy/damashop/files/*
+    - name: Stop Service Backoffice
+      run: sudo service backoffice stop
+    - name: Copy Backoffice files to directory
+      run: sudo rsync -a ~/deploy/backoffice/files/Backoffice/*  /var/aspnetcore/backoffice/
+    - name: Start Service Backoffice
+      run: sudo service backoffice start
+    - name: Remove Backoffice temp files
+      run: rm -rf ~/deploy/backoffice/files/*
+    

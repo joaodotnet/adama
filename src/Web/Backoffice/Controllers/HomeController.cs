@@ -75,7 +75,7 @@ namespace DamaWeb.Controllers
 
                         //Get Image
                         var originalImage = Path.Combine(_backofficeSettings.WebProductsPictureFullPath, Path.GetFileName(uri.LocalPath));
-                        using (Image<Rgba32> image = Image.Load(originalImage))
+                        using (Image image = Image.Load(originalImage))
                         {
                             image.Mutate(x => x
                                  .Resize(469, 469));
@@ -100,7 +100,7 @@ namespace DamaWeb.Controllers
                     var fileName = Path.GetFileName(uri.LocalPath);
                     var originalImagePath = Path.Combine(_backofficeSettings.WebProductTypesPictureFullPath, fileName);
                     var newImagePath = Path.Combine(_backofficeSettings.WebProductTypesPictureV2FullPath, fileName);
-                    using (Image<Rgba32> image = Image.Load(originalImagePath))
+                    using (Image image = Image.Load(originalImagePath))
                     {
                         image.Mutate(x => x
                              .Resize(255, 116));
@@ -117,7 +117,7 @@ namespace DamaWeb.Controllers
                             var fileNameHelper = Path.GetFileName(uriHelper.LocalPath);
                             var originalHelperPath = Path.Combine(_backofficeSettings.WebProductTypesPictureFullPath, fileNameHelper);
                             var newHelperPath = Path.Combine(_backofficeSettings.WebProductTypesPictureV2FullPath, fileNameHelper);
-                            using (Image<Rgba32> image = Image.Load(originalHelperPath))
+                            using (Image image = Image.Load(originalHelperPath))
                             {
                                 image.Mutate(x => x
                                      .Resize(112, 96));
@@ -152,12 +152,12 @@ namespace DamaWeb.Controllers
                     var originalPath = Path.Combine(_backofficeSettings.WebProductsPictureFullPath, fileName);
                     var newFileName = Utils.URLFriendly(Path.GetFileNameWithoutExtension(uriHelper.LocalPath)) + Path.GetExtension(uriHelper.LocalPath);
                     var newPath = Path.Combine(_backofficeSettings.WebProductsPictureV2FullPath, newFileName);
-                    using (Image<Rgba32> image = Image.Load(originalPath))
+                    using (Image image = Image.Load(originalPath))
                     {
                         var options = new ResizeOptions
                         {
                             Mode = ResizeMode.Crop,
-                            Size = new SixLabors.Primitives.Size(700, 700)
+                            Size = new Size(700, 700)
                         };
 
                         image.Mutate(x => x.Resize(options));
@@ -188,12 +188,12 @@ namespace DamaWeb.Controllers
                         var originalPath = Path.Combine(_backofficeSettings.WebProductsPictureFullPath, fileName);
                         var newFileName = Utils.URLFriendly(Path.GetFileNameWithoutExtension(uri.LocalPath)) + Path.GetExtension(uri.LocalPath);
                         var newPath = Path.Combine(_backofficeSettings.WebProductsPictureV2FullPath, newFileName);
-                        using (Image<Rgba32> image = Image.Load(originalPath))
+                        using (Image image = Image.Load(originalPath))
                         {
                             var options = new ResizeOptions
                             {
                                 Mode = ResizeMode.Crop,
-                                Size = new SixLabors.Primitives.Size(700, 700)
+                                Size = new Size(700, 700)
                             };
 
                             image.Mutate(x => x.Resize(options));
@@ -228,12 +228,12 @@ namespace DamaWeb.Controllers
                 }
 
                 //Resize
-                using (Image<Rgba32> image = Image.Load(sourceFile))
+                using (Image image = Image.Load(sourceFile))
                 {
                     var options = new ResizeOptions
                     {
                         Mode = ResizeMode.Crop,
-                        Size = new SixLabors.Primitives.Size(width, height)
+                        Size = new Size(width, height)
                     };
 
                     image.Mutate(x => x.Resize(options));

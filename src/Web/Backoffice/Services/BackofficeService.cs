@@ -95,7 +95,7 @@ namespace Backoffice.Services
             //Medium
             if (resize)
             {
-                using (Image<Rgba32> image = Image.Load(formFile.OpenReadStream()))
+                using (Image image = Image.Load(formFile.OpenReadStream()))
                 {
                     image.Mutate(x => x
                          .Resize(width, height));
@@ -105,8 +105,8 @@ namespace Backoffice.Services
                     var options = new ResizeOptions
                     {
                         Mode = ResizeMode.Crop,
-                        Size = new SixLabors.Primitives.Size(width, height)
-                    };
+                        Size = new Size(width, height)
+                    };                    
 
                     image.Mutate(x => x.Resize(options));      
 

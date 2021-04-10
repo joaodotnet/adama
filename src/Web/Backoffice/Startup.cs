@@ -36,14 +36,11 @@ namespace Backoffice
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
             services.AddDbContext<DamaContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("DamaConnection"), mysqlOptions =>
-                {
-                    mysqlOptions.ServerVersion(new Version(5, 7, 25), ServerType.MySql);
-                }));
+                options.UseMySql(Configuration.GetConnectionString("DamaShopConnection"), MariaDbServerVersion.LatestSupportedServerVersion));
 
             // Add Identity DbContext
             services.AddDbContext<AppIdentityDbContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("IdentityConnection")));
+                options.UseMySql(Configuration.GetConnectionString("IdentityConnection"), MariaDbServerVersion.LatestSupportedServerVersion));
             ConfigureServices(services);
             services.AddScoped<IInvoiceService, InvoiceTestService>();
         }
@@ -51,11 +48,11 @@ namespace Backoffice
         public void ConfigureProductionServices(IServiceCollection services)
         {
             services.AddDbContext<DamaContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("DamaConnection")));
+                options.UseMySql(Configuration.GetConnectionString("DamaShopConnection"), MariaDbServerVersion.LatestSupportedServerVersion));
 
             // Add Identity DbContext
             services.AddDbContext<AppIdentityDbContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("IdentityConnection")));
+                options.UseMySql(Configuration.GetConnectionString("IdentityConnection"), MariaDbServerVersion.LatestSupportedServerVersion));
             ConfigureServices(services);
             services.AddScoped<IInvoiceService, InvoiceService>();
         }
