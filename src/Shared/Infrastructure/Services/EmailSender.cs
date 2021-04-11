@@ -39,13 +39,23 @@ namespace Infrastructure.Services
         {
             try
             {
+                if (string.IsNullOrEmpty(ToEmail))
+                    return;
                 _logger.LogInformation("Sending Email...");
                 var mail = new MimeMessage();
                 mail.From.Add(new MailboxAddress(GetFromName(FromEmail), FromEmail));
-
-                mail.To.Add(MailboxAddress.Parse(ToEmail));
+                
+                foreach (var item in ToEmail.Split(","))
+                {
+                    mail.To.Add(MailboxAddress.Parse(item));
+                }
                 if (!string.IsNullOrEmpty(bccEmails))
-                    mail.Bcc.Add(MailboxAddress.Parse(bccEmails));
+                {
+                    foreach (var item in bccEmails.Split(","))
+                    {
+                        mail.Bcc.Add(MailboxAddress.Parse(item));
+                    }
+                }
                 mail.Subject = subject;
                 var builder = new BodyBuilder
                 {
