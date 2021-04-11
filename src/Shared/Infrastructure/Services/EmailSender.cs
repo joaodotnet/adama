@@ -1,15 +1,15 @@
-﻿using ApplicationCore;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
+using ApplicationCore;
 using ApplicationCore.Exceptions;
 using ApplicationCore.Interfaces;
+using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Net.Mail;
-using System.Threading.Tasks;
+using MimeKit;
 
 namespace Infrastructure.Services
 {
@@ -27,9 +27,7 @@ namespace Infrastructure.Services
         }
         public async Task SendEmailAsync(string fromEmail, string toEmail, string subject, string message, string bccEmails = null, IFormFile attachFile = null, List<(string, byte[])> files = null)
         {
-            // TODO: Wire this up to actual email sending logic via SendGrid, local SMTP, etc.
             await Execute(fromEmail, toEmail, subject, message, bccEmails, attachFile, files);
-            //await SendGenericEmailAsync(fromEmail, toEmail, subject, message, bccEmails);
         }
 
         public async Task SendGenericEmailAsync(string fromEmail, string toEmail, string subject, string textBody, string bccEmails = null, List<(string,byte[])> files = null)
@@ -42,34 +40,37 @@ namespace Infrastructure.Services
             try
             {
                 _logger.LogInformation("Sending Email...");
-                MailMessage mail = new MailMessage()
-                {
-                    From = new MailAddress(FromEmail, GetFromName(FromEmail))
-                };
-                mail.To.Add(ToEmail);
+                var mail = new MimeMessage();
+                mail.From.Add(new MailboxAddress(GetFromName(FromEmail), FromEmail));
+
+                mail.To.Add(MailboxAddress.Parse(ToEmail));
                 if (!string.IsNullOrEmpty(bccEmails))
-                    mail.Bcc.Add(bccEmails);
+                    mail.Bcc.Add(MailboxAddress.Parse(bccEmails));
                 mail.Subject = subject;
-                mail.Body = message;
-                mail.IsBodyHtml = true;
-                mail.Priority = MailPriority.Normal;
+                var builder = new BodyBuilder();
+                builder.HtmlBody = message;
+
+                
                 if (attachFile != null)
-                    mail.Attachments.Add(new Attachment(attachFile.OpenReadStream(), attachFile.FileName));
+                    builder.Attachments.Add(attachFile.FileName, attachFile.OpenReadStream());
                 else if(files?.Count > 0)
                 {
                     foreach (var item in files)
                     {
                         if(item.Bytes != null)
-                            mail.Attachments.Add(new Attachment(new MemoryStream(item.Bytes), item.FileName));
+                            builder.Attachments.Add(item.FileName, new MemoryStream(item.Bytes));
                     }
                 }
 
-                using (SmtpClient smtp = new SmtpClient(_appSettings.SmtpServer, _appSettings.SmtpPort))
-                {
-                    //smtp.UseDefaultCredentials = false;
-                    smtp.Credentials = new NetworkCredential(_appSettings.SmtpUsername, _appSettings.SmtpPassword);
-                    smtp.EnableSsl = _appSettings.SSL;
-                    await smtp.SendMailAsync(mail);
+                mail.Body = builder.ToMessageBody();
+                mail.Priority = MessagePriority.Normal;
+
+                using (SmtpClient smtp = new SmtpClient())
+                {                    
+                    smtp.Connect(_appSettings.SmtpServer, _appSettings.SmtpPort, _appSettings.SSL);
+                    smtp.Authenticate(_appSettings.SmtpUsername, _appSettings.SmtpPassword);
+                    await smtp.SendAsync(mail);
+                    smtp.Disconnect(true);
                 }
                 _logger.LogInformation("Email send successuful!");
             }
@@ -84,7 +85,7 @@ namespace Infrastructure.Services
         {
             if (fromEmail.Contains("saborcomtradicao"))
                 return "Sabor com Tradição";
-            return "Dama no Jornal®";
+            return "Dama no Jornal";
         }
 
         private string CreateGenericBody(string textBody)
