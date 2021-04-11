@@ -65,7 +65,7 @@ jobs:
         ConnectionStrings.IdentityConnection: ${{ secrets.IDENTITYCONNECTIONSTRING }}
         Email.SmtpServer: ${{ secrets.SMTPSERVER }}
         Email.SmtpPort: ${{ secrets.SMTPPORT}}
-        SSL: true
+        Email.SSL: true
         Email.SmtpUsername: ${{ secrets.SMTPUSERNAME }}
         Email.SmtpPassword: ${{ secrets.SMTPPASSWORD }}
         Email.FromInfoEmail: ${{ secrets.FROMINFOEMAIL }}
