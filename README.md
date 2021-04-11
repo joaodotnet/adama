@@ -1,5 +1,5 @@
 # Description
-This is a monolithic e-commerce application using ASP.NET Core 3.1
+This is a monolithic e-commerce application using ASP.NET 5
 
 # Patterns / Technologies using
 * Clean Architecture by (ardalis)

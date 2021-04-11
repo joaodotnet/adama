@@ -25,7 +25,7 @@ namespace UnitTests.ApplicationCore.Services.BasketServiceTests
         [Fact]
         public async Task ThrowsGivenInvalidBasketId()
         {
-            var basketService = new BasketService(_mockBasketRepo.Object, _mockCatalogRepo.Object, null, null);
+            var basketService = new BasketService(_mockBasketRepo.Object, _mockCatalogRepo.Object, null);
 
             await Assert.ThrowsAsync<BasketNotFoundException>(async () =>
                 await basketService.SetQuantities(_invalidId, new System.Collections.Generic.Dictionary<string, int>()));
@@ -34,7 +34,7 @@ namespace UnitTests.ApplicationCore.Services.BasketServiceTests
         [Fact]
         public async Task ThrowsGivenNullQuantities()
         {
-            var basketService = new BasketService(null, null, null, null);
+            var basketService = new BasketService(null, null, null);
 
             await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await basketService.SetQuantities(123, null));

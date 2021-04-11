@@ -6,7 +6,7 @@
 
 
 <h1 class="text-uppercase">@ViewData["Title"]</h1>
-@await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
+<partial name="_StatusMessage" for="StatusMessage" />
 <div class="row mx-sm-5 mt-4 mt-sm-5 justify-content-around">
     <div class="col-12 col-sm-4 p-sm-3 border-right border-primary">
         <h2 class="text-sm-center text-uppercase">Os Meus Dados</h2>

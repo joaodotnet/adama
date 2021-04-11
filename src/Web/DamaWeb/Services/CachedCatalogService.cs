@@ -23,7 +23,6 @@ namespace DamaWeb.Services
         private static readonly string _itemsBySearchKeyTemplate = "search-{0}-{1}-{2}-{3}";
         private static readonly string _menuKeyTemplate = "damamenu";
         private static readonly string _catalogTypeItemsKeyTemplate = "catalog-type-items-{0}-{1}-{2}-{3}-{4}";
-        private static readonly string _categoryTypesKeyTemplate = "category-types-{0}";
         private static readonly string _itemGetSlugKeyTemplate = "item-sku-{0}";
         private static readonly TimeSpan _defaultCacheDuration = TimeSpan.FromSeconds(30);
 

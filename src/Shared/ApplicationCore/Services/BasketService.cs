@@ -14,17 +14,14 @@ namespace ApplicationCore.Services
     public class BasketService : IBasketService
     {
         private readonly IAsyncRepository<Basket> _basketRepository;
-        private readonly IUriComposer _uriComposer;
         private readonly IAppLogger<BasketService> _logger;
         private readonly IAsyncRepository<CatalogItem> _itemRepository;        
 
         public BasketService(IAsyncRepository<Basket> basketRepository,
             IAsyncRepository<CatalogItem> itemRepository,
-            IUriComposer uriComposer,
             IAppLogger<BasketService> logger)
         {
             _basketRepository = basketRepository;
-            _uriComposer = uriComposer;
             _logger = logger;
             _itemRepository = itemRepository;
         }

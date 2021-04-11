@@ -47,18 +47,20 @@ namespace Infrastructure.Services
                 if (!string.IsNullOrEmpty(bccEmails))
                     mail.Bcc.Add(MailboxAddress.Parse(bccEmails));
                 mail.Subject = subject;
-                var builder = new BodyBuilder();
-                builder.HtmlBody = message;
+                var builder = new BodyBuilder
+                {
+                    HtmlBody = message
+                };
 
-                
+
                 if (attachFile != null)
                     builder.Attachments.Add(attachFile.FileName, attachFile.OpenReadStream());
                 else if(files?.Count > 0)
                 {
-                    foreach (var item in files)
+                    foreach (var (FileName, Bytes) in files)
                     {
-                        if(item.Bytes != null)
-                            builder.Attachments.Add(item.FileName, new MemoryStream(item.Bytes));
+                        if(Bytes != null)
+                            builder.Attachments.Add(FileName, new MemoryStream(Bytes));
                     }
                 }
 
@@ -81,14 +83,14 @@ namespace Infrastructure.Services
             }
         }
 
-        private string GetFromName(string fromEmail)
+        private static string GetFromName(string fromEmail)
         {
             if (fromEmail.Contains("saborcomtradicao"))
                 return "Sabor com Tradição";
             return "Dama no Jornal";
         }
 
-        private string CreateGenericBody(string textBody)
+        private static string CreateGenericBody(string textBody)
         {
             string body = $@"
 <table style='width:550px;'>

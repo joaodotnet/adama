@@ -17,16 +17,17 @@ namespace Infrastructure.Services
         {
             try
             {
-                var request = new RegisterInvoiceRequest();
-                request.RegisterInvoiceElem = new RegisterInvoiceType
+                var request = new RegisterInvoiceRequest
                 {
-                    TaxRegistrationNumber = "247609161",
-                    InvoiceNo = "FT 1/1",
-                    InvoiceDate = DateTime.Now,
-                    InvoiceType = InvoiceType.FT,
-                    InvoiceStatus = InvoiceStatus.N,
-                    Item = "227940032", //Final Customer: 999999990                 
-                    Line = new RegisterInvoiceTypeLine[]
+                    RegisterInvoiceElem = new RegisterInvoiceType
+                    {
+                        TaxRegistrationNumber = "247609161",
+                        InvoiceNo = "FT 1/1",
+                        InvoiceDate = DateTime.Now,
+                        InvoiceType = InvoiceType.FT,
+                        InvoiceStatus = InvoiceStatus.N,
+                        Item = "227940032", //Final Customer: 999999990                 
+                        Line = new RegisterInvoiceTypeLine[]
                     {
                         new RegisterInvoiceTypeLine {
                             TaxExemptionReason = "M10",
@@ -39,13 +40,14 @@ namespace Infrastructure.Services
                             Item = 1
                         }
                     },
-                    DocumentTotals = new RegisterInvoiceTypeDocumentTotals
-                    {
-                        TaxPayable = 0,
-                        NetTotal = 1,
-                        GrossTotal = 1
-                    }
+                        DocumentTotals = new RegisterInvoiceTypeDocumentTotals
+                        {
+                            TaxPayable = 0,
+                            NetTotal = 1,
+                            GrossTotal = 1
+                        }
 
+                    }
                 };
                 //Certificado:
                 string certificatePath = @"C:\projects\nsfw\Certificados\Teste\TesteWebServices.pfx";
@@ -74,12 +76,12 @@ namespace Infrastructure.Services
                 }
                 else
                     System.Diagnostics.Debug.WriteLine($">>>>>>>>>>>>> {webExeption.Message} <<<<<<<<<<<<<<<<<<<");
-                throw webExeption;
+                throw;
             }
             catch (Exception ex)
             { 
                 System.Diagnostics.Debug.WriteLine($">>>>>>>>>>>>> {ex.Message} <<<<<<<<<<<<<<<<< ");
-                throw ex;
+                throw;
             }
             
             return true;

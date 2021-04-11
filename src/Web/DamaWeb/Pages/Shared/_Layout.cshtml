@@ -96,9 +96,9 @@
                     <a class="nav-link" data-toggle="collapse" href="#newslettercollapse">Newsletter</a>
                 </li>
             </ul> *@
-            <ul class="navbar-nav ml-auto flex-row order-lg-4">
-                @(await Html.PartialAsync("_LoginPartial"))
-            </ul>
+        <ul class="navbar-nav ml-auto flex-row order-lg-4">
+            <partial name="_LoginPartial" />
+        </ul>
             <div class="divider-vertical d-none d-lg-flex order-lg-5"></div>
             <ul class="navbar-nav d-none d-lg-flex order-lg-6">
                 <li class="nav-item">

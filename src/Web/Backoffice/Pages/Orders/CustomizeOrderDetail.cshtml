@@ -10,7 +10,7 @@
     }
 }
 <h2>Encomenda Personalizada nº @Model.CustomizeOrder.Id</h2>
-@Html.Partial("_StatusMessage", Model.StatusMessage)
+<partial name="_StatusMessage" for="StatusMessage" />
 <div>
     <hr />
     <dl class="dl-horizontal">
