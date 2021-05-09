@@ -30,6 +30,11 @@ namespace ApplicationCore.Entities
         public ICollection<CatalogPicture> CatalogPictures { get; set; }
         public ICollection<CatalogCategory> CatalogCategories { get; set; } = new List<CatalogCategory>();
 
+        //For EF
+        public CatalogItem()
+        {
+        }
+
         public CatalogItem(int catalogIlustrationId,
             int catalogTypeId,
             bool showOnShop)
