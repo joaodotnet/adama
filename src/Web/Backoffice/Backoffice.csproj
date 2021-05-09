@@ -15,8 +15,8 @@
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
   </ItemGroup>  
   <ItemGroup>
-    <ProjectReference Include="..\..\Shared\ApplicationCore\ApplicationCore.csproj" />
-    <ProjectReference Include="..\..\Shared\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\..\ApplicationCore\ApplicationCore.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>  
   <ItemGroup>
     <Content Update="Pages\ProductType\_StatusMessage.cshtml">

@@ -21,8 +21,8 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Shared\ApplicationCore\ApplicationCore.csproj" />
-    <ProjectReference Include="..\..\Shared\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\..\ApplicationCore\ApplicationCore.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

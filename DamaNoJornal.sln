@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28705.295
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationCore", "src\Shared\ApplicationCore\ApplicationCore.csproj", "{F2304381-4774-4E9D-BB19-01AE29D480FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationCore", "src\ApplicationCore\ApplicationCore.csproj", "{F2304381-4774-4E9D-BB19-01AE29D480FF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Shared\Infrastructure\Infrastructure.csproj", "{7E93191C-69DD-4958-B80C-0F0AC55F6891}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Infrastructure\Infrastructure.csproj", "{7E93191C-69DD-4958-B80C-0F0AC55F6891}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backoffice", "src\Web\Backoffice\Backoffice.csproj", "{8E9D50CB-7A1B-4156-8ABB-94D832250E1A}"
 EndProject
