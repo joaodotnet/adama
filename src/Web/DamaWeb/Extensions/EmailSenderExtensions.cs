@@ -206,8 +206,8 @@ namespace Microsoft.AspNetCore.Mvc
         </div>
         <div style='margin-top:20px;text-align:center;width:550px'>
             Valor: {order.Total()} €<br />
-            IBAN PT50004572114025360687172<br />
-            NIB 004572114025360687172<br />
+            IBAN PT50004572114018522378165<br />
+            NIB 004572114018522378165<br />
             CAIXA DE CRÉDITO AGRÍCOLA<br />
             <strong>Titular da conta:</strong> Susana Nunes<br />
         </div>
