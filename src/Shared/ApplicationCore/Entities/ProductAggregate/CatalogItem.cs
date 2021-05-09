@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using ApplicationCore.Interfaces;
 
 namespace ApplicationCore.Entities
 {
-    public class CatalogItem : BaseEntity
+    public class CatalogItem : BaseEntity, IAggregateRoot
     {
         public string Sku { get; private set; }
         public string Name { get; private set; }
@@ -25,7 +26,8 @@ namespace ApplicationCore.Entities
         public decimal? Discount { get; private set; }
         public bool IsUnavailable { get; private set; }
 
-        public ICollection<CatalogAttribute> CatalogAttributes { get; set; }
+        private readonly List<CatalogAttribute> _attributes = new List<CatalogAttribute>();
+        public IReadOnlyCollection<CatalogAttribute> Attributes => _attributes.AsReadOnly();
         public ICollection<CatalogReference>  CatalogReferences { get; set; }
         public ICollection<CatalogPicture> CatalogPictures { get; set; }
         public ICollection<CatalogCategory> CatalogCategories { get; set; } = new List<CatalogCategory>();

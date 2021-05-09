@@ -29,7 +29,7 @@ namespace Backoffice.Pages.Products
                 .Include(p => p.CatalogIllustration)
                     .ThenInclude(i => i.IllustrationType)
                 .Include(p => p.CatalogType)
-                .Include(p => p.CatalogAttributes)
+                .Include(p => p.Attributes)
                 .Include(p => p.CatalogCategories)
                     .ThenInclude( cc => cc.Category)
                     .OrderByDescending(p => p.Id)

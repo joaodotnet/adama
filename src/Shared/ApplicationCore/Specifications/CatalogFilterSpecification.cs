@@ -30,7 +30,7 @@ namespace ApplicationCore.Specifications
             AddInclude(x => x.CatalogCategories);
             AddInclude($"{nameof(CatalogItem.CatalogCategories)}.{nameof(CatalogCategory.Category)}");
             AddInclude(x => x.CatalogPictures);
-            AddInclude(x => x.CatalogAttributes);
+            AddInclude(x => x.Attributes);
             AddInclude(x => x.CatalogType);
             AddInclude(x => x.CatalogIllustration);
             AddInclude($"{nameof(CatalogItem.CatalogIllustration)}.{nameof(CatalogIllustration.IllustrationType)}");
@@ -62,7 +62,7 @@ namespace ApplicationCore.Specifications
     {
         public CatalogAttrFilterSpecification(int catalogId) : base(i => i.Id == catalogId)
         {
-            AddInclude(x => x.CatalogAttributes);
+            AddInclude(x => x.Attributes);
         }
     }
 
@@ -71,7 +71,7 @@ namespace ApplicationCore.Specifications
         public CatalogTypeFilterSpecification(int catalogId) : base(i => i.Id == catalogId)
         {
             AddInclude(x => x.CatalogType);
-            AddInclude(x => x.CatalogAttributes);
+            AddInclude(x => x.Attributes);
         }
     }
 

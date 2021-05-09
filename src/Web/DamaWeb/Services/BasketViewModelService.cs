@@ -93,7 +93,7 @@ namespace DamaWeb.Services
                         itemModel.Sku = catalogItem.Sku;
                         itemModel.Slug = catalogItem.Slug;
 
-                        foreach (var attr in catalogItem.CatalogAttributes)
+                        foreach (var attr in catalogItem.Attributes)
                         {
                             if ((item.CatalogAttribute1.HasValue && item.CatalogAttribute1 == attr.Id) ||
                                 (item.CatalogAttribute2.HasValue && item.CatalogAttribute2 == attr.Id) ||

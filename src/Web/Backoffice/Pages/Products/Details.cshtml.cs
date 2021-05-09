@@ -36,7 +36,7 @@ namespace Backoffice.Pages.Products
                 .Include(p => p.CatalogIllustration)
                     .ThenInclude(i => i.IllustrationType)
                 .Include(p => p.CatalogType)
-                .Include(p => p.CatalogAttributes)
+                .Include(p => p.Attributes)
                 .Include(p => p.CatalogPictures)
                 .Include(p => p.CatalogCategories)
                     .ThenInclude(cc => cc.Category)

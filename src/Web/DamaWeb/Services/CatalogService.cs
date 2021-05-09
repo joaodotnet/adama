@@ -357,7 +357,7 @@ namespace DamaWeb.Services
                         );
 
                 //Attributes
-                foreach (var grpAttr in product.CatalogAttributes.GroupBy(x => x.Type))
+                foreach (var grpAttr in product.Attributes.GroupBy(x => x.Type))
                 {
                     //attrPriceDefault += grpAttr.First().Price ?? 0;
                     vm.Attributes.Add(new ProductAttributeViewModel

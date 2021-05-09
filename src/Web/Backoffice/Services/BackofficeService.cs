@@ -203,11 +203,11 @@ namespace Backoffice.Services
                 if (item.CatalogAttribute1.HasValue || item.CatalogAttribute2.HasValue || item.CatalogAttribute3.HasValue)
                 {
                     var product = await _damaContext.CatalogItems
-                    .Include(i => i.CatalogAttributes)
+                    .Include(i => i.Attributes)
                     .SingleOrDefaultAsync(i => i.Id == item.ProductId);
 
                     var attributes = new List<CatalogAttribute>();
-                    foreach (var attr in product.CatalogAttributes)
+                    foreach (var attr in product.Attributes)
                     {
                         if ((item.CatalogAttribute1.HasValue && item.CatalogAttribute1 == attr.Id) ||
                           (item.CatalogAttribute2.HasValue && item.CatalogAttribute2 == attr.Id) ||

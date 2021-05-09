@@ -158,7 +158,7 @@ namespace ApplicationCore.Services
             var spec = new CatalogTypeFilterSpecification(catalogItemId);
             var product = await _itemRepository.GetSingleBySpecAsync(spec);
 
-            var group = product.CatalogAttributes.GroupBy(x => x.Type);
+            var group = product.Attributes.GroupBy(x => x.Type);
             foreach (var attribute in group)
             {
                 if(!options.Item1.HasValue)

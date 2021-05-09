@@ -85,9 +85,9 @@ namespace Backoffice.Pages.Products.Attributes
 
             //Update Total Stock
             var prod = await _context.CatalogItems
-                .Include(x => x.CatalogAttributes)
+                .Include(x => x.Attributes)
                 .SingleOrDefaultAsync(x => x.Id == CatalogAttributeModel.CatalogItemId);
-            prod.UpdateStock(prod.CatalogAttributes.Sum(x => x.Stock));
+            prod.UpdateStock(prod.Attributes.Sum(x => x.Stock));
 
             await _context.SaveChangesAsync();
 

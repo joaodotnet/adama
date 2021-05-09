@@ -189,7 +189,7 @@ namespace Infrastructure.Data
                 .IsRequired()
                 .HasMaxLength(100);
             builder.HasOne(x => x.CatalogItem)
-                .WithMany(p => p.CatalogAttributes)
+                .WithMany(p => p.Attributes)
                 .HasForeignKey(x => x.CatalogItemId);
             //builder.HasOne(x => x.ReferenceCatalogItem)
             //    .WithMany(x => x.ReferenceCatalogAttributes)

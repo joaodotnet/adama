@@ -172,7 +172,7 @@ namespace ApplicationCore.Services
                 var spec = new CatalogAttrFilterSpecification(orderItem.ItemOrdered.CatalogItemId);
                 var product = await _itemRepository.GetSingleBySpecAsync(spec);
                 var listItem = (orderItem.Id, new List<CatalogAttribute>());
-                foreach (var item in product.CatalogAttributes)
+                foreach (var item in product.Attributes)
                 {
                     if ((orderItem.CatalogAttribute1.HasValue && orderItem.CatalogAttribute1 == item.Id) ||
                             (orderItem.CatalogAttribute2.HasValue && orderItem.CatalogAttribute2 == item.Id) ||
@@ -191,7 +191,7 @@ namespace ApplicationCore.Services
             var list = new List<CatalogAttribute>();
             if (product != null)
             {
-                foreach (var item in product.CatalogAttributes)
+                foreach (var item in product.Attributes)
                 {
                     if ((catalogAttribute1.HasValue && catalogAttribute1 == item.Id) ||
                            (catalogAttribute2.HasValue && catalogAttribute2 == item.Id) ||

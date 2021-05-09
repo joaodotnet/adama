@@ -40,7 +40,7 @@ namespace Backoffice.Pages.Stock
             var products = await _db.CatalogItems
                 .Include(x => x.CatalogCategories)
                 .ThenInclude(cc => cc.Category)
-                .Include(x => x.CatalogAttributes)
+                .Include(x => x.Attributes)
                 .Include(x => x.CatalogType)
                 .Include(x => x.CatalogIllustration)
                 .ThenInclude(i => i.IllustrationType)
@@ -51,9 +51,9 @@ namespace Backoffice.Pages.Stock
 
             foreach (var item in products)
             {
-                if (item.CatalogAttributes.Count > 0)
+                if (item.Attributes.Count > 0)
                 {
-                    foreach (var attr in item.CatalogAttributes)
+                    foreach (var attr in item.Attributes)
                     {
                         Stocks.Add(new StockViewModel
                         {
@@ -89,14 +89,14 @@ namespace Backoffice.Pages.Stock
             foreach (var item in Stocks)
             {
                 var prod = await _db.CatalogItems
-                    .Include(x => x.CatalogAttributes)
+                    .Include(x => x.Attributes)
                     .SingleOrDefaultAsync(x => x.Id == item.CatalogItemId);
 
                 if (item.CatalogAttributeId.HasValue)
                 {
                     if (!productsWithAttrs.Any(x => x == item.CatalogItemId))
                         productsWithAttrs.Add(item.CatalogItemId);
-                    var attr = prod.CatalogAttributes.SingleOrDefault(x => x.Id == item.CatalogAttributeId && x.CatalogItemId == item.CatalogItemId);
+                    var attr = prod.Attributes.SingleOrDefault(x => x.Id == item.CatalogAttributeId && x.CatalogItemId == item.CatalogItemId);
                     attr.Stock = item.Stock;
                 }
                 else
@@ -110,10 +110,10 @@ namespace Backoffice.Pages.Stock
                 foreach (var item in productsWithAttrs)
                 {
                     var prod = await _db.CatalogItems
-                           .Include(x => x.CatalogAttributes)
+                           .Include(x => x.Attributes)
                            .SingleOrDefaultAsync(x => x.Id == item);
 
-                    prod.UpdateStock(prod.CatalogAttributes?.Sum(x => x.Stock) ?? 0);
+                    prod.UpdateStock(prod.Attributes?.Sum(x => x.Stock) ?? 0);
                 }
 
                 await _db.SaveChangesAsync();
