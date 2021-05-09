@@ -89,12 +89,12 @@ namespace Backoffice.Pages.Products
             public decimal? Discount { get; set; }
 
 
-            public IList<ProductAttributeViewModel> CatalogAttributes { get; set; } = new List<ProductAttributeViewModel>();
+            public IList<ProductAttributeViewModel> Attributes { get; set; } = new List<ProductAttributeViewModel>();
             [Display(Name = "Imagens do Produto")]
-            public IList<ProductPictureViewModel> CatalogPictures { get; set; } = new List<ProductPictureViewModel>();
+            public IList<ProductPictureViewModel> Pictures { get; set; } = new List<ProductPictureViewModel>();
             [Display(Name = "Categorias")]
-            public IList<CatalogCategoryViewModel> CatalogCategories { get; set; } = new List<CatalogCategoryViewModel>();
-            public IList<CatalogReference> CatalogReferences { get; set; } = new List<CatalogReference>();
+            public IList<CatalogCategoryViewModel> Categories { get; set; } = new List<CatalogCategoryViewModel>();
+            public IList<CatalogReference> References { get; set; } = new List<CatalogReference>();
 
         }
 
@@ -140,7 +140,7 @@ namespace Backoffice.Pages.Products
                 var info = _service.SaveFile(ProductModel.Picture, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, (++lastCatalogItemId).ToString(), true, 700, 700);
                 ProductModel.PictureUri = info.PictureUri;
 
-                ProductModel.CatalogPictures.Add(new ProductPictureViewModel
+                ProductModel.Pictures.Add(new ProductPictureViewModel
                 {
                     IsActive = true,
                     IsMain = true,
@@ -158,7 +158,7 @@ namespace Backoffice.Pages.Products
                 foreach (var item in ProductModel.OtherPictures)
                 {
                     var info = _service.SaveFile(item, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, (++lastCatalogPictureId).ToString(), true, 700, 700);
-                    ProductModel.CatalogPictures.Add(new ProductPictureViewModel
+                    ProductModel.Pictures.Add(new ProductPictureViewModel
                     {
                         IsActive = true,
                         IsMain = false,
@@ -201,7 +201,7 @@ namespace Backoffice.Pages.Products
         public async Task<IActionResult> OnPostAddAttributeAsync()
         {
             await PopulateLists();
-            ProductModel.CatalogAttributes.Add(new ProductAttributeViewModel());
+            ProductModel.Attributes.Add(new ProductAttributeViewModel());
             return Page();
         }
 

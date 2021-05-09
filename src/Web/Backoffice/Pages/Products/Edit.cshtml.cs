@@ -89,12 +89,12 @@ namespace Backoffice.Pages.Products
             [Display(Name = "Desconto")]
             public decimal? Discount { get; set; }
 
-            public IList<ProductAttributeViewModel> CatalogAttributes { get; set; } = new List<ProductAttributeViewModel>();
+            public IList<ProductAttributeViewModel> Attributes { get; set; } = new List<ProductAttributeViewModel>();
             [Display(Name = "Imagens do Produto")]
-            public List<ProductPictureViewModel> CatalogPictures { get; set; } = new List<ProductPictureViewModel>();
+            public List<ProductPictureViewModel> Pictures { get; set; } = new List<ProductPictureViewModel>();
             [Display(Name = "Categorias")]
-            public IList<CatalogCategoryViewModel> CatalogCategories { get; set; } = new List<CatalogCategoryViewModel>();
-            public IList<CatalogReference> CatalogReferences { get; set; } = new List<CatalogReference>();
+            public IList<CatalogCategoryViewModel> Categories { get; set; } = new List<CatalogCategoryViewModel>();
+            public IList<CatalogReference> References { get; set; } = new List<CatalogReference>();
             public string PictureHighUri { get; set; }
         }
 
@@ -117,7 +117,7 @@ namespace Backoffice.Pages.Products
                 .AsNoTracking()
                 .SingleOrDefaultAsync(m => m.Id == id));
 
-            ProductModel.CatalogPictures.RemoveAll(x => x.IsMain);
+            ProductModel.Pictures.RemoveAll(x => x.IsMain);
 
             if (ProductModel == null)
             {
@@ -177,12 +177,12 @@ namespace Backoffice.Pages.Products
             //Save other images
             if (ProductModel.OtherPictures != null)
             {
-                var order = ProductModel.CatalogPictures.Count == 0 ? 0 : ProductModel.CatalogPictures.Max(x => x.Order);
+                var order = ProductModel.Pictures.Count == 0 ? 0 : ProductModel.Pictures.Max(x => x.Order);
                 var lastCatalogPictureId = _context.CatalogPictures.Count() > 0 ? GetLastCatalogPictureId() : 0;
                 foreach (var item in ProductModel.OtherPictures)
                 {
                     var info = _service.SaveFile(item, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, (++lastCatalogPictureId).ToString(), true, 700, 700);
-                    ProductModel.CatalogPictures.Add(new ProductPictureViewModel
+                    ProductModel.Pictures.Add(new ProductPictureViewModel
                     {
                         IsActive = true,
                         Order = ++order,
@@ -221,7 +221,7 @@ namespace Backoffice.Pages.Products
             }
 
             //Other pictutes
-            foreach (var item in ProductModel.CatalogPictures.Where(x => !x.IsMain).ToList())
+            foreach (var item in ProductModel.Pictures.Where(x => !x.IsMain).ToList())
             {
                 var otherPicture = item.Id != 0 ? prod.Pictures.SingleOrDefault(x => x.Id == item.Id) : null;
 
@@ -304,7 +304,7 @@ namespace Backoffice.Pages.Products
         public async Task<IActionResult> OnPostAddAttributeAsync()
         {
             await PopulateLists();
-            ProductModel.CatalogAttributes.Add(new ProductAttributeViewModel
+            ProductModel.Attributes.Add(new ProductAttributeViewModel
             {
                 CatalogItemId = ProductModel.Id
             });
@@ -325,7 +325,7 @@ namespace Backoffice.Pages.Products
         }
         private bool ValidateAttributesModel()
         {
-            foreach (var item in ProductModel.CatalogAttributes)
+            foreach (var item in ProductModel.Attributes)
             {
                 if (!item.ToRemove)
                 {
@@ -413,7 +413,7 @@ namespace Backoffice.Pages.Products
                 .ToListAsync();
             foreach (var item in allCats.Where(x => x.Parent == null).ToList())
             {
-                var catalogCategory = ProductModel.CatalogCategories.SingleOrDefault(x => x.CategoryId == item.Id);
+                var catalogCategory = ProductModel.Categories.SingleOrDefault(x => x.CategoryId == item.Id);
                 CatalogCategoryViewModel parent = new CatalogCategoryViewModel
                 {
                     Id = catalogCategory?.Id ?? 0,
@@ -424,10 +424,10 @@ namespace Backoffice.Pages.Products
                 };
                 parent.Childs.AddRange(allCats.Where(x => x.ParentId == item.Id).Select(s => new CatalogCategoryViewModel
                 {
-                    Id = ProductModel.CatalogCategories.SingleOrDefault(x => x.CategoryId == s.Id)?.Id ?? 0,
+                    Id = ProductModel.Categories.SingleOrDefault(x => x.CategoryId == s.Id)?.Id ?? 0,
                     CategoryId = s.Id,
                     Label = s.Name,
-                    Selected = ProductModel.CatalogCategories.Any(x => x.CategoryId == s.Id),
+                    Selected = ProductModel.Categories.Any(x => x.CategoryId == s.Id),
                 }));
                 CatalogCategoryModel.Add(parent);
             }
