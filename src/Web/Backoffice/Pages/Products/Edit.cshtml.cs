@@ -208,16 +208,9 @@ namespace Backoffice.Pages.Products
             {
                 var mainPic = prod.Pictures.SingleOrDefault(x => x.IsMain);
                 if (mainPic == null)
-                    prod.AddPicture(new CatalogPicture
-                    {
-                        IsActive = true,
-                        IsMain = true,
-                        Order = 0,
-                        PictureUri = ProductModel.PictureUri,
-                        PictureHighUri = ProductModel.PictureHighUri
-                    });
+                    prod.AddPicture(new CatalogPicture(true,true,ProductModel.PictureUri,0,ProductModel.PictureHighUri));
                 else
-                    prod.Pictures.SingleOrDefault(x => x.IsMain).PictureUri = ProductModel.PictureUri;
+                    prod.Pictures.SingleOrDefault(x => x.IsMain).UpdatePictureUri(ProductModel.PictureUri);
             }
 
             //Other pictutes
@@ -232,21 +225,11 @@ namespace Backoffice.Pages.Products
                 }
                 else if(otherPicture != null)
                 {                    
-                    otherPicture.IsActive = item.IsActive;
-                    otherPicture.Order = item.Order;
-                    otherPicture.PictureUri = item.PictureUri;
-                    otherPicture.PictureHighUri = item.PictureHighUri;
+                    otherPicture.UpdatePictureInfo(item.IsActive,item.Order,item.PictureUri,item.PictureHighUri);
                 }
                 else
                 {
-                    prod.AddPicture(new CatalogPicture
-                    {
-                        IsActive = item.IsActive,
-                        Order = item.Order,
-                        PictureUri = item.PictureUri,
-                        PictureHighUri = item.PictureHighUri,
-                        IsMain = false
-                    });
+                    prod.AddPicture(new CatalogPicture(item.IsActive,false,item.PictureUri,item.Order,item.PictureHighUri));
                 }
             }
 

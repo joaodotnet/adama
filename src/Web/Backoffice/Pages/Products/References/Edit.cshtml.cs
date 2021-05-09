@@ -94,12 +94,9 @@ namespace Backoffice.Pages.Products.References
                 x.ReferenceCatalogItemId == CatalogReference.CatalogItemId);
                 if (newReference == null)
                 {
-                    _context.CatalogReferences.Add(new CatalogReference
-                    {
-                        LabelDescription = CatalogReference.LabelDescription,
-                        CatalogItemId = CatalogReference.ReferenceCatalogItemId,
-                        ReferenceCatalogItemId = CatalogReference.CatalogItemId
-                    });
+                    _context.CatalogReferences.Add(
+                        new CatalogReference(CatalogReference.ReferenceCatalogItemId, CatalogReference.LabelDescription,CatalogReference.CatalogItemId)
+                    );
                 }
                 await _context.SaveChangesAsync();
             }
@@ -109,7 +106,7 @@ namespace Backoffice.Pages.Products.References
                                 .SingleOrDefaultAsync(x =>
                                     x.CatalogItemId == OriginalReference &&
                                     x.ReferenceCatalogItemId == CatalogReference.CatalogItemId);
-                catalogReference.LabelDescription = CatalogReference.LabelDescription;
+                catalogReference.UpdateLabel(CatalogReference.LabelDescription);
                 await _context.SaveChangesAsync();
             }
 

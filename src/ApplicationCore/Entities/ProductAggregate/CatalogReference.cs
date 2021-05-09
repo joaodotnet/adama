@@ -1,16 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ApplicationCore.Entities
 {
     public class CatalogReference : BaseEntity
     {
-        public int CatalogItemId { get; set; }
-        public CatalogItem CatalogItem { get; set; }
-        public int ReferenceCatalogItemId { get; set; }
-        public CatalogItem ReferenceCatalogItem { get; set; }
-        public string LabelDescription { get; set; }
+        public CatalogReference(int catalogItemId, string labelDescription, int referenceCatalogItemId)
+        {
+            CatalogItemId = catalogItemId;
+            LabelDescription = labelDescription;
+            ReferenceCatalogItemId = referenceCatalogItemId;
+        }
+        public CatalogReference(string labelDescription, int referenceCatalogItemId)
+        {
+            LabelDescription = labelDescription;
+            ReferenceCatalogItemId = referenceCatalogItemId;
+        }
 
+        public int CatalogItemId { get; private set; }
+        public CatalogItem CatalogItem { get; private set; }
+        public int ReferenceCatalogItemId { get; private set; }
+        public CatalogItem ReferenceCatalogItem { get; private set; }
+        public string LabelDescription { get; private set; }
+
+        public void UpdateLabel(string labelDescription)
+        {
+            LabelDescription = labelDescription;
+        }
     }
 }

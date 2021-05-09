@@ -97,7 +97,7 @@ namespace Backoffice.Pages.Stock
                     if (!productsWithAttrs.Any(x => x == item.CatalogItemId))
                         productsWithAttrs.Add(item.CatalogItemId);
                     var attr = prod.Attributes.SingleOrDefault(x => x.Id == item.CatalogAttributeId && x.CatalogItemId == item.CatalogItemId);
-                    attr.Stock = item.Stock;
+                    attr.UpdateStock(item.Stock);
                 }
                 else
                     prod.UpdateStock(item.Stock);

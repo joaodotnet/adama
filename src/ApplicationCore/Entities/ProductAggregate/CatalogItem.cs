@@ -49,6 +49,7 @@ namespace ApplicationCore.Entities
             ShowOnShop = showOnShop;
         }
 
+
         public void UpdateName(string newName)
         {
             Name = newName;
@@ -117,6 +118,10 @@ namespace ApplicationCore.Entities
         public void AddCategory(CatalogCategory catalogCategory)
         {
             _categories.Add(catalogCategory);
+        }
+        public void AddReference(string labelDescription, int referenceCatalogItemId)
+        {
+            _references.Add(new CatalogReference(labelDescription, referenceCatalogItemId));
         }
     }
 }

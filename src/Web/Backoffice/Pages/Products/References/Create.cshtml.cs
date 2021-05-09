@@ -20,6 +20,20 @@ namespace Backoffice.Pages.Products.References
             _context = context;
         }
 
+        [BindProperty]
+        public CatalogReferenceViewModel CatalogReference { get; set; } = new();
+
+        public class CatalogReferenceViewModel
+        {
+            public int Id { get; set; }
+            public int CatalogItemId { get; set; }
+            public CatalogItem CatalogItem { get; set; }
+            public int ReferenceCatalogItemId { get; set; }
+            public CatalogItem ReferenceCatalogItem { get; set; }
+            public string LabelDescription { get; set; }
+
+        }
+
         public async Task<IActionResult> OnGetAsync(int id)
         {
             //ViewData["CatalogItemId"] = new SelectList(_context.CatalogItems, "Id", "Name");
@@ -35,8 +49,7 @@ namespace Backoffice.Pages.Products.References
             return Page();
         }
 
-        [BindProperty]
-        public CatalogReference CatalogReference { get; set; } = new CatalogReference();
+
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -45,26 +58,32 @@ namespace Backoffice.Pages.Products.References
                 return Page();
             }
 
-            _context.CatalogReferences.Add(CatalogReference);
-            await _context.SaveChangesAsync();
+            var prod = await _context.CatalogItems
+                .Include(x => x.References)
+                .SingleOrDefaultAsync(x => x.Id == CatalogReference.CatalogItemId);
 
-            //Check if exists the other reference
-            var referenceB = await _context.CatalogReferences
-                .SingleOrDefaultAsync(x => 
-                x.CatalogItemId == CatalogReference.ReferenceCatalogItemId && 
-                x.ReferenceCatalogItemId == CatalogReference.CatalogItemId);
-            if(referenceB == null)
+            if (prod != null)
             {
-                _context.CatalogReferences.Add(new CatalogReference
-                {
-                    LabelDescription = CatalogReference.LabelDescription,
-                    CatalogItemId = CatalogReference.ReferenceCatalogItemId,
-                    ReferenceCatalogItemId = CatalogReference.CatalogItemId
-                });
-                await _context.SaveChangesAsync();
-            }
+                prod.AddReference(CatalogReference.LabelDescription, CatalogReference.ReferenceCatalogItemId);
 
-            return RedirectToPage("/Products/Edit", new { id = CatalogReference.CatalogItemId });
+                await _context.SaveChangesAsync();
+
+                //Check if exists the other reference
+                var referenceB = await _context.CatalogReferences
+                    .SingleOrDefaultAsync(x =>
+                    x.CatalogItemId == CatalogReference.ReferenceCatalogItemId &&
+                    x.ReferenceCatalogItemId == CatalogReference.CatalogItemId);
+                if (referenceB == null)
+                {
+                    _context.CatalogReferences.Add(
+                        new CatalogReference(CatalogReference.ReferenceCatalogItemId, CatalogReference.LabelDescription, CatalogReference.CatalogItemId)
+                    );
+                    await _context.SaveChangesAsync();
+                }
+
+                return RedirectToPage("/Products/Edit", new { id = CatalogReference.CatalogItemId });
+            }
+            return NotFound();
         }
     }
 }

@@ -46,13 +46,7 @@ namespace DamaWeb.Controllers
             {
                 if (!string.IsNullOrEmpty(item.PictureUri) && !item.Pictures.Any(x => x.IsMain))
                 {
-                    item.AddPicture(new CatalogPicture
-                    {
-                        IsActive = true,
-                        IsMain = true,
-                        PictureUri = item.PictureUri,
-                        Order = 0
-                    });
+                    item.AddPicture(new CatalogPicture(isActive: true, isMain: true, pictureUri: item.PictureUri,order: 0));
                     await _catalogRepository.UpdateAsync(item);
                 }
             }
@@ -65,12 +59,12 @@ namespace DamaWeb.Controllers
                     if (!string.IsNullOrEmpty(picture.PictureUri) && string.IsNullOrEmpty(picture.PictureHighUri))
                     {
                         //Set pictureHighUri
-                        picture.PictureHighUri = picture.PictureUri;
+                        picture.UpdatePictureUri(picture.PictureUri);
                         Uri uri = new Uri(picture.PictureUri);
                         var name = Utils.URLFriendly(Path.GetFileNameWithoutExtension(uri.LocalPath));
                         var fileName = name + Path.GetExtension(uri.LocalPath);
                         var fullPath = Path.Combine(_backofficeSettings.WebProductsPictureV2FullPath, fileName);
-                        picture.PictureUri = _backofficeSettings.WebProductsPictureV2Uri + fileName;
+                        picture.UpdatePictureUri(_backofficeSettings.WebProductsPictureV2Uri + fileName);
 
                         //Get Image
                         var originalImage = Path.Combine(_backofficeSettings.WebProductsPictureFullPath, Path.GetFileName(uri.LocalPath));
@@ -163,7 +157,8 @@ namespace DamaWeb.Controllers
 
                         image.Save(newPath, new JpegEncoder { Quality = 90 }); // Automatic encoder selected based on extension.
                     }
-                    item.UpdateMainPicture(mainPic.PictureUri = _backofficeSettings.WebProductsPictureV2Uri + newFileName);
+                    item.UpdateMainPicture(_backofficeSettings.WebProductsPictureV2Uri + newFileName);
+                    mainPic.UpdatePictureUri(_backofficeSettings.WebProductsPictureV2Uri + newFileName); 
                     await _catalogRepository.UpdateAsync(item);
                 }
             }
@@ -199,7 +194,7 @@ namespace DamaWeb.Controllers
 
                             image.Save(newPath, new JpegEncoder { Quality = 90 }); // Automatic encoder selected based on extension.
                         }
-                        other.PictureUri = _backofficeSettings.WebProductsPictureV2Uri + newFileName;
+                        other.UpdatePictureUri(_backofficeSettings.WebProductsPictureV2Uri + newFileName);
                     }
                 }
                 await _catalogRepository.UpdateAsync(item);
