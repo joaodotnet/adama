@@ -192,7 +192,7 @@ namespace Backoffice.Pages.Products
             await _context.SaveChangesAsync();
 
             //Update Sku
-            prod.Sku += "_" + prod.Id;
+            prod.UpdateSku(prod.Sku + "_" + prod.Id);
             await _context.SaveChangesAsync();
             
             return RedirectToPage("./Index");

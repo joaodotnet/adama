@@ -164,7 +164,7 @@ namespace DamaWeb.Controllers
 
                         image.Save(newPath, new JpegEncoder { Quality = 90 }); // Automatic encoder selected based on extension.
                     }
-                    item.PictureUri = mainPic.PictureUri = _backofficeSettings.WebProductsPictureV2Uri + newFileName;
+                    item.UpdateMainPicture(mainPic.PictureUri = _backofficeSettings.WebProductsPictureV2Uri + newFileName);
                     await _catalogRepository.UpdateAsync(item);
                 }
             }

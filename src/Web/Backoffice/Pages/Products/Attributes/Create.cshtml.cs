@@ -76,7 +76,7 @@ namespace Backoffice.Pages.Products.Attributes
             var prod = await _context.CatalogItems
                 .Include(x => x.CatalogAttributes)
                 .SingleOrDefaultAsync(x => x.Id == CatalogAttributeModel.CatalogItemId);
-            prod.Stock = prod.CatalogAttributes.Sum(x => x.Stock);
+            prod.UpdateStock(prod.CatalogAttributes.Sum(x => x.Stock));
             await _context.SaveChangesAsync();
 
             return RedirectToPage("/Products/Edit", new { id = CatalogAttributeModel.CatalogItemId });

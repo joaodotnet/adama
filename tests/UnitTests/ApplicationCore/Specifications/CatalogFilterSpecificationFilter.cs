@@ -31,11 +31,11 @@ namespace UnitTests
         {
             return new List<CatalogItem>()
             {
-                new CatalogItem() { Id = 1, CatalogIllustrationId = 1, CatalogTypeId= 1, ShowOnShop = true },
-                new CatalogItem() { Id = 2, CatalogIllustrationId = 1, CatalogTypeId= 2, ShowOnShop = true },
-                new CatalogItem() { Id = 3, CatalogIllustrationId = 1, CatalogTypeId= 3, ShowOnShop = true },
-                new CatalogItem() { Id = 4, CatalogIllustrationId = 2, CatalogTypeId= 1, ShowOnShop = true },
-                new CatalogItem() { Id = 5, CatalogIllustrationId = 2, CatalogTypeId= 2, ShowOnShop = true },
+                new CatalogItem(1,1,true) { Id = 1 },
+                new CatalogItem(1,2,true) { Id = 2 },
+                new CatalogItem(1,3,true) { Id = 3 },
+                new CatalogItem(2,1,true) { Id = 4 },
+                new CatalogItem(2,2,true) { Id = 5 },
             };
         }
     }

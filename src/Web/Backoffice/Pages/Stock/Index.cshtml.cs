@@ -100,7 +100,7 @@ namespace Backoffice.Pages.Stock
                     attr.Stock = item.Stock;
                 }
                 else
-                    prod.Stock = item.Stock;
+                    prod.UpdateStock(item.Stock);
             }
 
             await _db.SaveChangesAsync();
@@ -113,7 +113,7 @@ namespace Backoffice.Pages.Stock
                            .Include(x => x.CatalogAttributes)
                            .SingleOrDefaultAsync(x => x.Id == item);
 
-                    prod.Stock = prod.CatalogAttributes?.Sum(x => x.Stock) ?? 0;
+                    prod.UpdateStock(prod.CatalogAttributes?.Sum(x => x.Stock) ?? 0);
                 }
 
                 await _db.SaveChangesAsync();

@@ -201,24 +201,7 @@ namespace Backoffice.Pages.Products
                 .Include(p => p.CatalogPictures)
                 .SingleOrDefaultAsync(m => m.Id == ProductModel.Id);
             
-            prod.Name = ProductModel.Name;
-            prod.Slug = ProductModel.Slug;
-            prod.Description = ProductModel.Description;            
-            prod.CatalogIllustrationId = ProductModel.CatalogIllustrationId;
-            prod.CatalogTypeId = ProductModel.CatalogTypeId;
-            if(!string.IsNullOrEmpty(ProductModel.PictureUri))
-                prod.PictureUri = ProductModel.PictureUri;
-            prod.Price = ProductModel.Price;
-            prod.Discount = ProductModel.Discount;
-            prod.IsFeatured = ProductModel.IsFeatured;
-            prod.IsNew = ProductModel.IsNew;
-            prod.ShowOnShop = ProductModel.ShowOnShop;
-            prod.CanCustomize = ProductModel.CanCustomize;
-            prod.IsUnavailable = ProductModel.IsUnavailable;
-            prod.Sku = ProductModel.Sku;
-            prod.Stock = ProductModel.Stock;
-            prod.MetaDescription = ProductModel.MetaDescription;
-            prod.Title = ProductModel.Title;
+            prod.UpdateCatalogItem(ProductModel.Name,ProductModel.Slug,ProductModel.Description,ProductModel.CatalogIllustrationId,ProductModel.CatalogTypeId,ProductModel.PictureUri,ProductModel.Price,ProductModel.Discount,ProductModel.IsFeatured,ProductModel.IsNew,ProductModel.ShowOnShop,ProductModel.CanCustomize,ProductModel.IsUnavailable,ProductModel.Sku,ProductModel.Stock,ProductModel.MetaDescription,ProductModel.Title);
             
             //Main Picture
             if(!string.IsNullOrEmpty(ProductModel.PictureUri))

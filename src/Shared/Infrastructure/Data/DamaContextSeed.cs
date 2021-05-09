@@ -84,7 +84,7 @@ namespace Infrastructure.Data
                 {
                     for (int i = 0; i < item.Count(); i++)
                     {
-                        item.ElementAt(i).Name = $"{item.ElementAt(i).Name}-{i + 1}";
+                        item.ElementAt(i).UpdateName($"{item.ElementAt(i).Name}-{i + 1}");
                     }
                     
                 }
@@ -92,7 +92,7 @@ namespace Infrastructure.Data
                 await catalogContext.SaveChangesAsync();
 
                 //Update Slug
-                await catalogContext.CatalogItems.ForEachAsync(c => c.Slug = Utils.URLFriendly(c.Name));
+                await catalogContext.CatalogItems.ForEachAsync(c => c.UpdateSlug(Utils.URLFriendly(c.Name)));
 
                 await catalogContext.SaveChangesAsync();
             }

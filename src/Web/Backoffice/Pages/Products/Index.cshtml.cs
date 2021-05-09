@@ -47,16 +47,7 @@ namespace Backoffice.Pages.Products
         public async Task<IActionResult> OnGetUpdateProductAsync(int id, int checkboxType, bool value)
         {
             var product = await _context.CatalogItems.FindAsync(id);
-            if (checkboxType == 1)
-                product.ShowOnShop = value;
-            else if (checkboxType == 2)
-                product.IsNew = value;
-            else if (checkboxType == 3)
-                product.IsFeatured = value;
-            else if (checkboxType == 4)
-                product.CanCustomize = value;
-            else if (checkboxType == 5)
-                product.IsUnavailable = value;
+           product.UpdateFlags(checkboxType,value);
 
             await _context.SaveChangesAsync();
             return new JsonResult("OK");
