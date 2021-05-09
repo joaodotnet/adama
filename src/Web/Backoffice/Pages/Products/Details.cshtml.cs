@@ -37,8 +37,8 @@ namespace Backoffice.Pages.Products
                     .ThenInclude(i => i.IllustrationType)
                 .Include(p => p.CatalogType)
                 .Include(p => p.Attributes)
-                .Include(p => p.CatalogPictures)
-                .Include(p => p.CatalogCategories)
+                .Include(p => p.Pictures)
+                .Include(p => p.Categories)
                     .ThenInclude(cc => cc.Category)
                 .SingleOrDefaultAsync(m => m.Id == id));
 

@@ -10,34 +10,34 @@ namespace ApplicationCore.Specifications
             : base(i => i.ShowOnShop &&
             (!IllustrationId.HasValue || i.CatalogIllustrationId == IllustrationId) &&
             (!typeId.HasValue || i.CatalogTypeId == typeId) &&
-            (!categoryId.HasValue || i.CatalogCategories.Any(x => x.CategoryId == categoryId)) &&
+            (!categoryId.HasValue || i.Categories.Any(x => x.CategoryId == categoryId)) &&
             (!canCustomize.HasValue || i.CanCustomize == canCustomize.Value) &&
             (!showOnlyAvailable.HasValue || (showOnlyAvailable.HasValue && !showOnlyAvailable.Value) || (showOnlyAvailable.HasValue && showOnlyAvailable.Value && !i.IsUnavailable)))
         {
             AddInclude(x => x.CatalogType);
-            AddInclude(x => x.CatalogCategories);
+            AddInclude(x => x.Categories);
         }
 
         public CatalogFilterSpecification(bool onlyActive)
             : base(x => !onlyActive || (onlyActive && x.ShowOnShop))
         {
-            AddInclude(x => x.CatalogPictures);
+            AddInclude(x => x.Pictures);
         }
 
         public CatalogFilterSpecification(string slug)
             : base(x => x.Slug == slug)
         {
-            AddInclude(x => x.CatalogCategories);
-            AddInclude($"{nameof(CatalogItem.CatalogCategories)}.{nameof(CatalogCategory.Category)}");
-            AddInclude(x => x.CatalogPictures);
+            AddInclude(x => x.Categories);
+            AddInclude($"{nameof(CatalogItem.Categories)}.{nameof(CatalogCategory.Category)}");
+            AddInclude(x => x.Pictures);
             AddInclude(x => x.Attributes);
             AddInclude(x => x.CatalogType);
             AddInclude(x => x.CatalogIllustration);
             AddInclude($"{nameof(CatalogItem.CatalogIllustration)}.{nameof(CatalogIllustration.IllustrationType)}");
             AddInclude(x => x.CatalogType);
             AddInclude($"{nameof(CatalogItem.CatalogType)}.{nameof(CatalogType.PictureTextHelpers)}");
-            AddInclude(x => x.CatalogReferences);
-            AddInclude($"{nameof(CatalogItem.CatalogReferences)}.{nameof(CatalogReference.ReferenceCatalogItem)}");
+            AddInclude(x => x.References);
+            AddInclude($"{nameof(CatalogItem.References)}.{nameof(CatalogReference.ReferenceCatalogItem)}");
         }
     }
 

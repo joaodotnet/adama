@@ -107,12 +107,12 @@ namespace Backoffice.Pages.Products
 
             ProductModel = _mapper.Map<ProductEditViewModel>(
                 await _context.CatalogItems
-                .Include(p => p.CatalogCategories)
+                .Include(p => p.Categories)
                 .Include(p => p.CatalogIllustration)
                 .Include(p => p.CatalogType)
                 .Include(p => p.Attributes)
-                .Include(p => p.CatalogPictures)
-                .Include(p => p.CatalogReferences)
+                .Include(p => p.Pictures)
+                .Include(p => p.References)
                 .ThenInclude(cr => cr.ReferenceCatalogItem)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(m => m.Id == id));
@@ -197,8 +197,8 @@ namespace Backoffice.Pages.Products
             ProductModel.Price = ProductModel.Price == 0 ? default(decimal?) : ProductModel.Price;
             //var prod = _mapper.Map<CatalogItem>(ProductModel);
             var prod = await _context.CatalogItems
-                .Include(p => p.CatalogCategories)                
-                .Include(p => p.CatalogPictures)
+                .Include(p => p.Categories)                
+                .Include(p => p.Pictures)
                 .SingleOrDefaultAsync(m => m.Id == ProductModel.Id);
             
             prod.UpdateCatalogItem(ProductModel.Name,ProductModel.Slug,ProductModel.Description,ProductModel.CatalogIllustrationId,ProductModel.CatalogTypeId,ProductModel.PictureUri,ProductModel.Price,ProductModel.Discount,ProductModel.IsFeatured,ProductModel.IsNew,ProductModel.ShowOnShop,ProductModel.CanCustomize,ProductModel.IsUnavailable,ProductModel.Sku,ProductModel.Stock,ProductModel.MetaDescription,ProductModel.Title);
@@ -206,9 +206,9 @@ namespace Backoffice.Pages.Products
             //Main Picture
             if(!string.IsNullOrEmpty(ProductModel.PictureUri))
             {
-                var mainPic = prod.CatalogPictures.SingleOrDefault(x => x.IsMain);
+                var mainPic = prod.Pictures.SingleOrDefault(x => x.IsMain);
                 if (mainPic == null)
-                    prod.CatalogPictures.Add(new CatalogPicture
+                    prod.AddPicture(new CatalogPicture
                     {
                         IsActive = true,
                         IsMain = true,
@@ -217,13 +217,13 @@ namespace Backoffice.Pages.Products
                         PictureHighUri = ProductModel.PictureHighUri
                     });
                 else
-                    prod.CatalogPictures.SingleOrDefault(x => x.IsMain).PictureUri = ProductModel.PictureUri;
+                    prod.Pictures.SingleOrDefault(x => x.IsMain).PictureUri = ProductModel.PictureUri;
             }
 
             //Other pictutes
             foreach (var item in ProductModel.CatalogPictures.Where(x => !x.IsMain).ToList())
             {
-                var otherPicture = item.Id != 0 ? prod.CatalogPictures.SingleOrDefault(x => x.Id == item.Id) : null;
+                var otherPicture = item.Id != 0 ? prod.Pictures.SingleOrDefault(x => x.Id == item.Id) : null;
 
                 if (item.ToRemove && otherPicture != null)
                 {
@@ -239,7 +239,7 @@ namespace Backoffice.Pages.Products
                 }
                 else
                 {
-                    prod.CatalogPictures.Add(new CatalogPicture
+                    prod.AddPicture(new CatalogPicture
                     {
                         IsActive = item.IsActive,
                         Order = item.Order,
@@ -258,7 +258,7 @@ namespace Backoffice.Pages.Products
             {
                 if(catalogCategoriesDb == null || !catalogCategoriesDb.Any(x => x.CategoryId == item.CategoryId))
                 {
-                    prod.CatalogCategories.Add(new CatalogCategory
+                    prod.AddCategory(new CatalogCategory
                     {                        
                         CategoryId = item.CategoryId
                     });
@@ -267,7 +267,7 @@ namespace Backoffice.Pages.Products
                 {
                     if (catalogCategoriesDb == null || !catalogCategoriesDb.Any(x => x.CategoryId == child.CategoryId))
                     {
-                        prod.CatalogCategories.Add(new CatalogCategory
+                        prod.AddCategory(new CatalogCategory
                         {
                             CategoryId = child.CategoryId
                         });

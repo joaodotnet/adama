@@ -26,11 +26,14 @@ namespace ApplicationCore.Entities
         public decimal? Discount { get; private set; }
         public bool IsUnavailable { get; private set; }
 
-        private readonly List<CatalogAttribute> _attributes = new List<CatalogAttribute>();
+        private readonly List<CatalogAttribute> _attributes = new();
         public IReadOnlyCollection<CatalogAttribute> Attributes => _attributes.AsReadOnly();
-        public ICollection<CatalogReference>  CatalogReferences { get; set; }
-        public ICollection<CatalogPicture> CatalogPictures { get; set; }
-        public ICollection<CatalogCategory> CatalogCategories { get; set; } = new List<CatalogCategory>();
+        private readonly List<CatalogReference> _references = new();
+        public IReadOnlyCollection<CatalogReference>  References => _references.AsReadOnly();
+        private readonly List<CatalogPicture> _pictures = new();
+        public IReadOnlyCollection<CatalogPicture> Pictures => _pictures.AsReadOnly();
+        private readonly List<CatalogCategory> _categories = new();
+        public IReadOnlyCollection<CatalogCategory> Categories => _categories.AsReadOnly();   
 
         //For EF
         public CatalogItem()
@@ -104,6 +107,16 @@ namespace ApplicationCore.Entities
                 CanCustomize = value;
             else if (checkboxType == 5)
                 IsUnavailable = value;
+        }
+
+        public void AddPicture(CatalogPicture catalogPicture)
+        {
+            _pictures.Add(catalogPicture);
+        }
+
+        public void AddCategory(CatalogCategory catalogCategory)
+        {
+            _categories.Add(catalogCategory);
         }
     }
 }

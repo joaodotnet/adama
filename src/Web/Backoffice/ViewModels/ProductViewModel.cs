@@ -59,12 +59,12 @@ namespace Backoffice.ViewModels
         public bool IsUnavailable { get; set; }
 
 
-        public IList<ProductAttributeViewModel> CatalogAttributes { get; set; } = new List<ProductAttributeViewModel>();
+        public IList<ProductAttributeViewModel> Attributes { get; set; } = new List<ProductAttributeViewModel>();
         [Display(Name = "Imagens do Produto")]
-        public IList<ProductPictureViewModel> CatalogPictures { get; set; } = new List<ProductPictureViewModel>();
+        public IList<ProductPictureViewModel> Pictures { get; set; } = new List<ProductPictureViewModel>();
         [Display(Name = "Categorias")]
-        public IList<CatalogCategoryViewModel> CatalogCategories { get; set; } = new List<CatalogCategoryViewModel>();
-        public IList<CatalogReference> CatalogReferences { get; set; } = new List<CatalogReference>();
+        public IList<CatalogCategoryViewModel> Categories { get; set; } = new List<CatalogCategoryViewModel>();
+        public IList<CatalogReference> References { get; set; } = new List<CatalogReference>();
 
         public string DisplayCatalogTypeName {
             get {

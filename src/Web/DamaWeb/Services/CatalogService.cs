@@ -74,7 +74,7 @@ namespace DamaWeb.Services
                     CatalogItemId = i.Id,
                     CatalogItemName = i.Name,
                     PictureUri = i.PictureUri,
-                    PictureHighUri = i.CatalogPictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
+                    PictureHighUri = i.Pictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
                     Price = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) - i.Discount.Value : (i.Price ?? i.CatalogType.Price),
                     PriceBeforeDiscount = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) : default(decimal?),
                     ProductSlug = i.Slug,
@@ -88,7 +88,7 @@ namespace DamaWeb.Services
                         CatalogItemId = i.Id,
                         CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
-                        PictureHighUri = i.CatalogPictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
+                        PictureHighUri = i.Pictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
                         Price = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) - i.Discount.Value : (i.Price ?? i.CatalogType.Price),
                         PriceBeforeDiscount = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) : default(decimal?),
                         ProductSlug = i.Slug,
@@ -102,7 +102,7 @@ namespace DamaWeb.Services
                         CatalogItemId = i.Id,
                         CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
-                        PictureHighUri = i.CatalogPictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
+                        PictureHighUri = i.Pictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
                         Price = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) - i.Discount.Value : (i.Price ?? i.CatalogType.Price),
                         PriceBeforeDiscount = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) : default(decimal?),
                         ProductSlug = i.Slug,
@@ -183,7 +183,7 @@ namespace DamaWeb.Services
             foreach (var item in allItems)
             {
                 if (item.CatalogType.CatalogItems
-                    .Where(x => x.CatalogCategories.Any(c => c.CategoryId == category.Id))
+                    .Where(x => x.Categories.Any(c => c.CategoryId == category.Id))
                     .ToList().Count() > 0)
                 {
                     if (!types.Any(x => x.Id == item.CatalogTypeId))
@@ -208,7 +208,7 @@ namespace DamaWeb.Services
                         CatalogItemId = i.Id,
                         CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
-                        PictureHighUri = i.CatalogPictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
+                        PictureHighUri = i.Pictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
                         Price = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) - i.Discount.Value : (i.Price ?? i.CatalogType.Price),
                         PriceBeforeDiscount = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) : default(decimal?),
                         ProductSlug = i.Slug,
@@ -222,7 +222,7 @@ namespace DamaWeb.Services
                         CatalogItemId = i.Id,
                         CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
-                        PictureHighUri = i.CatalogPictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
+                        PictureHighUri = i.Pictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
                         Price = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) - i.Discount.Value : (i.Price ?? i.CatalogType.Price),
                         PriceBeforeDiscount = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) : default(decimal?),
                         ProductSlug = i.Slug,
@@ -243,7 +243,7 @@ namespace DamaWeb.Services
                         CatalogItemId = i.Id,
                         CatalogItemName = i.Name,
                         PictureUri = i.PictureUri,
-                        PictureHighUri = i.CatalogPictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
+                        PictureHighUri = i.Pictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
                         Price = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) - i.Discount.Value : (i.Price ?? i.CatalogType.Price),
                         PriceBeforeDiscount = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) : default(decimal?),
                         ProductSlug = i.Slug,
@@ -286,10 +286,10 @@ namespace DamaWeb.Services
             if (product != null)
             {
                 List<ProductReferenceViewModel> productReferences = new List<ProductReferenceViewModel>();
-                if (product.CatalogReferences?.Count > 0)
+                if (product.References?.Count > 0)
                 {
-                    productReferences.Add(new ProductReferenceViewModel { Label = product.CatalogReferences.First().LabelDescription, Name = product.Name, Slug = product.Slug });
-                    productReferences.AddRange(product.CatalogReferences
+                    productReferences.Add(new ProductReferenceViewModel { Label = product.References.First().LabelDescription, Name = product.Name, Slug = product.Slug });
+                    productReferences.AddRange(product.References
                         .Select(x => new ProductReferenceViewModel
                         {
                             Label = x.LabelDescription,
@@ -302,7 +302,7 @@ namespace DamaWeb.Services
                 var vm = new ProductViewModel
                 {
                     ProductId = product.Id,
-                    CategoryId = product.CatalogCategories.FirstOrDefault().CategoryId,
+                    CategoryId = product.Categories.FirstOrDefault().CategoryId,
                     ProductTypeId = product.CatalogTypeId,
                     ProductSKU = product.Sku,
                     ProductTitle = product.Name,
@@ -312,10 +312,10 @@ namespace DamaWeb.Services
                     ProductQuantity = 1,
                     ProductImagesUri = new List<(string, string)>
                     {
-                        (product.PictureUri,product.CatalogPictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri)
+                        (product.PictureUri,product.Pictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri)
                     },
                     Attributes = new List<ProductAttributeViewModel>(),
-                    Categories = product.CatalogCategories.Select(x => new LinkViewModel
+                    Categories = product.Categories.Select(x => new LinkViewModel
                     {
                         Name = x.Category.Name,
                         TagName = x.Category.Slug
@@ -331,7 +331,7 @@ namespace DamaWeb.Services
                     DeliveryTimeUnit = product.CatalogType.DeliveryTimeUnit,
                     CanCustomizeTotal = product.CanCustomize,
                     CustomizePrice = product.CatalogType.AdditionalTextPrice,
-                    FirstCategoryId = product.CatalogCategories.FirstOrDefault()?.CategoryId ?? 0,
+                    FirstCategoryId = product.Categories.FirstOrDefault()?.CategoryId ?? 0,
                     ProductReferences = productReferences,
                     PictureHelpers = product.CatalogType.PictureTextHelpers.Select(x => new PictureHelperViewModel
                     {
@@ -348,9 +348,9 @@ namespace DamaWeb.Services
                 };
 
                 //Others prictures
-                if (product.CatalogPictures.Where(x => x.IsActive && !x.IsMain).Count() > 0)
+                if (product.Pictures.Where(x => x.IsActive && !x.IsMain).Count() > 0)
                     vm.ProductImagesUri.AddRange(
-                        product.CatalogPictures
+                        product.Pictures
                         .Where(x => x.IsActive && !x.IsMain)
                         .OrderBy(x => x.Order)
                         .Select(x => (x.PictureUri,x.PictureHighUri))
@@ -425,7 +425,7 @@ namespace DamaWeb.Services
                     CatalogItemId = x.Id,
                     CatalogItemName = x.Name,
                     PictureUri = x.PictureUri,
-                    PictureHighUri = x.CatalogPictures?.SingleOrDefault(p => p.IsMain)?.PictureHighUri,
+                    PictureHighUri = x.Pictures?.SingleOrDefault(p => p.IsMain)?.PictureHighUri,
                     Price = x.Price ?? x.CatalogType.Price,
                     ProductSlug = x.Slug,
                     IsUnavailable = x.IsUnavailable
@@ -466,7 +466,7 @@ namespace DamaWeb.Services
                     CatalogItemId = x.Id,
                     CatalogItemName = x.Name,
                     PictureUri = x.PictureUri,
-                    PictureHighUri = x.CatalogPictures?.SingleOrDefault(p => p.IsMain)?.PictureHighUri,
+                    PictureHighUri = x.Pictures?.SingleOrDefault(p => p.IsMain)?.PictureHighUri,
                     Price = x.Price ?? x.CatalogType.Price,
                     ProductSlug = x.Slug,
                     IsUnavailable = x.IsUnavailable

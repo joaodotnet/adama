@@ -30,10 +30,10 @@
             @Html.DisplayFor(model => model.ProductModel.Description)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.ProductModel.CatalogCategories)
+            @Html.DisplayNameFor(model => model.ProductModel.Categories)
         </dt>
         <dd>
-            @foreach (var cat in Model.ProductModel.CatalogCategories)
+            @foreach (var cat in Model.ProductModel.Categories)
             {
                 @cat.Label
                 <br />
@@ -129,10 +129,10 @@
             <img src="@Model.ProductModel.PictureUri" />
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.ProductModel.CatalogPictures)
+            @Html.DisplayNameFor(model => model.ProductModel.Pictures)
         </dt>
         <dd>
-            @foreach (var item in Model.ProductModel.CatalogPictures)
+            @foreach (var item in Model.ProductModel.Pictures)
             {
                 <div class="col-md-3">
                     <img src="@item.PictureUri" class="img-responsive" />
@@ -157,24 +157,24 @@
                 <thead>
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.ProductModel.CatalogAttributes[0].Type)
+                            @Html.DisplayNameFor(model => model.ProductModel.Attributes[0].Type)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.ProductModel.CatalogAttributes[0].Name)
+                            @Html.DisplayNameFor(model => model.ProductModel.Attributes[0].Name)
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    @if (Model.ProductModel?.CatalogAttributes?.Count > 0)
+                    @if (Model.ProductModel?.Attributes?.Count > 0)
                     {
-                        for (int i = 0; i < Model.ProductModel.CatalogAttributes.Count; i++)
+                        for (int i = 0; i < Model.ProductModel.Attributes.Count; i++)
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(model => model.ProductModel.CatalogAttributes[i].Type)
+                                    @Html.DisplayFor(model => model.ProductModel.Attributes[i].Type)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(model => model.ProductModel.CatalogAttributes[i].Name)
+                                    @Html.DisplayFor(model => model.ProductModel.Attributes[i].Name)
                                 </td>
                             </tr>
                         }

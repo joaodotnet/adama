@@ -174,13 +174,13 @@ namespace Backoffice.Pages.Products
             var prod = _mapper.Map<CatalogItem>(ProductModel);            
             foreach (var item in CatalogCategoryModel.Where(x => x.Selected).ToList())
             {
-                prod.CatalogCategories.Add(new CatalogCategory
+                prod.AddCategory(new CatalogCategory
                 {
                     CategoryId = item.CategoryId
                 });
                 foreach (var child in item.Childs.Where(x => x.Selected).ToList())
                 {
-                    prod.CatalogCategories.Add(new CatalogCategory
+                    prod.AddCategory(new CatalogCategory
                     {
                         CategoryId = child.CategoryId
                     });

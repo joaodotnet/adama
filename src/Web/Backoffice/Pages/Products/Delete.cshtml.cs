@@ -60,7 +60,7 @@ namespace Backoffice.Pages.Products
             }
 
             var product = await _context.CatalogItems
-                .Include(x => x.CatalogPictures)
+                .Include(x => x.Pictures)
                 .SingleOrDefaultAsync(x => x.Id == id);
 
             if (product != null)
@@ -73,9 +73,9 @@ namespace Backoffice.Pages.Products
             if(!string.IsNullOrEmpty(product.PictureUri))
                 _service.DeleteFile(_backofficeSettings.WebProductsPictureFullPath, Utils.GetFileName(product.PictureUri));
 
-            if (product.CatalogPictures != null)
+            if (product.Pictures != null)
             {
-                foreach (var item in product.CatalogPictures)
+                foreach (var item in product.Pictures)
                 {
                     if (!string.IsNullOrEmpty(item.PictureUri))
                         _service.DeleteFile(_backofficeSettings.WebProductsPictureFullPath, Utils.GetFileName(item.PictureUri));

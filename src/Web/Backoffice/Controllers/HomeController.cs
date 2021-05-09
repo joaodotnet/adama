@@ -44,10 +44,9 @@ namespace DamaWeb.Controllers
             //Add main Picture
             foreach (var item in products)
             {
-                if (!string.IsNullOrEmpty(item.PictureUri) && !item.CatalogPictures.Any(x => x.IsMain))
+                if (!string.IsNullOrEmpty(item.PictureUri) && !item.Pictures.Any(x => x.IsMain))
                 {
-                    //item.CatalogPictures.ToList().ForEach(x => x.Order += 1);
-                    item.CatalogPictures.Add(new CatalogPicture
+                    item.AddPicture(new CatalogPicture
                     {
                         IsActive = true,
                         IsMain = true,
@@ -61,7 +60,7 @@ namespace DamaWeb.Controllers
             products = await _catalogRepository.ListAsync(spec);
             foreach (var product in products)
             {
-                foreach (var picture in product.CatalogPictures)
+                foreach (var picture in product.Pictures)
                 {
                     if (!string.IsNullOrEmpty(picture.PictureUri) && string.IsNullOrEmpty(picture.PictureHighUri))
                     {
@@ -144,7 +143,7 @@ namespace DamaWeb.Controllers
             //Add main Picture
             foreach (var item in products)
             {
-                var mainPic = item.CatalogPictures.SingleOrDefault(x => x.IsMain);
+                var mainPic = item.Pictures.SingleOrDefault(x => x.IsMain);
                 if (mainPic != null && !string.IsNullOrEmpty(mainPic.PictureHighUri))
                 {
                     Uri uriHelper = new Uri(mainPic.PictureHighUri);
@@ -179,7 +178,7 @@ namespace DamaWeb.Controllers
 
             foreach (var item in products)
             {
-                foreach (var other in item.CatalogPictures.Where(x => !x.IsMain).ToList())
+                foreach (var other in item.Pictures.Where(x => !x.IsMain).ToList())
                 {
                     if (!string.IsNullOrEmpty(other.PictureHighUri))
                     {

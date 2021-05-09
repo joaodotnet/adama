@@ -97,7 +97,7 @@ namespace Infrastructure.Data
             builder.ToTable("CatalogReference");
 
             builder.HasOne(x => x.CatalogItem)
-               .WithMany(p => p.CatalogReferences)
+               .WithMany(p => p.References)
                .HasForeignKey(x => x.CatalogItemId);
 
             builder.Property(x => x.LabelDescription)
@@ -170,7 +170,7 @@ namespace Infrastructure.Data
             builder.Property(x => x.PictureLowUri)
                 .HasMaxLength(1000);
             builder.HasOne(x => x.CatalogItem)
-                .WithMany(p => p.CatalogPictures)
+                .WithMany(p => p.Pictures)
                 .HasForeignKey(x => x.CatalogItemId);
         }
 

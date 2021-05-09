@@ -38,13 +38,13 @@ namespace Backoffice.Pages.Stock
             PopulateList();
 
             var products = await _db.CatalogItems
-                .Include(x => x.CatalogCategories)
+                .Include(x => x.Categories)
                 .ThenInclude(cc => cc.Category)
                 .Include(x => x.Attributes)
                 .Include(x => x.CatalogType)
                 .Include(x => x.CatalogIllustration)
                 .ThenInclude(i => i.IllustrationType)
-                .Where(x => (!CatalogCategoryId.HasValue || (CatalogCategoryId.HasValue && x.CatalogCategories.All(c => c.CategoryId == CatalogCategoryId.Value))) &&
+                .Where(x => (!CatalogCategoryId.HasValue || (CatalogCategoryId.HasValue && x.Categories.All(c => c.CategoryId == CatalogCategoryId.Value))) &&
                 (!CatalogTypeId.HasValue || (CatalogTypeId.HasValue && CatalogTypeId.Value == x.CatalogTypeId)) &&
                 (!CatalogIllustrationId.HasValue || (CatalogIllustrationId.HasValue && CatalogIllustrationId.Value == x.CatalogIllustrationId)))
                 .ToListAsync();
@@ -60,7 +60,7 @@ namespace Backoffice.Pages.Stock
                             ProductName = item.Name,
                             CatalogItemId = item.Id,
                             CatalogAttributeId = attr.Id,
-                            Category = string.Join(", ", item.CatalogCategories.Select(x => x.Category.Name)),
+                            Category = string.Join(", ", item.Categories.Select(x => x.Category.Name)),
                             CatalogType = item.CatalogType.Name,
                             Illustration = item.CatalogIllustration.Name,
                             Attribute = attr.Name,
@@ -74,7 +74,7 @@ namespace Backoffice.Pages.Stock
                     {
                         ProductName = item.Name,
                         CatalogItemId = item.Id,
-                        Category = string.Join(", ", item.CatalogCategories.Select(x => x.Category.Name)),
+                        Category = string.Join(", ", item.Categories.Select(x => x.Category.Name)),
                         CatalogType = item.CatalogType.Name,
                         Illustration = item.CatalogIllustration.Name,
                         Stock = item.Stock
