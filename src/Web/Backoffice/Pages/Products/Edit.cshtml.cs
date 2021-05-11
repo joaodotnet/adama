@@ -241,19 +241,13 @@ namespace Backoffice.Pages.Products
             {
                 if(catalogCategoriesDb == null || !catalogCategoriesDb.Any(x => x.CategoryId == item.CategoryId))
                 {
-                    prod.AddCategory(new CatalogCategory
-                    {                        
-                        CategoryId = item.CategoryId
-                    });
+                    prod.AddCategory(item.CategoryId);
                 }
                 foreach (var child in item.Childs.Where(x => x.Selected).ToList())
                 {
                     if (catalogCategoriesDb == null || !catalogCategoriesDb.Any(x => x.CategoryId == child.CategoryId))
                     {
-                        prod.AddCategory(new CatalogCategory
-                        {
-                            CategoryId = child.CategoryId
-                        });
+                        prod.AddCategory(child.CategoryId);
                     }
                 }
             }

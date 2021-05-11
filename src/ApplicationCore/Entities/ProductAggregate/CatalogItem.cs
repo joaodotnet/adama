@@ -15,7 +15,7 @@ namespace ApplicationCore.Entities
         public int CatalogTypeId { get; private set; }
         public CatalogType CatalogType { get; private set; }
         public int CatalogIllustrationId { get; private set; }
-        public CatalogIllustration CatalogIllustration { get; set; }
+        public CatalogIllustration CatalogIllustration { get; private set; }
         public bool ShowOnShop { get; private set; }
         public bool IsNew { get; private set; }
         public bool IsFeatured { get; private set; }
@@ -115,9 +115,9 @@ namespace ApplicationCore.Entities
             _pictures.Add(catalogPicture);
         }
 
-        public void AddCategory(CatalogCategory catalogCategory)
+        public void AddCategory(int categoryId)
         {
-            _categories.Add(catalogCategory);
+            _categories.Add(new CatalogCategory(categoryId));
         }
         public void AddReference(string labelDescription, int referenceCatalogItemId)
         {
