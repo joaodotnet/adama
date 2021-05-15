@@ -100,7 +100,7 @@ namespace DamaWeb.Controllers
 
                         image.Save(newImagePath); // Automatic encoder selected based on extension.
                     }
-                    item.PictureUri = _backofficeSettings.WebProductTypesPictureV2Uri + fileName;
+                    item.UpdatePicture(_backofficeSettings.WebProductTypesPictureV2Uri + fileName);
 
                     if (item.PictureTextHelpers?.Count > 0)
                     {

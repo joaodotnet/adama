@@ -138,21 +138,21 @@ namespace Backoffice.Pages.ProductType
             }
 
             if (productTypeEntity != null)
-            {                
-                productTypeEntity.Code = ProductTypeModel.Code;
-                productTypeEntity.Name = ProductTypeModel.Description;
-                productTypeEntity.DeliveryTimeMin = ProductTypeModel.DeliveryTimeMin;
-                productTypeEntity.DeliveryTimeMax = ProductTypeModel.DeliveryTimeMax;
-                productTypeEntity.DeliveryTimeUnit = ProductTypeModel.DeliveryTimeUnit;
-                productTypeEntity.Price = ProductTypeModel.Price;
-                productTypeEntity.AdditionalTextPrice = ProductTypeModel.AdditionalTextPrice;
-                productTypeEntity.Weight = ProductTypeModel.Weight;
-                productTypeEntity.MetaDescription = ProductTypeModel.MetaDescription;
-                productTypeEntity.Title = ProductTypeModel.Title;
-                productTypeEntity.Slug = ProductTypeModel.Slug;
+            {
+                productTypeEntity.Update(ProductTypeModel.Code,
+                                         ProductTypeModel.Description,
+                                         ProductTypeModel.DeliveryTimeMin,
+                                         ProductTypeModel.DeliveryTimeMax,
+                                         ProductTypeModel.DeliveryTimeUnit,
+                                         ProductTypeModel.Price,
+                                         ProductTypeModel.AdditionalTextPrice,
+                                         ProductTypeModel.Weight,
+                                         ProductTypeModel.MetaDescription,
+                                         ProductTypeModel.Title,
+                                         ProductTypeModel.Slug);
 
                 if (!string.IsNullOrEmpty(ProductTypeModel.PictureUri))
-                    productTypeEntity.PictureUri = ProductTypeModel.PictureUri;
+                    productTypeEntity.UpdatePicture(ProductTypeModel.PictureUri);
 
                 //Remove
                 var to_remove = productTypeEntity.Categories.Where(c => !ProductTypeModel.CategoriesId.Any(c2 => c2 == c.CategoryId));
@@ -164,7 +164,7 @@ namespace Backoffice.Pages.ProductType
                 var to_add = ProductTypeModel.CategoriesId.Where(c => !productTypeEntity.Categories.Any(c2 => c2.CategoryId == c));
                 foreach (var item in to_add)
                 {
-                    productTypeEntity.Categories.Add(new CatalogTypeCategory { CategoryId = item });
+                    productTypeEntity.AddCategory(new CatalogTypeCategory(item));
                 }
             }
 

@@ -106,13 +106,9 @@ namespace Backoffice.Pages.ProductType
 
             var catalogType = _mapper.Map<ApplicationCore.Entities.CatalogType>(ProductTypeModel);
 
-            catalogType.Categories = new List<CatalogTypeCategory>();
             foreach (var item in ProductTypeModel.CategoriesId)
             {
-                catalogType.Categories.Add(new CatalogTypeCategory
-                {
-                    CategoryId = item
-                });
+                catalogType.AddCategory(new CatalogTypeCategory(item));
             }
 
             _context.CatalogTypes.Add(catalogType);
