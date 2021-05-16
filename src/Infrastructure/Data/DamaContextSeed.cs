@@ -97,11 +97,11 @@ namespace Infrastructure.Data
                 await catalogContext.SaveChangesAsync();
             }
 
-            if(catalogContext.Categories.All(x => string.IsNullOrEmpty(x.Slug)))
-            {
-                await catalogContext.Categories.ForEachAsync(x => x.Slug = Utils.URLFriendly(x.Name));
-                await catalogContext.SaveChangesAsync();
-            }
+            // if(catalogContext.Categories.All(x => string.IsNullOrEmpty(x.Slug)))
+            // {
+            //     await catalogContext.Categories.ForEachAsync(x => x.Slug = Utils.URLFriendly(x.Name));
+            //     await catalogContext.SaveChangesAsync();
+            // }
 
             // if(catalogContext.CatalogTypes.All(x => string.IsNullOrEmpty(x.Slug)))
             // {
