@@ -16,7 +16,7 @@ namespace ApplicationCore.Entities
         public int? ParentId { get; private set; }
         public Category Parent { get; private set; }
         //public virtual ICollection<CatalogType> CatalogTypes { get; set; }
-        private readonly List<CatalogTypeCategory> _catalogTypes = new ();
+        private readonly List<CatalogTypeCategory> _catalogTypes = new();
         public IReadOnlyCollection<CatalogTypeCategory> CatalogTypes => _catalogTypes.AsReadOnly();
         private readonly List<CatalogCategory> _catalogCategories = new();
         public IReadOnlyCollection<CatalogCategory> CatalogCategories => _catalogCategories.AsReadOnly();

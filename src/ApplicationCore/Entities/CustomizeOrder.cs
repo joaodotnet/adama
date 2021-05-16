@@ -20,6 +20,9 @@ namespace ApplicationCore.Entities
         public string AttachFileName { get; private set; }
         public string Colors { get; private set; }
 
+        public CustomizeOrder()
+        {            
+        }
         public CustomizeOrder(string buyerId, string buyerName, string buyerPhone, string description, string text, string colors, CatalogItemOrdered itemOrdered, string fileName)
         {
             BuyerId = buyerId;
