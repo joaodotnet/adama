@@ -1,11 +1,12 @@
 ﻿using ApplicationCore.DTOs;
+using ApplicationCore.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ApplicationCore.Entities
 {
-    public class CatalogType : BaseEntity
+    public class CatalogType : BaseEntity, IAggregateRoot
     {
         public string Code { get; private set; } //To Remove       
         public string Name { get; private set; }

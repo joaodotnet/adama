@@ -140,7 +140,7 @@ namespace ApplicationCore.Services
                 var order = await _customizeOrderRepository.GetByIdAsync(id);
                 if (order != null)
                 {
-                    order.OrderState = orderState;
+                    order.UpdateOrderState(orderState);
                     await _customizeOrderRepository.UpdateAsync(order);
                 }
             }

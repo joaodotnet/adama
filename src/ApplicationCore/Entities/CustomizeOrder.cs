@@ -8,16 +8,33 @@ namespace ApplicationCore.Entities
 {
     public class CustomizeOrder : BaseEntity, IAggregateRoot
     {
-        public string BuyerId { get; set; }
-        public string BuyerName { get; set; }
-        public string BuyerContact { get; set; }
-        public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.Now;
-        public OrderStateType OrderState { get; set; }
+        public string BuyerId { get; private set; }
+        public string BuyerName { get; private set; }
+        public string BuyerContact { get; private set; }
+        public DateTimeOffset OrderDate { get; private set; } = DateTimeOffset.Now;
+        public OrderStateType OrderState { get; private set; }
 
-        public CatalogItemOrdered ItemOrdered { get; set; }
-        public string Description { get; set; }
-        public string Text { get; set; }
-        public string AttachFileName { get; set; }
-        public string Colors { get; set; }
+        public CatalogItemOrdered ItemOrdered { get; private set; }
+        public string Description { get; private set; }
+        public string Text { get; private set; }
+        public string AttachFileName { get; private set; }
+        public string Colors { get; private set; }
+
+        public CustomizeOrder(string buyerId, string buyerName, string buyerPhone, string description, string text, string colors, CatalogItemOrdered itemOrdered, string fileName)
+        {
+            BuyerId = buyerId;
+            BuyerName = buyerName;
+            BuyerContact = buyerPhone;
+            Description = description;
+            Text = text;
+            Colors = colors;
+            ItemOrdered = itemOrdered;
+            AttachFileName = fileName;
+        }
+
+        public void UpdateOrderState(OrderStateType orderState)
+        {
+            OrderState = orderState;
+        }
     }
 }

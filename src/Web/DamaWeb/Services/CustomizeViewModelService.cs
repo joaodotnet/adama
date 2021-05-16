@@ -92,17 +92,16 @@ namespace DamaWeb.Services
             var catalogType = await _catalogTypeRepository.GetByIdAsync(request.CatalogItemId.Value);
 
             //Save Order
-            var order = await _customizeOrderRepository.AddAsync(new CustomizeOrder
-            {
-                BuyerId = request.BuyerEmail,
-                BuyerName = request.BuyerName,
-                BuyerContact = request.BuyerPhone,
-                Description = request.Description,
-                Text = request.Text,
-                Colors = request.Colors,
-                ItemOrdered = new ApplicationCore.Entities.OrderAggregate.CatalogItemOrdered(catalogType.Id, catalogType.Name, catalogType.PictureUri),
-                AttachFileName = GetFileName(request.UploadFile?.FileName)
-            });
+            var order = await _customizeOrderRepository.AddAsync(new CustomizeOrder(
+                request.BuyerEmail,
+                request.BuyerName,
+                request.BuyerPhone,
+                request.Description,
+                request.Text,
+                request.Colors,
+                new CatalogItemOrdered(catalogType.Id, catalogType.Name, catalogType.PictureUri),
+                GetFileName(request.UploadFile?.FileName)
+            ));
 
             if(order != null)
                 _telemetry.TrackEvent("NewCustomizeOrder");
