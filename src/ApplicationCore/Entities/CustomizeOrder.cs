@@ -23,16 +23,16 @@ namespace ApplicationCore.Entities
         public CustomizeOrder()
         {            
         }
-        public CustomizeOrder(string buyerId, string buyerName, string buyerPhone, string description, string text, string colors, CatalogItemOrdered itemOrdered, string fileName)
+        public CustomizeOrder(string buyerId, string buyerName, string buyerContact, string description, string text, string colors, CatalogItemOrdered itemOrdered, string attachFileName)
         {
             BuyerId = buyerId;
             BuyerName = buyerName;
-            BuyerContact = buyerPhone;
+            BuyerContact = buyerContact;
             Description = description;
             Text = text;
             Colors = colors;
             ItemOrdered = itemOrdered;
-            AttachFileName = fileName;
+            AttachFileName = attachFileName;
         }
 
         public void UpdateOrderState(OrderStateType orderState)
