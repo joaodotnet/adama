@@ -207,7 +207,7 @@ namespace DamaWeb
                     async context =>
                     {
                         var ex = context.Features.Get<IExceptionHandlerFeature>();
-                        if (ex != null)
+                        if (!context.Request.Path.ToString().Contains("Error") && ex != null)
                         {
                             var err = $"<h1>Error: {ex.Error.Message}</h1>{ex.Error.Source}<hr />{context.Request.Path}<br />";
                             err += $"QueryString: {context.Request.QueryString}<hr />";
