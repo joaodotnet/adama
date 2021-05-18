@@ -6,12 +6,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading.Tasks;
 
 namespace DamaWeb
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
 
@@ -21,10 +22,12 @@ namespace DamaWeb
                 var loggerFactory = services.GetRequiredService<ILoggerFactory>();
                 try
                 {
+                    var environment = services.GetRequiredService<IWebHostEnvironment>();
                     var context = services.GetRequiredService<AppIdentityDbContext>();
                     AppIdentityDbContextSeed.EnsureDatabaseMigrations(context);
                     var damaContext = services.GetRequiredService<DamaContext>();
                     DamaContextSeed.EnsureDatabaseMigrations(damaContext);
+                    await DamaContextSeed.SeedAsync(damaContext, loggerFactory, null, environment.IsDevelopment());
                 }
                 catch (Exception ex)
                 {

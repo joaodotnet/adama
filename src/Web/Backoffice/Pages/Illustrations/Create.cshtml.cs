@@ -59,7 +59,7 @@ namespace Backoffice.Pages.Illustrations
                 {
                     await IllustrationModel.IllustrationImage.CopyToAsync(memoryStream);
                     // validate file, then move to CDN or public folder
-                    illustrationDB.Image = memoryStream.ToArray();
+                    illustrationDB.UpdateImage(memoryStream.ToArray());
                 }
             }
 

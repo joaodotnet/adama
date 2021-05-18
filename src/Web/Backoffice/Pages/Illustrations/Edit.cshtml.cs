@@ -77,9 +77,7 @@ namespace Backoffice.Pages.Illustrations
                 ModelState.AddModelError("", "Ilustração não encontrada!");
                 return Page();
             }
-            illustrationEntity.Code = IllustrationModel.Code;
-            illustrationEntity.Name = IllustrationModel.Name;
-            illustrationEntity.IllustrationTypeId = IllustrationModel.IllustrationTypeId;
+            illustrationEntity.UpdateData(IllustrationModel.Code,IllustrationModel.Name,IllustrationModel.IllustrationTypeId);
 
             if (IllustrationModel.IllustrationImage?.Length > 0)
             {
@@ -87,7 +85,7 @@ namespace Backoffice.Pages.Illustrations
                 {
                     await IllustrationModel.IllustrationImage.CopyToAsync(memoryStream);
                     // validate file, then move to CDN or public folder
-                    illustrationEntity.Image = memoryStream.ToArray();
+                    illustrationEntity.UpdateImage(memoryStream.ToArray());
                 }
             }
 

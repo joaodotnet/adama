@@ -40,6 +40,19 @@ namespace ApplicationCore.Entities
         {
         }
 
+        public CatalogItem(string name, string slug, decimal? price, string pictureUri, bool showOnShop, bool isFeatured, bool isNew, bool canCustomize,  int catalogIllustrationId, int catalogTypeId)
+        {
+            Name = name;
+            Slug = slug;
+            Price = price;
+            PictureUri = pictureUri;
+            ShowOnShop = showOnShop;
+            IsNew = isNew;
+            CanCustomize = canCustomize;
+            CatalogIllustrationId = catalogIllustrationId;
+            CatalogTypeId = catalogTypeId;
+        }
+
         public CatalogItem(int catalogIlustrationId,
             int catalogTypeId,
             bool showOnShop)

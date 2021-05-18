@@ -32,6 +32,13 @@ namespace ApplicationCore.Entities
         private readonly List<FileDetail> _pictureTextHelpers = new();
         public ICollection<FileDetail> PictureTextHelpers => _pictureTextHelpers.AsReadOnly();
 
+        public CatalogType(string name, string pictureUri)
+        {
+            Name = name;
+            Code = name;
+            PictureUri = pictureUri;
+        }
+
         public void UpdatePicture(string pictureUri)
         {
             PictureUri = pictureUri;
