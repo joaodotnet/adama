@@ -13,7 +13,7 @@ namespace Infrastructure.Identity
         private static string _roleStaff = "Staff";
 
         public static void EnsureDatabaseMigrations(AppIdentityDbContext context)
-        {            
+        {
             context.Database.Migrate();
         }
 
@@ -31,6 +31,22 @@ namespace Infrastructure.Identity
             {
                 var result = await rolemanager.CreateAsync(new IdentityRole(_roleStaff));
             }
-        }        
+        }
+
+        public static async Task EnsureUserAdminCreated(IServiceProvider services, bool isDevelopment)
+        {
+            if (isDevelopment)
+            {
+                var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+
+                var user = new ApplicationUser { UserName = "joaofbbg@gmail.com", Email = "joaofbbg@gmail.com" };
+
+                var result = await userManager.CreateAsync(user, "Pass@word1");
+                if(result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(user,_roleAdmin);
+                }
+            }
+        }
     }
 }

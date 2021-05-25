@@ -17,7 +17,7 @@ namespace Backoffice
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
 
@@ -28,8 +28,10 @@ namespace Backoffice
                 try
                 {
                     var context = services.GetRequiredService<AppIdentityDbContext>();
+                    var environment = services.GetRequiredService<IWebHostEnvironment>();
                     AppIdentityDbContextSeed.EnsureDatabaseMigrations(context);
-                    AppIdentityDbContextSeed.EnsureRoleAdminCreated(services).Wait();
+                    await AppIdentityDbContextSeed.EnsureRoleAdminCreated(services);
+                    await AppIdentityDbContextSeed.EnsureUserAdminCreated(services, environment.IsDevelopment());
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
                     var damaContext = services.GetRequiredService<DamaContext>();
