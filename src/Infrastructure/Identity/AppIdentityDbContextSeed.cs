@@ -39,7 +39,7 @@ namespace Infrastructure.Identity
             {
                 var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
-                var user = new ApplicationUser { UserName = "joaofbbg@gmail.com", Email = "joaofbbg@gmail.com" };
+                var user = new ApplicationUser { UserName = "bo@damanojornal.com", Email = "bo@damanojornal.com", EmailConfirmed = true };
 
                 var result = await userManager.CreateAsync(user, "Pass@word1");
                 if(result.Succeeded)

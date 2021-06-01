@@ -68,7 +68,7 @@ namespace Backoffice.Pages.Account
 
             if (ModelState.IsValid)
             {
-                if(Input.Email.ToLower() != "joaofbbg@gmail.com" && Input.Email.ToLower() != "susana.m.mendez@gmail.com")
+                if(Input.Email.ToLower() != "joaofbbg@gmail.com" && Input.Email.ToLower() != "susana.m.mendez@gmail.com" && Input.Email.ToLower() != "bo@damanojornal.com")
                 {
                     return Page();
                 }

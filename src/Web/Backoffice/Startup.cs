@@ -106,7 +106,7 @@ namespace Backoffice
             services.Configure<SageSettings>(Configuration.GetSection("Sage"));
             services.Configure<EmailSettings>(Configuration.GetSection("Email"));
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
-            // services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+            services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped<IBackofficeService, BackofficeService>();
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<IOrderService, OrderService>();
