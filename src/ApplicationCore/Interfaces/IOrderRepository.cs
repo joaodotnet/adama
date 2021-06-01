@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace ApplicationCore.Interfaces
 {
 
-    public interface IOrderRepository : IAsyncRepository<Order>
+    public interface IOrderRepository 
     {
         Order GetByIdWithItems(int id);
         Task<Order> GetByIdWithItemsAsync(int id);

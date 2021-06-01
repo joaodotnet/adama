@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ApplicationCore.Interfaces;
 
 namespace ApplicationCore.Entities
 {
-    public class ShippingPriceWeight : BaseEntity
+    public class ShippingPriceWeight : BaseEntity, IAggregateRoot
     {
         public int MinWeight { get; set; }
         public int? MaxWeight { get; set; }

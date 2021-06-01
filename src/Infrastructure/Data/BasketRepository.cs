@@ -9,10 +9,13 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Data
 {
-    public class BasketRepository : EfRepository<Basket>, IBasketRepository
+    public class BasketRepository : IBasketRepository
     {
-        public BasketRepository(DamaContext dbContext) : base(dbContext)
+        private readonly DamaContext _dbContext;
+
+        public BasketRepository(DamaContext dbContext)
         {
+            _dbContext = dbContext;
         }
 
         public Basket GetByIdWithItems(int id)

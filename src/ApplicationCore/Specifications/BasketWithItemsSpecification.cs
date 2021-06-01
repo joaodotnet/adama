@@ -1,18 +1,21 @@
 ﻿using ApplicationCore.Entities.BasketAggregate;
+using Ardalis.Specification;
 
 namespace ApplicationCore.Specifications
 {
-    public sealed class BasketWithItemsSpecification : BaseSpecification<Basket>
+    public sealed class BasketWithItemsSpecification : Specification<Basket>
     {
         public BasketWithItemsSpecification(int basketId)
-            :base(b => b.Id == basketId)
         {
-            AddInclude(b => b.Items);
+            Query
+                .Include(b => b.Items)
+                .Where(b => b.Id == basketId);
         }
         public BasketWithItemsSpecification(string buyerId, bool guestOnly = false)
-            : base(b => b.BuyerId == buyerId && ((!guestOnly && !b.IsGuest) || (guestOnly && b.IsGuest)))
         {
-            AddInclude(b => b.Items);
+            Query
+                .Include(b => b.Items)
+                .Where(b => b.BuyerId == buyerId && ((!guestOnly && !b.IsGuest) || (guestOnly && b.IsGuest)));
         }
     }
 }

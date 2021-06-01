@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace ApplicationCore.Interfaces
 {
 
-    public interface IBasketRepository : IAsyncRepository<Basket>
+    public interface IBasketRepository
     {
         Basket GetByIdWithItems(int id);
         Task<Basket> GetByIdWithItemsAsync(int id);

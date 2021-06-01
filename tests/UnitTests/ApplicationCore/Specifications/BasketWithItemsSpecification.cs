@@ -17,7 +17,7 @@ namespace UnitTests
 
             var result = GetTestBasketCollection()
                 .AsQueryable()
-                .FirstOrDefault(spec.Criteria);
+                .FirstOrDefault(spec.WhereExpressions.First());
 
             Assert.NotNull(result);
             Assert.Equal(_testBasketId, result.Id);
@@ -32,7 +32,7 @@ namespace UnitTests
 
             Assert.False(GetTestBasketCollection()
                 .AsQueryable()
-                .Any(spec.Criteria));
+                .Any(spec.WhereExpressions.First().Compile()));
         }
 
         public List<Basket> GetTestBasketCollection()

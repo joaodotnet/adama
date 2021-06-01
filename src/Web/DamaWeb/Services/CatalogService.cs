@@ -24,17 +24,17 @@ namespace DamaWeb.Services
     public class CatalogService : ICatalogService
     {
         private readonly ILogger<CatalogService> _logger;
-        private readonly IAsyncRepository<CatalogItem> _itemRepository;
-        private readonly IAsyncRepository<CatalogIllustration> _illustrationRepository;
-        private readonly IAsyncRepository<CatalogType> _typeRepository;
-        private readonly IAsyncRepository<Category> _categoryRepository;
+        private readonly IRepository<CatalogItem> _itemRepository;
+        private readonly IRepository<CatalogIllustration> _illustrationRepository;
+        private readonly IRepository<CatalogType> _typeRepository;
+        private readonly IRepository<Category> _categoryRepository;
 
         public CatalogService(
             ILoggerFactory loggerFactory,
-            IAsyncRepository<CatalogItem> itemRepository,
-            IAsyncRepository<CatalogIllustration> illustrationRepository,
-            IAsyncRepository<CatalogType> typeRepository,
-            IAsyncRepository<Category> categoryRepository)
+            IRepository<CatalogItem> itemRepository,
+            IRepository<CatalogIllustration> illustrationRepository,
+            IRepository<CatalogType> typeRepository,
+            IRepository<Category> categoryRepository)
         {
             _logger = loggerFactory.CreateLogger<CatalogService>();
             _itemRepository = itemRepository;
@@ -130,7 +130,7 @@ namespace DamaWeb.Services
         public async Task<IEnumerable<SelectListItem>> GetIllustrations()
         {
             _logger.LogInformation("GetIllustrations called.");
-            var illustrations = await _illustrationRepository.ListAllAsync();
+            var illustrations = await _illustrationRepository.ListAsync();
 
             var items = new List<SelectListItem>
             {
@@ -147,7 +147,7 @@ namespace DamaWeb.Services
         public async Task<IEnumerable<SelectListItem>> GetTypes()
         {
             _logger.LogInformation("GetTypes called.");
-            var types = await _typeRepository.ListAllAsync();
+            var types = await _typeRepository.ListAsync();
             var items = new List<SelectListItem>
             {
                 new SelectListItem() { Value = null, Text = "Todos", Selected = true }
@@ -280,8 +280,8 @@ namespace DamaWeb.Services
 
         public async Task<ProductViewModel> GetCatalogItem(string slug)
         {
-            var spec = new CatalogFilterSpecification(slug);
-            var product = await _itemRepository.GetSingleBySpecAsync(spec);
+            var spec = new CatalogFilterBySlugSpecification(slug);
+            var product = await _itemRepository.GetBySpecAsync(spec);
 
             if (product != null)
             {
@@ -532,7 +532,7 @@ namespace DamaWeb.Services
         public async Task<string> GetSlugFromSkuAsync(string sku)
         {
             var spec = new CatalogSkuSpecification(sku);
-            var catalogItem = await _itemRepository.GetSingleBySpecAsync(spec);
+            var catalogItem = await _itemRepository.GetBySpecAsync(spec);
             if (catalogItem != null)
                 return catalogItem.Slug;
             return string.Empty;
@@ -601,14 +601,14 @@ namespace DamaWeb.Services
        
         private async Task<Category> GetCategoryFromUrl(string categorySlug)
         {
-            var spec = new CategorySpecification(categorySlug.ToLower());
-            return await _categoryRepository.GetSingleBySpecAsync(spec);
+            var spec = new CategoryBySlugSpecification(categorySlug.ToLower());
+            return await _categoryRepository.GetBySpecAsync(spec);
         }
 
         private async Task<CatalogType> GetCatalogTypeFromUrl(string type)
         {
-            var spec = new CatalogTypeSpecification(type.ToLower());
-            return await _typeRepository.GetSingleBySpecAsync(spec);
+            var spec = new CatalogTypeBySlugSpecification(type.ToLower());
+            return await _typeRepository.GetBySpecAsync(spec);
         }
     }
 }

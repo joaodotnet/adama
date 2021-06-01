@@ -1,22 +1,24 @@
-﻿using ApplicationCore.Entities;
-using ApplicationCore.Entities.OrderAggregate;
+﻿using ApplicationCore.Entities.OrderAggregate;
+using Ardalis.Specification;
 
 namespace ApplicationCore.Specifications
 {
-    public class OrdersSpecification : BaseSpecification<Order>
+    public class OrdersSpecification : Specification<Order>
     {       
         public OrdersSpecification(string buyerId)
-            :base(o => o.BuyerId == buyerId)
         {
-            AddInclude(o => o.OrderItems);            
+            Query
+                .Include(o => o.OrderItems)
+                .Where(o => o.BuyerId == buyerId);
 
         }
 
         public OrdersSpecification(int orderId)
-            : base(o => o.Id == orderId)
+            : base()
         {
-            AddInclude(o => o.OrderItems);
-            //AddInclude("OrderItems.Details");
+            Query
+                .Include(o => o.OrderItems)
+                .Where(o => o.Id == orderId);
         }
     }
 }

@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Data
 {
-    public class OrderRepository : EfRepository<Order>, IOrderRepository
+    public class OrderRepository : IOrderRepository
     {
-        public OrderRepository(DamaContext dbContext) : base(dbContext)
+        private readonly DamaContext _dbContext;
+
+        public OrderRepository(DamaContext dbContext)
         {
+            _dbContext = dbContext;
         }
 
         public Order GetByIdWithItems(int id)

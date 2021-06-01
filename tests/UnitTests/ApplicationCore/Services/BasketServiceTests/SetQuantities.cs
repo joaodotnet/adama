@@ -13,13 +13,13 @@ namespace UnitTests.ApplicationCore.Services.BasketServiceTests
     public class SetQuantities
     {
         private readonly int _invalidId = -1;
-        private readonly Mock<IAsyncRepository<Basket>> _mockBasketRepo;
-        private readonly Mock<IAsyncRepository<CatalogItem>> _mockCatalogRepo;
+        private readonly Mock<IRepository<Basket>> _mockBasketRepo;
+        private readonly Mock<IRepository<CatalogItem>> _mockCatalogRepo;
 
         public SetQuantities()
         {
-            _mockBasketRepo = new Mock<IAsyncRepository<Basket>>();
-            _mockCatalogRepo = new Mock<IAsyncRepository<CatalogItem>>();
+            _mockBasketRepo = new Mock<IRepository<Basket>>();
+            _mockCatalogRepo = new Mock<IRepository<CatalogItem>>();
         }
 
         [Fact]

@@ -113,7 +113,7 @@ namespace DamaWeb
 
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
+            // services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
             services.AddScoped<ICatalogService, CachedCatalogService>();
             services.AddScoped<IBasketService, BasketService>();

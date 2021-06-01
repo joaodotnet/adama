@@ -20,10 +20,10 @@ namespace DamaWeb.Controllers
     public class HomeController : ControllerBase
     {
         private readonly ICatalogService _catalogService;
-        private readonly IAsyncRepository<CatalogItem> _catalogRepository;
+        private readonly IRepository<CatalogItem> _catalogRepository;
 
         public HomeController(ICatalogService catalogService,
-            IAsyncRepository<CatalogItem> catalogRepository)
+            IRepository<CatalogItem> catalogRepository)
         {
             _catalogService = catalogService;
             _catalogRepository = catalogRepository;

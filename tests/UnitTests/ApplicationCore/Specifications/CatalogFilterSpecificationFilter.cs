@@ -22,7 +22,7 @@ namespace UnitTests
 
             var result = GetTestItemCollection()
                 .AsQueryable()
-                .Where(spec.Criteria);
+                .Where(spec.WhereExpressions.First().Compile());
 
             Assert.Equal(expectedCount, result.Count());
         }

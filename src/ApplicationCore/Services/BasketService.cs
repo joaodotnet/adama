@@ -13,12 +13,12 @@ namespace ApplicationCore.Services
 {
     public class BasketService : IBasketService
     {
-        private readonly IAsyncRepository<Basket> _basketRepository;
+        private readonly IRepository<Basket> _basketRepository;
         private readonly IAppLogger<BasketService> _logger;
-        private readonly IAsyncRepository<CatalogItem> _itemRepository;        
+        private readonly IRepository<CatalogItem> _itemRepository;        
 
-        public BasketService(IAsyncRepository<Basket> basketRepository,
-            IAsyncRepository<CatalogItem> itemRepository,
+        public BasketService(IRepository<Basket> basketRepository,
+            IRepository<CatalogItem> itemRepository,
             IAppLogger<BasketService> logger)
         {
             _basketRepository = basketRepository;
@@ -134,7 +134,7 @@ namespace ApplicationCore.Services
             foreach (var item in basket.Items)
             {
                 var spec = new CatalogTypeFilterSpecification(item.CatalogItemId);
-                var product = await _itemRepository.GetSingleBySpecAsync(spec);
+                var product = await _itemRepository.GetBySpecAsync(spec);
 
                 if(product.CatalogType.DeliveryTimeUnit > deliveryTime.Unit)
                 {
@@ -156,7 +156,7 @@ namespace ApplicationCore.Services
             var options = (default(int?), default(int?), default(int?));
 
             var spec = new CatalogTypeFilterSpecification(catalogItemId);
-            var product = await _itemRepository.GetSingleBySpecAsync(spec);
+            var product = await _itemRepository.GetBySpecAsync(spec);
 
             var group = product.Attributes.GroupBy(x => x.Type);
             foreach (var attribute in group)

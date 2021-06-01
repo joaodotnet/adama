@@ -14,18 +14,18 @@ namespace ApplicationCore.Services
 {
     public class OrderService : IOrderService
     {
-        private readonly IAsyncRepository<Order> _orderRepository;
-        private readonly IAsyncRepository<CustomizeOrder> _customizeOrderRepository;
+        private readonly IRepository<Order> _orderRepository;
+        private readonly IRepository<CustomizeOrder> _customizeOrderRepository;
         private readonly IBasketRepository _basketRepository;
-        private readonly IAsyncRepository<CatalogItem> _itemRepository;
-        private readonly IAsyncRepository<CatalogType> _catalogRepository;
+        private readonly IRepository<CatalogItem> _itemRepository;
+        private readonly IRepository<CatalogType> _catalogRepository;
         private readonly IInvoiceService _invoiceService;
 
         public OrderService(IBasketRepository basketRepository,
-            IAsyncRepository<CatalogItem> itemRepository,
-            IAsyncRepository<Order> orderRepository,
-            IAsyncRepository<CustomizeOrder> customizeOrderRepository,
-            IAsyncRepository<CatalogType> catalogRepository,
+            IRepository<CatalogItem> itemRepository,
+            IRepository<Order> orderRepository,
+            IRepository<CustomizeOrder> customizeOrderRepository,
+            IRepository<CatalogType> catalogRepository,
             IInvoiceService invoiceService)
         {
             _orderRepository = orderRepository;
@@ -170,7 +170,7 @@ namespace ApplicationCore.Services
             foreach (var orderItem in orderItems)
             {
                 var spec = new CatalogAttrFilterSpecification(orderItem.ItemOrdered.CatalogItemId);
-                var product = await _itemRepository.GetSingleBySpecAsync(spec);
+                var product = await _itemRepository.GetBySpecAsync(spec);
                 var listItem = (orderItem.Id, new List<CatalogAttribute>());
                 foreach (var item in product.Attributes)
                 {
@@ -187,7 +187,7 @@ namespace ApplicationCore.Services
         public async Task<List<CatalogAttribute>> GetOrderAttributesAsync(int catalogItemId, int? catalogAttribute1, int? catalogAttribute2, int? catalogAttribute3)
         {
             var spec = new CatalogAttrFilterSpecification(catalogItemId);
-            var product = await _itemRepository.GetSingleBySpecAsync(spec);
+            var product = await _itemRepository.GetBySpecAsync(spec);
             var list = new List<CatalogAttribute>();
             if (product != null)
             {

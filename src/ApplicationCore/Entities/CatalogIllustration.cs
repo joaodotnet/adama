@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using ApplicationCore.Interfaces;
 
 namespace ApplicationCore.Entities
 {
-    public class CatalogIllustration : BaseEntity
+    public class CatalogIllustration : BaseEntity, IAggregateRoot
     {
         public string Code { get; private set; }
         public string Name { get; private set; }

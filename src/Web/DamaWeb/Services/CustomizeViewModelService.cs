@@ -19,10 +19,10 @@ namespace DamaWeb.Services
 {
     public class CustomizeViewModelService : ICustomizeViewModelService
     {
-        private readonly IAsyncRepository<Category> _categoryRepository;
-        private readonly IAsyncRepository<CatalogItem> _catalogRepository;
-        private readonly IAsyncRepository<CatalogType> _catalogTypeRepository;
-        private readonly IAsyncRepository<CustomizeOrder> _customizeOrderRepository;
+        private readonly IRepository<Category> _categoryRepository;
+        private readonly IRepository<CatalogItem> _catalogRepository;
+        private readonly IRepository<CatalogType> _catalogTypeRepository;
+        private readonly IRepository<CustomizeOrder> _customizeOrderRepository;
         private readonly IEmailSender _emailSender;
         private readonly EmailSettings _settings;
         private readonly IUriComposer _uriComposer;
@@ -30,10 +30,10 @@ namespace DamaWeb.Services
         private readonly IBasketService _basketService;
 
         public CustomizeViewModelService(
-            IAsyncRepository<Category> categoryRepository,
-            IAsyncRepository<CatalogItem> catalogRepository,
-            IAsyncRepository<CatalogType> catalogTypeRepository,
-            IAsyncRepository<CustomizeOrder> customizeRepository,
+            IRepository<Category> categoryRepository,
+            IRepository<CatalogItem> catalogRepository,
+            IRepository<CatalogType> catalogTypeRepository,
+            IRepository<CustomizeOrder> customizeRepository,
             IEmailSender emailSender,
             IOptions<EmailSettings> settings,
             IUriComposer uriComposer,
