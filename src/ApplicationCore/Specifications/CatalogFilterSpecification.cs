@@ -1,102 +1,30 @@
 ﻿using ApplicationCore.Entities;
+using Ardalis.Specification;
 using System.Linq;
 
 namespace ApplicationCore.Specifications
 {
 
-    public class CatalogFilterSpecification : BaseSpecification<CatalogItem>
+    public class CatalogFilterSpecification : Specification<CatalogItem>
     {
         public CatalogFilterSpecification(int? IllustrationId, int? typeId, int? categoryId, bool? canCustomize = null, bool? showOnlyAvailable = null)
-            : base(i => i.ShowOnShop &&
-            (!IllustrationId.HasValue || i.CatalogIllustrationId == IllustrationId) &&
-            (!typeId.HasValue || i.CatalogTypeId == typeId) &&
-            (!categoryId.HasValue || i.Categories.Any(x => x.CategoryId == categoryId)) &&
-            (!canCustomize.HasValue || i.CanCustomize == canCustomize.Value) &&
-            (!showOnlyAvailable.HasValue || (showOnlyAvailable.HasValue && !showOnlyAvailable.Value) || (showOnlyAvailable.HasValue && showOnlyAvailable.Value && !i.IsUnavailable)))
         {
-            AddInclude(x => x.CatalogType);
-            AddInclude(x => x.Categories);
+            Query
+                .Include(x => x.CatalogType)
+                .Include(x => x.Categories)
+                .Where(i => i.ShowOnShop &&
+                    (!IllustrationId.HasValue || i.CatalogIllustrationId == IllustrationId) &&
+                    (!typeId.HasValue || i.CatalogTypeId == typeId) &&
+                    (!categoryId.HasValue || i.Categories.Any(x => x.CategoryId == categoryId)) &&
+                    (!canCustomize.HasValue || i.CanCustomize == canCustomize.Value) &&
+                    (!showOnlyAvailable.HasValue || (showOnlyAvailable.HasValue && !showOnlyAvailable.Value) || (showOnlyAvailable.HasValue && showOnlyAvailable.Value && !i.IsUnavailable)));
         }
 
         public CatalogFilterSpecification(bool onlyActive)
-            : base(x => !onlyActive || (onlyActive && x.ShowOnShop))
         {
-            AddInclude(x => x.Pictures);
-        }
-
-        public CatalogFilterSpecification(string slug)
-            : base(x => x.Slug == slug)
-        {
-            AddInclude(x => x.Categories);
-            AddInclude($"{nameof(CatalogItem.Categories)}.{nameof(CatalogCategory.Category)}");
-            AddInclude(x => x.Pictures);
-            AddInclude(x => x.Attributes);
-            AddInclude(x => x.CatalogType);
-            AddInclude(x => x.CatalogIllustration);
-            AddInclude($"{nameof(CatalogItem.CatalogIllustration)}.{nameof(CatalogIllustration.IllustrationType)}");
-            AddInclude(x => x.CatalogType);
-            AddInclude($"{nameof(CatalogItem.CatalogType)}.{nameof(CatalogType.PictureTextHelpers)}");
-            AddInclude(x => x.References);
-            AddInclude($"{nameof(CatalogItem.References)}.{nameof(CatalogReference.ReferenceCatalogItem)}");
-        }
-    }
-
-    public class CatalogSearchSpecification : BaseSpecification<CatalogItem>
-    {
-        public CatalogSearchSpecification(string searchFor, bool showOnlyAvailabe)
-            : base(x => x.ShowOnShop &&
-                (!showOnlyAvailabe || (showOnlyAvailabe && !x.IsUnavailable)) &&
-                (x.CatalogType.Name.Contains(searchFor) ||
-                x.CatalogIllustration.Name.Contains(searchFor) ||
-                x.CatalogIllustration.IllustrationType.Name.Contains(searchFor) ||
-                x.Name.Contains(searchFor) ||
-                x.Description.Contains(searchFor)))
-        {
-            AddInclude(x => x.CatalogType);
-            AddInclude(x => x.CatalogIllustration);
-            AddInclude($"{nameof(CatalogItem.CatalogIllustration)}.{nameof(CatalogIllustration.IllustrationType)}");
-        }
-    }
-
-    public class CatalogAttrFilterSpecification : BaseSpecification<CatalogItem>
-    {
-        public CatalogAttrFilterSpecification(int catalogId) : base(i => i.Id == catalogId)
-        {
-            AddInclude(x => x.Attributes);
-        }
-    }
-
-    public class CatalogTypeFilterSpecification : BaseSpecification<CatalogItem>
-    {
-        public CatalogTypeFilterSpecification(int catalogId) : base(i => i.Id == catalogId)
-        {
-            AddInclude(x => x.CatalogType);
-            AddInclude(x => x.Attributes);
-        }
-    }
-
-    public class CatalogSkuSpecification : BaseSpecification<CatalogItem>
-    {
-        public CatalogSkuSpecification(string sku) : base(i => i.Sku == sku)
-        {
-
-        }
-    }
-
-    public class CatalogTagSpecification : BaseSpecification<CatalogItem>
-    {
-        public CatalogTagSpecification(string tagName, TagType? tagType, bool showOnlyAvailable) : 
-            base(x => x.ShowOnShop &&
-            (!showOnlyAvailable || (showOnlyAvailable && !x.IsUnavailable)) &&
-            (
-            (tagType.HasValue && tagType.Value == TagType.CATALOG_TYPE && x.CatalogType.Slug == tagName) || 
-            (tagType.HasValue && tagType.Value == TagType.ILLUSTRATION && x.CatalogIllustration.Name == tagName) ||
-            (tagType.HasValue && tagType.Value == TagType.ILLUSTRATION_TYPE && x.CatalogIllustration.IllustrationType.Name == tagName) || 
-            (!tagType.HasValue && (x.CatalogType.Slug == tagName || x.CatalogIllustration.Name == tagName || x.CatalogIllustration.IllustrationType.Name == tagName))))
-        {
-            AddInclude(x => x.CatalogType);
-            AddInclude(x => x.CatalogIllustration);
-            AddInclude($"{nameof(CatalogItem.CatalogIllustration)}.{nameof(CatalogIllustration.IllustrationType)}");
+            Query
+                .Include(x => x.Pictures)
+                .Where(x => !onlyActive || (onlyActive && x.ShowOnShop));
         }
     }
 }

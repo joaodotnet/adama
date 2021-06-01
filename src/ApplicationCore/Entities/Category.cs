@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ApplicationCore.Interfaces;
 
 namespace ApplicationCore.Entities
 {
-    public class Category : BaseEntity
+    public class Category : BaseEntity, IAggregateRoot
     {
         public string Name { get; private set; }
         public string Slug { get; private set; }

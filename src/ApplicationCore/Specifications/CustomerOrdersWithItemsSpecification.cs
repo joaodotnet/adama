@@ -1,14 +1,16 @@
 ﻿using ApplicationCore.Entities.OrderAggregate;
+using Ardalis.Specification;
 
 namespace ApplicationCore.Specifications
 {
-    public class CustomerOrdersWithItemsSpecification : BaseSpecification<Order>
+    public class CustomerOrdersWithItemsSpecification : Specification<Order>
     {
         public CustomerOrdersWithItemsSpecification(string buyerId)
-            : base(o => o.BuyerId == buyerId)
         {
-            AddInclude(o => o.OrderItems);
-            AddInclude($"{nameof(Order.OrderItems)}.{nameof(OrderItem.ItemOrdered)}");
+            Query
+                .Include(o => o.OrderItems)
+                .Include($"{nameof(Order.OrderItems)}.{nameof(OrderItem.ItemOrdered)}")
+                .Where(o => o.BuyerId == buyerId);
         }
     }
 }

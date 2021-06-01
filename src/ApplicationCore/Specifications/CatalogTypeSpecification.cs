@@ -1,26 +1,22 @@
 ﻿using ApplicationCore.Entities;
+using Ardalis.Specification;
 using System.Linq;
 
 namespace ApplicationCore.Specifications
 {
-    public class CatalogTypeSpecification : BaseSpecification<CatalogType>
+    public class CatalogTypeSpecification : Specification<CatalogType>
     {
         public CatalogTypeSpecification(int categoryId)
-            :base(x => x.Categories.Any(c => c.CategoryId == categoryId))
         {
-            AddInclude(x => x.CatalogItems);
+            Query
+                .Include(x => x.CatalogItems)
+                .Where(x => x.Categories.Any(c => c.CategoryId == categoryId));
         }
 
         public CatalogTypeSpecification(bool includeHelpers)
-            : base(x => true)
         {
             if(includeHelpers)
-                AddInclude(x => x.PictureTextHelpers);
-        }
-
-        public CatalogTypeSpecification(string slug)
-            : base(x => x.Slug == slug)
-        {
+                Query.Include(x => x.PictureTextHelpers);
         }
     }
 }

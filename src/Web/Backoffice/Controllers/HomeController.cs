@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
-using System.Xml;
 using ApplicationCore;
 using ApplicationCore.Entities;
 using ApplicationCore.Interfaces;
@@ -13,22 +10,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
-using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
-namespace DamaWeb.Controllers
+namespace Backoffice.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class HomeController : ControllerBase
     {
-        private readonly IAsyncRepository<CatalogItem> _catalogRepository;
-        private readonly IAsyncRepository<CatalogType> _catalogTypeRepository;
+        private readonly IRepository<CatalogItem> _catalogRepository;
+        private readonly IRepository<CatalogType> _catalogTypeRepository;
         private readonly BackofficeSettings _backofficeSettings;
 
         public HomeController(
-            IAsyncRepository<CatalogItem> catalogRepository,
-            IAsyncRepository<CatalogType> catalogTypeRepository,
+            IRepository<CatalogItem> catalogRepository,
+            IRepository<CatalogType> catalogTypeRepository,
             IOptions<BackofficeSettings> settings)
         {
             _catalogRepository = catalogRepository;

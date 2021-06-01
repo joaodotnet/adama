@@ -15,10 +15,10 @@ namespace DamaWeb.Pages.Order
 {
     public class DetailModel : PageModel
     {
-        private readonly IOrderRepository _orderRepository;
+        private readonly IRepository<ApplicationCore.Entities.OrderAggregate.Order> _orderRepository;
         private readonly IOrderService _orderService;
 
-        public DetailModel(IOrderRepository orderRepository, IOrderService orderService)
+        public DetailModel(IRepository<ApplicationCore.Entities.OrderAggregate.Order> orderRepository, IOrderService orderService)
         {
             _orderRepository = orderRepository;
             this._orderService = orderService;

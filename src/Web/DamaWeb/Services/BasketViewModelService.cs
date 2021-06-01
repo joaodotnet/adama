@@ -16,17 +16,17 @@ namespace DamaWeb.Services
 {
     public class BasketViewModelService : IBasketViewModelService
     {
-        private readonly IAsyncRepository<Basket> _basketRepository;
+        private readonly IRepository<Basket> _basketRepository;
         private readonly IUriComposer _uriComposer;
         private readonly CatalogSettings _settings;
-        private readonly IAsyncRepository<CatalogItem> _itemRepository;
-        private readonly IAsyncRepository<CatalogType> _typeRepository;
-        private readonly IAsyncRepository<ShippingPriceWeight> _priceWeightRepository;
+        private readonly IRepository<CatalogItem> _itemRepository;
+        private readonly IRepository<CatalogType> _typeRepository;
+        private readonly IRepository<ShippingPriceWeight> _priceWeightRepository;
 
-        public BasketViewModelService(IAsyncRepository<Basket> basketRepository,
-            IAsyncRepository<CatalogItem> itemRepository,
-            IAsyncRepository<CatalogType> typeRepository,
-            IAsyncRepository<ShippingPriceWeight> priceWeightRepository,
+        public BasketViewModelService(IRepository<Basket> basketRepository,
+            IRepository<CatalogItem> itemRepository,
+            IRepository<CatalogType> typeRepository,
+            IRepository<ShippingPriceWeight> priceWeightRepository,
             IUriComposer uriComposer,
             IOptions<CatalogSettings> settings)
         {
@@ -84,7 +84,7 @@ namespace DamaWeb.Services
                 if (item.CatalogItemId != 0)
                 {
                     var spec = new CatalogTypeFilterSpecification(item.CatalogItemId);
-                    var catalogItem = await _itemRepository.GetSingleBySpecAsync(spec);
+                    var catalogItem = await _itemRepository.GetBySpecAsync(spec);
                     if (catalogItem != null)
                     {
                         itemModel.PictureUrl = _uriComposer.ComposePicUri(catalogItem.PictureUri);
@@ -146,7 +146,7 @@ namespace DamaWeb.Services
 
         private async Task<decimal> CalculateShippingCostAsync(int totalWeight)
         {
-            var table = await _priceWeightRepository.ListAllAsync();
+            var table = await _priceWeightRepository.ListAsync();
             if(table.Count > 0)
             {
                 foreach (var item in table)

@@ -36,7 +36,7 @@ namespace Backoffice
 
                     var damaContext = services.GetRequiredService<DamaContext>();
                     DamaContextSeed.EnsureDatabaseMigrations(damaContext);
-                    DamaContextSeed.SeedAsync(damaContext, loggerFactory).Wait();
+                    await DamaContextSeed.SeedAsync(damaContext, loggerFactory, null, environment.IsDevelopment());
                 }
                 catch (Exception ex)
                 {

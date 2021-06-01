@@ -16,12 +16,12 @@ namespace DamaWeb.Pages.Order
 {
     public class IndexModel : PageModel
     {
-        private readonly IOrderRepository _orderRepository;
+        private readonly IRepository<ApplicationCore.Entities.OrderAggregate.Order> _orderRepository;
         private readonly IOrderService _orderService;
         private readonly IEmailSender _emailSender;
         private readonly EmailSettings _settings;
 
-        public IndexModel(IOrderRepository orderRepository, IOrderService orderService, IEmailSender emailSender, IOptions<EmailSettings> settings)
+        public IndexModel(IRepository<ApplicationCore.Entities.OrderAggregate.Order> orderRepository, IOrderService orderService, IEmailSender emailSender, IOptions<EmailSettings> settings)
         {
             _orderRepository = orderRepository;
             _orderService = orderService;

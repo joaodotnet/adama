@@ -1,30 +1,28 @@
 ﻿using ApplicationCore.Entities;
+using Ardalis.Specification;
 using System.Linq;
 
 namespace ApplicationCore.Specifications
 {
-    public class CategorySpecification : BaseSpecification<Category>
+    public class CategorySpecification : Specification<Category>
     {
         public CategorySpecification()
-            :base(x => !x.ParentId.HasValue && x.CatalogCategories.Any(c => c.CatalogItem.CanCustomize))
         {
-            AddInclude(x => x.CatalogCategories);
+            Query
+                .Include(x => x.CatalogCategories)
+                .Where(x => !x.ParentId.HasValue && x.CatalogCategories.Any(c => c.CatalogItem.CanCustomize));
         }
 
         public CategorySpecification(bool forMenuList)
-            : base(x => x.CatalogCategories.Any())
         {
-            AddInclude(x => x.Parent);
-            AddInclude(x => x.CatalogCategories);
-            AddInclude($"{nameof(Category.CatalogCategories)}.{nameof(CatalogCategory.CatalogItem)}");
-            AddInclude(x => x.CatalogTypes);
-            AddInclude($"{nameof(Category.CatalogTypes)}.{nameof(CatalogTypeCategory.CatalogType)}");
-            ApplyOrderBy(x => x.Order);
-        }
-
-        public CategorySpecification(string slug)
-            : base(x => x.Slug == slug)
-        {
+            Query
+                .Include(x => x.Parent)
+                .Include(x => x.CatalogCategories)
+                .Include($"{nameof(Category.CatalogCategories)}.{nameof(CatalogCategory.CatalogItem)}")
+                .Include(x => x.CatalogTypes)
+                .Include($"{nameof(Category.CatalogTypes)}.{nameof(CatalogTypeCategory.CatalogType)}")
+                .Where(x => x.CatalogCategories.Any())
+                .OrderBy(x => x.Order);
         }
     }
 }
