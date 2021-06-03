@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using ApplicationCore.Interfaces;
 
 namespace ApplicationCore.Entities
 {
-    public class CatalogTypeCategory
+    public class CatalogTypeCategory: IAggregateRoot
     {
 
         public int CatalogTypeId { get; private set; }

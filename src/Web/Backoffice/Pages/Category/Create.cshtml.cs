@@ -11,23 +11,25 @@ using Backoffice.ViewModels;
 using AutoMapper;
 using ApplicationCore;
 using Microsoft.EntityFrameworkCore;
+using ApplicationCore.Interfaces;
+using ApplicationCore.Specifications;
 
 namespace Backoffice.Pages.Category
 {
     public class CreateModel : PageModel
     {
-        private readonly Infrastructure.Data.DamaContext _context;
+        private readonly IRepository<ApplicationCore.Entities.Category> _repository;
         private readonly IMapper _mapper;
 
-        public CreateModel(Infrastructure.Data.DamaContext context, IMapper mapper)
+        public CreateModel(IRepository<ApplicationCore.Entities.Category> repository, IMapper mapper)
         {
-            _context = context;
+            _repository = repository;
             _mapper = mapper;
         }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
-            PopulateList();
+            await PopulateListAsync();
             return Page();
         }
 
@@ -36,13 +38,13 @@ namespace Backoffice.Pages.Category
 
         public async Task<IActionResult> OnPostAsync()
         {
-            PopulateList();
+            await PopulateListAsync();
             if (!ModelState.IsValid)
             {
                 return Page();
             }
             //check if name exists
-            if(_context.Categories.Any(x => x.Name.ToUpper() == Category.Name.ToUpper()))
+            if((await _repository.CountAsync(new CategorySpecification(new CategoryFilter { Name = Category.Name}))) > 0 )
             {
                 ModelState.AddModelError("", $"O nome da Categoria '{Category.Name}' já existe!");
                 return Page();
@@ -57,20 +59,19 @@ namespace Backoffice.Pages.Category
                 return Page();
             }
 
-            _context.Categories.Add(_mapper.Map<ApplicationCore.Entities.Category>(Category));
-            await _context.SaveChangesAsync();
+            await _repository.AddAsync(_mapper.Map<ApplicationCore.Entities.Category>(Category));
 
             return RedirectToPage("./Index");
         }
 
         private async Task<bool> SlugExistsAsync(string slug)
         {
-            return await _context.Categories.AnyAsync(x => x.Slug == slug);
+            return (await _repository.CountAsync(new CategorySpecification(new CategoryFilter { Slug = slug }))) > 0;
         }
 
-        private void PopulateList()
+        private async Task PopulateListAsync()
         {
-            ViewData["CategoryList"] = new SelectList(_context.Categories, "Id", "Name");
+            ViewData["CategoryList"] = new SelectList(await _repository.ListAsync(), "Id", "Name");
         }
     }
 }

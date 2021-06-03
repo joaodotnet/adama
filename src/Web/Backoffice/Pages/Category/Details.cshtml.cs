@@ -9,17 +9,21 @@ using ApplicationCore.Entities;
 using Infrastructure.Data;
 using Backoffice.ViewModels;
 using AutoMapper;
+using ApplicationCore.Interfaces;
+using ApplicationCore.Specifications;
 
 namespace Backoffice.Pages.Category
 {
     public class DetailsModel : PageModel
     {
-        private readonly Infrastructure.Data.DamaContext _context;
+        private readonly IRepository<ApplicationCore.Entities.Category> _categoryRepository;
+        private readonly IRepository<CatalogTypeCategory> _typeRepository;
         protected readonly IMapper _mapper;
 
-        public DetailsModel(Infrastructure.Data.DamaContext context, IMapper mapper)
+        public DetailsModel(IRepository<ApplicationCore.Entities.Category> categoryRepository, IRepository<ApplicationCore.Entities.CatalogTypeCategory> typeRepository, IMapper mapper)
         {
-            _context = context;
+            _categoryRepository = categoryRepository;
+            _typeRepository = typeRepository;
             _mapper = mapper;
         }
 
@@ -32,9 +36,7 @@ namespace Backoffice.Pages.Category
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .Include(x => x.Parent)
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var category = await _categoryRepository.GetBySpecAsync(new CategorySpecification(new CategoryFilter { Id = id.Value, IncludeParent = true }));
 
             if (category == null)
             {
@@ -42,11 +44,9 @@ namespace Backoffice.Pages.Category
             }
 
             //Prodcut Types
-            var types = await _context.CatalogTypeCategories
-                .Include(x => x.CatalogType)
-                .Where(x => x.CategoryId == id)
+            var types = (await _typeRepository.ListAsync(new CatalogTypeCategorySpec(id.Value)))
                 .Select(ct => ct.CatalogType)
-                .ToListAsync();
+                .ToList();
 
             Category = _mapper.Map<CategoryViewModel>(category);
             Category.ProductTypes = _mapper.Map<List<ProductTypeViewModel>>(types);

@@ -7,17 +7,18 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Backoffice.ViewModels;
 using AutoMapper;
+using ApplicationCore.Interfaces;
 
 namespace Backoffice.Pages.Category
 {
     public class DeleteModel : PageModel
     {
-        private readonly Infrastructure.Data.DamaContext _context;
+        private readonly IRepository<ApplicationCore.Entities.Category> _repository;
         protected readonly IMapper _mapper;
 
-        public DeleteModel(Infrastructure.Data.DamaContext context, IMapper mapper)
+        public DeleteModel(IRepository<ApplicationCore.Entities.Category> repository, IMapper mapper)
         {
-            _context = context;
+            _repository = repository;
             _mapper = mapper;
         }
 
@@ -31,7 +32,7 @@ namespace Backoffice.Pages.Category
                 return NotFound();
             }
 
-            var catInDB = await _context.Categories.SingleOrDefaultAsync(m => m.Id == id);
+            var catInDB = await _repository.GetByIdAsync(id);
 
             if (catInDB == null)
             {
@@ -50,12 +51,11 @@ namespace Backoffice.Pages.Category
                 return NotFound();
             }
 
-            var catinDb = await _context.Categories.FindAsync(id);
+            var catinDb = await _repository.GetByIdAsync(id);
 
             if (catinDb != null)
             {
-                _context.Categories.Remove(catinDb);
-                await _context.SaveChangesAsync();
+                await _repository.DeleteAsync(catinDb);
             }
 
             return RedirectToPage("./Index");

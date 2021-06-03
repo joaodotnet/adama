@@ -1,27 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using ApplicationCore.Entities;
-using Infrastructure.Data;
 using AutoMapper;
 using Backoffice.ViewModels;
 using ApplicationCore;
+using ApplicationCore.Interfaces;
+using ApplicationCore.Specifications;
 
 namespace Backoffice.Pages.Category
 {
     public class EditModel : PageModel
     {
-        private readonly Infrastructure.Data.DamaContext _context;
+        private readonly IRepository<ApplicationCore.Entities.Category> _repository;
         protected readonly IMapper _mapper;
 
-        public EditModel(Infrastructure.Data.DamaContext context, IMapper mapper)
+        public EditModel(IRepository<ApplicationCore.Entities.Category> repository, IMapper mapper)
         {
-            _context = context;
+            _repository = repository;
             _mapper = mapper;
         }
 
@@ -34,9 +32,9 @@ namespace Backoffice.Pages.Category
             {
                 return NotFound();
             }
-            PopulateList();
+            await PopulateListAsync();
 
-            var category = await _context.Categories.Include(x=> x.Parent).SingleOrDefaultAsync(m => m.Id == id);
+            var category = await _repository.GetBySpecAsync(new CategorySpecification(new CategoryFilter { Id = id, IncludeParent = true }));
 
             if (category == null)
             {
@@ -49,13 +47,13 @@ namespace Backoffice.Pages.Category
 
         public async Task<IActionResult> OnPostAsync()
         {
-            PopulateList();
+            await PopulateListAsync();
             if (!ModelState.IsValid)
             {
                 return Page();
             }
             //check if name exists
-            if (_context.Categories.Any(x => x.Name.ToUpper() == Category.Name.ToUpper() && x.Id != Category.Id))
+            if ((await _repository.CountAsync(new CategorySpecification(new CategoryFilter { Name = Category.Name, Id = Category.Id, NotTheSameId = true }))) > 0)
             {
                 ModelState.AddModelError("", $"O nome da Categoria '{Category.Name}' já existe!");
                 return Page();
@@ -69,29 +67,20 @@ namespace Backoffice.Pages.Category
                 ModelState.AddModelError("Category.Slug", "Já existe um slug com o mesmo nome!");
                 return Page();
             }
+            var cat = await _repository.GetBySpecAsync(new CategorySpecification(new CategoryFilter { Id = Category.Id, IncludeParent = true }));
+            _mapper.Map(Category,cat);
 
-            var category = _mapper.Map<ApplicationCore.Entities.Category>(Category);
-
-            _context.Attach(category).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                
-            }
+            await _repository.UpdateAsync(cat);
 
             return RedirectToPage("./Index");
         }
 
         private async Task<bool> SlugExistsAsync(int id, string slug)
         {
-            return await _context.Categories.AnyAsync(x => x.Id != id && x.Slug == slug);
+            return (await _repository.CountAsync(new CategorySpecification(new CategoryFilter { Id = id, Slug = slug, NotTheSameId = true }))) > 0;
         }
 
-        private void PopulateList()
+        private async Task PopulateListAsync()
         {
             List<(string, string)> list = new List<(string, string)>
             {
@@ -100,7 +89,7 @@ namespace Backoffice.Pages.Category
             };
 
             ViewData["PositionList"] = new SelectList(list.Select(x => new { Id = x.Item1, Name = x.Item2 }), "Id", "Name");
-            ViewData["CategoryList"] = new SelectList(_context.Categories, "Id", "Name");
+            ViewData["CategoryList"] = new SelectList(await _repository.ListAsync(), "Id", "Name");
         }
     }
 }
