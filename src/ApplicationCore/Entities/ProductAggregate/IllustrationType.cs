@@ -1,6 +1,8 @@
-﻿namespace ApplicationCore.Entities
+﻿using ApplicationCore.Interfaces;
+
+namespace ApplicationCore.Entities
 {
-    public class IllustrationType : BaseEntity
+    public class IllustrationType : BaseEntity, IAggregateRoot
     {
         public string Code { get; private set; }
         public string Name { get; private set; }

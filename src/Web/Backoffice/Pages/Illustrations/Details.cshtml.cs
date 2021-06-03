@@ -1,26 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using ApplicationCore.Entities;
-using Infrastructure.Data;
 using AutoMapper;
 using Backoffice.ViewModels;
-using System.IO;
+using ApplicationCore.Interfaces;
+using ApplicationCore.Specifications;
 
 namespace Backoffice.Pages.Illustrations
 {
     public class DetailsModel : PageModel
     {
-        private readonly Infrastructure.Data.DamaContext _context;
+        private readonly IRepository<CatalogIllustration> _repository;
         private readonly IMapper _mapper;
 
-        public DetailsModel(Infrastructure.Data.DamaContext context, IMapper mapper)
+        public DetailsModel(IRepository<CatalogIllustration> repository, IMapper mapper)
         {
-            _context = context;
+            _repository = repository;
             _mapper = mapper;
         }
 
@@ -32,7 +29,7 @@ namespace Backoffice.Pages.Illustrations
             {
                 return NotFound();
             }
-            var illustrationDb = await _context.CatalogIllustrations.Include(x => x.IllustrationType).SingleOrDefaultAsync(m => m.Id == id);
+            var illustrationDb = await _repository.GetBySpecAsync(new CatalogIllustrationSpecification(id.Value));
             IllustrationModel = _mapper.Map<IllustrationViewModel>(illustrationDb);
             if(illustrationDb.Image != null)
             {

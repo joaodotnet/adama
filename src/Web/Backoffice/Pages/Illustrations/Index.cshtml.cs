@@ -1,25 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using ApplicationCore.Entities;
-using Infrastructure.Data;
 using AutoMapper;
 using Backoffice.ViewModels;
+using ApplicationCore.Interfaces;
+using ApplicationCore.Specifications;
 
 namespace Backoffice.Pages.Illustrations
 {
     public class IndexModel : PageModel
     {
-        private readonly Infrastructure.Data.DamaContext _context;
+        private readonly IRepository<CatalogIllustration> _repository;
         private readonly IMapper _mapper;
 
-        public IndexModel(Infrastructure.Data.DamaContext context, IMapper mapper)
+        public IndexModel(IRepository<CatalogIllustration> repository, IMapper mapper)
         {
-            _context = context;
+            _repository = repository;
             _mapper = mapper;
         }
 
@@ -27,11 +24,7 @@ namespace Backoffice.Pages.Illustrations
 
         public async Task OnGetAsync()
         {
-            IllustrationModel = _mapper.Map<List<IllustrationViewModel>>(
-                await _context.CatalogIllustrations
-                .Include(x => x.IllustrationType)
-                .OrderBy(x => x.Code)
-                .ToListAsync());
+            IllustrationModel = _mapper.Map<IList<IllustrationViewModel>>(await _repository.ListAsync(new CatalogIllustrationSpecification()));
         }
     }
 }

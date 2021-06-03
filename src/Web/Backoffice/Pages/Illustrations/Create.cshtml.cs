@@ -1,28 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ApplicationCore.Entities;
-using Infrastructure.Data;
 using AutoMapper;
-using Backoffice.Extensions;
 using Backoffice.ViewModels;
 using System.IO;
-using Microsoft.EntityFrameworkCore;
+using ApplicationCore.Interfaces;
+using ApplicationCore.Specifications;
 
 namespace Backoffice.Pages.Illustrations
 {
     public class CreateModel : PageModel
     {
-        private readonly DamaContext _context;
+        private readonly IRepository<CatalogIllustration> _repository;
+        private readonly IRepository<IllustrationType> _illustrationTypeRepo;
         private readonly IMapper _mapper;
 
-        public CreateModel(DamaContext context, IMapper mapper)
+        public CreateModel(IRepository<CatalogIllustration> repository,
+            IRepository<IllustrationType> illustrationTypeRepo,
+            IMapper mapper)
         {
-            _context = context;
+            _repository = repository;
+            _illustrationTypeRepo = illustrationTypeRepo;
             _mapper = mapper;
         }
 
@@ -44,7 +45,7 @@ namespace Backoffice.Pages.Illustrations
             }
 
             //check if code exists
-            if (_context.CatalogIllustrations.Any(x => x.Code.ToUpper() == IllustrationModel.Code.ToUpper()))
+            if ((await _repository.CountAsync(new CatalogIllustrationSpecification(IllustrationModel.Code)) > 0))
             {
                 await PopulateListAsync();
                 ModelState.AddModelError("", $"O código da Ilustração '{IllustrationModel.Code}' já existe!");
@@ -63,9 +64,9 @@ namespace Backoffice.Pages.Illustrations
                 }
             }
 
-            _context.CatalogIllustrations.Add(illustrationDB);
+            await _repository.AddAsync(illustrationDB);
 
-            await _context.SaveChangesAsync();
+            await _repository.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }
@@ -78,9 +79,9 @@ namespace Backoffice.Pages.Illustrations
 
         private async Task PopulateListAsync()
         {
-            var list = await _context.IllustrationTypes
+            var list = (await _illustrationTypeRepo.ListAsync())
                 .Select(x => new { Id = x.Id, Name = $"{x.Code} - {x.Name}" })
-                .ToListAsync();
+                .ToList();
             ViewData["IllustrationTypes"] = new SelectList(list, "Id", "Name");
         }
     }

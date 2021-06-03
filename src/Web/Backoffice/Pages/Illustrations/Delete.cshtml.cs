@@ -1,25 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using ApplicationCore.Entities;
-using Infrastructure.Data;
 using AutoMapper;
 using Backoffice.ViewModels;
+using ApplicationCore.Interfaces;
+using ApplicationCore.Entities;
+using ApplicationCore.Specifications;
 
 namespace Backoffice.Pages.Illustrations
 {
     public class DeleteModel : PageModel
     {
-        private readonly Infrastructure.Data.DamaContext _context;
+        private readonly IRepository<CatalogIllustration> _repository;
         private readonly IMapper _mapper;
 
-        public DeleteModel(Infrastructure.Data.DamaContext context, IMapper mapper)
+        public DeleteModel(IRepository<CatalogIllustration> repository, IMapper mapper)
         {
-            _context = context;
+            _repository = repository;
             _mapper = mapper;
         }
 
@@ -33,7 +30,8 @@ namespace Backoffice.Pages.Illustrations
                 return NotFound();
             }
 
-            IllustrationModel = _mapper.Map<IllustrationViewModel>(await _context.CatalogIllustrations.Include(x => x.IllustrationType).SingleOrDefaultAsync(m => m.Id == id));
+            var illustration = await _repository.GetBySpecAsync(new CatalogIllustrationSpecification(id.Value));
+            IllustrationModel = _mapper.Map<IllustrationViewModel>(illustration);
 
             if (IllustrationModel == null)
             {
@@ -49,12 +47,11 @@ namespace Backoffice.Pages.Illustrations
                 return NotFound();
             }
 
-            var illustration = await _context.CatalogIllustrations.FindAsync(id);
+            var illustration = await _repository.GetByIdAsync(id);
 
             if (illustration != null)
             {
-                _context.CatalogIllustrations.Remove(illustration);
-                await _context.SaveChangesAsync();
+                await _repository.DeleteAsync(illustration);
             }
 
             return RedirectToPage("./Index");
