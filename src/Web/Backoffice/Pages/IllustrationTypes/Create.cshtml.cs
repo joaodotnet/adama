@@ -1,25 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using ApplicationCore.Entities;
-using Infrastructure.Data;
 using Backoffice.ViewModels;
 using AutoMapper;
+using ApplicationCore.Interfaces;
+using ApplicationCore.Specifications;
 
 namespace Backoffice.Pages.IllustrationTypes
 {
     public class CreateModel : PageModel
     {
-        private readonly DamaContext _context;
+        private readonly IRepository<IllustrationType> _repository;
         private readonly IMapper _mapper;
 
-        public CreateModel(DamaContext context, IMapper mapper)
+        public CreateModel(IRepository<IllustrationType> repository, IMapper mapper)
         {
-            _context = context;
+            _repository = repository;
             _mapper = mapper;
         }
 
@@ -39,14 +36,13 @@ namespace Backoffice.Pages.IllustrationTypes
             }
 
             //check if code exists
-            if (_context.IllustrationTypes.Any(x => x.Code.ToUpper() == IllustrationType.Code.ToUpper()))
+            if ((await _repository.CountAsync(new IllustrationTypeSpecification(IllustrationType.Code.ToUpper()))) > 0)
             {
                 ModelState.AddModelError("", $"O código do Tipo de Ilustração '{IllustrationType.Code}' já existe!");
                 return Page();
             }
 
-            _context.IllustrationTypes.Add(_mapper.Map<IllustrationType>(IllustrationType));
-            await _context.SaveChangesAsync();
+            await _repository.AddAsync(_mapper.Map<IllustrationType>(IllustrationType));
 
             return RedirectToPage("./Index");
         }

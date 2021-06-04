@@ -9,17 +9,18 @@ using ApplicationCore.Entities;
 using Infrastructure.Data;
 using AutoMapper;
 using Backoffice.ViewModels;
+using ApplicationCore.Interfaces;
 
 namespace Backoffice.Pages.IllustrationTypes
 {
     public class IndexModel : PageModel
     {
-        private readonly DamaContext _context;
+        private readonly IRepository<IllustrationType> _repository;
         private readonly IMapper _mapper;
 
-        public IndexModel(DamaContext context, IMapper mapper)
+        public IndexModel(IRepository<IllustrationType> repository, IMapper mapper)
         {
-            _context = context;
+            _repository = repository;
             _mapper = mapper;
         }
 
@@ -27,7 +28,7 @@ namespace Backoffice.Pages.IllustrationTypes
 
         public async Task OnGetAsync()
         {
-            IllustrationType = _mapper.Map<List<IllustrationTypeViewModel>>(await _context.IllustrationTypes.ToListAsync());
+            IllustrationType = _mapper.Map<List<IllustrationTypeViewModel>>(await _repository.ListAsync());
         }
     }
 }

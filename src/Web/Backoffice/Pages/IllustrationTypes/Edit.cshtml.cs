@@ -1,26 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using ApplicationCore.Entities;
-using Infrastructure.Data;
 using AutoMapper;
 using Backoffice.ViewModels;
+using ApplicationCore.Interfaces;
+using ApplicationCore.Specifications;
 
 namespace Backoffice.Pages.IllustrationTypes
 {
     public class EditModel : PageModel
     {
-        private readonly DamaContext _context;
+        private readonly IRepository<IllustrationType> _repository;
         private readonly IMapper _mapper;
 
-        public EditModel(Infrastructure.Data.DamaContext context, IMapper mapper)
+        public EditModel(IRepository<IllustrationType> repository, IMapper mapper)
         {
-            _context = context;
+            _repository = repository;
             _mapper = mapper;
         }
 
@@ -34,7 +30,7 @@ namespace Backoffice.Pages.IllustrationTypes
                 return NotFound();
             }
 
-            IllustrationType = _mapper.Map<IllustrationTypeViewModel>(await _context.IllustrationTypes.SingleOrDefaultAsync(m => m.Id == id));
+            IllustrationType = _mapper.Map<IllustrationTypeViewModel>(await _repository.GetByIdAsync(id.Value));
 
             if (IllustrationType == null)
             {
@@ -51,22 +47,15 @@ namespace Backoffice.Pages.IllustrationTypes
             }
 
             //check if code exists
-            if (_context.IllustrationTypes.Any(x => x.Code.ToUpper() == IllustrationType.Code.ToUpper() && x.Id != IllustrationType.Id))
+            if ((await _repository.CountAsync(new IllustrationTypeSpecification(IllustrationType.Code, IllustrationType.Id)) > 0))
             {
                 ModelState.AddModelError("", $"O código do Tipo de Ilustração '{IllustrationType.Code}' já existe!");
                 return Page();
             }
 
-            _context.Attach(_mapper.Map<IllustrationType>(IllustrationType)).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                
-            }
+            var entity = await _repository.GetByIdAsync(IllustrationType.Id);
+            _mapper.Map(IllustrationType, entity);
+            await _repository.UpdateAsync(entity);
 
             return RedirectToPage("./Index");
         }
