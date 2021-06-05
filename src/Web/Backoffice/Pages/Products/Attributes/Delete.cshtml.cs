@@ -1,28 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using ApplicationCore.Entities;
-using Infrastructure.Data;
 using AutoMapper;
-using Backoffice.ViewModels;
 using Backoffice.Interfaces;
 using System.ComponentModel.DataAnnotations;
+using ApplicationCore.Interfaces;
+using ApplicationCore.Specifications;
 
 namespace Backoffice.Pages.Products.Attributes
 {
     public class DeleteModel : PageModel
     {
-        private readonly DamaContext _context;
+        private readonly IRepository<CatalogItem> _repository;
         private readonly IMapper _mapper;
         private readonly IBackofficeService _service;
 
-        public DeleteModel(DamaContext context, IMapper mapper, IBackofficeService service)
+        public DeleteModel(IRepository<CatalogItem> repository, IMapper mapper, IBackofficeService service)
         {
-            _context = context;
+            _repository = repository;
             _mapper = mapper;
             _service = service;
         }
@@ -44,16 +41,19 @@ namespace Backoffice.Pages.Products.Attributes
             public int CatalogItemId { get; set; }
         }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int? catalogItemId, int? id)
         {
-            if (id == null)
+            if (id == null || catalogItemId == null)
             {
                 return NotFound();
             }
 
-            var ca = await _context.CatalogAttributes
-                .Include(c => c.CatalogItem)
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var prod = await _repository.GetBySpecAsync(new CatalogAttrFilterSpecification(catalogItemId.Value));
+
+            if(prod == null)
+                return NotFound();
+            
+            var ca = prod.Attributes.SingleOrDefault(x => x.Id == id);
 
             if (ca == null)
             {
@@ -65,22 +65,23 @@ namespace Backoffice.Pages.Products.Attributes
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync(int? catalogItemId, int? id)
         {
-            if (id == null)
+            if (id == null || catalogItemId == null)
             {
                 return NotFound();
             }
 
-            var ca = await _context.CatalogAttributes.FindAsync(id);
+            var prod = await _repository.GetBySpecAsync(new CatalogAttrFilterSpecification(catalogItemId.Value));
 
-            if (ca != null)
+            if(prod == null)
+                return NotFound();
+            
+            var ca = prod.Attributes.SingleOrDefault(x => x.Id == id);
+            if(ca != null)
             {
-                _context.CatalogAttributes.Remove(ca);
-                await _context.SaveChangesAsync();
-
-                
-                //await _service.DeleteCatalogPrice(ca.CatalogItemId, ca.Id);
+                prod.RemoveAttribute(ca);
+                await _repository.UpdateAsync(prod);
             }
 
             return RedirectToPage("/Products/Edit", new { id = ca.CatalogItemId });

@@ -3,6 +3,8 @@ using ApplicationCore.Entities.OrderAggregate;
 using AutoMapper;
 using Backoffice.ViewModels;
 using System.Linq;
+using static Backoffice.Pages.Products.Attributes.DeleteModel;
+using static Backoffice.Pages.Products.Attributes.EditModel;
 
 namespace Backoffice
 {
@@ -36,6 +38,8 @@ namespace Backoffice
             CreateMap<Pages.Products.Attributes.CreateModel.AttributeCreateModel, CatalogAttribute>();
             CreateMap<Pages.Products.Attributes.EditModel.AttributeEditModel, CatalogAttribute>();
             CreateMap<ProductAttributeViewModel, CatalogAttribute>();
+            CreateMap<CatalogAttribute, AttributeViewModel>();
+            CreateMap<CatalogAttribute, AttributeEditModel>();
             CreateMap<ShopConfigViewModel, ShopConfig>();
             CreateMap<ShopConfig, ShopConfigViewModel>();
             CreateMap<ShopConfigDetail, ShopConfigDetailViewModel>();

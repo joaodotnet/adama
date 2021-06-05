@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace ApplicationCore.Entities
 {
     public class CatalogAttribute : BaseEntity
@@ -12,6 +14,13 @@ namespace ApplicationCore.Entities
         public void UpdateStock(int newStock)
         {
             Stock = newStock;
+        }
+
+        public void UpdateInfo(AttributeType type, string name, int stock)
+        {
+            Type = type;
+            Name = name;
+            Stock = stock;
         }
     }
 }

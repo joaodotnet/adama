@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ApplicationCore.Interfaces;
 
 namespace ApplicationCore.Entities
@@ -61,7 +62,6 @@ namespace ApplicationCore.Entities
             CatalogTypeId = catalogTypeId;
             ShowOnShop = showOnShop;
         }
-
 
         public void UpdateName(string newName)
         {
@@ -135,6 +135,24 @@ namespace ApplicationCore.Entities
         public void AddReference(string labelDescription, int referenceCatalogItemId)
         {
             _references.Add(new CatalogReference(labelDescription, referenceCatalogItemId));
+        }
+        public void AddAttribute(CatalogAttribute attribute)
+        {
+            _attributes.Add(attribute);
+        }
+
+        public void RemoveAttribute(CatalogAttribute attribute)
+        {
+            _attributes.Remove(attribute);
+        }
+
+        public void UpdateAttribute(int id, AttributeType type, string name, int stock)
+        {
+            var attribute = _attributes.SingleOrDefault(x => x.Id == id);
+            if(attribute != null)
+            {
+                attribute.UpdateInfo(type, name, stock);
+            }
         }
     }
 }

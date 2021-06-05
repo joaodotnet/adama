@@ -181,8 +181,8 @@
                                     @Html.DisplayFor(model => Model.ProductModel.Attributes[i].Stock)
                                 </td>
                                 <td>
-                                    <a asp-page="./Attributes/Edit" asp-route-id="@Model.ProductModel.Attributes[i].Id">Editar</a> |
-                                    <a asp-page="./Attributes/Delete" asp-route-id="@Model.ProductModel.Attributes[i].Id">Apagar</a>
+                                    <a asp-page="./Attributes/Edit" asp-route-catalogItemId="@Model.ProductModel.Id" asp-route-id="@Model.ProductModel.Attributes[i].Id">Editar</a> |
+                                    <a asp-page="./Attributes/Delete" asp-route-catalogItemId="@Model.ProductModel.Id" asp-route-id="@Model.ProductModel.Attributes[i].Id">Apagar</a>
                                 </td>
                             </tr>
                         }

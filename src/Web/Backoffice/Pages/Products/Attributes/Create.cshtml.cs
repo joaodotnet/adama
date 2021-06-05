@@ -1,30 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using ApplicationCore.Entities;
-using Infrastructure.Data;
-using Backoffice.ViewModels;
 using AutoMapper;
 using Backoffice.Interfaces;
-using Backoffice.Extensions;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
+using ApplicationCore.Interfaces;
+using ApplicationCore.Specifications;
 
 namespace Backoffice.Pages.Products.Attributes
 {
     public class CreateModel : PageModel
     {
-        private readonly DamaContext _context;
+        private readonly IRepository<CatalogItem> _repository;
         private readonly IMapper _mapper;
         private readonly IBackofficeService _service;
 
-        public CreateModel(Infrastructure.Data.DamaContext context, IMapper mapper, IBackofficeService service)
+        public CreateModel(IRepository<CatalogItem> repository, IMapper mapper, IBackofficeService service)
         {
-            _context = context;
+            _repository = repository;
             _mapper = mapper;
             this._service = service;
         }
@@ -47,8 +42,7 @@ namespace Backoffice.Pages.Products.Attributes
 
         public async Task<IActionResult> OnGet(int id)
         {
-            var prod = await _context.CatalogItems
-                .FindAsync(id);
+            var prod = await _repository.GetByIdAsync(id);
             if (prod == null)
                 return NotFound();
 
@@ -69,15 +63,14 @@ namespace Backoffice.Pages.Products.Attributes
             }
             //CatalogAttributeModel.CatalogItem = null;
             var attribute = _mapper.Map<CatalogAttribute>(CatalogAttributeModel);
-            _context.CatalogAttributes.Add(attribute);
-            await _context.SaveChangesAsync();
+            var product = await _repository.GetByIdAsync(attribute.CatalogItemId);
+            product.AddAttribute(attribute);
+            await _repository.UpdateAsync(product);
 
             //Update Total Stock
-            var prod = await _context.CatalogItems
-                .Include(x => x.Attributes)
-                .SingleOrDefaultAsync(x => x.Id == CatalogAttributeModel.CatalogItemId);
+            var prod = await _repository.GetBySpecAsync(new CatalogAttrFilterSpecification(CatalogAttributeModel.CatalogItemId));
             prod.UpdateStock(prod.Attributes.Sum(x => x.Stock));
-            await _context.SaveChangesAsync();
+            await _repository.SaveChangesAsync();
 
             return RedirectToPage("/Products/Edit", new { id = CatalogAttributeModel.CatalogItemId });
         }
