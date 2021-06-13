@@ -16,6 +16,7 @@ namespace ApplicationCore.Interfaces
         Task<(int?,int?,int?)> GetFirstOptionFromAttributeAsync(int catalogItemId);
         Task AddCustomizeItemToBasket(int basketId, int catalogTypeId, string description, string textOrName, string colors, int quantity);
         Task AddObservationAsync(int basketId, string message);
+        Task<bool> AddCouponAsync(int basketId, string coupon);
         Task RemoveObservationsAsync(int basketId);
     }
 }

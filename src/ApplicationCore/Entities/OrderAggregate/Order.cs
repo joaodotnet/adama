@@ -12,7 +12,7 @@ namespace ApplicationCore.Entities.OrderAggregate
         {
         }
 
-        public Order(string buyerId, string phoneNumber, int? taxNumber, Address shipToAddress, Address billingAddress, bool useBillingSameAsShipping, List<OrderItem> items, decimal shippingCost, string observations, string customerEmail = null)
+        public Order(string buyerId, string phoneNumber, int? taxNumber, Address shipToAddress, Address billingAddress, bool useBillingSameAsShipping, List<OrderItem> items, decimal shippingCost, string observations, decimal? discount, string customerEmail = null)
         {
             ShipToAddress = shipToAddress;
             if (billingAddress != null)
@@ -28,6 +28,7 @@ namespace ApplicationCore.Entities.OrderAggregate
             PhoneNumber = phoneNumber;
             OrderState = items.Any(x => x.CustomizeItem?.CatalogTypeId != null) ? OrderStateType.UNDER_ANALYSIS : OrderStateType.PENDING;
             Observations = observations;
+            Discount = discount;
         }
         public string BuyerId { get; private set; }
         public string CustomerEmail { get; set; }
@@ -43,6 +44,7 @@ namespace ApplicationCore.Entities.OrderAggregate
         public string SalesInvoiceNumber { get; set; }
         public long? SalesPaymentId { get; set; }
         public string Observations { get; private set; }
+        public decimal? Discount { get; private set; } 
 
         // DDD Patterns comment
         // Using a private collection field, better for DDD Aggregate's encapsulation
@@ -66,7 +68,7 @@ namespace ApplicationCore.Entities.OrderAggregate
             {
                 subtotal += item.UnitPrice * item.Units;
             }
-            return subtotal;
+            return subtotal - (Discount ?? 0);
         }
 
         public decimal Total()
@@ -76,7 +78,7 @@ namespace ApplicationCore.Entities.OrderAggregate
             {
                 total += item.UnitPrice * item.Units;
             }
-            return total + ShippingCost;
+            return total + ShippingCost - (Discount ?? 0);
         }
 
         public void UpdateBillingInfo(int? taxNumber, string customerEmail, Address billingAddress)

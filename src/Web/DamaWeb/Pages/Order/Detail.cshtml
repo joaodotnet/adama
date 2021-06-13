@@ -103,9 +103,21 @@
         </div>
     }
 
-    @if (Model.OrderDetails.ShippingCost > 0)
+    @if(Model.OrderDetails.Discount.HasValue)
     {
         <section class="dnj-orders_detail-section dnj-orders_detail-section--right mt-3">
+            <article class="dnj-orders_detail-titles dnj-basket-titles--clean row">
+                <section class="dnj-orders_detail-title d-none d-sm-block col-sm-7"></section>
+                <section class="dnj-orders_detail-title col-8 col-sm-3 text-sm-right"><small>Desconto 25%</small></section>
+                <section class="dnj-orders_detail-item dnj-orders_detail-item--mark col-4 col-sm-2 text-nowrap text-right text-sm-left">- @Model.OrderDetails.Discount.Value.ToString("N2") €</section>
+            </article>
+        </section>
+
+    }
+
+    @if (Model.OrderDetails.ShippingCost > 0)
+    {
+        <section class="dnj-orders_detail-section dnj-orders_detail-section--right">
             <article class="dnj-orders_detail-titles dnj-basket-titles--clean row">
                 <section class="dnj-orders_detail-title d-none d-sm-block col-sm-7"></section>
                 <section class="dnj-orders_detail-title col-8 col-sm-3 text-sm-right"><small>Despesas de Envio</small></section>

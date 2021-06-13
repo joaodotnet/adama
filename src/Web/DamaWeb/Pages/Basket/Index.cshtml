@@ -4,274 +4,331 @@
 @{
     ViewData["Title"] = "O Meu Carrinho";
 }
-    <h1 class="text-uppercase mt-sm-5 mt-2">O Meu Carrinho</h1>
+<h1 class="text-uppercase mt-sm-5 mt-2">O Meu Carrinho</h1>
 
-    @if (Model.BasketModel.Items.Any())
-    {
+@if (Model.BasketModel.Items.Any())
+{
 
-        <div class="row">
-            <div class="col-sm-9 col">
-                <div class="d-none d-sm-block">
-                    <form class="quantity-form" method="post">
-                        <article class="row m-0 pt-sm-4 pb-sm-2">
-                            <section class="dnj-basket-title col-sm-2 p-0">Produto</section>
-                            <section class="dnj-basket-title col-sm-3 text-center"></section>
-                            <section class="dnj-basket-title col-sm-2 text-center">Preço</section>
-                            <section class="dnj-basket-title col-sm-2 text-center">Quantidade</section>
-                            <section class="dnj-basket-title col-sm-2 text-center">Subtotal</section>
-                            <section class="col-sm-1"></section>
-                        </article>
-                        <hr class="dama-hr-tiny" />
-                        <div class="esh-catalog-items">
-                            @for (int i = 0; i < Model.BasketModel.Items.Count; i++)
-                            {
-                                var item = Model.BasketModel.Items[i];
-                                <div class="row m-0">
-                                    <div class="col-sm-2 p-0">
-                                        <a asp-page="/Product" asp-route-id="@item.Slug">
-                                            <img class="dnj-basket-image img-fluid" src="@item.PictureUrl" />
-                                        </a>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="card border-0 m-0 p-0 h-100">
-                                            <div class="card-header bg-white border-0 p-0">
-                                                <span class="font-weight-bold">@item.ProductName</span>
-                                                @if(!string.IsNullOrEmpty(item.ProductName2))
-                                                {
-                                                    <br />
-                                                    @item.ProductName2
-                                                }
-                                            </div>
-                                            <div class="card-body h-100"></div>
-                                            <div class="card-footer bg-white border-0 p-0">
-                                                @if (!string.IsNullOrEmpty(item.CustomizeName))
-                                                {
-                                                    <div class="align-text-bottom">
-                                                        <span class="dama-basket-label" id="nameInputText">PERSONALIZAÇÃO:</span><span class="dama-basket-item"> @item.CustomizeName</span>
-                                                    </div>
-                                                }
-                                                @foreach (var attr in Model.BasketModel.Items[i].Attributes)
-                                                {
-                                                    <br />
-                                                    <span class="dama-basket-label text-uppercase">@attr.Label:</span><span class="dama-basket-item"> @attr.Name</span>
-                                                }
-                                            </div>
+    <div class="row">
+        <div class="col-sm-9 col">
+            <div class="d-none d-sm-block">
+                <form class="quantity-form" method="post">
+                    <article class="row m-0 pt-sm-4 pb-sm-2">
+                        <section class="dnj-basket-title col-sm-2 p-0">Produto</section>
+                        <section class="dnj-basket-title col-sm-3 text-center"></section>
+                        <section class="dnj-basket-title col-sm-2 text-center">Preço</section>
+                        <section class="dnj-basket-title col-sm-2 text-center">Quantidade</section>
+                        <section class="dnj-basket-title col-sm-2 text-center">Subtotal</section>
+                        <section class="col-sm-1"></section>
+                    </article>
+                    <hr class="dama-hr-tiny" />
+                    <div class="esh-catalog-items">
+                        @for (int i = 0; i < Model.BasketModel.Items.Count; i++)
+                        {
+                            var item = Model.BasketModel.Items[i];
+                            <div class="row m-0">
+                                <div class="col-sm-2 p-0">
+                                    <a asp-page="/Product" asp-route-id="@item.Slug">
+                                        <img class="dnj-basket-image img-fluid" src="@item.PictureUrl" />
+                                    </a>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="card border-0 m-0 p-0 h-100">
+                                        <div class="card-header bg-white border-0 p-0">
+                                            <span class="font-weight-bold">@item.ProductName</span>
+                                            @if (!string.IsNullOrEmpty(item.ProductName2))
+                                            {
+                                                <br />
+                                                @item.ProductName2
+                                            }
+                                        </div>
+                                        <div class="card-body h-100"></div>
+                                        <div class="card-footer bg-white border-0 p-0">
+                                            @if (!string.IsNullOrEmpty(item.CustomizeName))
+                                            {
+                                                <div class="align-text-bottom">
+                                                    <span class="dama-basket-label" id="nameInputText">PERSONALIZAÇÃO:</span><span
+                                            class="dama-basket-item"> @item.CustomizeName</span>
+                                                </div>
+                                            }
+                                            @foreach (var attr in Model.BasketModel.Items[i].Attributes)
+                                            {
+                                                <br />
+                                                <span class="dama-basket-label text-uppercase">@attr.Label:</span><span
+                                        class="dama-basket-item"> @attr.Name</span>
+                                            }
                                         </div>
                                     </div>
-                                    <div class="col-sm-2 align-self-center text-sm-center">
-                                        @if (!item.IsFromCustomize)
-                                        {
-                                            <span>
-                                                @item.UnitPrice.ToString("N2") €
-                                            </span>
-                                        }
-                                        else
-                                        {
-                                            <small>em análise</small>
-                                        }
-                                    </div>
-                                    <div class="col-sm-2 align-items-center align-self-center">
-                                        <input type="hidden" name="@("Items[" + i + "].Key" )" value="@item.Id" />
-                                        <input type="number" class="form-control dama-basket-item text-center quantity-ipt" min="1" name="@("Items[" + i + "].Value" )" value="@item.Quantity" />
-                                    </div>
-                                    <div class="col-sm-2 align-items-center align-self-center text-center">
-                                        @if (!item.IsFromCustomize)
-                                        {
-                                            <text>
-                                                @Math.Round(item.Quantity * item.UnitPrice, 2).ToString("N2") €
-                                            </text>
-                                        }
-                                    </div>
-                                    <div class="col-sm-1 align-self-center text-right">
-                                        <button class="dama-basket-btn" type="submit" name="removebutton" asp-page-handler="Remove" asp-route-id="@i">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
                                 </div>
-                                @if (i < Model.BasketModel.Items.Count - 1)
-                                {
-                                    <hr class="dama-hr-tiny my-3" />
-                                }
-                            }
-                        </div>
-                        <hr class="dama-hr-tiny my-3" />
-                        <div class="row">
-                            <div class="col-sm-2 text-left">
-                                <a asp-page="/Index" class="btn btn-menta text-uppercase">Voltar à loja</a>
+                                <div class="col-sm-2 align-self-center text-sm-center">
+                                    @if (!item.IsFromCustomize)
+                                    {
+                                        <span>
+                                            @item.UnitPrice.ToString("N2") €
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <small>em análise</small>
+                                    }
+                                </div>
+                                <div class="col-sm-2 align-items-center align-self-center">
+                                    <input type="hidden" name="@("Items[" + i + "].Key" )" value="@item.Id" />
+                                    <input type="number" class="form-control dama-basket-item text-center quantity-ipt" min="1"
+                                name="@("Items[" + i + "].Value" )" value="@item.Quantity" />
+                                </div>
+                                <div class="col-sm-2 align-items-center align-self-center text-center">
+                                    @if (!item.IsFromCustomize)
+                                    {
+                                        <text>
+                                            @Math.Round(item.Quantity * item.UnitPrice, 2).ToString("N2") €
+                                        </text>
+                                    }
+                                </div>
+                                <div class="col-sm-1 align-self-center text-right">
+                                    <button class="dama-basket-btn" type="submit" name="removebutton" asp-page-handler="Remove"
+                                asp-route-id="@i">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="col-6 offset-sm-5 col-sm-2">
-                                <button class="btn btn-primary text-white text-uppercase px-4" name="updatebutton" type="submit" asp-page-handler="Update">
-                                    Atualizar
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="d-block d-sm-none">
-                    <form class="quantity-form" method="post">
-                        <hr class="dama-hr-tiny" />
-                        <div class="esh-catalog-items">
-                            @for (int i = 0; i < Model.BasketModel.Items.Count; i++)
+                            @if (i < Model.BasketModel.Items.Count - 1)
                             {
-                                var item = Model.BasketModel.Items[i];
-                                <div class="row m-0">
-                                    <div class="col-4 p-0">
-                                        <a asp-page="/Product" asp-route-id="@item.Slug">
-                                            <img class="dnj-basket-image img-fluid" src="@item.PictureUrl" />
-                                        </a>
-                                    </div>
-                                    <div class="col-7">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="card border-0 m-0 p-0">
-                                                    <div class="card-header bg-white border-0 p-0">
-                                                        <span class="font-weight-bold">@item.ProductName</span>
-                                                        @if (!string.IsNullOrEmpty(item.ProductName2))
-                                                        {
-                                                            <br />
-                                                            @item.ProductName2
-                                                        }
-                                                    </div>
-                                                    <div class="card-footer bg-white border-0 p-0">
-                                                        @if (!string.IsNullOrEmpty(item.CustomizeName))
-                                                        {
-                                                            <div class="align-text-bottom">
-                                                                <span class="dama-basket-label" id="nameInputText">PERSONALIZAÇÃO:</span><span class="dama-basket-item"> @item.CustomizeName</span>
-                                                            </div>
-                                                        }
-                                                        @foreach (var attr in Model.BasketModel.Items[i].Attributes)
-                                                        {
-                                                            <br />
-                                                            <span class="dama-basket-label text-uppercase">@attr.Label:</span><span class="dama-basket-item"> @attr.Name</span>
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="d-inline-flex align-items-center">
-                                                    <label class="dama-basket-label mb-0 pr-3">PREÇO:</label>
-                                                    @if (!item.IsFromCustomize)
-                                                    {
-                                                        <span>
-                                                            @item.UnitPrice.ToString("N2") €
-                                                        </span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <small>em análise</small>
-                                                    }
-                                                </div>
-                                            </div>
-                                            <div class="col-12 col-sm-2 d-inline-flex align-items-center">
-                                                <label for="@("Items[" + i + "].Value" )" class="dama-basket-label mb-0 pr-3">QUANTIDADE:</label>
-                                                <input type="hidden" name="@("Items[" + i + "].Key" )" value="@item.Id" />
-                                                <input type="number" class="form-control dama-basket-item text-center quantity-ipt" min="1" name="@("Items[" + i + "].Value" )" value="@item.Quantity" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-1 align-self-center text-right">
-                                        <button class="dama-basket-btn" type="submit" name="removebutton" asp-page-handler="Remove" asp-route-id="@i">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                @if (i < Model.BasketModel.Items.Count - 1)
-                                {
-                                    <hr class="dama-hr-tiny my-3" />
-                                }
+                                <hr class="dama-hr-tiny my-3" />
                             }
+                        }
+                    </div>
+                    <hr class="dama-hr-tiny my-3" />
+                    <div class="row">
+                        <div class="col-sm-2 text-left">
+                            <a asp-page="/Index" class="btn btn-menta text-uppercase">Voltar à loja</a>
                         </div>
-                        <hr class="dama-hr-tiny my-3" />
-                        <div class="mt-4">
-                            <a asp-page="/Index" class="btn btn-menta btn-block text-uppercase">Voltar à loja</a>
-                            <button class="btn btn-primary btn-block text-white text-uppercase px-4 mt-2" name="updatebutton" type="submit" asp-page-handler="Update">
+                        <div class="col-6 offset-sm-5 col-sm-2">
+                            <button class="btn btn-primary text-white text-uppercase px-4" name="updatebutton" type="submit"
+                            asp-page-handler="Update">
                                 Atualizar
                             </button>
                         </div>
+                    </div>
+                </form>
+            </div>
+            <div class="d-block d-sm-none">
+                <form class="quantity-form" method="post">
+                    <hr class="dama-hr-tiny" />
+                    <div class="esh-catalog-items">
+                        @for (int i = 0; i < Model.BasketModel.Items.Count; i++)
+                        {
+                            var item = Model.BasketModel.Items[i];
+                            <div class="row m-0">
+                                <div class="col-4 p-0">
+                                    <a asp-page="/Product" asp-route-id="@item.Slug">
+                                        <img class="dnj-basket-image img-fluid" src="@item.PictureUrl" />
+                                    </a>
+                                </div>
+                                <div class="col-7">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="card border-0 m-0 p-0">
+                                                <div class="card-header bg-white border-0 p-0">
+                                                    <span class="font-weight-bold">@item.ProductName</span>
+                                                    @if (!string.IsNullOrEmpty(item.ProductName2))
+                                                    {
+                                                        <br />
+                                                        @item.ProductName2
+                                                    }
+                                                </div>
+                                                <div class="card-footer bg-white border-0 p-0">
+                                                    @if (!string.IsNullOrEmpty(item.CustomizeName))
+                                                    {
+                                                        <div class="align-text-bottom">
+                                                            <span class="dama-basket-label"
+                                                    id="nameInputText">PERSONALIZAÇÃO:</span><span
+                                                    class="dama-basket-item"> @item.CustomizeName</span>
+                                                        </div>
+                                                    }
+                                                    @foreach (var attr in Model.BasketModel.Items[i].Attributes)
+                                                    {
+                                                        <br />
+                                                        <span class="dama-basket-label text-uppercase">@attr.Label:</span><span
+                                                class="dama-basket-item"> @attr.Name</span>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="d-inline-flex align-items-center">
+                                                <label class="dama-basket-label mb-0 pr-3">PREÇO:</label>
+                                                @if (!item.IsFromCustomize)
+                                                {
+                                                    <span>
+                                                        @item.UnitPrice.ToString("N2") €
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <small>em análise</small>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-2 d-inline-flex align-items-center">
+                                            <label for="@("Items[" + i + "].Value" )"
+                                        class="dama-basket-label mb-0 pr-3">QUANTIDADE:</label>
+                                            <input type="hidden" name="@("Items[" + i + "].Key" )" value="@item.Id" />
+                                            <input type="number" class="form-control dama-basket-item text-center quantity-ipt"
+                                        min="1" name="@("Items[" + i + "].Value" )" value="@item.Quantity" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-1 align-self-center text-right">
+                                    <button class="dama-basket-btn" type="submit" name="removebutton" asp-page-handler="Remove"
+                                asp-route-id="@i">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            @if (i < Model.BasketModel.Items.Count - 1)
+                            {
+                                <hr class="dama-hr-tiny my-3" />
+                            }
+                        }
+                    </div>
+                    <hr class="dama-hr-tiny my-3" />
+                    <div class="mt-4">
+                        <a asp-page="/Index" class="btn btn-menta btn-block text-uppercase">Voltar à loja</a>
+                        <button class="btn btn-primary btn-block text-white text-uppercase px-4 mt-2" name="updatebutton"
+                        type="submit" asp-page-handler="Update">
+                            Atualizar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col col-sm-3 px-sm-5 mt-4 mt-sm-0">
+            <img src="~/images/bird-right.png" class="mb-3 d-none d-sm-block" />
+            <div class="border border-primary p-2 p-md-3 p-xl-4 mt-3">
+                <div class="d-inline-flex d-sm-block align-items-center justify-content-between w-100">
+                    <div class="text-sm-center">
+                        OBSERVAÇÕES <i class="fas fa-info-circle text-primary"></i>
+                    </div>
+                    <div class="text-sm-center mt-0 mt-sm-3 observationCard collapse show">
+                        @if (string.IsNullOrEmpty(Model.BasketModel.Observations))
+                        {
+                            <a class="btn btn-menta px-4" data-toggle="collapse" href=".observationCard" role="button"
+                        aria-expanded="false" aria-controls="observationCard">
+                                ADICIONAR
+                            </a>
+                        }
+                        else
+                        {
+                            <div class="small text-menta mb-2">ADICIONADO</div>
+                            <a class="btn btn-menta btn-sm px-4" data-toggle="collapse" href=".observationCard" role="button"
+                        aria-expanded="false" aria-controls="observationCard">
+                                EDITAR
+                            </a>
+                        }
+                    </div>
+                </div>
+                <div class="collapse observationCard mt-3">
+                    <form method="post" asp-page-handler="AddObservation">
+                        <div class="form-group">
+                            <textarea class="form-control" asp-for="BasketModel.Observations"
+                            placeholder="MENSAGEM"></textarea>
+                            <span asp-validation-for="BasketModel.Observations" class="text-danger"></span>
+                        </div>
+                        @if (string.IsNullOrEmpty(Model.BasketModel.Observations))
+                        {
+                            <button type="submit" class="btn btn-menta btn-block">ADICIONAR</button>
+                            <div class="w-100 text-center small mt-1">
+                                <a class="offer-cancel" data-toggle="collapse" href=".observationCard" role="button"
+                            aria-expanded="false" aria-controls="offerCard">Cancelar</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-menta btn-block">ATUALIZAR</button>
+                            <button type="submit" class="btn btn-secondary btn-block" asp-page-h
+                        andler="RemoveObservations">REMOVER</button>
+                        }
+                        <input type="hidden" asp-for="BasketModel.Id" />
                     </form>
                 </div>
             </div>
-            <div class="col col-sm-3 px-sm-5 mt-4 mt-sm-0">
-                <img src="~/images/bird-right.png" class="mb-3 d-none d-sm-block" />               
-                <div class="border border-primary p-2 p-md-3 p-xl-4 mt-3">
-                    <div class="d-inline-flex d-sm-block align-items-center justify-content-between w-100">
-                        <div class="text-sm-center">
-                            OBSERVAÇÕES <i class="fas fa-info-circle text-primary"></i>
-                        </div>
-                        <div class="text-sm-center mt-0 mt-sm-3 observationCard collapse show">
-                            @if (string.IsNullOrEmpty(Model.BasketModel.Observations))
+            <div class="border border-primary p-2 p-md-3 p-xl-4 mt-3">
+                <div class="d-inline-flex d-sm-block align-items-center justify-content-between w-100">
+                    <div class="text-sm-center">
+                        CUPÂO DE DESCONTO <i class="fas fa-info-circle text-primary"></i>
+                    </div>
+                    <div class="text-sm-center mt-0 mt-sm-3">
+                        <div class="text-sm-center mt-0 mt-sm-3 couponCard collapse show">
+                            @if (!Model.BasketModel.Discount.HasValue)
                             {
-                                <a class="btn btn-menta px-4" data-toggle="collapse" href=".observationCard" role="button" aria-expanded="false" aria-controls="observationCard">
+                                <a class="btn btn-menta px-4" data-toggle="collapse" href=".couponCard" role="button"
+                            aria-expanded="false" aria-controls="couponCard">
                                     ADICIONAR
                                 </a>
                             }
                             else
                             {
                                 <div class="small text-menta mb-2">ADICIONADO</div>
-                                <a class="btn btn-menta btn-sm px-4" data-toggle="collapse" href=".observationCard" role="button" aria-expanded="false" aria-controls="observationCard">
-                                    EDITAR
-                                </a>
                             }
                         </div>
-                    </div>
-                    <div class="collapse observationCard mt-3">
-                        <form method="post" asp-page-handler="AddObservation">
-                            <div class="form-group">
-                                <textarea class="form-control" asp-for="BasketModel.Observations" placeholder="MENSAGEM"></textarea>
-                                <span asp-validation-for="BasketModel.Observations" class="text-danger"></span>
-                            </div>
-                            @if (string.IsNullOrEmpty(Model.BasketModel.Observations))
-                            {
-                                <button type="submit" class="btn btn-menta btn-block">ADICIONAR</button>
-                                <div class="w-100 text-center small mt-1">
-                                    <a class="offer-cancel" data-toggle="collapse" href=".observationCard" role="button" aria-expanded="false" aria-controls="offerCard">Cancelar</a>
+                        <div class="collapse couponCard mt-3">
+                            <form method="post" asp-page-handler="AddCoupon">
+                                <div class="form-group">
+                                    <input asp-for="BasketModel.CouponText" class="form-control" />
+                                    <span asp-validation-for="BasketModel.CouponText" class="text-danger small"></span>
                                 </div>
-                            }
-                            else
-                            {
-                                <button type="submit" class="btn btn-menta btn-block">ATUALIZAR</button>
-                                <button type="submit" class="btn btn-secondary btn-block" asp-page-handler="RemoveObservations">REMOVER</button>
-                            }
-                            <input type="hidden" asp-for="BasketModel.Id" />
-                        </form>
+                                <button type="submit" class="btn btn-menta px-4">
+                                    ADICIONAR
+                                </button>
+                                <input type="hidden" asp-for="BasketModel.Id" />
+                            </form>
+                        </div>
                     </div>
                 </div>
-                <div class="text-center mt-3 d-inline-flex d-sm-block justify-content-center w-100 align-items-center">
-                    <h5 class="mb-0">SUBTOTAL<span class="d-sm-none"> -&nbsp;</span></h5>
-                    <span class="dnj-basket-price">@Model.BasketModel.SubTotal()</span>
-                </div>
-                <a class="btn btn-default dnj-basket-checkout" role="button" asp-page="/Basket/Checkout">Comprar</a>
             </div>
+            @if (Model.BasketModel.Discount.HasValue)
+            {
+                <div class="text-center mt-3 d-inline-flex d-sm-block justify-content-center w-100 align-items-center">
+                    <div class="mb-0">DESCONTO 25%<span class="d-sm-none"> -&nbsp;</span></div>
+                    <span class="dnj-basket-price">- @Model.BasketModel.Discount.Value.ToString("N2")</span>
+                </div>
+            }
+            <div class="text-center mt-3 d-inline-flex d-sm-block justify-content-center w-100 align-items-center">
+                <h5 class="mb-0">SUBTOTAL<span class="d-sm-none"> -&nbsp;</span></h5>
+                <span class="dnj-basket-price">@Model.BasketModel.SubTotal().ToString("N2")</span>
+            </div>
+            <a class="btn btn-default dnj-basket-checkout" role="button" asp-page="/Basket/Checkout">Comprar</a>
         </div>
-    }
-    else
-    {
-        <div class="esh-catalog-items row ml-3">
-            O Carrinho está vazio.
-        </div>
-    }
+    </div>
+}
+else
+{
+    <div class="esh-catalog-items row ml-3">
+        O Carrinho está vazio.
+    </div>
+}
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script>
 
-        $(document).ready(function () {
+    $(document).ready(function () {
 
-            $('.dnj-basket-input').keypress(function (e) {
-                if (e.which == 13) {
-                    e.preventDefault();
-                    $('button[name=updatebutton]').click();
-                    return false;
-                }
-            });
-
-            $('.quantity-ipt').focusout(function (e) {
-                var postData = $(this).closest('form').serialize();
-                $.post('?handler=Update', postData, function () {
-                    //TODO: Think about how to update html
-                });
-            });
+        $('.dnj-basket-input').keypress(function (e) {
+            if (e.which == 13) {
+                e.preventDefault();
+                $('button[name=updatebutton]').click();
+                return false;
+            }
         });
 
-    </script>
-}
+        $('.quantity-ipt').focusout(function (e) {
+            var postData = $(this).closest('form').serialize();
+            $.post('?handler=Update', postData, function () {
+                //TODO: Think about how to update html
+            });
+        });
+    });
 
+</script>
+}

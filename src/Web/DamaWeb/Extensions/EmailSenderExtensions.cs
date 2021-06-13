@@ -113,7 +113,21 @@ namespace Microsoft.AspNetCore.Mvc
     </div>
     <div style='margin-top:20px;width:550px'>
         <table width='100%'>";            
-            body += $@"<tr>
+            if(order.Discount.HasValue)
+            {
+                body += $@"
+            <tr>
+                <td>Desconto 25%</td>
+                <td style='text-align:right'>- {order.Discount.Value.ToString("N2")} €</td>
+            </tr>
+            <tr>
+                <td colspan='2'>
+                    <hr />
+                </td>
+            </tr>";    
+            }
+            body += $@"
+            <tr>
                 <td>Subtotal</td>
                 <td style='text-align:right'>{(order.SubTotal()).ToString("N2")} €</td>
             </tr>

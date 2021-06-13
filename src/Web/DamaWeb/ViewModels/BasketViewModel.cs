@@ -16,6 +16,8 @@ namespace DamaWeb.ViewModels
         public decimal DefaultShippingCost { get; set; }
         [MaxLength(5000)]
         public string Observations { get; set; }
+        public string CouponText { get; set; }
+        public decimal? Discount { get; set; }
         public bool CanSubmit { get; set; } = false;
 
         public bool HasCustomizeItems
@@ -31,7 +33,7 @@ namespace DamaWeb.ViewModels
 
         public decimal SubTotal()
         {
-            return Items.Sum(x => x.UnitPrice * x.Quantity);
+            return Items.Sum(x => x.UnitPrice * x.Quantity) - (Discount ?? 0);
         }
 
         public decimal Total()

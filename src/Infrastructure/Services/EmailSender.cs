@@ -80,7 +80,8 @@ namespace Infrastructure.Services
                 using (SmtpClient smtp = new SmtpClient())
                 {                    
                     smtp.Connect(_appSettings.SmtpServer, _appSettings.SmtpPort, _appSettings.SSL);
-                    smtp.Authenticate(_appSettings.SmtpUsername, _appSettings.SmtpPassword);
+                    if(!string.IsNullOrEmpty((_appSettings.SmtpUsername)))
+                        smtp.Authenticate(_appSettings.SmtpUsername, _appSettings.SmtpPassword);
                     await smtp.SendAsync(mail);
                     smtp.Disconnect(true);
                 }

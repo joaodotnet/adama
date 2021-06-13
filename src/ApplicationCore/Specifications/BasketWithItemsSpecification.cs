@@ -3,7 +3,7 @@ using Ardalis.Specification;
 
 namespace ApplicationCore.Specifications
 {
-    public sealed class BasketWithItemsSpecification : Specification<Basket>
+    public sealed class BasketWithItemsSpecification : Specification<Basket>, ISingleResultSpecification
     {
         public BasketWithItemsSpecification(int basketId)
         {

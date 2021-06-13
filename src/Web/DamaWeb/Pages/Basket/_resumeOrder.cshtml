@@ -54,9 +54,16 @@
 <hr class="dama-hr-tiny-pink my-2" />
 @if (!Model.HasCustomizeItems)
 {
+    @if(Model.Discount.HasValue)
+    {
+        <article class="row m-0">
+            <section class="col-9 px-3">DESCONTO 25%</section>
+            <section class="col-3 px-sm-3 dama-product-price text-right">- @Model.Discount.Value.ToString("N2")</section>
+        </article>
+    }
     <article class="row m-0">
         <section class="col-9 px-3">SUBTOTAL</section>
-        <section class="col-3 px-sm-3 dama-product-price text-right">@Model.SubTotal()</section>
+        <section class="col-3 px-sm-3 dama-product-price text-right">@Model.SubTotal().ToString("N2")</section>
     </article>
     <article id="shipping-cost" class="row m-0 @(Model.ShowShippingCost ? "d-flex": "d-none")">
         <section class="col-9 px-3"><small>Despesas de Envio</small></section>

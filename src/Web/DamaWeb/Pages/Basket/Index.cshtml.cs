@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using System.ComponentModel.DataAnnotations;
 using ApplicationCore;
 
 namespace DamaWeb.Pages.Basket
@@ -124,6 +123,17 @@ namespace DamaWeb.Pages.Basket
         public async Task OnPostAddObservationAsync()
         {
             await _basketService.AddObservationAsync(BasketModel.Id, BasketModel.Observations);
+            await SetBasketModelAsync();
+        }
+
+        public async Task OnPostAddCouponAsync()
+        {
+            var result = await _basketService.AddCouponAsync(BasketModel.Id, BasketModel.CouponText);
+            if(!result)
+            {
+                ModelState.AddModelError("BasketModel.CouponText", "Cupão não é válido!");                   
+            }
+            
             await SetBasketModelAsync();
         }
 
