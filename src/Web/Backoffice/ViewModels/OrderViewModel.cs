@@ -35,6 +35,8 @@ namespace Backoffice.ViewModels
         public int? BillingToAddress_PhoneNumber { get; set; }
         [Display(Name = "Morada de facturação")]
         public string BillingToAddress { get; set; }
+        [Display(Name = "Desconto")]
+        public decimal? Discount { get; set; }
         [Display(Name = "Portes")]
         public decimal ShippingCost { get; set; }
         public decimal Total { get; set; }
