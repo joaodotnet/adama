@@ -3,14 +3,16 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(DamaContext))]
-    partial class DamaContextModelSnapshot : ModelSnapshot
+    [Migration("20210613145647_AddBasketCoupon")]
+    partial class AddBasketCoupon
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -592,9 +594,6 @@ namespace Infrastructure.Data.Migrations
 
                     b.Property<string>("BuyerId")
                         .HasColumnType("longtext");
-
-                    b.Property<decimal?>("Discount")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Observations")
                         .HasMaxLength(5000)

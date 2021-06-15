@@ -15,6 +15,8 @@ namespace ApplicationCore.Entities.BasketAggregate
         public DateTime? UpdatedDate { get; set; }
         public string Observations { get; set; }
         public bool IsGuest { get; set; }
+        public string Coupon { get; private set; }
+        public decimal? Discount { get; set; }
 
         public void AddItem(int catalogItemId, decimal unitPrice, int quantity = 1, int? option1 = null, int? option2 = null, int? option3 = null, string customizeName = null, string customizeSide = null, bool addToExistingItem = false)
         {
@@ -39,8 +41,8 @@ namespace ApplicationCore.Entities.BasketAggregate
                 existingItem.Quantity += quantity;
                 existingItem.UpdatedDate = DateTime.Now;
             }
-
-        }
+            UpdateDiscount();
+        }        
 
         public void AddCustomizeItem(int catalogTypeId, string description, string textOrName, string colors, int quantity = 1)
         {
@@ -58,16 +60,38 @@ namespace ApplicationCore.Entities.BasketAggregate
         public void RemoveItem(int index)
         {
             _items.RemoveAt(index);
+            UpdateDiscount();
         }
 
         public void RemoveAllItems()
         {
             _items.RemoveAll(_ => true);
+            UpdateDiscount();
         }
 
         public void RemoveEmptyItems()
         {
             _items.RemoveAll(i => i.Quantity == 0);
+        }
+
+        public void AddCouponDiscount(string coupon)
+        {
+            Coupon = coupon;
+            UpdateDiscount();
+        }
+
+        private void UpdateDiscount()
+        {
+            if(!string.IsNullOrEmpty(Coupon))
+            {
+                var total = _items.Sum(x => x.UnitPrice * x.Quantity);
+                if(total > 0)
+                    Discount = total * Constants.COUPON_DISCOUNT;
+                else
+                    Discount = null;
+            }
+            else
+                Discount = null;
         }
     }
 }

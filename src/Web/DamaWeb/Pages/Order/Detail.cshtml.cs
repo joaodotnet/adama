@@ -34,6 +34,8 @@ namespace DamaWeb.Pages.Order
             public decimal? Total { get; set; }
             public string Status { get; set; }
             public decimal ShippingCost { get; set; }
+            public decimal? Discount { get; set; }
+            
 
             public Address ShippingAddress { get; set; }
 
@@ -96,6 +98,7 @@ namespace DamaWeb.Pages.Order
                 BillingAddress = order.BillingToAddress,
                 Status = EnumHelper<OrderStateType>.GetDisplayValue(order.OrderState),
                 ShippingCost = order.ShippingCost,
+                Discount = order.Discount,
                 Total = order.OrderItems.Any(x => x.UnitPrice == 0) ? default(decimal?) : order.Total()
             };
 

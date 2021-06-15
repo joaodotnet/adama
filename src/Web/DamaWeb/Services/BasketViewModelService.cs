@@ -60,6 +60,8 @@ namespace DamaWeb.Services
             viewModel.DefaultShippingCost = result.ShippingCost;
             viewModel.ShowShippingCost = false;           
             viewModel.Observations = basket.Observations;
+            viewModel.CouponText = basket.Coupon;
+            viewModel.Discount = basket.Discount;
 
             return viewModel;
         }

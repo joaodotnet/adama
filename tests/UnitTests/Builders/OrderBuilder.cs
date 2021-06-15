@@ -29,19 +29,19 @@ namespace UnitTests.Builders
         {
             var orderItem = new OrderItem(TestCatalogItemOrdered, TestUnitPrice, TestUnits);
             var itemList = new List<OrderItem>() { orderItem };
-            _order = new Order(TestBuyerId, null, null, new AddressBuilder().WithDefaultValues(), new AddressBuilder().WithDefaultValues(), false, itemList, 0, null);
+            _order = new Order(TestBuyerId, null, null, new AddressBuilder().WithDefaultValues(), new AddressBuilder().WithDefaultValues(), false, itemList, 0, null, null);
             return _order;
         }
 
         public Order WithNoItems()
         {
-            _order = new Order(TestBuyerId, null, null, new AddressBuilder().WithDefaultValues(), new AddressBuilder().WithDefaultValues(), false, new List<OrderItem>(), 0, null);
+            _order = new Order(TestBuyerId, null, null, new AddressBuilder().WithDefaultValues(), new AddressBuilder().WithDefaultValues(), false, new List<OrderItem>(), 0, null, null);
             return _order;
         }
 
         public Order WithItems(List<OrderItem> items)
         {
-            _order = new Order(TestBuyerId, null, null, new AddressBuilder().WithDefaultValues(), new AddressBuilder().WithDefaultValues(), false, items, 0, null);
+            _order = new Order(TestBuyerId, null, null, new AddressBuilder().WithDefaultValues(), new AddressBuilder().WithDefaultValues(), false, items, 0, null, null);
             return _order;
         }
     }

@@ -248,6 +248,12 @@ namespace Infrastructure.Data
             builder.Property(x => x.IsGuest)
                 .HasDefaultValue(false);
 
+            builder.Property(x => x.Coupon)
+                .HasMaxLength(100);
+
+            builder.Property(x => x.Discount)
+                 .HasColumnType("decimal(18,2)");
+
         }
 
         private void ConfigureCatalogItem(EntityTypeBuilder<CatalogItem> builder)
@@ -399,6 +405,9 @@ namespace Infrastructure.Data
                 .HasMaxLength(255);
 
             builder.Property(x => x.ShippingCost)
+                 .HasColumnType("decimal(18,2)");
+
+            builder.Property(x => x.Discount)
                  .HasColumnType("decimal(18,2)");
 
             var navigation = builder.Metadata.FindNavigation(nameof(Order.OrderItems));

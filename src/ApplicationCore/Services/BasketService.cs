@@ -188,5 +188,22 @@ namespace ApplicationCore.Services
                 await _basketRepository.UpdateAsync(basket);
             }
         }
+
+        public async Task<bool> AddCouponAsync(int basketId, string coupon)
+        {
+            if(string.IsNullOrWhiteSpace(coupon) || Constants.COUPON_ACTIVE != coupon.ToUpper())
+                return false;
+            
+            var basketSpec = new BasketWithItemsSpecification(basketId);
+            var basket = await _basketRepository.GetBySpecAsync(basketSpec);
+            if (basket == null)
+                return false;
+
+            basket.AddCouponDiscount(coupon);
+            await _basketRepository.UpdateAsync(basket);
+        
+            return true;
+
+        }
     }
 }
