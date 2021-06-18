@@ -82,7 +82,7 @@ namespace Microsoft.AspNetCore.Mvc
                 if (!string.IsNullOrEmpty(item.CustomizeName))
                 {
                     var sideText = item.CustomizeSide;
-                    if (item.CustomizeSide.LastIndexOf('-') > 0)
+                    if (!string.IsNullOrEmpty(sideText) && item.CustomizeSide.LastIndexOf('-') > 0)
                         sideText = item.CustomizeSide.Substring(item.CustomizeSide.LastIndexOf('-') + 1);
 
                     body += $@"<tr>
