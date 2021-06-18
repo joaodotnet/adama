@@ -89,14 +89,14 @@
 
         <div class="row mt-4 w-100">
             <input class="dama-product-add ml-2 w-100" type="submit" value="ADICIONAR AO CARRINHO" />
-            @if (Model.CanCustomize)
+            @if (Model.CanCustomizeName)
             {
-                @* <a id="btnCustomize" class="btn btn-outline-pink ml-2 mt-2 w-100" role="button" data-toggle="collapse" href="#customizeSection">AQUI PODES PERSONALIZAR</a> *@
+                 <a id="btnCustomize" class="btn btn-outline-pink ml-2 mt-2 w-100" role="button" data-toggle="collapse" href="#customizeSection">AQUI PODES PERSONALIZAR</a> 
             }
         </div>
         <small id="txtDeliveryStockTime" class="text-muted dama-small-text my-3">Tempo de entrega entre 2 a 3 dias úteis para produtos em stock.</small>
 
-        @if (Model.CanCustomize)
+        @if (Model.CanCustomizeName)
         {
             <div id="customizeSection" class="collapse my-4">
                 <div class="text-center">PERSONALIZAR</div>
@@ -145,7 +145,7 @@
                         <input class="dama-product-add w-100" type="submit" value="ADICIONAR AO CARRINHO" />
                     </div>
                 }
-                @if (Model.CanCustomizeTotal)
+                @*@if (Model.CanCustomizeTotal)
                 {
                     <div id="divCustomizeTotal" class="row mb-4 mb-md-3 align-items-center">
                         <div class="col-12 col-md-8 dama-customize-question  mb-2 mb-sm-0">&#9679; Queres uma ilustração personalizada?</div>
@@ -153,7 +153,7 @@
                             <a class="btn btn-sm btn-menta w-100" role="button" asp-page="/Customize/Index" asp-route-CategoryId="@Model.CategoryId" asp-route-CatalogItemId="@Model.ProductTypeId" asp-fragment="produtos">PERSONALIZAR</a>
                         </div>
                     </div>
-                }
+                }*@
             </div>
         }
     }
