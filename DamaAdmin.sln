@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31402.337
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DamaAdmin.Server", "src\Web\DamaAdmin\Server\DamaAdmin.Server.csproj", "{6C5B8B71-8243-4C3E-B4CC-A99ACB8F2693}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DamaAdmin.Server", "src\Web\DamaAdmin\Server\DamaAdmin.Server.csproj", "{6C5B8B71-8243-4C3E-B4CC-A99ACB8F2693}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DamaAdmin.Client", "src\Web\DamaAdmin\Client\DamaAdmin.Client.csproj", "{66DD6972-5D8C-4EB8-B9E5-9CB70E68D2CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DamaAdmin.Client", "src\Web\DamaAdmin\Client\DamaAdmin.Client.csproj", "{66DD6972-5D8C-4EB8-B9E5-9CB70E68D2CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DamaAdmin.Shared", "src\Web\DamaAdmin\Shared\DamaAdmin.Shared.csproj", "{47CDF69B-17B0-4903-B651-590943327B30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationCore", "src\ApplicationCore\ApplicationCore.csproj", "{BE97F2D4-3B94-4B4F-BB46-534DE9E2B85E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Infrastructure\Infrastructure.csproj", "{B312FE6F-9695-42CB-88CC-D25764460943}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +25,14 @@ Global
 		{66DD6972-5D8C-4EB8-B9E5-9CB70E68D2CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66DD6972-5D8C-4EB8-B9E5-9CB70E68D2CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66DD6972-5D8C-4EB8-B9E5-9CB70E68D2CD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{47CDF69B-17B0-4903-B651-590943327B30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{47CDF69B-17B0-4903-B651-590943327B30}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{47CDF69B-17B0-4903-B651-590943327B30}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{47CDF69B-17B0-4903-B651-590943327B30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE97F2D4-3B94-4B4F-BB46-534DE9E2B85E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE97F2D4-3B94-4B4F-BB46-534DE9E2B85E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE97F2D4-3B94-4B4F-BB46-534DE9E2B85E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE97F2D4-3B94-4B4F-BB46-534DE9E2B85E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B312FE6F-9695-42CB-88CC-D25764460943}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B312FE6F-9695-42CB-88CC-D25764460943}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B312FE6F-9695-42CB-88CC-D25764460943}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B312FE6F-9695-42CB-88CC-D25764460943}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

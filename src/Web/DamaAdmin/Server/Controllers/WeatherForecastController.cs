@@ -1,4 +1,4 @@
-﻿using DamaAdmin.Shared;
+﻿using ApplicationCore.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

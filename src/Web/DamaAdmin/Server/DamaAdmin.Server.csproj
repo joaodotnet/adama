@@ -7,12 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.7" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Client\DamaAdmin.Client.csproj" />
-    <ProjectReference Include="..\Shared\DamaAdmin.Shared.csproj" />
+    <ProjectReference Include="..\..\..\ApplicationCore\ApplicationCore.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

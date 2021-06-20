@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace DamaAdmin.Shared
+namespace ApplicationCore.DTOs
 {
     public class WeatherForecast
     {

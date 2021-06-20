@@ -1,4 +1,6 @@
-﻿@page "/categories"
+﻿@page "/categorias"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @attribute [Authorize]
 @inject HttpClient Http
 
@@ -11,87 +13,73 @@
 {
     <p><em>Loading...</em></p>
 }
-<table class="table table-pagination">
-    <thead>
-        <tr>
-            <th>
-                Nome
-            </th>
-            <th>
-                Ordem
-            </th>
-            <th>
-                Categoria Pai
-            </th>
-            <th>
-                Meta Description
-            </th>
-            <th>
-                Titulo
-            </th>
-            <th>
-                Nº Tipos de Produtos
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in categories) {
-        <tr>
-            <td>
-                @item.Name
-            </td>
-            <td>
-                @item.Order
-            </td>
-            <td>
-                @item.Parent.Name
-            </td>
-            <td>
-                @item.MetaDescription
-            </td>
-            <td>
-                @item.Title
-            </td>
-            <td>
-                @item.NrTypeProducts
-            </td>
-            <td>
-                <a href="#" asp-route-id="@item.Id">Editar</a> |
-                <a href="#" asp-route-id="@item.Id">Detalhes</a> |
-                <a href="#" asp-route-id="@item.Id">Remover</a>
-            </td>
-        </tr>
+else
+{
+    <table class="table table-pagination">
+        <thead>
+            <tr>
+                <th>
+                    Nome
+                </th>
+                <th>
+                    Ordem
+                </th>
+                <th>
+                    Categoria Pai
+                </th>
+                <th>
+                    Meta Description
+                </th>
+                <th>
+                    Titulo
+                </th>
+                <th>
+                    Nº Tipos de Produtos
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in categories)
+            {
+                <tr>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.Order
+                    </td>
+                    <td>
+                        @item.Parent?.Name
+                    </td>
+                    <td>
+                        @item.MetaDescription
+                    </td>
+                    <td>
+                        @item.Title
+                    </td>
+                    <td>
+                        <a href="#" asp-route-id="@item.Id">Editar</a> |
+                        <a href="#" asp-route-id="@item.Id">Detalhes</a> |
+                        <a href="#" asp-route-id="@item.Id">Remover</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-    </tbody>
-</table>
 
 @code {
-    private List<CategoryViewModel> categories = new();
-
+    private CategoryViewModel[] categories;
     protected override async Task OnInitializedAsync()
     {
-        //categories = await Http.GetFromJsonAsync<CategoryViewModel[]>("sample-data/weather.json");
-    }
-
-    public class CategoryViewModel
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Slug { get; set; }
-
-        public int Order { get; set; }
-
-        public string MetaDescription { get; set; }
-
-        public string Title { get; set; }
-
-        public string H1Text { get; set; }
-        public string Description { get; set; }
-
-        public int? ParentId { get; set; }
-        public CategoryViewModel Parent { get; set; }
-
-        public int NrTypeProducts { get; set; }
+        try
+        {
+            categories = await Http.GetFromJsonAsync<CategoryViewModel[]>("Categories");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }        
     }
 }
