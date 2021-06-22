@@ -23,11 +23,13 @@ namespace DamaAdmin.Server.Controllers
         private static readonly string[] _scopeRequiredByApi = new string[] { "API.Access" };
         private readonly IMapper _mapper;
         private readonly IRepository<Category> _categoryRepository;
+        private readonly ILogger<CategoriesController> _logger;
 
-        public CategoriesController(IMapper mapper, IRepository<Category> categoryRepository)
+        public CategoriesController(IMapper mapper, IRepository<Category> categoryRepository, ILogger<CategoriesController> logger)
         {
             _mapper = mapper;
             _categoryRepository = categoryRepository;
+            _logger = logger;
         }
         [HttpGet]
         public async Task<IEnumerable<CategoryViewModel>> Get()
@@ -38,6 +40,13 @@ namespace DamaAdmin.Server.Controllers
 
             var model = _mapper.Map<IEnumerable<CategoryViewModel>>(cats);
             return model;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post(CategoryViewModel model)
+        {
+            await _categoryRepository.AddAsync(_mapper.Map<ApplicationCore.Entities.Category>(model));
+            return Ok();
         }
     }
 

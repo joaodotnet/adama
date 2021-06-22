@@ -1,4 +1,4 @@
-﻿@page "/categorias"
+﻿@page "/categorias/{message?}"
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @attribute [Authorize]
@@ -7,8 +7,14 @@
 <h2>Categorias</h2>
 
 <p>
-    <a href="#">Nova Categoria</a>
+    <a href="/categorias/novo">Nova Categoria</a>
 </p>
+@if (!string.IsNullOrEmpty(Message))
+{
+    <div class="alert alert-success" role="alert">
+        @Message
+    </div>
+}
 @if (categories == null)
 {
     <p><em>Loading...</em></p>
@@ -71,6 +77,10 @@ else
 
 @code {
     private CategoryViewModel[] categories;
+
+    [Parameter]
+    public string Message { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         try
@@ -80,6 +90,6 @@ else
         catch (AccessTokenNotAvailableException exception)
         {
             exception.Redirect();
-        }        
+        }
     }
 }
