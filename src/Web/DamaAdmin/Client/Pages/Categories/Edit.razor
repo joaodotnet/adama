@@ -1,0 +1,159 @@
+﻿@page "/categorias/{Id:int}"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@attribute [Authorize]
+@inject HttpClient Http
+@inject NavigationManager NavManager
+
+<h2>Editar Categoria @categoryModel?.Name</h2>
+<hr />
+@if (categoryModel == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="@categoryModel" OnValidSubmit="@HandleValidSubmit">
+        <div class="row">
+            <div class="col-md-6">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="form-group required">
+                    <label>Nome</label>
+                    <InputText @bind-Value="categoryModel.Name" @onblur="NameChangeEvent" class="form-control" />
+                    <ValidationMessage For="@(() => categoryModel.Name)" />
+                </div>
+                <div class="form-group required">
+                    <label>Slug</label>
+                    <InputText @bind-Value="categoryModel.Slug" class="form-control" />
+                    <ValidationMessage For="@(() => categoryModel.Slug)" />
+                </div>
+                <div class="form-group required">
+                    <label>Ordem</label>
+                    <InputNumber @bind-Value="categoryModel.Order" class="form-control" />
+                    <ValidationMessage For="@(() => categoryModel.Order)" />
+                </div>
+                <div class="form-group">
+                    <label>Categoria Pai</label>
+                    <InputSelect @bind-Value="categoryModel.ParentId" class="form-control">
+                        @if (allCategories.Count == 0)
+                            {
+                            <option class="font-italic">Loading...</option>
+                            }
+                            else
+                            {
+                            <option></option>
+                            @foreach (var item in allCategories)
+                                {
+                                <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                    </InputSelect>
+                    <span asp-validation-for="categoryModel.ParentId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Atualizar" class="btn btn-primary" />
+                </div>
+                @if (!string.IsNullOrEmpty(statusMessage))
+                {
+                    @if (statusMessage.StartsWith("Erro"))
+                    {
+                        <ul class="validation-errors">
+                            <li class="validation-message">@statusMessage</li>
+                        </ul>
+                    }
+                    else
+                    {
+                        <div class="alert alert-success">@statusMessage</div>
+                    }
+                }
+            </div>
+            <div class="col-md-6">
+                <h4>SEO</h4>
+                <div class="form-group">
+                    <label>Meta Description</label>
+                    <InputText @bind-Value="categoryModel.MetaDescription" class="form-control" />
+                    <ValidationMessage For="@(() => categoryModel.MetaDescription)" />
+                </div>
+                <div class="form-group">
+                    <label>Titulo</label>
+                    <InputText @bind-Value="categoryModel.Title" class="form-control" />
+                    <ValidationMessage For="@(() => categoryModel.Title)" />
+                    <small>(se vazio assume o nome da categoria)</small>
+                </div>
+                <div class="form-group">
+                    <label>Texto H1</label>
+                    <InputText @bind-Value="categoryModel.H1Text" class="form-control" />
+                    <ValidationMessage For="@(() => categoryModel.H1Text)" />
+                </div>
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <InputTextArea @bind-Value="categoryModel.Description" class="form-control"></InputTextArea>
+                    <ValidationMessage For="@(() => categoryModel.Description)" />
+                </div>
+            </div>
+        </div>
+    </EditForm>
+}
+<div>
+    <a href="/categorias">Voltar para a lista</a>
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private CategoryViewModel categoryModel = null;
+    private List<CategoryViewModel> allCategories = new();
+    private string statusMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            allCategories = await Http.GetFromJsonAsync<List<CategoryViewModel>>("Categories");
+            categoryModel = allCategories.SingleOrDefault(x => x.Id == Id);
+
+            if (categoryModel == null)
+            {
+                var message = "Erro: Categoria não encontrada!";
+                NavManager.NavigateTo($"/categorias/{message}");
+            }
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    private void NameChangeEvent()
+    {
+        categoryModel.Slug = ApplicationCore.Utils.URLFriendly(categoryModel.Name);
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (allCategories.Any(x => x.Name == categoryModel.Name && x.Id != Id))
+        {
+            statusMessage = $"Erro: O nome da Categoria '{categoryModel.Name}' já existe!";
+            return;
+        }
+        if (allCategories.Any(x => x.Slug == categoryModel.Slug && x.Id != Id))
+        {
+            statusMessage = "Erro: Já existe um slug com o mesmo nome!";
+            return;
+        }
+        statusMessage = null;
+
+        var response = await Http.PutAsJsonAsync("categories", categoryModel);
+        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            var message = $"Categoria {categoryModel.Name} atualizada com sucesso!";
+            NavManager.NavigateTo($"/categorias/{message}");
+        }
+        else
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            var message = $"Erro ao atualizar Categoria {categoryModel.Name}: ({response.StatusCode}) {content}";
+        }
+    }
+}

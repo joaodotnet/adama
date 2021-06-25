@@ -131,6 +131,11 @@
             var message = $"Categoria {categoryModel.Name} criada com sucesso!";
             NavManager.NavigateTo($"/categorias/{message}");
         }
+        else
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            var message = $"Erro ao criar Categoria {categoryModel.Name}: ({response.StatusCode}) {content}";
+        }
     }
 
     private void NameChangeEvent()

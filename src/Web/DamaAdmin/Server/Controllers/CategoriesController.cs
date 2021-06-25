@@ -48,6 +48,18 @@ namespace DamaAdmin.Server.Controllers
             await _categoryRepository.AddAsync(_mapper.Map<ApplicationCore.Entities.Category>(model));
             return Ok();
         }
+
+        [HttpPut]
+        public async Task<IActionResult> Put(CategoryViewModel model)
+        {
+            var cat = await _categoryRepository.GetBySpecAsync(new CategorySpecification(new CategoryFilter { Id = model.Id, IncludeParent = true }));
+            if (cat == null)
+                return NotFound("Categoria inexistente!");
+            _mapper.Map(model, cat);
+
+            await _categoryRepository.UpdateAsync(cat);
+            return Ok();
+        }
     }
 
     // [Authorize]
