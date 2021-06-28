@@ -10,6 +10,7 @@
     <PackageReference Include="Microsoft.Authentication.WebAssembly.Msal" Version="5.0.7" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
+    <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>

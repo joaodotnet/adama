@@ -33,8 +33,14 @@ namespace ApplicationCore.DTOs
         [Display(Name = "Descrição")]
         public string Description { get; set; }
 
-        [Display(Name="Categoria Pai")]
+        [Display(Name="ID Categoria Pai")]
         public int? ParentId { get; set; }
+        [Display(Name = "Nome da Categoria Pai")]
         public CategoryViewModel Parent { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }
