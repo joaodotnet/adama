@@ -3,6 +3,7 @@
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @attribute [Authorize]
 @inject HttpClient Http
+@inject IJSRuntime JSRuntime
 
 <h2>Categorias</h2>
 
@@ -68,7 +69,7 @@ else
                         <button class="btn btn-info btn-sm" @onclick="() => Modal.Open(item.Name, item)">
                             <span class="oi oi-eye" title="Ver" aria-hidden="true"></span>
                         </button>
-                        <button class="btn btn-danger btn-sm">
+                        <button class="btn btn-danger btn-sm" @onclick="() => OnRemoveItem(item)">
                             <span class="oi oi-trash" title="Remover" aria-hidden="true"></span>
                         </button>
                     </td>
@@ -96,6 +97,24 @@ else
         catch (AccessTokenNotAvailableException exception)
         {
             exception.Redirect();
+        }
+    }
+    private async Task OnRemoveItem(CategoryViewModel item)
+    {
+        if (!await JSRuntime.InvokeAsync<bool>("confirm", $"Tens a certeza que queres remover a categoria {item.Name}?"))
+            return;
+
+        var response = await Http.DeleteAsync($"categories?id={item.Id}");
+
+        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            Message = $"Categoria {item.Name} foi removida!";
+            categories = await Http.GetFromJsonAsync<CategoryViewModel[]>("Categories");
+        }
+        else
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            Message = $"Erro ao remover Categoria {item.Name}: ({response.StatusCode}) {content}";
         }
     }
 }
