@@ -1,4 +1,5 @@
-﻿using ApplicationCore.DTOs;
+﻿using ApplicationCore;
+using ApplicationCore.DTOs;
 using ApplicationCore.Entities;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Specifications;
@@ -32,14 +33,15 @@ namespace DamaAdmin.Server.Controllers
             _logger = logger;
         }
         [HttpGet]
-        public async Task<IEnumerable<CategoryViewModel>> Get()
+        public async Task<PaginatedList<CategoryViewModel>> Get(int? pageIndex)
         {
             HttpContext.VerifyUserHasAnyAcceptedScope(_scopeRequiredByApi);
 
-            var cats = await _categoryRepository.ListAsync(new CategorySpecification(new CategoryFilter{ IncludeCatalogTypes = true }));
+            var total = await _categoryRepository.CountAsync(new CategorySpecification(new CategoryFilter { IncludeCatalogTypes = true }));
+            var cats = await _categoryRepository.ListAsync(new CategorySpecification(new CategoryFilter{ IncludeCatalogTypes = true }, pageIndex ?? 1, 2));
 
             var model = _mapper.Map<IEnumerable<CategoryViewModel>>(cats);
-            return model;
+            return new PaginatedList<CategoryViewModel>(model, total, pageIndex ?? 1, 2);
         }
 
         [HttpPost]

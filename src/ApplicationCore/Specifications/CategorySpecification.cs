@@ -25,7 +25,7 @@ namespace ApplicationCore.Specifications
                 .OrderBy(x => x.Order);
         }
 
-        public CategorySpecification(CategoryFilter filter)
+        public CategorySpecification(CategoryFilter filter, int? pageIndex = null, int? pageSize = null)
         {
             if(!string.IsNullOrWhiteSpace(filter.Name))
                 Query.Where(x => x.Name.ToUpper() == filter.Name.ToUpper());
@@ -39,6 +39,12 @@ namespace ApplicationCore.Specifications
                 Query.Include(x => x.Parent);
             if(filter.IncludeCatalogTypes)
                 Query.Include(x => x.CatalogTypes);
+
+            if(pageIndex.HasValue && pageSize.HasValue)
+            {
+                Query.Skip((pageIndex.Value - 1) * pageSize.Value)
+                    .Take(pageSize.Value);
+            }
         }
     }
 

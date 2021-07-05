@@ -1,4 +1,6 @@
-﻿@page "/categorias/{message?}"
+﻿@page "/categorias/"
+@page "/categorias/{message}"
+@page "/categorias/pag/{PageIndex:int?}"
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @attribute [Authorize]
@@ -76,6 +78,13 @@ else
                 </tr>
             }
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="6">
+                    <Pagination Info="Params"></Pagination>
+                </td>
+            </tr>
+        </tfoot>
     </table>
     <Modal @ref="Modal"></Modal>
 }
@@ -83,22 +92,28 @@ else
 @code {
     private CategoryViewModel[] categories;
     private Modal Modal { get; set; }
+    private Pagination Pagination { get; set; }
+    private Pagination.PaginationInfo Params;
 
     [Parameter]
     public string Message { get; set; }
-
+    [Parameter]
+    public int? PageIndex { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            categories = await Http.GetFromJsonAsync<CategoryViewModel[]>("Categories");
+            var result = await Http.GetFromJsonAsync<PaginatedList<CategoryViewModel>>($"Categories?pageIndex={PageIndex}"); //, new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+            categories = result.Items.ToArray();
+            Params = new(result.PageIndex, result.TotalPages, result.HasPreviousPage, result.HasNextPage, "/categorias/pag");
         }
         catch (AccessTokenNotAvailableException exception)
         {
             exception.Redirect();
         }
     }
+
     private async Task OnRemoveItem(CategoryViewModel item)
     {
         if (!await JSRuntime.InvokeAsync<bool>("confirm", $"Tens a certeza que queres remover a categoria {item.Name}?"))
