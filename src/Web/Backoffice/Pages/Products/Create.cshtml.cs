@@ -130,6 +130,11 @@ namespace Backoffice.Pages.Products
 
             ProductModel.Sku = await _service.GetSku(ProductModel.CatalogTypeId, ProductModel.CatalogIllustrationId);
 
+            
+            ProductModel.Price = ProductModel.Price == 0 ? default(decimal?) : ProductModel.Price;
+            
+            var prod = _mapper.Map<CatalogItem>(ProductModel);            
+
             //Save Main Image            
             if (ProductModel.Picture?.Length > 0)
             {
@@ -138,16 +143,9 @@ namespace Backoffice.Pages.Products
                     lastCatalogItemId = GetLastCatalogId();
 
                 var info = _service.SaveFile(ProductModel.Picture, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, (++lastCatalogItemId).ToString(), true, 700, 700);
-                ProductModel.PictureUri = info.PictureUri;
+                prod.UpdateMainPicture(info.PictureUri);
 
-                ProductModel.Pictures.Add(new ProductPictureViewModel
-                {
-                    IsActive = true,
-                    IsMain = true,
-                    Order = 0,
-                    PictureUri = info.PictureUri,
-                    PictureHighUri = info.PictureHighUri
-                });
+                prod.AddPicture(new CatalogPicture(true, true, info.PictureUri,0, info.PictureHighUri));
             }
 
             //Save other images
@@ -158,20 +156,11 @@ namespace Backoffice.Pages.Products
                 foreach (var item in ProductModel.OtherPictures)
                 {
                     var info = _service.SaveFile(item, _backofficeSettings.WebProductsPictureV2FullPath, _backofficeSettings.WebProductsPictureV2Uri, (++lastCatalogPictureId).ToString(), true, 700, 700);
-                    ProductModel.Pictures.Add(new ProductPictureViewModel
-                    {
-                        IsActive = true,
-                        IsMain = false,
-                        Order = ++order,
-                        PictureUri = info.PictureUri,
-                        PictureHighUri = info.PictureHighUri
-                    });
+                    prod.AddPicture(new CatalogPicture(true,false, info.PictureUri,++order, info.PictureHighUri));
                 }
             }
-            ProductModel.Price = ProductModel.Price == 0 ? default(decimal?) : ProductModel.Price;
-            
-            //Catalog Catagories
-            var prod = _mapper.Map<CatalogItem>(ProductModel);            
+
+            //Categories
             foreach (var item in CatalogCategoryModel.Where(x => x.Selected).ToList())
             {
                 prod.AddCategory(item.CategoryId);

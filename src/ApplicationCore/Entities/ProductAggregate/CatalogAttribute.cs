@@ -11,6 +11,13 @@ namespace ApplicationCore.Entities
         public CatalogItem CatalogItem { get; private set; }
         public int Stock { get; private set; }
 
+        public CatalogAttribute(AttributeType type, string name, int stock)
+        {
+            Type = type;
+            Name = name;
+            Stock = stock;
+        }
+
         public void UpdateStock(int newStock)
         {
             Stock = newStock;
