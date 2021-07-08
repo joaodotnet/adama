@@ -19,7 +19,10 @@ namespace Backoffice
             CreateMap<CatalogType, ProductTypeViewModel>()
                 .ForMember(dest => dest.CategoriesName,
                 opts => opts.MapFrom(src => src.Categories.Select(c => c.Category.Name)));
-            CreateMap<ProductTypeViewModel, CatalogType>();
+            CreateMap<ProductTypeViewModel, CatalogType>()
+                .ForMember(x => x.Categories, opt => opt.Ignore())
+                .ForMember(x => x.CatalogItems, opt => opt.Ignore())
+                .ForMember(x => x.PictureTextHelpers, opt => opt.Ignore());
             CreateMap<CatalogIllustration, IllustrationViewModel>();
             CreateMap<IllustrationViewModel, CatalogIllustration>();
             CreateMap<IllustrationType, IllustrationTypeViewModel>();

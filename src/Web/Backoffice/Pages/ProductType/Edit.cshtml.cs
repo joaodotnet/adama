@@ -154,18 +154,18 @@ namespace Backoffice.Pages.ProductType
                 if (!string.IsNullOrEmpty(ProductTypeModel.PictureUri))
                     productTypeEntity.UpdatePicture(ProductTypeModel.PictureUri);
 
-                //Remove
-                var to_remove = productTypeEntity.Categories.Where(c => !ProductTypeModel.CategoriesId.Any(c2 => c2 == c.CategoryId));
-                foreach (var item in to_remove)
-                {
-                    _context.Entry(item).State = EntityState.Deleted;
-                }
-                //Add
-                var to_add = ProductTypeModel.CategoriesId.Where(c => !productTypeEntity.Categories.Any(c2 => c2.CategoryId == c));
-                foreach (var item in to_add)
-                {
-                    productTypeEntity.AddCategory(new CatalogTypeCategory(item));
-                }
+                // //Remove
+                // var to_remove = productTypeEntity.Categories.Where(c => !ProductTypeModel.CategoriesId.Any(c2 => c2 == c.CategoryId));
+                // foreach (var item in to_remove)
+                // {
+                //     _context.Entry(item).State = EntityState.Deleted;
+                // }
+                // //Add
+                // var to_add = ProductTypeModel.CategoriesId.Where(c => !productTypeEntity.Categories.Any(c2 => c2.CategoryId == c));
+                // foreach (var item in to_add)
+                // {
+                //     productTypeEntity.AddCategory(new CatalogTypeCategory(item));
+                // }
             }
 
             try

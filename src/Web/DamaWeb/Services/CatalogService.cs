@@ -80,23 +80,24 @@ namespace DamaWeb.Services
                     ProductSlug = i.Slug,
                     IsUnavailable = i.IsUnavailable
                 }),
-                NewCatalogItems = itemsOnPage
-                    .Where(x => x.IsNew)
-                    .Take(12)
-                    .Select(i => new CatalogItemViewModel()
-                    {
-                        CatalogItemId = i.Id,
-                        CatalogItemName = i.Name,
-                        PictureUri = i.PictureUri,
-                        PictureHighUri = i.Pictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
-                        Price = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) - i.Discount.Value : (i.Price ?? i.CatalogType.Price),
-                        PriceBeforeDiscount = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) : default(decimal?),
-                        ProductSlug = i.Slug,
-                        IsUnavailable = i.IsUnavailable
-                    }),
+                NewCatalogItems = new List<CatalogItemViewModel>(),
+                // NewCatalogItems = itemsOnPage
+                //     .Where(x => x.IsNew)
+                //     .Take(12)
+                //     .Select(i => new CatalogItemViewModel()
+                //     {
+                //         CatalogItemId = i.Id,
+                //         CatalogItemName = i.Name,
+                //         PictureUri = i.PictureUri,
+                //         PictureHighUri = i.Pictures?.SingleOrDefault(x => x.IsMain)?.PictureHighUri,
+                //         Price = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) - i.Discount.Value : (i.Price ?? i.CatalogType.Price),
+                //         PriceBeforeDiscount = i.Discount.HasValue ? (i.Price ?? i.CatalogType.Price) : default(decimal?),
+                //         ProductSlug = i.Slug,
+                //         IsUnavailable = i.IsUnavailable
+                //     }),
                 FeaturedCatalogItems = itemsOnPage
                     .Where(x => x.IsFeatured)
-                    .Take(12)
+                    .Take(24)
                     .Select(i => new CatalogItemViewModel()
                     {
                         CatalogItemId = i.Id,
