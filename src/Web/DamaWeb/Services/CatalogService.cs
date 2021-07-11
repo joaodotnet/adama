@@ -15,6 +15,8 @@ using System.IO;
 using DamaWeb.Extensions;
 using ApplicationCore;
 using System.Net;
+using Microsoft.Extensions.Hosting;
+
 namespace DamaWeb.Services
 {
     /// <summary>
@@ -28,19 +30,22 @@ namespace DamaWeb.Services
         private readonly IRepository<CatalogIllustration> _illustrationRepository;
         private readonly IRepository<CatalogType> _typeRepository;
         private readonly IRepository<Category> _categoryRepository;
+        private readonly IHostEnvironment _environment;
 
         public CatalogService(
             ILoggerFactory loggerFactory,
             IRepository<CatalogItem> itemRepository,
             IRepository<CatalogIllustration> illustrationRepository,
             IRepository<CatalogType> typeRepository,
-            IRepository<Category> categoryRepository)
+            IRepository<Category> categoryRepository,
+            IHostEnvironment environment)
         {
             _logger = loggerFactory.CreateLogger<CatalogService>();
             _itemRepository = itemRepository;
             _illustrationRepository = illustrationRepository;
             _typeRepository = typeRepository;
             _categoryRepository = categoryRepository;
+            _environment = environment;
         }
 
         public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int? itemsPage, int? illustrationId, int? typeId, int? categoryId, string onlyAvailable = null)
@@ -339,10 +344,10 @@ namespace DamaWeb.Services
                         PictureUri = x.PictureUri,
                         PictureFileName = x.FileName
                     }).ToList(),
-                    MetaDescription = !string.IsNullOrEmpty(product.MetaDescription) ? 
-                        product.MetaDescription : 
-                        !string.IsNullOrEmpty(product.CatalogType.MetaDescription) ? 
-                            $"{product.CatalogType.MetaDescription} {product.Name}" : 
+                    MetaDescription = !string.IsNullOrEmpty(product.MetaDescription) ?
+                        product.MetaDescription :
+                        !string.IsNullOrEmpty(product.CatalogType.MetaDescription) ?
+                            $"{product.CatalogType.MetaDescription} {product.Name}" :
                             "",
                     Title = string.IsNullOrEmpty(product.Title) ? product.Name : product.Title,
                     IsUnavailable = product.IsUnavailable
@@ -354,7 +359,7 @@ namespace DamaWeb.Services
                         product.Pictures
                         .Where(x => x.IsActive && !x.IsMain)
                         .OrderBy(x => x.Order)
-                        .Select(x => (x.PictureUri,x.PictureHighUri))
+                        .Select(x => (x.PictureUri, x.PictureHighUri))
                         );
 
                 //Attributes
@@ -452,7 +457,7 @@ namespace DamaWeb.Services
             var spec = new CatalogSearchSpecification(searchFor, onlyAvailable == "true");
             var items = await _itemRepository.ListAsync(spec);
 
-            var totalItems = items.Count();           
+            var totalItems = items.Count();
             var iPage = itemsPage ?? totalItems;
             var itemsOnPage = items
                 .Skip(iPage * pageIndex)
@@ -512,18 +517,19 @@ namespace DamaWeb.Services
         {
             var illustrations = await _illustrationRepository.ListAsync(new CatalogIllustrationSpecification(true));
 
-            if(illustrations.Any())
+            if (illustrations.Any())
             {
-            menuViewModel.Add(new MenuItemComponentViewModel
-            {
-                Name = "COLECÇÔES",
-                Childs = illustrations.Select(x => new MenuItemComponentViewModel
+                var basePath = _environment.IsProduction() ? "/loja" : "";
+                menuViewModel.Add(new MenuItemComponentViewModel
                 {
-                    Name = x.Name,
-                    NameUri = $"/tag/{x.Name.Replace(" ", "%2520")}",
-                    IsTag = true
-                }).ToList()
-            });
+                    Name = "COLECÇÔES",
+                    Childs = illustrations.Select(x => new MenuItemComponentViewModel
+                    {
+                        Name = x.Name,
+                        NameUri = $"{basePath}/tag/{x.Name.Replace(" ", "%2520")}",
+                        IsTag = true
+                    }).ToList()
+                });
 
             }
 
@@ -588,10 +594,10 @@ namespace DamaWeb.Services
                         Name = x.Name.ToUpper(),
                         NameUri = x.Slug
                     }));
-                } 
+                }
                 else
                 {
-           
+
                     //Get Catalog Types of Category
                     var category = categories.SingleOrDefault(x => x.Id == item.Id);
                     var types = new List<CatalogType>();
@@ -623,7 +629,7 @@ namespace DamaWeb.Services
             }
         }
 
-       
+
         private async Task<Category> GetCategoryFromUrl(string categorySlug)
         {
             var spec = new CategoryBySlugSpecification(categorySlug.ToLower());
