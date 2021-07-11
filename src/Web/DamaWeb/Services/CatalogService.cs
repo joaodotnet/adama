@@ -510,11 +510,13 @@ namespace DamaWeb.Services
 
         private async Task GetIllustrationsAsync(List<MenuItemComponentViewModel> menuViewModel)
         {
-            var illustrations = await _illustrationRepository.ListAsync();
+            var illustrations = await _illustrationRepository.ListAsync(new CatalogIllustrationSpecification(true));
 
+            if(illustrations.Any())
+            {
             menuViewModel.Add(new MenuItemComponentViewModel
             {
-                Name = "Colecções",
+                Name = "COLECÇÔES",
                 Childs = illustrations.Select(x => new MenuItemComponentViewModel
                 {
                     Name = x.Name,
@@ -522,6 +524,8 @@ namespace DamaWeb.Services
                     IsTag = true
                 }).ToList()
             });
+
+            }
 
         }
 

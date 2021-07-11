@@ -24,5 +24,10 @@ namespace ApplicationCore.Specifications
                 .Include(x => x.IllustrationType)
                 .Where(x => x.Id == id);
         }
+
+        public CatalogIllustrationSpecification(bool showInMenu)
+        {
+            Query.Where(x => x.InMenu == showInMenu);
+        }
     }
 }
