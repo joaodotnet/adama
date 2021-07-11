@@ -25,5 +25,7 @@ namespace Backoffice.ViewModels
         [Display(Name = "Imagem")]
         public IFormFile IllustrationImage { get; set; }
         public string ImageBase64 { get; set; }
+        [Display(Name = "Menu")]
+        public bool InMenu { get; set; }
     }
 }

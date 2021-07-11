@@ -40,7 +40,7 @@ namespace Infrastructure.Data
             builder.Entity<Category>(ConfigureCategory);
             builder.Entity<Basket>(ConfigureBasket);
             builder.Entity<BasketItem>(ConfigureBasketItem);
-            builder.Entity<CatalogIllustration>(ConfigureCatalogBrand);
+            builder.Entity<CatalogIllustration>(ConfigureCatalogIllustration);
             builder.Entity<CatalogType>(ConfigureCatalogType);
             builder.Entity<IllustrationType>(ConfigureIllustrationType);           
             builder.Entity<CatalogItem>(ConfigureCatalogItem);
@@ -308,7 +308,7 @@ namespace Infrastructure.Data
                 .HasMaxLength(61);
         }
 
-        private void ConfigureCatalogBrand(EntityTypeBuilder<CatalogIllustration> builder)
+        private void ConfigureCatalogIllustration(EntityTypeBuilder<CatalogIllustration> builder)
         {
             builder.ToTable("CatalogIllustration");
 
@@ -327,6 +327,10 @@ namespace Infrastructure.Data
                 .HasMaxLength(100);
             builder.Property(x => x.PictureUri)
                 .HasMaxLength(255);
+
+            builder.Property(x => x.InMenu)
+                .HasDefaultValue(false);
+
             builder.HasOne(x => x.IllustrationType)
                 .WithMany()
                 .HasForeignKey(x => x.IllustrationTypeId);

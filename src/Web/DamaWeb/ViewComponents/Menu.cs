@@ -24,7 +24,6 @@ namespace DamaWeb.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            //return View(await _shopService.GetMenuList());
             return View(await _catalogService.GetMenuViewModel());
         }
     }

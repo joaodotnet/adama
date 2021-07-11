@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using System.IO;
 using DamaWeb.Extensions;
 using ApplicationCore;
-
+using System.Net;
 namespace DamaWeb.Services
 {
     /// <summary>
@@ -502,7 +502,31 @@ namespace DamaWeb.Services
 
             await GetTopCategoriesAsync(menuViewModel, categories, parents);
 
+            await GetIllustrationsAsync(menuViewModel);
+
+
             return menuViewModel;
+        }
+
+        private async Task GetIllustrationsAsync(List<MenuItemComponentViewModel> menuViewModel)
+        {
+            var illustrations = await _illustrationRepository.ListAsync(new CatalogIllustrationSpecification(true));
+
+            if(illustrations.Any())
+            {
+            menuViewModel.Add(new MenuItemComponentViewModel
+            {
+                Name = "COLECÇÔES",
+                Childs = illustrations.Select(x => new MenuItemComponentViewModel
+                {
+                    Name = x.Name,
+                    NameUri = $"/tag/{x.Name.Replace(" ", "%2520")}",
+                    IsTag = true
+                }).ToList()
+            });
+
+            }
+
         }
 
         public async Task<CatalogTypeViewModel> GetCatalogTypeItemsAsync(string cat, string type, int pageIndex, int itemsPage, string onlyAvailable = null)

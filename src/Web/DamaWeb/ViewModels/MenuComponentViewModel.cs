@@ -18,5 +18,6 @@ namespace DamaWeb.ViewModels
         public string NameUri { get; set; }
         public string TypeUri { get; set; }
         public List<MenuItemComponentViewModel> Childs { get; set; } = new List<MenuItemComponentViewModel>();
+        public bool IsTag { get; set; }
     }
 }

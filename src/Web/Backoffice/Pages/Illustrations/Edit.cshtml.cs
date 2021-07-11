@@ -78,7 +78,7 @@ namespace Backoffice.Pages.Illustrations
                 ModelState.AddModelError("", "Ilustração não encontrada!");
                 return Page();
             }
-            illustrationEntity.UpdateData(IllustrationModel.Code,IllustrationModel.Name,IllustrationModel.IllustrationTypeId);
+            illustrationEntity.UpdateData(IllustrationModel.Code,IllustrationModel.Name,IllustrationModel.IllustrationTypeId, IllustrationModel.InMenu);
 
             if (IllustrationModel.IllustrationImage?.Length > 0)
             {

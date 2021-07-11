@@ -21,7 +21,13 @@
                         @foreach (var child in item.Childs)
                         {
 
-                            @if (!string.IsNullOrEmpty(child.TypeUri))
+                            @if (child.IsTag)
+                            {
+                                <a class="dropdown-item" href="@child.NameUri">
+                                    <span class="dropdown-item-text">@child.Name</span>
+                                </a>
+                            }
+                            else if (!string.IsNullOrEmpty(child.TypeUri))
                             {
 
                                 <a class="dropdown-item" asp-page="/Category/Type/Index" asp-route-cat="@child.NameUri" asp-route-type="@child.TypeUri">

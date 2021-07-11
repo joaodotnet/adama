@@ -13,6 +13,8 @@ namespace ApplicationCore.Entities
         public IllustrationType IllustrationType { get; private set; }
         public byte[] Image { get; private set; }
 
+        public bool InMenu { get; private set; }
+
         public CatalogIllustration(string code, string name, int illustrationTypeId)
         {
             Code = code;
@@ -25,11 +27,17 @@ namespace ApplicationCore.Entities
             Image = image;
         }
 
-        public void UpdateData(string code, string name, int illustrationTypeId)
+        public void UpdateData(string code, string name, int illustrationTypeId, bool inMenu)
         {
             Code = code;
             Name = name;
             IllustrationTypeId = illustrationTypeId;
+            InMenu = inMenu;
+        }
+
+        public void UpdateInMenuFlag(bool value)
+        {
+            InMenu = value;
         }
     }
 }
