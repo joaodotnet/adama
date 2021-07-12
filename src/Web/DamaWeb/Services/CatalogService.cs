@@ -432,7 +432,8 @@ namespace DamaWeb.Services
                     CatalogItemName = x.Name,
                     PictureUri = x.PictureUri,
                     PictureHighUri = x.Pictures?.SingleOrDefault(p => p.IsMain)?.PictureHighUri,
-                    Price = x.Price ?? x.CatalogType.Price,
+                    Price = x.Discount.HasValue ? (x.Price ?? x.CatalogType.Price) - x.Discount.Value : (x.Price ?? x.CatalogType.Price),
+                    PriceBeforeDiscount = x.Discount.HasValue ? (x.Price ?? x.CatalogType.Price) : default(decimal?),
                     ProductSlug = x.Slug,
                     IsUnavailable = x.IsUnavailable
                 }).ToList(),
@@ -526,7 +527,8 @@ namespace DamaWeb.Services
                     Childs = illustrations.Select(x => new MenuItemComponentViewModel
                     {
                         Name = x.Name,
-                        NameUri = $"{basePath}/tag/{x.Name.Replace(" ", "%2520")}",
+                        NameUri = $"{basePath}/tag/{x.Name.Replace(" ", "%2520").Replace("#", "%2523")}",
+                        //NameUri = $"{basePath}/tag/{Uri.EscapeDataString(x.Name)}",
                         IsTag = true
                     }).ToList()
                 });
