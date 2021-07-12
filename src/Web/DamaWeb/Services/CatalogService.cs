@@ -474,7 +474,8 @@ namespace DamaWeb.Services
                     CatalogItemName = x.Name,
                     PictureUri = x.PictureUri,
                     PictureHighUri = x.Pictures?.SingleOrDefault(p => p.IsMain)?.PictureHighUri,
-                    Price = x.Price ?? x.CatalogType.Price,
+                    Price = x.Discount.HasValue ? (x.Price ?? x.CatalogType.Price) - x.Discount.Value : (x.Price ?? x.CatalogType.Price),
+                    PriceBeforeDiscount = x.Discount.HasValue ? (x.Price ?? x.CatalogType.Price) : default(decimal?),
                     ProductSlug = x.Slug,
                     IsUnavailable = x.IsUnavailable
                 }).ToList(),
