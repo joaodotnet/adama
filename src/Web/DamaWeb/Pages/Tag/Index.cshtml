@@ -36,7 +36,7 @@
     @if (Model.CatalogModel.CatalogItems.Count() > 0)
     {
         @* @await Html.PartialAsync("_pagination", Model.CatalogModel.PaginationInfo, new ViewDataDictionary(ViewData) { { "SearchFor", Model.Tag }, { "TagName", Model.TagName }, { "TypeId", Model.CatalogModel.TypesFilterApplied }, { "IllustrationId", Model.CatalogModel.IllustrationFilterApplied } }) *@
-        <partial name="_pagination" for="CatalogModel.PaginationInfo"/>
+        <partial name="_pagination" for="CatalogModel.PaginationInfo" view-data="ViewData"/>
     }
 </div>
 
