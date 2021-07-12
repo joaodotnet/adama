@@ -8,12 +8,24 @@
             if (item.Childs.Count > 0)
             {
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle d-none d-sm-block" asp-page="/Category/Index" asp-route-id="@item.NameUri">
-                        @item.Name
-                    </a>
-                    <a class="nav-link dropdown-toggle d-block d-sm-none" id="navbarDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        @item.Name
-                    </a>
+                    @if(!item.IsTag)
+                    {
+                        <a class="nav-link dropdown-toggle d-none d-sm-block" asp-page="/Category/Index" asp-route-id="@item.NameUri">
+                            @item.Name
+                        </a>
+                        <a class="nav-link dropdown-toggle d-block d-sm-none" id="navbarDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @item.Name
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-outline-primary border border-primary btn-sm dropdown-toggle d-none d-sm-block" asp-page="/Category/Index" asp-route-id="@item.NameUri">
+                            @item.Name
+                        </a>
+                        <a class="nav-link dropdown-toggle d-block d-sm-none" id="navbarDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @item.Name
+                        </a>
+                    }
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item d-block d-sm-none" asp-page="/Category/Index" asp-route-id="@item.NameUri">
                             <span class="dropdown-item-text text-primary">VER TODOS</span>
