@@ -488,10 +488,12 @@ iframe {
 .card-img-overlay {
     z-index: 5;
 }
-
+.nav-item > .btn {
+    font-size: 15px;
+}
 .nav-item > .btn:hover {
     color: #fff !important;
 }
-.nav-item > .btn.active, .nav-item > .btn:active {
+.nav-item > .btn.active, .nav-item > .btn:active, .show > .btn-outline-primary.dropdown-toggle {
     color: #fff !important;
 }
