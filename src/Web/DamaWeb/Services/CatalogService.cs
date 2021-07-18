@@ -531,7 +531,8 @@ namespace DamaWeb.Services
                         NameUri = $"{basePath}/tag/{x.Name.Replace(" ", "%2520").Replace("#", "%2523")}",
                         //NameUri = $"{basePath}/tag/{Uri.EscapeDataString(x.Name)}",
                         IsTag = true
-                    }).ToList()
+                    }).ToList(),
+                    IsTag = true
                 });
 
             }
