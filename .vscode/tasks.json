@@ -1,0 +1,54 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build-blazor",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/Web/DamaAdmin/Server/DamaAdmin.Server.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        // {
+        //     "label": "publish",
+        //     "command": "dotnet",
+        //     "type": "process",
+        //     "args": [
+        //         "publish",
+        //         "${workspaceFolder}/src/Web/DamaAdmin/Server/DamaAdmin.Server.csproj",
+        //         "/property:GenerateFullPaths=true",
+        //         "/consoleloggerparameters:NoSummary"
+        //     ],
+        //     "problemMatcher": "$msCompile"
+        // },
+        {
+            "label": "watch-blazor",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                "${workspaceFolder}/src/Web/DamaAdmin/Server/DamaAdmin.Server.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build-backoffice",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/Web/Backoffice/Backoffice.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+    ]
+}

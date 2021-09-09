@@ -110,7 +110,7 @@ else
     {
         try
         {
-            allCategories = await Http.GetFromJsonAsync<List<CategoryDTO>>("Categories");
+            allCategories = await Http.GetFromJsonAsync<List<CategoryDTO>>("Categories/all");
             categoryModel = allCategories.SingleOrDefault(x => x.Id == Id);
 
             if (categoryModel == null)

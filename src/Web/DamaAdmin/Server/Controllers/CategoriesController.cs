@@ -44,6 +44,17 @@ namespace DamaAdmin.Server.Controllers
             return new PaginatedList<CategoryDTO>(model, total, pageIndex ?? 1, 2);
         }
 
+        [HttpGet("all")]
+        public async Task<List<CategoryDTO>> GetAll()
+        {
+            HttpContext.VerifyUserHasAnyAcceptedScope(_scopeRequiredByApi);
+
+            var categories = await _categoryRepository.ListAsync();
+
+            return _mapper.Map<List<CategoryDTO>>(categories);
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> Post(CategoryDTO model)
         {
