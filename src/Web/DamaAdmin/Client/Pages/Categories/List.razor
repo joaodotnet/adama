@@ -90,7 +90,7 @@ else
 }
 
 @code {
-    private CategoryViewModel[] categories;
+    private CategoryDTO[] categories;
     private Modal Modal { get; set; }
     private Pagination Pagination { get; set; }
     private Pagination.PaginationInfo Params;
@@ -104,7 +104,7 @@ else
     {
         try
         {
-            var result = await Http.GetFromJsonAsync<PaginatedList<CategoryViewModel>>($"Categories?pageIndex={PageIndex}"); //, new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+            var result = await Http.GetFromJsonAsync<PaginatedList<CategoryDTO>>($"Categories?pageIndex={PageIndex}"); //, new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true }
             categories = result.Items.ToArray();
             Params = new(result.PageIndex, result.TotalPages, result.HasPreviousPage, result.HasNextPage, "/categorias/pag");
         }
@@ -114,7 +114,7 @@ else
         }
     }
 
-    private async Task OnRemoveItem(CategoryViewModel item)
+    private async Task OnRemoveItem(CategoryDTO item)
     {
         if (!await JSRuntime.InvokeAsync<bool>("confirm", $"Tens a certeza que queres remover a categoria {item.Name}?"))
             return;
@@ -124,7 +124,7 @@ else
         if (response.StatusCode == System.Net.HttpStatusCode.OK)
         {
             Message = $"Categoria {item.Name} foi removida!";
-            categories = await Http.GetFromJsonAsync<CategoryViewModel[]>("Categories");
+            categories = await Http.GetFromJsonAsync<CategoryDTO[]>("Categories");
         }
         else
         {

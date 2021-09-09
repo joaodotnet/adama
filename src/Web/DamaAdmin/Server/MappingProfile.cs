@@ -8,8 +8,8 @@ namespace DamaAdmin.Server
     {
         public MappingProfile()
         {
-            CreateMap<Category, CategoryViewModel>();
-            CreateMap<CategoryViewModel, Category>();
+            CreateMap<Category, CategoryDTO>();
+            CreateMap<CategoryDTO, Category>();
         }
     }
 }

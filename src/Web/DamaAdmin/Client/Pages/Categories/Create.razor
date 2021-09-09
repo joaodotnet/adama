@@ -95,15 +95,15 @@
 </div>
 
 @code{
-    private CategoryViewModel categoryModel = new();
-    private List<CategoryViewModel> allCategories = new();
+    private CategoryDTO categoryModel = new();
+    private List<CategoryDTO> allCategories = new();
     private string statusMessage;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            allCategories = await Http.GetFromJsonAsync<List<CategoryViewModel>>("Categories");
+            allCategories = await Http.GetFromJsonAsync<List<CategoryDTO>>("Categories");
         }
         catch (AccessTokenNotAvailableException exception)
         {

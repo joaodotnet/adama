@@ -3,7 +3,7 @@ using System.Text;
 
 namespace ApplicationCore.DTOs
 {
-    public class CategoryViewModel
+    public class CategoryDTO
     {
         public int Id { get; set; }
         [Required]
@@ -35,7 +35,7 @@ namespace ApplicationCore.DTOs
         [Display(Name="ID Categoria Pai")]
         public int? ParentId { get; set; }
         [Display(Name = "Nome da Categoria Pai")]
-        public CategoryViewModel Parent { get; set; }
+        public CategoryDTO Parent { get; set; }
 
         public override string ToString()
         {

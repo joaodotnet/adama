@@ -33,26 +33,26 @@ namespace DamaAdmin.Server.Controllers
             _logger = logger;
         }
         [HttpGet]
-        public async Task<PaginatedList<CategoryViewModel>> Get(int? pageIndex)
+        public async Task<PaginatedList<CategoryDTO>> Get(int? pageIndex)
         {
             HttpContext.VerifyUserHasAnyAcceptedScope(_scopeRequiredByApi);
 
             var total = await _categoryRepository.CountAsync(new CategorySpecification(new CategoryFilter { IncludeCatalogTypes = true }));
             var cats = await _categoryRepository.ListAsync(new CategorySpecification(new CategoryFilter{ IncludeCatalogTypes = true }, pageIndex ?? 1, 2));
 
-            var model = _mapper.Map<IEnumerable<CategoryViewModel>>(cats);
-            return new PaginatedList<CategoryViewModel>(model, total, pageIndex ?? 1, 2);
+            var model = _mapper.Map<IEnumerable<CategoryDTO>>(cats);
+            return new PaginatedList<CategoryDTO>(model, total, pageIndex ?? 1, 2);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(CategoryViewModel model)
+        public async Task<IActionResult> Post(CategoryDTO model)
         {
             await _categoryRepository.AddAsync(_mapper.Map<ApplicationCore.Entities.Category>(model));
             return Ok();
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(CategoryViewModel model)
+        public async Task<IActionResult> Put(CategoryDTO model)
         {
             var cat = await _categoryRepository.GetBySpecAsync(new CategorySpecification(new CategoryFilter { Id = model.Id, IncludeParent = true }));
             if (cat == null)

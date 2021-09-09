@@ -102,15 +102,15 @@ else
 @code {
     [Parameter]
     public int Id { get; set; }
-    private CategoryViewModel categoryModel = null;
-    private List<CategoryViewModel> allCategories = new();
+    private CategoryDTO categoryModel = null;
+    private List<CategoryDTO> allCategories = new();
     private string statusMessage;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            allCategories = await Http.GetFromJsonAsync<List<CategoryViewModel>>("Categories");
+            allCategories = await Http.GetFromJsonAsync<List<CategoryDTO>>("Categories");
             categoryModel = allCategories.SingleOrDefault(x => x.Id == Id);
 
             if (categoryModel == null)
