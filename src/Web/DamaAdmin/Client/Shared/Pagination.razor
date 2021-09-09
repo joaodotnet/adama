@@ -1,5 +1,4 @@
-﻿@inject NavigationManager NavManager
-<nav aria-label="Page navigation example">
+﻿<nav aria-label="Page navigation example">
     <ul class="pagination">
         <li class="page-item @(Info.HasPreviousPage ? "" : "disabled")">
             <a class="page-link" href="#" aria-label="Previous">
@@ -8,7 +7,7 @@
         </li>
         @for (int i = 0; i < Info.TotalPages; i++)
         {
-            <li class="page-item @(i == Info.PageIndex-1 ? "active" : "")"><a class="page-link" href="" @onclick="() => GoTo(i)" @onclick:preventDefault>@(i+1)</a></li>
+            <li class="page-item @(i == Info.PageIndex-1 ? "active" : "")"><a class="page-link" href="" @onclick="@(e => GoTo(i))" @onclick:preventDefault>@(i+1)</a></li>
         }
         <li class="page-item @(Info.HasNextPage ? "" : "disabled")">
             <a class="page-link" href="#" aria-label="Next">
@@ -18,13 +17,16 @@
     </ul>
 </nav>
 @code {
-        [Parameter]
-        public PaginationInfo Info { get; set; }
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
 
-        void GoTo(int i)
-        {
-            NavManager.NavigateTo($"{Info.Url}/{i}");
-        }
+    [Parameter]
+    public PaginationInfo Info { get; set; }
+
+    void GoTo(int i)
+    {
+        NavigationManager.NavigateTo($"{Info.Url}/{i}");
+    }
 
     public class PaginationInfo
     {

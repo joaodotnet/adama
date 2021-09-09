@@ -6,14 +6,10 @@
     "configurations": [
         {
             "name": "Dama Admin Server Launch",
-            "type": "coreclr",
+            "type": "blazorwasm",
             "request": "launch",
             "preLaunchTask": "build-blazor",
-            "program": "${workspaceFolder}/src/Web/DamaAdmin/Server/bin/Debug/net5.0/DamaAdmin.Server.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/src/Web/DamaAdmin",
-            "stopAtEntry": false,
-            "console": "internalConsole",
+            "cwd": "${workspaceFolder}/src/Web/DamaAdmin/Server",
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
             }
