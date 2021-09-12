@@ -25,7 +25,7 @@ namespace DamaAdmin.Client.Pages.Categories
         [Inject]
         public ICategoryHttpRepository CategoryRepo { get; set; }
 
-        [Inject] 
+        [Inject]
         public IJSRuntime JSRuntime { get; set; }
 
         protected async override Task OnInitializedAsync()
@@ -55,6 +55,12 @@ namespace DamaAdmin.Client.Pages.Categories
                 var content = await response.Content.ReadAsStringAsync();
                 Message = $"Erro ao remover Categoria {item.Name}: ({response.StatusCode}) {content}";
             }
+        }
+
+        private async Task SelectedPage(int page)
+        {
+            _pagingParameters.PageNumber = page;
+            await GetCategories();
         }
 
         private async Task GetCategories()
