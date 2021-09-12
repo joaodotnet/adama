@@ -40,9 +40,18 @@ namespace DamaAdmin.Server
                     options.TokenValidationParameters.NameClaimType = "name";
                 });
 
+            services.AddCors(policy =>
+            {
+                policy.AddPolicy("CorsPolicy", opt => opt
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .WithExposedHeaders("X-Pagination"));
+            });
+
             services.AddControllersWithViews();
             services.AddRazorPages();
-            
+
             services.AddAutoMapper(typeof(Startup));
 
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));

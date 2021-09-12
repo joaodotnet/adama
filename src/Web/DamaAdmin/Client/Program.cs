@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+﻿using DamaAdmin.Client.HttpRepositories;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +24,7 @@ namespace DamaAdmin.Client
 
             // Supply HttpClient instances that include access tokens when making requests to the server project
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("DamaAdmin.ServerAPI"));
+            builder.Services.AddScoped<ICategoryHttpRepository, CategoryHttpRepository>();
 
             builder.Services.AddMsalAuthentication(options =>
             {

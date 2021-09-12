@@ -1,5 +1,4 @@
-﻿using ApplicationCore;
-using ApplicationCore.DTOs;
+﻿using ApplicationCore.DTOs;
 using ApplicationCore.Entities;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Specifications;
@@ -11,11 +10,12 @@ using Microsoft.Identity.Web.Resource;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace DamaAdmin.Server.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("[controller]")]
     public class CategoriesController : ControllerBase
@@ -33,15 +33,21 @@ namespace DamaAdmin.Server.Controllers
             _logger = logger;
         }
         [HttpGet]
-        public async Task<PaginatedList<CategoryDTO>> Get(int? pageIndex)
+        public async Task<PagedList<CategoryDTO>> Get([FromQuery] PagingParameters parameters)
         {
             HttpContext.VerifyUserHasAnyAcceptedScope(_scopeRequiredByApi);
 
             var total = await _categoryRepository.CountAsync(new CategorySpecification(new CategoryFilter { IncludeCatalogTypes = true }));
-            var cats = await _categoryRepository.ListAsync(new CategorySpecification(new CategoryFilter{ IncludeCatalogTypes = true }, pageIndex ?? 1, 2));
+            
+            var cats = await _categoryRepository.ListAsync(new CategorySpecification(new CategoryFilter{ IncludeCatalogTypes = true }, parameters.PageNumber, parameters.PageSize));
 
             var model = _mapper.Map<IEnumerable<CategoryDTO>>(cats);
-            return new PaginatedList<CategoryDTO>(model, total, pageIndex ?? 1, 2);
+
+            var list = new PagedList<CategoryDTO>(model, total, parameters.PageNumber , parameters.PageSize);
+ 
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(list.MetaData));
+
+            return list;
         }
 
         [HttpGet("all")]

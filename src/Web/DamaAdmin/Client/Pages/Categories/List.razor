@@ -1,12 +1,8 @@
 ﻿@page "/categorias/"
 @page "/categorias/{message}"
-@page "/categorias/pag/{pageIndex}"
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using DamaAdmin.Client.Shared
-@attribute [Authorize]
-@inject HttpClient Http
-@inject IJSRuntime JSRuntime
 
 <h2>Categorias</h2>
 
@@ -19,7 +15,7 @@
         @Message
     </div>
 }
-@if (categories == null)
+@if (CategoryList == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -47,7 +43,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in categories)
+            @foreach (var item in CategoryList)
             {
                 <tr>
                     <td>
@@ -80,57 +76,7 @@ else
             }
         </tbody>
         <tfoot>
-            <tr>
-                <td colspan="6">
-                    <Pagination Info="Params"></Pagination>
-                </td>
-            </tr>
         </tfoot>
     </table>
     <Modal @ref="Modal"></Modal>
-}
-
-@code {
-    private CategoryDTO[] categories;
-    private Modal Modal { get; set; }
-    private Pagination Pagination { get; set; }
-    private Pagination.PaginationInfo Params;
-
-    [Parameter]
-    public string Message { get; set; }
-    [Parameter]
-    public string PageIndex { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        try
-        {
-            var result = await Http.GetFromJsonAsync<PaginatedList<CategoryDTO>>($"Categories?pageIndex={PageIndex}"); //, new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true }
-            categories = result.Items.ToArray();
-            Params = new(result.PageIndex, result.TotalPages, result.HasPreviousPage, result.HasNextPage, "/categorias/pag");
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-    }
-
-    private async Task OnRemoveItem(CategoryDTO item)
-    {
-        if (!await JSRuntime.InvokeAsync<bool>("confirm", $"Tens a certeza que queres remover a categoria {item.Name}?"))
-            return;
-
-        var response = await Http.DeleteAsync($"categories?id={item.Id}");
-
-        if (response.StatusCode == System.Net.HttpStatusCode.OK)
-        {
-            Message = $"Categoria {item.Name} foi removida!";
-            categories = await Http.GetFromJsonAsync<CategoryDTO[]>("Categories");
-        }
-        else
-        {
-            var content = await response.Content.ReadAsStringAsync();
-            Message = $"Erro ao remover Categoria {item.Name}: ({response.StatusCode}) {content}";
-        }
-    }
 }
