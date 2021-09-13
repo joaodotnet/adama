@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using ApplicationCore.DTOs;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using DamaAdmin.Client.Shared;
 using Microsoft.AspNetCore.Authorization;

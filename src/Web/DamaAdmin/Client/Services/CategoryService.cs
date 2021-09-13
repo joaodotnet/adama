@@ -59,7 +59,7 @@ namespace DamaAdmin.Client.Services
             return await _client.GetFromJsonAsync<IEnumerable<CategoryViewModel>>("categories/all", _options);
         }
 
-        public async Task Update(CategoryViewModel categoryModel)
+        public async Task Create(CategoryViewModel categoryModel)
         {
             var response = await _client.PostAsJsonAsync("categories", categoryModel, _options);
             
@@ -68,6 +68,17 @@ namespace DamaAdmin.Client.Services
                 var content = await response.Content.ReadAsStringAsync();
                 throw new ApplicationException(content);
             } 
+        }
+
+        public async Task Update(CategoryViewModel categoryModel)
+        {
+            var response = await _client.PutAsJsonAsync("categories", categoryModel, _options);
+            
+            if (!response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                throw new ApplicationException(content);
+            }
         }
     }
 }
