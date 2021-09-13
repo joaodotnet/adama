@@ -12,6 +12,6 @@
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0"/>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\ApplicationCore\ApplicationCore.csproj"/>
+    <ProjectReference Include="..\Shared\DamaAdmin.Shared.csproj" />
   </ItemGroup>
 </Project>

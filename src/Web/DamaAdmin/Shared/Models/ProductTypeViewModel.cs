@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using ApplicationCore.Entities;
 
-namespace ApplicationCore.DTOs
+namespace DamaAdmin.Shared.Models
 {
     public class ProductTypeViewModel
     {

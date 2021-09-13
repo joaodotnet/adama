@@ -1,4 +1,5 @@
 ﻿@page "/categorias/{Id:int}"
+@using DamaAdmin.Shared.Models
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @attribute [Authorize]
@@ -102,15 +103,15 @@ else
 @code {
     [Parameter]
     public int Id { get; set; }
-    private CategoryDTO categoryModel = null;
-    private List<CategoryDTO> allCategories = new();
+    private CategoryViewModel categoryModel = null;
+    private List<CategoryViewModel> allCategories = new();
     private string statusMessage;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            allCategories = await Http.GetFromJsonAsync<List<CategoryDTO>>("Categories/all");
+            allCategories = await Http.GetFromJsonAsync<List<CategoryViewModel>>("Categories/all");
             categoryModel = allCategories.SingleOrDefault(x => x.Id == Id);
 
             if (categoryModel == null)

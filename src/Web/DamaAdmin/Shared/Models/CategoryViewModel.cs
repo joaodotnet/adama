@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace ApplicationCore.DTOs
+namespace DamaAdmin.Shared.Models
 {
-    public class CategoryDTO
+    public class CategoryViewModel
     {
         public int Id { get; set; }
         [Required]
@@ -35,7 +35,7 @@ namespace ApplicationCore.DTOs
         [Display(Name="ID Categoria Pai")]
         public int? ParentId { get; set; }
         [Display(Name = "Nome da Categoria Pai")]
-        public CategoryDTO Parent { get; set; }
+        public CategoryViewModel Parent { get; set; }
 
         public override string ToString()
         {

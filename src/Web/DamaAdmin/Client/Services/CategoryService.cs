@@ -5,8 +5,9 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
-using ApplicationCore.DTOs;
-using DamaAdmin.Client.Features;
+using DamaAdmin.Shared.Features;
+using DamaAdmin.Shared.Interfaces;
+using DamaAdmin.Shared.Models;
 using Microsoft.AspNetCore.WebUtilities;
 
 namespace DamaAdmin.Client.Services
@@ -32,7 +33,7 @@ namespace DamaAdmin.Client.Services
         }
 
 
-        public async Task<PagingResponse<CategoryDTO>> List(PagingParameters parameters)
+        public async Task<PagingResponse<CategoryViewModel>> List(PagingParameters parameters)
         {
             var queryStringParam = new Dictionary<string, string>
             {
@@ -44,21 +45,21 @@ namespace DamaAdmin.Client.Services
             {
                 throw new ApplicationException(content);
             }
-            var pagingResponse = new PagingResponse<CategoryDTO>
+            var pagingResponse = new PagingResponse<CategoryViewModel>
             {
-                Items = JsonSerializer.Deserialize<List<CategoryDTO>>(content, _options),
+                Items = JsonSerializer.Deserialize<List<CategoryViewModel>>(content, _options),
                 MetaData = JsonSerializer.Deserialize<MetaData>(response.Headers.GetValues("X-Pagination").First(), _options)
             };
 
             return pagingResponse;
         }
 
-        public async Task<IEnumerable<CategoryDTO>> ListAll()
+        public async Task<IEnumerable<CategoryViewModel>> ListAll()
         {
-            return await _client.GetFromJsonAsync<IEnumerable<CategoryDTO>>("categories/all", _options);
+            return await _client.GetFromJsonAsync<IEnumerable<CategoryViewModel>>("categories/all", _options);
         }
 
-        public async Task Update(CategoryDTO categoryModel)
+        public async Task Update(CategoryViewModel categoryModel)
         {
             var response = await _client.PostAsJsonAsync("categories", categoryModel, _options);
             

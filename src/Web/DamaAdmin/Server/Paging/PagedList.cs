@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ApplicationCore.DTOs;
+using DamaAdmin.Shared.Features;
 
 namespace DamaAdmin.Server
 {

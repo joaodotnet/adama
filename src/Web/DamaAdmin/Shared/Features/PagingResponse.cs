@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using ApplicationCore.DTOs;
 
-namespace DamaAdmin.Client.Features
+namespace DamaAdmin.Shared.Features
 {
     public class PagingResponse<T> where T : class
     {

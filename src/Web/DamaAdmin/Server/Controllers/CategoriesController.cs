@@ -1,13 +1,13 @@
-﻿using ApplicationCore.DTOs;
-using ApplicationCore.Entities;
+﻿using ApplicationCore.Entities;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Specifications;
 using AutoMapper;
+using DamaAdmin.Shared.Features;
+using DamaAdmin.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Web.Resource;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -33,17 +33,17 @@ namespace DamaAdmin.Server.Controllers
             _logger = logger;
         }
         [HttpGet]
-        public async Task<PagedList<CategoryDTO>> Get([FromQuery] PagingParameters parameters)
+        public async Task<PagedList<CategoryViewModel>> Get([FromQuery] PagingParameters parameters)
         {
             HttpContext.VerifyUserHasAnyAcceptedScope(_scopeRequiredByApi);
 
-            var total = await _categoryRepository.CountAsync(new CategorySpecification(new CategoryFilter { IncludeCatalogTypes = true }));
+            var total = await _categoryRepository.CountAsync(new CategorySpecification(new CategoryFilter()));
             
-            var cats = await _categoryRepository.ListAsync(new CategorySpecification(new CategoryFilter{ IncludeCatalogTypes = true }, parameters.PageNumber, parameters.PageSize));
+            var cats = await _categoryRepository.ListAsync(new CategorySpecification(new CategoryFilter{ IncludeParent = true }, parameters.PageNumber, parameters.PageSize));
 
-            var model = _mapper.Map<IEnumerable<CategoryDTO>>(cats);
+            var model = _mapper.Map<IEnumerable<CategoryViewModel>>(cats);
 
-            var list = new PagedList<CategoryDTO>(model, total, parameters.PageNumber , parameters.PageSize);
+            var list = new PagedList<CategoryViewModel>(model, total, parameters.PageNumber , parameters.PageSize);
  
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(list.MetaData));
 
@@ -51,25 +51,25 @@ namespace DamaAdmin.Server.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<List<CategoryDTO>> GetAll()
+        public async Task<List<CategoryViewModel>> GetAll()
         {
             HttpContext.VerifyUserHasAnyAcceptedScope(_scopeRequiredByApi);
 
             var categories = await _categoryRepository.ListAsync();
 
-            return _mapper.Map<List<CategoryDTO>>(categories);
+            return _mapper.Map<List<CategoryViewModel>>(categories);
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Post(CategoryDTO model)
+        public async Task<IActionResult> Post(CategoryViewModel model)
         {
             await _categoryRepository.AddAsync(_mapper.Map<ApplicationCore.Entities.Category>(model));
             return Ok();
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(CategoryDTO model)
+        public async Task<IActionResult> Put(CategoryViewModel model)
         {
             var cat = await _categoryRepository.GetBySpecAsync(new CategorySpecification(new CategoryFilter { Id = model.Id, IncludeParent = true }));
             if (cat == null)
@@ -94,40 +94,4 @@ namespace DamaAdmin.Server.Controllers
             return NotFound();
         }
     }
-
-    // [Authorize]
-    // [ApiController]
-    // [Route("[controller]")]
-    // public class WeatherForecastController : ControllerBase
-    // {
-    //     private static readonly string[] Summaries = new[]
-    //     {
-    //         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    //     };
-
-    //     private readonly ILogger<WeatherForecastController> _logger;
-
-    //     // The Web API will only accept tokens 1) for users, and 2) having the "API.Access" scope for this API
-    //     static readonly string[] scopeRequiredByApi = new string[] { "API.Access" };
-
-    //     public WeatherForecastController(ILogger<WeatherForecastController> logger)
-    //     {
-    //         _logger = logger;
-    //     }
-
-    //     [HttpGet]
-    //     public IEnumerable<WeatherForecast> Get()
-    //     {
-    //         HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
-
-    //         var rng = new Random();
-    //         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-    //         {
-    //             Date = DateTime.Now.AddDays(index),
-    //             TemperatureC = rng.Next(-20, 55),
-    //             Summary = Summaries[rng.Next(Summaries.Length)]
-    //         })
-    //         .ToArray();
-    //     }
-    // }
 }

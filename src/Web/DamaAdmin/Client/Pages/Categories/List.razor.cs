@@ -5,15 +5,17 @@ using Microsoft.JSInterop;
 using ApplicationCore.DTOs;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using DamaAdmin.Client.Shared;
-using DamaAdmin.Client.Services;
 using Microsoft.AspNetCore.Authorization;
+using DamaAdmin.Shared.Interfaces;
+using DamaAdmin.Shared.Models;
+using DamaAdmin.Shared.Features;
 
 namespace DamaAdmin.Client.Pages.Categories
 {
     [Authorize]
     public partial class List : ComponentBase
     {
-        public List<CategoryDTO> CategoryList { get; set; }
+        public List<CategoryViewModel> CategoryList { get; set; }
         public MetaData MetaData { get; set; } = new();
         private PagingParameters _pagingParameters = new();
         private Modal Modal { get; set; }
@@ -40,7 +42,7 @@ namespace DamaAdmin.Client.Pages.Categories
             }
         }
 
-        private async Task OnRemoveItem(CategoryDTO item)
+        private async Task OnRemoveItem(CategoryViewModel item)
         {
             if (!await JSRuntime.InvokeAsync<bool>("confirm", $"Tens a certeza que queres remover a categoria {item.Name}?"))
                 return;

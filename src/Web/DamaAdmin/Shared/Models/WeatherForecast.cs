@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ApplicationCore.DTOs
+namespace DamaAdmin.Shared.Models
 {
     public class WeatherForecast
     {

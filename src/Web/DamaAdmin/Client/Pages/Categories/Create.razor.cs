@@ -2,18 +2,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
-using ApplicationCore.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using DamaAdmin.Client.Services;
+using DamaAdmin.Shared.Interfaces;
+using DamaAdmin.Shared.Models;
 
 namespace DamaAdmin.Client.Pages.Categories
 {
     [Authorize]
     public partial class Create : ComponentBase
     {
-        private CategoryDTO categoryModel = new();
-        private IEnumerable<CategoryDTO> allCategories = new List<CategoryDTO>();
+        private CategoryViewModel categoryModel = new();
+        private IEnumerable<CategoryViewModel> allCategories = new List<CategoryViewModel>();
         private string statusMessage;
         [Inject]
         public ICategoryService CategoryService { get; set; }

@@ -1,4 +1,4 @@
-namespace ApplicationCore.DTOs
+namespace DamaAdmin.Shared.Features
 {
     public class MetaData
     {

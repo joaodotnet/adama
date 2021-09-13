@@ -1,6 +1,6 @@
-using ApplicationCore.DTOs;
 using ApplicationCore.Entities;
 using AutoMapper;
+using DamaAdmin.Shared.Models;
 
 namespace DamaAdmin.Server
 {
@@ -8,8 +8,8 @@ namespace DamaAdmin.Server
     {
         public MappingProfile()
         {
-            CreateMap<Category, CategoryDTO>();
-            CreateMap<CategoryDTO, Category>();
+            CreateMap<Category, CategoryViewModel>();
+            CreateMap<CategoryViewModel, Category>();
         }
     }
 }

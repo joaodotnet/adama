@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ApplicationCore.DTOs;
 using DamaAdmin.Client.Features;
+using DamaAdmin.Shared.Features;
 using Microsoft.AspNetCore.Components;
 
 namespace DamaAdmin.Client.Components
