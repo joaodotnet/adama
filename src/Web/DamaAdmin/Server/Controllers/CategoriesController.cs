@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace DamaAdmin.Server.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class CategoriesController : ControllerBase

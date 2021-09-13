@@ -1,9 +1,4 @@
 ﻿@page "/categorias/novo"
-@using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-@attribute [Authorize]
-@inject HttpClient Http
-@inject NavigationManager NavManager
 
 <h2>Nova Categoria</h2>
 
@@ -31,7 +26,7 @@
             <div class="form-group">
                 <label>Categoria Pai</label>
                 <InputSelect @bind-Value="categoryModel.ParentId" class="form-control">
-                    @if (allCategories.Count == 0)
+                    @if (allCategories.Count() == 0)
                     {
                         <option class="font-italic">Loading...</option>
                     }
@@ -93,53 +88,3 @@
 <div>
     <a href="/categorias">Voltar para a lista</a>
 </div>
-
-@code{
-    private CategoryDTO categoryModel = new();
-    private List<CategoryDTO> allCategories = new();
-    private string statusMessage;
-
-    protected override async Task OnInitializedAsync()
-    {
-        try
-        {
-            allCategories = await Http.GetFromJsonAsync<List<CategoryDTO>>("Categories");
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-    }
-
-    private async Task HandleValidSubmit()
-    {
-        if (allCategories.Any(x => x.Name == categoryModel.Name))
-        {
-            statusMessage = $"Erro: O nome da Categoria '{categoryModel.Name}' já existe!";
-            return;
-        }
-        if (allCategories.Any(x => x.Slug == categoryModel.Slug))
-        {
-            statusMessage = "Erro: Já existe um slug com o mesmo nome!";
-            return;
-        }
-        statusMessage = null;
-
-        var response = await Http.PostAsJsonAsync("categories", categoryModel);
-        if (response.StatusCode == System.Net.HttpStatusCode.OK)
-        {
-            var message = $"Categoria {categoryModel.Name} criada com sucesso!";
-            NavManager.NavigateTo($"/categorias/{message}");
-        }
-        else
-        {
-            var content = await response.Content.ReadAsStringAsync();
-            var message = $"Erro ao criar Categoria {categoryModel.Name}: ({response.StatusCode}) {content}";
-        }
-    }
-
-    private void NameChangeEvent()
-    {
-        categoryModel.Slug = ApplicationCore.Utils.URLFriendly(categoryModel.Name);
-    }
-}

@@ -2,25 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 using ApplicationCore.DTOs;
 using DamaAdmin.Client.Features;
 using Microsoft.AspNetCore.WebUtilities;
 
-namespace DamaAdmin.Client.HttpRepositories
+namespace DamaAdmin.Client.Services
 {
-    public interface ICategoryHttpRepository
-    {
-        Task<PagingResponse<CategoryDTO>> GetCategories(PagingParameters parameters);
-        Task<HttpResponseMessage> Delete(int categoryId);
-    }
-    public class CategoryHttpRepository : ICategoryHttpRepository
+    public class CategoryService : ICategoryService
     {
         private readonly HttpClient _client;
         private readonly JsonSerializerOptions _options;
 
-        public CategoryHttpRepository(HttpClient client)
+        public CategoryService(HttpClient client)
         {
             _client = client;
             _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
@@ -35,7 +31,8 @@ namespace DamaAdmin.Client.HttpRepositories
             return await _client.DeleteAsync(QueryHelpers.AddQueryString("categories", queryStringParam));
         }
 
-        public async Task<PagingResponse<CategoryDTO>> GetCategories(PagingParameters parameters)
+
+        public async Task<PagingResponse<CategoryDTO>> List(PagingParameters parameters)
         {
             var queryStringParam = new Dictionary<string, string>
             {
@@ -54,6 +51,22 @@ namespace DamaAdmin.Client.HttpRepositories
             };
 
             return pagingResponse;
+        }
+
+        public async Task<IEnumerable<CategoryDTO>> ListAll()
+        {
+            return await _client.GetFromJsonAsync<IEnumerable<CategoryDTO>>("categories/all", _options);
+        }
+
+        public async Task Update(CategoryDTO categoryModel)
+        {
+            var response = await _client.PostAsJsonAsync("categories", categoryModel, _options);
+            
+            if (!response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                throw new ApplicationException(content);
+            } 
         }
     }
 }

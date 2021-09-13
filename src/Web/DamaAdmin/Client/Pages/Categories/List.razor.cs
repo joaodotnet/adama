@@ -5,7 +5,7 @@ using Microsoft.JSInterop;
 using ApplicationCore.DTOs;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using DamaAdmin.Client.Shared;
-using DamaAdmin.Client.HttpRepositories;
+using DamaAdmin.Client.Services;
 using Microsoft.AspNetCore.Authorization;
 
 namespace DamaAdmin.Client.Pages.Categories
@@ -23,7 +23,7 @@ namespace DamaAdmin.Client.Pages.Categories
         public string Message { get; set; }
 
         [Inject]
-        public ICategoryHttpRepository CategoryRepo { get; set; }
+        public ICategoryService CategoryService { get; set; }
 
         [Inject]
         public IJSRuntime JSRuntime { get; set; }
@@ -44,7 +44,7 @@ namespace DamaAdmin.Client.Pages.Categories
         {
             if (!await JSRuntime.InvokeAsync<bool>("confirm", $"Tens a certeza que queres remover a categoria {item.Name}?"))
                 return;
-            var response = await CategoryRepo.Delete(item.Id);
+            var response = await CategoryService.Delete(item.Id);
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 Message = $"Categoria {item.Name} foi removida!";
@@ -65,7 +65,7 @@ namespace DamaAdmin.Client.Pages.Categories
 
         private async Task GetCategories()
         {
-            var pagingResponse = await CategoryRepo.GetCategories(_pagingParameters);
+            var pagingResponse = await CategoryService.List(_pagingParameters);
             CategoryList = pagingResponse.Items;
             MetaData = pagingResponse.MetaData;
         }
