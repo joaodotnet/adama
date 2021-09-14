@@ -10,6 +10,9 @@ namespace DamaAdmin.Server
         {
             CreateMap<Category, CategoryViewModel>();
             CreateMap<CategoryViewModel, Category>();
+
+            CreateMap<CatalogType, ProductTypeViewModel>();
+            CreateMap<ProductTypeViewModel, CatalogType>();
         }
     }
 }

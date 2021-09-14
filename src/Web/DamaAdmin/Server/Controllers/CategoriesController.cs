@@ -10,7 +10,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Web.Resource;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace DamaAdmin.Server.Controllers
@@ -18,15 +17,14 @@ namespace DamaAdmin.Server.Controllers
     [Authorize]
     [ApiController]
     [Route("[controller]")]
-    public class CategoriesController : ControllerBase
-    {
-        // The Web API will only accept tokens 1) for users, and 2) having the "API.Access" scope for this API
-        private static readonly string[] _scopeRequiredByApi = new string[] { "API.Access" };
+    public class CategoriesController : DamaAdminBase<Category>
+    {        
         private readonly IMapper _mapper;
         private readonly IRepository<Category> _categoryRepository;
         private readonly ILogger<CategoriesController> _logger;
 
         public CategoriesController(IMapper mapper, IRepository<Category> categoryRepository, ILogger<CategoriesController> logger)
+        : base(categoryRepository, mapper)
         {
             _mapper = mapper;
             _categoryRepository = categoryRepository;
@@ -35,19 +33,10 @@ namespace DamaAdmin.Server.Controllers
         [HttpGet]
         public async Task<PagedList<CategoryViewModel>> Get([FromQuery] PagingParameters parameters)
         {
-            HttpContext.VerifyUserHasAnyAcceptedScope(_scopeRequiredByApi);
-
-            var total = await _categoryRepository.CountAsync(new CategorySpecification(new CategoryFilter()));
-            
-            var cats = await _categoryRepository.ListAsync(new CategorySpecification(new CategoryFilter{ IncludeParent = true }, parameters.PageNumber, parameters.PageSize));
-
-            var model = _mapper.Map<IEnumerable<CategoryViewModel>>(cats);
-
-            var list = new PagedList<CategoryViewModel>(model, total, parameters.PageNumber , parameters.PageSize);
- 
-            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(list.MetaData));
-
-            return list;
+            return await GetWithPaging<CategoryViewModel>(
+                parameters,
+                new CategorySpecification(new CategoryFilter()),
+                new CategorySpecification(new CategoryFilter { IncludeParent = true }, parameters.PageNumber, parameters.PageSize));
         }
 
         [HttpGet("all")]

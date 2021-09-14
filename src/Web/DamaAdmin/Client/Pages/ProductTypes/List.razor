@@ -1,4 +1,5 @@
 ﻿@page "/tipos-de-produto/{message?}"
+@using DamaAdmin.Client.Components
 
 <h2>Tipos de Produto</h2>
 <p>
@@ -10,10 +11,80 @@
         @Message
     </div>
 }
-@if (productTypes == null)
+@if (ProductTypeList == null)
 {
     <p><em>A carregar...</em></p>
 }
 else
 {
+    <div class="row">
+        <div class="col">
+            <table class="table table-pagination">
+                <thead>
+                    <tr>
+                        <th>
+                            Código
+                        </th>
+                        <th>
+                            Nome
+                        </th>
+                        <th>
+                            Categorias
+                        </th>
+                        <th>
+                            Preço
+                        </th>
+                        <th>
+                            Preço Adicional Frase/Nome
+                        </th>                        
+                        <th>
+                            Meta & Title?
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ProductTypeList)
+                    {
+                        <tr>
+                            <td>
+                                @item.Code
+                            </td>
+                            <td>
+                                @item.Name
+                            </td>
+                            <td>
+                                @string.Join(",", item.CategoriesName)
+                            </td>
+                            <td>
+                                @item.Price
+                            </td>
+                            <td>
+                                @item.AdditionalTextPrice
+                            </td>                            
+                            <td>@(!string.IsNullOrEmpty(item.MetaDescription) ? "Sim/":
+                        "Não/")@(!string.IsNullOrEmpty(item.Title) ? "Sim" : "Não")</td>
+                            <td>
+                                <a href="/tipos-de-produto/@item.Id" class="btn btn-warning btn-sm" role="button" title="Editar">
+                                    <span class="oi oi-pencil" title="Editar" aria-hidden="true"></span>
+                                </a>
+                                <button class="btn btn-info btn-sm" @onclick="@(e => Modal.Open(item.Name, item))">
+                                    <span class="oi oi-eye" title="Ver" aria-hidden="true"></span>
+                                </button>
+                                <button class="btn btn-danger btn-sm" @onclick="@(e => OnRemoveItem(item))">
+                                    <span class="oi oi-trash" title="Remover" aria-hidden="true"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <Pagination MetaData="MetaData" Spread="3" SelectedPage="SelectedPage" />
+        </div>
+    </div>
+    <Modal @ref="Modal"></Modal>
 }

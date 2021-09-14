@@ -15,10 +15,11 @@ namespace DamaAdmin.Client.Pages.Categories
     [Authorize]
     public partial class List : ComponentBase
     {
+        private PagingParameters _pagingParameters = new();
+        
         public List<CategoryViewModel> CategoryList { get; set; }
         public MetaData MetaData { get; set; } = new();
-        private PagingParameters _pagingParameters = new();
-        private Modal Modal { get; set; }
+        public Modal Modal { get; set; }
 
 
         [Parameter]
