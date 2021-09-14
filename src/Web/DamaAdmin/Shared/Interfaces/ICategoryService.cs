@@ -6,12 +6,12 @@ using DamaAdmin.Shared.Models;
 
 namespace DamaAdmin.Shared.Interfaces
 {
-    public interface ICategoryService
+    public interface IHttpService<T> where T: class
     {
-        Task<PagingResponse<CategoryViewModel>> List(PagingParameters parameters);
-        Task<IEnumerable<CategoryViewModel>> ListAll();
+        Task<PagingResponse<T>> List(PagingParameters parameters);
+        Task<IEnumerable<T>> ListAll();
         Task<HttpResponseMessage> Delete(int categoryId);
-        Task Create(CategoryViewModel categoryModel);
-        Task Update(CategoryViewModel categoryModel);
+        Task Create(T categoryModel);
+        Task Update(T categoryModel);
     }
 }

@@ -6,6 +6,7 @@ using DamaAdmin.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using DamaAdmin.Shared.Interfaces;
+using DamaAdmin.Client.Services;
 
 namespace DamaAdmin.Client.Pages.Categories
 {
@@ -20,7 +21,7 @@ namespace DamaAdmin.Client.Pages.Categories
         private string statusMessage;
 
         [Inject]
-        public ICategoryService CategoryService { get; set; }
+        public CategoryService CategoryService { get; set; }
         [Inject]
         public NavigationManager NavManager { get; set; }
         protected override async Task OnInitializedAsync()

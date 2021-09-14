@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using DamaAdmin.Shared.Interfaces;
 using DamaAdmin.Shared.Models;
 using DamaAdmin.Shared.Features;
+using DamaAdmin.Client.Services;
 
 namespace DamaAdmin.Client.Pages.Categories
 {
@@ -24,7 +25,7 @@ namespace DamaAdmin.Client.Pages.Categories
         public string Message { get; set; }
 
         [Inject]
-        public ICategoryService CategoryService { get; set; }
+        public CategoryService CategoryService { get; set; }
 
         [Inject]
         public IJSRuntime JSRuntime { get; set; }

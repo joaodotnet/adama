@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using DamaAdmin.Shared.Interfaces;
 using DamaAdmin.Shared.Models;
+using DamaAdmin.Client.Services;
 
 namespace DamaAdmin.Client.Pages.Categories
 {
@@ -16,7 +17,7 @@ namespace DamaAdmin.Client.Pages.Categories
         private IEnumerable<CategoryViewModel> allCategories = new List<CategoryViewModel>();
         private string statusMessage;
         [Inject]
-        public ICategoryService CategoryService { get; set; }
+        public CategoryService CategoryService { get; set; }
         [Inject]
         public NavigationManager NavManager { get; set; }
 
