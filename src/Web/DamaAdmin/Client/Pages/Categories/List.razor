@@ -1,9 +1,6 @@
 ﻿@page "/categorias/"
 @page "/categorias/{message}"
-@using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-@using DamaAdmin.Client.Shared
-@using DamaAdmin.Client.Components
+@inherits BlazorPageBase<CategoryViewModel,CategoryService>
 
 <h2>Categorias</h2>
 
@@ -16,7 +13,7 @@
         @Message
     </div>
 }
-@if (CategoryList == null)
+@if (Items == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -46,7 +43,7 @@ else
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in CategoryList)
+                    @foreach (var item in Items)
                     {
                         <tr>
                             <td>

@@ -3,13 +3,8 @@ using System.Text;
 
 namespace DamaAdmin.Shared.Models
 {
-    public class CategoryViewModel
+    public class CategoryViewModel : BaseViewModel
     {
-        public int Id { get; set; }
-        [Required]
-        [StringLength(100)]
-        [Display(Name = "Nome")]
-        public string Name { get; set; }
         [Required]
         [StringLength(100)]
         public string Slug { get; set; }

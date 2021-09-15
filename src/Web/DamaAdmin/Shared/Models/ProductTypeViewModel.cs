@@ -4,17 +4,13 @@ using ApplicationCore.Entities;
 
 namespace DamaAdmin.Shared.Models
 {
-    public class ProductTypeViewModel
-    {
-        public int Id { get; set; }
+    public class ProductTypeViewModel : BaseViewModel
+    {       
         [Required]
         [StringLength(25)]
         [Display(Name = "Código")]
         public string Code { get; set; }
-        [Required]
-        [StringLength(100)]
-        [Display(Name = "Nome")]
-        public string Name { get; set; }
+        
         [Required]
         [StringLength(100)]
         public string Slug { get; set; }

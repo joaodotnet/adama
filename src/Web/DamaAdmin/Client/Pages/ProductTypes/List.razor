@@ -1,5 +1,5 @@
 ﻿@page "/tipos-de-produto/{message?}"
-@using DamaAdmin.Client.Components
+@inherits BlazorPageBase<ProductTypeViewModel,ProductTypeService>
 
 <h2>Tipos de Produto</h2>
 <p>
@@ -11,7 +11,7 @@
         @Message
     </div>
 }
-@if (ProductTypeList == null)
+@if (Items == null)
 {
     <p><em>A carregar...</em></p>
 }
@@ -44,7 +44,7 @@ else
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in ProductTypeList)
+                    @foreach (var item in Items)
                     {
                         <tr>
                             <td>
