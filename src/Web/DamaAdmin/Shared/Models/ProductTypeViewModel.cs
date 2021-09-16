@@ -16,7 +16,7 @@ namespace DamaAdmin.Shared.Models
         public string Slug { get; set; }
         [Required]
         [Display(Name = "Categorias")]
-        public List<int> CategoriesId { get; set; } = new List<int>();
+        public List<string> CategoriesId { get; set; } = new List<string>();
         [Display(Name = "Categorias")]
         public List<string> CategoriesName { get; set; } = new List<string>();
         public string PictureUri { get; set; }
