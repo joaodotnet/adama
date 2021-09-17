@@ -41,5 +41,11 @@ namespace DamaAdmin.Server.Controllers
                 );           
         }
 
+        [HttpGet("exists")]
+        public async Task<bool> CheckIfExists([FromQuery] string code)
+        {
+            return (await _catalogTypesRepository.CountAsync(new CatalogTypeSpecification(code.ToUpper()))) > 0;
+        }
+
     }
 }

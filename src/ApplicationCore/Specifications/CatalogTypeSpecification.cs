@@ -31,5 +31,10 @@ namespace ApplicationCore.Specifications
                     .Take(pageSize.Value);
             }
         }
+        public CatalogTypeSpecification(string code)
+        {
+            Query
+                .Where(x => x.Code.ToUpper() == code);
+        }
     }
 }

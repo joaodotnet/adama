@@ -74,6 +74,11 @@ namespace DamaAdmin.Client.Pages.ProductTypes
         
         private async Task HandleValidSubmit()
         {
+            if(await ProductTypeService.CheckIfExists(model.Code))
+            {
+                statusMessage = $"Erro: O nome do tipo de produto '{model.Code}' já existe!";
+                return;
+            }
             // if (allCategories.Any(x => x.Name == categoryModel.Name))
             // {
             //     statusMessage = $"Erro: O nome da Categoria '{categoryModel.Name}' já existe!";
