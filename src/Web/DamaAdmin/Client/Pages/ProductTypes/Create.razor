@@ -5,27 +5,28 @@
 <hr />
 <EditForm Model="@model" OnValidSubmit="@HandleValidSubmit">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <DataAnnotationsValidator />
             <ValidationSummary />
             <div class="form-group required">
                 <label>Código</label>
                 <InputText @bind-Value="model.Code" class="form-control" />
                 <ValidationMessage For="@(() => model.Code)" />
-            </div> 
+            </div>
             <div class="form-group required">
                 <label>Nome</label>
                 <InputText @bind-Value="model.Name" @onblur="NameChangeEvent" class="form-control" />
                 <ValidationMessage For="@(() => model.Name)" />
-            </div>    
+            </div>
             <div class="form-group required">
                 <label>Slug</label>
                 <InputText @bind-Value="model.Slug" class="form-control" />
                 <ValidationMessage For="@(() => model.Slug)" />
-            </div>     
+            </div>
             <div class="form-group">
                 <label>Categorias</label>
-                <select @ref="_elementReference" value="@model.CategoriesId" multiple="multiple" @onchange="OnChangeCallback" class="form-control">
+                <select @ref="_elementReference" value="@model.CategoriesId" multiple="multiple"
+                    @onchange="OnChangeCallback" class="form-control">
                     @if (allCategories.Count() == 0)
                     {
                         <option class="font-italic">Loading...</option>
@@ -39,18 +40,53 @@
                     }
                 </select>
                 <span asp-validation-for="model.CategoriesId" class="text-danger"></span>
-            </div> 
+            </div>
             <div class="form-group">
                 <label>Preço</label>
                 <InputNumber @bind-Value="model.Price" class="form-control decimal" />
                 <ValidationMessage For="@(() => model.Price)" />
-            </div>  
+            </div>
             <div class="form-group">
                 <label>Preço Adicional Frase/Nome</label>
                 <InputNumber @bind-Value="model.AdditionalTextPrice" class="form-control decimal" />
                 <ValidationMessage For="@(() => model.AdditionalTextPrice)" />
             </div>
-
+            <div class="form-group">
+                <label>Imagens Adicionar Frase/Nome</label>
+                <InputFile OnChange="@OnTextHelpersImagesSelection" class="form-control" multiple />
+            </div>
+            <div class="form-group">
+                <label>Peso (gramas)</label>
+                <InputNumber @bind-Value="model.Weight" class="form-control decimal" />
+                <ValidationMessage For="@(() => model.Weight)" />
+            </div>
+            <div class="form-group">
+                <label>Imagem Principal</label>
+                <InputFile OnChange="@OnImageSelection" class="form-control" />
+                <span>(quadrado)</span>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col">
+                        <label>Entrega (Min)</label>
+                        <InputNumber @bind-Value="model.DeliveryTimeMin" class="form-control" />
+                    </div>
+                    <div class="col">
+                        <label>Entrega (Max)</label>
+                        <InputNumber @bind-Value="model.DeliveryTimeMax" class="form-control" />
+                    </div>
+                    <div class="col">
+                        <label>Unidade</label>
+                        <InputSelect @bind-Value="model.DeliveryTimeUnit" class="form-control">
+                            @foreach (var item in Enum.GetValues(typeof(ApplicationCore.Entities.DeliveryTimeUnitType)))
+                            {
+                                <option value="@item">@item</option>
+                            }
+                        </InputSelect>
+                    </div>
+                    <br />
+                </div>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Criar" class="btn btn-primary" />
             </div>

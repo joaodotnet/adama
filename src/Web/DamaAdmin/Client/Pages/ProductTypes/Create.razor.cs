@@ -8,6 +8,7 @@ using DamaAdmin.Shared.Interfaces;
 using DamaAdmin.Shared.Models;
 using DamaAdmin.Client.Services;
 using Microsoft.JSInterop;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace DamaAdmin.Client.Pages.ProductTypes
 {
@@ -17,6 +18,7 @@ namespace DamaAdmin.Client.Pages.ProductTypes
         private ProductTypeViewModel model = new();
         private string statusMessage;
         private IEnumerable<CategoryViewModel> allCategories = new List<CategoryViewModel>();
+        private List<FileData> fileData = new List<FileData>();
 
         [Inject]
         public ProductTypeService ProductTypeService { get; set; }
@@ -37,6 +39,37 @@ namespace DamaAdmin.Client.Pages.ProductTypes
             {
                 exception.Redirect();
             }
+        }
+
+        private async Task OnTextHelpersImagesSelection(InputFileChangeEventArgs e)
+        {
+            model.FormFileTextHelpers.Clear();
+            foreach (IBrowserFile imgFile in e.GetMultipleFiles())
+            {
+                var buffers = new byte[imgFile.Size];
+                await imgFile.OpenReadStream().ReadAsync(buffers);                                
+                model.FormFileTextHelpers.Add(new FileData
+                {
+                    Data = buffers,
+                    FileType = imgFile.ContentType,
+                    Size = imgFile.Size,
+                    FileName = imgFile.Name
+                });
+            }
+        }
+
+        private async Task OnImageSelection(InputFileChangeEventArgs e)
+        {
+            IBrowserFile imgFile = e.File;
+            var buffers = new byte[imgFile.Size];
+            await imgFile.OpenReadStream().ReadAsync(buffers);
+            model.Picture = new FileData
+            {
+                Data = buffers,
+                FileType = imgFile.ContentType,
+                Size = imgFile.Size,
+                FileName = imgFile.Name
+            };
         }
         
         private async Task HandleValidSubmit()

@@ -53,5 +53,7 @@ namespace DamaAdmin.Shared.Models
         [Display(Name = "Questão personalizar (loja)")]
         [StringLength(255)]
         public string Question { get; set; }
+        public List<FileData> FormFileTextHelpers { get; set; } = new();
+        public FileData Picture {get; set; }
     }
 }
