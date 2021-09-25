@@ -79,22 +79,67 @@ namespace DamaAdmin.Client.Pages.ProductTypes
                 statusMessage = $"Erro: O nome do tipo de produto '{model.Code}' já existe!";
                 return;
             }
-            // if (allCategories.Any(x => x.Name == categoryModel.Name))
+
+            if(model.CategoriesId == null || model.CategoriesId.Count == 0)
+            {
+                statusMessage = "Erro: O campo Categorias é obrigatório";
+                return;
+            }
+
+            if(model.Picture?.Size > 2097152)
+            {
+                statusMessage = "Erro: O tamanho da imagem principal é muito grande, o máximo é 2MB";
+                return;
+            }
+
+            if(model.FormFileTextHelpers?.Count > 0 && model.FormFileTextHelpers.Any(x => x.Size > 2097152))
+            {
+                statusMessage = "Erro: O tamanho das imagens do nome principal são muito grandes, o máximo é 2MB";
+                return;
+            }
+
+            // ProductTypeModel.Slug = Utils.URLFriendly(ProductTypeModel.Slug);
+            // if((await CheckIfSlugExistsAsync(ProductTypeModel.Slug)))
             // {
-            //     statusMessage = $"Erro: O nome da Categoria '{categoryModel.Name}' já existe!";
-            //     return;
+            //     ModelState.AddModelError("ProductTypeModel.Slug", "Este slug já existe!");
+            //     return Page();
             // }
 
-            // if (allCategories.Any(x => x.Slug == categoryModel.Slug))
+            // //Save Image
+            // if (ProductTypeModel?.Picture?.Length > 0)
             // {
-            //     statusMessage = "Erro: Já existe um slug com o mesmo nome!";
-            //     return;
+            //     var lastId = _context.CatalogTypes.Count() > 0 ? GetLastCatalogTypeId() : 0;
+            //     ProductTypeModel.PictureUri = _service.SaveFile(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureV2FullPath, _backofficeSettings.WebProductTypesPictureV2Uri, (++lastId).ToString(), true, 300).PictureUri;
             // }
 
-            // statusMessage = null;
-            // await CategoryService.Create(categoryModel);
-            // var message = $"Categoria {categoryModel.Name} criada com sucesso!";
-            // NavManager.NavigateTo($"/categorias/{message}");
+            // //Save Images Text Helpers
+            // if (ProductTypeModel?.FormFileTextHelpers?.Count > 0)
+            // {
+            //     foreach (var item in ProductTypeModel.FormFileTextHelpers)
+            //     {
+            //         var lastId = _context.FileDetails.Count() > 0 ? GetLastFileDetailsId() : 0;
+            //         var pictureInfo = _service.SaveFile(item, _backofficeSettings.WebProductTypesPictureV2FullPath, _backofficeSettings.WebProductTypesPictureV2Uri, (++lastId).ToString(), true, 150);
+            //         ProductTypeModel.PictureTextHelpers.Add(new FileDetailViewModel
+            //         {
+            //             PictureUri = pictureInfo.PictureUri,
+            //             Extension = pictureInfo.Extension,
+            //             FileName = pictureInfo.Filename,
+            //             Location = pictureInfo.Location
+            //         });
+            //     }
+            // }
+
+            // var catalogType = _mapper.Map<ApplicationCore.Entities.CatalogType>(ProductTypeModel);
+
+            // foreach (var item in ProductTypeModel.CategoriesId)
+            // {
+            //     catalogType.AddCategory(new CatalogTypeCategory(item));
+            // }
+
+            // _context.CatalogTypes.Add(catalogType);
+            // await _context.SaveChangesAsync();
+
+            // return RedirectToPage("./Index");
         }
 
         private void NameChangeEvent()
