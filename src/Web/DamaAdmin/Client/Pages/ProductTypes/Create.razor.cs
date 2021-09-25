@@ -74,7 +74,7 @@ namespace DamaAdmin.Client.Pages.ProductTypes
         
         private async Task HandleValidSubmit()
         {
-            if(await ProductTypeService.CheckIfExists(model.Code))
+            if(await ProductTypeService.CheckIfCodeExists(model.Code))
             {
                 statusMessage = $"Erro: O nome do tipo de produto '{model.Code}' já existe!";
                 return;
@@ -98,12 +98,11 @@ namespace DamaAdmin.Client.Pages.ProductTypes
                 return;
             }
 
-            // ProductTypeModel.Slug = Utils.URLFriendly(ProductTypeModel.Slug);
-            // if((await CheckIfSlugExistsAsync(ProductTypeModel.Slug)))
-            // {
-            //     ModelState.AddModelError("ProductTypeModel.Slug", "Este slug já existe!");
-            //     return Page();
-            // }
+            if(await ProductTypeService.CheckIfSlugExists(model.Slug))
+            {
+                statusMessage = $"Erro: O slug {model.Slug} já existe!";
+                return;
+            }
 
             // //Save Image
             // if (ProductTypeModel?.Picture?.Length > 0)

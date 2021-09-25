@@ -34,17 +34,27 @@ namespace DamaAdmin.Server.Controllers
         [HttpGet]
         public async Task<PagedList<ProductTypeViewModel>> Get([FromQuery] PagingParameters parameters)
         {
-            return await GetWithPaging<ProductTypeViewModel>(
-                parameters, 
-                new CatalogTypeSpecification(null, null),
-                new CatalogTypeSpecification(parameters.PageNumber, parameters.PageSize)
-                );           
+            return await GetWithPaging<ProductTypeViewModel>(parameters,
+                new CatalogTypeSpecification(new CatalogTypeFilter()),
+                new CatalogTypeSpecification(
+                    new CatalogTypeFilter 
+                    {
+                        IncludeCategories = true, 
+                        PageIndex = parameters.PageNumber, 
+                        PageSize = parameters.PageSize 
+                    }));           
         }
 
-        [HttpGet("exists")]
-        public async Task<bool> CheckIfExists([FromQuery] string code)
+        [HttpGet("code/exists")]
+        public async Task<bool> CheckIfCodeExists([FromQuery] string code)
         {
-            return (await _catalogTypesRepository.CountAsync(new CatalogTypeSpecification(code.ToUpper()))) > 0;
+            return (await _catalogTypesRepository.CountAsync(new CatalogTypeSpecification(new CatalogTypeFilter { Code = code.ToUpper() }))) > 0;
+        }
+
+        [HttpGet("slug/exists")]
+        public async Task<bool> CheckIfSlugExists([FromQuery] string slug)
+        {
+            return (await _catalogTypesRepository.CountAsync(new CatalogTypeSpecification(new CatalogTypeFilter { Slug = slug.ToUpper() }))) > 0;
         }
 
     }

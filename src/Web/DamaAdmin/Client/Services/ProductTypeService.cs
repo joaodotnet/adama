@@ -14,14 +14,30 @@ namespace DamaAdmin.Client.Services
         {
         }
 
-        public async Task<bool> CheckIfExists(string code)
+        public async Task<bool> CheckIfCodeExists(string code)
         {
              var queryStringParam = new Dictionary<string, string>
             {
                 ["code"] = code
             };
 
-            var response = await client.GetAsync(QueryHelpers.AddQueryString($"{endpointName}/exists", queryStringParam));
+            var response = await client.GetAsync(QueryHelpers.AddQueryString($"{endpointName}/code/exists", queryStringParam));
+            var content = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApplicationException(content);
+            }
+            return bool.Parse(content);
+        }
+
+        public async Task<bool> CheckIfSlugExists(string slug)
+        {
+             var queryStringParam = new Dictionary<string, string>
+            {
+                ["slug"] = slug
+            };
+
+            var response = await client.GetAsync(QueryHelpers.AddQueryString($"{endpointName}/slug/exists", queryStringParam));
             var content = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)
             {
