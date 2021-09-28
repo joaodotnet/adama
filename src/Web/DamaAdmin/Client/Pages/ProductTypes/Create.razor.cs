@@ -9,6 +9,8 @@ using DamaAdmin.Shared.Models;
 using DamaAdmin.Client.Services;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components.Forms;
+using ApplicationCore.Helpers;
+using ApplicationCore.DTOs;
 
 namespace DamaAdmin.Client.Pages.ProductTypes
 {
@@ -104,12 +106,18 @@ namespace DamaAdmin.Client.Pages.ProductTypes
                 return;
             }
 
-            // //Save Image
-            // if (ProductTypeModel?.Picture?.Length > 0)
-            // {
-            //     var lastId = _context.CatalogTypes.Count() > 0 ? GetLastCatalogTypeId() : 0;
-            //     ProductTypeModel.PictureUri = _service.SaveFile(ProductTypeModel.Picture, _backofficeSettings.WebProductTypesPictureV2FullPath, _backofficeSettings.WebProductTypesPictureV2Uri, (++lastId).ToString(), true, 300).PictureUri;
-            // }
+            //Save Image
+            if (model?.Picture?.Size > 0)
+            {
+                //var lastId = _context.CatalogTypes.Count() > 0 ? GetLastCatalogTypeId() : 0;
+                // model.PictureUri = ImageHelper.SaveFile(
+                //     model.Picture, 
+                //     _backofficeSettings.WebProductTypesPictureV2FullPath, 
+                //     _backofficeSettings.WebProductTypesPictureV2Uri, 
+                //     (++lastId).ToString(),
+                //      true, 300
+                //      ).PictureUri;
+            }
 
             // //Save Images Text Helpers
             // if (ProductTypeModel?.FormFileTextHelpers?.Count > 0)

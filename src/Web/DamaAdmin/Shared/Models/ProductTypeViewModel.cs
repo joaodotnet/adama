@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using ApplicationCore.DTOs;
 using ApplicationCore.Entities;
 
 namespace DamaAdmin.Shared.Models
