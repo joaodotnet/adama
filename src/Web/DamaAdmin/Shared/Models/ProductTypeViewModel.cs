@@ -36,7 +36,7 @@ namespace DamaAdmin.Shared.Models
         [Display(Name = "Preço Adicional Frase/Nome")]
         public decimal? AdditionalTextPrice { get; set; }
         
-        //public IList<FileDetailViewModel> PictureTextHelpers { get; set; } = new List<FileDetailViewModel>();
+        public IList<FileDetailViewModel> PictureTextHelpers { get; set; } = new List<FileDetailViewModel>();
         [Display(Name = "Peso (gramas)")]
         public int? Weight { get; set; }
         [Display(Name = "Meta Description")]

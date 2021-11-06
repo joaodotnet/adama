@@ -1,7 +1,6 @@
 using System.IO;
+using System.Threading.Tasks;
 using ApplicationCore.DTOs;
-using ApplicationCore.Extensions;
-using Microsoft.AspNetCore.Http;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 
@@ -13,10 +12,10 @@ namespace ApplicationCore.Helpers
         {
             var info = new PictureInfo
             {
-                Filename = formFile.GetFileNameSimplify(),
-                Extension = formFile.GetExtension()
+                Filename = Utils.URLFriendly(Path.GetFileNameWithoutExtension(fileData.FileName)),
+                Extension = Path.GetExtension(fileData.FileName)
             };
-            var filename = formFile.GetFileName();
+            var filename = fileData.FileName;
 
             if (!string.IsNullOrEmpty(addToFilename))
             {
@@ -26,22 +25,19 @@ namespace ApplicationCore.Helpers
 
             //High
             var fileNameHigh = filename.Replace(".", "-high.");
-            var fileHighPath = Path.Combine(
-                fullPath,
-                fileNameHigh);
+            var fileHighPath = fullPath + fileNameHigh;
             using (var stream = new FileStream(fileHighPath, FileMode.Create))
             {
-                formFile.CopyTo(stream);
+                stream.Write(fileData.Data,0, fileData.Data.Length);
+                stream.Close();
             }
 
-            var filePath = Path.Combine(
-                fullPath,
-                filename);
+            var filePath = fullPath + filename;
 
             //Medium
             if (resize)
             {
-                using (Image image = Image.Load(formFile.OpenReadStream()))
+                using (Image image = Image.Load(fileData.Data))
                 {
                     image.Mutate(x => x
                          .Resize(width, height));
@@ -63,7 +59,8 @@ namespace ApplicationCore.Helpers
             {
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    formFile.CopyTo(stream);
+                    stream.Write(fileData.Data, 0, fileData.Data.Length);
+                    stream.Close();
                 }
 
             }

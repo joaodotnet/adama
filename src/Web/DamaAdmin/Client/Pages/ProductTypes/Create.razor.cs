@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
@@ -11,6 +11,8 @@ using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components.Forms;
 using ApplicationCore.Helpers;
 using ApplicationCore.DTOs;
+using Microsoft.Extensions.Configuration;
+using System;
 
 namespace DamaAdmin.Client.Pages.ProductTypes
 {
@@ -30,6 +32,8 @@ namespace DamaAdmin.Client.Pages.ProductTypes
         public NavigationManager NavManager { get; set; }
         [Inject]
         public IJSRuntime JSRuntime { get; set; }
+        [Inject]
+        public IConfiguration Configuration { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -110,31 +114,39 @@ namespace DamaAdmin.Client.Pages.ProductTypes
             if (model?.Picture?.Size > 0)
             {
                 //var lastId = _context.CatalogTypes.Count() > 0 ? GetLastCatalogTypeId() : 0;
-                // model.PictureUri = ImageHelper.SaveFile(
-                //     model.Picture, 
-                //     _backofficeSettings.WebProductTypesPictureV2FullPath, 
-                //     _backofficeSettings.WebProductTypesPictureV2Uri, 
-                //     (++lastId).ToString(),
-                //      true, 300
-                //      ).PictureUri;
+                model.PictureUri = (ImageHelper.SaveFile(
+                    model.Picture, 
+                    Configuration["WebProductTypesPictureV2FullPath"], 
+                    Configuration["WebProductTypesPictureV2Uri"], 
+                    Guid.NewGuid().ToString(),
+                     true, 300
+                     )).PictureUri;
+
+                Console.WriteLine("Picture Uri: {0}", model.PictureUri);
             }
 
-            // //Save Images Text Helpers
-            // if (ProductTypeModel?.FormFileTextHelpers?.Count > 0)
-            // {
-            //     foreach (var item in ProductTypeModel.FormFileTextHelpers)
-            //     {
-            //         var lastId = _context.FileDetails.Count() > 0 ? GetLastFileDetailsId() : 0;
-            //         var pictureInfo = _service.SaveFile(item, _backofficeSettings.WebProductTypesPictureV2FullPath, _backofficeSettings.WebProductTypesPictureV2Uri, (++lastId).ToString(), true, 150);
-            //         ProductTypeModel.PictureTextHelpers.Add(new FileDetailViewModel
-            //         {
-            //             PictureUri = pictureInfo.PictureUri,
-            //             Extension = pictureInfo.Extension,
-            //             FileName = pictureInfo.Filename,
-            //             Location = pictureInfo.Location
-            //         });
-            //     }
-            // }
+            //Save Images Text Helpers
+            if (model?.FormFileTextHelpers?.Count > 0)
+            {
+                foreach (var item in model.FormFileTextHelpers)
+                {
+                    var pictureInfo = ImageHelper.SaveFile(
+                        item, 
+                        Configuration["WebProductTypesPictureV2FullPath"], 
+                        Configuration["WebProductTypesPictureV2Uri"], 
+                        Guid.NewGuid().ToString(), 
+                        true, 
+                        150);
+
+                    model.PictureTextHelpers.Add(new FileDetailViewModel
+                    {
+                        PictureUri = pictureInfo.PictureUri,
+                        Extension = pictureInfo.Extension,
+                        FileName = pictureInfo.Filename,
+                        Location = pictureInfo.Location
+                    });
+                }
+            }
 
             // var catalogType = _mapper.Map<ApplicationCore.Entities.CatalogType>(ProductTypeModel);
 
