@@ -88,7 +88,17 @@
                 </div>
             </div>
             <div class="form-group">
-                <input type="submit" value="Criar" class="btn btn-primary" />
+                <button type="submit" class="btn btn-primary" disabled=@_isSubmitting>
+                    @if(!_isSubmitting)
+                    {
+                        <span>Criar</span>
+                    }
+                    else
+                    {
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span>A criar...</span>
+                    }
+                </button>
             </div>
             @if (!string.IsNullOrEmpty(statusMessage))
             {

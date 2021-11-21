@@ -19,6 +19,8 @@ namespace DamaAdmin.Client.Pages.ProductTypes
     [Authorize]
     public partial class Create : ComponentBase
     {
+        private ElementReference _elementReference;
+        private bool _isSubmitting;
         private ProductTypeViewModel model = new();
         private string statusMessage;
         private IEnumerable<CategoryViewModel> allCategories = new List<CategoryViewModel>();
@@ -53,7 +55,7 @@ namespace DamaAdmin.Client.Pages.ProductTypes
             foreach (IBrowserFile imgFile in e.GetMultipleFiles())
             {
                 var buffers = new byte[imgFile.Size];
-                await imgFile.OpenReadStream().ReadAsync(buffers);                                
+                await imgFile.OpenReadStream().ReadAsync(buffers);
                 model.FormFileTextHelpers.Add(new FileData
                 {
                     Data = buffers,
@@ -77,88 +79,88 @@ namespace DamaAdmin.Client.Pages.ProductTypes
                 FileName = imgFile.Name
             };
         }
-        
+
         private async Task HandleValidSubmit()
         {
-            if(await ProductTypeService.CheckIfCodeExists(model.Code))
+            _isSubmitting = true;
+            try
             {
-                statusMessage = $"Erro: O nome do tipo de produto '{model.Code}' já existe!";
-                return;
-            }
-
-            if(model.CategoriesId == null || model.CategoriesId.Count == 0)
-            {
-                statusMessage = "Erro: O campo Categorias é obrigatório";
-                return;
-            }
-
-            if(model.Picture?.Size > 2097152)
-            {
-                statusMessage = "Erro: O tamanho da imagem principal é muito grande, o máximo é 2MB";
-                return;
-            }
-
-            if(model.FormFileTextHelpers?.Count > 0 && model.FormFileTextHelpers.Any(x => x.Size > 2097152))
-            {
-                statusMessage = "Erro: O tamanho das imagens do nome principal são muito grandes, o máximo é 2MB";
-                return;
-            }
-
-            if(await ProductTypeService.CheckIfSlugExists(model.Slug))
-            {
-                statusMessage = $"Erro: O slug {model.Slug} já existe!";
-                return;
-            }
-
-            //Save Image
-            if (model?.Picture?.Size > 0)
-            {
-                //var lastId = _context.CatalogTypes.Count() > 0 ? GetLastCatalogTypeId() : 0;
-                model.PictureUri = (ImageHelper.SaveFile(
-                    model.Picture, 
-                    Configuration["WebProductTypesPictureV2FullPath"], 
-                    Configuration["WebProductTypesPictureV2Uri"], 
-                    Guid.NewGuid().ToString(),
-                     true, 300
-                     )).PictureUri;
-
-                Console.WriteLine("Picture Uri: {0}", model.PictureUri);
-            }
-
-            //Save Images Text Helpers
-            if (model?.FormFileTextHelpers?.Count > 0)
-            {
-                foreach (var item in model.FormFileTextHelpers)
+                if (await ProductTypeService.CheckIfCodeExists(model.Code))
                 {
-                    var pictureInfo = ImageHelper.SaveFile(
-                        item, 
-                        Configuration["WebProductTypesPictureV2FullPath"], 
-                        Configuration["WebProductTypesPictureV2Uri"], 
-                        Guid.NewGuid().ToString(), 
-                        true, 
-                        150);
-
-                    model.PictureTextHelpers.Add(new FileDetailViewModel
-                    {
-                        PictureUri = pictureInfo.PictureUri,
-                        Extension = pictureInfo.Extension,
-                        FileName = pictureInfo.Filename,
-                        Location = pictureInfo.Location
-                    });
+                    statusMessage = $"Erro: O nome do tipo de produto '{model.Code}' já existe!";
+                    return;
                 }
+
+                if (model.CategoriesId == null || model.CategoriesId.Count == 0)
+                {
+                    statusMessage = "Erro: O campo Categorias é obrigatório";
+                    return;
+                }
+
+                if (model.Picture?.Size > 2097152)
+                {
+                    statusMessage = "Erro: O tamanho da imagem principal é muito grande, o máximo é 2MB";
+                    return;
+                }
+
+                if (model.FormFileTextHelpers?.Count > 0 && model.FormFileTextHelpers.Any(x => x.Size > 2097152))
+                {
+                    statusMessage = "Erro: O tamanho das imagens do nome principal são muito grandes, o máximo é 2MB";
+                    return;
+                }
+
+                if (await ProductTypeService.CheckIfSlugExists(model.Slug))
+                {
+                    statusMessage = $"Erro: O slug {model.Slug} já existe!";
+                    return;
+                }
+
+                //Save Image
+                if (model?.Picture?.Size > 0)
+                {
+                    //var lastId = _context.CatalogTypes.Count() > 0 ? GetLastCatalogTypeId() : 0;
+                    model.PictureUri = (ImageHelper.SaveFile(
+                        model.Picture,
+                        Configuration["WebProductTypesPictureV2FullPath"],
+                        Configuration["WebProductTypesPictureV2Uri"],
+                        Guid.NewGuid().ToString(),
+                         true, 300
+                         )).PictureUri;
+
+                    Console.WriteLine("Picture Uri: {0}", model.PictureUri);
+                }
+
+                //Save Images Text Helpers
+                if (model?.FormFileTextHelpers?.Count > 0)
+                {
+                    foreach (var item in model.FormFileTextHelpers)
+                    {
+                        var pictureInfo = ImageHelper.SaveFile(
+                            item,
+                            Configuration["WebProductTypesPictureV2FullPath"],
+                            Configuration["WebProductTypesPictureV2Uri"],
+                            Guid.NewGuid().ToString(),
+                            true,
+                            150);
+
+                        model.PictureTextHelpers.Add(new FileDetailViewModel
+                        {
+                            PictureUri = pictureInfo.PictureUri,
+                            Extension = pictureInfo.Extension,
+                            FileName = pictureInfo.Filename,
+                            Location = pictureInfo.Location
+                        });
+                    }
+                }
+
+                await ProductTypeService.Create(model);
+                var message = $"Tipo de produto {model.Name} criado com sucesso!";
+                NavManager.NavigateTo($"/tipos-de-produto/{message}");
             }
-
-            // var catalogType = _mapper.Map<ApplicationCore.Entities.CatalogType>(ProductTypeModel);
-
-            // foreach (var item in ProductTypeModel.CategoriesId)
-            // {
-            //     catalogType.AddCategory(new CatalogTypeCategory(item));
-            // }
-
-            // _context.CatalogTypes.Add(catalogType);
-            // await _context.SaveChangesAsync();
-
-            // return RedirectToPage("./Index");
+            finally
+            {
+                _isSubmitting = false;
+            }
         }
 
         private void NameChangeEvent()
@@ -172,11 +174,9 @@ namespace DamaAdmin.Client.Pages.ProductTypes
             model.CategoriesId = selection;
         }
 
-        private ElementReference _elementReference;
-
         public async Task<List<string>> GetAllSelections(ElementReference elementReference)
         {
-            return  (await JSRuntime.InvokeAsync<List<string>>("getSelectedValues", elementReference)).ToList();
+            return (await JSRuntime.InvokeAsync<List<string>>("getSelectedValues", elementReference)).ToList();
         }
     }
 }

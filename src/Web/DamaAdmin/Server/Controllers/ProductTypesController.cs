@@ -1,4 +1,4 @@
-using ApplicationCore.Entities;
+﻿using ApplicationCore.Entities;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Specifications;
 using AutoMapper;
@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Web.Resource;
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -57,5 +58,25 @@ namespace DamaAdmin.Server.Controllers
             return (await _catalogTypesRepository.CountAsync(new CatalogTypeSpecification(new CatalogTypeFilter { Slug = slug.ToUpper() }))) > 0;
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Post(ProductTypeViewModel model)
+        {
+            FileDetailViewModel[] pictureTextHelpers = Array.Empty<FileDetailViewModel>();
+            model.PictureTextHelpers.CopyTo(pictureTextHelpers, 0);
+            model.PictureTextHelpers = null;
+            var entity = _mapper.Map<CatalogType>(model);
+            
+            model.CategoriesId.ForEach(x => entity.AddCategory(new CatalogTypeCategory(int.Parse(x))));
+            if(pictureTextHelpers.Length > 0)
+            {
+                foreach (var item in pictureTextHelpers)
+                {
+                    entity.PictureTextHelpers.Add(_mapper.Map<FileDetail>(item));
+                }
+            }
+
+            await _catalogTypesRepository.AddAsync(entity);
+            return Ok();
+        }
     }
 }
