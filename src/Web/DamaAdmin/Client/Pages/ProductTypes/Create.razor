@@ -1,87 +1,101 @@
-﻿@page "/tipos-de-produto/novo"
+﻿@page "/tipos-de-produto/editar/{Id:int?}"
 
-<h2>Novo Tipo de Produto</h2>
+@if (IsNew)
+{
+    <h2>Novo Tipo de Produto</h2>
+}
+else
+{
+    <h2>Editar Tipo de Produto @model?.Name</h2>
+}
 
 <hr />
-<EditForm Model="@model" OnValidSubmit="@HandleValidSubmit">
-    <div class="row">
-        <div class="col-md-4">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-            <div class="form-group required">
-                <label>Código</label>
-                <InputText @bind-Value="model.Code" class="form-control" />
-                <ValidationMessage For="@(() => model.Code)" />
-            </div>
-            <div class="form-group required">
-                <label>Nome</label>
-                <InputText @bind-Value="model.Name" @onblur="NameChangeEvent" class="form-control" />
-                <ValidationMessage For="@(() => model.Name)" />
-            </div>
-            <div class="form-group required">
-                <label>Slug</label>
-                <InputText @bind-Value="model.Slug" class="form-control" />
-                <ValidationMessage For="@(() => model.Slug)" />
-            </div>
-            <div class="form-group">
-                <label>Categorias</label>
-                <select @ref="_elementReference" value="@model.CategoriesId" multiple="multiple"
-                    @onchange="OnChangeCallback" class="form-control">
-                    @if (allCategories.Count() == 0)
-                    {
-                        <option class="font-italic">Loading...</option>
-                    }
-                    else
-                    {
-                        @foreach (var item in allCategories)
+
+@if (!IsNew && model == null)
+{
+    <p><em>A Carregar...</em></p>
+}
+else
+{
+    <EditForm Model="@model" OnValidSubmit="@HandleValidSubmit">
+        <div class="row">
+            <div class="col-md-4">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="form-group required">
+                    <label>Código</label>
+                    <InputText @bind-Value="model.Code" class="form-control" />
+                    <ValidationMessage For="@(() => model.Code)" />
+                </div>
+                <div class="form-group required">
+                    <label>Nome</label>
+                    <InputText @bind-Value="model.Name" @onblur="NameChangeEvent" class="form-control" />
+                    <ValidationMessage For="@(() => model.Name)" />
+                </div>
+                <div class="form-group required">
+                    <label>Slug</label>
+                    <InputText @bind-Value="model.Slug" class="form-control" />
+                    <ValidationMessage For="@(() => model.Slug)" />
+                </div>
+                <div class="form-group">
+                    <label>Categorias</label>
+                    <select @ref="_elementReference" value="@model.CategoriesId" multiple="multiple"
+                        @onchange="OnChangeCallback" class="form-control">
+                        @if (allCategories.Count() == 0)
                         {
-                            <option value="@item.Id">@item.Name</option>
+                            <option class="font-italic">Loading...</option>
                         }
-                    }
-                </select>
-                <span asp-validation-for="model.CategoriesId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label>Preço</label>
-                <InputNumber @bind-Value="model.Price" class="form-control decimal" />
-                <ValidationMessage For="@(() => model.Price)" />
-            </div>
-            <div class="form-group">
-                <label>Preço Adicional Frase/Nome</label>
-                <InputNumber @bind-Value="model.AdditionalTextPrice" class="form-control decimal" />
-                <ValidationMessage For="@(() => model.AdditionalTextPrice)" />
-            </div>
-            <div class="form-group">
-                <label>Imagens Adicionar Frase/Nome</label>
-                <InputFile OnChange="@OnTextHelpersImagesSelection" class="form-control" multiple />
-            </div>
-            <div class="form-group">
-                <label>Peso (gramas)</label>
-                <InputNumber @bind-Value="model.Weight" class="form-control decimal" />
-                <ValidationMessage For="@(() => model.Weight)" />
-            </div>
-            <div class="form-group">
-                <label>Imagem Principal</label>
-                <InputFile OnChange="@OnImageSelection" class="form-control" />
-                <span>(quadrado)</span>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col">
-                        <label>Entrega (Min)</label>
-                        <InputNumber @bind-Value="model.DeliveryTimeMin" class="form-control" />
-                    </div>
-                    <div class="col">
-                        <label>Entrega (Max)</label>
-                        <InputNumber @bind-Value="model.DeliveryTimeMax" class="form-control" />
-                    </div>
-                    <div class="col">
-                        <label>Unidade</label>
-                        <InputSelect @bind-Value="model.DeliveryTimeUnit" class="form-control">
-                            @foreach (var item in Enum.GetValues(typeof(ApplicationCore.Entities.DeliveryTimeUnitType)))
+                        else
+                        {
+                            @foreach (var item in allCategories)
                             {
-                                <option value="@item">@item</option>
+                                <option value="@item.Id">@item.Name</option>
                             }
+                        }
+                    </select>
+                    <span asp-validation-for="model.CategoriesId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Preço</label>
+                    <InputNumber @bind-Value="model.Price" class="form-control decimal" />
+                    <ValidationMessage For="@(() => model.Price)" />
+                </div>
+                <div class="form-group">
+                    <label>Preço Adicional Frase/Nome</label>
+                    <InputNumber @bind-Value="model.AdditionalTextPrice" class="form-control decimal" />
+                    <ValidationMessage For="@(() => model.AdditionalTextPrice)" />
+                </div>
+                <div class="form-group">
+                    <label>Imagens Adicionar Frase/Nome</label>
+                    <InputFile OnChange="@OnTextHelpersImagesSelection" class="form-control" multiple />
+                </div>
+                <div class="form-group">
+                    <label>Peso (gramas)</label>
+                    <InputNumber @bind-Value="model.Weight" class="form-control decimal" />
+                    <ValidationMessage For="@(() => model.Weight)" />
+                </div>
+                <div class="form-group">
+                    <label>Imagem Principal</label>
+                    <InputFile OnChange="@OnImageSelection" class="form-control" />
+                    <span>(quadrado)</span>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <label>Entrega (Min)</label>
+                            <InputNumber @bind-Value="model.DeliveryTimeMin" class="form-control" />
+                        </div>
+                        <div class="col">
+                            <label>Entrega (Max)</label>
+                            <InputNumber @bind-Value="model.DeliveryTimeMax" class="form-control" />
+                        </div>
+                        <div class="col">
+                            <label>Unidade</label>
+                            <InputSelect @bind-Value="model.DeliveryTimeUnit" class="form-control">
+                                @foreach (var item in Enum.GetValues(typeof(ApplicationCore.Entities.DeliveryTimeUnitType)))
+                                {
+                                <option value="@item">@item</option>
+                                }
                         </InputSelect>
                     </div>
                     <br />
@@ -89,63 +103,63 @@
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary" disabled=@_isSubmitting>
-                    @if(!_isSubmitting)
+                    @if (!_isSubmitting)
+                        {
+                            <span>Criar</span>
+                        }
+                        else
+                        {
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span>A criar...</span>
+                        }
+                    </button>
+                </div>
+                @if (!string.IsNullOrEmpty(statusMessage))
+                {
+                    @if (statusMessage.StartsWith("Erro"))
                     {
-                        <span>Criar</span>
+                        <ul class="validation-errors">
+                            <li class="validation-message">@statusMessage</li>
+                        </ul>
                     }
                     else
                     {
-                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        <span>A criar...</span>
+                        <div class="alert alert-success">@statusMessage</div>
                     }
-                </button>
-            </div>
-            @if (!string.IsNullOrEmpty(statusMessage))
-            {
-                @if (statusMessage.StartsWith("Erro"))
-                {
-                    <ul class="validation-errors">
-                        <li class="validation-message">@statusMessage</li>
-                    </ul>
                 }
-                else
-                {
-                    <div class="alert alert-success">@statusMessage</div>
-                }
-            }
-        </div>
-        <div class="col-md-6">
-            <h4>SEO</h4>
-            <div class="form-group">
-                <label>Meta Description</label>
-                <InputText @bind-Value="model.MetaDescription" class="form-control" />
-                <ValidationMessage For="@(() => model.MetaDescription)" />
             </div>
-            <div class="form-group">
-                <label>Titulo</label>
-                <InputText @bind-Value="model.Title" class="form-control" />
-                <ValidationMessage For="@(() => model.Title)" />
-                <small>(se vazio assume a descrição do tipo do produto)</small>
-            </div>
-            <div class="form-group">
-                <label>Texto H1</label>
-                <InputText @bind-Value="model.H1Text" class="form-control" />
-                <ValidationMessage For="@(() => model.H1Text)" />
-            </div>
-            <div class="form-group">
-                <label>Descrição</label>
-                <InputTextArea @bind-Value="model.Description" class="form-control"></InputTextArea>
-                <ValidationMessage For="@(() => model.Description)" />
-            </div>
-            <div class="form-group">
-                <label>Questão personalizar (loja)</label>
-                <InputText @bind-Value="model.Question" class="form-control" />
-                <ValidationMessage For="@(() => model.Question)" />
+            <div class="col-md-6">
+                <h4>SEO</h4>
+                <div class="form-group">
+                    <label>Meta Description</label>
+                    <InputText @bind-Value="model.MetaDescription" class="form-control" />
+                    <ValidationMessage For="@(() => model.MetaDescription)" />
+                </div>
+                <div class="form-group">
+                    <label>Titulo</label>
+                    <InputText @bind-Value="model.Title" class="form-control" />
+                    <ValidationMessage For="@(() => model.Title)" />
+                    <small>(se vazio assume a descrição do tipo do produto)</small>
+                </div>
+                <div class="form-group">
+                    <label>Texto H1</label>
+                    <InputText @bind-Value="model.H1Text" class="form-control" />
+                    <ValidationMessage For="@(() => model.H1Text)" />
+                </div>
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <InputTextArea @bind-Value="model.Description" class="form-control"></InputTextArea>
+                    <ValidationMessage For="@(() => model.Description)" />
+                </div>
+                <div class="form-group">
+                    <label>Questão personalizar (loja)</label>
+                    <InputText @bind-Value="model.Question" class="form-control" />
+                    <ValidationMessage For="@(() => model.Question)" />
+                </div>
             </div>
         </div>
-    </div>
-</EditForm>
-
+    </EditForm>
+}
 <div>
     <a href="/categorias">Voltar para a lista</a>
 </div>

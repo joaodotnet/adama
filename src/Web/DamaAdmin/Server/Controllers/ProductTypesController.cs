@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Entities;
+﻿using System.Threading.Tasks;
+using ApplicationCore.Entities;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Specifications;
 using AutoMapper;
@@ -7,11 +8,6 @@ using DamaAdmin.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Identity.Web.Resource;
-using System;
-using System.Collections.Generic;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace DamaAdmin.Server.Controllers
 {
@@ -44,6 +40,19 @@ namespace DamaAdmin.Server.Controllers
                         PageIndex = parameters.PageNumber, 
                         PageSize = parameters.PageSize 
                     }));           
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ProductTypeViewModel>> GetById(int id)
+        {
+            var productType = await _catalogTypesRepository.GetBySpecAsync(
+                new CatalogTypeSpecification(id));
+
+            if (productType == null)
+            {
+                return NotFound();
+            }
+            return _mapper.Map<ProductTypeViewModel>(productType);
         }
 
         [HttpGet("code/exists")]

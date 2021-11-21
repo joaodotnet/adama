@@ -4,8 +4,16 @@ using System.Linq;
 
 namespace ApplicationCore.Specifications
 {
-    public class CatalogTypeSpecification : Specification<CatalogType>
+    public class CatalogTypeSpecification : Specification<CatalogType>, ISingleResultSpecification
     {
+        public CatalogTypeSpecification(int id)
+        {
+            Query
+                .Include(p => p.Categories)
+                    .ThenInclude(c => c.Category)
+                .Include(p => p.PictureTextHelpers)
+                .Where(m => m.Id == id);
+        }
         public CatalogTypeSpecification(CatalogTypeFilter filter)
         {
             if (filter.CategoryId.HasValue)

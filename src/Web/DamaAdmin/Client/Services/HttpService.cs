@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -15,13 +15,13 @@ namespace DamaAdmin.Client.Services
     {
         protected readonly string endpointName;
         protected readonly HttpClient client;
-        private readonly JsonSerializerOptions _options;
+
+        protected JsonSerializerOptions Options => new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         public HttpService(HttpClient client, string endpointName)
         {
             this.client = client;
             this.endpointName = endpointName;
-            _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         }
 
         public async Task<HttpResponseMessage> Delete(int id)
@@ -48,8 +48,8 @@ namespace DamaAdmin.Client.Services
             }
             var pagingResponse = new PagingResponse<T>
             {
-                Items = JsonSerializer.Deserialize<List<T>>(content, _options),
-                MetaData = JsonSerializer.Deserialize<MetaData>(response.Headers.GetValues("X-Pagination").First(), _options)
+                Items = JsonSerializer.Deserialize<List<T>>(content, Options),
+                MetaData = JsonSerializer.Deserialize<MetaData>(response.Headers.GetValues("X-Pagination").First(), Options)
             };
 
             return pagingResponse;
@@ -57,12 +57,12 @@ namespace DamaAdmin.Client.Services
 
         public async Task<IEnumerable<T>> ListAll()
         {
-            return await client.GetFromJsonAsync<IEnumerable<T>>($"{endpointName}/all", _options);
+            return await client.GetFromJsonAsync<IEnumerable<T>>($"{endpointName}/all", Options);
         }
 
         public async Task Create(T model)
         {
-            var response = await client.PostAsJsonAsync(endpointName, model, _options);
+            var response = await client.PostAsJsonAsync(endpointName, model, Options);
             
             if (!response.IsSuccessStatusCode)
             {
@@ -73,7 +73,7 @@ namespace DamaAdmin.Client.Services
 
         public async Task Update(T model)
         {
-            var response = await client.PutAsJsonAsync(endpointName, model, _options);
+            var response = await client.PutAsJsonAsync(endpointName, model, Options);
             
             if (!response.IsSuccessStatusCode)
             {

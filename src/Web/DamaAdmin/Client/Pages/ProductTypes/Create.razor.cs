@@ -19,6 +19,9 @@ namespace DamaAdmin.Client.Pages.ProductTypes
     [Authorize]
     public partial class Create : ComponentBase
     {
+        [Parameter]
+        public int? Id { get; set; }
+
         private ElementReference _elementReference;
         private bool _isSubmitting;
         private ProductTypeViewModel model = new();
@@ -37,11 +40,15 @@ namespace DamaAdmin.Client.Pages.ProductTypes
         [Inject]
         public IConfiguration Configuration { get; set; }
 
+        public bool IsNew => !Id.HasValue;
+
         protected override async Task OnInitializedAsync()
         {
             try
             {
                 allCategories = await CategoryService.ListAll();
+                if (Id.HasValue)
+                    model = await ProductTypeService.GetById(Id.Value);
             }
             catch (AccessTokenNotAvailableException exception)
             {

@@ -3,7 +3,7 @@
 
 <h2>Tipos de Produto</h2>
 <p>
-    <a href="/tipos-de-produto/novo">Novo Tipo de Produto</a>
+    <a href="/tipos-de-produto/editar">Novo Tipo de Produto</a>
 </p>
 @if (!string.IsNullOrEmpty(Message))
 {
@@ -65,7 +65,7 @@ else
                             <td>@(!string.IsNullOrEmpty(item.MetaDescription) ? "Sim/":
                         "Não/")@(!string.IsNullOrEmpty(item.Title) ? "Sim" : "Não")</td>
                             <td>
-                                <a href="/tipos-de-produto/@item.Id" class="btn btn-warning btn-sm" role="button" title="Editar">
+                                <a href="/tipos-de-produto/editar/@item.Id" class="btn btn-warning btn-sm" role="button" title="Editar">
                                     <span class="oi oi-pencil" title="Editar" aria-hidden="true"></span>
                                 </a>
                                 <button class="btn btn-info btn-sm" @onclick="@(e => Modal.Open(item.Name, item))">
