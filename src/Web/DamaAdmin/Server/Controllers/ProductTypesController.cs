@@ -61,7 +61,7 @@ namespace DamaAdmin.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(ProductTypeViewModel model)
         {
-            FileDetailViewModel[] pictureTextHelpers = Array.Empty<FileDetailViewModel>();
+            FileDetailViewModel[] pictureTextHelpers = new FileDetailViewModel[model.PictureTextHelpers.Count];
             model.PictureTextHelpers.CopyTo(pictureTextHelpers, 0);
             model.PictureTextHelpers = null;
             var entity = _mapper.Map<CatalogType>(model);
@@ -71,7 +71,7 @@ namespace DamaAdmin.Server.Controllers
             {
                 foreach (var item in pictureTextHelpers)
                 {
-                    entity.PictureTextHelpers.Add(_mapper.Map<FileDetail>(item));
+                    entity.AddPictureTextHelper(_mapper.Map<FileDetail>(item));
                 }
             }
 

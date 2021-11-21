@@ -49,6 +49,11 @@ namespace ApplicationCore.Entities
             _categories.Add(catalogTypeCategory);
         }
 
+        public void AddPictureTextHelper(FileDetail pictureTextHelper)
+        {
+            _pictureTextHelpers.Add(pictureTextHelper);
+        }
+
         public void Update(string code, string name, int deliveryTimeMin, int deliveryTimeMax, DeliveryTimeUnitType deliveryTimeUnit, decimal price, decimal? additionalTextPrice, int? weight, string metaDescription, string title, string slug)
         {
             Code = code;
