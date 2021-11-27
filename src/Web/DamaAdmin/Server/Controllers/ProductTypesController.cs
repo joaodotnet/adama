@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using ApplicationCore.Entities;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Specifications;
@@ -52,13 +53,18 @@ namespace DamaAdmin.Server.Controllers
             {
                 return NotFound();
             }
-            return _mapper.Map<ProductTypeViewModel>(productType);
+            var vm = _mapper.Map<ProductTypeViewModel>(productType);
+            if (productType.Categories?.Count > 0)
+            {
+                vm.CategoriesId.AddRange(productType.Categories.Select(x => x.CategoryId.ToString()));
+            }
+            return vm;
         }
 
         [HttpGet("code/exists")]
-        public async Task<bool> CheckIfCodeExists([FromQuery] string code)
+        public async Task<bool> CheckIfCodeExists([FromQuery] string code, [FromQuery] int? productTypeId)
         {
-            return (await _catalogTypesRepository.CountAsync(new CatalogTypeSpecification(new CatalogTypeFilter { Code = code.ToUpper() }))) > 0;
+            return (await _catalogTypesRepository.CountAsync(new CatalogTypeSpecification(new CatalogTypeFilter { Code = code.ToUpper(), ProductTypeId = productTypeId }))) > 0;
         }
 
         [HttpGet("slug/exists")]

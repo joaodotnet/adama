@@ -46,9 +46,11 @@ namespace DamaAdmin.Client.Pages.ProductTypes
         {
             try
             {
-                allCategories = await CategoryService.ListAll();
                 if (Id.HasValue)
+                {
                     model = await ProductTypeService.GetById(Id.Value);
+                }
+                allCategories = await CategoryService.ListAll();
             }
             catch (AccessTokenNotAvailableException exception)
             {
@@ -92,7 +94,7 @@ namespace DamaAdmin.Client.Pages.ProductTypes
             _isSubmitting = true;
             try
             {
-                if (await ProductTypeService.CheckIfCodeExists(model.Code))
+                if (await ProductTypeService.CheckIfCodeExists(model.Code, model.Id))
                 {
                     statusMessage = $"Erro: O nome do tipo de produto '{model.Code}' já existe!";
                     return;

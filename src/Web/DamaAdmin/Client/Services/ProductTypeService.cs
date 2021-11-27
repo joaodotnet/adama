@@ -20,12 +20,14 @@ namespace DamaAdmin.Client.Services
             return await client.GetFromJsonAsync<ProductTypeViewModel>($"{endpointName}/{id}", Options);
         }
 
-        public async Task<bool> CheckIfCodeExists(string code)
+        public async Task<bool> CheckIfCodeExists(string code, int? id)
         {
              var queryStringParam = new Dictionary<string, string>
             {
                 ["code"] = code
             };
+            if (id.HasValue)
+                queryStringParam.Add("productTypeId", id.ToString());
 
             var response = await client.GetAsync(QueryHelpers.AddQueryString($"{endpointName}/code/exists", queryStringParam));
             var content = await response.Content.ReadAsStringAsync();

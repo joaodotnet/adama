@@ -54,6 +54,9 @@ namespace ApplicationCore.Specifications
                     .ThenInclude(c => c.Category);
             }
 
+            if (filter.ProductTypeId.HasValue)
+                Query.Where(x => x.Id != filter.ProductTypeId);
+
         }
     }
     public class CatalogTypeFilter
@@ -65,5 +68,6 @@ namespace ApplicationCore.Specifications
         public string Code { get; set; }
         public string Slug { get; set; }
         public bool IncludeCategories { get; set; }
+        public int? ProductTypeId { get; set; }
     }
 }

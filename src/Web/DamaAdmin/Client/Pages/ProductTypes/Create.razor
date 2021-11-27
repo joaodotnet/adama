@@ -49,7 +49,8 @@ else
                         {
                             @foreach (var item in allCategories)
                             {
-                                <option value="@item.Id">@item.Name</option>
+                                var isSelected = model.CategoriesId.Any(x => x == item.Id.ToString());
+                                <option value="@item.Id" selected="@isSelected">@item.Name</option>
                             }
                         }
                     </select>
@@ -68,6 +69,17 @@ else
                 <div class="form-group">
                     <label>Imagens Adicionar Frase/Nome</label>
                     <InputFile OnChange="@OnTextHelpersImagesSelection" class="form-control" multiple />
+                    @if (!IsNew)
+                    {
+                        <div class="row">
+                            @foreach (var item in model.PictureTextHelpers)
+                            {
+                                <div class="col-md-6">
+                                    <img src="@item.PictureUri" class="img-thumbnail" />
+                                </div>
+                            }
+                        </div>
+                    }
                 </div>
                 <div class="form-group">
                     <label>Peso (gramas)</label>
@@ -78,6 +90,7 @@ else
                     <label>Imagem Principal</label>
                     <InputFile OnChange="@OnImageSelection" class="form-control" />
                     <span>(quadrado)</span>
+                    <img src="@model.PictureUri" class="img-thumbnail" />
                 </div>
                 <div class="form-group">
                     <div class="row">
