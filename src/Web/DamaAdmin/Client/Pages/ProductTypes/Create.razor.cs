@@ -118,7 +118,7 @@ namespace DamaAdmin.Client.Pages.ProductTypes
                     return;
                 }
 
-                if (await ProductTypeService.CheckIfSlugExists(model.Slug))
+                if (await ProductTypeService.CheckIfSlugExists(model.Slug, model.Id))
                 {
                     statusMessage = $"Erro: O slug {model.Slug} já existe!";
                     return;
@@ -161,9 +161,11 @@ namespace DamaAdmin.Client.Pages.ProductTypes
                         });
                     }
                 }
+                else
+                    model.PictureTextHelpers = new List<FileDetailViewModel>();
 
-                await ProductTypeService.Create(model);
-                var message = $"Tipo de produto {model.Name} criado com sucesso!";
+                await ProductTypeService.Upsert(model);
+                var message = $"Tipo de produto {model.Name} atualizado com sucesso!";
                 NavManager.NavigateTo($"/tipos-de-produto/{message}");
             }
             finally

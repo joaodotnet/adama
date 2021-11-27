@@ -60,7 +60,7 @@ namespace DamaAdmin.Client.Services
             return await client.GetFromJsonAsync<IEnumerable<T>>($"{endpointName}/all", Options);
         }
 
-        public async Task Create(T model)
+        public async Task Upsert(T model)
         {
             var response = await client.PostAsJsonAsync(endpointName, model, Options);
             

@@ -48,7 +48,7 @@ namespace DamaAdmin.Client.Pages.Categories
             }
 
             statusMessage = null;
-            await CategoryService.Create(categoryModel);
+            await CategoryService.Upsert(categoryModel);
             var message = $"Categoria {categoryModel.Name} criada com sucesso!";
             NavManager.NavigateTo($"/categorias/{message}");
         }

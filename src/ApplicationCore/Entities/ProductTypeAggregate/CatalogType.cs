@@ -49,6 +49,11 @@ namespace ApplicationCore.Entities
             _categories.Add(catalogTypeCategory);
         }
 
+        public void RemoveCategory(CatalogTypeCategory item)
+        {
+            _categories.Remove(item);
+        }
+
         public void AddPictureTextHelper(FileDetail pictureTextHelper)
         {
             _pictureTextHelpers.Add(pictureTextHelper);
@@ -67,6 +72,11 @@ namespace ApplicationCore.Entities
             MetaDescription = metaDescription;
             Title = title;
             Slug = slug;
+        }
+
+        public void ClearTextHelpers()
+        {
+            _pictureTextHelpers.Clear();
         }
     }
 

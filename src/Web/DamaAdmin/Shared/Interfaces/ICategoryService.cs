@@ -11,7 +11,7 @@ namespace DamaAdmin.Shared.Interfaces
         Task<PagingResponse<T>> List(PagingParameters parameters);
         Task<IEnumerable<T>> ListAll();
         Task<HttpResponseMessage> Delete(int categoryId);
-        Task Create(T categoryModel);
+        Task Upsert(T categoryModel);
         Task Update(T categoryModel);
     }
 }

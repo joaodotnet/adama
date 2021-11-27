@@ -54,8 +54,11 @@ namespace ApplicationCore.Specifications
                     .ThenInclude(c => c.Category);
             }
 
+            if (filter.NotProductTypeId.HasValue)
+                Query.Where(x => x.Id != filter.NotProductTypeId);
+
             if (filter.ProductTypeId.HasValue)
-                Query.Where(x => x.Id != filter.ProductTypeId);
+                Query.Where(x => x.Id == filter.ProductTypeId);
 
         }
     }
@@ -68,6 +71,7 @@ namespace ApplicationCore.Specifications
         public string Code { get; set; }
         public string Slug { get; set; }
         public bool IncludeCategories { get; set; }
+        public int? NotProductTypeId { get; set; }
         public int? ProductTypeId { get; set; }
     }
 }

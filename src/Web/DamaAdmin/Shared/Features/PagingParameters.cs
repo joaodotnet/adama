@@ -1,10 +1,10 @@
-namespace DamaAdmin.Shared.Features
+﻿namespace DamaAdmin.Shared.Features
 {
     public class PagingParameters
     {
-        const int maxPageSize = 2;
+        const int maxPageSize = 10;
         public int PageNumber { get; set; } = 1;
-        private int _pageSize = 2;
+        private int _pageSize = 10;
         public int PageSize
         {
             get

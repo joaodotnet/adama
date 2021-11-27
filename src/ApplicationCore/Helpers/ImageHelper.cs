@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using ApplicationCore.DTOs;
 using SixLabors.ImageSharp;
@@ -70,6 +70,18 @@ namespace ApplicationCore.Helpers
             info.PictureHighUri = uriPath + fileNameHigh;
 
             return info;
+        }
+
+        public static void DeleteFile(string fullpath)
+        {
+            if (File.Exists(fullpath))
+                File.Delete(fullpath);
+        }
+
+        public static void DeleteFile(string fullpath, string fileName)
+        {
+            if (File.Exists(Path.Combine(fullpath, fileName)))
+                File.Delete(Path.Combine(fullpath, fileName));
         }
     }
 }

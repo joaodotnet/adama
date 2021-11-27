@@ -38,12 +38,15 @@ namespace DamaAdmin.Client.Services
             return bool.Parse(content);
         }
 
-        public async Task<bool> CheckIfSlugExists(string slug)
+        public async Task<bool> CheckIfSlugExists(string slug, int? id)
         {
              var queryStringParam = new Dictionary<string, string>
             {
                 ["slug"] = slug
             };
+
+            if (id.HasValue)
+                queryStringParam.Add("productTypeId", id.ToString());
 
             var response = await client.GetAsync(QueryHelpers.AddQueryString($"{endpointName}/slug/exists", queryStringParam));
             var content = await response.Content.ReadAsStringAsync();
