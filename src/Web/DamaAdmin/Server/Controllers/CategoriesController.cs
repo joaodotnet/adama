@@ -16,7 +16,7 @@ namespace DamaAdmin.Server.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class CategoriesController : DamaAdminBase<Category>
     {        
         private readonly IMapper _mapper;

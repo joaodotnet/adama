@@ -19,6 +19,9 @@ namespace DamaAdmin.Server
 
             CreateMap<FileDetail, FileDetailViewModel>();
             CreateMap<FileDetailViewModel, FileDetail>();
+
+            CreateMap<IllustrationType, IllustrationTypeViewModel>();
+            CreateMap<IllustrationTypeViewModel, IllustrationType>();
         }
     }
 }

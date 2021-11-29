@@ -24,6 +24,7 @@ namespace DamaAdmin.Client
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("DamaAdmin.ServerAPI"));
             builder.Services.AddScoped<CategoryService>();
             builder.Services.AddScoped<ProductTypeService>();
+            builder.Services.AddScoped<IllustrationTypeService>();
 
             builder.Services.AddMsalAuthentication(options =>
             {

@@ -21,7 +21,7 @@ namespace DamaAdmin.Client.Services
         public HttpService(HttpClient client, string endpointName)
         {
             this.client = client;
-            this.endpointName = endpointName;
+            this.endpointName = "api/" + endpointName;
         }
 
         public async Task<HttpResponseMessage> Delete(int id)
@@ -41,7 +41,10 @@ namespace DamaAdmin.Client.Services
                 ["pageNumber"] = parameters.PageNumber.ToString()
             };
             var response = await client.GetAsync(QueryHelpers.AddQueryString(endpointName, queryStringParam));
+            Console.WriteLine("url: " + response.RequestMessage.RequestUri.ToString());
+            Console.WriteLine("response status:" + response.StatusCode);
             var content = await response.Content.ReadAsStringAsync();
+            Console.WriteLine("response content: " + content);
             if (!response.IsSuccessStatusCode)
             {
                 throw new ApplicationException(content);

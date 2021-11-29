@@ -1,0 +1,67 @@
+﻿@page "/tipos-de-ilustracoes/{message?}"
+@inherits BlazorPageBase<IllustrationTypeViewModel,IllustrationTypeService>
+
+<h2>Tipos de Ilustrações</h2>
+<p>
+    <a href="/tipos-de-ilustracoes/editar">Novo Tipo de Ilustração</a>
+</p>
+@if (!string.IsNullOrEmpty(Message))
+{
+    <div class="alert alert-success" role="alert">
+        @Message
+    </div>
+}
+@if (Items == null)
+{
+    <p><em>A carregar...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col">
+            <table class="table table-pagination">
+                <thead>
+                    <tr>
+                        <th>
+                            Código
+                        </th>
+                        <th>
+                            Nome
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Items)
+                    {
+                        <tr>
+                            <td>
+                                @item.Code
+                            </td>
+                            <td>
+                                @item.Name
+                            </td>
+                            <td>
+                                 <a href="/tipos-de-ilustracoes/editar/@item.Id" class="btn btn-warning btn-sm" role="button" title="Editar">
+                                    <span class="oi oi-pencil" title="Editar" aria-hidden="true"></span>
+                                </a>
+                                <button class="btn btn-info btn-sm" @onclick="@(e => Modal.Open(item.Name, item))">
+                                    <span class="oi oi-eye" title="Ver" aria-hidden="true"></span>
+                                </button>
+                                <button class="btn btn-danger btn-sm" @onclick="@(e => OnRemoveItem(item))">
+                                    <span class="oi oi-trash" title="Remover" aria-hidden="true"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <Pagination MetaData="MetaData" Spread="3" SelectedPage="SelectedPage" />
+        </div>
+    </div>
+    <Modal @ref="Modal"></Modal>
+}
