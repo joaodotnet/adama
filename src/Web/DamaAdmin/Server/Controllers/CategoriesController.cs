@@ -68,19 +68,5 @@ namespace DamaAdmin.Server.Controllers
             await _categoryRepository.UpdateAsync(cat);
             return Ok();
         }
-
-        [HttpDelete]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var catinDb = await _categoryRepository.GetByIdAsync(id);
-
-            if (catinDb != null)
-            {
-                await _categoryRepository.DeleteAsync(catinDb);
-                return Ok();
-            }
-
-            return NotFound();
-        }
     }
 }

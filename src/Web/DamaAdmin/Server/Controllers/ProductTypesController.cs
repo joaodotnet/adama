@@ -71,15 +71,15 @@ namespace DamaAdmin.Server.Controllers
         }
 
         [HttpGet("code/exists")]
-        public async Task<bool> CheckIfCodeExists([FromQuery] string code, [FromQuery] int? productTypeId)
+        public async Task<bool> CheckIfCodeExists([FromQuery] string code, [FromQuery] int? id)
         {
-            return (await _catalogTypesRepository.CountAsync(new CatalogTypeSpecification(new CatalogTypeFilter { Code = code.ToUpper(), NotProductTypeId = productTypeId }))) > 0;
+            return (await _catalogTypesRepository.CountAsync(new CatalogTypeSpecification(new CatalogTypeFilter { Code = code.ToUpper(), NotProductTypeId = id }))) > 0;
         }
 
         [HttpGet("slug/exists")]
-        public async Task<bool> CheckIfSlugExists([FromQuery] string slug, [FromQuery] int? productTypeId)
+        public async Task<bool> CheckIfSlugExists([FromQuery] string slug, [FromQuery] int? id)
         {
-            return (await _catalogTypesRepository.CountAsync(new CatalogTypeSpecification(new CatalogTypeFilter { Slug = slug.ToUpper(), NotProductTypeId = productTypeId }))) > 0;
+            return (await _catalogTypesRepository.CountAsync(new CatalogTypeSpecification(new CatalogTypeFilter { Slug = slug.ToUpper(), NotProductTypeId = id }))) > 0;
         }
 
         [HttpPost]
@@ -152,6 +152,38 @@ namespace DamaAdmin.Server.Controllers
             }
 
             return Ok();
+        }
+
+        [HttpDelete]
+        public override async Task<IActionResult> Delete(int id)
+        {
+            var productTypeEntity = await _catalogTypesRepository.GetBySpecAsync(
+                    new CatalogTypeSpecification(
+                        new CatalogTypeFilter
+                        {
+                            ProductTypeId = id,
+                            IncludeCategories = true,
+                            IncludeHelpers = true
+                        }));
+
+            if (productTypeEntity != null)
+            {
+                if(!string.IsNullOrEmpty(productTypeEntity.PictureUri))
+                {
+                    ImageHelper.DeleteFile(_backofficeSettings.WebProductTypesPictureV2FullPath, Utils.GetFileName(productTypeEntity.PictureUri));
+                }
+                foreach (var item in productTypeEntity.PictureTextHelpers)
+                {
+                    ImageHelper.DeleteFile(item.Location);
+                }
+                productTypeEntity.ClearCategories();
+                productTypeEntity.ClearTextHelpers();
+                await _catalogTypesRepository.UpdateAsync(productTypeEntity);
+                await _catalogTypesRepository.DeleteAsync(productTypeEntity);
+                return Ok();
+            }
+
+            return NotFound();
         }
 
         private void SaveTextHelpers(FileDetailViewModel[] pictureTextHelpers, CatalogType entity, bool deleteAll = false)

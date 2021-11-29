@@ -84,5 +84,29 @@ namespace DamaAdmin.Client.Services
                 throw new ApplicationException(content);
             }
         }
+
+        public async Task<T> GetById(int id)
+        {
+            Console.WriteLine($"url: {endpointName}/{id}");
+            return await client.GetFromJsonAsync<T>($"{endpointName}/{id}", Options);
+        }
+
+        public virtual async Task<bool> CheckIfCodeExists(string code, int? id)
+        {
+            var queryStringParam = new Dictionary<string, string>
+            {
+                ["code"] = code
+            };
+            if (id.HasValue)
+                queryStringParam.Add("id", id.ToString());
+
+            var response = await client.GetAsync(QueryHelpers.AddQueryString($"{endpointName}/code/exists", queryStringParam));
+            var content = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApplicationException(content);
+            }
+            return bool.Parse(content);
+        }
     }
 }

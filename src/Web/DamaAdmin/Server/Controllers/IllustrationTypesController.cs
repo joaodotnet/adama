@@ -15,8 +15,13 @@ namespace DamaAdmin.Server.Controllers
     [Route("api/[controller]")]
     public class IllustrationTypesController : DamaAdminBase<IllustrationType>
     {
+        private readonly IRepository<IllustrationType> _repository;
+        private readonly IMapper _mapper;
+
         public IllustrationTypesController(IRepository<IllustrationType> repository, IMapper mapper) : base(repository, mapper)
         {
+            _repository = repository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -30,6 +35,40 @@ namespace DamaAdmin.Server.Controllers
                         PageIndex = parameters.PageNumber,
                         PageSize = parameters.PageSize
                     }));
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IllustrationTypeViewModel>> GetById(int id)
+        {
+            var entity = await _repository.GetByIdAsync(id);
+
+            if (entity == null)
+            {
+                return NotFound();
+            }
+            return _mapper.Map<IllustrationTypeViewModel>(entity);
+        }
+
+        [HttpGet("code/exists")]
+        public async Task<bool> CheckIfCodeExists([FromQuery] string code, [FromQuery] int? id)
+        {
+            return (await _repository.CountAsync(new IllustrationTypeSpecification(new IllustrationTypeFilter { Code = code.ToUpper(), NotId = id }))) > 0;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post(IllustrationTypeViewModel model)
+        {
+            var entity = _mapper.Map<IllustrationType>(model);
+            if (model.Id == 0)
+            {
+                await _repository.AddAsync(entity);
+            }
+            else
+            {
+                await _repository.UpdateAsync(entity);
+            }
+
+            return Ok();
         }
     }
 }

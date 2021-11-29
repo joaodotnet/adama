@@ -78,6 +78,11 @@ namespace ApplicationCore.Entities
         {
             _pictureTextHelpers.Clear();
         }
+
+        public void ClearCategories()
+        {
+            _categories.Clear();
+        }
     }
 
     public enum DeliveryTimeUnitType

@@ -15,29 +15,6 @@ namespace DamaAdmin.Client.Services
         {
         }
 
-        public async Task<ProductTypeViewModel> GetById(int id)
-        {
-            return await client.GetFromJsonAsync<ProductTypeViewModel>($"{endpointName}/{id}", Options);
-        }
-
-        public async Task<bool> CheckIfCodeExists(string code, int? id)
-        {
-             var queryStringParam = new Dictionary<string, string>
-            {
-                ["code"] = code
-            };
-            if (id.HasValue)
-                queryStringParam.Add("productTypeId", id.ToString());
-
-            var response = await client.GetAsync(QueryHelpers.AddQueryString($"{endpointName}/code/exists", queryStringParam));
-            var content = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new ApplicationException(content);
-            }
-            return bool.Parse(content);
-        }
-
         public async Task<bool> CheckIfSlugExists(string slug, int? id)
         {
              var queryStringParam = new Dictionary<string, string>
@@ -46,7 +23,7 @@ namespace DamaAdmin.Client.Services
             };
 
             if (id.HasValue)
-                queryStringParam.Add("productTypeId", id.ToString());
+                queryStringParam.Add("id", id.ToString());
 
             var response = await client.GetAsync(QueryHelpers.AddQueryString($"{endpointName}/slug/exists", queryStringParam));
             var content = await response.Content.ReadAsStringAsync();

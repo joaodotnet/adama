@@ -1,4 +1,4 @@
-using ApplicationCore.Interfaces;
+﻿using ApplicationCore.Interfaces;
 using Ardalis.Specification;
 using AutoMapper;
 using DamaAdmin.Shared.Features;
@@ -41,6 +41,20 @@ namespace DamaAdmin.Server.Controllers
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedlist.MetaData));
 
             return pagedlist;
+        }
+
+        [HttpDelete]
+        public virtual async Task<IActionResult> Delete(int id)
+        {
+            var entity = await _repository.GetByIdAsync(id);
+
+            if (entity != null)
+            {
+                await _repository.DeleteAsync(entity);
+                return Ok();
+            }
+
+            return NotFound();
         }
     }
 }

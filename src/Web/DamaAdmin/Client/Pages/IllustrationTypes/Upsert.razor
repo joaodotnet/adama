@@ -1,0 +1,69 @@
+﻿@page "/tipos-de-ilustracoes/editar/{Id:int?}"
+
+@if (IsNew)
+{
+    <h2>Novo Tipo de Ilustração</h2>
+}
+else
+{
+    <h2>Editar Tipo de Ilustração @model?.Name</h2>
+}
+
+<hr />
+
+@if (!IsNew && model == null)
+{
+    <p><em>A Carregar...</em></p>
+}
+else
+{
+    <EditForm Model="@model" OnValidSubmit="@HandleValidSubmit">
+        <div class="row">
+            <div class="col-md-4">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="form-group required">
+                    <label>Código</label>
+                    <InputText @bind-Value="model.Code" class="form-control" />
+                    <ValidationMessage For="@(() => model.Code)" />
+                </div>
+                <div class="form-group required">
+                    <label>Nome</label>
+                    <InputText @bind-Value="model.Name" class="form-control" />
+                    <ValidationMessage For="@(() => model.Name)" />
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" disabled=@_isSubmitting>
+                        @if (!_isSubmitting)
+                        {
+                            <span>Criar</span>
+                        }
+                        else
+                        {
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span>A criar...</span>
+                        }
+                    </button>
+
+                    @if (!string.IsNullOrEmpty(statusMessage))
+                    {
+                        @if (statusMessage.StartsWith("Erro"))
+                        {
+                            <ul class="validation-errors">
+                                <li class="validation-message">@statusMessage</li>
+                            </ul>
+                        }
+                        else
+                        {
+                            <div class="alert alert-success">@statusMessage</div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </EditForm>
+}
+<div>
+    <a href="/tipos-de-ilustracoes">Voltar para a lista</a>
+</div>

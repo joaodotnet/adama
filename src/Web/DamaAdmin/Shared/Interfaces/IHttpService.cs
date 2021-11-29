@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using DamaAdmin.Shared.Features;
@@ -13,5 +13,7 @@ namespace DamaAdmin.Shared.Interfaces
         Task<HttpResponseMessage> Delete(int categoryId);
         Task Upsert(T categoryModel);
         Task Update(T categoryModel);
+        Task<T> GetById(int id);
+        abstract Task<bool> CheckIfCodeExists(string code, int? id);
     }
 }
