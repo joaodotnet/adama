@@ -25,6 +25,7 @@ namespace DamaAdmin.Client
             builder.Services.AddScoped<CategoryService>();
             builder.Services.AddScoped<ProductTypeService>();
             builder.Services.AddScoped<IllustrationTypeService>();
+            builder.Services.AddScoped<IllustrationService>();
 
             builder.Services.AddMsalAuthentication(options =>
             {

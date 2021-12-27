@@ -97,7 +97,7 @@ namespace DamaAdmin.Client.Services
             {
                 ["code"] = code
             };
-            if (id.HasValue)
+            if (id.HasValue && id != 0)
                 queryStringParam.Add("id", id.ToString());
 
             var response = await client.GetAsync(QueryHelpers.AddQueryString($"{endpointName}/code/exists", queryStringParam));

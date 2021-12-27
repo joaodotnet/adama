@@ -22,6 +22,9 @@ namespace DamaAdmin.Server
 
             CreateMap<IllustrationType, IllustrationTypeViewModel>();
             CreateMap<IllustrationTypeViewModel, IllustrationType>();
+
+            CreateMap<CatalogIllustration, IllustrationViewModel>();
+            CreateMap<IllustrationViewModel, CatalogIllustration>();
         }
     }
 }

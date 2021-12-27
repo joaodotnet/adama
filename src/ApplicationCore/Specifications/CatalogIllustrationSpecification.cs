@@ -1,4 +1,4 @@
-using ApplicationCore.Entities;
+﻿using ApplicationCore.Entities;
 using Ardalis.Specification;
 using System.Linq;
 
@@ -6,23 +6,50 @@ namespace ApplicationCore.Specifications
 {
     public class CatalogIllustrationSpecification : Specification<CatalogIllustration>, ISingleResultSpecification
     {
-        public CatalogIllustrationSpecification()
+        public CatalogIllustrationSpecification(IllustrationFilter filter)
         {
-            Query.Include(x => x.IllustrationType)
-                .OrderBy(x => x.Code);
-        }
-        public CatalogIllustrationSpecification(string code, int? notId = null)
-        {
-            Query.Where(x => x.Code.ToUpper() == code.ToUpper());
-            if(notId.HasValue)
-                Query.Where(x => x.Id != notId.Value);
-        }
+            if (!string.IsNullOrEmpty(filter.Code))
+                Query.Where(x => x.Code.ToUpper() == filter.Code.ToUpper());
 
-        public CatalogIllustrationSpecification(int id)
-        {
+            if (filter.NotId.HasValue)
+                Query.Where(x => x.Id != filter.NotId.Value);
+
+            if (filter.PageIndex.HasValue && filter.PageSize.HasValue)
+            {
+                Query
+                    .Skip((filter.PageIndex.Value - 1) * filter.PageSize.Value)
+                    .Take(filter.PageSize.Value);
+            }
+
             Query
                 .Include(x => x.IllustrationType)
-                .Where(x => x.Id == id);
+                .OrderBy(x => x.Code);
         }
+
+        //public CatalogIllustrationSpecification()
+        //{
+        //    Query.Include(x => x.IllustrationType)
+        //        .OrderBy(x => x.Code);
+        //}
+        //public CatalogIllustrationSpecification(string code, int? notId = null)
+        //{
+        //    Query.Where(x => x.Code.ToUpper() == code.ToUpper());
+        //    if(notId.HasValue)
+        //        Query.Where(x => x.Id != notId.Value);
+        //}
+
+        //public CatalogIllustrationSpecification(int id)
+        //{
+        //    Query
+        //        .Include(x => x.IllustrationType)
+        //        .Where(x => x.Id == id);
+        //}        
+    }
+    public class IllustrationFilter
+    {
+        public string Code { get; set; }
+        public int? NotId { get; set; }
+        public int? PageIndex { get; set; }
+        public int? PageSize { get; set; }
     }
 }

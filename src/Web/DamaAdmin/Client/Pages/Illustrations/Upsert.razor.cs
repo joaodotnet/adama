@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using DamaAdmin.Client.Services;
 using DamaAdmin.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +8,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.JSInterop;
 
-namespace DamaAdmin.Client.Pages.IllustrationTypes
+namespace DamaAdmin.Client.Pages.Illustrations
 {
     [Authorize]
     public partial class Upsert : ComponentBase
@@ -16,9 +17,12 @@ namespace DamaAdmin.Client.Pages.IllustrationTypes
         public int? Id { get; set; }
 
         private bool _isSubmitting;
-        private IllustrationTypeViewModel model = new();
+        private IllustrationViewModel model = new();
         private string statusMessage;
+        private IEnumerable<IllustrationTypeViewModel> allIllustrationTypes = new List<IllustrationTypeViewModel>();
 
+        [Inject]
+        public IllustrationService IllustrationService { get; set; }
         [Inject]
         public IllustrationTypeService IllustrationTypeService { get; set; }
         [Inject]
@@ -34,9 +38,10 @@ namespace DamaAdmin.Client.Pages.IllustrationTypes
         {
             try
             {
+                allIllustrationTypes = await IllustrationTypeService.ListAll();
                 if (Id.HasValue)
                 {
-                    model = await IllustrationTypeService.GetById(Id.Value);
+                    model = await IllustrationService.GetById(Id.Value);
                 }
             }
             catch (AccessTokenNotAvailableException exception)
@@ -50,15 +55,15 @@ namespace DamaAdmin.Client.Pages.IllustrationTypes
             _isSubmitting = true;
             try
             {
-                if (await IllustrationTypeService.CheckIfCodeExists(model.Code, model.Id))
+                if (await IllustrationService.CheckIfCodeExists(model.Code, model.Id))
                 {
-                    statusMessage = $"Erro: O nome do tipo de ilustração '{model.Code}' já existe!";
+                    statusMessage = $"Erro: O nome da ilustração '{model.Code}' já existe!";
                     return;
                 }
 
-                await IllustrationTypeService.Upsert(model);
-                var message = $"Tipo de illustração {model.Name} atualizado com sucesso!";
-                NavManager.NavigateTo($"/tipos-de-ilustracoes/{message}");
+                await IllustrationService.Upsert(model);
+                var message = $"Illustração {model.Name} atualizado com sucesso!";
+                NavManager.NavigateTo($"/ilustracoes/{message}");
             }
             finally
             {

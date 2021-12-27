@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ApplicationCore.Entities;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Specifications;
@@ -7,6 +8,7 @@ using DamaAdmin.Shared.Features;
 using DamaAdmin.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 
 namespace DamaAdmin.Server.Controllers
 {
@@ -69,6 +71,16 @@ namespace DamaAdmin.Server.Controllers
             }
 
             return Ok();
+        }
+
+        [HttpGet("all")]
+        public async Task<List<IllustrationTypeViewModel>> GetAll()
+        {
+            HttpContext.VerifyUserHasAnyAcceptedScope(_scopeRequiredByApi);
+
+            var illustrationTypes = await _repository.ListAsync();
+
+            return _mapper.Map<List<IllustrationTypeViewModel>>(illustrationTypes);
         }
     }
 }
