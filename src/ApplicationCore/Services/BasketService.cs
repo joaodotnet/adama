@@ -134,7 +134,7 @@ namespace ApplicationCore.Services
             foreach (var item in basket.Items)
             {
                 var spec = new CatalogTypeFilterSpecification(item.CatalogItemId);
-                var product = await _itemRepository.GetBySpecAsync(spec);
+                var product = await _itemRepository.FirstOrDefaultAsync(spec);
 
                 if(product.CatalogType.DeliveryTimeUnit > deliveryTime.Unit)
                 {
@@ -156,7 +156,7 @@ namespace ApplicationCore.Services
             var options = (default(int?), default(int?), default(int?));
 
             var spec = new CatalogTypeFilterSpecification(catalogItemId);
-            var product = await _itemRepository.GetBySpecAsync(spec);
+            var product = await _itemRepository.FirstOrDefaultAsync(spec);
 
             var group = product.Attributes.GroupBy(x => x.Type);
             foreach (var attribute in group)
@@ -195,7 +195,7 @@ namespace ApplicationCore.Services
                 return false;
             
             var basketSpec = new BasketWithItemsSpecification(basketId);
-            var basket = await _basketRepository.GetBySpecAsync(basketSpec);
+            var basket = await _basketRepository.FirstOrDefaultAsync(basketSpec);
             if (basket == null)
                 return false;
 

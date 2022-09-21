@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace ApplicationCore.Specifications
 {
-
     public class CatalogFilterSpecification : Specification<CatalogItem>
     {
         public CatalogFilterSpecification(int? IllustrationId, int? typeId, int? categoryId, bool? canCustomize = null, bool? showOnlyAvailable = null)

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Runtime.InteropServices;
+using System.Linq;
 using ApplicationCore.Entities;
 using AutoMapper;
 using DamaAdmin.Shared.Models;
@@ -25,6 +26,11 @@ namespace DamaAdmin.Server
 
             CreateMap<CatalogIllustration, IllustrationViewModel>();
             CreateMap<IllustrationViewModel, CatalogIllustration>();
+
+            CreateMap<CatalogItem, ProductViewModel>()
+            .ForMember(dest => dest.CategoriesName,
+                opts => opts.MapFrom(src => src.Categories.Select(c => c.Category.Name)));
+            CreateMap<ProductViewModel, CatalogItem>();
         }
     }
 }

@@ -1,0 +1,114 @@
+@page "/produtos/{message?}"
+@inherits BlazorPageBase<ProductViewModel,ProductService>
+
+<h2>Produtos</h2>
+
+<p>
+    <a href="/produtos/editar">Novo Produto</a>
+</p>
+@if (!string.IsNullOrEmpty(Message))
+{
+    <div class="alert alert-success" role="alert">
+        @Message
+    </div>
+}
+@if (Items == null)
+{
+    <p><em>A carregar...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col">
+            <EditForm Model="@model">
+                <table id="tbl-products" class="table table-pagination">
+                    <thead>
+                        <tr>
+                            <th>
+                                Nome
+                            </th>
+                            <th>
+                                Categorias
+                            </th>
+                            <th>
+                                Preço
+                            </th>
+                            <th>
+                                Desconto
+                            </th>
+                            <th>
+                                Loja
+                            </th>
+                            <th>
+                                Novidade
+                            </th>
+                            <th>
+                                Destaque
+                            </th>
+                            <th>
+                                Personalizar
+                            </th>
+                            <th>
+                                Indisponível
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Items)
+                        {
+                            <tr>
+                                <td>
+                                    @item.Name
+                                </td>
+                                <td>
+                                    @((MarkupString)string.Join("<br>", item.CategoriesName))
+                                </td>
+                                <td>
+                                    @item.Price
+                                </td>
+                                <td>
+                                    @item.Discount
+                                </td>
+                                <td>
+                                    <InputCheckbox @bind-Value="item.ShowOnShop" @oninput="args=>UpdateFlag(args, item, 1)" 
+                                checkboxType="1" />
+                                </td>
+                                <td>
+                                    <InputCheckbox @bind-Value="item.IsNew" @oninput="args=>UpdateFlag(args, item, 2)"/>
+                                </td>
+                                <td>
+                                    <InputCheckbox @bind-Value="item.IsFeatured" @oninput="args=>UpdateFlag(args, item, 3)"/>
+                                </td>
+                                <td>
+                                    <InputCheckbox @bind-Value="item.CanCustomize" @oninput="args=>UpdateFlag(args, item, 4)"/>
+                                </td>
+                                <td>
+                                    <InputCheckbox @bind-Value="item.IsUnavailable" @oninput="args=>UpdateFlag(args, item, 5)"/>
+                                </td>
+                                <td>
+                                    <a href="/produtos/editar/@item.Id" class="btn btn-warning btn-sm" role="button"
+                                title="Editar">
+                                        <span class="oi oi-pencil" title="Editar" aria-hidden="true"></span>
+                                    </a>
+                                    <button class="btn btn-info btn-sm" @onclick="@(e => Modal.Open(item.Name, item))">
+                                        <span class="oi oi-eye" title="Ver" aria-hidden="true"></span>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" @onclick="@(e => OnRemoveItem(item))">
+                                        <span class="oi oi-trash" title="Remover" aria-hidden="true"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </EditForm>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <Pagination MetaData="MetaData" Spread="3" SelectedPage="SelectedPage" />
+        </div>
+    </div>
+    <Modal @ref="Modal"></Modal>
+}

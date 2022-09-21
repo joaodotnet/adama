@@ -170,7 +170,7 @@ namespace ApplicationCore.Services
             foreach (var orderItem in orderItems)
             {
                 var spec = new CatalogAttrFilterSpecification(orderItem.ItemOrdered.CatalogItemId);
-                var product = await _itemRepository.GetBySpecAsync(spec);
+                var product = await _itemRepository.FirstOrDefaultAsync(spec);
                 var listItem = (orderItem.Id, new List<CatalogAttribute>());
                 foreach (var item in product.Attributes)
                 {
@@ -187,7 +187,7 @@ namespace ApplicationCore.Services
         public async Task<List<CatalogAttribute>> GetOrderAttributesAsync(int catalogItemId, int? catalogAttribute1, int? catalogAttribute2, int? catalogAttribute3)
         {
             var spec = new CatalogAttrFilterSpecification(catalogItemId);
-            var product = await _itemRepository.GetBySpecAsync(spec);
+            var product = await _itemRepository.FirstOrDefaultAsync(spec);
             var list = new List<CatalogAttribute>();
             if (product != null)
             {
