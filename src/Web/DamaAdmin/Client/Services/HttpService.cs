@@ -16,7 +16,7 @@ namespace DamaAdmin.Client.Services
         protected readonly string endpointName;
         protected readonly HttpClient client;
 
-        protected JsonSerializerOptions Options => new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        protected JsonSerializerOptions SerlializerOptions => new() { PropertyNameCaseInsensitive = true };
 
         public HttpService(HttpClient client, string endpointName)
         {
@@ -51,8 +51,8 @@ namespace DamaAdmin.Client.Services
             }
             var pagingResponse = new PagingResponse<T>
             {
-                Items = JsonSerializer.Deserialize<List<T>>(content, Options),
-                MetaData = JsonSerializer.Deserialize<MetaData>(response.Headers.GetValues("X-Pagination").First(), Options)
+                Items = JsonSerializer.Deserialize<List<T>>(content, SerlializerOptions),
+                MetaData = JsonSerializer.Deserialize<MetaData>(response.Headers.GetValues("X-Pagination").First(), SerlializerOptions)
             };
 
             return pagingResponse;
@@ -60,12 +60,12 @@ namespace DamaAdmin.Client.Services
 
         public async Task<IEnumerable<T>> ListAll()
         {
-            return await client.GetFromJsonAsync<IEnumerable<T>>($"{endpointName}/all", Options);
+            return await client.GetFromJsonAsync<IEnumerable<T>>($"{endpointName}/all", SerlializerOptions);
         }
 
         public async Task Upsert(T model)
         {
-            var response = await client.PostAsJsonAsync(endpointName, model, Options);
+            var response = await client.PostAsJsonAsync(endpointName, model, SerlializerOptions);
             
             if (!response.IsSuccessStatusCode)
             {
@@ -76,7 +76,7 @@ namespace DamaAdmin.Client.Services
 
         public async Task Update(T model)
         {
-            var response = await client.PutAsJsonAsync(endpointName, model, Options);
+            var response = await client.PutAsJsonAsync(endpointName, model, SerlializerOptions);
             
             if (!response.IsSuccessStatusCode)
             {
@@ -88,7 +88,7 @@ namespace DamaAdmin.Client.Services
         public async Task<T> GetById(int id)
         {
             Console.WriteLine($"url: {endpointName}/{id}");
-            return await client.GetFromJsonAsync<T>($"{endpointName}/{id}", Options);
+            return await client.GetFromJsonAsync<T>($"{endpointName}/{id}", SerlializerOptions);
         }
 
         public virtual async Task<bool> CheckIfCodeExists(string code, int? id)

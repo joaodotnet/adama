@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ApplicationCore.Specifications
 {
-    public class CatalogTypeSpecification : Specification<CatalogType>, ISingleResultSpecification
+    public class CatalogTypeSpecification : Specification<CatalogType>, ISingleResultSpecification<CatalogType>
     {
         public CatalogTypeSpecification(int id)
         {

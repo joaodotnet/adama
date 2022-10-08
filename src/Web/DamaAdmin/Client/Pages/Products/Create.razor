@@ -1,0 +1,220 @@
+﻿@page "/produtos/editar/{Id:int?}"
+
+@if (IsNew)
+{
+    <h2>Novo Produto</h2>
+}
+else
+{
+    <h2>Editar Produto @model?.Name</h2>
+}
+
+<hr />
+
+@if (!IsNew && model == null)
+{
+    <p><em>A Carregar...</em></p>
+}
+else
+{
+    <EditForm Model="@model" OnValidSubmit="@HandleValidSubmit">
+        <div class="row">
+            <div class="col-md-4">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="form-group required">
+                    <label>Nome</label>
+                    <InputText @bind-Value="model.Name" @onblur="NameChangeEvent" class="form-control" />
+                    <ValidationMessage For="@(() => model.Name)" />
+                </div>
+                <div class="form-group required">
+                    <label>Slug</label>
+                    <InputText @bind-Value="model.Slug" class="form-control" />
+                    <ValidationMessage For="@(() => model.Slug)" />
+                </div>
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <InputTextArea @bind-Value="model.Description" class="form-control" rows='5'></InputTextArea>
+                    <ValidationMessage For="@(() => model.Description)" />
+                </div>
+                <div class="form-group required">
+                    <label>Tipo de Produto</label>
+                    <InputSelect @bind-Value="model.CatalogTypeId" class="form-control" @onblur="ProductTypeChangeEvent">
+                        @if (allProductTypes.Count() == 0)
+                        {
+                            <option class="font-italic">Loading...</option>
+                        }
+                        else
+                        {
+                            <option></option>
+                            @foreach (var item in allProductTypes)
+                            {
+                                <option value="@item.Id">@item.Code - @item.Name</option>
+                            }
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => model.CatalogTypeId)" />
+                </div>
+                <div class="form-group required">
+                    <label>Ilustração</label>
+                    <InputSelect @bind-Value="model.CatalogIllustrationId" class="form-control">
+                        @if (allIllustrations.Count() == 0)
+                        {
+                            <option class="font-italic">Loading...</option>
+                        }
+                        else
+                        {
+                            <option></option>
+                            @foreach (var item in allIllustrations)
+                            {
+                                <option value="@item.Id">@item.Code - @item.IllustrationType.Code - @item.Name</option>
+                            }
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => model.CatalogIllustrationId)" />
+                </div>
+                <div class="form-group">
+                    <label>Preço</label>
+                    <InputNumber @bind-Value="model.Price" class="form-control decimal" />
+                    <ValidationMessage For="@(() => model.Price)" />
+                    <span id="ProductTypePrice">@model.ProductTypePrice</span>
+                </div>
+                <div class="form-group">
+                    <label>Desconto</label>
+                    <InputNumber @bind-Value="model.Discount" class="form-control decimal" />
+                    <ValidationMessage For="@(() => model.Discount)" />
+                </div>
+                <div class="form-group">
+                    <label>Stock</label>
+                    <InputNumber @bind-Value="model.Stock" class="form-control" />
+                    <ValidationMessage For="@(() => model.Stock)" />
+                </div>
+                <div class="form-check">
+                    <InputCheckbox @bind-Value="model.ShowOnShop" class="form-check-input" />
+                    <label class="form-check-label">Loja</label>
+                    <ValidationMessage For="@(() => model.ShowOnShop)" />
+                </div>
+                <div class="form-check">
+                    <InputCheckbox @bind-Value="model.IsNew" class="form-check-input" />
+                    <label class="form-check-label">Novidade</label>
+                    <ValidationMessage For="@(() => model.IsNew)" />
+                </div>
+                <div class="form-check">
+                    <InputCheckbox @bind-Value="model.IsFeatured" class="form-check-input" />
+                    <label class="form-check-label">Destaque</label>
+                    <ValidationMessage For="@(() => model.IsFeatured)" />
+                </div>
+                <div class="form-check">
+                    <InputCheckbox @bind-Value="model.CanCustomize" class="form-check-input" />
+                    <label class="form-check-label">Personalizar?</label>
+                    <ValidationMessage For="@(() => model.CanCustomize)" />
+                </div>
+                <div class="form-check">
+                    <InputCheckbox @bind-Value="model.IsUnavailable" class="form-check-input" />
+                    <label class="form-check-label">Indisponível</label>
+                    <ValidationMessage For="@(() => model.IsUnavailable)" />
+                </div>
+                <div class="form-group">
+                    <label>Imagem Principal</label>
+                    <InputFile OnChange="@OnImageSelection" class="form-control" />
+                    <span>(quadrado)</span>
+                    @if (!string.IsNullOrEmpty(model.PictureUri))
+                    {
+                        <img src="@model.PictureUri" class="img-thumbnail" />
+                    }
+                </div>
+                <div class="form-group">
+                    <label>Outras Imagens</label>
+                    <InputFile OnChange="@OnMoreImagesSelection" class="form-control" multiple />
+                    <small>(Podes escolher várias fotos ao mesmo tempo)</small>
+                    @if(!IsNew)
+                    {
+                         <div class="row">
+                            @foreach (var item in model.OtherPictures)
+                            {
+                                <div class="col-md-6">
+                                    <img src="@item.PictureUri" class="img-thumbnail" />
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" disabled=@isSubmitting>
+                        @if (!isSubmitting)
+                        {
+                            <span>Criar</span>
+                        }
+                        else
+                        {
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span>A criar...</span>
+                        }
+                    </button>
+                </div>
+                @if (!string.IsNullOrEmpty(statusMessage))
+                {
+                    @if (statusMessage.StartsWith("Erro"))
+                    {
+                        <ul class="validation-errors">
+                            <li class="validation-message">@statusMessage</li>
+                        </ul>
+                    }
+                    else
+                    {
+                        <div class="alert alert-success">@statusMessage</div>
+                    }
+                }
+            </div>
+            <div class="col-md-offset-2 col-md-6">
+                <h4>SEO</h4>
+                <div class="form-group">
+                    <label>Meta Description</label>
+                    <InputText @bind-Value="model.MetaDescription" class="form-control" />
+                    <ValidationMessage For="@(() => model.MetaDescription)" />
+                </div>
+                <div class="form-group">
+                    <label>Titulo</label>
+                    <InputText @bind-Value="model.Title" class="form-control" />
+                    <ValidationMessage For="@(() => model.Title)" />
+                    <small>(se vazio assume o nome do produto)</small>
+                </div>
+                <h4>Categorias</h4>
+                <ul id="category-list">
+                    @foreach (var catalogCategory in catalogCategoryModel)
+                    {
+                        <li class="parent-category">
+                            <label>
+                                @*<InputNumber type="hidden" @bind-Value="catalogCategoryModel[i].CategoryId" />
+                        <InputCheckbox @bind-Value="catalogCategoryModel[i].Selected" class="parent-checkbox" cat-id="@catalogCategoryModel[i].CategoryId" />*@
+                                <input type="checkbox" @bind="catalogCategory.Selected" />
+                                @catalogCategory.Label
+                            </label>
+
+                            @if (catalogCategory.Childs.Count > 0)
+                            {
+                                <ul>
+                                    @foreach (var child in catalogCategory.Childs)
+                                    {
+                                        <li>
+                                            <label>
+                                                @*<InputNumber type="hidden" @bind-Value="catalogCategoryModel[i].Childs[j].CategoryId" />
+                                <InputCheckbox @bind-Value="catalogCategoryModel[i].Childs[j].Selected" class="child-checkbox" cat-id="@catalogCategoryModel[i].Childs[j].CategoryId" />*@
+                                                <input type="checkbox" @bind="child.Selected" @onclick="(()=>HandleChildClick(catalogCategory, child))" />
+                                                @child.Label
+                                            </label>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </EditForm>
+}
+<div>
+    <a href="/produtos">Voltar para a lista</a>
+</div>
+

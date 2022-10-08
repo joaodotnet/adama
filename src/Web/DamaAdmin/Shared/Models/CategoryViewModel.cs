@@ -32,6 +32,8 @@ namespace DamaAdmin.Shared.Models
         [Display(Name = "Nome da Categoria Pai")]
         public CategoryViewModel Parent { get; set; }
 
+
+
         public override string ToString()
         {
             return Name;

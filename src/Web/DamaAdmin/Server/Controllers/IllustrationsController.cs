@@ -1,12 +1,15 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ApplicationCore.Entities;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Specifications;
 using AutoMapper;
+using DamaAdmin.Client.Pages.Categories;
 using DamaAdmin.Shared.Features;
 using DamaAdmin.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 
 namespace DamaAdmin.Server.Controllers
 {
@@ -53,6 +56,14 @@ namespace DamaAdmin.Server.Controllers
         public async Task<bool> CheckIfCodeExists([FromQuery] string code, [FromQuery] int? id)
         {
             return (await _repository.CountAsync(new CatalogIllustrationSpecification(new IllustrationFilter { Code = code.ToUpper(), NotId = id }))) > 0;
+        }
+
+        [HttpGet("all")]
+        public async Task<List<IllustrationViewModel>> GetAll()
+        {
+            HttpContext.VerifyUserHasAnyAcceptedScope(_scopeRequiredByApi);
+            var all = await _repository.ListAsync(new CatalogIllustrationSpecification(new())); //TODO: create a spec to return only data needed
+            return _mapper.Map<List<IllustrationViewModel>>(all);
         }
 
         [HttpPost]

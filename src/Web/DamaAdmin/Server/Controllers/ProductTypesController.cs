@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ApplicationCore;
 using ApplicationCore.Entities;
@@ -6,12 +7,14 @@ using ApplicationCore.Helpers;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Specifications;
 using AutoMapper;
+using DamaAdmin.Client.Pages.Categories;
 using DamaAdmin.Shared.Features;
 using DamaAdmin.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Identity.Web.Resource;
 
 namespace DamaAdmin.Server.Controllers
 {
@@ -55,7 +58,7 @@ namespace DamaAdmin.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductTypeViewModel>> GetById(int id)
         {
-            var productType = await _catalogTypesRepository.GetBySpecAsync(
+            var productType = await _catalogTypesRepository.SingleOrDefaultAsync(
                 new CatalogTypeSpecification(id));
 
             if (productType == null)
@@ -82,6 +85,14 @@ namespace DamaAdmin.Server.Controllers
             return (await _catalogTypesRepository.CountAsync(new CatalogTypeSpecification(new CatalogTypeFilter { Slug = slug.ToUpper(), NotProductTypeId = id }))) > 0;
         }
 
+        [HttpGet("all")]
+        public async Task<List<ProductTypeViewModel>> GetAll()
+        {
+            HttpContext.VerifyUserHasAnyAcceptedScope(_scopeRequiredByApi);
+            var all = await _catalogTypesRepository.ListAsync(); //TODO: Create spec to return only data needed
+            return _mapper.Map<List<ProductTypeViewModel>>(all);           
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post(ProductTypeViewModel model)
         {
@@ -99,7 +110,7 @@ namespace DamaAdmin.Server.Controllers
             }
             else
             {
-                var productTypeEntity = await _catalogTypesRepository.GetBySpecAsync(
+                var productTypeEntity = await _catalogTypesRepository.SingleOrDefaultAsync(
                     new CatalogTypeSpecification(
                         new CatalogTypeFilter
                         {
@@ -157,7 +168,7 @@ namespace DamaAdmin.Server.Controllers
         [HttpDelete]
         public override async Task<IActionResult> Delete(int id)
         {
-            var productTypeEntity = await _catalogTypesRepository.GetBySpecAsync(
+            var productTypeEntity = await _catalogTypesRepository.SingleOrDefaultAsync(
                     new CatalogTypeSpecification(
                         new CatalogTypeFilter
                         {
