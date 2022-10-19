@@ -5,8 +5,10 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
+using ApplicationCore.DTOs;
 using DamaAdmin.Shared.Features;
 using DamaAdmin.Shared.Interfaces;
+using DamaAdmin.Shared.Models;
 using Microsoft.AspNetCore.WebUtilities;
 
 namespace DamaAdmin.Client.Services
@@ -41,10 +43,7 @@ namespace DamaAdmin.Client.Services
                 ["pageNumber"] = parameters.PageNumber.ToString()
             };
             var response = await client.GetAsync(QueryHelpers.AddQueryString(endpointName, queryStringParam));
-            Console.WriteLine("url: " + response.RequestMessage.RequestUri.ToString());
-            Console.WriteLine("response status:" + response.StatusCode);
             var content = await response.Content.ReadAsStringAsync();
-            Console.WriteLine("response content: " + content);
             if (!response.IsSuccessStatusCode)
             {
                 throw new ApplicationException(content);
@@ -107,6 +106,32 @@ namespace DamaAdmin.Client.Services
                 throw new ApplicationException(content);
             }
             return bool.Parse(content);
+        }
+
+        public async Task<IList<FileData>> FileSaveAsync(MultipartFormDataContent content)
+        {
+            List<FileData> uploadResults = new();
+
+            var response = await client.PostAsync($"api/filesave", content);
+            if (response.IsSuccessStatusCode)
+            {
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                };
+
+                using var responseStream =
+                    await response.Content.ReadAsStreamAsync();
+
+                var newUploadResults = await JsonSerializer
+                    .DeserializeAsync<IList<FileData>>(responseStream, options);
+
+                if (newUploadResults is not null)
+                {
+                    uploadResults = newUploadResults.ToList();
+                }
+            }
+            return uploadResults;
         }
     }
 }

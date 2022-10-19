@@ -1,4 +1,4 @@
-namespace ApplicationCore.DTOs
+﻿namespace ApplicationCore.DTOs
 {
     public class FileData
     {
@@ -6,5 +6,9 @@ namespace ApplicationCore.DTOs
         public string FileType { get; set; }
         public long Size { get; set; }
         public string FileName { get; set; }
+        public bool Uploaded { get; set; }
+        public string? StoredFileName { get; set; }
+        public int ErrorCode { get; set; }
+        public bool IsPrincipal { get; set; }
     }
 }

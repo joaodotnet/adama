@@ -181,26 +181,22 @@ else
                 </div>
                 <h4>Categorias</h4>
                 <ul id="category-list">
-                    @foreach (var catalogCategory in catalogCategoryModel)
+                    @foreach (var category in model.Categories)
                     {
                         <li class="parent-category">
                             <label>
-                                @*<InputNumber type="hidden" @bind-Value="catalogCategoryModel[i].CategoryId" />
-                        <InputCheckbox @bind-Value="catalogCategoryModel[i].Selected" class="parent-checkbox" cat-id="@catalogCategoryModel[i].CategoryId" />*@
-                                <input type="checkbox" @bind="catalogCategory.Selected" />
-                                @catalogCategory.Label
+                                <input type="checkbox" @bind="category.Selected" />
+                                @category.Label
                             </label>
 
-                            @if (catalogCategory.Childs.Count > 0)
+                            @if (category.Childs.Count > 0)
                             {
                                 <ul>
-                                    @foreach (var child in catalogCategory.Childs)
+                                    @foreach (var child in category.Childs)
                                     {
                                         <li>
                                             <label>
-                                                @*<InputNumber type="hidden" @bind-Value="catalogCategoryModel[i].Childs[j].CategoryId" />
-                                <InputCheckbox @bind-Value="catalogCategoryModel[i].Childs[j].Selected" class="child-checkbox" cat-id="@catalogCategoryModel[i].Childs[j].CategoryId" />*@
-                                                <input type="checkbox" @bind="child.Selected" @onclick="(()=>HandleChildClick(catalogCategory, child))" />
+                                                <input type="checkbox" @bind="child.Selected" @onclick="(()=>HandleChildClick(category, child))" />
                                                 @child.Label
                                             </label>
                                         </li>

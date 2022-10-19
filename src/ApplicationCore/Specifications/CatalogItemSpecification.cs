@@ -1,4 +1,4 @@
-using ApplicationCore.Entities;
+﻿using ApplicationCore.Entities;
 using Ardalis.Specification;
 using System.Linq;
 
@@ -25,6 +25,15 @@ namespace ApplicationCore.Specifications
                 Query.Include(p => p.Attributes);
             }
 
+            if (!string.IsNullOrEmpty(filter.Slug))
+            {
+                Query
+                    .Where(x => x.Slug.ToUpper() == filter.Slug);
+            }
+
+            if (filter.NotProductId.HasValue)
+                Query.Where(x => x.Id != filter.NotProductId);
+
             if (filter.PageIndex.HasValue && filter.PageSize.HasValue)
             {
                 Query.Skip((filter.PageIndex.Value - 1) * filter.PageSize.Value)
@@ -40,5 +49,7 @@ namespace ApplicationCore.Specifications
         public bool AddCategories { get; set; }
         public bool AddAttributes { get; set; }
         public bool AddIllustrations { get; set; }
+        public string Slug { get; set; }
+        public int? NotProductId { get; set; }
     }
 }

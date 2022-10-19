@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ApplicationCore.Specifications
 {
-    public class CatalogIllustrationSpecification : Specification<CatalogIllustration>, ISingleResultSpecification
+    public class CatalogIllustrationSpecification : Specification<CatalogIllustration>, ISingleResultSpecification<CatalogIllustration>
     {
         public CatalogIllustrationSpecification(IllustrationFilter filter)
         {
@@ -24,6 +24,9 @@ namespace ApplicationCore.Specifications
             Query
                 .Include(x => x.IllustrationType)
                 .OrderBy(x => x.Code);
+
+            if (filter.Id.HasValue)
+                Query.Where(x => x.Id == filter.Id);
         }
 
         //public CatalogIllustrationSpecification()
@@ -51,5 +54,6 @@ namespace ApplicationCore.Specifications
         public int? NotId { get; set; }
         public int? PageIndex { get; set; }
         public int? PageSize { get; set; }
+        public int? Id { get; set; }
     }
 }

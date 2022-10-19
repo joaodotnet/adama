@@ -14,8 +14,8 @@ namespace DamaAdmin.Server
             CreateMap<CategoryViewModel, Category>();
 
             CreateMap<CatalogType, ProductTypeViewModel>()
-            .ForMember(dest => dest.CategoriesName,
-                opts => opts.MapFrom(src => src.Categories.Select(c => c.Category.Name)));
+                .ForMember(dest => dest.CategoriesName,
+                    opts => opts.MapFrom(src => src.Categories.Select(c => c.Category.Name)));
             CreateMap<ProductTypeViewModel, CatalogType>();
 
             CreateMap<FileDetail, FileDetailViewModel>();
@@ -28,9 +28,12 @@ namespace DamaAdmin.Server
             CreateMap<IllustrationViewModel, CatalogIllustration>();
 
             CreateMap<CatalogItem, ProductViewModel>()
-            .ForMember(dest => dest.CategoriesName,
-                opts => opts.MapFrom(src => src.Categories.Select(c => c.Category.Name)));
-            CreateMap<ProductViewModel, CatalogItem>();
+                .ForMember(dest => dest.CategoriesName,
+                    opts => opts.MapFrom(src => src.Categories.Select(c => c.Category.Name)))
+                .ForMember(dest => dest.Categories, opts => opts.Ignore());
+            CreateMap<ProductViewModel, CatalogItem>()
+                .ForMember(dest => dest.Pictures, opts => opts.Ignore())
+                .ForMember(dest => dest.Categories, opts => opts.Ignore());
         }
     }
 }

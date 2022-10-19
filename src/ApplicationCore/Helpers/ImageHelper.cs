@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.IO.Pipelines;
 using System.Threading.Tasks;
 using ApplicationCore.DTOs;
 using SixLabors.ImageSharp;
@@ -26,18 +28,14 @@ namespace ApplicationCore.Helpers
             //High
             var fileNameHigh = filename.Replace(".", "-high.");
             var fileHighPath = fullPath + fileNameHigh;
-            using (var stream = new FileStream(fileHighPath, FileMode.Create))
-            {
-                stream.Write(fileData.Data,0, fileData.Data.Length);
-                stream.Close();
-            }
+            File.Copy(fileData.StoredFileName, fileHighPath, true);
 
             var filePath = fullPath + filename;
 
             //Medium
             if (resize)
             {
-                using (Image image = Image.Load(fileData.Data))
+                using (Image image = Image.Load(fileData.StoredFileName))
                 {
                     image.Mutate(x => x
                          .Resize(width, height));
@@ -48,26 +46,23 @@ namespace ApplicationCore.Helpers
                     {
                         Mode = ResizeMode.Crop,
                         Size = new Size(width, height)
-                    };                    
+                    };
 
-                    image.Mutate(x => x.Resize(options));      
+                    image.Mutate(x => x.Resize(options));
 
                     image.Save(filePath, new SixLabors.ImageSharp.Formats.Jpeg.JpegEncoder { Quality = 90 }); // Automatic encoder selected based on extension.
                 }
             }
             else
             {
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    stream.Write(fileData.Data, 0, fileData.Data.Length);
-                    stream.Close();
-                }
-
+                File.Copy(fileData.StoredFileName, filePath, true);
             }
 
             info.Location = filePath;
             info.PictureUri = uriPath + filename;
             info.PictureHighUri = uriPath + fileNameHigh;
+
+            File.Delete(fileData.StoredFileName);
 
             return info;
         }

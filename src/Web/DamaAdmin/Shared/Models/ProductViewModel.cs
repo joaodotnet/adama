@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using ApplicationCore.DTOs;
 using ApplicationCore.Entities;
 
@@ -33,13 +34,9 @@ namespace DamaAdmin.Shared.Models
         public bool IsFeatured{ get; set; }
         [Display(Name = "Personalizar")]
         public bool CanCustomize { get; set; }
-        [Display(Name = "Imagem Principal")]
-        public FileData Picture { get; set; }
         [Display(Name = "URL da Imagem Principal")]
         public string PictureUri { get; set; }
-        [Display(Name = "Imagens do Produto")]
-        public List<FileData> OtherPicturesFormFiles { get; set; } = new();
-        public List<FileDetailViewModel> OtherPictures { get; set; } = new();
+        
         [Display(Name = "Stock")]
         public int Stock { get; set; }
         [Display(Name = "Meta Description")]
@@ -56,12 +53,14 @@ namespace DamaAdmin.Shared.Models
         [Display(Name = "Categorias")]
         public List<string> CategoriesName { get; set; } = new List<string>();
 
-        // public IList<ProductAttributeViewModel> Attributes { get; set; } = new List<ProductAttributeViewModel>();
-        // [Display(Name = "Imagens do Produto")]
-        // public IList<ProductPictureViewModel> Pictures { get; set; } = new List<ProductPictureViewModel>();
-        // [Display(Name = "Categorias")]
-        //public IList<CatalogCategoryViewModel> Categories { get; set; } = new List<CatalogCategoryViewModel>();
-        public IList<CatalogReference> References { get; set; } = new List<CatalogReference>();
+        [NotMapped]
+        public List<FileData> PicturesToUpload { get; set; } = new ();
+        public List<FileDetailViewModel> OtherPictures { get; set; } = new();
+        [NotMapped]
+        public IList<ProductPictureViewModel> Pictures { get; set; }
+        [NotMapped]
+        public List<CatalogCategoryViewModel> Categories { get; set; } = new();
+        //public IList<CatalogReference> References { get; set; } = new List<CatalogReference>();
 
         public string DisplayCatalogTypeName {
             get {
