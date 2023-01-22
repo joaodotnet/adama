@@ -56,10 +56,10 @@ namespace DamaAdmin.Server.Controllers
             var allCats = await _categoryRepository.ListAsync(
                     new CategorySpecification(new CategoryFilter { IncludeParent = true, IncludeCatalogTypes = true }));
          
-            var catsId = allCats
-                .Where(x => x.CatalogTypes.Any(ct => ct.CatalogTypeId == catalogTypeId))
-                .Select(x => x.Id)
-                .ToList();
+            //var catsId = allCats
+            //    .Where(x => x.CatalogTypes.Any(ct => ct.CatalogTypeId == catalogTypeId))
+            //    .Select(x => x.Id)
+            //    .ToList();
 
             List<CatalogCategoryViewModel> catalogCategories = new List<CatalogCategoryViewModel>();
             foreach (var item in allCats.Where(x => x.Parent == null).ToList())
@@ -69,14 +69,14 @@ namespace DamaAdmin.Server.Controllers
                     CategoryId = item.Id,
                     Label = item.Name,
                     Childs = new List<CatalogCategoryViewModel>(),
-                    Selected = catsId.Contains(item.Id)
+                    //Selected = catsId.Contains(item.Id)
 
                 };
                 parent.Childs.AddRange(allCats.Where(x => x.ParentId == item.Id).Select(s => new CatalogCategoryViewModel
                 {
                     CategoryId = s.Id,
                     Label = s.Name,
-                    Selected = catsId.Contains(s.Id)
+                    //Selected = catsId.Contains(s.Id)
                 }));
                 catalogCategories.Add(parent);
             }

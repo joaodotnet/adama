@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace ApplicationCore.Specifications
 {
-    public class CatalogItemSpecification : Specification<CatalogItem>, ISingleResultSpecification
+    public class CatalogItemSpecification : Specification<CatalogItem>, ISingleResultSpecification<CatalogItem>
     {
-        public CatalogItemSpecification(CatalogItemFiler filter)
+        public CatalogItemSpecification(CatalogItemFilter filter)
         {
             if(filter.AddIllustrations)
             {
@@ -25,6 +25,11 @@ namespace ApplicationCore.Specifications
                 Query.Include(p => p.Attributes);
             }
 
+            if(filter.AddPictures)
+            {
+                Query.Include(p => p.Pictures);
+            }
+
             if (!string.IsNullOrEmpty(filter.Slug))
             {
                 Query
@@ -34,6 +39,12 @@ namespace ApplicationCore.Specifications
             if (filter.NotProductId.HasValue)
                 Query.Where(x => x.Id != filter.NotProductId);
 
+            if(filter.ProductId.HasValue)
+                Query.Where(x => x.Id == filter.ProductId);
+
+            if (filter.OrderByIdDesc)
+                Query.OrderByDescending(x => x.Id);
+
             if (filter.PageIndex.HasValue && filter.PageSize.HasValue)
             {
                 Query.Skip((filter.PageIndex.Value - 1) * filter.PageSize.Value)
@@ -42,14 +53,17 @@ namespace ApplicationCore.Specifications
         }
     }
 
-    public class CatalogItemFiler
+    public class CatalogItemFilter
     {
         public int? PageIndex { get; set; }
         public int? PageSize { get; set; }
         public bool AddCategories { get; set; }
         public bool AddAttributes { get; set; }
         public bool AddIllustrations { get; set; }
+        public bool AddPictures { get; set; }
         public string Slug { get; set; }
         public int? NotProductId { get; set; }
+        public int? ProductId { get; set; }
+        public bool OrderByIdDesc{ get; set; }
     }
 }

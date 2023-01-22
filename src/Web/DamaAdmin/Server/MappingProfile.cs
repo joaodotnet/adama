@@ -34,6 +34,8 @@ namespace DamaAdmin.Server
             CreateMap<ProductViewModel, CatalogItem>()
                 .ForMember(dest => dest.Pictures, opts => opts.Ignore())
                 .ForMember(dest => dest.Categories, opts => opts.Ignore());
+
+            CreateMap<CatalogPicture, ProductPictureViewModel>();
         }
     }
 }

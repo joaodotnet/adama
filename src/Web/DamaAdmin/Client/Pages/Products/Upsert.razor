@@ -1,4 +1,5 @@
-﻿@page "/produtos/editar/{Id:int?}"
+﻿@page "/produtos/criar/{Id:int?}"
+@page "/produtos/editar/{Id:int?}"
 
 @if (IsNew)
 {
@@ -130,7 +131,7 @@ else
                     @if(!IsNew)
                     {
                          <div class="row">
-                            @foreach (var item in model.OtherPictures)
+                            @foreach (var item in model.Pictures)
                             {
                                 <div class="col-md-6">
                                     <img src="@item.PictureUri" class="img-thumbnail" />

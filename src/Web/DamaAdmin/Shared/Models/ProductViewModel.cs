@@ -55,9 +55,9 @@ namespace DamaAdmin.Shared.Models
 
         [NotMapped]
         public List<FileData> PicturesToUpload { get; set; } = new ();
-        public List<FileDetailViewModel> OtherPictures { get; set; } = new();
+        //public List<FileDetailViewModel> OtherPictures { get; set; } = new();
         [NotMapped]
-        public IList<ProductPictureViewModel> Pictures { get; set; }
+        public List<ProductPictureViewModel> Pictures { get; set; } = new();
         [NotMapped]
         public List<CatalogCategoryViewModel> Categories { get; set; } = new();
         //public IList<CatalogReference> References { get; set; } = new List<CatalogReference>();

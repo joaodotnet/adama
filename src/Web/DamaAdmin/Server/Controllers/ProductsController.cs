@@ -7,15 +7,11 @@ using ApplicationCore.Helpers;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Specifications;
 using AutoMapper;
-using DamaAdmin.Client.Pages.Categories;
 using DamaAdmin.Shared.Features;
 using DamaAdmin.Shared.Models;
-using Infrastructure.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace DamaAdmin.Server.Controllers
 {
@@ -27,6 +23,7 @@ namespace DamaAdmin.Server.Controllers
         private readonly IRepository<CatalogItem> _repository;
         private readonly IRepository<CatalogType> _catalogTypeRepository;
         private readonly IRepository<CatalogIllustration> _catalogIllustrationRepository;
+        private readonly IRepository<Category> _categoryRepository;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
 
@@ -34,12 +31,14 @@ namespace DamaAdmin.Server.Controllers
             IRepository<CatalogItem> repository,
             IRepository<CatalogType> catalogTypeRepository,
             IRepository<CatalogIllustration> catalogIllustrationRepository,
+            IRepository<Category> categoryRepository,
             IMapper mapper,
             IConfiguration configuration) : base(repository, mapper)
         {
             _repository = repository;
             _catalogTypeRepository = catalogTypeRepository;
             _catalogIllustrationRepository = catalogIllustrationRepository;
+            _categoryRepository = categoryRepository;
             _mapper = mapper;
             _configuration = configuration;
         }
@@ -48,15 +47,41 @@ namespace DamaAdmin.Server.Controllers
         public async Task<PagedList<ProductViewModel>> Get([FromQuery] PagingParameters parameters)
         {
             return await GetWithPaging<ProductViewModel>(parameters,
-                new CatalogItemSpecification(new CatalogItemFiler()),
+                new CatalogItemSpecification(new CatalogItemFilter()),
                 new CatalogItemSpecification(
-                    new CatalogItemFiler
+                    new CatalogItemFilter
                     {
                         AddCategories = true,
                         PageIndex = parameters.PageNumber,
-                        PageSize = parameters.PageSize
+                        PageSize = parameters.PageSize,
+                        OrderByIdDesc = true
                     }
                 ));
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ProductViewModel>> GetById(int id)
+        {
+            var product = await _repository.SingleOrDefaultAsync(
+                new CatalogItemSpecification(
+                    new CatalogItemFilter 
+                    { 
+                        AddCategories = true,
+                        AddPictures = true,
+                        ProductId = id
+                    }
+                ));
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+            var vm = _mapper.Map<ProductViewModel>(product);
+
+            //Fill Categories
+            await SetCatalogCategoryModel(vm, product);
+
+            return vm;
         }
 
         [HttpPut("{id}/updateflag")]
@@ -75,7 +100,7 @@ namespace DamaAdmin.Server.Controllers
         [HttpGet("slug/exists")]
         public async Task<bool> CheckIfSlugExists([FromQuery] string slug, [FromQuery] int? id)
         {
-            return (await _repository.CountAsync(new CatalogItemSpecification(new CatalogItemFiler { Slug = slug.ToUpper(), NotProductId = id }))) > 0;
+            return (await _repository.CountAsync(new CatalogItemSpecification(new CatalogItemFilter { Slug = slug.ToUpper(), NotProductId = id }))) > 0;
         }
 
         [HttpGet("sku/new")]
@@ -154,6 +179,34 @@ namespace DamaAdmin.Server.Controllers
             }
 
             return Ok();
+        }
+
+        private async Task SetCatalogCategoryModel(ProductViewModel model, CatalogItem catalogItem)
+        {
+            //Catalog Categories            
+            var allCats = await _categoryRepository.ListAsync(
+                    new CategorySpecification(new CategoryFilter { IncludeParent = true, IncludeCatalogTypes = true }));
+
+            foreach (var item in allCats.Where(x => x.Parent == null).ToList())
+            {
+                var catalogCategory = catalogItem.Categories.SingleOrDefault(x => x.CategoryId == item.Id);
+                CatalogCategoryViewModel parent = new CatalogCategoryViewModel
+                {
+                    Id = catalogCategory?.Id ?? 0,
+                    CategoryId = item.Id,
+                    Label = item.Name,
+                    Selected = catalogCategory != null ? true : false,
+                    Childs = new List<CatalogCategoryViewModel>()
+                };
+                parent.Childs.AddRange(allCats.Where(x => x.ParentId == item.Id).Select(s => new CatalogCategoryViewModel
+                {
+                    Id = catalogItem.Categories.SingleOrDefault(x => x.CategoryId == s.Id)?.Id ?? 0,
+                    CategoryId = s.Id,
+                    Label = s.Name,
+                    Selected = catalogItem.Categories.Any(x => x.CategoryId == s.Id),
+                }));
+                model.Categories.Add(parent);
+            }
         }
     }
 

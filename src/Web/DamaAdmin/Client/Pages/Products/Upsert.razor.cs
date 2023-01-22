@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection.Metadata;
-using System.Text.Json;
 using System.Threading.Tasks;
-using ApplicationCore.DTOs;
-using ApplicationCore.Helpers;
 using DamaAdmin.Client.Services;
 using DamaAdmin.Shared.Models;
 using Microsoft.AspNetCore.Components;
@@ -16,11 +12,10 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using static System.Net.WebRequestMethods;
 
 namespace DamaAdmin.Client.Pages.Products
 {
-    public partial class Create
+    public partial class Upsert
     {
         private ProductViewModel model = new();
         private IEnumerable<ProductTypeViewModel> allProductTypes = new List<ProductTypeViewModel>();
@@ -48,23 +43,29 @@ namespace DamaAdmin.Client.Pages.Products
         [Inject]
         public NavigationManager NavManager { get; set; }
         [Inject]
-        public ILogger<Create> Logger { get; set; }
+        public ILogger<Upsert> Logger { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             try
             {
-                //if (Id.HasValue)
-                //{
-                //    model = await ProductTypeService.GetById(Id.Value);
-                //}
                 allProductTypes = await ProductTypeService.ListAll();
                 allIllustrations = await IllustrationService.ListAll();
-                model.Categories = await CategoryService.GetCatalogCategories(allProductTypes.First().Id);
+                var allCategories = await CategoryService.GetCatalogCategories(0);
+                if (Id.HasValue)
+                {
+                    model = await ProductService.GetById(Id.Value);
+                }
+                else
+                    model.Categories = await CategoryService.GetCatalogCategories(allProductTypes.First().Id);
             }
             catch (AccessTokenNotAvailableException exception)
             {
                 exception.Redirect();
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
         private async Task HandleValidSubmit()
@@ -81,7 +82,7 @@ namespace DamaAdmin.Client.Pages.Products
                 model.Sku = await ProductService.GetNewSku(model.CatalogTypeId, model.CatalogIllustrationId);
                 model.Price = model.Price == 0 ? default : model.Price;
 
-                await ProductService.Upsert(model);
+                //await ProductService.Upsert(model);
                 var message = $"Produto {model.Name} atualizado com sucesso!";
                 NavManager.NavigateTo($"/produtos/{message}");
             }
