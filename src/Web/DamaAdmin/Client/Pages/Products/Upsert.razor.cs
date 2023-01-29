@@ -27,6 +27,8 @@ namespace DamaAdmin.Client.Pages.Products
 
         [Parameter]
         public int? Id { get; set; }
+        [Parameter]
+        public string Message { get; set; }
 
         public bool IsNew => !Id.HasValue;
 

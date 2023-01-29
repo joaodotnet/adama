@@ -1,0 +1,82 @@
+﻿@page "/relacoes/criar/{CatalogItemId:int}"
+@page "/relacoes/editar/{Id:int?}"
+
+@if (IsNew)
+{
+    <h2>Nova Relação para o produto @_model.CatalogItemName</h2>
+}
+else
+{
+    <h2>Editar Relação @_model?.LabelDescription do produto @_model.CatalogItemName</h2>
+}
+
+<hr />
+
+@if (!IsNew && _model == null)
+{
+    <p><em>A Carregar...</em></p>
+}
+else
+{
+    <EditForm Model="@_model" OnValidSubmit="@HandleValidSubmit">
+        <div class="row">
+            <div class="col-md-4">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="form-group required">
+                    <label>Label</label>
+                    <InputText @bind-Value="_model.LabelDescription" class="form-control" />
+                    <ValidationMessage For="@(() => _model.LabelDescription)" />
+                </div>
+                <div class="form-group required">
+                    <label>Produto</label>
+                    <InputSelect @bind-Value="_model.ReferenceCatalogItemId" class="form-control">
+                        @if (_allProducts.Count() == 0)
+                        {
+                            <option class="font-italic">Loading...</option>
+                        }
+                        else
+                        {
+                            <option></option>
+                            @foreach (var item in _allProducts)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => _model.ReferenceCatalogItemId)" />
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" disabled=@_isSubmitting>
+                        @if (!_isSubmitting)
+                        {
+                            <span>Criar</span>
+                        }
+                        else
+                        {
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span>A criar...</span>
+                        }
+                    </button>
+                </div>
+                @if (!string.IsNullOrEmpty(_statusMessage))
+                {
+                    @if (_statusMessage.StartsWith("Erro"))
+                    {
+                        <ul class="validation-errors">
+                            <li class="validation-message">@_statusMessage</li>
+                        </ul>
+                    }
+                    else
+                    {
+                        <div class="alert alert-success">@_statusMessage</div>
+                    }
+                }
+            </div>
+        </div>
+    </EditForm>
+}
+<div>
+    <a href="/produtos/editar/@_model.CatalogItemId">Voltar para o produto</a>
+</div>
+

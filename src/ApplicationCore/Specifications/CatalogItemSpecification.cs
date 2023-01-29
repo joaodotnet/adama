@@ -30,6 +30,12 @@ namespace ApplicationCore.Specifications
                 Query.Include(p => p.Pictures);
             }
 
+            if(filter.AddReferences)
+            {
+                Query.Include(p => p.References)
+                    .ThenInclude(r => r.ReferenceCatalogItem);
+            }
+
             if (!string.IsNullOrEmpty(filter.Slug))
             {
                 Query
@@ -61,6 +67,7 @@ namespace ApplicationCore.Specifications
         public bool AddAttributes { get; set; }
         public bool AddIllustrations { get; set; }
         public bool AddPictures { get; set; }
+        public bool AddReferences { get; set; }
         public string Slug { get; set; }
         public int? NotProductId { get; set; }
         public int? ProductId { get; set; }

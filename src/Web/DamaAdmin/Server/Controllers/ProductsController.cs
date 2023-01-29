@@ -59,6 +59,12 @@ namespace DamaAdmin.Server.Controllers
                 ));
         }
 
+        [HttpGet("all")]
+        public async Task<List<ProductViewModel>> GetAll()
+        {
+            return _mapper.Map<List<ProductViewModel>>(await _repository.ListAsync(new CatalogItemSpecification(new CatalogItemFilter())));
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductViewModel>> GetById(int id)
         {
@@ -68,6 +74,7 @@ namespace DamaAdmin.Server.Controllers
                     { 
                         AddCategories = true,
                         AddPictures = true,
+                        AddReferences = true,
                         ProductId = id
                     }
                 ));

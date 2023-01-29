@@ -36,6 +36,10 @@ namespace DamaAdmin.Server
                 .ForMember(dest => dest.Categories, opts => opts.Ignore());
 
             CreateMap<CatalogPicture, ProductPictureViewModel>();
+
+            CreateMap<CatalogReference, CatalogReferenceViewModel>()
+                .ForMember(dest => dest.ReferenceCatalogItemName, opts => opts.MapFrom(src => src.ReferenceCatalogItem.Name))
+                .ForMember(dest => dest.CatalogItemName, opts => opts.MapFrom(src => src.CatalogItem.Name));
         }
     }
 }

@@ -27,7 +27,6 @@ namespace DamaAdmin.Client.Pages.ProductTypes
         private ProductTypeViewModel model = new();
         private string statusMessage;
         private IEnumerable<CategoryViewModel> allCategories = new List<CategoryViewModel>();
-        private List<FileData> fileData = new List<FileData>();
 
         [Inject]
         public ProductTypeService ProductTypeService { get; set; }
